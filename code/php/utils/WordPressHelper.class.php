@@ -28,7 +28,7 @@ class WordPressHelper {
 				
 		// Check that it worked
 		if ($wpdb->posts != "wp_{$new_blog_id}_posts"){
-			ApolloLogger::fatal("Could not switch blog, check wpmu-functions.switch_to_blog and make sure the section that skips work if the blog ids are the same is commented out (around line 312)!");
+			Logger::fatal("Could not switch blog, check wpmu-functions.switch_to_blog and make sure the section that skips work if the blog ids are the same is commented out (around line 312)!");
 		}
 				
 		return self::$prev_blog_id;
@@ -65,15 +65,15 @@ class WordPressHelper {
 		$sql = $wpdb->prepare("SELECT meta_value FROM wp_%d_postmeta WHERE meta_key = '_wp_attached_file' AND post_id = %d", $blog_id, $post_id); 		
 		$fullsizepath = $blog_file_root . $blog_id . '/files/' . $wpdb->get_var($sql);
 
-		ApolloLogger::debug($fullsizepath);
+		Logger::debug($fullsizepath);
 		
 		if (!file_exists($fullsizepath)){
-			ApolloLogger::error("Image does not exists for post id $post_id and blog id $blog_id");
+			Logger::error("Image does not exists for post id $post_id and blog id $blog_id");
 			return;
 		}
 
 		// Where is $wpdb->posts being set?
-		ApolloLogger::debug($wpdb->posts);
+		Logger::debug($wpdb->posts);
 		
 		$res = wp_update_attachment_metadata( $post_id, wp_generate_attachment_metadata( $post_id, $fullsizepath ));
 		
@@ -91,7 +91,7 @@ class WordPressHelper {
 		$sql = $wpdb->prepare("SELECT meta_value FROM wp_%d_postmeta WHERE post_id = %d AND meta_key = '_wp_attachment_metadata'", $blog_id, $post_id); 		
 		$serialized_meta = $wpdb->get_var($sql);			
 		$meta = unserialize($serialized_meta);	
-		//ApolloLogger::dump($meta);		
+		//Logger::dump($meta);		
 		return $meta;
 	}
 	
@@ -297,7 +297,7 @@ class WordPressHelper {
 	*/
 	public static function setDomain($blog_id, $new_domain, $current_site_id=1, $is_update=false){
 
-		ApolloLogger::debug(">>>>> setDomain($blog_id, $new_domain, $current_site_id, $is_update)" );
+		Logger::debug(">>>>> setDomain($blog_id, $new_domain, $current_site_id, $is_update)" );
 
 		global $wpdb;				
 
@@ -316,13 +316,13 @@ class WordPressHelper {
 		if ($is_update){
 			$sql = $wpdb->prepare("UPDATE wp_site SET domain = %s, path = '/' WHERE id = %d", $stripped_new_domain, $site_id ); 	
 			$wpdb->query($sql);	
-			ApolloLogger::debug("Update: Site ID = $site_id");
+			Logger::debug("Update: Site ID = $site_id");
 		}
 		else {
 			$sql = $wpdb->prepare("INSERT INTO wp_site (id, domain, path) VALUES ('', %s, '/')", $stripped_new_domain ); 		
 			$res = $wpdb->query($sql);	
 			$site_id = $wpdb->insert_id;
-			ApolloLogger::debug("Insert: Site ID = $site_id");
+			Logger::debug("Insert: Site ID = $site_id");
 		}
 		
 		$sql = $wpdb->prepare("UPDATE wp_blogs SET domain = %s, site_id = %d WHERE blog_id = %d", $stripped_new_domain, $site_id, $blog_id ); 		

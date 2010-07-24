@@ -47,16 +47,15 @@ class CommandHelper {
 	            
 	            case self::$PARA_TYPE_NUMERIC :
 	                if (!is_numeric($val)){
-	                    self::sendErrorMessage("Expecting numeric ($type) value for '$paraName', possible SQL injection!");
+	                	Logger::error("Expecting numeric ($type) value for '$paraName', possible SQL injection!");
+	                    $msg = CommandHelper::getErrorMessage("Expecting numeric ($type) value for '$paraName', possible SQL injection!");
+	                    self::sendMessage($msg);
 	                    die();
 	                }
 	                break;
 	
 	            case self::$PARA_TYPE_STRING :
-	                $val = DatabaseManager::make_sql_safe($val);
-	                // Remove special characters
-					$tags = array("\\");
-					$val = str_replace($tags, "", $val);	                
+	                $val = mysql_real_escape_string($val);
 	                break;
 	
 	            case self::$PARA_TYPE_JSON :

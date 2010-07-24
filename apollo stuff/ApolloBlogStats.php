@@ -46,16 +46,16 @@ function apolloastats_statsMenu()
 */
 function apollo_errorHandler(){
 
-	ApolloLogger::catchSysErrors();
-	ApolloLogger::setSendEmail(ApolloLogger::$ERROR);
+	Logger::catchSysErrors();
+	Logger::setSendEmail(Logger::$ERROR);
 
 	if (stripos($_SERVER['HTTP_HOST'], 'local') > 0){
 		error_log("local");
-		ApolloLogger::setLevelDebug();
+		Logger::setLevelDebug();
 	}
 	else {
-		ApolloLogger::setLevelDebug();
-		//ApolloLogger::setLevelError();
+		Logger::setLevelDebug();
+		//Logger::setLevelError();
 	}
 }
 

@@ -316,14 +316,14 @@ class KeywordExtractor {
 	
 	public static function getKeywords($refurl){
 			
-		//ApolloLogger::debug("getKeywords($refurl)");
+		//Logger::debug("getKeywords($refurl)");
 				
 		if (ereg('^(.*)\?(.*)',$refurl,$regs)) {
 		
 			$refhost = $regs[1];
 			$refquery = $regs[2];
 			
-			//ApolloLogger::debug("RefHost: $refhost RefQuery: $refquery");
+			//Logger::debug("RefHost: $refhost RefQuery: $refquery");
 			
 			foreach (self::$replacements as $key => $value) {
 				if (preg_match("/^http:\/\/(www)?".$key."\//",$refhost)) {
@@ -336,7 +336,7 @@ class KeywordExtractor {
 			
 			foreach(self::$ses as $name=>$seng) {
 			
-				//ApolloLogger::debug("Name: $name SENG: $seng");
+				//Logger::debug("Name: $name SENG: $seng");
 				
 				$sechecked++;
 				
@@ -356,7 +356,7 @@ class KeywordExtractor {
 						}
 					}
 					
-					//ApolloLogger::debug($searchengineurl);
+					//Logger::debug($searchengineurl);
 					
 					if (preg_match('/'.$seng['query'].'=(.*)(?:&|$)/Ui',$refquery,$regs)) {
 						// ok, we have a match!
@@ -384,7 +384,7 @@ class KeywordExtractor {
 		
 		// $searchengine,$searchengineurl,$sechecked;
 
-		//ApolloLogger::debug("SE: $searchengine URL: $searchengineurl ");
+		//Logger::debug("SE: $searchengine URL: $searchengineurl ");
 		
 		// this little bit added by jennifer @ scriptygoddess.com
 		// to prevent breaking if url passed in was not a search query

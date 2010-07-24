@@ -14,28 +14,24 @@ $file_root = substr($discRoot, 0, strpos($discRoot, "code"));
 $code_root = substr($discRoot, 0, strpos($discRoot, "code")) . "code/php/";
 $url_root = 'http://' . $_SERVER['HTTP_HOST'] . substr($_SERVER['PHP_SELF'], 0, strpos($_SERVER['PHP_SELF'], "code"));
 
-//error_log("File Root: " . $file_root);
-//error_log("Code Root: " . $code_root);
-
 define("FILE_ROOT", $file_root); // The root for the code tree 
 define("CODE_ROOT", $code_root); // The root for the code tree 
 
+// Server-specific passwords kept in sticky file
+// see setup.php.sticky_example
+require_once($code_root . "setup.php.sticky");
+
 Logger::catchSysErrors();
 Logger::setLevelDebug();
+
+Logger::debug("Database user: " . database_user);
+Logger::debug("Database host: " . database_host);
 
 // Load session
 Session::init();
 
 // Set default time zone
 date_default_timezone_set('UTC');
-
-// Server-specific passwords kept in sticky file
-// see setup.php.sticky_example
-require_once($code_root . "setup.php.sticky");
-
-Session::set("database_verbose", false);
-Logger::debug("Database user: " . Session::get("database_user"));
-Logger::debug("Database host: " . Session::get("database_host"));
 
 // Any shutdown events....
 register_shutdown_function("onShutdown");

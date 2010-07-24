@@ -62,13 +62,13 @@ class DatabaseManager {
 	public static function connect(){
 
 		if (self::$username == ""){
-			if (Session::exist('database_user')){
+			if (defined('database_user')){
 				Logger::debug("DB Username is not set, but found credentials stored in Session");
-				self::$username = Session::get("database_user");
-				self::$password = Session::get("database_pass");
-				self::$databaseName = Session::get("database_name");
-				self::$verbose = Session::get("database_verbose");	
-				self::$databaseURL = Session::get("database_host");	
+				self::$username = database_user;
+				self::$password = database_pass;
+				self::$databaseName = database_name;
+				self::$verbose = database_verbose;	
+				self::$databaseURL = database_host;	
 			}
 			else {
 				Logger::fatal("DB Username is not set, and could not find credentials in Session!!!");
@@ -187,6 +187,7 @@ class DatabaseManager {
 	public static function prepare($query = null) { // ( $query, *$args )
 			
 		$args = func_get_args();
+				
 		array_shift($args);
 
 		// If args were passed as an array (as in vsprintf), move them up
@@ -197,11 +198,16 @@ class DatabaseManager {
 		$query = str_replace("'%s'", '%s', $query); // in case someone mistakenly already singlequoted it
 		$query = str_replace('"%s"', '%s', $query); // doublequote unquoting
 		$query = str_replace('%s', "'%s'", $query); // quote the strings
-		array_walk($args, array(&$this, 'escape_by_ref'));
+		
+		for($i=0; $i<count($args); $i++){
+			$args[$i] = mysql_real_escape_string($args[$i]);
+		}
+		
+		//array_walk($args, array(&$this, 'mysql_real_escape_string'));
 
 		return @vsprintf($query, $args);
 	}	
-	
+		
     // //////////////////////////////////////////////////////////////////////////////////////
 	
 

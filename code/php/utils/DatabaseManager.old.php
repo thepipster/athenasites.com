@@ -44,6 +44,7 @@ class DatabaseManager {
 	 * @return 
 	 */
 	public static function initPDO() {
+	
 		self::$username = Session::get("database_user");
 		self::$password = Session::get("database_pass");
 		self::$databaseName = Session::get("database_name");

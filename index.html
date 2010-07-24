@@ -234,7 +234,7 @@ var ssLogin = {
 
 		$.ajax({
 			url: RemoteManager.m_url,
-			dataType: "text",
+			dataType: "json",
 			success: function(ret){ssLogin.onGotStats(ret);},
 			data: paras
 		});
@@ -243,15 +243,17 @@ var ssLogin = {
 	
 	onGotStats : function(ret){
 
-		eval("var data = ("+ret+")");
+		// $msg = '{"result":"true", "us": "'.$no_users.'", "si": "'.$no_sites.'", "pg": "'.$no_pages.'", "po": "'.$no_posts.'"}';
 
-        if (data.result == 'true'){
+        if (ret.result == 'true'){
         	
-        	var no_users = data.us;
-        	var no_tasks = data.tk;
-        	var no_projects = data.pr;
+        	var no_users = ret.us;
+        	var no_sites = ret.si;
+        	var no_pages = ret.pg;
+        	var no_posts = ret.po;
         	
-        	var txt = no_users + " users, with " + no_projects + " projects and " + no_tasks + " tasks";
+        	//var txt = no_sites + " sites with " + no_pages + " pages, " + no_users + " users and " + no_posts + " blog posts";
+        	var txt = no_pages + " pages from " + no_sites + " sites, with " + no_users + " users and " + no_posts + " blog posts";
         	$('.stats').html(txt);
         }
    	}	

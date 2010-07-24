@@ -59,7 +59,7 @@ class ApolloLogger {
      * Let the Logger catch any system errors
      */
     public static function catchSysErrors(){
-        set_error_handler("ApolloLogger::sysErrorHandler");
+        set_error_handler("Logger::sysErrorHandler");
     }
 
 	// //////////////////////////////////////////////////////////////////////////////////////
@@ -212,7 +212,7 @@ class ApolloLogger {
 	// //////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Use to replace system error handler, if desired. Use ApolloLogger::catchSysErrors() to
+     * Use to replace system error handler, if desired. Use Logger::catchSysErrors() to
      * activate
      */
     public static function sysErrorHandler($errno, $errstr, $errfile, $errline){

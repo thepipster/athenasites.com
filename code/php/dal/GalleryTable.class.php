@@ -76,7 +76,7 @@ class GalleryTable {
 		$current_image_id = $wpdb->get_var($sql);		
 		$ret = false;
 		
-		//ApolloLogger::debug("Current image id: $current_image_id");
+		//Logger::debug("Current image id: $current_image_id");
 		
 		if (isset($current_image_id)){
 			
@@ -100,15 +100,15 @@ class GalleryTable {
 
 	public static function moveSlot($image_post_id, $old_slot_no, $new_slot_no, $page_post_id, $theme_para_id, $old_gallery_number, $new_gallery_number, $blog_id){		
 	
-		ApolloLogger::debug("moveSlot($old_slot_no, $new_slot_no, $page_post_id, $theme_para_id, $old_gallery_number, $new_gallery_number, $blog_id)");
+		Logger::debug("moveSlot($old_slot_no, $new_slot_no, $page_post_id, $theme_para_id, $old_gallery_number, $new_gallery_number, $blog_id)");
 	
 		// get image post id
 		$check_image_post_id = self::getImageIDInSlot($page_post_id, $old_slot_no, $theme_para_id, $old_gallery_number, $blog_id);
 		
-		ApolloLogger::debug(">>> $image_post_id -- $check_image_post_id");
+		Logger::debug(">>> $image_post_id -- $check_image_post_id");
 		
 		if (!isset($check_image_post_id) || $check_image_post_id != $image_post_id){
-			ApolloLogger::error("No image found in slot $old_slot_no for gallery $old_gallery_number, blog $blog_id, page_id $page_post_id");
+			Logger::error("No image found in slot $old_slot_no for gallery $old_gallery_number, blog $blog_id, page_id $page_post_id");
 		}
 		
 		// clear the old slot
@@ -122,7 +122,7 @@ class GalleryTable {
 	// //////////////////////////////////////////////////////////////////////////////////////
 
 	public static function clearSlot($slot_no, $page_post_id, $theme_para_id, $gallery_number, $blog_id){				
-		//ApolloLogger::debug("clearSlot(slot_no=$slot_no, page_post_id=$page_post_id, theme_para_id=$theme_para_id, gallery_number=$gallery_number, blog_id=$blog_id)");
+		//Logger::debug("clearSlot(slot_no=$slot_no, page_post_id=$page_post_id, theme_para_id=$theme_para_id, gallery_number=$gallery_number, blog_id=$blog_id)");
 		global $wpdb;		
 		$sql = $wpdb->prepare("DELETE FROM apollo_GalleryTable WHERE slot_number = %d AND page_post_id = %d AND theme_para_id = %d AND gallery_number = %d AND blog_id = %d",  $slot_no, $page_post_id, $theme_para_id, $gallery_number, $blog_id);
 		return $wpdb->query($sql);		
@@ -206,7 +206,7 @@ class GalleryTable {
 			$sql = $wpdb->prepare("UPDATE apollo_GalleryMeta SET title = %s WHERE page_post_id = %d AND theme_para_id = %d AND gallery_number = %d AND blog_id = %d", $title, $page_post_id, $theme_para_id, $gallery_number, $blog_id);
 		}
 
-		//ApolloLogger::debug($sql);
+		//Logger::debug($sql);
 				
 		return $wpdb->query($sql);		
 	}

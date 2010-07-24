@@ -131,31 +131,24 @@ function checkUser($email, $sha1_pass){
 
 	Logger::debug("checkUser($email, $sha1_pass)");
 	
-	$query = "SELECT user_id FROM User WHERE email = ? AND password_hash = ?";			
-	DatabaseManager::prepare($query);
-	DatabaseManager::bindParam(1, $email);
-	DatabaseManager::bindParam(2, $sha1_pass);
-	$results = DatabaseManager::execute();
-	
+	$sql = DatabaseManager::prepare("SELECT id FROM athena_Users WHERE email = %s AND password_hash = %s", $email, $sha1_pass);
+	$id = DatabaseManager::getVar($sql);
+
     $target_date  = mktime(date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
     $date_str = date('Y-m-d H:i:s', $target_date);
 	
 	// If no results, then the table is empty...		
-	if(!$results) {
+	if(!$id) {
 		Session::clear("username"); // Clear the username in the session
 		Session::clear("userid"); // Clear the userid in the session
 		$msg = '{"result":"false", "msg": "Bad Username/password"}';
 	}
 	else {
 	
-		$query = "UPDATE User SET last_login = ? WHERE user_id = ?";
-		DatabaseManager::prepare($query);
-		DatabaseManager::bindParam(1, $date_str);
-		DatabaseManager::bindParam(2, $results[0]['user_id']);
-		$id = DatabaseManager::execute(false, true);	
-
+		$sql = DatabaseManager::prepare("UPDATE athena_Users SET last_login = %s WHERE id = %d", $date_str, $id);
+		DatabaseManager::submitQuery($sql);
 		Session::set("username", $email); // Store username in session, used for validation
-		Session::set("userid", $results[0]['user_id']); // Store username in session, used for validation
+		Session::set("userid", $id); // Store username in session, used for validation
 		$msg = '{"result":"true", "msg": "OK!"}';
 	}	
 

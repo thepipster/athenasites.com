@@ -28,7 +28,7 @@ class ProductionCodeBuilder {
 
 	public static function buildApolloPluginCSS($code_root, $master_filename, $doMinify=true) {
 				
-		ApolloLogger::debug("Processing CSS.. [$master_filename]");
+		Logger::debug("Processing CSS.. [$master_filename]");
 	 	 	
 	 	file_put_contents($master_filename, "");
 	 	 
@@ -49,7 +49,7 @@ class ProductionCodeBuilder {
 	 		}
 
 			//$base_dir = dirname($script);
-			//ApolloLogger::debug("BaseDir: $base_dir");
+			//Logger::debug("BaseDir: $base_dir");
 	
 			file_put_contents($master_filename, $min_script, FILE_APPEND);
 									
@@ -61,7 +61,7 @@ class ProductionCodeBuilder {
 	 	$new_size = round($new_size / 1024);
 	 	$pc = 100 * $new_size / $size;
 	 	
-	 	ApolloLogger::info("Merged $no_files files with a total size of $size kb to 1 file of size $new_size kb (".number_format($pc,2)."% compression)");
+	 	Logger::info("Merged $no_files files with a total size of $size kb to 1 file of size $new_size kb (".number_format($pc,2)."% compression)");
 	
 	}
 	
@@ -76,7 +76,7 @@ class ProductionCodeBuilder {
 	 */
 	public static function buildProductionJS($code_root, $master_filename, $doMinify=true) {
 				
-		ApolloLogger::debug("Processing JS.. [$master_filename]");
+		Logger::debug("Processing JS.. [$master_filename]");
 	 	 	
 	 	file_put_contents($master_filename, "");
 	 	 
@@ -87,7 +87,7 @@ class ProductionCodeBuilder {
 	 		
 	 		$script_filename = $code_root . $script;
 	 		
-	 		//ApolloLogger::debug('Opening ' . $script_filename . '...');
+	 		//Logger::debug('Opening ' . $script_filename . '...');
 	 		$size += filesize($script_filename);
 	 		
 	 		if ($doMinify){
@@ -107,13 +107,13 @@ class ProductionCodeBuilder {
 	 	$new_size = round($new_size / 1024);
 	 	$pc = 100 * $new_size / $size;
 	 	
-	 	ApolloLogger::info("Merged $no_files files with a total size of $size kb to 1 file of size $new_size kb (".number_format($pc,2)."% compression)");
+	 	Logger::info("Merged $no_files files with a total size of $size kb to 1 file of size $new_size kb (".number_format($pc,2)."% compression)");
 	/*
 		file_put_contents(JSMin::minify(file_get_contents($master_filename)));
 	
 		$final_size = round(filesize($master_filename) / 1024);
 	
-	 	ApolloLogger::info("Final minify step changed size from $new_size kb to $final_size kb");
+	 	Logger::info("Final minify step changed size from $new_size kb to $final_size kb");
 	*/	
 	
 	}

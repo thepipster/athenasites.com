@@ -14,11 +14,11 @@ class ThemeTable {
 	*/
 	public static function getThemeIDFromTemplateName($templateName){
 		
-		//ApolloLogger::debug("getThemeIDFromTemplateName($templateName)");
+		//Logger::debug("getThemeIDFromTemplateName($templateName)");
 		
 		global $wpdb;
 		
-		//if ($wpdb == null) ApolloLogger::fatal("ThemeTable not initialized!");
+		//if ($wpdb == null) Logger::fatal("ThemeTable not initialized!");
 		
 		return $wpdb->get_var($wpdb->prepare("SELECT id FROM apollo_Theme WHERE theme_name = %s",  $templateName));
 
@@ -104,7 +104,7 @@ class ThemeTable {
 
 	public static function getThemeParas($theme_id, $page_template_name){
 		
-		//ApolloLogger::debug("getThemeParas($theme_id, $page_template_name)");
+		//Logger::debug("getThemeParas($theme_id, $page_template_name)");
 		
 		global $wpdb;
 		$data = null;

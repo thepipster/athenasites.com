@@ -27,7 +27,7 @@ class PageParasTable {
 		//error_log("setParaValue($blog_id, $page_post_id, $theme_para_id, $new_value)");
 		
 		$current_value = self::getParaValue($page_post_id, $theme_para_id, $blog_id);		
-		//ApolloLogger::debug("Current value = $current_value");
+		//Logger::debug("Current value = $current_value");
 		
 		if (isset($current_value)){
 			return self::updateParaValue($blog_id, $page_post_id, $theme_para_id, $new_value);

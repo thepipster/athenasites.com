@@ -1,14 +1,16 @@
 <?php
 if ($_SERVER['HTTP_HOST'] == "athena.local"){
-	Session::set("database_user", "mike");
-	Session::set("database_pass", "mike76");
-	Session::set("database_name", "athenasites");
-	Session::set("database_host", "localhost");
+	define("database_user", "mike");
+	define("database_pass", "mike76");
+	define("database_name", "athenasites");
+	define("database_host", "localhost");
+	define("database_verbose", false);
 }
 else {
-	Session::set("database_user", "etasking_appuser");
-	Session::set("database_pass", "payjQZeZAZ7HB5pe");
-	Session::set("database_name", "etasking");
-	Session::set("database_host", "localhost");
+	define("database_user", "etasking_appuser");
+	define("database_pass", "payjQZeZAZ7HB5pe");
+	define("database_name", "etasking");
+	define("database_host", "localhost");
+	define("database_verbose", false);
 }
 ?>

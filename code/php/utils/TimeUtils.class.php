@@ -2,6 +2,11 @@
 
 class TimeUtils {
 
+	public static function getPastDateString($no_days_ago){		
+		date_default_timezone_set('UTC');
+		return date("Y-m-d H:i", mktime(date("H"), date("i"), date("s"), date("m")  , date("d")-$no_days_ago, date("Y")));
+	}
+	
 	// ///////////////////////////////////////////////////////////////////////
 
 	/**

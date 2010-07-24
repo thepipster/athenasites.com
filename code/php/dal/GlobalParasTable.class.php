@@ -11,7 +11,7 @@ class GlobalParasTable {
 	*/
 	public static function setGlobalParaValue($blog_id, $theme_para_id, $new_value){
 	
-		//ApolloLogger::debug("setGlobalParaValue($blog_id, $theme_para_id, $new_value)");
+		//Logger::debug("setGlobalParaValue($blog_id, $theme_para_id, $new_value)");
 		
 		global $wpdb;	
 		

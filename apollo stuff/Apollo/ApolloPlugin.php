@@ -40,9 +40,9 @@ require_once($common_code_root . 'php/plugin_functions.php');
 
 
 /*
-ApolloApolloLogger::debug("AP_FILE_ROOT = " . AP_FILE_ROOT);
-ApolloApolloLogger::debug("AP_URL_ROOT = " . AP_URL_ROOT);
-ApolloApolloLogger::debug("APC_URL_ROOT = " . APC_URL_ROOT);
+ApolloLogger::debug("AP_FILE_ROOT = " . AP_FILE_ROOT);
+ApolloLogger::debug("AP_URL_ROOT = " . AP_URL_ROOT);
+ApolloLogger::debug("APC_URL_ROOT = " . APC_URL_ROOT);
 */
 
 $wud = wp_upload_dir();
@@ -133,7 +133,7 @@ function apolloSitesInit(){
 	
 	global $wpdb;
 	//$sql = $wpdb->prepare("SELECT * FROM apollo_Sessions"); 		
-	//ApolloLogger::debug(">>>>> $sql");
+	//Logger::debug(">>>>> $sql");
 	Session::init($wpdb);
 	WordPressHelper::setupApolloSession();
 			
@@ -385,7 +385,7 @@ function onGlobalSettings(){
 	
 	foreach ($para_list as $theme_para){
 
-		//ApolloApolloLogger::dump($para);
+		//ApolloLogger::dump($para);
 		
 		$theme_para_id = $theme_para['id'];
 
@@ -554,7 +554,7 @@ function onEditGallery() {
 	echo '<link type="text/css" href="'.APC_URL_ROOT.'ApolloPlugin.css" rel="stylesheet"  />';
 
 	global $blog_id;
-//	ApolloLogger::debug(">>>> Blog ID: $blog_id");
+//	Logger::debug(">>>> Blog ID: $blog_id");
 	
 	
 	// Get the user's current theme id in the apollo database
@@ -651,7 +651,7 @@ function onEditGallery() {
 	    }
 	}
 	
-	//ApolloLogger::dump($gallery_pages);
+	//Logger::dump($gallery_pages);
 
     echo "               </select>";
     echo "            </td>";

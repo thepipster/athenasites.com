@@ -9,8 +9,8 @@ require_once($common_code_root . 'php/utils/JSMin.class.php');
 require_once($common_code_root . 'php/utils/CSSMin.class.php');
 require_once($theme_root . 'php/ProductionCodeBuilder.class.php');
 
-ApolloLogger::catchSysErrors();
-ApolloLogger::echoLog();
+Logger::catchSysErrors();
+Logger::echoLog();
 
 ProductionCodeBuilder::buildProductionJS($theme_root, $theme_root . 'js/pandora-min.js');
 ProductionCodeBuilder::buildApolloPluginCSS($theme_root, $theme_root . 'pandora-min.css');

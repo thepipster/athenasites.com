@@ -40,7 +40,7 @@ class FolderTable {
 	*/
 	public static function addMediaToFolder($folder_id, $media_post_id, $blog_id){
 	
-		//ApolloLogger::debug("addMediaToFolder($folder_id, $media_post_id)");
+		//Logger::debug("addMediaToFolder($folder_id, $media_post_id)");
 
 		global $wpdb;
 

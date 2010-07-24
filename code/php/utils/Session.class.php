@@ -10,35 +10,180 @@
 class Session {
 
 	private static $session_started_flag = false;
-
-	// //////////////////////////////////////////////////////////////////////////////////////
-
-	/**
-	* Class constructor
-	*/
-	//public function __construct(){
-	//	self::init();
-	//}
-	
-	// //////////////////////////////////////////////////////////////////////////////////////
-
-	/**
-	* Class Destructor
-	*/
-	//function __destruct(){
-	//	self::close();
-	//}
-		
+			
 	// //////////////////////////////////////////////////////////////////////////////////////
 
 	/**
 	* Initialize the session
 	*/
 	public static function init(){	
-		session_start();
-		self::$session_started_flag = true;
+	
+		if (!self::$session_started_flag){
+		
+			//Logger::debug("Setting up Sesion");
+									
+			self::$session_started_flag = true;
+				
+			session_set_save_handler(
+				"Session::onSessionOpen", 
+				"Session::onSessionClose",
+				"Session::onSessionRead",
+				"Session::onSessionWrite",
+				"Session::onSessionDestroy",
+				"Session::onSessionGC");
+	/*
+			session_set_save_handler( 
+				array( &$this, "Session::onSessionOpen" ), 
+				array( &$this, "Session::onSessionClose" ),
+				array( &$this, "Session::onSessionRead" ),
+				array( &$this, "Session::onSessionWrite"),
+				array( &$this, "Session::onSessionDestroy"),
+				array( &$this, "Session::onSessionGC" )
+	        );
+	 */       
+			session_start();
+		}
+        		
 	}
 	
+	// //////////////////////////////////////////////////////////////////////////////////////
+	
+	private static function connect(){	
+	}
+	
+	// //////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Session Handler callbacks
+	//
+	// //////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	* The onSessionOpen() and onSessionClose() functions are closely related. These are used to 
+	* open the session data store and close it, respectively. If you are storing sessions in 
+	* the filesystem, these functions open and close files (and you likely need to use a global 
+	* variable for the file handler, so that the other session functions can use it).
+	*/
+	public static function onSessionOpen($save_path, $session_name) {
+		self::connect();
+	}
+
+	// //////////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* The onSessionOpen() and onSessionClose() functions are closely related. These are used to 
+	* open the session data store and close it, respectively. If you are storing sessions in 
+	* the filesystem, these functions open and close files (and you likely need to use a global 
+	* variable for the file handler, so that the other session functions can use it).
+	*/
+	public static function onSessionClose() {
+	}
+
+	// //////////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* The onSessionRead() function is called whenever PHP needs to read the session data. This takes 
+	* place immediately after _open(), and both are a direct result of your use of session_start().
+	*
+	* PHP passes this function the session identifier, as the following example demonstrates:
+	*/
+	public static function onSessionRead($session_id){
+				
+		//Logger::debug("Session $session_id read");
+    	$id = mysql_real_escape_string($session_id);
+		
+	    if ($result = DatabaseManager::submitQuery("SELECT data FROM apollo_Sessions WHERE id = '$id'")) {
+	        if (mysql_num_rows($result)) {
+	            $record = mysql_fetch_assoc($result);
+	            return $record['data'];
+	        }
+	    }
+	 
+	    return '';
+		
+		//global $wpdb;
+		//$sql = self::$wpdb->prepare("SELECT data FROM apollo_Sessions WHERE id = %s",  $session_id ); 		
+		//return self::$wpdb->query($sql);		
+				
+	}
+
+	// //////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	* The onSessionWrite() function is called whenever PHP needs to write the session data. This takes 
+	* place at the very end of the script.
+	*
+	* PHP passes this function the session identifier and the session data. You don't need to 
+	* worry with the format of the data - PHP serializes it, so that you can treat it like a string. 
+	* However, PHP does not modify it beyond this, so you want to properly escape it before using 
+	* it in a query:
+	*/
+	public static function onSessionWrite($session_id, $data){
+		
+		//Logger::debug("Session $session_id write ($data)");
+		
+	    $access = time();
+ 
+    	$id = mysql_real_escape_string($session_id);
+	    $access = mysql_real_escape_string($access);
+    	$data = mysql_real_escape_string($data);
+ 		
+		return DatabaseManager::submitQuery("REPLACE INTO apollo_Sessions VALUES ('$id', '$access', '$data')");
+		
+ 		//global $wpdb;
+		//$sql = self::$wpdb->prepare("REPLACE INTO apollo_Sessions VALUES  (%s, %d, %s)",  $session_id,  time(), $data ); 		
+		//return self::$wpdb->query($sql);		
+	}
+
+	// //////////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* The onSessionDestroy($session_id) function is called whenever PHP needs to destroy all session data associated 
+	* with a specific session identifier. An obvious example is when you call session__destroy().
+	*
+	* PHP passes the session identifier to the function:
+	*/
+	public static function onSessionDestroy($session_id){
+		
+		//Logger::debug("Session destroy");
+
+	    $id = mysql_real_escape_string($session_id);
+ 
+		return DatabaseManager::submitQuery("DELETE FROM apollo_Sessions WHERE id = '$id'");
+
+
+ 		//global $wpdb;
+		//$sql = self::$wpdb->prepare("DELETE FROM apollo_Sessions WHERE id = %d",  $session_id); 		
+		//self::$wpdb->query($sql);		
+	}
+
+	// //////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	* The Session::onSessionGC() function is called every once in a while in order to clean out (delete) old 
+	* records in the session data store. More specifically, the frequency in which this function 
+	* is called is determined by two configuration directives, session.gc_probability and 
+	* session.gc_divisor. The default values for these are 1  and 1000, respectively, which 
+	* means there is a 1 in 1000 (0.1%) chance for this function to be called per session initialization.
+	*
+	* Because the onSessionWrite() function keeps the timestamp of the last access in the access column 
+	* for each record, this can be used to determine which records to delete. PHP passes the 
+	* maximum number of seconds allowed before a session is to be considered expired:
+	*/
+	public static function onSessionGC($max_session_lifetime){
+		
+		Logger::debug("Session gc - max = $max_session_lifetime");
+
+		$old = time() - $max_session_lifetime;
+	 	$old = mysql_real_escape_string($old);
+
+		return DatabaseManager::submitQuery("DELETE FROM apollo_Sessions WHERE access < '$old'");
+
+ 		//global $wpdb;
+		//$sql = self::$wpdb->prepare("DELETE FROM apollo_Sessions WHERE access < %d",  $old); 		
+		//self::$wpdb->query($sql);				
+	}
+
+	// //////////////////////////////////////////////////////////////////////////////////////	
 	// //////////////////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -53,7 +198,12 @@ class Session {
 	* Set a variable into the session
 	*/
 	public static function set($name, $val){
-		if (!self::$session_started_flag) self::init();
+		
+		if (!self::$session_started_flag) {
+			global $wpdb;
+			self::init($wpdb);
+		}
+		
 		$_SESSION[$name] = $val;
 	}
 
@@ -65,7 +215,10 @@ class Session {
 	*/
 	public static function get($name){
 		
-		if (!self::$session_started_flag) self::init();
+		if (!self::$session_started_flag) {
+			global $wpdb;
+			self::init($wpdb);
+		}
 		
 		if(isset($_SESSION[$name])) 
 			return $_SESSION[$name];
@@ -82,7 +235,10 @@ class Session {
 	*/
 	public static function clear($name){
 		
-		if (!self::$session_started_flag) self::init();
+		if (!self::$session_started_flag) {
+			global $wpdb;
+			self::init($wpdb);
+		}
 				
 		if(isset($_SESSION[$name])) unset($_SESSION[$name]);
 	}
@@ -93,7 +249,11 @@ class Session {
 	* Tests whether a variable is in the session (return true if it is)
 	*/
 	public static function exists($name){	
-		if (!self::$session_started_flag) self::init();
+		
+		if (!self::$session_started_flag) {
+			global $wpdb;
+			self::init($wpdb);
+		}
 			
 		if(isset($_SESSION[$name])) return true; 			
 		return false;
@@ -189,6 +349,21 @@ class Session {
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////
+/*
+	public static function logMessage($message, $level, $class, $function){
+	
+		if (!self::$session_started_flag){
+			self::init();
+		}
+		
+    	$message = mysql_real_escape_string($message);
+	    $level = mysql_real_escape_string($level);
+ 		
+		return mysql_query("INSERT INTO apollo_Log (message, level, class, function) VALUES  ('$message', '$level', '$class', '$function')", self::$connection);
+		
+	}
+	*/
+	// //////////////////////////////////////////////////////////////////////////////////////
 
 
 	/**
@@ -203,7 +378,7 @@ class Session {
 		$temp .= "<br><br><b>SESSION Dump</b><pre>";
 		$temp .= self::var_log($_SESSION);
 		$temp .= "</pre>";
-		
+		/*
 		$temp .= "<b>REQUEST (GET or POST or COOKIE) Dump</b><pre>";
 		$temp .= self::var_log($_REQUEST);
 		$temp .= "</pre>";
@@ -215,7 +390,7 @@ class Session {
 		$temp .= "<b>POST Dump</b><pre>";
 		$temp .= self::var_log($_POST);
 		$temp .= "</pre>";
-				
+		*/		
 		return $temp;
 		
 	}

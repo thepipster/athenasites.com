@@ -43,7 +43,7 @@ if (!Session::get("apollo_user_logged_in")){
 	$msg['result'] = 'not authorized!';
 
 	CommandHelper::sendMessage($msg);	
-	ApolloLogger::fatal("Not authorized! " . $_SERVER['HTTP_REFERER'] . " " . $_SERVER['HTTP_USER_AGENT']);
+	Logger::fatal("Not authorized! " . $_SERVER['HTTP_REFERER'] . " " . $_SERVER['HTTP_USER_AGENT']);
 	die();
 	
 }
@@ -93,7 +93,7 @@ static $CMD_RESET_DOMAIN				= 102;
 // Get the command type....
 $cmd = CommandHelper::getPara('cmd', true, CommandHelper::$PARA_TYPE_NUMERIC);
 
-ApolloLogger::debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Command: $cmd");
+Logger::debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Command: $cmd");
 
 // Handle the report request type
 switch($cmd){
@@ -241,7 +241,7 @@ switch($cmd){
 		break;	
 			
 	default:
-		ApolloLogger::fatal($cmd, "Command $cmd is not supported yet!");
+		Logger::fatal($cmd, "Command $cmd is not supported yet!");
 		break;
 
 }
@@ -254,7 +254,7 @@ switch($cmd){
 
 function stripTags($text){
 	//$text = mysql_real_escape_string($text);
-	ApolloLogger::debug("stripTags($text)");	
+	Logger::debug("stripTags($text)");	
 	$tags = array("\\");
 	$replace   = array("");
 	return str_replace($tags, $replace, $text);
@@ -269,7 +269,7 @@ function checkPageValidForBlog($post_id){
 	global $wpdb;
 
 	$blogid = Session::get('apollo_blog_id');
-	//ApolloLogger::debug("Blog ID: $blogid Post ID: $post_id");
+	//Logger::debug("Blog ID: $blogid Post ID: $post_id");
 		
 	$sql = $wpdb->prepare("SELECT ID FROM wp_%d_posts WHERE ID=%d",  $blogid, $post_id ); 			
 	$found_id = $wpdb->get_var($sql);		
@@ -278,7 +278,7 @@ function checkPageValidForBlog($post_id){
 		$msg['cmd'] = 0;
 		$msg['result'] = 'not authorized!';
 		CommandHelper::sendMessage($msg);	
-		ApolloLogger::fatal("Attempted unauthorized access!");
+		Logger::fatal("Attempted unauthorized access!");
 		die();
 	}
 
@@ -293,7 +293,7 @@ function checkValidBlog($blog_id){
 		$msg['cmd'] = 0;
 		$msg['result'] = 'not authorized!';
 		CommandHelper::sendMessage($msg);	
-		ApolloLogger::fatal("Attempted unauthorized access!");
+		Logger::fatal("Attempted unauthorized access!");
 		die();
 	}
 }
@@ -308,14 +308,14 @@ function checkValidFolder($folder_id){
 	$blogid = Session::get('apollo_blog_id');
 		
 	$sql = $wpdb->prepare("SELECT id FROM apollo_Folders WHERE blog_id=%d AND id=%d",  $blogid, $folder_id ); 			
-	ApolloLogger::debug($sql);
+	Logger::debug($sql);
 	$found_id = $wpdb->get_var($sql);		
 	
 	if (!isset($found_id) || $found_id != $folder_id){
 		$msg['cmd'] = 0;
 		$msg['result'] = 'not authorized!';
 		CommandHelper::sendMessage($msg);	
-		ApolloLogger::fatal("Attempted unauthorized access!");
+		Logger::fatal("Attempted unauthorized access!");
 		die();
 	}
 
@@ -450,7 +450,7 @@ function assignGalleryThumbnail($image_post_id, $page_post_id, $gal_no, $theme_p
 	
 	$blogid = Session::get('apollo_blog_id');
 
-	ApolloLogger::debug("assignGalleryThumbnail($image_post_id, $page_post_id, $gal_no, $theme_para_id)");
+	Logger::debug("assignGalleryThumbnail($image_post_id, $page_post_id, $gal_no, $theme_para_id)");
 		
 	$result = GalleryTable::setGalleryThumbnail($page_post_id, $theme_para_id, $gal_no, $image_post_id, $blogid);
 
@@ -468,7 +468,7 @@ function assignGalleryTitle($title, $page_post_id, $gal_no, $theme_para_id){
 
 	$blogid = Session::get('apollo_blog_id');
 	
-	//ApolloLogger::debug("assignGalleryTitle($title, $page_post_id, $gal_no, $theme_para_id)");
+	//Logger::debug("assignGalleryTitle($title, $page_post_id, $gal_no, $theme_para_id)");
 	
 	$result = GalleryTable::setGalleryTitle($page_post_id, $theme_para_id, $gal_no, $title, $blogid);
 	
@@ -482,13 +482,13 @@ function assignGalleryTitle($title, $page_post_id, $gal_no, $theme_para_id){
 
 function assignGlobalPara($blog_id, $theme_para_id, $new_value){
 
-	//ApolloLogger::debug("assignGlobalPara($blog_id, $theme_para_id, $new_value)");
+	//Logger::debug("assignGlobalPara($blog_id, $theme_para_id, $new_value)");
 
 	checkValidBlog($blog_id);
 	
 	$result = GlobalParasTable::setGlobalParaValue($blog_id, $theme_para_id, $new_value);
 			
-	ApolloLogger::debug("Result: $result");
+	Logger::debug("Result: $result");
 			
 	$msg = array();
 	
@@ -504,7 +504,7 @@ function assignGlobalPara($blog_id, $theme_para_id, $new_value){
 
 function assignPagePara($page_post_id, $theme_para_id, $new_value){
 
-	//ApolloLogger::debug("assignPagePara($page_post_id, $theme_para_id, $new_value)");
+	//Logger::debug("assignPagePara($page_post_id, $theme_para_id, $new_value)");
 	
 	checkPageValidForBlog($page_post_id);
 
@@ -534,7 +534,7 @@ function listImages($page_id, $theme_para_id){
 
 	global $blog_downloads_root;
 
-	//ApolloLogger::debug("listImages($page_id, $theme_para_id)");
+	//Logger::debug("listImages($page_id, $theme_para_id)");
 	$blog_id = Session::get('apollo_blog_id');			
 	
 	$imageList = array();
@@ -557,7 +557,7 @@ function listImages($page_id, $theme_para_id){
 			
 			if (!isset($temp['url']) || $temp['url'] == ''){
 				// Force thumbnail generation!
-				ApolloLogger::warn("Warning, thumbnail missing for image {$image['id']}, for the blog id $blog_id");
+				Logger::warn("Warning, thumbnail missing for image {$image['id']}, for the blog id $blog_id");
 				WordPressHelper::regenerateThumbnail($image['id'], $blog_id, $blog_downloads_root);	
 			}
 			
@@ -594,7 +594,7 @@ function addImageToGallery($image_id, $page_id, $slot_no, $gal_no, $theme_para_i
 	$blog_id = Session::get('apollo_blog_id');			
 
 	//addImageToGallery(53, 3, 0, 0, 408) 
-	ApolloLogger::debug("addImageToGallery($image_id, $page_id, $slot_no, $gal_no, $theme_para_id)");
+	Logger::debug("addImageToGallery($image_id, $page_id, $slot_no, $gal_no, $theme_para_id)");
 	
 	$id = GalleryTable::addImageToSlot($image_id, $page_id, $slot_no, $theme_para_id, $gal_no, $blog_id);
 	
@@ -618,7 +618,7 @@ function moveImage($old_slot_no, $new_slot_no, $page_id, $old_gal_no, $new_gal_n
 
 	checkPageValidForBlog($page_id);
 
-	ApolloLogger::debug("moveImage(old_slot_no=$old_slot_no, new_slot_no=$new_slot_no, page_id=$page_id, gal_no=$gal_no, theme_para_id=$theme_para_id, image_id=$image_id)");
+	Logger::debug("moveImage(old_slot_no=$old_slot_no, new_slot_no=$new_slot_no, page_id=$page_id, gal_no=$gal_no, theme_para_id=$theme_para_id, image_id=$image_id)");
 
 	$blog_id = Session::get('apollo_blog_id');			
 
@@ -657,7 +657,7 @@ function removeImage($image_id, $page_id, $gal_no, $theme_para_id, $slot_no){
 
 function addMediaToFolder($media_post_id, $folder_id){
 	
-	//ApolloLogger::debug("addMediaToFolder($media_post_id, $folder_id)");
+	//Logger::debug("addMediaToFolder($media_post_id, $folder_id)");
 	
 	checkPageValidForBlog($media_post_id);
 
@@ -686,7 +686,7 @@ function addMediaToFolder($media_post_id, $folder_id){
 	$msg['media_post_id'] = $media_post_id;
 	$msg['folder_id'] = $folder_id;
 
-	//ApolloLogger::dump($msg);
+	//Logger::dump($msg);
 
 	CommandHelper::sendMessage($msg);	
 }
@@ -709,7 +709,7 @@ function addFolder($name){
 
 function renameFolder($folder_id, $name){
 	
-	ApolloLogger::debug("Name: $name");
+	Logger::debug("Name: $name");
 	checkValidFolder($folder_id);
 			
 	$res = FolderTable::renameFolder($folder_id, $name);
@@ -738,7 +738,7 @@ function deleteFolder($folder_id){
 
 function updateImageInfo($image_post_id, $title, $caption, $desc, $alt_text){
 	
-	ApolloLogger::debug("updateImageInfo($image_post_id, $title, $caption, $desc, $alt_text)");
+	Logger::debug("updateImageInfo($image_post_id, $title, $caption, $desc, $alt_text)");
 	
 	checkPageValidForBlog($image_post_id);
 
@@ -752,7 +752,7 @@ function updateImageInfo($image_post_id, $title, $caption, $desc, $alt_text){
 	$post['post_content'] = $desc;
 //	$post['post_status'] = 'publish'		
 			
-	ApolloLogger::dump($post);
+	Logger::dump($post);
 	
 	$res = wp_update_post( $post );
 */			
@@ -791,7 +791,7 @@ function updateImageInfo($image_post_id, $title, $caption, $desc, $alt_text){
 
 function getImageInfo($image_post_id){
 
-	//ApolloLogger::debug("getImageInfo($image_post_id)");
+	//Logger::debug("getImageInfo($image_post_id)");
 	
 	checkPageValidForBlog($image_post_id);
 	
@@ -824,8 +824,8 @@ function getImageInfo($image_post_id){
 	
 	$msg['cmd'] = 17;
 
-	//ApolloLogger::dump($data);
-	ApolloLogger::dump($msg);
+	//Logger::dump($data);
+	Logger::dump($msg);
 	
 	CommandHelper::sendMessage($msg);	
 

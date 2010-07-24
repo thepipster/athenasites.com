@@ -208,8 +208,8 @@ function apolloCustomFieldBox() {
 	
 	}
 	else {
-		ApolloLogger::error("Post id is not set!");
-		//ApolloLogger::dump($_REQUEST);
+		Logger::error("Post id is not set!");
+		//Logger::dump($_REQUEST);
 	}
 
 	if ($echo_image_data){		

@@ -15,7 +15,7 @@ require_once($common_code_root . 'php/utils/WordPressHelper.class.php');
 $blog_id = 2;
 $post_id = 42; // 'intro30.jpg'
 
-ApolloLogger::echoLog();
+Logger::echoLog();
 
 WordPressHelper::setCurrentBlog($blog_id);
 WordPressHelper::regenerateThumbnail($post_id, $blog_id, $blog_downloads_root);

@@ -14,7 +14,7 @@ require_once($common_code_root . 'php/utils/Browser.class.php');
 require_once($common_code_root . 'php/utils/TimeUtils.class.php');
 require_once($common_code_root . 'php/utils/KeywordExtractor.class.php');
 
-ApolloLogger::echoLog();
+Logger::echoLog();
 
 global $wpdb;
 
@@ -31,7 +31,7 @@ foreach($gallery_images as $images){
 	$data = $wpdb->get_results($sql, ARRAY_A);		
 	
 	if (!isset($data)){
-		ApolloLogger::debug("Deleting image id $image_post_id for blog id $blog_id <br\>\n");		
+		Logger::debug("Deleting image id $image_post_id for blog id $blog_id <br\>\n");		
 		$sql = $wpdb->prepare("DELETE FROM apollo_GalleryTable WHERE blog_id = %d AND image_post_id = %d",  $blog_id, $image_post_id); 		
 		$wpdb->query($sql, ARRAY_A);		
 	}

@@ -9,8 +9,8 @@ require_once($common_code_root . 'php/utils/CSSMin.class.php');
 require_once($common_code_root . 'php/utils/ProductionCodeBuilder.class.php');
 
 
-ApolloLogger::catchSysErrors();
-ApolloLogger::echoLog();
+Logger::catchSysErrors();
+Logger::echoLog();
 
 ProductionCodeBuilder::buildProductionJS($common_code_root . 'js/ApolloProduction.class.js');
 ProductionCodeBuilder::buildApolloPluginCSS($common_code_root . 'ApolloPlugin.css');

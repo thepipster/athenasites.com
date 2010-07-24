@@ -103,7 +103,7 @@ foreach ($blog_list AS $blog) {
 			$server_ip = $data[3];
 			
 			if ($blog_id == 2 && $page_views > 100){
-				ApolloLogger::debug("[$day_date] Page views: " . $page_views . " >>> $sql1");
+				Logger::debug("[$day_date] Page views: " . $page_views . " >>> $sql1");
 			}
 			
 			//error_log(">>> Server IP: $server_ip");
@@ -196,7 +196,7 @@ function getSearchBots($blog_id, $date_from, $date_end, $day_date){
 	$data_list = $wpdb->get_results($sql, ARRAY_N);
 	
 	foreach($data_list as $data){
-		//ApolloLogger::dump($data);
+		//Logger::dump($data);
 		$botname = $data[0];
 		$hits = $data[1];
 		//error_log("BlogID: $blog_id Bot: $botname Hits: $hits Date: $day_date");
@@ -303,7 +303,7 @@ function getKeywordString($blog_id, $date_from, $date_end){
 	if ($no_keywords > 0){
 
 		//error_log(">> Found $no_keywords keywords");
-		//ApolloLogger::dump($keyword_list);
+		//Logger::dump($keyword_list);
 
 		for($k=0; $k<$no_keywords; $k++){
 			if ($k != 0){

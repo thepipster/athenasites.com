@@ -6,7 +6,7 @@ function echoImagePickerJSImageData(){
 
 	global $blog_id;
 	
-	ApolloLogger::debug("Blog ID: $blog_id");
+	Logger::debug("Blog ID: $blog_id");
 	
 	$args = array(
 		'post_type' => 'attachment',
@@ -24,12 +24,12 @@ function echoImagePickerJSImageData(){
 	$fav_ct = 0;
 		
 	$domain = WordPressHelper::getDomain($blog_id);
-	ApolloLogger::debug("Domain =  $domain");
+	Logger::debug("Domain =  $domain");
 		
 	if (isset($attachments)) {
 		foreach ($attachments as $post) {		
 			
-			//ApolloLogger::dump($post);
+			//Logger::dump($post);
 			
 			$post_id = $post->ID;
 			$mime_type = $post->post_mime_type; // e.g. image/jpeg
@@ -53,7 +53,7 @@ function echoImagePickerJSImageData(){
 			$image_width = $meta['width'];
 			$image_height = $meta['height'];
 
-			//ApolloLogger::debug("Post ID: $post_id Folder ID: $folder_id");
+			//Logger::debug("Post ID: $post_id Folder ID: $folder_id");
 			if (!isset($folder_id)) $folder_id = 1; // unassigned folder id			
 
 			if (ImageUtils::isImageFromMime($mime_type)){		
@@ -150,7 +150,7 @@ function echoPageViewsData($isGlobal=false){
 		$os_data = StatsRollupTables::getGlobalOSViewsLastNDays(30);		
 	}
 
-	//ApolloLogger::dump($view_data);
+	//Logger::dump($view_data);
 
 	// Create the page view array
 
@@ -216,8 +216,8 @@ function echoPageViewsData($isGlobal=false){
 	
 	$os_str = '';
 	
-	//ApolloLogger::debug("Unique Views: " . $unique_str);
-	//ApolloLogger::debug("Page Views: " . $views_str);
+	//Logger::debug("Unique Views: " . $unique_str);
+	//Logger::debug("Page Views: " . $views_str);
 			
 	$is_global_str = 'false';
 	if ($isGlobal) $is_global_str = 'true';
