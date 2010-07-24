@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+	jQuery UI Release!
+
+	Call task called 'deploy-release' to build a full release.
+	The release built will be stored on 'dist' dir.
+
+-->
+
+<project name="jquery-ui" default="deploy-release" basedir=".">
+	
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath>
+			<pathelement location="build/ant-contrib-0.6.jar"/>
+		</classpath>
+	</taskdef>
+	
+	<property file="ant.properties" />
+
+	<loadfile failonerror="no" srcFile="../version.txt" property="release.version" />
+	<property name="release.filename" value="jquery-ui-${release.version}" />
+
+	<property name="dist.dir" value="dist/${release.filename}/" />
+	<property name="build.dir" value="build" />
+	<property name="ui.dir" value="../" />
+	<property name="src.dir" value="${ui.dir}/ui/" />
+	<property name="theme.dir" value="${ui.dir}/themes/base/" />
+	<property name="docs.dir" value="${ui.dir}/docs/" />
+
+	<property name="min.folder" value="${dist.dir}/ui/minified" />
+
+	<property name="concatenated" value="jquery-ui" />
+	<property name="concatenated.i18n" value="jquery-ui-i18n" />
+
+	<property name="core.files" value="ui.core.js, ui.draggable.js, ui.droppable.js, ui.resizable.js, ui.selectable.js, ui.sortable.js, effects.core.js" />
+
+	<property description="YUI Compressor" name="yui-jar" value="${build.dir}/yuicompressor-2.4.2.jar" />
+	
+	<target name="deploy-release" depends="docs-download, concatenate, minify, copy, replace-version, prepend-header, zip" description="Release builder">
+	</target>
+
+	<target name="replace-version">
+		<replaceregexp match="@VERSION" replace="${release.version}" flags="g" byline="true">
+		    <fileset dir="${dist.dir}/ui/" includes="*.js"/>
+			<fileset dir="${dist.dir}/ui/minified/" includes="*.js"/>
+		</replaceregexp>
+		<echo message="Replaced all @VERSION to ${release.version}." />
+	</target>
+	
+	<target name="prepend-header">
+		<!-- TODO: refactor this ugly mess -->
+		<copy todir="${dist.dir}/headers/">
+			<fileset dir="${dist.dir}/ui/" includes="*.js" />
+		</copy>
+		<replaceregexp match="^(\/\*.*?\*\/\s).+" replace="\1" flags="s">
+		    <fileset dir="${dist.dir}/headers/" includes="*.js"/>
+		</replaceregexp>
+		<for param="file">
+			<path><fileset dir="${dist.dir}/ui/minified/" includes="*.js" /></path>
+			<sequential>
+				<propertyregex override="yes" property="target" input="@{file}" regexp=".+\\(.+)\.min\.js$" replace="\1"/>
+				<concat destfile="${dist.dir}/ui-headered/${target}.min.js">
+					<header file="${dist.dir}/headers/${target}.js" />
+					<fileset file="@{file}" />
+				</concat>
+			</sequential>
+		</for>
+		<copy todir="${dist.dir}/ui/minified">
+			<fileset dir="${dist.dir}/ui-headered/" includes="*.js" />
+		</copy>
+		<delete dir="${dist.dir}/headers/" />
+		<delete dir="${dist.dir}/ui-headered/" />
+	</target>
+
+	<target description="Zip the package" name="zip">
+		<zip destfile="${dist.dir}/../${release.filename}.zip">
+			<zipfileset dir="dist/" />
+		</zip>
+	</target>
+
+	<target name="concatenate">
+		<echo message="Building concatenated" />
+		<mkdir dir="${dist.dir}/ui/" />
+		<delete file="${dist.dir}/ui/${concatenated}.js" />
+
+		<concat destfile="${dist.dir}/ui/${concatenated}.js">
+			<filelist dir="${src.dir}/" files="${core.files}" />
+			<fileset dir="${src.dir}/" includes="ui.*.js, effects.*.js" excludes="${core.files}" />
+		</concat>
+		<echo message="Concatenated built." />
+
+		<concat destfile="${dist.dir}/themes/base/${concatenated}.css">
+			<fileset dir="${theme.dir}/" includes="ui.core.css" />
+			<fileset dir="${theme.dir}/" includes="ui.*.css" excludes="ui.all.css, ui.core.css, ui.base.cs, ui.theme.css" />
+			<fileset dir="${theme.dir}/" includes="ui.theme.css" />
+		</concat>
+		<echo message="Concatenated theme." />
+
+		<mkdir dir="${dist.dir}/ui/i18n/" />
+		<delete file="${dist.dir}/ui/i18n/${concatenated.i18n}.js" />
+
+		<concat destfile="${dist.dir}/ui/i18n/${concatenated.i18n}.js" encoding="utf-8">
+			<fileset dir="${src.dir}/i18n/" includes="ui.*.js" />
+		</concat>
+		<echo message="Concatenated i18n built." />
+	</target>
+
+	<target name="minify" depends="concatenate" description="Remove all comments and whitespace, no compression, great in combination with GZip">
+		<echo message="Building minified" />
+		<delete dir="${min.folder}/" />
+		<mkdir dir="${min.folder}" />
+		<delete dir="${min.folder}/i18n/" />
+		<mkdir dir="${min.folder}/i18n/" />
+
+		<apply executable="java" parallel="false">
+			<filelist dir="${dist.dir}/ui/" files="${concatenated}.js" />
+			<fileset dir="${src.dir}/" includes="ui.*.js, effects.*.js" />
+			<arg line="-jar" />
+			<arg path="${yui-jar}" />
+			<arg value="--charset" />  
+			<arg value="UTF-8" />  
+			<srcfile />
+			<arg line="-o" />
+			<mapper type="glob" from="*.js" to="${min.folder}/*.min.js" />
+			<targetfile />
+		</apply>
+		<echo message="Minified built." />
+
+		<apply executable="java" parallel="false">
+			<filelist dir="${dist.dir}/ui/i18n/" files="${concatenated.i18n}.js" />
+			<fileset dir="${src.dir}/i18n/" includes="ui.*.js" />
+			<arg line="-jar" />
+			<arg path="${yui-jar}" />
+			<arg value="--charset" />  
+			<arg value="UTF-8" />  
+			<srcfile />
+			<arg line="-o" />
+			<mapper type="glob" from="*.js" to="${min.folder}/i18n/*.min.js" />
+			<targetfile />
+		</apply>
+		<echo message="Minified i18n built." />
+	</target>
+
+	<target description="Copy needed folders" name="copy">
+		<echo message="Copying files" />
+		<mkdir dir="${dist.dir}" />
+
+		<copy overwrite="true" todir="${dist.dir}/">
+			<fileset dir="${ui.dir}/" includes="jquery-*.js" />
+		</copy>
+
+		<copy overwrite="true" todir="${dist.dir}/ui/">
+			<fileset dir="${src.dir}/" includes="ui.*.js, effects.*.js" />
+		</copy>
+
+		<copy overwrite="true" todir="${dist.dir}/ui/i18n/" >
+			<fileset dir="${src.dir}/i18n/" />
+		</copy>
+
+		<copy overwrite="true" todir="${dist.dir}/">
+			<fileset dir="${ui.dir}/" includes="*.txt" />
+		</copy>
+
+		<copy overwrite="true" todir="${dist.dir}/demos/" >
+			<fileset dir="${ui.dir}/demos/" />
+		</copy>
+
+		<copy overwrite="true" todir="${dist.dir}/external/" >
+			<fileset dir="${ui.dir}/external/" />
+		</copy>
+
+		<copy overwrite="true" todir="${dist.dir}/tests/" >
+			<fileset dir="${ui.dir}/tests/" />
+		</copy>
+
+		<copy overwrite="true" todir="${dist.dir}/docs/" >
+			<fileset dir="${ui.dir}/docs/" />
+		</copy>
+
+		<copy overwrite="true" todir="${dist.dir}/themes/" >
+			<fileset dir="${ui.dir}/themes/" />
+		</copy>
+		<echo message="Files copied." />
+	</target>
+	
+	 <target name="clean">
+	 	<delete dir="dist" />
+    </target>
+	
+	<target name="docs-download">
+		<mkdir dir="${docs.dir}" />
+		<property name="url" value="http://docs.jquery.com/action/render/UI/API/${release.version}/" />
+
+		<get src="${url}Draggable" dest="${docs.dir}draggable.html" />
+		<get src="${url}Droppable" dest="${docs.dir}droppable.html" />
+		<get src="${url}Resizable" dest="${docs.dir}resizable.html" />
+		<get src="${url}Selectable" dest="${docs.dir}selectable.html" />
+		<get src="${url}Sortable" dest="${docs.dir}sortable.html" />
+
+		<get src="${url}Accordion" dest="${docs.dir}accordion.html" />
+		<get src="${url}Datepicker" dest="${docs.dir}datepicker.html" />
+		<get src="${url}Dialog" dest="${docs.dir}dialog.html" />
+		<get src="${url}Progressbar" dest="${docs.dir}progressbar.html" />
+		<get src="${url}Slider" dest="${docs.dir}slider.html" />
+		<get src="${url}Tabs" dest="${docs.dir}tabs.html" />
+
+		<get src="http://docs.jquery.com/action/render/UI/Effects/animate" dest="${docs.dir}animate.html" />
+		<get src="http://docs.jquery.com/action/render/UI/Effects/addClass" dest="${docs.dir}addClass.html" />
+		<get src="http://docs.jquery.com/action/render/UI/Effects/effect" dest="${docs.dir}effect.html" />
+		<get src="http://docs.jquery.com/action/render/UI/Effects/hide" dest="${docs.dir}hide.html" />
+		<get src="http://docs.jquery.com/action/render/UI/Effects/removeClass" dest="${docs.dir}removeClass.html" />
+		<get src="http://docs.jquery.com/action/render/UI/Effects/show" dest="${docs.dir}show.html" />
+		<get src="http://docs.jquery.com/action/render/UI/Effects/switchClass" dest="${docs.dir}switchClass.html" />
+		<get src="http://docs.jquery.com/action/render/UI/Effects/toggle" dest="${docs.dir}toggle.html" />
+		<get src="http://docs.jquery.com/action/render/UI/Effects/toggleClass" dest="${docs.dir}toggleClass.html" />
+	</target>
+
+	<target name="docs-clean">
+		<delete dir="${docs.dir}" />
+	</target>
+	
+	<target name="whitespace">
+		<replaceregexp match="[\t ]+$" replace="" flags="g" byline="true">
+		    <fileset dir="${src.dir}" includes="*.js"/>
+		    <fileset dir="${src.dir}/i18n/" includes="*.js"/>
+		</replaceregexp>
+		<echo message="All trailing spaces removed." />
+	</target>
+
+</project>

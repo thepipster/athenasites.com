@@ -1,0 +1,172 @@
+/* Branding ////////////////////////////////////////// */
+
+.apollo_logo_small {
+	background-image: url('../images/logo_small.png');
+	background-repeat: no-repeat;
+	width: 85px;
+	height: 20px;
+}
+
+.apollo_logo_title {
+	background-image: url('../images/logo_small.png');
+	background-repeat: no-repeat;
+	padding-left: 100px;
+	padding-top: 5px;
+	height: 20px;
+}
+
+/* Icons ////////////////////////////////////////// */
+
+.apollo_folder {
+	background-image: url('../images/folder_icon.png');
+	background-repeat: no-repeat;
+	width: 24px;
+	height: 24px;
+}
+
+.apollo_folder:hover {
+	background-image: url('../images/folder_icon_hover.png');
+}
+
+.apollo_add_folder_icon {
+	background-image: url('../images/add_folder_icon.png');
+	background-repeat: no-repeat;
+	width: 24px;
+	height: 24px;
+}
+
+.apollo_folder_selected_icon {
+	background-image: url('../images/folder_selected_icon.png');
+	background-repeat: no-repeat;
+	width: 24px;
+	height: 24px;
+}
+
+.apollo_add_icon {
+	background-image: url('../images/add_icon.png');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+}
+
+/* Buttons ////////////////////////////////////////// */
+
+.apollo_small_add_button {
+	background-image: url('../images/small_add_button.png');
+	background-repeat: no-repeat;
+	height: 18px;
+	width: 45px;
+	cursor: pointer;
+}
+
+.apollo_small_add_button:hover {
+	background-image: url('../images/small_add_button_hover.png');
+}
+
+.apollo_add_button {
+	background-image: url('../images/add_button.png');
+	background-repeat: no-repeat;
+	height: 24px;
+	width: 60px;
+	cursor: pointer;
+}
+
+.apollo_add_button:hover {
+	background-image: url('../images/add_button_hover.png');
+}
+
+.apollo_ok_button {
+	background-image: url('../images/ok_button.png');
+	background-repeat: no-repeat;
+	height: 24px;
+	width: 60px;
+	cursor: pointer;
+}
+
+.apollo_ok_button:hover {
+	background-image: url('../images/ok_button_hover.png');
+}
+
+.apollo_update_button {
+	background-image: url('../images/update_button.png');
+	background-repeat: no-repeat;
+	height: 24px;
+	width: 60px;
+	cursor: pointer;
+}
+
+.apollo_update_button:hover {
+	background-image: url('../images/update_button_hover.png');
+}
+
+.apollo_change_button {
+	background-image: url('../images/change_button.png');
+	background-repeat: no-repeat;
+	height: 24px;
+	width: 60px;
+	cursor: pointer;
+}
+
+.apollo_change_button:hover {
+	background-image: url('../images/change_button_hover.png');
+}
+
+.apollo_add_slot_button {
+	background-image: url('../images/add_slot_button.png');
+	background-repeat: no-repeat;
+	height: 24px;
+	width: 65px;
+	cursor: pointer;
+}
+
+.apollo_add_slot_button:hover {
+	background-image: url('../images/add_slot_button_hover.png');
+}
+
+.apollo_add_subgallery_button {
+	background-image: url('../images/add_gallery_button.png');
+	background-repeat: no-repeat;
+	height: 24px;
+	width: 90px;
+	cursor: pointer;
+}
+
+.apollo_add_subgallery_button:hover {
+	background-image: url('../images/add_gallery_button_hover.png');
+}
+
+.apollo_thumbnail_button {
+	background-image: url('../images/thumbnail_button.png');
+	background-repeat: no-repeat;
+	height: 24px;
+	width: 90px;
+	cursor: pointer;
+}
+
+.apollo_thumbnail_button:hover {
+	background-image: url('../images/thumbnail_button_hover.png');
+}
+
+.apollo_add_folder_button {
+	background-image: url('../images/add_folder_button.png');
+	background-repeat: no-repeat;
+	height: 24px;
+	width: 90px;
+	cursor: pointer;
+}
+
+.apollo_add_folder_button:hover {
+	background-image: url('../images/add_folder_button_hover.png');
+}
+
+.apollo_delete_gallery_button {
+	background-image: url('../images/delete_gallery_button.png');
+	background-repeat: no-repeat;
+	height: 24px;
+	width: 105px;
+	cursor: pointer;
+}
+
+.apollo_delete_gallery_button:hover {
+	background-image: url('../images/delete_gallery_button_hover.png');
+}

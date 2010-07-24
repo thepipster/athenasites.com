@@ -1,0 +1,6 @@
+<?php
+Session::set("database_user", "someuser");
+Session::set("database_pass", "somepass");
+Session::set("database_name", "somedatabasename");
+Session::set("database_host", "localhost");
+?>

@@ -1,0 +1,264 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Athena Sites</title>
+
+<meta name="Description" content="Photography business in a box" />
+<meta name="Keywords" content="" />
+
+<!-- Favicon ///////////////////////////////////////////////////// -->
+
+<link rel="icon" type="image/png" href="favicon.png">
+
+<!--[if IE]>
+<link rel="shortcut icon" href="favicon.ico">
+<![endif]-->
+	
+<!-- Load styles //////////////////////////////////////////////////////////////////// -->
+<!--
+<link rel="stylesheet" href="css/SimpleScrum.css" type="text/css" /> 
+-->
+
+<!-- Javascript includes //////////////////////////////////////////////////////////// -->
+
+<script type="text/javascript" src="code/js/3rdparty/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="code/js/3rdparty/jquery.validate.min.js"></script>
+<script type="text/javascript" src="code/js/3rdparty/jquery.json-1.3.min.js"></script>
+
+<script type="text/javascript" src="code/js/utils/sha1.js"></script>
+
+<!-- DEBUG MODE -->
+<!--
+<script type="text/javascript" src="code/3rdparty/jquery-ui/ui/ui.core.js"></script>
+<script type="text/javascript" src="code/3rdparty/jquery-ui/ui/ui.draggable.js"></script>
+-->
+<!-- END DEBUG MODE -->
+ 
+
+<script src="code/js/RemoteManager.class.js" type="text/javascript"></script>
+<script src="code/js/DataManager.class.js" type="text/javascript"></script>
+
+<!-- Inline Style ////////////////////////////////////////////////////////////////// -->
+
+<style type="text/css">
+
+#contents {
+	margin-top: 100px;
+}
+
+#loginContainer {
+	height: 300px;
+	/* margin-right: 100px; */
+	width: 800px;
+	background-color: white;
+	margin-top: 10px;
+}
+
+#footer {
+	font-size: 12px;
+	height: 20px;
+	z-index: 1000; 
+}
+
+#footer .stats {
+	color: blue;
+}
+
+#footer .copyright {
+	font-size: 10px;
+	color: gray;
+}
+
+.contentsBox {
+	border-width: 2px;
+	border-color: #1c585d;
+	border-style: solid;
+	background-color: #96d5f5;
+	color: black;
+	width: 400px;
+	height: 200px;
+}
+
+#logoBox {
+	width: 256px;
+}
+
+.red {
+	color: red;
+	font-size: 14px;
+}
+
+label { width: 10em; float: left; }
+label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
+
+#debug_txt {
+	display: none;
+	position: absolute;
+	padding: 5px;
+	overflow: auto;
+	top: 20px;
+	left: 20px;
+	width: 250px;
+	height: 500px;
+	background-color: black;
+	z-index: 9999;
+	border: medium double gray;	
+	filter: alpha(opacity=60);
+	-moz-opacity:.60;
+	opacity:.60;	
+	font-size: 12px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+	<!-- Javascript code /////////////////////////////////////////////////////////////// -->
+
+	<div id='debug_txt'></div>
+	
+	<div id="contents" align="center">		
+	
+		<div id="logoBox">
+			<img src="images/logo.png" width="256"/>
+		</div>
+			
+	
+		<div id='loginContainer'>
+						
+			<div align='center' class='contentsBox' id='loginBox' style='padding-top:30px;'>
+	
+				<div align='center'>
+					<h3>Welcome to Athena Sites <span class='red'>(alpha)</span></h3>
+				</div>	
+				<br/>
+	
+				<form id="loginForm" method="get" action="" onsubmit="return false;">
+
+					<table width="90%" border="0">
+						<tr>
+							<td align="right">Email:</td>
+							<td><input type='text' name='email' id='email' value='' class="required email"/></td>
+						</tr>
+						<tr>
+							<td align="right">Password:</td>
+							<td><input type='password' name='password' id='password' value='' class="required"/></td>
+						</tr>
+					</table>				
+						
+					<br/>
+					<div align='center'>
+						<!--
+						<button onclick='ssLogin.onLogin()'>Login</button>
+						-->
+						<input type="submit" value="Login" onclick='ssLogin.onLogin()'>
+					</div>	
+						
+				</form>
+				
+			</div>
+			
+		</div><!-- loginContainer -->
+
+		<div id='footer'>
+			<div class='stats'>&nbsp;</div>
+			<br/>
+			<div class='copyright'>All text, code and design is copyright &copy 2009-2010 ApolloSites, Inc. All rights reserved.</div>
+		</div>
+	
+	</div> <!-- contents -->	
+ 
+</body>
+</html>
+
+<!-- Javascript code /////////////////////////////////////////////////////////////// -->
+
+<script type="text/javascript">
+
+
+var ssLogin = {
+
+	// ////////////////////////////////////////////////////////////////////////
+
+	init : function(){
+		
+		$('#status_txt').html("test");
+		RemoteManager.init();
+		
+		ssLogin.getStats();
+		
+		//DataManager.init();
+				
+		//StaticRemoteManager.getLastUser(onGotLastUser);		
+	},
+
+	// ////////////////////////////////////////////////////////////////////////
+	
+	onLogin : function(){		
+		$('#loginForm').validate({messages: {email: "Enter valid email!", password: "Enter a password"}});
+		if ($('#loginForm').valid()){
+			RemoteManager.checkUser($('#email').val(), $('#password').val(), ssLogin.onPasswordChecked);
+		}
+	},
+		
+	// ////////////////////////////////////////////////////////////////////////
+	
+	onPasswordChecked : function(isValid){
+	
+		if (isValid){
+			window.location = "main.php";		
+			// Setup classes...
+			/*
+			DataManager.init();
+			WhiteBoardFrame.init('');
+	
+			WhiteBoardFrame.paint('WhiteBoardContents');
+			BacklogFrame.paint('BackLogContents', function(){backlogFrameLoaded(isRemote)});	
+			*/
+			// DataManager.loadFromServer(function(){callback(true);});				
+	
+		}
+		else {
+			alert('Bad username/password');
+		}
+		
+	},
+
+	// ////////////////////////////////////////////////////////////////////////
+
+	getStats : function(){
+		
+		var paras = {cmd : 'getStats'};
+
+		$.ajax({
+			url: RemoteManager.m_url,
+			dataType: "text",
+			success: function(ret){ssLogin.onGotStats(ret);},
+			data: paras
+		});
+	},
+	
+	
+	onGotStats : function(ret){
+
+		eval("var data = ("+ret+")");
+
+        if (data.result == 'true'){
+        	
+        	var no_users = data.us;
+        	var no_tasks = data.tk;
+        	var no_projects = data.pr;
+        	
+        	var txt = no_users + " users, with " + no_projects + " projects and " + no_tasks + " tasks";
+        	$('.stats').html(txt);
+        }
+   	}	
+}
+
+ssLogin.init();
+//$(document).ready(ssLogin.init());
+
+</script>
+

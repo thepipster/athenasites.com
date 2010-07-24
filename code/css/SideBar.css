@@ -1,0 +1,74 @@
+
+#SideBar {
+	min-width: 100px;
+	width: 10%;
+	height: 100%;
+	float: left;
+	padding: 0px;
+	margin: 0px;
+}
+
+#SideBar p {
+	padding-left: 10px;
+	font-size: 14px;
+}
+
+#SideBar .add_new_project {
+	font-size: 10px;
+	color: #990000;
+	cursor: pointer;
+}
+
+#SideBar .add_new_project:hover {
+	color: white;
+}
+
+/* SideBar Projects /////////////////////////////// */
+
+#SideBar_Projects {
+}
+
+/* SideBar Users /////////////////////////////// */
+
+#SideBar_Users {
+}
+
+#SideBar .project_user {
+	padding-left: 10px;
+	padding-top: 3px;
+}
+
+#SideBar .project_user:hover {
+	color: white;
+	cursor: pointer;
+}
+
+#SideBar .project_user_force_hover {
+	color: #303030;
+	cursor: pointer;
+	background-color: #dfe2e2;
+}
+
+#SideBar .project_user_special {
+	padding-left: 10px;
+	padding-top: 3px;
+}
+
+#SideBar .project_user_special:hover {
+	color: white;
+	cursor: pointer;
+}
+
+#SideBar .selected {
+	color: #f3f2f1;
+}
+
+#SideBar .user_name {
+	position: relative;
+	padding-left: 5px;
+	top: -2px;
+}
+
+#SideBar .user_icon {
+}
+

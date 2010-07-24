@@ -1,0 +1,65 @@
+crum
+#SettingsFrame {
+}
+
+#SettingsFrame .settings_panel {
+	border: 1px solid #CCCCCC;
+	margin: 10px 5px;
+	padding: 0px 0px 10px 0px;
+	background-color: #EFEFEF;
+}
+
+#SettingsFrame .red_text {
+	color: red;
+	font-size: 10px;
+}
+
+#SettingsFrame h3 {
+	font-size: 14px;
+	padding: 2px 5px;
+	margin: 0 0 10px 0;
+	background-color: #CCCCCC;
+	display: block;
+	height: 18px;
+}
+
+#SettingsFrame h4 {
+	font-size: 12px;
+	padding-left: 10px;
+	margin: 0 0 10px 0;
+}
+
+#SettingsFrame .project_user {
+	padding-top: 3px;
+}
+
+#SettingsFrame .project_user:hover {
+	color: white;
+	cursor: pointer;
+}
+
+#SettingsFrame .selected {
+	color: #f3f2f1;
+}
+
+#SettingsFrame .user_name {
+	position: relative;
+	padding-left: 5px;
+	top: -2px;
+}
+
+
+#SettingsFrame .yes {
+	background-image: url('/images/button_ok.png');
+	background-repeat: no-repeat;
+	width: 14px;
+	height: 14px;
+}
+
+#SettingsFrame .no {
+	background-image: url('/images/button_cancel.png');
+	background-repeat: no-repeat;
+	width: 14px;
+	height: 14px;
+}
+

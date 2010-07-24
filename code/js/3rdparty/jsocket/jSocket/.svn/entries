@@ -1,0 +1,74 @@
+9
+
+dir
+79
+http://jsocket.googlecode.com/svn/trunk/jSocket
+http://jsocket.googlecode.com/svn
+
+
+
+2008-05-18T02:54:34.974056Z
+78
+aidamina
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+8fcfcc5c-d04c-0410-8d28-c99088ae29c4
+
+test
+dir
+
+license.txt
+file
+
+
+
+
+2008-11-16T01:13:20.000000Z
+bc528f2a2d304ab1e6e8a80c38bb5cce
+2008-05-10T12:58:55.406049Z
+12
+aidamina
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1200
+
+server
+dir
+
+src
+dir
+
+flash
+dir
+

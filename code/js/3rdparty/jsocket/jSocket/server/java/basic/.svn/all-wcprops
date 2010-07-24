@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/77/trunk/jSocket/server/java/basic
+END
+.classpath
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/77/trunk/jSocket/server/java/basic/.classpath
+END
+crossdomain.xml
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/77/trunk/jSocket/server/java/basic/crossdomain.xml
+END
+.project
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/77/trunk/jSocket/server/java/basic/.project
+END

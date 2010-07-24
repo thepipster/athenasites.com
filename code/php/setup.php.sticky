@@ -1,0 +1,14 @@
+<?php
+if ($_SERVER['HTTP_HOST'] == "athena.local"){
+	Session::set("database_user", "mike");
+	Session::set("database_pass", "mike76");
+	Session::set("database_name", "athenasites");
+	Session::set("database_host", "localhost");
+}
+else {
+	Session::set("database_user", "etasking_appuser");
+	Session::set("database_pass", "payjQZeZAZ7HB5pe");
+	Session::set("database_name", "etasking");
+	Session::set("database_host", "localhost");
+}
+?>

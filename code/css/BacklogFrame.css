@@ -1,0 +1,165 @@
+
+#BackLogContents {
+}
+
+#BackLogContents .project_write_status {
+	color: red;
+	font-size: 10px;
+}
+
+#BackLogContents .help_text {
+	font-size: 10px;
+	color: blue;
+	margin-left: 5px;
+}
+
+/* Node Styles /////////////////////////////////////////////////////// */
+
+#BackLogContents .Yellow {
+	background-color: #f5f06a;
+}
+
+#BackLogContents .Blue {
+	background-color: #b1daee;
+}
+
+#BackLogContents .Red {
+	background-color: #fee1e7;
+}
+
+#BackLogContents .Green {
+	background-color: #c4ef93;
+}
+
+/* //////////////////////////////////////////////////////////// */
+
+#BackLogContents div.section, .createNew {
+	border: 1px solid #CCCCCC;
+	margin: 10px 5px;
+	padding: 0px 0px 10px 0px;
+	background-color: #EFEFEF;
+}
+
+
+#BackLogContents .createNew input { margin-left: 5px; }
+
+#BackLogContents .createNew h3, div.section h3{
+	font-size: 14px;
+	padding: 2px 5px;
+	margin: 0 0 10px 0;
+	background-color: #CCCCCC;
+	display: block;
+	height: 18px;
+}
+
+/* Sprint styles for the backlog /////////////////////////// */
+
+#BackLogContents .deleteSprintLink {
+	padding-top: 2px;
+	font-size: 10px;
+	color: red;
+	cursor:default;
+	float: right;
+}
+
+#BackLogContents .deleteSprintLink:hover {
+	color: white;
+	cursor:default;
+}
+
+#BackLogContents .sprintPoints {
+	font-weight: normal;
+	font-size: 12px;
+	color: blue;
+	padding-left: 5px;	
+	float: left;
+}
+
+#BackLogContents .sprintTime {
+	font-weight: normal;
+	font-size: 12px;
+	color: green;
+	padding-left: 5px;	
+	float: left;
+}
+
+#BackLogContents .sprintName {
+	font-weight: normal;
+	font-size: 14px;
+	color: black;
+	float: left;
+	overflow: hidden;
+}
+
+/* Task styles for the backlog /////////////////////////// */
+
+#BackLogContents .taskTime {
+	font-size: 10px;
+	color: blue;
+	padding-left:5px;
+	float: left;	
+	margin-top: 2px;
+}
+
+#BackLogContents .taskAsignee {
+	font-size: 10px;
+	color: blue;
+	padding-left:5px;
+	float: left;	
+	color: #990000;
+	margin-top: 2px;
+}
+
+#BackLogContents .taskName {
+	float: left;
+	overflow: hidden;
+}
+
+#BackLogContents .sprintState {
+	font-weight: normal;
+	margin-right:5px;
+	float: left;
+}
+
+#BackLogContents .taskEdit {
+
+	background-image: url('/images/task_edit.png');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	
+	float:right; 
+	cursor:default;
+}
+
+#BackLogContents .taskDelete {
+	background-image: url('/images/task_delete.png');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	
+	float:right; 
+	cursor:default;
+}
+
+/* End Task styles for the backlog /////////////////////////// */
+
+#BackLogContents div.section h3 {
+	cursor: move;
+}
+
+/* Style for each task item */
+#BackLogContents div.lineitem {
+	font-weight: bold;
+	margin: 3px 10px;
+	padding: 2px;
+	background-color: #FFFFFF;
+	overflow: hidden;
+	cursor: move;
+}
+
+#BackLogContents h1 {
+	margin-bottom: 0;
+	font-size: 18px;
+}
+

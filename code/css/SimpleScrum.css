@@ -1,0 +1,110 @@
+
+html{
+	margin:0;
+	padding: 0;
+	height: 100%;
+} 
+
+html, body {
+/*	font-family: Arial, Helvetica; */
+	font-family: "Lucida Grande",Tahoma,Verdana,Arial,sans-serif;
+	font-size: 11px;
+	background-color: #b3b3b3;
+	height: 100%;
+	width: 100%;
+	margin:0;
+	padding: 0;
+}
+
+#MenuBar{
+	margin-bottom: 10px;
+	width: 90%;
+	height: 30px;
+	border: 1px solid black;
+	background-color: #cccccc;
+	left: 150px;
+	position: absolute;
+	top: 0px;
+}
+
+.ViewFrame {
+	background-color: #f3f2f1;
+	font-size: 12px;
+	color: black;
+	border: 1px solid black;
+	margin: 0px;
+	padding: 0;
+	width: 98%;
+	height: 92%;
+	/*border: medium double rgb(250,0,255);*/
+}
+
+#Content {	
+	width: 100%;
+	height: 100%;
+	min-width: 1000px;
+	padding: 0px;
+	margin: 0px;
+}
+
+#MainContent {
+	min-width: 800px;
+	height: 100%;
+	width: 90%;
+	float: right;
+	padding: 0px;
+	margin: 0px;
+}
+
+
+#debug_txt {
+	display: none;
+	position: absolute;
+	padding: 5px;
+	overflow: auto;
+	top: 20px;
+	left: 20px;
+	width: 250px;
+	height: 500px;
+	background-color: black;
+	z-index: 9999;
+	border: medium double gray;	
+	filter: alpha(opacity=60);
+	-moz-opacity:.60;
+	opacity:.60;	
+}
+
+#bgFade {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: -999em;
+	filter: alpha(opacity=50);
+	-moz-opacity:.50;
+	opacity:.50;
+}
+
+/* Basic dialog box //////////////////////////////////////////// */
+
+.dialogBox {
+	border-width: 2px;
+	border-color: #1c585d;
+	border-style: solid;
+	background-color: #96d5f5;
+	display: none;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 500px;
+	z-index: 900;
+}
+
+
+#status_txt {
+/*
+	position: absolute;
+	left: 50%;
+	top: 20px;
+*/	
+	z-index: 100;
+}
