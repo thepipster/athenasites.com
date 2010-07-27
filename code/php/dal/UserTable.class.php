@@ -9,7 +9,7 @@ class UserTable {
     /**
      * Create a new user
      */
-	public static function create($email, $name, $sha1_pass, $user_group){
+	public static function create($email, $name, $password_hash, $user_group){
 	
         // Get data in correct locale (SQL's NOW() doesn't do that)
         $target_date  = mktime(date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
@@ -17,7 +17,7 @@ class UserTable {
         	
 		$sql = DatabaseManager::prepare(
 			"INSERT INTO athena_Users (email, name, password_hash, account_created, last_login, user_group) VALUES (%s, %s, %s, %s, %s, %d)", 
-			$email, $name, $sha1_pass, $date_str, $date_str, $user_group);
+			$email, $name, $password_hash, $date_str, $date_str, $user_group);
 			
 		DatabaseManager::submitQuery($sql);
 		
@@ -29,8 +29,8 @@ class UserTable {
     /**
      * Update details about an existing user
      */
-    public static function update($id, $name, $sha1_pass){
-		$sql = DatabaseManager::prepare("UPDATE athena_Users SET name = %s, password_hash = %s WHERE id = %d", $name, $sha1_pass, $id);
+    public static function update($id, $name, $password_hash){
+		$sql = DatabaseManager::prepare("UPDATE athena_Users SET name = %s, password_hash = %s WHERE id = %d", $name, $password_hash, $id);
 		return DatabaseManager::submitQuery($sql);
     }
     
@@ -43,13 +43,31 @@ class UserTable {
 		// TBD
 	}
 	
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	public static function getPasswordFromEmail($email){
+		$sql = DatabaseManager::prepare("SELECT password_hash FROM athena_Users WHERE email = %s ", $email);			
+		return DatabaseManager::getVar($sql);				
+	}
+		
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
-	public static function checkValid($email, $sha1_pass){
-		$sql = DatabaseManager::prepare("SELECT id FROM athena_Users WHERE email = %s AND password_hash = %s", $email, $sha1_pass);
+	public static function checkValid($email, $password_hash){
+		$sql = DatabaseManager::prepare("SELECT id FROM athena_Users WHERE email = %s AND password_hash = %s", $email, $password_hash);
 		return DatabaseManager::getVar($sql);
 	}
 	
+	// ///////////////////////////////////////////////////////////////////////////////////////
+	
+	public static function getUser($id){
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_Users WHERE id = %d", $id);
+		$data = DatabaseManager::getResults($sql);
+		if (isset($data[0])){
+			return $data[0];
+		}
+		return null;
+	}
+
 	// ///////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -63,7 +81,7 @@ class UserTable {
 
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
-	public static function updateLastLoginDate($id){
+	public static function updateLastLogin($id){
 	    $target_date  = mktime(date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
 	    $date_str = date('Y-m-d H:i:s', $target_date);
 

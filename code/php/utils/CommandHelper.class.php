@@ -1,4 +1,47 @@
 <?php
+/**
+* *******************************************************************
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+* 
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+* 
+* *******************************************************************
+*
+* This class provides a way consitent and simplified way to handle user content
+* from the client (browser).
+*
+* Requires: a slighlty modified version of Garry Whites' browser detection class (Browser.class.php) 
+* for the optional init method, if you don't use this then you don't need this file.
+* 
+* Usage; 
+*
+* [Optional] Call CommandHelper::init() to setup (this determines if the browser supports gzip)
+* Alternatively, just set CommandHelper::$ZIP_MESSAGE yourself.
+*
+* Validation examples;
+*
+* To validate a $POST or $GET para called 'myParaName' that is required and you expect to be numeric call;
+* CommandHelper::getPara('myParaName', true, CommandHelper::$PARA_TYPE_NUMERIC);
+*
+* To validate a $POST or $GET para called 'myParaName' that is required and you expect to be a string call;
+* CommandHelper::getPara('myParaName', true, CommandHelper::$PARA_TYPE_STRING);
+*
+* To validate a $POST or $GET para called 'myParaName' that is NOT required and you expect to be a json encoded object call;
+* CommandHelper::getPara('myParaName', false, CommandHelper::$PARA_TYPE_JSON);
+*
+* @author Mike Pritchard (mike@adastrasystems.com) 
+*
+*/
 class CommandHelper {
 
 	public static $PARA_TYPE_NUMERIC = 0;
@@ -9,10 +52,14 @@ class CommandHelper {
 	// ///////////////////////////////////////////////////////////////////////////////////////
 	
 	public static function init(){
-		// Turn off gzip for IE6 or lower, 'cos it can't handle it
-	    $br = new Browser;
 	
-	    if ($br->Name == "MSIE" && $br->Version <= 6.0){
+		$browser = new Browser();
+			 	
+		// Turn off gzip for IE6 or lower, 'cos it can't handle it
+		$browser_name = $browser->getBrowser();
+		$browser_version = $browser->getVersion();
+		
+	    if ($browser_name == Browser::BROWSER_IE && $browser_version < 7){
 	    	self::$ZIP_MESSAGE = false;
 		}
 		else {
@@ -24,6 +71,8 @@ class CommandHelper {
 	
 	/**
 	* Get a para from either a $_GET or $_POST. Also, check for any sql injection attacks
+	*
+	* @return The validated para, or null if validation failed.
 	* @para paraName
 	* @para required if true, this will return an error message and kill the php session
 	*/
@@ -41,54 +90,62 @@ class CommandHelper {
 	        $val_set = true;
 	    }
 	
+		$typestr = "Unknown";
+	
 	    if ($val_set){
 	
 	        switch($type){
 	            
 	            case self::$PARA_TYPE_NUMERIC :
-	                if (!is_numeric($val)){
-	                	Logger::error("Expecting numeric ($type) value for '$paraName', possible SQL injection!");
-	                    $msg = CommandHelper::getErrorMessage("Expecting numeric ($type) value for '$paraName', possible SQL injection!");
-	                    self::sendMessage($msg);
-	                    die();
+	            	$typestr = 'numeric';
+	                if (is_numeric($val)){
+	                	return $val;
 	                }
 	                break;
 	
 	            case self::$PARA_TYPE_STRING :
-	                $val = mysql_real_escape_string($val);
+	                return mysql_real_escape_string($val);
 	                break;
 	
 	            case self::$PARA_TYPE_JSON :
-	                // Nothing to do, let through as it'll be parsed into json which will make it safe
+	            	$typestr = 'JSON';
+	            	// Test to see if it can be decoded
+	            	$test = json_decode($val);
+	            	if ($test){
+		                return $val;
+	            	}
 	                break;
 	        }
-	
-	        return $val;
+	        
+			if ($required){
+				self::sendValidateFailMessage("Validation failed, expecting '$paraName' to be of type $typestr");
+				die();
+			}
+	        
 	    }
-	
-	
+
+		// If we get here, then could not find para in $GET or $POST	        
 		if ($required){
-			self::sendErrorMessage("Parameter not set, expecting '$paraName'");
+			self::sendValidateFailMessage("Parameter not set, expecting '$paraName'");
 			die();
 		}
-		
+				
 		return false;
 	}
 	
 	// ///////////////////////////////////////////////////////////////////////////////////////
-	
-	public static function getErrorMessage($msg){
-		return '{"msg":999,"error": "'.$msg.'"}';
-	}
-	
-	public static function sendErrorMessage($msg){
-		self::sendTextMessage(self::getErrorMessage($msg));
+
+	private static function sendValidateFailMessage($msg){
+		$data['result'] = 'fail';
+		$data['data'] = 'Validation failure: ' . $msg;
+		error_log("Validation failure!!!");
+		self::sendMessage($data);
 	}
 	
 	// ///////////////////////////////////////////////////////////////////////////////////////
-	
+		
 	/**
-	* Send a normal text (string) message back to the client
+	* Send a normal text (string) message back to the client.
 	*/
 	public static function sendTextMessage($msg){
 	
@@ -104,7 +161,10 @@ class CommandHelper {
 	// ///////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	* Send the message back to the client, optionally gzip the message
+	* Send the message back to the client, optionally gzip the message. The data is encoded
+	* using json_encode, see http://php.net/manual/en/function.json-encode.php for more information
+	*
+	* @param data - The data to be encoded
 	*/
 	public static function sendMessage($data){
 	
