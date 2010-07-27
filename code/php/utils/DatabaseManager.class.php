@@ -118,6 +118,31 @@ class DatabaseManager {
 
 	// //////////////////////////////////////////////////////////////////////////////////////
 
+	public static function insert($query){
+	
+		// Check to see if connection has been opened, if not connect to database
+		if (self::$connection == NULL)
+			self::connect();
+
+		if (self::$verbose == true){
+			Logger::debug($query);
+		}
+			
+		// Submit query....
+		$result = mysql_query($query, self::$connection);
+
+		// Handle result.....
+		if (!$result){
+			Logger::fatal("Database query error = " . mysql_error() . " Query = [$query] ");
+		}
+		//else
+		//	Logger::debug("Database Query = [$query] ");	
+				
+		return mysql_insert_id();
+	}
+	
+	// //////////////////////////////////////////////////////////////////////////////////////
+
 	public static function submitQuery($query){
 
 		// Check to see if connection has been opened, if not connect to database

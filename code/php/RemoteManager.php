@@ -125,15 +125,13 @@ function checkValid(){
 				
 }
 
+
 // ///////////////////////////////////////////////////////////////////////////////////////
 
 function checkUser($email, $sha1_pass){
 
-	Logger::debug("checkUser($email, $sha1_pass)");
+	$id = UserTable::checkValid($email, $sha1_pass);
 	
-	$sql = DatabaseManager::prepare("SELECT id FROM athena_Users WHERE email = %s AND password_hash = %s", $email, $sha1_pass);
-	$id = DatabaseManager::getVar($sql);
-
     $target_date  = mktime(date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
     $date_str = date('Y-m-d H:i:s', $target_date);
 	
@@ -143,10 +141,8 @@ function checkUser($email, $sha1_pass){
 		Session::clear("userid"); // Clear the userid in the session
 		$msg = '{"result":"false", "msg": "Bad Username/password"}';
 	}
-	else {
-	
-		$sql = DatabaseManager::prepare("UPDATE athena_Users SET last_login = %s WHERE id = %d", $date_str, $id);
-		DatabaseManager::submitQuery($sql);
+	else {	
+		UserTable::updateLastLoginDate($id);
 		Session::set("username", $email); // Store username in session, used for validation
 		Session::set("userid", $id); // Store username in session, used for validation
 		$msg = '{"result":"true", "msg": "OK!"}';
