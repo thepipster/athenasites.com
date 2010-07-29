@@ -1,6 +1,6 @@
 <?php
 
-require_once("code/php/setup.php");
+require_once("admin/code/php/setup.php");
 
 Logger::echoLog();
 
