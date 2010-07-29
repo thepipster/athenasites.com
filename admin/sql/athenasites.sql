@@ -4,7 +4,7 @@
 #
 # Host: localhost (MySQL 5.0.41-log)
 # Database: athenasites
-# Generation Time: 2010-07-23 22:57:52 -0600
+# Generation Time: 2010-07-28 23:21:24 -0600
 # ************************************************************
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -17,54 +17,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
-# Dump of table apollo_Folders
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `apollo_Folders`;
-
-CREATE TABLE `apollo_Folders` (
-  `id` int(11) NOT NULL auto_increment,
-  `blog_id` bigint(20) default NULL,
-  `name` varchar(255) default 'Unamed Folder',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
-
-LOCK TABLES `apollo_Folders` WRITE;
-/*!40000 ALTER TABLE `apollo_Folders` DISABLE KEYS */;
-INSERT INTO `apollo_Folders` (`id`,`blog_id`,`name`)
-VALUES
-	(1,0,'Reserved'),
-	(2,0,'Reserved'),
-	(3,0,'Reserved'),
-	(4,0,'Reserved'),
-	(5,0,'Reserved'),
-	(6,0,'Reserved'),
-	(7,0,'Reserved'),
-	(8,0,'Reserved'),
-	(9,0,'Reserved'),
-	(10,2,'wedding'),
-	(11,2,'couples'),
-	(12,2,'children'),
-	(13,2,'seniors, young adults'),
-	(14,2,'sports'),
-	(15,2,'pets'),
-	(16,2,'products'),
-	(19,1,'test images'),
-	(20,3,'test images'),
-	(21,0,'new folder'),
-	(22,5,'Home'),
-	(23,5,'Weddings 1'),
-	(24,5,'Weddings 2'),
-	(25,5,'Vail'),
-	(26,5,'Keystone'),
-	(27,3,'broadmoor'),
-	(28,3,'site graphics'),
-	(30,2,'families and maternity');
-
-/*!40000 ALTER TABLE `apollo_Folders` ENABLE KEYS */;
-UNLOCK TABLES;
-
-
 # Dump of table apollo_GalleryMeta
 # ------------------------------------------------------------
 
@@ -72,7 +24,7 @@ DROP TABLE IF EXISTS `apollo_GalleryMeta`;
 
 CREATE TABLE `apollo_GalleryMeta` (
   `id` int(11) NOT NULL auto_increment,
-  `page_post_id` bigint(20) default NULL,
+  `page_id` bigint(20) default NULL,
   `gallery_number` tinyint(2) default '0',
   `title` varchar(255) default NULL,
   `description` varchar(255) default NULL,
@@ -84,7 +36,7 @@ CREATE TABLE `apollo_GalleryMeta` (
 
 LOCK TABLES `apollo_GalleryMeta` WRITE;
 /*!40000 ALTER TABLE `apollo_GalleryMeta` DISABLE KEYS */;
-INSERT INTO `apollo_GalleryMeta` (`id`,`page_post_id`,`gallery_number`,`title`,`description`,`image_post_id`,`theme_para_id`,`blog_id`)
+INSERT INTO `apollo_GalleryMeta` (`id`,`page_id`,`gallery_number`,`title`,`description`,`image_post_id`,`theme_para_id`,`blog_id`)
 VALUES
 	(1,4,1,'',NULL,NULL,102,1);
 
@@ -345,341 +297,6 @@ VALUES
 	(19,2,'567',210);
 
 /*!40000 ALTER TABLE `apollo_GlobalParas` ENABLE KEYS */;
-UNLOCK TABLES;
-
-
-# Dump of table apollo_MediaToFolder
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `apollo_MediaToFolder`;
-
-CREATE TABLE `apollo_MediaToFolder` (
-  `folder_id` int(11) default NULL,
-  `media_post_id` bigint(20) default NULL,
-  `blog_id` bigint(20) default '2'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-LOCK TABLES `apollo_MediaToFolder` WRITE;
-/*!40000 ALTER TABLE `apollo_MediaToFolder` DISABLE KEYS */;
-INSERT INTO `apollo_MediaToFolder` (`folder_id`,`media_post_id`,`blog_id`)
-VALUES
-	(10,277,2),
-	(10,276,2),
-	(10,275,2),
-	(10,273,2),
-	(10,272,2),
-	(10,271,2),
-	(10,270,2),
-	(10,269,2),
-	(10,268,2),
-	(10,267,2),
-	(10,266,2),
-	(10,265,2),
-	(12,264,2),
-	(11,263,2),
-	(10,262,2),
-	(10,261,2),
-	(10,260,2),
-	(11,259,2),
-	(11,258,2),
-	(11,257,2),
-	(10,256,2),
-	(10,255,2),
-	(10,254,2),
-	(10,253,2),
-	(10,252,2),
-	(10,251,2),
-	(10,249,2),
-	(10,242,2),
-	(13,241,2),
-	(12,240,2),
-	(13,239,2),
-	(13,238,2),
-	(12,237,2),
-	(12,236,2),
-	(12,235,2),
-	(12,234,2),
-	(12,233,2),
-	(12,232,2),
-	(14,230,2),
-	(11,229,2),
-	(12,228,2),
-	(12,226,2),
-	(12,225,2),
-	(12,224,2),
-	(12,223,2),
-	(12,222,2),
-	(12,221,2),
-	(12,219,2),
-	(12,218,2),
-	(12,216,2),
-	(12,214,2),
-	(12,212,2),
-	(12,211,2),
-	(12,209,2),
-	(12,208,2),
-	(10,207,2),
-	(10,206,2),
-	(10,205,2),
-	(12,203,2),
-	(12,202,2),
-	(10,200,2),
-	(11,199,2),
-	(10,198,2),
-	(12,197,2),
-	(11,183,2),
-	(11,182,2),
-	(11,181,2),
-	(11,180,2),
-	(13,178,2),
-	(11,177,2),
-	(11,176,2),
-	(12,175,2),
-	(11,174,2),
-	(11,173,2),
-	(13,172,2),
-	(11,171,2),
-	(11,170,2),
-	(11,168,2),
-	(13,167,2),
-	(11,166,2),
-	(11,165,2),
-	(13,164,2),
-	(13,163,2),
-	(11,162,2),
-	(11,161,2),
-	(11,160,2),
-	(11,159,2),
-	(11,158,2),
-	(11,156,2),
-	(11,155,2),
-	(13,154,2),
-	(11,153,2),
-	(11,152,2),
-	(11,151,2),
-	(11,149,2),
-	(16,148,2),
-	(10,147,2),
-	(10,146,2),
-	(10,145,2),
-	(10,143,2),
-	(10,142,2),
-	(10,141,2),
-	(10,140,2),
-	(10,139,2),
-	(10,138,2),
-	(10,137,2),
-	(10,136,2),
-	(10,135,2),
-	(10,134,2),
-	(10,133,2),
-	(10,131,2),
-	(10,130,2),
-	(10,129,2),
-	(10,128,2),
-	(10,126,2),
-	(16,125,2),
-	(10,123,2),
-	(10,122,2),
-	(10,121,2),
-	(11,120,2),
-	(10,119,2),
-	(10,115,2),
-	(10,114,2),
-	(10,109,2),
-	(11,108,2),
-	(11,107,2),
-	(11,106,2),
-	(11,105,2),
-	(11,104,2),
-	(10,103,2),
-	(10,102,2),
-	(10,101,2),
-	(10,100,2),
-	(11,99,2),
-	(11,98,2),
-	(11,96,2),
-	(10,95,2),
-	(10,94,2),
-	(10,93,2),
-	(10,92,2),
-	(10,91,2),
-	(10,90,2),
-	(10,89,2),
-	(10,88,2),
-	(10,86,2),
-	(10,84,2),
-	(10,83,2),
-	(10,82,2),
-	(10,81,2),
-	(10,80,2),
-	(10,79,2),
-	(10,78,2),
-	(10,77,2),
-	(10,76,2),
-	(10,75,2),
-	(10,74,2),
-	(10,73,2),
-	(12,72,2),
-	(12,71,2),
-	(12,69,2),
-	(12,68,2),
-	(12,67,2),
-	(14,66,2),
-	(12,65,2),
-	(12,64,2),
-	(12,62,2),
-	(12,57,2),
-	(15,55,2),
-	(11,54,2),
-	(12,52,2),
-	(12,50,2),
-	(12,48,2),
-	(11,411,2),
-	(11,409,2),
-	(11,410,2),
-	(11,408,2),
-	(27,31,3),
-	(27,32,3),
-	(27,33,3),
-	(27,35,3),
-	(27,34,3),
-	(27,37,3),
-	(27,26,3),
-	(27,25,3),
-	(27,24,3),
-	(27,23,3),
-	(27,22,3),
-	(27,21,3),
-	(27,20,3),
-	(27,19,3),
-	(27,18,3),
-	(27,17,3),
-	(23,307,5),
-	(23,306,5),
-	(23,305,5),
-	(23,304,5),
-	(23,303,5),
-	(23,302,5),
-	(23,301,5),
-	(23,300,5),
-	(23,299,5),
-	(23,298,5),
-	(23,297,5),
-	(23,296,5),
-	(23,295,5),
-	(23,294,5),
-	(23,293,5),
-	(23,292,5),
-	(23,291,5),
-	(23,290,5),
-	(23,289,5),
-	(23,288,5),
-	(23,287,5),
-	(23,286,5),
-	(23,285,5),
-	(23,284,5),
-	(23,283,5),
-	(23,282,5),
-	(23,281,5),
-	(23,280,5),
-	(23,279,5),
-	(23,278,5),
-	(23,277,5),
-	(23,276,5),
-	(23,275,5),
-	(23,274,5),
-	(23,273,5),
-	(23,272,5),
-	(23,271,5),
-	(23,270,5),
-	(23,269,5),
-	(23,268,5),
-	(23,267,5),
-	(23,217,5),
-	(23,205,5),
-	(23,203,5),
-	(23,201,5),
-	(23,266,5),
-	(23,265,5),
-	(23,264,5),
-	(23,263,5),
-	(23,262,5),
-	(23,261,5),
-	(23,260,5),
-	(23,259,5),
-	(23,258,5),
-	(23,257,5),
-	(23,256,5),
-	(27,30,3),
-	(27,36,3),
-	(27,38,3),
-	(27,39,3),
-	(28,16,3),
-	(28,14,3),
-	(11,540,2),
-	(11,538,2),
-	(11,539,2),
-	(10,528,2),
-	(10,500,2),
-	(13,499,2),
-	(12,498,2),
-	(12,497,2),
-	(12,496,2),
-	(12,495,2),
-	(30,494,2),
-	(30,493,2),
-	(11,492,2),
-	(11,491,2),
-	(11,490,2),
-	(11,489,2),
-	(11,488,2),
-	(11,487,2),
-	(11,486,2),
-	(12,485,2),
-	(11,484,2),
-	(30,483,2),
-	(30,482,2),
-	(11,481,2),
-	(11,479,2),
-	(11,478,2),
-	(11,477,2),
-	(30,476,2),
-	(30,457,2),
-	(10,456,2),
-	(10,455,2),
-	(12,454,2),
-	(30,453,2),
-	(10,452,2),
-	(10,451,2),
-	(12,450,2),
-	(12,449,2),
-	(10,448,2),
-	(12,447,2),
-	(11,446,2),
-	(11,445,2),
-	(12,444,2),
-	(30,443,2),
-	(12,442,2),
-	(30,441,2),
-	(10,440,2),
-	(30,439,2),
-	(10,438,2),
-	(10,437,2),
-	(10,435,2),
-	(14,414,2),
-	(12,413,2),
-	(12,412,2),
-	(13,179,2),
-	(10,144,2),
-	(12,47,2),
-	(12,46,2),
-	(30,37,2),
-	(30,33,2),
-	(10,32,2),
-	(10,31,2);
-
-/*!40000 ALTER TABLE `apollo_MediaToFolder` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
@@ -23343,139 +22960,7 @@ LOCK TABLES `apollo_Sessions` WRITE;
 /*!40000 ALTER TABLE `apollo_Sessions` DISABLE KEYS */;
 INSERT INTO `apollo_Sessions` (`id`,`access`,`data`)
 VALUES
-	('006d0ce039bd00098685507809057e03',1270282836,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"4\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:9:\"charlotte\";apollo_blog_id|s:1:\"5\";'),
-	('6d31f4ll0krjj9aplnp348csc7',1270354944,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"1\";'),
-	('c2gcr6pc6kmut22i6b9gtohj30',1270357383,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"2\";'),
-	('a6c15eb61049342803f47535caa5bb2c',1270331051,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('82a6a34f2deb4ec8f3e2afd06443481d',1270658236,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('1a0145caa35f824d003b903688fcf38a',1270699331,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"1\";'),
-	('4b0440b5cf781308b67333d93c10fa5f',1270699319,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"4\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:9:\"charlotte\";apollo_blog_id|s:1:\"5\";'),
-	('a41e782040bde6901ab79f0faeda14ec',1270699477,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('cbc872bd84de38e3b72496b201042c38',1270841890,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"5\";'),
-	('a151cc476a9bee3b47317831d99a3d4f',1270615607,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('e2031fa45846642f5aeab5b53f76a808',1270615607,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('9bb7575032f898539d4f4bc8c810423b',1270615608,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('47f91268fa09020718935c8fd1dac7df',1270615609,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('531bd88fe2ead726aff7c3344171e4dc',1270615609,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('4524a251e32c239cb011dfede4325b03',1270615610,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('03d4b7a09861cc898156e6285a628a79',1270615611,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('d6eaecabf3fbd81b1bf19d5627353894',1270705015,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"2\";'),
-	('679f2f405f74e36f5053c62a126d039f',1270691748,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('f022209fcb44e7d035b671b48aa9fa0d',1270691748,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('352d639d536cfb3fb9e9ea2e3724a7db',1270691749,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('a01bd03712a34a9f928dc621417717ef',1270691750,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('e6a27f8dc3e237909880a809d1c59ca0',1270691751,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('5e44a677e97cd5c4b9db613ca0031e42',1270691751,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('091529c5e19a946fbe6cc23cfc75d58f',1270691752,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('8caa6a1d584bc8fee51fa6621918bc16',1270691753,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('90616e9f92df8a771f37b1685435467a',1270691754,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('d76ab30db5deb1bcc0b3e9dc49d65b7e',1270691754,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('45df83b2d2e0cb526c2f297ad725336e',1270699378,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('d57a259fee384bad4fd2bc6b8da485c0',1270699379,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('8e91676f2e0a5f5e9095ce44ea21adff',1270699380,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('4d2d8c755684c4bf8b06c7d65169271b',1270699381,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('f056615c27ef6fe68fb106aa279e9d74',1270699382,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('430dce78d54ae2dfc9d6681d6773cd42',1270699382,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('adf0567314d9275f8a27eabf53b44be1',1270699383,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('be43ddda14ce685154327846d7df0fe6',1270699384,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('a94e5eb618abed84700577a6f9edacd2',1270699385,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('6049de441d475494ddc30cd736de8943',1271093923,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"1\";'),
-	('fba29232c5a56a15cc660f0c0400605a',1271093981,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"2\";'),
-	('8b35b7115f03d48e35a5b7cfffcd7884',1271094104,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"4\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:9:\"charlotte\";apollo_blog_id|s:1:\"5\";'),
-	('c6cd20295bb91014df7d3ba457264b81',1270842241,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"4\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:9:\"charlotte\";apollo_blog_id|s:1:\"5\";'),
-	('44ee8414d6e5d9375440c409c82184fd',1270842244,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"4\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:9:\"charlotte\";apollo_blog_id|s:1:\"1\";'),
-	('a15a5c1727d187f482e99af1ccadf7ea',1270864456,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"4\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:9:\"charlotte\";apollo_blog_id|s:1:\"1\";'),
-	('e9a5310d0fc128cf3e2c9cb60ba37bc7',1271093870,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('6d983005ad4b26518bfd128b12009ca6',1270910848,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"4\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:9:\"charlotte\";apollo_blog_id|s:1:\"1\";'),
-	('76178b60be549ff9e1bae3cd731eaefb',1271087766,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('601ff21fb7d726514c51efe743c8478c',1271472392,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('892fdf3ccc0394d55dd322b8f0ae9d6c',1271885256,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"1\";'),
-	('e194336dfb536853d4ce3c7c1b8615a4',1271883972,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"2\";'),
-	('7ba2922f2ada4068395802e154e77610',1271870638,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"1\";'),
-	('13339dbaa26f9b1e410eeff9442bb08a',1271824262,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"2\";'),
-	('27e2316929c1853112262c48b59fa1f7',1271870574,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('e128a2399da79d467492667877c99cfb',1271881371,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('e0560d32e9cf5dfbc930ec6bd51a69e6',1271885250,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"1\";'),
-	('773f5fd60c90c6894f3348c5f37cea08',1271884699,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"3\";'),
-	('29fbda62ee7e678bbc40b57cc75dce55',1271960563,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"1\";'),
-	('2482c519708e3646588705d760b1d3dd',1272009605,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"2\";'),
-	('61a1d1a86377af82d73fe6f92c01d3bf',1272054750,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"4\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:9:\"charlotte\";apollo_blog_id|s:1:\"5\";'),
-	('3e7caf73a4d10458b8f16cbad8c45d0c',1272067165,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"4\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:9:\"charlotte\";apollo_blog_id|s:1:\"5\";'),
-	('6993c3d56f94e29784089f0bc396e17c',1272174011,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"1\";'),
-	('4043d0eeadff4eea9fa52c1aed0e52a8',1272174013,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"2\";'),
-	('7aa1a21b043a0181124fca6f5ba9301e',1272174959,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"2\";'),
-	('78aadf4962fa8c69025d4c761dbaeee4',1273084240,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"2\";'),
-	('d9523577c1960c8d5a68bf60dc5a57a3',1272918434,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"1\";'),
-	('7ba998d1f675c8e60bc2aaecc1d09cb2',1272919177,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"6\";'),
-	('d5cc3c2865536cfcfef50f123ad981ea',1272986032,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('5476247e5818a8e4cbf5aa15b327cc9a',1273039693,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"1\";'),
-	('5441246a4908dcd62c77aa5470d81a11',1273026662,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"2\";'),
-	('5177e326ce39aff8a9bc8c4f6f206a91',1273026920,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('99dba37d1076b08fdd858e977f71c4fc',1273012661,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"1\";'),
-	('bf9490d9d35f02ce6487eee5399ec760',1273012733,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"2\";'),
-	('64736d2fdcb72894c99605e7756a8a70',1273082225,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('459e9845776d86fb97ea26ddd59fd464',1273079336,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('4e54acbea3b3e18365d8222afe5c573f',1273175008,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('231bcdc9f6e639bb418dc3305a4ad3f8',1273196915,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"1\";'),
-	('ff6a9f7853d24e9eb81751f726e1e554',1273297741,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"1\";'),
-	('1198a8a1d34018a49b20c63fdc04c2aa',1273256395,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"2\";'),
-	('f3cbfa19b6546f19d5ae1caa15688230',1273347701,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"1\";'),
-	('4e5f01fd408efb62a60755c7ded3309a',1273362770,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"2\";'),
-	('5b8d27bf5d227fda73a3682b2658cab5',1273371979,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('66e619ee046015d0aab12902e17867cf',1273387924,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"1\";'),
-	('5920a092306f2474a67c1d024e238d5e',1273387952,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"2\";'),
-	('9ab424f984e84b969a261a48b7346115',1273524369,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('fbfa7a2fe413047ddf9302558683500c',1273616435,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('a3aa93feb41c0434e756b78871e77375',1273872879,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('1edb3ecadf03c4aeb41614d3294aad77',1274030517,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"1\";'),
-	('7a5cd9a6db9999b375a791115cef9b01',1274032922,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"2\";'),
-	('d5f11a894d4ad39e2e883515576d069d',1274124833,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('6d46078dd90a6ddf8bf3a85cf723d304',1274453028,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('9ceb505c6fb7ac844a9747d80f178daa',1274557689,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('e5ebbeb8b21727183fab3305943cd7a8',1274818917,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('ca4ed1ac4573ee3bd27756dfa6a2ee81',1275059793,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"admin\";apollo_blog_id|s:1:\"1\";'),
-	('c96bff825b4558cc52925af1c220c5cc',1275026562,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"4\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:9:\"charlotte\";apollo_blog_id|s:1:\"5\";'),
-	('ffceec0cc894bdd47941db8b1bf421e2',1275859274,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:4:\"Mike\";apollo_blog_id|s:1:\"2\";'),
-	('7c4cb5c30ae6993b138702f82c4d1f04',1275261899,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('c0ae0663ea3be12169beddf450e22ec4',1275260734,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('e3fea594b3bc301174a61a1935a1260e',1275927126,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:4:\"Mike\";apollo_blog_id|s:1:\"2\";'),
-	('473bd2be67e854a931e4ee404e037c4d',1275267102,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('e1e5b52e2e8d9434f066f2729fe7a441',1275414555,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:4:\"Mike\";apollo_blog_id|s:1:\"1\";'),
-	('05e324e26b485e3aeff92593857f8189',1275534280,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('a5183357cf1427eb1ee80b9e4578b35b',1276010690,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:4:\"Mike\";apollo_blog_id|s:1:\"2\";'),
-	('5fd052078db496232c8c9ca3598a55a1',1275575445,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('d0308f8e4ed9825fd3a6d5d841177f0f',1275575028,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('723138bb4117ebc09a3e936e3d37db1d',1276097207,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('68d6e4c3c46c0198c379969cd06d4dff',1276472245,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:4:\"Mike\";apollo_blog_id|s:1:\"2\";'),
-	('1dadc546c5e711b4ce8dbe72361dfc1a',1276183551,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('677c2cc702191988f852d3bc446bc91f',1276123690,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:4:\"Mike\";apollo_blog_id|s:1:\"2\";'),
-	('071aef81cdff4bb390d733a9362c16f2',1276213954,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('d67cb9d06f234ced8a72084046a580d8',1276213737,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('a232d6e6552717ee11b6faeda855defa',1276624204,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('5f488eea6b8cd4b58ed6ff2988924ae8',1276726538,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:4:\"Mike\";apollo_blog_id|s:1:\"2\";'),
-	('71e0ba002c7770d450259a4483819460',1277273311,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('878500b4306946e03c5cd510ea305716',1277588225,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('a96ff79452d8d35f9139695219c9ea1a',1277938175,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:4:\"Mike\";apollo_blog_id|s:1:\"2\";'),
-	('02adca134459c8bfd50d49cbcc0f4c92',1277937092,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('2e3fc494ba3d46401acb0b5e05627b7b',1277927527,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('340ad9cb6b5b8bf5bb37e9c36e8719ed',1278022364,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:4:\"Mike\";apollo_blog_id|s:1:\"1\";'),
-	('eda6368bd39446a33ee618ea79aa463f',1278020674,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:4:\"Mike\";apollo_blog_id|s:1:\"1\";'),
-	('ea6f4cc741c70dd716f7dc02a9859904',1278006637,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:4:\"Mike\";apollo_blog_id|s:1:\"2\";'),
-	('312ab3e5a4674cedf28cff4700cd43aa',1277995427,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('2b5e809bc89ff459205ff727497dcc2f',1278022649,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:4:\"Mike\";apollo_blog_id|s:1:\"1\";'),
-	('2c0d90f02e84366eaa07823719e1c328',1278024631,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:4:\"Mike\";apollo_blog_id|s:1:\"1\";'),
-	('d3d7ffbc5f355426eb4e79f24646fc7a',1278026460,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:4:\"Mike\";apollo_blog_id|s:1:\"1\";'),
-	('8930ae5cacdf024cff7e35b2503c258d',1278026252,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|N;apollo_user_display_name|s:4:\"Mike\";apollo_blog_id|s:2:\"14\";'),
-	('3f5ab578abc69237212820cf45bf9052',1278026278,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:4:\"Mike\";apollo_blog_id|s:1:\"1\";'),
-	('b67cb778fd9b1ff58814a12a00f98cdf',1278026588,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"4\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:9:\"charlotte\";apollo_blog_id|s:2:\"14\";'),
-	('90f5e8a69117fcb7e20773900016a269',1278027315,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:4:\"Mike\";apollo_blog_id|s:1:\"2\";'),
-	('4c0663033cac17452b0e0f56616e7074',1278028485,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:4:\"Mike\";apollo_blog_id|s:1:\"1\";'),
-	('f88fec684d3385837a2400a16789f3b0',1278028558,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:4:\"Mike\";apollo_blog_id|s:1:\"1\";'),
-	('bcc3280d86d71932f23d4eacf951b375',1278083618,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('5570e81ca750eeea8de0f60b92d366c6',1278177283,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('3b4966b6499ce25ff17cab9d966a93fa',1278305680,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('5842c82bf23fffd92a94e6f8934823bb',1278357281,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"3\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:5:\"holly\";apollo_blog_id|s:1:\"2\";'),
-	('30e8205d1104ae6877f05a2ff0c260b9',1278360256,'apollo_user_logged_in|b:1;apollo_user_id|s:1:\"1\";apollo_user_level|s:2:\"10\";apollo_user_display_name|s:4:\"Mike\";apollo_blog_id|s:1:\"1\";');
+	('a985cdb2b3ed859c2a8f70cf4f612b2a',1280367757,'user_valid|b:1;user_id|s:1:\"1\";user_name|s:14:\"Mike Pritchard\";user_email|s:20:\"mike@apollosites.com\";user_level|s:1:\"1\";');
 
 /*!40000 ALTER TABLE `apollo_Sessions` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -23584,6 +23069,109 @@ CREATE TABLE `athena_Comments` (
 
 
 
+# Dump of table athena_Folders
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `athena_Folders`;
+
+CREATE TABLE `athena_Folders` (
+  `id` int(11) NOT NULL auto_increment,
+  `site_id` bigint(20) default NULL,
+  `name` varchar(255) default 'Unamed Folder',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+
+LOCK TABLES `athena_Folders` WRITE;
+/*!40000 ALTER TABLE `athena_Folders` DISABLE KEYS */;
+INSERT INTO `athena_Folders` (`id`,`site_id`,`name`)
+VALUES
+	(1,0,'Reserved (Unassigned)'),
+	(2,0,'Reserved (Last 24 hours))'),
+	(3,0,'Reserved (Last 7 days)'),
+	(4,0,'Reserved (last 1 day)'),
+	(5,0,'Reserved'),
+	(6,0,'Reserved'),
+	(7,0,'Reserved'),
+	(8,0,'Reserved'),
+	(9,0,'Reserved'),
+	(10,2,'wedding'),
+	(11,2,'couples'),
+	(12,2,'children'),
+	(13,2,'seniors, young adults'),
+	(14,2,'sports'),
+	(15,2,'pets'),
+	(16,2,'products'),
+	(19,1,'test images'),
+	(20,3,'test images'),
+	(21,0,'new folder'),
+	(22,5,'Home'),
+	(23,5,'Weddings 1'),
+	(24,5,'Weddings 2'),
+	(25,5,'Vail'),
+	(26,5,'Keystone'),
+	(27,3,'broadmoor'),
+	(28,3,'site graphics'),
+	(30,2,'families and maternity'),
+	(0,0,'Reserved (All)');
+
+/*!40000 ALTER TABLE `athena_Folders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table athena_Media
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `athena_Media`;
+
+CREATE TABLE `athena_Media` (
+  `id` bigint(20) NOT NULL auto_increment,
+  `folder_id` int(11) default '1',
+  `site_id` bigint(20) default '2',
+  `filename` varchar(255) default NULL,
+  `mime_type` varchar(20) default NULL,
+  `file_size` int(11) default NULL,
+  `created` timestamp NULL default NULL on update CURRENT_TIMESTAMP,
+  `title` text,
+  `description` text,
+  `tags` text,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+
+LOCK TABLES `athena_Media` WRITE;
+/*!40000 ALTER TABLE `athena_Media` DISABLE KEYS */;
+INSERT INTO `athena_Media` (`id`,`folder_id`,`site_id`,`filename`,`mime_type`,`file_size`,`created`,`title`,`description`,`tags`)
+VALUES
+	(1,1,1,'OzTrip003.JPG','application/octet-st',723476,'2010-07-29 00:33:03','OzTrip_003.JPG','',''),
+	(2,1,1,'OzTrip001.JPG','application/octet-st',807827,'2010-07-29 01:35:34','OzTrip_001.JPG','',''),
+	(3,1,1,'OzTrip002.JPG','application/octet-st',872627,'2010-07-29 01:35:34','OzTrip_002.JPG','',''),
+	(4,1,1,'OzTrip003_1.JPG','application/octet-st',723476,'2010-07-29 01:35:35','OzTrip_003.JPG','',''),
+	(5,1,1,'OzTrip004.JPG','application/octet-st',615570,'2010-07-29 01:35:35','OzTrip_004.JPG','',''),
+	(6,1,1,'OzTrip005.JPG','application/octet-st',735837,'2010-07-29 01:35:35','OzTrip_005.JPG','',''),
+	(7,1,1,'OzTrip006.JPG','application/octet-st',414403,'2010-07-29 01:35:35','OzTrip_006.JPG','',''),
+	(8,1,1,'OzTrip007.JPG','application/octet-st',489871,'2010-07-29 01:35:35','OzTrip_007.JPG','',''),
+	(9,1,1,'OzTrip008.JPG','application/octet-st',357606,'2010-07-29 01:35:35','OzTrip_008.JPG','',''),
+	(10,1,1,'OzTrip009.JPG','application/octet-st',343058,'2010-07-29 01:35:35','OzTrip_009.JPG','',''),
+	(11,1,1,'OzTrip010.JPG','application/octet-st',351745,'2010-07-29 01:35:35','OzTrip_010.JPG','',''),
+	(12,1,1,'OzTrip011.JPG','application/octet-st',374787,'2010-07-29 01:35:35','OzTrip_011.JPG','',''),
+	(13,1,1,'OzTrip012.JPG','application/octet-st',322263,'2010-07-29 01:35:35','OzTrip_012.JPG','',''),
+	(14,1,1,'OzTrip013.JPG','application/octet-st',330755,'2010-07-29 01:35:36','OzTrip_013.JPG','',''),
+	(15,1,1,'OzTrip014.JPG','application/octet-st',330122,'2010-07-29 01:35:36','OzTrip_014.JPG','',''),
+	(16,1,1,'OzTrip015.JPG','application/octet-st',319923,'2010-07-29 01:35:36','OzTrip_015.JPG','',''),
+	(17,1,1,'OzTrip016.JPG','application/octet-st',434645,'2010-07-29 01:35:36','OzTrip_016.JPG','',''),
+	(18,1,1,'OzTrip017.JPG','application/octet-st',559583,'2010-07-29 01:35:36','OzTrip_017.JPG','',''),
+	(19,1,1,'OzTrip018.JPG','application/octet-st',584899,'2010-07-29 01:35:36','OzTrip_018.JPG','',''),
+	(20,1,1,'OzTrip019.JPG','application/octet-st',675779,'2010-07-29 01:35:36','OzTrip_019.JPG','',''),
+	(21,1,1,'OzTrip020.JPG','application/octet-st',556474,'2010-07-29 01:35:36','OzTrip_020.JPG','',''),
+	(22,1,1,'OzTrip021.JPG','application/octet-st',375146,'2010-07-29 01:35:36','OzTrip_021.JPG','',''),
+	(23,1,1,'OzTrip022.JPG','application/octet-st',534496,'2010-07-29 01:35:36','OzTrip_022.JPG','',''),
+	(24,1,1,'OzTrip023.JPG','application/octet-st',386851,'2010-07-29 01:35:36','OzTrip_023.JPG','',''),
+	(25,1,1,'OzTrip024.JPG','application/octet-st',442516,'2010-07-29 01:35:37','OzTrip_024.JPG','',''),
+	(26,1,1,'OzTrip025.JPG','application/octet-st',494676,'2010-07-29 01:35:37','OzTrip_025.JPG','','');
+
+/*!40000 ALTER TABLE `athena_Media` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
 # Dump of table athena_Pages
 # ------------------------------------------------------------
 
@@ -23596,14 +23184,15 @@ CREATE TABLE `athena_Pages` (
   `content` text,
   `status` enum('published','draft','revision') default 'draft',
   `last_edit` timestamp NULL default NULL on update CURRENT_TIMESTAMP,
+  `parent_page_id` int(11) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_Pages` WRITE;
 /*!40000 ALTER TABLE `athena_Pages` DISABLE KEYS */;
-INSERT INTO `athena_Pages` (`id`,`user_id`,`site_id`,`content`,`status`,`last_edit`)
+INSERT INTO `athena_Pages` (`id`,`user_id`,`site_id`,`content`,`status`,`last_edit`,`parent_page_id`)
 VALUES
-	(1,1,1,NULL,'published','2010-07-23 17:58:55');
+	(1,1,1,NULL,'published','2010-07-23 17:58:55',NULL);
 
 /*!40000 ALTER TABLE `athena_Pages` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -23643,29 +23232,29 @@ CREATE TABLE `athena_Sites` (
   `id` int(11) NOT NULL auto_increment,
   `domain` varchar(200) default NULL,
   `path` varchar(100) default NULL,
-  `theme` int(11) default NULL,
+  `theme_id` int(11) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_Sites` WRITE;
 /*!40000 ALTER TABLE `athena_Sites` DISABLE KEYS */;
-INSERT INTO `athena_Sites` (`id`,`domain`,`path`,`theme`)
+INSERT INTO `athena_Sites` (`id`,`domain`,`path`,`theme_id`)
 VALUES
-	(1,'athena.local',NULL,1);
+	(1,'athena.local','',1),
+	(2,'callisto.athena.local','',4);
 
 /*!40000 ALTER TABLE `athena_Sites` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
-# Dump of table athena_UserGroups
+# Dump of table athena_UserLevels
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `athena_UserGroups`;
+DROP TABLE IF EXISTS `athena_UserLevels`;
 
-CREATE TABLE `athena_UserGroups` (
+CREATE TABLE `athena_UserLevels` (
   `id` int(11) default NULL,
   `name` varchar(12) default NULL,
-  `level` tinyint(1) default NULL,
   `description` text,
   `create_post` tinyint(4) default '0',
   `edit_post` int(11) default NULL,
@@ -23675,17 +23264,17 @@ CREATE TABLE `athena_UserGroups` (
   `delete_page` int(11) default NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-LOCK TABLES `athena_UserGroups` WRITE;
-/*!40000 ALTER TABLE `athena_UserGroups` DISABLE KEYS */;
-INSERT INTO `athena_UserGroups` (`id`,`name`,`level`,`description`,`create_post`,`edit_post`,`delete_post`,`create_page`,`edit_page`,`delete_page`)
+LOCK TABLES `athena_UserLevels` WRITE;
+/*!40000 ALTER TABLE `athena_UserLevels` DISABLE KEYS */;
+INSERT INTO `athena_UserLevels` (`id`,`name`,`description`,`create_post`,`edit_post`,`delete_post`,`create_page`,`edit_page`,`delete_page`)
 VALUES
-	(1,'Super Admin',1,'Access to all sites',1,1,1,1,1,1),
-	(2,'Admin',2,'Allowed to administer a given website',1,1,1,1,1,1),
-	(3,'Author',3,'Allowed to write posts and modify content for a given website',1,1,0,0,0,0),
-	(4,'Contributer',4,'Allowed to write posts for a given site',1,0,0,0,0,0),
-	(5,'Subscriber',5,'No rights',0,0,0,0,0,0);
+	(1,'Super Admin','Access to all sites',1,1,1,1,1,1),
+	(2,'Admin','Allowed to administer a given website',1,1,1,1,1,1),
+	(3,'Author','Allowed to write posts and modify content for a given website',1,1,0,0,0,0),
+	(4,'Contributer','Allowed to write posts for a given site',1,0,0,0,0,0),
+	(5,'Subscriber','No rights',0,0,0,0,0,0);
 
-/*!40000 ALTER TABLE `athena_UserGroups` ENABLE KEYS */;
+/*!40000 ALTER TABLE `athena_UserLevels` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
@@ -23698,19 +23287,18 @@ CREATE TABLE `athena_Users` (
   `id` int(11) NOT NULL auto_increment,
   `email` varchar(255) default NULL,
   `name` varchar(255) default NULL,
-  `password_hash` varchar(255) default NULL,
+  `password_hash` varchar(128) default NULL,
   `account_created` datetime default NULL,
   `last_login` datetime default NULL,
-  `user_group` tinyint(1) default NULL,
+  `user_level` tinyint(1) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_Users` WRITE;
 /*!40000 ALTER TABLE `athena_Users` DISABLE KEYS */;
-INSERT INTO `athena_Users` (`id`,`email`,`name`,`password_hash`,`account_created`,`last_login`,`user_group`)
+INSERT INTO `athena_Users` (`id`,`email`,`name`,`password_hash`,`account_created`,`last_login`,`user_level`)
 VALUES
-	(1,'mike@apollosites.com','Mike Pritchard','e65aace9237833ec775253cfde97f59a0af5bc3d','0000-00-00 00:00:00',NULL,1),
-	(2,'mike@apollsites.com','Admin','e65aace9237833ec775253cfde97f59a0af5bc3d',NULL,NULL,NULL);
+	(1,'mike@apollosites.com','Mike Pritchard','4ee7c140e3566f2bfa60a65e13738fe5c1bcc48f5845f668fab1','2010-07-28 22:22:42','2010-07-29 01:42:37',1);
 
 /*!40000 ALTER TABLE `athena_Users` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -23730,7 +23318,8 @@ LOCK TABLES `athena_UserToSite` WRITE;
 /*!40000 ALTER TABLE `athena_UserToSite` DISABLE KEYS */;
 INSERT INTO `athena_UserToSite` (`user_id`,`site_id`)
 VALUES
-	(1,1);
+	(1,1),
+	(1,2);
 
 /*!40000 ALTER TABLE `athena_UserToSite` ENABLE KEYS */;
 UNLOCK TABLES;
