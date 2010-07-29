@@ -3,7 +3,8 @@
 require_once("code/php/setup.php");
 
 if(!SecurityUtils::isLoggedIn()){
-	header("Location: admin.html");
+//	header("Location: http://".$_SERVER['HTTP_HOST']."/admin/index.html");
+	header("Location: index.html");
 } 
 
 $user_id = SecurityUtils::getCurrentUserID();
@@ -322,6 +323,8 @@ var ssMain = {
 
 	init : function(){			
 
+		SystemAPI.init();
+
 		Message.init('#debug_txt');
 		Message.showOnError();
 		
@@ -397,7 +400,7 @@ var ssMain = {
 	},
 	
 	doLogout : function(){
-		window.location = "admin.html";
+		window.location = "index.html";
 	},
 
 	// ////////////////////////////////////////////////////////////////////////
@@ -451,7 +454,7 @@ var ssMain = {
 	}
 }
 
+$(document).ready(function(){ssMain.init();});
 
-ssMain.init();
 
 </script>
