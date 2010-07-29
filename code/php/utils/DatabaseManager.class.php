@@ -268,19 +268,17 @@ class DatabaseManager {
 	* Get all the results for a query as an associative array, returns null if no results found
 	*/
 	public static function getResults($sql){
-
+		
 		$results = DatabaseManager::submitQuery($sql);
 
 		if (!$results || mysql_num_rows($results) == 0) {
 			return null;
 		}
 		
-		$row = mysql_fetch_assoc($result);
-
 		$data = array();
 		
 		// Build the output data		
-		while ($row = mysql_fetch_assoc($result)) {
+		while ($row = mysql_fetch_assoc($results)) {
 			$data[] = $row;
 		}
 

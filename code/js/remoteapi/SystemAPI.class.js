@@ -15,7 +15,7 @@ var SystemAPI = {
 	* Initialize the API
 	*/
 	init : function(){		
-		SystemAPI.m_url = defines.rootURL + SystemAPI.m_url;
+		SystemAPI.m_url = defines.root_url + SystemAPI.m_url;
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////

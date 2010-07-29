@@ -1,16 +1,7 @@
 <?php
-if ($_SERVER['HTTP_HOST'] == "athena.local"){
-	define("database_user", "mike");
-	define("database_pass", "mike76");
-	define("database_name", "athenasites");
-	define("database_host", "localhost");
-	define("database_verbose", false);
-}
-else {
-	define("database_user", "etasking_appuser");
-	define("database_pass", "payjQZeZAZ7HB5pe");
-	define("database_name", "etasking");
-	define("database_host", "localhost");
-	define("database_verbose", false);
-}
+define("database_user", "mike");
+define("database_pass", "mike76");
+define("database_name", "athenasites");
+define("database_host", "localhost");
+define("database_verbose", false);
 ?>

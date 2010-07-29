@@ -38,19 +38,19 @@ class SecurityUtils {
 		
 	// //////////////////////////////////////////////////////////////
 	
-	public static function logIn($user_id, $user_group, $user_name, $user_email){
+	public static function logIn($user_id, $user_level, $user_name, $user_email){
 		Session::set('user_valid', true);
 		Session::set('user_id', $user_id);
 		Session::set('user_name', $user_name);
 		Session::set('user_email', $user_email);
-		Session::set('user_group', $user_group);
+		Session::set('user_level', $user_level);
 	}
 
 	// //////////////////////////////////////////////////////////////
 
 	public static function logOut(){
 		Session::clear('user_id');
-		Session::clear('user_group');
+		Session::clear('user_level');
 		Session::clear('user_email');
 		Session::clear('user_name');
 		Session::set('user_valid', false);
@@ -60,6 +60,45 @@ class SecurityUtils {
 
 	public static function isLoggedIn(){
 		return Session::get('user_valid');
+	}
+
+	// //////////////////////////////////////////////////////////////
+
+	public static function getCurrentUserID(){return Session::get('user_id');}
+	public static function getCurrentUserLevel(){return Session::get('user_level');}
+	public static function getCurrentUserName(){return Session::get('user_name');}
+	public static function getCurrentUserEmail(){return Session::get('user_email');}
+
+	// //////////////////////////////////////////////////////////////
+
+	public static function getMediaFolder($user_id, $site_id){
+		return FILE_ROOT . "user.files/$site_id/";
+	}
+	
+	// //////////////////////////////////////////////////////////////
+	
+	public static function createUser($email, $plain_password, $user_group, $name){
+		// Create entry in user table
+		$password_hash = SecurityUtils::generatePassHash($plain_password);
+		$user_id = UserTable::create($email, $name, $password_hash, $user_group);				
+		return $user_id;	
+	}
+
+	// //////////////////////////////////////////////////////////////
+
+	/**
+	* Create a site, and assign a user to the site
+	*/
+	public static function createSite($user_id, $site_domain, $site_path, $site_theme){
+
+		// Create entry in site table
+		$site_id= SitesTable::create($site_domain, $site_path, $site_theme);
+
+		// Create entry in site table
+		SitesTable::addUserToSite($user_id, $site_id);
+
+		// Create files directory
+		mkdir(self::getMediaFolder($user_id, $site_id));
 	}
 
 }

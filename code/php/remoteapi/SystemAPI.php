@@ -112,7 +112,7 @@ function checkUser($email, $plain_password){
 		$msg['data'] = 'true';		
 		// Setup user session
 		$user = UserTable::getUser($user_id);
-		SecurityUtils::logIn($user_id, $user['user_group'], $user['name'], $user['email']);
+		SecurityUtils::logIn($user_id, $user['user_level'], $user['name'], $user['email']);
 		// Update the last login
 		UserTable::updateLastLogin($user_id);
 	}

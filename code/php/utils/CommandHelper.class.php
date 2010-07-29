@@ -53,7 +53,7 @@ class CommandHelper {
 	
 	public static function init(){
 	
-		$browser = new Browser();
+		$browser = new BrowserDetect();
 			 	
 		// Turn off gzip for IE6 or lower, 'cos it can't handle it
 		$browser_name = $browser->getBrowser();

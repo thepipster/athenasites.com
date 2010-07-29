@@ -3,8 +3,27 @@
 require_once("code/php/setup.php");
 
 if(!SecurityUtils::isLoggedIn()){
-	header("Location: index.html");
+	header("Location: admin.html");
 } 
+
+$user_id = SecurityUtils::getCurrentUserID();
+$user_level = SecurityUtils::getCurrentUserLevel();
+
+
+// Get the site id's for this user
+
+// If this is a super-user, then just get all the site id's
+if ($user_level == 1){	
+	$site_list = SitesTable::getSites();
+}
+else {
+	$site_list = SitesTable::getSitesForUser($user_id);
+}
+
+Logger::debug("User has " . count($site_list) . " sites!");
+Logger::debug("User level = $user_level");
+
+$current_site_id = $site_list[0]['id'];
 
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -35,7 +54,7 @@ if(!SecurityUtils::isLoggedIn()){
 <link rel="stylesheet" href="code/css/Athena.css" type="text/css" /> 
 <link rel="stylesheet" href="code/css/SideBar.css" type="text/css" />
 
-<link rel="stylesheet" href="code/css/FlashUploader.css" type="text/css" />
+<link rel="stylesheet" href="code/css/FilesFrame.css" type="text/css" />
 
 <link rel="stylesheet" href="code/css/datePicker.css" type="text/css" />
 
@@ -70,9 +89,13 @@ if(!SecurityUtils::isLoggedIn()){
 
 <!-- Utils -->
 <script src="code/js/defines.js" type="text/javascript"></script>
+<script src="code/js/utils/Message.class.js" type="text/javascript"></script>
 <script src="code/js/utils/AthenaDialog.class.js" type="text/javascript"></script>
-<script src="code/js/utils/FileProgress.class.js" type="text/javascript"></script>
-<script src="code/js/utils/FlashUploader.class.js" type="text/javascript"></script>
+<script src="code/js/flashuploader/FileProgress.class.js" type="text/javascript"></script>
+<!--
+<script src="code/js/flashuploader/flashUploaderHandler.js" type="text/javascript"></script>
+-->
+<script src="code/js/flashuploader/FlashUploader.class.js" type="text/javascript"></script>
 
 <!-- Core -->
 <script src="code/js/DataStore.class.js" type="text/javascript"></script>
@@ -197,8 +220,25 @@ if(!SecurityUtils::isLoggedIn()){
 				<div id='gallery_menu' class='menu_item' onclick='ssMain.onShowGalleries()'>Galleries</div>
 				<div id='stats_menu' class='menu_item' onclick='ssMain.onShowStats()'>Stats</div>				
 				<div id='settings_menu' class='menu_item' onclick='ssMain.onShowSettings()'>Settings</div>
+								
 				<div class='menu_link' onclick='ssMain.onLogout()'>Logout</div>
 				<div id='account_menu' class='menu_link' onclick='ssMain.onShowAccount()'>Account</div>
+				
+				<?php
+				if (count($site_list) > 1){
+					echo '<select style=\'float:right; margin-right:20px; margin-top:3px;\' onchange=\'ssMain.onSelectSite($(this).val())\'>';
+					foreach($site_list as $site){
+						
+						$selected = '';
+						if ($site['id'] == $current_site_id){
+							$selected = 'selected';
+						}
+						
+						echo "<option $selected value='".$site['id']."'>".$site['domain']."</option>";
+					}
+					echo '</select>';
+				}
+				?>				
 			</div>
 
 			<!-- Dashboard Page Content ///////////////////////////////////////////////////////////// -->
@@ -282,7 +322,11 @@ var ssMain = {
 
 	init : function(){			
 
+		Message.init('#debug_txt');
+		Message.showOnError();
+		
 		DataStore.init();
+		DataStore.m_siteID = <?=$current_site_id?>;
 	
 		ssMain.onShowFiles();
 			
@@ -292,7 +336,7 @@ var ssMain = {
 		// Save when browser quits
 		$(window).unload( function () { DataStore.save(); } );
 	
-		//$(window).resize( function(){ ssMain.onResize() });
+		$(window).resize( function(){ ssMain.onResize() });
 
 		// Setup date picker...
 		Date.firstDayOfWeek = 0;
@@ -353,7 +397,7 @@ var ssMain = {
 	},
 	
 	doLogout : function(){
-		window.location = "index.html";
+		window.location = "admin.html";
 	},
 
 	// ////////////////////////////////////////////////////////////////////////
@@ -362,6 +406,11 @@ var ssMain = {
 		ssMain.repaint();		
 	},
 
+	onSelectSite : function(site_id){
+		DataStore.site_id = site_id;
+		ssMain.repaint();		
+	},
+	
 	// ////////////////////////////////////////////////////////////////////////
 	
 	onShowDashboard : function(){ ssMain.view = ssMain.VIEW_DASHBOARD; ssMain.repaint(); },
