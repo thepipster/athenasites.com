@@ -10,9 +10,9 @@
 // Figure out the location of this file
 $discRoot = realpath(dirname(__FILE__)) . "/";
 
-$file_root = substr($discRoot, 0, strpos($discRoot, "code"));
-$code_root = substr($discRoot, 0, strpos($discRoot, "code")) . "code/php/";
-$url_root = 'http://' . $_SERVER['HTTP_HOST'] . substr($_SERVER['PHP_SELF'], 0, strpos($_SERVER['PHP_SELF'], "code"));
+$file_root = substr($discRoot, 0, strpos($discRoot, "admin"));
+$code_root = substr($discRoot, 0, strpos($discRoot, "admin")) . "admin/code/php/";
+$url_root = 'http://' . $_SERVER['HTTP_HOST'] . substr($_SERVER['PHP_SELF'], 0, strpos($_SERVER['PHP_SELF'], "admin"));
 
 define("FILE_ROOT", $file_root); // The root for the code tree 
 define("CODE_ROOT", $code_root); // The root for the code tree 

@@ -42,7 +42,7 @@ else {
 	if (!isset($folder_id) || !$folder_id) $folder_id = 1; // folder id of 1 is considered 'unassigned'
 	//$user = UserTable::getUser($user_id);
 	
-	$folder = SecurityUtils::getMediaFolder($user_id, $site_id);
+	$folder = SecurityUtils::getMediaFolder($site_id);
 		
 	Logger::debug('Upload script starting');
 	Logger::debug('User ID = ' . $user_id);
@@ -59,7 +59,7 @@ else {
         
     $mime = new MimeType();
         
-    $mime_type = $mime->getType($new_filepath);
+    $mime_type = $mime->getType(strtolower($new_filepath));
     $file_size = filesize($new_filepath);
     
 	/*

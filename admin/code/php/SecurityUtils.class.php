@@ -71,7 +71,7 @@ class SecurityUtils {
 
 	// //////////////////////////////////////////////////////////////
 
-	public static function getMediaFolder($user_id, $site_id){
+	public static function getMediaFolder($site_id){
 		return FILE_ROOT . "user.files/$site_id/";
 	}
 	

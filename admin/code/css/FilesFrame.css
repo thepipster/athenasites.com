@@ -4,6 +4,26 @@
 	height: 100%;
 }
 
+#flashUploderContent .title {
+	background-color: #b8bfc8;
+	width: 100%;
+	display: block;
+	font-size: 16px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 5px;
+/*
+	background-color: #d5dde5;
+	border-color: #a3a3a3;
+	border-style: solid;
+	border-width: 1px;
+	border-bottom-color: #d5dde5; 
+	font-size: 14px;
+	padding: 3px;
+	padding-bottom: 0px;
+*/
+}
+
 #flashUploderContent {
 	background-color: #d5dde5;
 	border-color: #a3a3a3;
@@ -15,7 +35,8 @@
 }
 
 #flashUploderContent h3 {
-	margin-left: 0px;
+	margin: 0;
+	padding: 0;
 }
 
 #flashUploderContent .uploadControls {

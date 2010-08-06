@@ -69,7 +69,7 @@ var FilesFrame = {
 				
 		var swfu = new SWFUpload(settings);
 		
-		$('#flashUploaderProgress').height( $('#FilesFrame').outerHeight() - $('.uploadControls').outerHeight() - 50 );
+		$('#flashUploaderProgress').height( $('#FilesFrame').outerHeight() - $('.uploadControls').outerHeight() - 60 );
 	}
 
 }
