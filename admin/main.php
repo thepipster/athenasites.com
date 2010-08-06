@@ -10,7 +10,6 @@ if(!SecurityUtils::isLoggedIn()){
 $user_id = SecurityUtils::getCurrentUserID();
 $user_level = SecurityUtils::getCurrentUserLevel();
 
-
 // Get the site id's for this user
 
 // If this is a super-user, then just get all the site id's
@@ -21,8 +20,8 @@ else {
 	$site_list = SitesTable::getSitesForUser($user_id);
 }
 
-Logger::debug("User has " . count($site_list) . " sites!");
-Logger::debug("User level = $user_level");
+//Logger::debug("User has " . count($site_list) . " sites!");
+//Logger::debug("User level = $user_level");
 
 $current_site_id = $site_list[0]['id'];
 
@@ -76,6 +75,8 @@ $current_site_id = $site_list[0]['id'];
 <script type="text/javascript" src="code/js/3rdparty/date.js"></script>
 <script type="text/javascript" src="code/js/3rdparty/jquery.datePicker.js"></script>
 
+<script type="text/javascript" src="code/js/3rdparty/jquery.advancedClick.js"></script>
+
 <script type="text/javascript" src="code/js/3rdparty/jquery_ui/ui/ui.core.js"></script>
 <script type="text/javascript" src="code/js/3rdparty/jquery_ui/ui/ui.draggable.js"></script>
 <script type="text/javascript" src="code/js/3rdparty/jquery_ui/ui/ui.droppable.js"></script>
@@ -103,6 +104,10 @@ $current_site_id = $site_list[0]['id'];
 
 <!-- Remote APIs -->
 <script src="code/js/remoteapi/SystemAPI.class.js" type="text/javascript"></script>
+<script src="code/js/remoteapi/MediaAPI.class.js" type="text/javascript"></script>
+
+<!-- Sub-Frame Displays -->
+<script src="code/js/subframes/ImageSelector.class.js" type="text/javascript"></script>
 
 <!-- Frame Displays -->
 <script src="code/js/frames/DashboardFrame.class.js" type="text/javascript"></script>
@@ -323,13 +328,17 @@ var ssMain = {
 
 	init : function(){			
 
+		// Initialize the remote API's
 		SystemAPI.init();
+		MediaAPI.init();
 
+		// Setup the JS logger
 		Message.init('#debug_txt');
 		Message.showOnError();
 		
-		DataStore.init();
+		// Setup the data store for the site
 		DataStore.m_siteID = <?=$current_site_id?>;
+		DataStore.init();
 	
 		ssMain.onShowFiles();
 			
@@ -349,7 +358,7 @@ var ssMain = {
 		//$('.datepicker').datePicker({clickInput:true, startDate:'1996-01-01'});
 						
 		// Start loading data
-		//DataStore.loadAll(ssMain.onDataLoaded);
+		DataStore.load();
         
 		// Setup classes...
 		DashboardFrame.init();

@@ -132,7 +132,16 @@ class CommandHelper {
 				
 		return false;
 	}
+
+	// ///////////////////////////////////////////////////////////////////////////////////////
 	
+	public static function sendAuthorizationFailMessage($msg){
+		$data['result'] = 'fail';
+		$data['data'] = 'Authorization failure: ' . $msg;
+		error_log("Authorization failure!!!");
+		self::sendMessage($data);
+	}
+
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
 	private static function sendValidateFailMessage($msg){

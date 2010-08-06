@@ -9,15 +9,17 @@
 
 // location object:
 //<protocol>//<host>[:<port>]/<pathname>[<hash>][<search>]
-var base_url = location.protocol + '//' + location.host + '/admin/';
-var code_url = base_url + 'code/';
+var base_url = location.protocol + '//' + location.host + "/";
+var admin_base_url = location.protocol + '//' + location.host + '/admin/';
+var code_url = admin_base_url + 'code/';
 
 /**
 * This class contains all the globally required constants
 */
 var defines = {
-	flash_upload_processor:	code_url + "admin/php/FlashProcessUpload.php",
-	upload_processor:		code_url + "admin/php/ProcessUpload.php",
-	root_url: 				base_url,
-	code_url: 				code_url
+	flash_upload_processor:	code_url + "php/FlashProcessUpload.php",
+	upload_processor:		code_url + "php/ProcessUpload.php",
+	root_url: 				admin_base_url,
+	code_url: 				code_url,
+	user_files_root_url: 	base_url + "user.files/"
 };

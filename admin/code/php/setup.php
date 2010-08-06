@@ -24,8 +24,11 @@ require_once($code_root . "setup.php.sticky");
 Logger::catchSysErrors();
 Logger::setLevelDebug();
 
-Logger::debug("Database user: " . database_user);
-Logger::debug("Database host: " . database_host);
+define("THUMB_WIDTH", 50);
+define("THUMB_HEIGHT", 50);
+
+//Logger::debug("Database user: " . database_user);
+//Logger::debug("Database host: " . database_host);
 
 // Load session
 Session::init();

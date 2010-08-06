@@ -64,6 +64,32 @@ class SecurityUtils {
 
 	// //////////////////////////////////////////////////////////////
 
+	/**
+	* Check to see if the current user has access to the given site id
+	*/
+	public static function isLoggedInForSite($site_id){
+	
+		if (Session::get('user_valid')){
+		
+			$user_level = SecurityUtils::getCurrentUserLevel();
+			$user_id = SecurityUtils::getCurrentUserID();
+			
+			// If this is a super-user, then allow access. Otherwise check that the
+			// user has access to this site
+			if ($user_level == 1){	
+				return true;
+			}
+			else {
+				return SitesTable::checkUserSiteAccess($user_id, $site_id);
+			}
+			
+		}
+		
+		return false;
+	}
+
+	// //////////////////////////////////////////////////////////////
+
 	public static function getCurrentUserID(){return Session::get('user_id');}
 	public static function getCurrentUserLevel(){return Session::get('user_level');}
 	public static function getCurrentUserName(){return Session::get('user_name');}
@@ -99,6 +125,7 @@ class SecurityUtils {
 
 		// Create files directory
 		mkdir(self::getMediaFolder($user_id, $site_id));
+
 	}
 
 }

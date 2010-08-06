@@ -25,15 +25,16 @@ var ImageSelector = {
 	/**
 	*
 	*/
-	paint : function(mode){
+	paint : function(mode, targetDiv){
 	
 		ImageSelector.mode = mode;
+		ImageSelector.targetDiv = targetDiv;
 		
 		folder_name = "(All)";
 		
-		if (ImagePickerData.folderList.length >= 1){
-			ImageSelector.folder_id = ImagePickerData.folderList[0].id;	
-			folder_name = ImagePickerData.folderList[0].folder_name;
+		if (DataStore.m_folderList.length >= 1){
+			ImageSelector.folder_id = DataStore.m_folderList[0].id;	
+			folder_name = DataStore.m_folderList[0].folder_name;
 		}
 		
 		var minHeight = 550;
@@ -99,17 +100,17 @@ var ImageSelector = {
 		txt += "</ul>";
 
 							
-		//jQuery(targetDiv).attr('title',dialogTitle);					
-		jQuery('#ApolloImageSelector').html(txt);
+		//$(targetDiv).attr('title',dialogTitle);					
+		$(ImageSelector.targetDiv).html(txt);
 		
 		ImageSelector.paintFolders();		
 		ImageSelector.paintImages();
 		
-		jQuery('#ApolloImageSelector').disableSelection();
-		jQuery('#ApolloImageSelector').noContext();
+		$(ImageSelector.targetDiv).disableSelection();
+		$(ImageSelector.targetDiv).noContext();
 		
 		// Disable right click menu except where we want it
-		//jQuery('#ApolloImageSelector').bind("rightClickMenu",function(e){return false;}); 		
+		//$(ImageSelector.targetDiv).bind("rightClickMenu",function(e){return false;}); 		
 		
 	},
 
@@ -121,7 +122,7 @@ var ImageSelector = {
 	
 	onSelectAll : function(){	
 		ImageSelector.paintImages();			
-		jQuery('.thumb').addClass('multiselected');				
+		$('.thumb').addClass('multiselected');				
 		setTimeout('ImageSelector.makeMultiSelectedDraggable()', 300);
 	},
 
@@ -129,7 +130,7 @@ var ImageSelector = {
 	
 	paintImages : function(){
 		
-		var imageList = ImagePickerData.imageList;
+		var imageList = DataStore.m_mediaList;
 		
 		var txt = "";
 
@@ -138,13 +139,13 @@ var ImageSelector = {
 		var localOffset = d.getTimezoneOffset() * 60000;
 		var utc_date = new Date(localTime + localOffset);
 		var utc_time = localTime + localOffset;
-				
+								
 		//alert(ImageSelector.folder_id + " " + ImageSelector.ID_LAST_24_HOURS);
 				
 		for (var i=0; i<imageList.length; i++){
 
 			var thumb_url = imageList[i].thumb_url;
-			var post_id = imageList[i].post_id;
+			var post_id = imageList[i].id;
 			var title = imageList[i].title;
 			var width = imageList[i].width;
 			var height = imageList[i].height;
@@ -194,27 +195,27 @@ var ImageSelector = {
 			
 		}
 				
-		jQuery('#apollo_image_library').html(txt);
-		jQuery('#apollo_image_library').noContext();
+		$('#apollo_image_library').html(txt);
+		$('#apollo_image_library').noContext();
 
 				
 		if (ImageSelector.mode == ImageSelector.MODE_EDIT_GALLERY){
-			jQuery(".thumb").draggable({revert: true, zIndex: 300});				
+			$(".thumb").draggable({revert: true, zIndex: 300});				
 		}
 		else {
 
-			//jQuery(dragClass).multiDrag();
+			//$(dragClass).multiDrag();
 			
 
-			jQuery('.thumb').mousedown( function(e) {					
+			$('.thumb').mousedown( function(e) {					
 				
 				var evt = e;					
 				
-				jQuery(this).mouseup( 
+				$(this).mouseup( 
 					function() {
 									
-						//jQuery(this).unbind('mousedown');
-						jQuery(this).unbind('mouseup');
+						//$(this).unbind('mousedown');
+						$(this).unbind('mouseup');
 						
 						//alert("Ctrl:"+evt.ctrlKey + " Alt:" + evt.altKey + " Shift:" + evt.shiftKey);
 						
@@ -258,12 +259,12 @@ var ImageSelector = {
 	
 	onStartClick : function(e, obj){
 		
-			var id = jQuery(obj).attr('id');
-			var isSelected = jQuery(obj).is('.multiselected');
+			var id = $(obj).attr('id');
+			var isSelected = $(obj).is('.multiselected');
 			
 			if (ImageSelector.shiftSelectStarted){
 				// This clears the current selection
-				jQuery('.multiselected').removeClass('multiselected');
+				$('.multiselected').removeClass('multiselected');
 			}
 			
 			//if (ImageSelector.isDragging) return;		
@@ -275,7 +276,7 @@ var ImageSelector = {
 				ImageSelector.shiftSelectStartedID = id;
 				ImageSelector.shiftSelectStarted = true;
 				ImageSelector.paintImages();			
-				jQuery('#'+id).addClass('multiselected');
+				$('#'+id).addClass('multiselected');
 				setTimeout('ImageSelector.makeMultiSelectedDraggable()', 300);
 			}
 		
@@ -286,24 +287,24 @@ var ImageSelector = {
 	
 	onAltClick : function(e, obj){
 							
-		var id = jQuery(obj).attr('id');
-		var isSelected = jQuery(obj).is('.multiselected');
+		var id = $(obj).attr('id');
+		var isSelected = $(obj).is('.multiselected');
 			
 		if (isSelected){
-			jQuery('#'+id).removeClass('multiselected');
-			jQuery('#'+id).draggable('destroy');
+			$('#'+id).removeClass('multiselected');
+			$('#'+id).draggable('destroy');
 		}
 		else {
-			jQuery('#'+id).addClass('multiselected');
+			$('#'+id).addClass('multiselected');
 			setTimeout('ImageSelector.makeMultiSelectedDraggable()', 300);
 		}
 		
 		/*		
-		if (jQuery(obj).is('.multiselected')){
-			jQuery(obj).removeClass('multiselected');				
+		if ($(obj).is('.multiselected')){
+			$(obj).removeClass('multiselected');				
 		}
 		else {
-			jQuery(obj).addClass('multiselected');
+			$(obj).addClass('multiselected');
 		}
 		*/
 		
@@ -316,27 +317,27 @@ var ImageSelector = {
 	*/
 	onShiftClick : function(e, obj){
 										
-		var id = jQuery(obj).attr('id');
+		var id = $(obj).attr('id');
 			
-	  	jQuery('.thumb').removeClass('multiselected')
+	  	$('.thumb').removeClass('multiselected')
 			
 		if (ImageSelector.shiftSelectStarted){
 
 			var foundStart = false;
 			var foundEnd = false;
 					
-	  		jQuery('.thumb').each(	
+	  		$('.thumb').each(	
 	  			function(){	  				
 	  				if (!foundEnd){
-		  				if (jQuery(this).attr('id') == ImageSelector.shiftSelectStartedID){
+		  				if ($(this).attr('id') == ImageSelector.shiftSelectStartedID){
 		  					foundStart = true;
 		  				}
 		  				
 		  				if (foundStart){
-		  					jQuery(this).addClass('multiselected');
+		  					$(this).addClass('multiselected');
 		  				}
 		  				
-		  				if (foundStart && jQuery(this).attr('id') == id){
+		  				if (foundStart && $(this).attr('id') == id){
 		  					foundEnd = true;
 		  				}
 	  				}	  				
@@ -346,24 +347,24 @@ var ImageSelector = {
 	  		// If we didn't find the end, try going backwards
 	  		if (!foundEnd){
 	  		
-	  			jQuery('.multiselected').removeClass('multiselected')
+	  			$('.multiselected').removeClass('multiselected')
 	  			
 				foundStart = false;
 				foundEnd = false;
 	  		
-		  		jQuery('.thumb').each(	
+		  		$('.thumb').each(	
 		  			function(){	  				
 		  				if (!foundEnd){
 		  				
-			  				if (jQuery(this).attr('id') == id){
+			  				if ($(this).attr('id') == id){
 			  					foundStart = true;
 			  				}
 		  							  				
 			  				if (foundStart){
-			  					jQuery(this).addClass('multiselected');
+			  					$(this).addClass('multiselected');
 			  				}
 			  				
-			  				if (jQuery(this).attr('id') == ImageSelector.shiftSelectStartedID){
+			  				if ($(this).attr('id') == ImageSelector.shiftSelectStartedID){
 			  					foundEnd = true;
 			  				}
 			  				
@@ -390,15 +391,15 @@ var ImageSelector = {
 	onCtrlClick : function(e, obj){
 	
 		//e.stopPropagation();
-		//jQuery(obj).unbind('click')
+		//$(obj).unbind('click')
 			/*		
-		if (jQuery(obj).is('.multiselected')){
-			jQuery(obj).removeClass('multiselected');				
-			jQuery(obj).draggable({revert: true, zIndex: 300});
+		if ($(obj).is('.multiselected')){
+			$(obj).removeClass('multiselected');				
+			$(obj).draggable({revert: true, zIndex: 300});
 		}
 		else {
-			jQuery(obj).draggable("destroy");
-			jQuery(obj).addClass('multiselected');
+			$(obj).draggable("destroy");
+			$(obj).addClass('multiselected');
 			setTimeout('ImageSelector.makeMultiSelectedDraggable()', 300);
 		}
 		*/
@@ -408,7 +409,7 @@ var ImageSelector = {
 				
 	makeMultiSelectedDraggable : function(){
 	
-		jQuery('.multiselected').draggable({		
+		$('.multiselected').draggable({		
 				revert: true,
 				zIndex: 300,
 				delay: 200,				
@@ -417,12 +418,12 @@ var ImageSelector = {
 			  		var txt = "<div id='multidrag_container'>";
 			  		var ct = 0;
 			  		
-			  		jQuery('.multiselected').each(	
+			  		$('.multiselected').each(	
 			  			function(){
 			  				if (ct < 20){
 				  				var offset = ct * 5; ct++;
-				  				var src = jQuery(this).attr('src');
-				  				var id = jQuery(this).attr('id');
+				  				var src = $(this).attr('src');
+				  				var id = $(this).attr('id');
 				  				var style = "position: absolute; top: " + offset + "px; left:" + offset + "px;";
 				  				txt += "<img id='"+id+"' src='"+src+"' class='dragged_thumb' width='50px' height='50px' style='"+style+"'>";
 			  				}
@@ -433,11 +434,11 @@ var ImageSelector = {
 			  		
 			  		return txt;
 			  					  		
-    				//var selected = jQuery('.multiselected');
+    				//var selected = $('.multiselected');
 					//if (selected.length === 0) {
-					//	selected = jQuery(this);
+					//	selected = $(this);
 					//}
-					//var container = jQuery('<div/>').attr('id', 'draggingContainer');
+					//var container = $('<div/>').attr('id', 'draggingContainer');
 					//container.append(selected.clone());
 					//return container;					 					
 				}
@@ -462,7 +463,7 @@ var ImageSelector = {
 	
 	paintFolders : function(){
 		
-		var folderList = ImagePickerData.folderList;
+		var folderList = DataStore.m_folderList;
 		
 		var txt = "";
 		
@@ -471,7 +472,7 @@ var ImageSelector = {
 		// Hard-coded 'all' folder....		
 		if (ImageSelector.folder_id == 0){
 			txt += "<div id='folder_0' class='apollo_system_folder' style='width:100%;' onclick=\"ImageSelector.onSelectFolder('0')\"><div class='folder_name_selected'>Show All</div></div>";
-			jQuery('#apollo_title_folder_name').html('(All)');
+			$('#apollo_title_folder_name').html('(All)');
 		}
 		else {
 			txt += "<div id='folder_0' class='apollo_system_folder' style='width:100%;' onclick=\"ImageSelector.onSelectFolder('0')\"><div class='folder_name'>Show All</div></div>";
@@ -481,7 +482,7 @@ var ImageSelector = {
 		// Hard-coded 'unassigned' folder....		
 		if (ImageSelector.folder_id == ImageSelector.ID_UNASSIGNED){
 			txt += "<div id='folder_"+ImageSelector.ID_UNASSIGNED+"' class='apollo_folder apollo_system_folder' style='width:100%;' onclick=\"ImageSelector.onSelectFolder("+ImageSelector.ID_UNASSIGNED+")\"><div class='folder_name_selected'>Unassigned images</div></div>";
-			jQuery('#apollo_title_folder_name').html('(Unassigned images)');
+			$('#apollo_title_folder_name').html('(Unassigned images)');
 		}
 		else {
 			txt += "<div id='folder_1' class='apollo_folder apollo_system_folder' style='width:100%;' onclick=\"ImageSelector.onSelectFolder("+ImageSelector.ID_UNASSIGNED+")\"><div class='folder_name'>Unassigned images</div></div>";
@@ -490,7 +491,7 @@ var ImageSelector = {
 		// Hard-coded 'last hour' folder....		
 		if (ImageSelector.folder_id == ImageSelector.ID_LAST_1_HOUR){
 			txt += "<div id='folder_"+ImageSelector.ID_LAST_1_HOUR+"' class='apollo_system_folder' style='width:100%;' onclick=\"ImageSelector.onSelectFolder("+ImageSelector.ID_LAST_1_HOUR+")\"><div class='folder_name_selected'>Added in last hour</div></div>";
-			jQuery('#apollo_title_folder_name').html('(Added in last hour)');
+			$('#apollo_title_folder_name').html('(Added in last hour)');
 		}
 		else {
 			txt += "<div id='folder_"+ImageSelector.ID_LAST_1_HOUR+"' class='apollo_system_folder' style='width:100%;' onclick=\"ImageSelector.onSelectFolder("+ImageSelector.ID_LAST_1_HOUR+")\"><div class='folder_name'>Added in last hour</div></div>";
@@ -499,7 +500,7 @@ var ImageSelector = {
 		// Hard-coded 'added last 24 hours' folder....		
 		if (ImageSelector.folder_id == ImageSelector.ID_LAST_24_HOURS){
 			txt += "<div id='folder_"+ImageSelector.ID_LAST_24_HOURS+"' class='apollo_system_folder' style='width:100%;' onclick=\"ImageSelector.onSelectFolder("+ImageSelector.ID_LAST_24_HOURS+")\"><div class='folder_name_selected'>Added in last 24 hours</div></div>";
-			jQuery('#apollo_title_folder_name').html('(Added in last 24 hours)');
+			$('#apollo_title_folder_name').html('(Added in last 24 hours)');
 		}
 		else {
 			txt += "<div id='folder_"+ImageSelector.ID_LAST_24_HOURS+"' class='apollo_system_folder' style='width:100%;' onclick=\"ImageSelector.onSelectFolder("+ImageSelector.ID_LAST_24_HOURS+")\"><div class='folder_name'>Added in last 24 hours</div></div>";
@@ -515,7 +516,7 @@ var ImageSelector = {
 			//alert(folder_name + " " + folder_id);
 			
 			if (folder_id == ImageSelector.folder_id){
-				jQuery('#apollo_title_folder_name').html('('+folder_name+')');
+				$('#apollo_title_folder_name').html('('+folder_name+')');
 				txt += "<div id='folder_"+folder_id+"' class='apollo_folder folder_with_menu' style='width:100%;' title='Right click to edit' onclick=\"ImageSelector.onSelectFolder('"+folder_id+"')\"><div class='folder_name folder_name_selected'>"+folder_name+"</div></div>";
 			}
 			else {
@@ -525,21 +526,21 @@ var ImageSelector = {
 			
 		}
 		
-		jQuery('#apollo_folder_list').html(txt);
+		$('#apollo_folder_list').html(txt);
 		
-		jQuery('.apollo_folder').droppable({
+		$('.apollo_folder').droppable({
 				drop: ImageSelector.onAddToFolder,
-				over: function(ev, ui) {jQuery(this).addClass( 'apollo_folder_droppable_hover' );},
-				out: function(ev, ui) {jQuery(this).removeClass( 'apollo_folder_droppable_hover' );}
+				over: function(ev, ui) {$(this).addClass( 'apollo_folder_droppable_hover' );},
+				out: function(ev, ui) {$(this).removeClass( 'apollo_folder_droppable_hover' );}
 			});			
 
 				
-	   // jQuery(".folder_with_menu").rightClickMenu({menu: "folderMenu"}, function(action, el, pos){ImageSelector.onMenuItem(action, el)});
+	   // $(".folder_with_menu").rightClickMenu({menu: "folderMenu"}, function(action, el, pos){ImageSelector.onMenuItem(action, el)});
 		if (ImageSelector.mode != ImageSelector.MODE_EDIT_GALLERY){
-			jQuery(".folder_with_menu").rightClick( function(e) {ImageSelector.onRightClickFolder(e, this);});
+			$(".folder_with_menu").rightClick( function(e) {ImageSelector.onRightClickFolder(e, this);});
 		}
 
-		jQuery("#apollo_folder_list").disableSelection();
+		$("#apollo_folder_list").disableSelection();
 				
 	},
 
@@ -549,22 +550,22 @@ var ImageSelector = {
 
 		e.stopPropagation();
 		
-		//var x = e.pageX - jQuery('#adminmenu').width() - 30;
-		//var y = e.pageY - jQuery('#wphead').height() - jQuery('#update-nag').height();		
+		//var x = e.pageX - $('#adminmenu').width() - 30;
+		//var y = e.pageY - $('#wphead').height() - $('#update-nag').height();		
 		var x = e.pageX;
 		var y = e.pageY;		
 
-		jQuery('#folderMenu').css('top',y);
-		jQuery('#folderMenu').css('left',x);
-		jQuery('#folderMenu').show();
+		$('#folderMenu').css('top',y);
+		$('#folderMenu').css('left',x);
+		$('#folderMenu').show();
 
-		jQuery('#folderMenu .edit').unbind('click');
-		jQuery('#folderMenu .delete').unbind('click');
-		jQuery('#folderMenu .quit').unbind('click');
+		$('#folderMenu .edit').unbind('click');
+		$('#folderMenu .delete').unbind('click');
+		$('#folderMenu .quit').unbind('click');
 
-		jQuery('#folderMenu .edit').click(function(){ImageSelector.onMenuItem('rename_folder', obj)});
-		jQuery('#folderMenu .delete').click(function(){ImageSelector.onMenuItem('delete_folder', obj)});
-		jQuery('#folderMenu .quit').click(function(){ImageSelector.onMenuItem('quit', obj)});
+		$('#folderMenu .edit').click(function(){ImageSelector.onMenuItem('rename_folder', obj)});
+		$('#folderMenu .delete').click(function(){ImageSelector.onMenuItem('delete_folder', obj)});
+		$('#folderMenu .quit').click(function(){ImageSelector.onMenuItem('quit', obj)});
 		
 	},
 	
@@ -572,22 +573,22 @@ var ImageSelector = {
 
 		e.stopPropagation();
 
-		//var x = e.pageX - jQuery('#adminmenu').width() - 30;
-		//var y = e.pageY - jQuery('#wphead').height() - jQuery('#update-nag').height();		
+		//var x = e.pageX - $('#adminmenu').width() - 30;
+		//var y = e.pageY - $('#wphead').height() - $('#update-nag').height();		
 		var x = e.pageX;
 		var y = e.pageY;		
 
-		jQuery('#imageMenu').css('top',y);
-		jQuery('#imageMenu').css('left',x);
-		jQuery('#imageMenu').show();
+		$('#imageMenu').css('top',y);
+		$('#imageMenu').css('left',x);
+		$('#imageMenu').show();
 
-		jQuery('#imageMenu .edit').unbind('click');
-		jQuery('#imageMenu .delete').unbind('click');
-		jQuery('#imageMenu .quit').unbind('click');
+		$('#imageMenu .edit').unbind('click');
+		$('#imageMenu .delete').unbind('click');
+		$('#imageMenu .quit').unbind('click');
 		
-		jQuery('#imageMenu .edit').click(function(){ImageSelector.onMenuItem('edit_image', obj)});
-		jQuery('#imageMenu .delete').click(function(){ImageSelector.onMenuItem('delete_image', obj)});
-		jQuery('#imageMenu .quit').click(function(){ImageSelector.onMenuItem('quit', obj)});
+		$('#imageMenu .edit').click(function(){ImageSelector.onMenuItem('edit_image', obj)});
+		$('#imageMenu .delete').click(function(){ImageSelector.onMenuItem('delete_image', obj)});
+		$('#imageMenu .quit').click(function(){ImageSelector.onMenuItem('quit', obj)});
 		
 	},
 		
@@ -596,8 +597,8 @@ var ImageSelector = {
 	messageTimeout : -1,
 	
 	showMessage : function(msg){
-		jQuery('#apollo_title_feedback').html(msg);
-		jQuery('#apollo_title_feedback').show();
+		$('#apollo_title_feedback').html(msg);
+		$('#apollo_title_feedback').show();
 		if (ImageSelector.messageTimeout != -1){
 			clearTimeout(ImageSelector.messageTimeout)
 		}
@@ -605,7 +606,7 @@ var ImageSelector = {
 	},
 	
 	hideMessage : function(){
-		jQuery('#apollo_title_feedback').hide();
+		$('#apollo_title_feedback').hide();
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////////
@@ -615,14 +616,14 @@ var ImageSelector = {
 	*/
 	onMenuItem : function(item, selectedElement){
 		
-		jQuery('#imageMenu').hide();
-		jQuery('#folderMenu').hide();
+		$('#imageMenu').hide();
+		$('#folderMenu').hide();
 		
 		
-		var divID = jQuery(selectedElement).attr('id');
+		var divID = $(selectedElement).attr('id');
 		
 		if (item == 'rename_folder' || item == 'delete_folder'){
-			var name = jQuery('#'+divID + ' .folder_name').html();
+			var name = $('#'+divID + ' .folder_name').html();
 			var folder_id = parseInt(divID.substr(7));
 		}
 		else {
@@ -653,18 +654,18 @@ var ImageSelector = {
 	makeFolderNameEditable : function(folder_id){
 		
 		var divID = '#folder_' + folder_id;
-		var name = jQuery(divID + ' .folder_name').html();
+		var name = $(divID + ' .folder_name').html();
 		
-		jQuery(divID).attr('onclick','');
-		jQuery(divID).html("<input id='folder_name_edit' style='margin-left:30px' type='text' value='"+name+"' onblur='ImageSelector.paintFolders()'/>");
+		$(divID).attr('onclick','');
+		$(divID).html("<input id='folder_name_edit' style='margin-left:30px' type='text' value='"+name+"' onblur='ImageSelector.paintFolders()'/>");
 		
-		jQuery("#folder_name_edit").keypress(function (e) {
+		$("#folder_name_edit").keypress(function (e) {
 			if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
-				ImageSelector.renameFolder(folder_id, jQuery("#folder_name_edit").val());
+				ImageSelector.renameFolder(folder_id, $("#folder_name_edit").val());
 			}
 	    });
 		
-		jQuery("#folder_name_edit").focus();
+		$("#folder_name_edit").focus();
 	},
 		
 	// ////////////////////////////////////////////////////////////////////////////
@@ -681,7 +682,7 @@ var ImageSelector = {
 	
 		var paras = {cmd: 14, folder_id: folderdId};
 												
-		jQuery.ajax({
+		$.ajax({
 			url: ImagePickerData.commandURL,
 			dataType: "text",
 			data: paras,
@@ -695,15 +696,15 @@ var ImageSelector = {
 		
 		var temp = new Array();
 		
-		for (var i=0; i<ImagePickerData.folderList.length; i++){
+		for (var i=0; i<DataStore.m_folderList.length; i++){
 		
-			if (ImagePickerData.folderList[i].id != folder_id){
-				temp.push(ImagePickerData.folderList[i]);
+			if (DataStore.m_folderList[i].id != folder_id){
+				temp.push(DataStore.m_folderList[i]);
 			}
 			
 		}
 
-		ImagePickerData.folderList = temp;
+		DataStore.m_folderList = temp;
 		ImageSelector.paintFolders()	
 	},
 	
@@ -717,7 +718,7 @@ var ImageSelector = {
 		
 		var paras = {cmd: 12, folder_name: folderName};
 												
-		jQuery.ajax({
+		$.ajax({
 			url: ImagePickerData.commandURL,
 			dataType: "json",
 			data: paras,
@@ -735,7 +736,7 @@ var ImageSelector = {
 			var temp = new Array();
 			temp.id = folder_id;
 			temp.name = folderName;
-			ImagePickerData.folderList.push(temp);
+			DataStore.m_folderList.push(temp);
 			ImageSelector.paintFolders();		
 			ImageSelector.makeFolderNameEditable(folder_id);					
 			
@@ -752,9 +753,9 @@ var ImageSelector = {
 			return "Unassigned";
 		}
 		
-		for (var i=0; i<ImagePickerData.folderList.length; i++){
-			if (ImagePickerData.folderList[i].id == folder_id){
-				return ImagePickerData.folderList[i].name;
+		for (var i=0; i<DataStore.m_folderList.length; i++){
+			if (DataStore.m_folderList[i].id == folder_id){
+				return DataStore.m_folderList[i].name;
 			}			
 		}
 		
@@ -769,7 +770,7 @@ var ImageSelector = {
 	renameFolder : function(folderId, folderName){
 		var paras = {cmd: 11, folder_id: folderId, folder_name: folderName};
 												
-		jQuery.ajax({
+		$.ajax({
 			url: ImagePickerData.commandURL,
 			dataType: "text",
 			data: paras,
@@ -779,9 +780,9 @@ var ImageSelector = {
 	
 	onFolderRenamed : function(ret, folderId, folderName){
 
-		for (var i=0; i<ImagePickerData.folderList.length; i++){
-			if (ImagePickerData.folderList[i].id == folderId){
-				ImagePickerData.folderList[i].name = folderName;
+		for (var i=0; i<DataStore.m_folderList.length; i++){
+			if (DataStore.m_folderList[i].id == folderId){
+				DataStore.m_folderList[i].name = folderName;
 				break;
 			}
 		}
@@ -798,17 +799,17 @@ var ImageSelector = {
 	*/
 	onAddToFolder : function(event, ui){
 
-		var imgID = parseInt(jQuery(ui.draggable).attr('id').substring(4));						
-		var folderID = parseInt(jQuery(this).attr('id').substring(7));	// format folder_xxx
+		var imgID = parseInt($(ui.draggable).attr('id').substring(4));						
+		var folderID = parseInt($(this).attr('id').substring(7));	// format folder_xxx
 
 		// Check to see if there are images multi-selected, and whether this image
 		// is one of them
 		var imgList = new Array();
 		var is_multiDrag = false;
 		
-  		jQuery('.multiselected').each(	
+  		$('.multiselected').each(	
   			function(){
-				var multi_imgID = parseInt(jQuery(this).attr('id').substring(4));
+				var multi_imgID = parseInt($(this).attr('id').substring(4));
 				imgList.push(multi_imgID);	
 				if (imgID == multi_imgID){
 					is_multiDrag = true;
@@ -835,7 +836,7 @@ var ImageSelector = {
 				
 				var paras = {cmd: 10, media_post_id: tempImgID, folder_id: folderID};
 														
-				jQuery.ajax({
+				$.ajax({
 					url: ImagePickerData.commandURL,
 					dataType: "json",
 					data: paras,
@@ -844,10 +845,10 @@ var ImageSelector = {
 			}	
 		}
 
-		//alert(jQuery(ui.draggable).html());
-		//alert(jQuery(ui.draggable).attr('id'));
+		//alert($(ui.draggable).html());
+		//alert($(ui.draggable).attr('id'));
 		
-		jQuery(this).removeClass( 'apollo_folder_droppable_hover' );
+		$(this).removeClass( 'apollo_folder_droppable_hover' );
 			
 	},
 	
@@ -858,10 +859,10 @@ var ImageSelector = {
 			var imgID = msg.media_post_id;
 			var folderID = msg.folder_id;
 					
-			for (var i=0; i<ImagePickerData.imageList.length; i++){
+			for (var i=0; i<DataStore.m_mediaList.length; i++){
 				
-				if (ImagePickerData.imageList[i].post_id == imgID){
-					ImagePickerData.imageList[i].folder_id = folderID;						
+				if (DataStore.m_mediaList[i].post_id == imgID){
+					DataStore.m_mediaList[i].folder_id = folderID;						
 					break;
 				}
 			}

@@ -52,6 +52,20 @@ class SitesTable {
 	
 	// /////////////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Check to see if the given user has access to the given site
+	*/
+	public static function checkUserSiteAccess($user_id, $site_id){
+		$sql = DatabaseManager::prepare("SELECT sites.id FROM athena_Sites sites INNER JOIN athena_UserToSite uts WHERE uts.user_id = %d AND sites.id = %d", $user_id, $site_id);			
+		$data = DatabaseManager::getVar($sql);				
+		if (isset($data) && $data > 0){
+			return true;
+		}
+		return false;
+	}
+
+	// /////////////////////////////////////////////////////////////////////////////////
+
 	public static function getSitesForUser($user_id){
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_Sites sites INNER JOIN athena_UserToSite uts WHERE uts.user_id = %d AND sites.id = uts.site_id ORDER BY sites.id", $user_id);			
 		return DatabaseManager::getResults($sql);				

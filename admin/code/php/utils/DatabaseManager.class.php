@@ -63,7 +63,7 @@ class DatabaseManager {
 
 		if (self::$username == ""){
 			if (defined('database_user')){
-				Logger::debug("DB Username is not set, but found credentials stored in Session");
+				//Logger::debug("DB Username is not set, but found credentials stored in Session");
 				self::$username = database_user;
 				self::$password = database_pass;
 				self::$databaseName = database_name;
@@ -86,7 +86,7 @@ class DatabaseManager {
 
 			// Select the relevant database.........
 			if (mysql_select_db(self::$databaseName, self::$connection)) {
-				Logger::debug("Connection to MySQL database '" . self::$databaseName . "' OK!");
+				//Logger::debug("Connection to MySQL database '" . self::$databaseName . "' OK!");
 			}
 			else {
 				Logger::fatal("Failed to connect to MySQL database '" . self::$databaseName . "'");
@@ -102,7 +102,7 @@ class DatabaseManager {
 			//exit();
 		}
 		
-		Logger::debug("Connection to database initialized ok!");
+		//Logger::debug("Connection to database initialized ok!");
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +112,7 @@ class DatabaseManager {
 	*/
 	public static function close(){
 		// Close the link with the MySql engine on the server
-		Logger::debug("close() - Closing connection...");
+		//Logger::debug("close() - Closing connection...");
         if (self::$connection) @mysql_close(self::$connection);
 	}
 

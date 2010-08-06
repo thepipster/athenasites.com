@@ -56,11 +56,42 @@ else {
  	$new_filepath = $folder . $name;
     
     move_uploaded_file($tmp_name, $new_filepath);	
-        
-    $mime = new MimeType();
-        
-    $mime_type = $mime->getType(strtolower($new_filepath));
+                
+    // If this is an image then get the info
+	$image_info = getimagesize($new_filepath);
+
+    if ($image_info){
+
+	    $thumb_name = getThumbName($name, $folder);
+	 	$new_thumbfilepath = $folder . $thumb_name;
+	 	
+	 	Logger::debug(">>>> New image name: $name Thumb name: $thumb_name");
+    
+	    $width = $image_info[0];
+	    $height = $image_info[1];
+	    $mime_type = $image_info['mime'];
+	    
+	    // Create thumbnails!
+	    $src_image = ImageUtils::createImageFromFile($new_filepath, $mime_type);
+	    $thumb_img = ImageUtils::resizeImage($src_image, $mime_type, 'fit', THUMB_WIDTH, THUMB_HEIGHT, null);
+	    
+	    $thumb_width = imagesx($thumb_img);
+	    $thumb_height = imagesy($thumb_img);
+	    
+		imagepng($thumb_img, $new_thumbfilepath);	    
+    }
+    else {
+	    $mime = new MimeType();                
+	    $mime_type = $mime->getType(strtolower($new_filepath));
+	    $width = null;
+	    $height = null;
+	    $thumb_name = null;
+	    $thumb_width = null;
+	    $thumb_height= null;
+    }
+    
     $file_size = filesize($new_filepath);
+        
     
 	/*
 	$new_filename = $new_file['target_dir'] . $new_file['filename'];
@@ -71,7 +102,9 @@ else {
 		
 	// Add to media table
 	//FolderTable::addMedia($folder_id, $site_id, $name, $mime_type, $file_size);
-	FolderTable::addMedia($folder_id, $site_id, $name, $mime_type, $file_size, $title, '', '');
+	FolderTable::addMedia($folder_id, $site_id, $name, $mime_type, $file_size, $title, '', '', $width, $height, $thumb_name, $thumb_width, $thumb_height);
+	
+	// Make a thumbnail
 	
 	Logger::debug("Upload complete!");
 }	
@@ -80,6 +113,7 @@ else {
 // it won't fire its onComplete method - SO DO NOT REOMOVE FOLLOWING!	
 echo "Upload complete! <br>";
 
+// ////////////////////////////////////////////////////////////////////////////////
 
 function friendlyName($filename, $dir) {
 
@@ -102,6 +136,19 @@ function friendlyName($filename, $dir) {
 	}
 
 	return $name . '.' . $ext;
+}
+
+// ////////////////////////////////////////////////////////////////////////////////
+
+function getThumbName($filename, $dir) {
+
+	// separate filename from extension
+	$path_parts = pathinfo($filename);
+	$ext = $path_parts['extension'];
+	$name = $path_parts['filename'];
+	
+	Logger::debug(">>>> $name $ext");
+	return $name . '_thumb.' . $ext;
 }
 
 

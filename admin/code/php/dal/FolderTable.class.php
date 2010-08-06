@@ -11,16 +11,16 @@ class FolderTable {
 	/**
 	* Get all the images associated with a page
 	*/
-	public static function getFoldersForBlog($site_id){
+	public static function getFoldersForSite($site_id){
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_Folders WHERE site_id = %d ORDER BY name ASC",  $site_id ); 		
-		return DatabaseManager::getResuts($sql, ARRAY_A);		
+		return DatabaseManager::getResults($sql);		
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////
 
-	public static function getImageEntriesForBlog($site_id){
+	public static function getImageEntriesForSite($site_id){
 		$sql = DatabaseManager::prepare("SELECT media.* FROM athena_Media media INNER JOIN athena_Folders folders WHERE folders.id = media.folder_id AND folders.site_id = %d",  $site_id ); 		
-		return DatabaseManager::getResuts($sql, ARRAY_A);		
+		return DatabaseManager::getResults($sql);		
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////
@@ -32,14 +32,32 @@ class FolderTable {
 
 	// //////////////////////////////////////////////////////////////////////////////////////
 
-	public static function addMedia($folder_id, $site_id, $filename, $mime_type, $file_size, $title, $descriptions, $tags){
+	/**
+	* Get all the images associated with a page
+	*/
+	public static function getMediaForSite($site_id){
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_Media WHERE site_id = %d ORDER BY id ASC",  $site_id ); 		
+		return DatabaseManager::getResults($sql);		
+	}
+
+	// //////////////////////////////////////////////////////////////////////////////////////
+
+	public static function getMediaForFolder($site_id, $folder_id){
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_Media WHERE site_id = %d AND folder_id = %d ORDER BY id ASC",  $site_id, $folder_id ); 		
+		return DatabaseManager::getResults($sql);		
+	}
+	
+	// //////////////////////////////////////////////////////////////////////////////////////
+
+	public static function addMedia($folder_id, $site_id, $filename, $mime_type, $file_size, $title, $descriptions, $tags, $width, $height, $thumb_filename, $thumb_width, $thumb_height){
 
         // Get data in correct locale (SQL's NOW() doesn't do that)
         $target_date  = mktime(date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
         $date_str = date('Y-m-d H:i:s', $target_date);
 
-		$sql = DatabaseManager::prepare("INSERT INTO athena_Media (folder_id, site_id, filename, mime_type, file_size, created, title, description, tags) VALUES (%d, %d, %s, %s, %d, %s, %s, %s, %s)",  
-					$folder_id, $site_id, $filename, $mime_type, $file_size, $date_str,  $title, $descriptions, $tags); 		
+		$sql = DatabaseManager::prepare("INSERT INTO athena_Media (folder_id, site_id, filename, mime_type, file_size, created, title, description, tags, width, height, thumb_filename, thumb_width, thumb_height) 
+					VALUES (%d, %d, %s, %s, %d, %s, %s, %s, %s, %d, %d, %s, %d, %d)",  
+						$folder_id, $site_id, $filename, $mime_type, $file_size, $date_str,  $title, $descriptions, $tags, $width, $height, $thumb_filename, $thumb_width, $thumb_height); 		
 		return DatabaseManager::insert($sql);		
 	}
 

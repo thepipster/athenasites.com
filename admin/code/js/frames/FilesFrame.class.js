@@ -9,6 +9,8 @@ var FilesFrame = {
 		
 	},
 	
+	// ////////////////////////////////////////////////////////////////////////
+	
 	repaint : function(){
 							
 		$('#FilesFrame').html();
@@ -22,7 +24,22 @@ var FilesFrame = {
 		);
 	},
 	
+	// ////////////////////////////////////////////////////////////////////////
+
 	onGotHTML : function(){
+		FilesFrame.paintUploader();
+		FilesFrame.paintMedia();
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////
+
+	paintMedia : function(){
+		ImageSelector.paint(ImageSelector.MODE_ORG_MEDIA, '#athena_folder_contents');
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////
+	
+	paintUploader : function(){
 
 		//FlashUploader.paint('#flashUploader');
 
@@ -71,5 +88,8 @@ var FilesFrame = {
 		
 		$('#flashUploaderProgress').height( $('#FilesFrame').outerHeight() - $('.uploadControls').outerHeight() - 60 );
 	}
+	
+	// ////////////////////////////////////////////////////////////////////////
+	
 
 }
