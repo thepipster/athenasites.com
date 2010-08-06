@@ -32,6 +32,13 @@ switch($cmd){
 		getImages($site_id); 
 		break;			
 		
+	case "saveMediaInfo":
+		$title = CommandHelper::getPara('title', true, CommandHelper::$PARA_TYPE_STRING);
+		$desc = CommandHelper::getPara('desc', true, CommandHelper::$PARA_TYPE_STRING);
+		$tags = CommandHelper::getPara('tags', true, CommandHelper::$PARA_TYPE_STRING);
+		saveMediaInfo($site_id, $title, $desc, $tags);
+		break;			
+			
 	default :
 		CommandHelper::sendTextMessage("Undefined command '$cmd'");
 		
@@ -67,6 +74,18 @@ function getImages($site_id){
 				
 	CommandHelper::sendMessage($msg);		
 	
+}
+
+// //// ///////////////////////////////////////////////////////////////////////////////////////
+
+function saveMediaInfo($site_id, $title, $desc, $tags){
+
+	$msg = array();	
+	$msg['cmd'] = 'saveMediaInfo';
+	$msg['result'] = 'ok';			
+	$msg['data'] = '';
+				
+	CommandHelper::sendMessage($msg);	
 }
 
 ?>

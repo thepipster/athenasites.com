@@ -4,6 +4,101 @@
 	height: 100%;
 }
 
+#FilesFrameContent .thumbwrapper {
+	width: 60px;
+	height: 60px;
+	margin: 5px;	
+	float: left;
+/*	text-align: center; */
+}
+
+#FilesFrameContent .thumbtitle {
+	font-size: 8px;
+	overflow: hidden;
+	text-align: center;
+	width: 80px;
+	display: block;
+}
+
+#FilesFrameContent .thumb {
+	
+	border-width: 4px;
+	border-style: solid;
+	/*border-color: #cccccc;*/
+	border-color: white;
+	background-color: #d9dcdc;
+	
+	margin: 0px;
+	padding: 0px;
+	z-index: 1;
+}
+
+/* Folder Pop-up context menu /////////////////////////// */
+
+#FilesFrameContent .rightClickMenu {
+	position: absolute;
+	width: 120px;
+	z-index: 99999;
+	border: solid 1px #CCC;
+	background: #EEE;
+	padding: 0px;
+	margin: 0px;
+	display: none; 
+}
+
+#FilesFrameContent .rightClickMenu LI {
+	list-style: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+#FilesFrameContent .rightClickMenu A {
+	color: #333;
+	text-decoration: none;
+	display: block;
+	line-height: 20px;
+	height: 20px;
+	background-position: 6px center;
+	background-repeat: no-repeat;
+	outline: none;
+	padding: 1px 5px;
+	padding-left: 28px;
+}
+
+#FilesFrameContent .rightClickMenu LI:hover A {
+	color: #FFF;
+	background-color: #3399FF;
+}
+
+#FilesFrameContent .rightClickMenu LI.disabled A {
+	color: #AAA;
+	cursor: default;
+}
+
+#FilesFrameContent .rightClickMenu LI.hover.disabled A {
+	background-color: transparent;
+}
+
+#FilesFrameContent .rightClickMenu LI.separator {
+	border-top: solid 1px #CCC;
+}
+
+/*
+	Adding Icons
+	
+	You can add icons to the context menu by adding
+	classes to the respective LI element(s)
+*/
+
+#FilesFrameContent .rightClickMenu LI.edit A { background-image: url('../../images/menu_images/page_white_edit.png'); }
+#FilesFrameContent .rightClickMenu LI.cut A { background-image: url('../../images/menu_images/cut.png'); }
+#FilesFrameContent .rightClickMenu LI.copy A { background-image: url('../../images/menu_images/page_white_copy.png'); }
+#FilesFrameContent .rightClickMenu LI.paste A { background-image: url('../../images/menu_images/page_white_paste.png'); }
+#FilesFrameContent .rightClickMenu LI.delete A { background-image: url('../../images/menu_images/page_white_delete.png'); }
+#FilesFrameContent .rightClickMenu LI.quit A { background-image: url('../../images/menu_images/door.png'); }
+
+/* Flash Upload styles /////////////////////////// */
+
 #flashUploderContent .title {
 	background-color: #b8bfc8;
 	width: 100%;

@@ -95,21 +95,16 @@ class ImageUtils {
 	/**
 	* Resizes an image.  If $resize_mode = 'crop', and no coordinates are specified, the image is cropped in the center.
 	*
-	* @param input_image {Input must be an image stored in a variable.  It should already be converted to an image using imagecreatefromstring, etc...}
+	* @param input_image {Input must be an image stored in a image object}
 	* @param image_type {types are image/jpeg, image/png, image/gif}
 	* @param target_filename {Full file name of target image}
 	* @param resize_mode {Spedicifes the mode, types are fit, crop}
-	* @param crop {array} Specifies the coordinates of the crop in the order top, right, bottom, left.
-	* @param crop_left {specifies the x coordinate of the top left corner of the crop}
-	* @param crop_top {specifies the y coordinate of the top left corner of the crop}
-	* @param crop_right {specifies the x coordinate of the bottom right corner of the crop}
-	* @param crop_bottom {specifies the y coordinate of the bottom right corner of the crop}
 	* @return {resized image. This will need to be converted to the appropriate image type, and stored}
 	*
 	*/
-	public static function resizeImage($input_image, $mime_type, $resize_mode, $target_width, $target_height, $crop = NULL){
+	public static function resizeImage($input_image, $mime_type, $resize_mode, $target_width, $target_height){
 
-		Logger::debug("resizeImage(mime = $mime_type, resize_mode = $resize_mode, target_width = $target_width, target_height = $target_height, $crop)");
+		Logger::debug("resizeImage(mime = $mime_type, resize_mode = $resize_mode, target_width = $target_width, target_height = $target_height)");
 		
 		// Verify $input_image
 
@@ -123,6 +118,7 @@ class ImageUtils {
 			Logger::error("Target width, $target_width, is invalid.  Defaulting to image width, $input_width");
 			$target_width = $input_width;
 		}
+		
 		//Verify target height
 		if($target_height < 1){
 			Logger::error("Target height, $target_height, is invalid.  Defaulting to image height, $input_height");
@@ -131,104 +127,89 @@ class ImageUtils {
 
 		$target_ratio = $target_width / $target_height;
 		
-		//Verify crop parameters
-		if($resize_mode == "crop"){
-			if(is_null($crop) || !is_array($crop)){
-				$crop_mode = "default";
-			}elseif(count($crop) != 4){
-				Logger::error("Incorrect number of crop parameters defined: ".count($crop).".");
-				$crop_mode = "default";
-			}elseif($crop[0] < 0 || $crop[1] > $target_width || $crop[2] > $target_height || $crop[3] < 0){
-				Logger::error("Crop Parameters out of range of the image size.");
-				$crop_mode = "default";
-			}elseif($crop[2] - $crop[0] < 1 || $crop[1] - $crop[4] < 1){
-				Logger::error("Crop Parameters would give the final image negative dimensions.");
-				$crop_mode = "default";
-			}else{
-				$crop_mode = "custom";
-			}
-		}
 		// Calculate the width and height of the output image
 		switch($resize_mode){
+			
+			case "letterbox":
 			case "fit":
 				$input_crop_x = 0; //no cropping
 				$input_crop_y = 0; //no cropping
 				if($input_ratio > $target_ratio){
 					$output_width = $target_width;
 					$output_height = floor($target_width / $input_ratio);
-				}else{
+				}
+				else{
 					$output_height = $target_height;
 					$output_width = ceil($target_height * $input_ratio);
 				}
 				$input_crop_width = $input_width;
 				$input_crop_height = $input_height;
-			break;
+			
+				break;
+			
 			case "crop":
-				Logger::debug("Crop Requested");
-				switch($crop_mode){
-					case "default":
-						// Crop undefined. Use default crop settings (crop the center of the image)
-						$output_width = $target_width;
-						$output_height = $target_height;
-						$output_ratio = $target_ratio;
-						if($input_ratio > $target_ratio){
-							$input_crop_x = ceil(($input_width - ($output_ratio * $input_height)) / 2);
-							$input_crop_y = 0;
-							$input_crop_width = $input_width - $input_crop_x * 2;
-							$input_crop_height = $input_height;
-						}else{
-							$input_crop_x = 0;
-							$input_crop_y = floor(($input_height - ($input_width / $output_ratio)) / 2);
-							$input_crop_width = $input_width;
-							$input_crop_height = $input_height - $input_crop_y * 2;
-						}
-
-						$output_width = $target_width;
-						$output_height = $target_height;
-						$output_ratio = $output_width / $output_height;
-						if($input_ratio > $target_ratio){
-							$input_crop_x = ceil(($input_width - ($output_ratio * $input_height)) / 2);
-							$input_crop_y = 0;
-						}else{
-							$input_crop_x = 0;
-							$input_crop_y = floor(($input_height - ($input_width / output_ratio)) / 2);
-						}
-					break;
-					case "custom":
-						// Crop Defined
-						$input_crop_x = $crop_left;
-						$input_crop_y = $crop_top;
-						$input_crop_width = $crop_right - $crop_left;
-						$input_crop_height = $crop_bottom - $crop_top;
-						$input_crop_ratio = $input_crop_width / $input_crop_height;
-						Logger::debug("input_crop_ratio: $input_crop_ratio");
-						if($input_crop_ratio > $target_ratio){
-							$output_width = $target_width;
-							$output_height = floor($target_width / $input_crop_ratio);
-						}else{
-							$output_height = $target_height;
-							$output_width = ceil($target_height * $input_crop_ratio);
-						}
-					break;
-					case "default":
-						Logger::warning("Crop Mode not Defined");
-					break;
+				
+				// Crop undefined. Use default crop settings (crop the center of the image)
+				$output_width = $target_width;
+				$output_height = $target_height;
+				$output_ratio = $target_ratio;
+				
+				if ($input_ratio > $target_ratio){
+					$input_crop_x = ceil(($input_width - ($output_ratio * $input_height)) / 2);
+					$input_crop_y = 0;
+					$input_crop_width = $input_width - $input_crop_x * 2;
+					$input_crop_height = $input_height;
 				}
-			break;
+				else {
+					$input_crop_x = 0;
+					$input_crop_y = floor(($input_height - ($input_width / $output_ratio)) / 2);
+					$input_crop_width = $input_width;
+					$input_crop_height = $input_height - $input_crop_y * 2;
+				}
+
+				$output_width = $target_width;
+				$output_height = $target_height;
+				$output_ratio = $output_width / $output_height;
+				if ($input_ratio > $target_ratio){
+					$input_crop_x = ceil(($input_width - ($output_ratio * $input_height)) / 2);
+					$input_crop_y = 0;
+				}
+				else {
+					$input_crop_x = 0;
+					$input_crop_y = floor(($input_height - ($input_width / $output_ratio)) / 2);
+				}
+			
+				break;
+			
 			default:
 				Logger::warning("Resize Mode not Defined");
 			break;
 		}
 
 		//Create a blank image with the new width and height
-		Logger::debug("Output Height: $output_height");
-		Logger::debug("Output Width: $output_width");
-		$output_image = imagecreatetruecolor($output_width, $output_height);
-		
-		if($mime_type == 'image/png'){
+		if ($resize_mode == 'letterbox'){
+			$output_image = imagecreatetruecolor($target_width, $target_height);
+			
+			$x_offset = ($target_width - $output_width) / 2;
+			$y_offset = ($target_height - $output_height) / 2;		
+
+			if ($y_offset < 0) $y_offset = 0;
+			if ($x_offset < 0) $x_offset = 0;			
+			
+			imagesavealpha($output_image, true);
+			imagefill($output_image, 0, 0, imagecolorallocatealpha($output_image, 0, 0, 0, 127));
+		}
+		else {
+			$output_image = imagecreatetruecolor($output_width, $output_height);
+			$y_offset = 0;
+			$x_offset = 0;		
+		}
+				
+		if ($mime_type == 'image/png'){
 			//Preserve transparency in PNGs
 			imagealphablending($output_image, false);
-		}elseif($mime_type == 'image/gif'){
+		}
+		elseif ($mime_type == 'image/gif'){
 			//Preserve transparency in GIFs
 	        $trnprt_indx = imagecolortransparent($input_image);
 	        if ($trnprt_indx >= 0) {
@@ -240,12 +221,11 @@ class ImageUtils {
 	        }
 		}
 
-		//Copy the input image to the output image, and resize
-		if (imagecopyresampled($output_image, $input_image, 0, 0, $input_crop_x, $input_crop_y, $output_width, $output_height, $input_crop_width, $input_crop_height)){
-			logger::debug(", 0, 0, $input_crop_x, $input_crop_y, $output_width, $output_height, $input_crop_width, $input_crop_height)");
+		// Copy the input image to the output image, and resize
+		if (imagecopyresampled($output_image, $input_image, $x_offset, $y_offset, $input_crop_x, $input_crop_y, $output_width, $output_height, $input_crop_width, $input_crop_height)){
 			return $output_image;
 		}
-		else{
+		else {
 			Logger::error("Could not create $mime_type!!! Failed at imagecopyresampled()");
 		}
 	}

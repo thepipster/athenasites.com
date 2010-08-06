@@ -64,16 +64,14 @@ else {
 
 	    $thumb_name = getThumbName($name, $folder);
 	 	$new_thumbfilepath = $folder . $thumb_name;
-	 	
-	 	Logger::debug(">>>> New image name: $name Thumb name: $thumb_name");
-    
+	 	    
 	    $width = $image_info[0];
 	    $height = $image_info[1];
 	    $mime_type = $image_info['mime'];
 	    
 	    // Create thumbnails!
 	    $src_image = ImageUtils::createImageFromFile($new_filepath, $mime_type);
-	    $thumb_img = ImageUtils::resizeImage($src_image, $mime_type, 'fit', THUMB_WIDTH, THUMB_HEIGHT, null);
+	    $thumb_img = ImageUtils::resizeImage($src_image, $mime_type, 'letterbox', THUMB_WIDTH, THUMB_HEIGHT);
 	    
 	    $thumb_width = imagesx($thumb_img);
 	    $thumb_height = imagesy($thumb_img);

@@ -55,6 +55,7 @@ $current_site_id = $site_list[0]['id'];
 <link rel="stylesheet" href="code/css/SideBar.css" type="text/css" />
 
 <link rel="stylesheet" href="code/css/FilesFrame.css" type="text/css" />
+<link rel="stylesheet" href="code/css/ImageEditDialog.css" type="text/css" />
 
 <link rel="stylesheet" href="code/css/datePicker.css" type="text/css" />
 
@@ -100,13 +101,18 @@ $current_site_id = $site_list[0]['id'];
 <script src="code/js/flashuploader/FlashUploader.class.js" type="text/javascript"></script>
 
 <!-- Core -->
+<script src="code/js/utils/AthenaUtils.class.js" type="text/javascript"></script>
 <script src="code/js/DataStore.class.js" type="text/javascript"></script>
 
 <!-- Remote APIs -->
 <script src="code/js/remoteapi/SystemAPI.class.js" type="text/javascript"></script>
 <script src="code/js/remoteapi/MediaAPI.class.js" type="text/javascript"></script>
 
+<!-- Dialog Displays -->
+<script src="code/js/dialogs/ImageEditDialog.class.js" type="text/javascript"></script>
+
 <!-- Sub-Frame Displays -->
+<script src="code/js/subframes/FolderMediaFrame.class.js" type="text/javascript"></script>
 <script src="code/js/subframes/ImageSelector.class.js" type="text/javascript"></script>
 
 <!-- Frame Displays -->
@@ -302,6 +308,38 @@ $current_site_id = $site_list[0]['id'];
 </body>
 </html>
 
+<!-- Javascript common functions /////////////////////////////////////////////////////// -->
+
+<script type="text/javascript">
+
+(function ($) {
+$.fn.vAlign = function() {
+	return this.each(function(i){
+	var h = $(this).height();
+	var oh = $(this).outerHeight();
+	var mt = (h + (oh - h)) / 2;	
+	$(this).css("margin-top", "-" + mt + "px");	
+	$(this).css("top", "50%");
+	$(this).css("position", "absolute");	
+	});	
+};
+})(jQuery);
+
+(function ($) {
+$.fn.hAlign = function() {
+	return this.each(function(i){
+	var w = $(this).width();
+	var ow = $(this).outerWidth();	
+	var ml = (w + (ow - w)) / 2;	
+	$(this).css("margin-left", "-" + ml + "px");
+	$(this).css("left", "50%");
+	$(this).css("position", "absolute");
+	});
+};
+})(jQuery);
+
+</script>
+
 <!-- Javascript code /////////////////////////////////////////////////////////////// -->
 
 <script type="text/javascript">
@@ -319,7 +357,7 @@ var ssMain = {
 	VIEW_SETTINGS : 7,
 	VIEW_ACCOUNT : 8,
 	
-	view : 1,
+	view : 2,
 		
 	pageTracker : '',
 	
@@ -339,9 +377,7 @@ var ssMain = {
 		// Setup the data store for the site
 		DataStore.m_siteID = <?=$current_site_id?>;
 		DataStore.init();
-	
-		ssMain.onShowFiles();
-			
+				
 		// Start auto-save timer....
         //setInterval ( "ssMain.onAutoSave()", 5000 );
 	
@@ -358,7 +394,7 @@ var ssMain = {
 		//$('.datepicker').datePicker({clickInput:true, startDate:'1996-01-01'});
 						
 		// Start loading data
-		DataStore.load();
+		DataStore.load(ssMain.onDataLoaded);
         
 		// Setup classes...
 		DashboardFrame.init();
@@ -369,6 +405,12 @@ var ssMain = {
         SettingsFrame.init();		
 	},
 
+	// ////////////////////////////////////////////////////////////////////////
+
+	onDataLoaded : function(){
+		ssMain.repaint();
+	},
+	
 	// ////////////////////////////////////////////////////////////////////////
 
 	isResizing : false,

@@ -67,6 +67,8 @@ var MediaAPI = {
 	*/	
 	getMedia : function(siteID, callback){
 		
+		AthenaDialog.showLoading();
+		
 		var paras = {cmd : 'getMedia', site_id: siteID};
 
 		$.ajax({
@@ -93,7 +95,43 @@ var MediaAPI = {
 			AthenaDialog.showAjaxError(ret);
 		}
         
-   	}	
-   					
+   	},	
+   	
+	// ////////////////////////////////////////////////////////////////////////
+	
+	/**
+	* Get the list of media for this site
+	*/	
+	saveMediaInfo : function(siteID, mediaTitle, mediaDesc, mediaTags, callback){
+		
+		AthenaDialog.showLoading();
+		
+		var paras = {cmd : 'saveMediaInfo', site_id: siteID, title: mediaTitle, desc: mediaDesc, tags: mediaTags};
+
+		$.ajax({
+			url: MediaAPI.m_url,
+			dataType: "json",
+			success: function(ret){MediaAPI.onMediaInfoSaved(ret, callback);},
+			data: paras
+		});
+	},	
+			
+	onMediaInfoSaved : function(ret, callback){
+
+		AthenaDialog.clearLoading();
+		
+		if (ret.result == 'ok'){	
+			if (ret.data == 'true'){
+				callback(ret.data);
+			}
+			else {
+				callback(ret.data);
+			}
+		}
+		else {
+			AthenaDialog.showAjaxError(ret);
+		}
+        
+   	}   					
 }
     

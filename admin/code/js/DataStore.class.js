@@ -25,12 +25,26 @@ var DataStore = {
 
 	// //////////////////////////////////////////////////////////////////////////////////
 
-	save : function(){
+	getImage : function(image_id){
+		for(var i=0; i<DataStore.m_mediaList.length; i++){
+			if (DataStore.m_mediaList[i].id == image_id){
+				return DataStore.m_mediaList[i];
+			}
+		}
+		return false;
 	},
-		
+	
 	// //////////////////////////////////////////////////////////////////////////////////
 
-	load : function(){
+	save : function(){
+	},
+				
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	m_dataLoadedCallback : '',
+	
+	load : function(callback){
+		DataStore.m_dataLoadedCallback = callback;
 		MediaAPI.getFolders(DataStore.m_siteID, DataStore.onGotFolders);
 		MediaAPI.getMedia(DataStore.m_siteID, DataStore.onGotMedia);
 	},
@@ -42,11 +56,16 @@ var DataStore = {
 	},
 	
 	// //////////////////////////////////////////////////////////////////////////////////
-
+	
 	onGotMedia : function(media_list){
 		
-		DataStore.m_mediaList = new Array(media_list.length);
+		if (!media_list || media_list == undefined){
+			DataStore.m_mediaList = new Array();			
+			return;
+		}
 		
+		DataStore.m_mediaList = new Array(media_list.length);
+				
 		for(var i=0; i<media_list.length; i++){			
 			
 			var files_root = defines.user_files_root_url + DataStore.m_siteID + "/";
@@ -60,6 +79,8 @@ var DataStore = {
 			temp.tags = media_list[i].tags;
 			temp.width = media_list[i].width;
 			temp.height = media_list[i].height;
+			temp.thumb_width = media_list[i].thumb_width;
+			temp.thumb_height = media_list[i].thumb_height;
 			temp.id = media_list[i].id;
 			temp.date_added = media_list[i].created;
 			temp.folder_id = media_list[i].folder_id;
@@ -70,6 +91,9 @@ var DataStore = {
 			
 			DataStore.m_mediaList[i] = temp;
 		}
+		
+		// Call the callback
+		DataStore.m_dataLoadedCallback();
 	}
 		
 }
