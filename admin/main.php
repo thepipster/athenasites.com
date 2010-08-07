@@ -56,6 +56,7 @@ $current_site_id = $site_list[0]['id'];
 
 <link rel="stylesheet" href="code/css/FilesFrame.css" type="text/css" />
 <link rel="stylesheet" href="code/css/ImageEditDialog.css" type="text/css" />
+<link rel="stylesheet" href="code/css/ImageEditFrame.css" type="text/css" />
 
 <link rel="stylesheet" href="code/css/datePicker.css" type="text/css" />
 
@@ -112,7 +113,8 @@ $current_site_id = $site_list[0]['id'];
 <script src="code/js/dialogs/ImageEditDialog.class.js" type="text/javascript"></script>
 
 <!-- Sub-Frame Displays -->
-<script src="code/js/subframes/FolderMediaFrame.class.js" type="text/javascript"></script>
+<script src="code/js/subframes/ImageEditFrame.class.js" type="text/javascript"></script>
+<script src="code/js/subframes/UploadMediaFrame.class.js" type="text/javascript"></script>
 <script src="code/js/subframes/FolderSidebarFrame.class.js" type="text/javascript"></script>
 <script src="code/js/subframes/ImageSelector.class.js" type="text/javascript"></script>
 
@@ -124,7 +126,7 @@ $current_site_id = $site_list[0]['id'];
 <script src="code/js/frames/PostsFrame.class.js" type="text/javascript"></script>
 <script src="code/js/frames/SettingsFrame.class.js" type="text/javascript"></script>
 <script src="code/js/frames/AccountFrame.class.js" type="text/javascript"></script>
-
+<script src="code/js/frames/EditImageFrame.class.js" type="text/javascript"></script>
 <script src="code/js/frames/SidebarFrame.class.js" type="text/javascript"></script>
 
 <!-- Dialog Displays -->
@@ -132,61 +134,6 @@ $current_site_id = $site_list[0]['id'];
 <!-- Inline Style ////////////////////////////////////////////////////////////////// -->
 
 <style type="text/css">
-
-	#menu_container {
-		width: 97%;
-		height: 25px;
-		display: block;
-		padding: 0px;
-		margin: 0px;
-		padding-top: 5px;
-	}
-	
-	#menu_container .menu_item {		
-		width: 100px;
-		height: 20px;
-		float: left;
-		font-size: 14px;
-		padding: 0px;
-		margin: 0px;
-		margin-top: 2px;
-		padding-top: 3px;
-		margin-right: 5px;
-		background-color: #999999;
-		cursor: pointer;
-	}
-
-	#menu_container .menu_item:hover {
-		background-color: #f3f2f1;
-	}
-	
-	#menu_container .menu_item.selected {
-		background-color: #f3f2f1;
-	}
-	
-	#menu_container .menu_link {		
-		width: 60px;
-		height: 20px;
-		float: left;
-		font-size: 13px;
-		padding: 0px;
-		margin: 0px;
-		margin-top: 2px;
-		padding-top: 3px;
-		margin-right: 5px;
-		cursor: pointer;
-		float: right;
-		text-align: right;
-		color: #00007a;
-	}	
-
-	#menu_container .menu_link:hover {
-		color: #f3f2f1;
-	}
-
-	#menu_container .menu_link.selected {
-		color: white;
-	}
 	
 	/* Hide the datepicker 'choose date' link */	
 	a.dp-choose-date {
@@ -201,102 +148,122 @@ $current_site_id = $site_list[0]['id'];
 	
 <body>
 
-	<!-- Debug box //////////////////////////////////////////////////////////////////////////// -->
-	
-	<div id='debug_txt'>
-	</div>
+<!-- Debug box //////////////////////////////////////////////////////////////////////////// -->
 
-	<!-- Main  //////////////////////////////////////////////////////////////////////////////// -->
+<div id='debug_txt'>
+</div>
 
-	<div id='sync_spinner'></div>	
+<!-- Main  //////////////////////////////////////////////////////////////////////////////// -->
+
+<div id='sync_spinner'></div>	
+
+<div id='Content' align='center'>
+
+	<table border="0" width='100%' height='100%' style='width:100%; height:100%'>
 	
-	<div id='Content' align='center'>
-	
-		<div id='SideBar' align="left">
-		</div>
+		<tr valign="top" style='width:100%; height:100%'>
 		
-		<div id='MainContent'>
-
-			<div id='menu_container'>
-				<div id='dashboard_menu' class='menu_item' onclick='ssMain.onShowDashboard()'>Dashboard</div>				
-				<div id='pages_menu' class='menu_item' onclick='ssMain.onShowPages()'>Pages</div>				
-				<div id='files_menu' class='menu_item' onclick='ssMain.onShowFiles()'>Files</div>
-				<div id='posts_menu' class='menu_item' onclick='ssMain.onShowPosts()'>Posts</div>
-				<div id='gallery_menu' class='menu_item' onclick='ssMain.onShowGalleries()'>Galleries</div>
-				<div id='stats_menu' class='menu_item' onclick='ssMain.onShowStats()'>Stats</div>				
-				<div id='settings_menu' class='menu_item' onclick='ssMain.onShowSettings()'>Settings</div>
+			<td width="180px">
+				<div id='SideBar' align="left">
+				</div>
+			</td>
+			
+			<td>
+			
+				<div id='MainContent'>
+		
+					<div id='menu_container'>
+					<!--
+						<div id='dashboard_menu' class='menu_item' onclick='ssMain.onShowDashboard()'>Dashboard</div>				
+					-->
+						<div id='pages_menu' class='menu_item' onclick='ssMain.onShowPages()'>Pages</div>				
+						<div id='files_menu' class='menu_item' onclick='ssMain.onShowFiles()'>Upload Files</div>
+						<div id='edit_files_menu' class='menu_item' onclick='ssMain.onShowEditImages()'>Edit Images</div>
+						<div id='posts_menu' class='menu_item' onclick='ssMain.onShowPosts()'>Posts</div>
+						<div id='gallery_menu' class='menu_item' onclick='ssMain.onShowGalleries()'>Galleries</div>
+						<div id='stats_menu' class='menu_item' onclick='ssMain.onShowStats()'>Stats</div>				
+						<div id='settings_menu' class='menu_item' onclick='ssMain.onShowSettings()'>Settings</div>
+										
+						<div class='menu_link' onclick='ssMain.onLogout()'>Logout</div>
+						<div id='account_menu' class='menu_link' onclick='ssMain.onShowAccount()'>Account</div>
+						
+						<?php
+						if (count($site_list) > 1){
+							echo '<select style=\'float:right; margin-right:20px; margin-top:3px;\' onchange=\'ssMain.onSelectSite($(this).val())\'>';
+							foreach($site_list as $site){
 								
-				<div class='menu_link' onclick='ssMain.onLogout()'>Logout</div>
-				<div id='account_menu' class='menu_link' onclick='ssMain.onShowAccount()'>Account</div>
-				
-				<?php
-				if (count($site_list) > 1){
-					echo '<select style=\'float:right; margin-right:20px; margin-top:3px;\' onchange=\'ssMain.onSelectSite($(this).val())\'>';
-					foreach($site_list as $site){
-						
-						$selected = '';
-						if ($site['id'] == $current_site_id){
-							$selected = 'selected';
+								$selected = '';
+								if ($site['id'] == $current_site_id){
+									$selected = 'selected';
+								}
+								
+								echo "<option $selected value='".$site['id']."'>".$site['domain']."</option>";
+							}
+							echo '</select>';
 						}
+						?>				
+					</div>
+		
+					<!-- Dashboard Page Content ///////////////////////////////////////////////////////////// -->
+					
+					<div id='DashboardFrame' class='ViewFrame'>
+						DASHBOARD
+					</div> <!-- content -->
+		
+					<!-- Files Page Content ///////////////////////////////////////////////////////////// -->
+					
+					<div id='FilesFrame' class='ViewFrame'>
+					</div> <!-- content -->
+
+					<!-- Edit Images/Files Page Content ///////////////////////////////////////////////////////////// -->
+					
+					<div id='EditFilesFrame' class='ViewFrame'>
+					</div> <!-- content -->
+		
+					<!-- Pages Page Content ///////////////////////////////////////////////////////////// -->
+					
+					<div id='PagesFrame' class='ViewFrame'>
+						PAGES
+					</div> <!-- content -->
+		
+					<!-- Posts Page Content ///////////////////////////////////////////////////////////// -->
+					
+					<div id='PostsFrame' class='ViewFrame'>
+						POSTS
+					</div> <!-- content -->
+		
+					<!-- Galleries Page Content ///////////////////////////////////////////////////////////// -->
+					
+					<div id='GalleriesFrame' class='ViewFrame'>
+						GALLERIES
+					</div> <!-- content -->	
+		
+					<!-- Stats Page Content ///////////////////////////////////////////////////////////// -->
+					
+					<div id='StatsFrame' class='ViewFrame'>
+						STATS
+					</div> <!-- content -->	
+		
+					<!-- Settings Frame ///////////////////////////////////////////////////////////// -->
+				
+					<div id='SettingsFrame' style='display:none' class='ViewFrame' align="center">
+						SETTINGS
+					</div> <!-- content -->	
 						
-						echo "<option $selected value='".$site['id']."'>".$site['domain']."</option>";
-					}
-					echo '</select>';
-				}
-				?>				
-			</div>
-
-			<!-- Dashboard Page Content ///////////////////////////////////////////////////////////// -->
-			
-			<div id='DashboardFrame' class='ViewFrame'>
-				DASHBOARD
-			</div> <!-- content -->
-
-			<!-- Files Page Content ///////////////////////////////////////////////////////////// -->
-			
-			<div id='FilesFrame' class='ViewFrame'>
-				FILES
-			</div> <!-- content -->
-
-			<!-- Pages Page Content ///////////////////////////////////////////////////////////// -->
-			
-			<div id='PagesFrame' class='ViewFrame'>
-				PAGES
-			</div> <!-- content -->
-
-			<!-- Posts Page Content ///////////////////////////////////////////////////////////// -->
-			
-			<div id='PostsFrame' class='ViewFrame'>
-				POSTS
-			</div> <!-- content -->
-
-			<!-- Galleries Page Content ///////////////////////////////////////////////////////////// -->
-			
-			<div id='GalleriesFrame' class='ViewFrame'>
-				GALLERIES
-			</div> <!-- content -->	
-
-			<!-- Stats Page Content ///////////////////////////////////////////////////////////// -->
-			
-			<div id='StatsFrame' class='ViewFrame'>
-				STATS
-			</div> <!-- content -->	
-
-			<!-- Settings Frame ///////////////////////////////////////////////////////////// -->
-		
-			<div id='SettingsFrame' style='display:none' class='ViewFrame' align="center">
-				SETTINGS
-			</div> <!-- content -->	
+					<!-- Account Frame ///////////////////////////////////////////////////////////// -->
 				
-			<!-- Account Frame ///////////////////////////////////////////////////////////// -->
+					<div id='AccountFrame' style='display:none' class='ViewFrame' align="center">
+						Account
+					</div> <!-- content -->					
 		
-			<div id='AccountFrame' style='display:none' class='ViewFrame' align="center">
-				Account
-			</div> <!-- content -->					
-
-		</div> <!-- MainContent -->
-				
-	</div>
+				</div> <!-- MainContent -->
+			
+			
+			</td>
+		</tr>
+	</table>
+			
+</div>
  
 </body>
 </html>
@@ -317,8 +284,9 @@ var ssMain = {
 	VIEW_STATS : 6,
 	VIEW_SETTINGS : 7,
 	VIEW_ACCOUNT : 8,
+	VIEW_EDITFILES : 9,
 	
-	view : 2,
+	view : 9,
 		
 	pageTracker : '',
 	
@@ -363,7 +331,8 @@ var ssMain = {
         GalleriesFrame.init();
         PagesFrame.init();
         PostsFrame.init();
-        SettingsFrame.init();		
+        SettingsFrame.init();	
+        EditImageFrame.init();	
 	},
 
 	// ////////////////////////////////////////////////////////////////////////
@@ -445,6 +414,8 @@ var ssMain = {
 	onShowSettings : function(){ ssMain.view = ssMain.VIEW_SETTINGS; ssMain.repaint(); },
 	onShowStats : function(){ ssMain.view = ssMain.VIEW_STATS; ssMain.repaint(); },
 	onShowAccount : function(){ ssMain.view = ssMain.VIEW_ACCOUNT; ssMain.repaint(); },
+	onShowEditImages : function(){ ssMain.view = ssMain.VIEW_EDITFILES; ssMain.repaint(); },
+	
 	
 	// ////////////////////////////////////////////////////////////////////////
 						
@@ -469,6 +440,7 @@ var ssMain = {
 			case ssMain.VIEW_SETTINGS : $('#SettingsFrame').show(); $('#settings_menu').addClass('selected'); SettingsFrame.repaint(); break;
 			case ssMain.VIEW_STATS : $('#StatsFrame').show(); $('#stats_menu').addClass('selected'); SettingsFrame.repaint(); break;
 			case ssMain.VIEW_ACCOUNT : $('#AccountFrame').show(); $('#account_menu').addClass('selected'); AccountFrame.repaint(); break;
+			case ssMain.VIEW_EDITFILES : $('#EditFilesFrame').show(); $('#edit_files_menu').addClass('selected'); EditImageFrame.repaint(); break;
 		}
 		
 		SidebarFrame.repaint();

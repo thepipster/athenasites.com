@@ -72,12 +72,17 @@ var FlashUploader = {
 	// //////////////////////////////////////////////////////////////////////////////////
 
 	uploadStart : function(file) {		
+		
 		try {
 			/* I don't want to do any file validation or anything,  I'll just update the UI and
 			return true to indicate that the upload should start.
 			It's important to update the UI here because in Linux no uploadProgress events are called. The best
 			we can do is say we are uploading.
 			 */
+			
+			this.removePostParam('folder_id');
+			this.addPostParam('folder_id', DataStore.m_currentFolderID);
+			
 			var progress = new FileProgress(file, this.customSettings.progressTarget);
 			progress.setStatus("Uploading...");
 			progress.toggleCancel(true, this);

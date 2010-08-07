@@ -13,8 +13,53 @@ var FilesFrame = {
 	
 	repaint : function(){
 							
-		$('#FilesFrame').html();
+		var txt = "";
 		
+		txt += "<div id='FilesFrameContent' align='left'>";
+
+		txt += "<table border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>";
+
+		txt += "<tr valign='top'>";
+		
+		txt += "	<td>";
+		txt += "		<div id='athena_folder_contents'></div>";
+		txt += "	</td>";
+					
+		txt += "	<td width='150px' style='height:100%; padding:5px'>";
+																
+		txt += "		<div id='flashUploderContent' class='subframebox' style='height:100%;'>";
+								
+		txt += "			<span class='title'>Upload Files</span>";
+													
+		txt += "			<div class='uploadControls'>";
+		txt += "				<!--";
+		txt += "				<h3>Upload Files</h3>";
+		txt += "				-->";						
+		txt += "				<span id='flashUploadButton'></span>";
+		txt += "				<button id='flashUploadCancelButton' onclick='swfu.cancelQueue();' disabled='disabled'>Cancel</button>";
+		txt += "				<!--";
+		txt += "				<button id='flashUploadCancelButton' onclick='swfu.cancelQueue();' disabled='disabled'>Cancel</button>";
+		txt += "				<input id='flashUploadCancelButton' type='button' value='Cancel All Uploads' onclick='swfu.cancelQueue();' disabled='disabled' style='margin-left: 2px; font-size: 8pt; height: 29px;' />";
+		txt += "				<div id='flashUploaderStatus'>0 Files Uploaded</div>";
+		txt += "				-->";
+						
+		txt += "			</div>";				
+					
+		txt += "			<div class='uploadProgress' id='flashUploaderProgress'>";
+		txt += "			</div>";
+					
+		txt += "		</div>";											
+			
+		txt += "	</td>";
+		txt += "</tr>";
+
+		txt += "</table>";
+	
+		txt += "</div>"					
+							
+		$('#FilesFrame').html(txt);
+
+		/*
 		$.get(
 			defines.root_url + 'code/html/FilesFrame.html', 
 			function(data) {
@@ -22,19 +67,23 @@ var FilesFrame = {
 		  		FilesFrame.onGotHTML();
 			}
 		);
-	},
-	
-	// ////////////////////////////////////////////////////////////////////////
+		*/
 
-	onGotHTML : function(){
 		FilesFrame.paintUploader();
 		FilesFrame.paintMedia();
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////
+/*
+	onGotHTML : function(){
+		FilesFrame.paintUploader();
+		FilesFrame.paintMedia();
+	},
+*/	
+	// ////////////////////////////////////////////////////////////////////////
 
 	paintMedia : function(){
-		FolderMediaFrame.paint('#athena_folder_contents');
+		UploadMediaFrame.paint('#athena_folder_contents');
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////

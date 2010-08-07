@@ -5,7 +5,7 @@
 *
 * @since 24th March, 2010
 */
-var FolderMediaFrame = {
+var UploadMediaFrame = {
 
 	folder_id : 0,
 	targetDiv : '',
@@ -17,7 +17,7 @@ var FolderMediaFrame = {
 	*/
 	paint : function(targetDiv){
 	
-		FolderMediaFrame.targetDiv = targetDiv;
+		UploadMediaFrame.targetDiv = targetDiv;
 		
 		var txt = "";
 		
@@ -35,22 +35,22 @@ var FolderMediaFrame = {
 		txt += "</ul>";
 		
 							
-		$(FolderMediaFrame.targetDiv).html(txt);
+		$(UploadMediaFrame.targetDiv).html(txt);
 		
-		FolderMediaFrame.paintImages();
+		UploadMediaFrame.paintImages();
 		
-		$(FolderMediaFrame.targetDiv).disableSelection();
-		$(FolderMediaFrame.targetDiv).noContext();
+		$(UploadMediaFrame.targetDiv).disableSelection();
+		$(UploadMediaFrame.targetDiv).noContext();
 		
 		// Disable right click menu except where we want it
-		//$(FolderMediaFrame.targetDiv).bind("rightClickMenu",function(e){return false;}); 		
+		//$(UploadMediaFrame.targetDiv).bind("rightClickMenu",function(e){return false;}); 		
 		
 	},
 
 	// ////////////////////////////////////////////////////////////////////////////
 
 	repaint : function(){
-		FolderMediaFrame.paint(FolderMediaFrame.targetDiv);	
+		UploadMediaFrame.paint(UploadMediaFrame.targetDiv);	
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////////
@@ -86,40 +86,40 @@ var FolderMediaFrame = {
 			var added_date = new Date(imageList[i].date_added);						
 			var hours_ago = (utc_time - added_date.getTime())/3600000;
 						
-			//FolderMediaFrame.showMessage(added_date + "  |||   " + utc_date + " Delta = " + hours_ago);
-			//FolderMediaFrame.showMessage(" Delta = " + hours_ago);
+			//UploadMediaFrame.showMessage(added_date + "  |||   " + utc_date + " Delta = " + hours_ago);
+			//UploadMediaFrame.showMessage(" Delta = " + hours_ago);
 			
 			switch(DataStore.m_currentFolderID){
 			
 				case FolderSidebarFrame.ID_UNASSIGNED:
-					if (image_folder_id == FolderMediaFrame.ID_ALL || image_folder_id == FolderSidebarFrame.ID_UNASSIGNED)
-						txt += FolderMediaFrame.getImageHTML(post_id, thumb_url, title, width, height);	
+					if (image_folder_id == UploadMediaFrame.ID_ALL || image_folder_id == FolderSidebarFrame.ID_UNASSIGNED)
+						txt += UploadMediaFrame.getImageHTML(post_id, thumb_url, title, width, height);	
 					break;
 					
 				case FolderSidebarFrame.ID_LAST_1_HOUR:
 					if (hours_ago <= 1){
-						txt += FolderMediaFrame.getImageHTML(post_id, thumb_url, title, width, height);				
+						txt += UploadMediaFrame.getImageHTML(post_id, thumb_url, title, width, height);				
 					}
 					break;
 
 				case FolderSidebarFrame.ID_LAST_24_HOURS:
 					if (hours_ago <= 24){
-						txt += FolderMediaFrame.getImageHTML(post_id, thumb_url, title, width, height);				
+						txt += UploadMediaFrame.getImageHTML(post_id, thumb_url, title, width, height);				
 					}
 					break;
 
 				case FolderSidebarFrame.ID_LAST_7_DAYS:
 					if (hours_ago <= 168){
-						txt += FolderMediaFrame.getImageHTML(post_id, thumb_url, title, width, height);				
+						txt += UploadMediaFrame.getImageHTML(post_id, thumb_url, title, width, height);				
 					}
 					break;
 
 				case FolderSidebarFrame.ID_ALL:
-					txt += FolderMediaFrame.getImageHTML(post_id, thumb_url, title, width, height);				
+					txt += UploadMediaFrame.getImageHTML(post_id, thumb_url, title, width, height);				
 					break;	
 
 				case image_folder_id:	
-					txt += FolderMediaFrame.getImageHTML(post_id, thumb_url, title, width, height);				
+					txt += UploadMediaFrame.getImageHTML(post_id, thumb_url, title, width, height);				
 					break;	
 
 				default:					
@@ -130,6 +130,9 @@ var FolderMediaFrame = {
 								
 		$('#apollo_image_library').html(txt);
 		$('#apollo_image_library').noContext();
+				
+
+		$(".thumb").rightClick( function(e) {UploadMediaFrame.onRightClickImage(e, this);});
 				
 			//$(dragClass).multiDrag();
 			/*
@@ -147,26 +150,26 @@ var FolderMediaFrame = {
 					
 					if (evt.ctrlKey){
 						// Ctrl-left click
-						//FolderMediaFrame.onAltClick(e, this);
+						//UploadMediaFrame.onAltClick(e, this);
 					}
 					else if( evt.button == 0 ) {
 						if (evt.shiftKey){
 							// Shift-left click
-							//FolderMediaFrame.onShiftClick(e, this);
+							//UploadMediaFrame.onShiftClick(e, this);
 						}
 						else if (evt.altKey){
 							// Ctrl-left click
-							//FolderMediaFrame.onAltClick(e, this);
+							//UploadMediaFrame.onAltClick(e, this);
 						}
 						else {
 							// Just a left click
-							//FolderMediaFrame.onStartClick(e, this);
+							//UploadMediaFrame.onStartClick(e, this);
 						}
 						return false;
 					} 
 					else if( evt.button == 2) {
 						// Right click
-						FolderMediaFrame.onRightClickImage(e, this);
+						UploadMediaFrame.onRightClickImage(e, this);
 						return true;
 					}
 				}
@@ -193,7 +196,7 @@ var FolderMediaFrame = {
 		//txt += "<span class='thumbtitle'>"+title+"</span>";
 		txt += "</div>";
 		//				alert(txt);
-		// onclick='FolderMediaFrame.onSelectImage("+post_id+")'
+		// onclick='UploadMediaFrame.onSelectImage("+post_id+")'
 		return txt;
 	},
 
@@ -216,9 +219,9 @@ var FolderMediaFrame = {
 		$('#imageMenu .delete').unbind('click');
 		$('#imageMenu .quit').unbind('click');
 		
-		$('#imageMenu .edit').click(function(){FolderMediaFrame.onMenuItem('edit_image', obj)});
-		$('#imageMenu .delete').click(function(){FolderMediaFrame.onMenuItem('delete_image', obj)});
-		$('#imageMenu .quit').click(function(){FolderMediaFrame.onMenuItem('quit', obj)});
+		$('#imageMenu .edit').click(function(){UploadMediaFrame.onMenuItem('edit_image', obj)});
+		$('#imageMenu .delete').click(function(){UploadMediaFrame.onMenuItem('delete_image', obj)});
+		$('#imageMenu .quit').click(function(){UploadMediaFrame.onMenuItem('quit', obj)});
 		
 	},
 			

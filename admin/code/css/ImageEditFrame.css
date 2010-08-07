@@ -1,0 +1,54 @@
+#ApolloImageEditFrame {
+	width: 500px;
+	height: 100%;
+}
+
+#ApolloImageEditFrame .titleField {
+	/* background-color: #d5dde5;*/
+	background-color: #efeeed;
+	padding-left: 5px;
+	padding-right: 5px;
+	width: 100px;
+}
+
+#ApolloImageEditFrame .dataField {
+	width: 100%;
+	height: 100%;
+	color: #435e80;
+	width: 400px;
+}
+
+#ApolloImageEditFrame .imageDisplay {
+	margin-top: 10px;
+	margin-bottom: 5px;
+	height: 406px;
+	width: 500px;
+}
+
+#ApolloImageEditFrame input {
+	width: 400px;
+	/*max-width: 400px;*/
+	font-family: Arial, Arial, Helvetica, sans-serif;
+	color: #435e80;
+}
+
+#ApolloImageEditFrame textarea {
+	width: 400px;
+	/*min-height:100px;*/
+	height: 60px;
+	/*max-width: 400px;*/
+	font-family: Arial, Arial, Helvetica, sans-serif;
+	color: #435e80;
+}
+
+#ApolloImageEditFrame .update_button {
+	width: 45px;
+	height: 18px;
+	background-image: url('../../images/update_button.png');
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+
+#ApolloImageEditFrame .update_button:hover {
+	background-image: url('../../images/update_button_hover.png');
+}

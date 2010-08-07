@@ -35,33 +35,41 @@ var DataStore = {
 	},
 	
 	// //////////////////////////////////////////////////////////////////////////////////
-/*
-	addFolder : function(folderName, folderID){	
-	},
-			
-	// //////////////////////////////////////////////////////////////////////////////////
-
-	renameFolder : function(folderID, folderName){	
+	
+	getFolderName : function(folder_id){
+	
+		if (folder_id == FolderSidebarFrame.ID_UNASSIGNED){
+			return "Unassigned";
+		}
+		
+		for (var i=0; i<DataStore.m_folderList.length; i++){
+			if (DataStore.m_folderList[i].id == folder_id){
+				return DataStore.m_folderList[i].name;
+			}			
+		}
+		
+		return "? ("+folder_id+")";
 	},
 	
-	// //////////////////////////////////////////////////////////////////////////////////
-	
-	deleteFolder : function(folderID, callback){	
-	},
-*/	
 	// //////////////////////////////////////////////////////////////////////////////////
 
 	save : function(){
 	},
 				
 	// //////////////////////////////////////////////////////////////////////////////////
-
-	m_dataLoadedCallback : '',
 	
 	load : function(callback){
-		DataStore.m_dataLoadedCallback = callback;
-		MediaAPI.getFolders(DataStore.m_siteID, DataStore.onGotFolders);
-		MediaAPI.getMedia(DataStore.m_siteID, DataStore.onGotMedia);
+		MediaAPI.getAll(DataStore.m_siteID, function(folders, media){ DataStore.onGotData(folders, media, callback);} );
+		//MediaAPI.getFolders(DataStore.m_siteID, DataStore.onGotFolders);
+		//MediaAPI.getMedia(DataStore.m_siteID, DataStore.onGotMedia);
+	},
+	
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	onGotData : function(folder_list, media_list, callback){
+		DataStore.onGotFolders(folder_list);
+		DataStore.onGotMedia(media_list);
+		callback();
 	},
 	
 	// //////////////////////////////////////////////////////////////////////////////////
@@ -123,8 +131,6 @@ var DataStore = {
 			DataStore.m_mediaList[i] = temp;
 		}
 		
-		// Call the callback
-		DataStore.m_dataLoadedCallback();
 	}
 		
 }

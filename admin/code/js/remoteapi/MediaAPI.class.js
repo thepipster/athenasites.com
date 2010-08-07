@@ -19,6 +19,41 @@ var MediaAPI = {
 	},
 			
 	// ////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Get the list of folders and media for this site
+	*/
+	getAll : function(siteID, callback){
+	
+		AthenaDialog.showLoading();
+		
+		var paras = {cmd : 'getAll', site_id: siteID};
+
+		$.ajax({
+			url: MediaAPI.m_url,
+			dataType: "json",
+			data: paras,
+			success: function(ret){MediaAPI.onGotAll(ret, callback);}
+		});			
+		
+	},
+			
+	/**
+	* Check the response from the server, and load data if login is good
+	*/
+	onGotAll : function(ret, callback){
+		
+		AthenaDialog.clearLoading();
+		
+		if (ret.result == 'ok'){	
+			callback(ret.data.folders, ret.data.media);
+		}
+		else {
+			AthenaDialog.showAjaxError(ret);
+		}
+	},
+
+	// ////////////////////////////////////////////////////////////////////////
 	
 	/**
 	* Get the list of folders for this site
@@ -46,12 +81,7 @@ var MediaAPI = {
 		AthenaDialog.clearLoading();
 		
 		if (ret.result == 'ok'){	
-			if (ret.data == 'true'){
-				callback(ret.data);
-			}
-			else {
-				callback(ret.data);
-			}
+			callback(ret.data);
 		}
 		else {
 			AthenaDialog.showAjaxError(ret);
@@ -125,7 +155,7 @@ var MediaAPI = {
 	
 	onMediaAddedToFolder : function(ret, callback){								
 		if (ret.result == "ok"){
-			callback();			
+			callback(ret.data.folder_id, ret.data.media_id);			
 		}					
 		else {
 			AthenaDialog.showAjaxError(ret);

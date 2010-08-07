@@ -24,6 +24,10 @@ Logger::debug("Command = " . $cmd);
 // Get the command type, and process
 switch($cmd){
 
+	case "getAll":
+		getAll($site_id); 
+		break;			
+
 	case "getFolders":
 		getFolders($site_id); 
 		break;			
@@ -51,7 +55,7 @@ switch($cmd){
 	case "addMediaToFolder" :
 		$media_id = CommandHelper::getPara('media_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
 		$folder_id = CommandHelper::getPara('folder_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
-		addMediaToFolder($media_id, $folder_id);
+		addMediaToFolder($site_id, $media_id, $folder_id);
 		break;
 					
 	case "saveMediaInfo":
@@ -88,6 +92,8 @@ function checkValidFolder($site_id, $folder_id){
 // ///////////////////////////////////////////////////////////////////////////////////////
 
 function addMediaToFolder($site_id, $media_id, $folder_id){
+
+	//Logger::debug("addMediaToFolder(site_id = $site_id, media_id = $media_id, folder_id = $folder_id)");
 	
 	// Is the media already in this folder?
 	$current_folder_id = FolderTable::getMediaFolderID($media_id, $site_id);
@@ -109,10 +115,8 @@ function addMediaToFolder($site_id, $media_id, $folder_id){
 	}
 	
 	$msg['cmd'] = "addMediaToFolder";
-	$msg['media_id'] = $media_id;
-	$msg['folder_id'] = $folder_id;
+	$msg['data'] = array('folder_id' => $folder_id, 'media_id' => $media_id);
 
-	//ApolloLogger::dump($msg);
 
 	CommandHelper::sendMessage($msg);	
 }
@@ -168,6 +172,33 @@ function addFolder($site_id, $folder_name){
 	Logger::dump($msg);
 				
 	CommandHelper::sendMessage($msg);	
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function getAll($site_id){
+
+	// Get the folder list.........
+	$folder_list = FolderTable::getFoldersForSite($site_id);
+	
+	// Get the media list
+	$media_list = FolderTable::getMediaForSite($site_id);
+	
+	$media_data = array();
+	foreach ($media_list as $media){
+		$temp = $media;
+		$temp['created'] = date("m/d/Y H:i", strtotime($media['created'])); // Convert to JS compatible date
+		$media_data[] = $temp;
+	}
+	
+	
+	$msg = array();	
+	$msg['cmd'] = 'getAll';
+	$msg['result'] = 'ok';			
+	$msg['data'] = array('folders' => $folder_list, 'media' => $media_data);
+				
+	CommandHelper::sendMessage($msg);		
+
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////

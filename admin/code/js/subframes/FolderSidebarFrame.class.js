@@ -23,7 +23,7 @@ var FolderSidebarFrame = {
 		var txt = "";
 
 		txt += "<div class='folder_filter' id='folders_select_0' title='Select to display all of your images'><img class='folder_filter_icon' src='images/system_folder_icon.png'><span class='folder_name' onclick=\"FolderSidebarFrame.onSelectFolder('0')\">Show All</span></div>";
-		txt += "<div class='folder_filter' id='folders_select_1' title='Select to display all unassigned files (files that have not been added to a folder'><img class='folder_filter_icon' src='images/system_folder_icon.png'><span class='folder_name' onclick=\"FolderSidebarFrame.onSelectFolder('1')\">Unassigned Files</span></div>";
+		txt += "<div class='folder_filter droppable_folder' id='folders_select_1' title='Select to display all unassigned files (files that have not been added to a folder'><img class='folder_filter_icon' src='images/system_folder_icon.png'><span class='folder_name' onclick=\"FolderSidebarFrame.onSelectFolder('1')\">Unassigned Files</span></div>";
 		txt += "<div class='folder_filter' id='folders_select_4' title='Select to display all files uploaded in the last hour'><img class='folder_filter_icon' src='images/system_folder_icon.png'><span class='folder_name' onclick=\"FolderSidebarFrame.onSelectFolder('4')\">Added in last hour</span></div>";
 		txt += "<div class='folder_filter' id='folders_select_2' title='Select to display all files uploaded in the last 24 hours'><img class='folder_filter_icon' src='images/system_folder_icon.png'><span class='folder_name' onclick=\"FolderSidebarFrame.onSelectFolder('2')\">Added in last 24 hours</span></div>";
 		txt += "<div class='folder_filter' id='folders_select_3' title='Select to display all files uploaded in the last 7 days'><img class='folder_filter_icon' src='images/system_folder_icon.png'><span class='folder_name' onclick=\"FolderSidebarFrame.onSelectFolder('3')\">Added in last 7 days</span></div>";						
@@ -59,7 +59,7 @@ var FolderSidebarFrame = {
 		// Hard-coded 'all' folder....		
 		if (DataStore.m_currentFolderID == 0){
 			$('#folders_select_0').addClass('selected');
-			FolderMediaFrame.updateFolderName('(All)');
+			UploadMediaFrame.updateFolderName('(All)');
 		}
 		else {
 			$('#folders_select_0').removeClass('selected');
@@ -69,7 +69,7 @@ var FolderSidebarFrame = {
 		// Hard-coded 'unassigned' folder....		
 		if (DataStore.m_currentFolderID == FolderSidebarFrame.ID_UNASSIGNED){
 			$('#folders_select_'+FolderSidebarFrame.ID_UNASSIGNED).addClass('selected');
-			FolderMediaFrame.updateFolderName('(Unassigned images)');
+			UploadMediaFrame.updateFolderName('(Unassigned images)');
 		}
 		else {
 			$('#folders_select_'+FolderSidebarFrame.ID_UNASSIGNED).removeClass('selected');
@@ -78,7 +78,7 @@ var FolderSidebarFrame = {
 		// Hard-coded 'last 7 days' folder....		
 		if (DataStore.m_currentFolderID == FolderSidebarFrame.ID_LAST_7_DAYS){
 			$('#folders_select_'+FolderSidebarFrame.ID_LAST_7_DAYS).addClass('selected');
-			FolderMediaFrame.updateFolderName('(Added in last 7 days)');
+			UploadMediaFrame.updateFolderName('(Added in last 7 days)');
 		}
 		else {
 			$('#folders_select_'+FolderSidebarFrame.ID_LAST_7_DAYS).removeClass('selected');
@@ -87,7 +87,7 @@ var FolderSidebarFrame = {
 		// Hard-coded 'last hour' folder....		
 		if (DataStore.m_currentFolderID == FolderSidebarFrame.ID_LAST_1_HOUR){
 			$('#folders_select_'+FolderSidebarFrame.ID_LAST_1_HOUR).addClass('selected');
-			FolderMediaFrame.updateFolderName('(Added in last hour)');
+			UploadMediaFrame.updateFolderName('(Added in last hour)');
 		}
 		else {
 			$('#folders_select_'+FolderSidebarFrame.ID_LAST_1_HOUR).removeClass('selected');
@@ -96,7 +96,7 @@ var FolderSidebarFrame = {
 		// Hard-coded 'added last 24 hours' folder....		
 		if (DataStore.m_currentFolderID == FolderSidebarFrame.ID_LAST_24_HOURS){
 			$('#folders_select_'+FolderSidebarFrame.ID_LAST_24_HOURS).addClass('selected');
-			FolderMediaFrame.updateFolderName('(Added in last 24 hours)');
+			UploadMediaFrame.updateFolderName('(Added in last 24 hours)');
 		}
 		else {
 			$('#folders_select_'+FolderSidebarFrame.ID_LAST_24_HOURS).removeClass('selected');
@@ -111,14 +111,14 @@ var FolderSidebarFrame = {
 			//alert(folder_name + " " + folder_id);
 			
 			if (folder_id == DataStore.m_currentFolderID){
-				FolderMediaFrame.updateFolderName('('+folder_name+')');
+				UploadMediaFrame.updateFolderName('('+folder_name+')');
 				
 				//txt += "<div id='folder_"+folder_id+"' class='apollo_folder folder_with_menu' style='width:100%;' title='Right click to edit' onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\"><div class='folder_name folder_name_selected'>"+folder_name+"</div></div>";
-				txt += "<div class='folder' id='folder_"+folder_id+"' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/folder_icon.png'><span class='folder_name selected' onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\">"+folder_name+"</span></div>";
+				txt += "<div class='folder droppable_folder' id='folder_"+folder_id+"' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/folder_icon.png'><span class='folder_name selected' onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\">"+folder_name+"</span></div>";
 			}
 			else {
 //				txt += "<div id='folder_"+folder_id+"' class='apollo_folder folder_with_menu' style='width:100%;' title='Right click to edit' onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\"><div class='folder_name'>"+folder_name+"</div></div>";
-				txt += "<div class='folder' id='folder_"+folder_id+"' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/folder_icon.png'><span class='folder_name' onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\">"+folder_name+"</span></div>";
+				txt += "<div class='folder droppable_folder' id='folder_"+folder_id+"' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/folder_icon.png'><span class='folder_name' onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\">"+folder_name+"</span></div>";
 			}
 
 			
@@ -136,6 +136,12 @@ var FolderSidebarFrame = {
 				
 		$(".folder").rightClick( function(e) {FolderSidebarFrame.onRightClickFolder(e, this);});
 
+		$('.droppable_folder').droppable({
+				drop: FolderSidebarFrame.onAddToFolder,
+				over: function(ev, ui) {$(this).addClass( 'folder_name_hover' );},
+				out: function(ev, ui) {$(this).removeClass( 'folder_name_hover' );}
+			});	
+			
 		$("#apollo_folder_list").disableSelection();
 				
 	},
@@ -163,6 +169,49 @@ var FolderSidebarFrame = {
 		$('#folderMenu .delete').click(function(){FolderSidebarFrame.onMenuItem('delete_folder', obj)});
 		$('#folderMenu .quit').click(function(){FolderSidebarFrame.onMenuItem('quit', obj)});
 		
+	},
+
+	// ////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Get the image list for the currently selected gallery page. Note that even for multi-drag
+	* the object dropped on the folder is still the source thumbnail, and not the image that is
+	* show during the drag (defined by the helper function)
+	*/
+	onAddToFolder : function(event, ui){
+
+		var imgID = parseInt($(ui.draggable).attr('id').substring(4));						
+		var folderID = parseInt($(this).attr('id').substring(7));	// format folder_xxx
+		
+		//alert("imgID = " + imgID + " folder id = " + folderID);
+		
+		if (folderID == FolderSidebarFrame.ID_UNASSIGNED || folderID > 9){		
+			MediaAPI.addMediaToFolder(DataStore.m_siteID, imgID, folderID, FolderSidebarFrame.onAddedToFolder)
+		}	
+		
+		$(this).removeClass( 'folder_name_hover' );
+			
+	},
+	
+	onAddedToFolder : function(folderID, mediaID){
+			
+		if (folderID == 0){
+			AthenaDialog.message("Image removed from folder");			
+		}
+		else {
+			AthenaDialog.message("Image added to folder <i>" + DataStore.getFolderName(folderID) + "</i>");			
+		}	
+		
+		
+		for (var i=0; i<DataStore.m_mediaList.length; i++){
+			
+			if (DataStore.m_mediaList[i].id == mediaID){
+				DataStore.m_mediaList[i].folder_id = folderID;						
+				break;
+			}
+		}
+		
+		UploadMediaFrame.repaint();			
 	},
 
 	// ////////////////////////////////////////////////////////////////////////////
@@ -213,7 +262,7 @@ var FolderSidebarFrame = {
 		
 	onSelectFolder : function(folder_id){
 		DataStore.m_currentFolderID = parseInt(folder_id);
-		FolderMediaFrame.repaint();
+		UploadMediaFrame.repaint();
 		FolderSidebarFrame.paintFolders();				
 	},
 			
