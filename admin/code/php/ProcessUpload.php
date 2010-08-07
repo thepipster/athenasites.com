@@ -39,6 +39,7 @@ else {
 	$user_id = SecurityUtils::getCurrentUserID();
 	$folder_id = CommandHelper::getPara('folder_id', false, CommandHelper::$PARA_TYPE_NUMERIC);
 	$site_id = CommandHelper::getPara('site_id', false, CommandHelper::$PARA_TYPE_NUMERIC);
+	
 	if (!isset($folder_id) || !$folder_id) $folder_id = 1; // folder id of 1 is considered 'unassigned'
 	//$user = UserTable::getUser($user_id);
 	
@@ -71,7 +72,8 @@ else {
 	    
 	    // Create thumbnails!
 	    $src_image = ImageUtils::createImageFromFile($new_filepath, $mime_type);
-	    $thumb_img = ImageUtils::resizeImage($src_image, $mime_type, 'letterbox', THUMB_WIDTH, THUMB_HEIGHT);
+	    //$thumb_img = ImageUtils::resizeImage($src_image, $mime_type, 'letterbox', THUMB_WIDTH, THUMB_HEIGHT);
+	    $thumb_img = ImageUtils::resizeImage($src_image, $mime_type, 'crop', THUMB_WIDTH, THUMB_HEIGHT);
 	    
 	    $thumb_width = imagesx($thumb_img);
 	    $thumb_height = imagesy($thumb_img);

@@ -8,6 +8,7 @@
 var ImageSelector = {
 
 	folder_id : 0,
+	targetDiv : '',
 	
 	MODE_EDIT_GALLERY : 0,
 	MODE_ORG_MEDIA : 1,

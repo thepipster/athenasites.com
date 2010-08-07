@@ -113,6 +113,7 @@ $current_site_id = $site_list[0]['id'];
 
 <!-- Sub-Frame Displays -->
 <script src="code/js/subframes/FolderMediaFrame.class.js" type="text/javascript"></script>
+<script src="code/js/subframes/FolderSidebarFrame.class.js" type="text/javascript"></script>
 <script src="code/js/subframes/ImageSelector.class.js" type="text/javascript"></script>
 
 <!-- Frame Displays -->
@@ -212,14 +213,6 @@ $current_site_id = $site_list[0]['id'];
 	<div id='Content' align='center'>
 	
 		<div id='SideBar' align="left">
-			<p>Projects<span class='add_new_project' onclick="ssMain.onAddProject()" title="Add a new project, you can rename or modify it in the settings tab">&nbsp;(add)</span></p>
-			<div id='SideBar_Projects'></div>
-			<p>Taskboards<span class='add_new_project' onclick="ssMain.onAddSprint()" title="Add a new taskboard, you can rename or modify it in the settings tab">&nbsp;(add)</span></p>
-			<div id='SideBar_Sprints'></div>
-			<p>Users</p>
-			<div class='project_user_special' title='TBD! Select to filter results for this user'><img class='user_icon' src='images/group.png'><span class='user_name'>All</span></div>
-			<div class='project_user' id='0' title='Drag a task from the planning view onto this to clear the task assignment. Select to filter results for this user (TBD!!).'><img class='user_icon' src='images/group.png'><span class='user_name'>Unassigned</span></div>
-			<div id='SideBar_Users'></div>
 		</div>
 		
 		<div id='MainContent'>
@@ -308,38 +301,6 @@ $current_site_id = $site_list[0]['id'];
 </body>
 </html>
 
-<!-- Javascript common functions /////////////////////////////////////////////////////// -->
-
-<script type="text/javascript">
-
-(function ($) {
-$.fn.vAlign = function() {
-	return this.each(function(i){
-	var h = $(this).height();
-	var oh = $(this).outerHeight();
-	var mt = (h + (oh - h)) / 2;	
-	$(this).css("margin-top", "-" + mt + "px");	
-	$(this).css("top", "50%");
-	$(this).css("position", "absolute");	
-	});	
-};
-})(jQuery);
-
-(function ($) {
-$.fn.hAlign = function() {
-	return this.each(function(i){
-	var w = $(this).width();
-	var ow = $(this).outerWidth();	
-	var ml = (w + (ow - w)) / 2;	
-	$(this).css("margin-left", "-" + ml + "px");
-	$(this).css("left", "50%");
-	$(this).css("position", "absolute");
-	});
-};
-})(jQuery);
-
-</script>
-
 <!-- Javascript code /////////////////////////////////////////////////////////////// -->
 
 <script type="text/javascript">
@@ -405,6 +366,15 @@ var ssMain = {
         SettingsFrame.init();		
 	},
 
+	// ////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Refresh after data has changed on the server
+	*/
+	refresh : function(){
+		DataStore.load(ssMain.onDataLoaded);
+	},
+	
 	// ////////////////////////////////////////////////////////////////////////
 
 	onDataLoaded : function(){

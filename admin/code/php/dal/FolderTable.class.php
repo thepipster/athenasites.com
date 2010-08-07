@@ -105,13 +105,13 @@ class FolderTable {
 	// //////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	* Delete a folder and all associated meda from the media-to-folder table
+	* Delete a folder and move all associated meda from the media-to-folder table
 	*/
 	public static function deleteFolder($folder_id){
 		$sql = DatabaseManager::prepare("DELETE FROM athena_Folders WHERE id = %d",  $folder_id); 		
 		$res = DatabaseManager::submitQuery($sql);		
 
-		$sql = DatabaseManager::prepare("DELETE FROM athena_Media WHERE folder_id = %d",  $folder_id); 		
+		$sql = DatabaseManager::prepare("UPDATE athena_Media SET folder_id = 1 WHERE folder_id = %d",  $folder_id); 		
 		$res = DatabaseManager::submitQuery($sql);		
 	}
 

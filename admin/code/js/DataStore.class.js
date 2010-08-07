@@ -11,7 +11,7 @@ var DataStore = {
 	/** Currently selected site id (if the user has more than 1 site!) */
 	m_siteID : 0,
 	
-	/** List of folders for the site */
+	/** List of folders for the site with fields; id, site_id, name */
 	m_folderList : '',
 
 	/** List of media for the site */
@@ -35,6 +35,21 @@ var DataStore = {
 	},
 	
 	// //////////////////////////////////////////////////////////////////////////////////
+/*
+	addFolder : function(folderName, folderID){	
+	},
+			
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	renameFolder : function(folderID, folderName){	
+	},
+	
+	// //////////////////////////////////////////////////////////////////////////////////
+	
+	deleteFolder : function(folderID, callback){	
+	},
+*/	
+	// //////////////////////////////////////////////////////////////////////////////////
 
 	save : function(){
 	},
@@ -52,7 +67,23 @@ var DataStore = {
 	// //////////////////////////////////////////////////////////////////////////////////
 
 	onGotFolders : function(folder_list){
-		DataStore.folderList = folder_list;
+		
+		if (!folder_list || folder_list == undefined){
+			DataStore.m_folderList = new Array();			
+			return;
+		}
+		
+		DataStore.m_folderList = new Array(folder_list.length);
+				
+		for(var i=0; i<folder_list.length; i++){			
+			
+			var temp = new Object();
+			temp.id = folder_list[i].id;
+			temp.name = folder_list[i].name;
+			
+			DataStore.m_folderList[i] = temp;
+			
+		}		
 	},
 	
 	// //////////////////////////////////////////////////////////////////////////////////

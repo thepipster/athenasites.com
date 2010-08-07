@@ -187,6 +187,7 @@ var FlashUploader = {
 	// FlashUploader event comes from the Queue Plugin
 	queueComplete : function(numFilesUploaded) {
 		//$('#flashUploaderStatus').html(numFilesUploaded + " file" + (numFilesUploaded === 1 ? "" : "s") + " uploaded.");
+		ssMain.refresh();
 	}
 
 

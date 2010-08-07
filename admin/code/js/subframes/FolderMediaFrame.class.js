@@ -8,6 +8,7 @@
 var FolderMediaFrame = {
 
 	folder_id : 0,
+	targetDiv : '',
 			
 	// ////////////////////////////////////////////////////////////////////////////
 	
@@ -21,10 +22,12 @@ var FolderMediaFrame = {
 		var txt = "";
 		
 		
+		txt += "<h3 id='apollo_title_folder_name'></div>";
+
 		txt += "<div id='apollo_image_library'></div>";		
 				
 		txt += "<div id='imageEditDialog'></div>";
-		
+				
 		txt += "<ul id='imageMenu' class='rightClickMenu'>";
 		txt += "	<li class='edit'><a href='#edit_image'>Edit</a></li>";
 		//txt += "	<li class='delete'><a href='#delete_image'>Delete</a></li>";
@@ -45,6 +48,18 @@ var FolderMediaFrame = {
 	},
 
 	// ////////////////////////////////////////////////////////////////////////////
+
+	repaint : function(){
+		FolderMediaFrame.paint(FolderMediaFrame.targetDiv);	
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////////
+
+	updateFolderName : function(name){
+		//$('#apollo_title_folder_name').html(name);
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////////
 	
 	paintImages : function(){
 		
@@ -58,7 +73,7 @@ var FolderMediaFrame = {
 		var utc_date = new Date(localTime + localOffset);
 		var utc_time = localTime + localOffset;
 								
-		//alert(DataStore.m_currentFolderID + " " + FolderMediaFrame.ID_LAST_24_HOURS);
+		//alert(DataStore.m_currentFolderID + " " + FolderSidebarFrame.ID_UNASSIGNED);
 								
 		for (var i=0; i<imageList.length; i++){
 
@@ -70,36 +85,36 @@ var FolderMediaFrame = {
 			var image_folder_id = parseInt(imageList[i].folder_id);
 			var added_date = new Date(imageList[i].date_added);						
 			var hours_ago = (utc_time - added_date.getTime())/3600000;
-			
+						
 			//FolderMediaFrame.showMessage(added_date + "  |||   " + utc_date + " Delta = " + hours_ago);
 			//FolderMediaFrame.showMessage(" Delta = " + hours_ago);
 			
 			switch(DataStore.m_currentFolderID){
 			
-				case FolderMediaFrame.ID_UNASSIGNED:
-					if (image_folder_id == FolderMediaFrame.ID_ALL || image_folder_id == FolderMediaFrame.ID_UNASSIGNED)
+				case FolderSidebarFrame.ID_UNASSIGNED:
+					if (image_folder_id == FolderMediaFrame.ID_ALL || image_folder_id == FolderSidebarFrame.ID_UNASSIGNED)
 						txt += FolderMediaFrame.getImageHTML(post_id, thumb_url, title, width, height);	
 					break;
 					
-				case FolderMediaFrame.ID_LAST_1_HOUR:
+				case FolderSidebarFrame.ID_LAST_1_HOUR:
 					if (hours_ago <= 1){
 						txt += FolderMediaFrame.getImageHTML(post_id, thumb_url, title, width, height);				
 					}
 					break;
 
-				case FolderMediaFrame.ID_LAST_24_HOURS:
+				case FolderSidebarFrame.ID_LAST_24_HOURS:
 					if (hours_ago <= 24){
 						txt += FolderMediaFrame.getImageHTML(post_id, thumb_url, title, width, height);				
 					}
 					break;
 
-				case FolderMediaFrame.ID_LAST_7_DAYS:
+				case FolderSidebarFrame.ID_LAST_7_DAYS:
 					if (hours_ago <= 168){
 						txt += FolderMediaFrame.getImageHTML(post_id, thumb_url, title, width, height);				
 					}
 					break;
 
-				case FolderMediaFrame.ID_ALL:
+				case FolderSidebarFrame.ID_ALL:
 					txt += FolderMediaFrame.getImageHTML(post_id, thumb_url, title, width, height);				
 					break;	
 
@@ -117,8 +132,7 @@ var FolderMediaFrame = {
 		$('#apollo_image_library').noContext();
 				
 			//$(dragClass).multiDrag();
-			
-
+			/*
 		$('.thumb').mousedown( function(e) {					
 			
 			var evt = e;					
@@ -158,7 +172,9 @@ var FolderMediaFrame = {
 				}
 			)
 		});
-
+*/
+		// Make draggable
+		$(".thumb").draggable({revert: true, zIndex: 300});	
 		
 	},
 
@@ -215,15 +231,8 @@ var FolderMediaFrame = {
 		
 		$('#imageMenu').hide();
 				
-		var divID = $(selectedElement).attr('id');
-		
-		if (item == 'rename_folder' || item == 'delete_folder'){
-			var name = $('#'+divID + ' .folder_name').html();
-			var folder_id = parseInt(divID.substr(7));
-		}
-		else {
-			var image_post_id = parseInt(divID.substr(4));
-		}
+		var divID = $(selectedElement).attr('id');		
+		var image_post_id = parseInt(divID.substr(4));
 										
 		// Process events related to images...											
 		if (item == 'edit_image'){

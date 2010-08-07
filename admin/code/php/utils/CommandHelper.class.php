@@ -147,7 +147,7 @@ class CommandHelper {
 	private static function sendValidateFailMessage($msg){
 		$data['result'] = 'fail';
 		$data['data'] = 'Validation failure: ' . $msg;
-		error_log("Validation failure!!!");
+		error_log("Validation failure!!!" . $msg);
 		self::sendMessage($data);
 	}
 	

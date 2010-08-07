@@ -37,9 +37,7 @@ var MediaAPI = {
 		});			
 		
 	},
-		
-	// ////////////////////////////////////////////////////////////////////////
-	
+			
 	/**
 	* Check the response from the server, and load data if login is good
 	*/
@@ -62,6 +60,108 @@ var MediaAPI = {
 	
 	// ////////////////////////////////////////////////////////////////////////
 	
+	addFolder : function(siteID, folderName, callback){
+
+		if (folderName == undefined){
+			folderName = 'new folder';
+		}
+		
+		var paras = {cmd: 'addFolder', site_id: siteID, folder_name: folderName};
+												
+		$.ajax({
+			url: MediaAPI.m_url,
+			dataType: "json",
+			data: paras,
+			success: function(ret){MediaAPI.onAddedFolder(ret, callback)}
+		});	
+	},
+	
+	onAddedFolder : function(ret, callback){
+								
+		if (ret.result == "ok"){		
+			callback(ret.data.name, ret.data.id);			
+		}					
+		else {
+			AthenaDialog.showAjaxError(ret);
+		}		
+	},
+
+	// ////////////////////////////////////////////////////////////////////////
+		
+	renameFolder : function(siteID, folderID, newName, callback){
+		
+		var paras = {cmd: 'renameFolder', site_id: siteID, folder_id: folderID, folder_name: newName};
+												
+		$.ajax({
+			url: MediaAPI.m_url,
+			dataType: "json",
+			data: paras,
+			success: function(ret){MediaAPI.onRenamedFolder(ret, callback)}
+		});	
+	},
+	
+	onRenamedFolder : function(ret, callback){								
+		if (ret.result == "ok"){
+			callback(ret.data.id, ret.data.name);			
+		}					
+		else {
+			AthenaDialog.showAjaxError(ret);
+		}		
+	},
+
+	// ////////////////////////////////////////////////////////////////////////
+		
+	addMediaToFolder : function(siteID, mediaID, folderID, callback){
+		
+		var paras = {cmd: 'addMediaToFolder', site_id: siteID, folder_id: folderID, media_id: mediaID};
+												
+		$.ajax({
+			url: MediaAPI.m_url,
+			dataType: "json",
+			data: paras,
+			success: function(ret){MediaAPI.onMediaAddedToFolder(ret, callback)}
+		});	
+	},
+	
+	onMediaAddedToFolder : function(ret, callback){								
+		if (ret.result == "ok"){
+			callback();			
+		}					
+		else {
+			AthenaDialog.showAjaxError(ret);
+		}		
+	},
+
+	// ////////////////////////////////////////////////////////////////////////
+	
+	/**
+	* Delete a folder, any media assigned to that folder will be considered 'unassigned' so 
+	* it is not deleted!
+	*/
+	deleteFolder : function(siteID, folderID, callback){
+		
+		var paras = {cmd: 'deleteFolder', site_id: siteID, folder_id: folderID};
+												
+		$.ajax({
+			url: MediaAPI.m_url,
+			dataType: "json",
+			data: paras,
+			success: function(ret){MediaAPI.onDeletedFolder(ret, callback)}
+		});	
+	},
+	
+	onDeletedFolder : function(ret, callback){
+		if (ret.result == "ok"){
+			callback(ret.data.id);			
+		}					
+		else {
+			AthenaDialog.showAjaxError(ret);
+		}		
+	
+	},
+
+	// ////////////////////////////////////////////////////////////////////////
+			
 	/**
 	* Get the list of media for this site
 	*/	

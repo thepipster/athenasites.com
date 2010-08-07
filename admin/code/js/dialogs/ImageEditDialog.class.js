@@ -32,18 +32,27 @@ var ImageEditDialog = {
 		var desc = AthenaUtils.htmlEncode(imageData.description);
 		var alt_text = AthenaUtils.htmlEncode(imageData.tags);
 		var image_url = imageData.file_url;
-										
+						
+												
 		var dHeight = img_height/2 + 250;
 		var dWidth = img_width/2 + 50;
 		
 		if (dWidth < 500) dWidth = 500;
-		if (dHeight < 600) dHeight = 600;
+		if (dHeight < 700) dHeight = 700;
+		
+		dHeight = $(window).height() * 0.9;
+		dWidth = img_width;
+		
+		new_img_height = dHeight - 300;
+		new_img_width = new_img_height * img_width / img_height;
+		dWidth = new_img_width;
 		
 		var txt = "";
 		
 		txt += "<div id='ApolloImageEditDialog' align='center'>";
 		
-		txt += "<img class='imageDisplay' src='"+image_url+"' width='"+Math.round(img_width/2)+"px' height='"+Math.round(img_height/2)+"'/>";
+//		txt += "<img class='imageDisplay' src='"+image_url+"' width='"+Math.round(img_width/2)+"px' height='"+Math.round(img_height/2)+"'/>";
+		txt += "<img class='imageDisplay' src='"+image_url+"' width='100%'/>";
 		
 		txt += "<table width='100%' height='100%' cellspacing='3px'>";		
 

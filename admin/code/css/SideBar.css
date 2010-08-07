@@ -33,42 +33,118 @@
 #SideBar_Users {
 }
 
-#SideBar .project_user {
+#SideBar .folder_filter {
 	padding-left: 10px;
 	padding-top: 3px;
 }
 
-#SideBar .project_user:hover {
+#SideBar .folder_filter:hover {
 	color: white;
 	cursor: pointer;
 }
 
+/*
 #SideBar .project_user_force_hover {
 	color: #303030;
 	cursor: pointer;
 	background-color: #dfe2e2;
 }
+*/
 
-#SideBar .project_user_special {
-	padding-left: 10px;
-	padding-top: 3px;
-}
-
-#SideBar .project_user_special:hover {
-	color: white;
-	cursor: pointer;
-}
 
 #SideBar .selected {
 	color: #f3f2f1;
 }
 
-#SideBar .user_name {
+#SideBar .folder_filter_name {
 	position: relative;
 	padding-left: 5px;
 	top: -2px;
 }
 
-#SideBar .user_icon {
+
+#SideBar .folder_name:hover {
+	color: white;
+	cursor: pointer;
 }
 
+#SideBar .folder_name {
+	position: relative;
+	padding-left: 5px;
+	top: -8px;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+
+#SideBar .folder_filter_icon {
+}
+
+#SideBar .folder {
+	margin-left: 5px;
+	padding-top: 3px;
+}
+
+/* Folder Pop-up context menu /////////////////////////// */
+
+#SideBar .rightClickMenu {
+	position: absolute;
+	width: 120px;
+	z-index: 99999;
+	border: solid 1px #CCC;
+	background: #EEE;
+	padding: 0px;
+	margin: 0px;
+	display: none; 
+}
+
+#SideBar .rightClickMenu LI {
+	list-style: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+#SideBar .rightClickMenu A {
+	color: #333;
+	text-decoration: none;
+	display: block;
+	line-height: 20px;
+	height: 20px;
+	background-position: 6px center;
+	background-repeat: no-repeat;
+	outline: none;
+	padding: 1px 5px;
+	padding-left: 28px;
+}
+
+#SideBar .rightClickMenu LI:hover A {
+	color: #FFF;
+	background-color: #3399FF;
+}
+
+#SideBar .rightClickMenu LI.disabled A {
+	color: #AAA;
+	cursor: default;
+}
+
+#SideBar .rightClickMenu LI.hover.disabled A {
+	background-color: transparent;
+}
+
+#SideBar .rightClickMenu LI.separator {
+	border-top: solid 1px #CCC;
+}
+
+/*
+	Adding Icons
+	
+	You can add icons to the context menu by adding
+	classes to the respective LI element(s)
+*/
+
+#SideBar .rightClickMenu LI.edit A { background-image: url('../../images/menu_images/page_white_edit.png'); }
+#SideBar .rightClickMenu LI.cut A { background-image: url('../../images/menu_images/cut.png'); }
+#SideBar .rightClickMenu LI.copy A { background-image: url('../../images/menu_images/page_white_copy.png'); }
+#SideBar .rightClickMenu LI.paste A { background-image: url('../../images/menu_images/page_white_paste.png'); }
+#SideBar .rightClickMenu LI.delete A { background-image: url('../../images/menu_images/page_white_delete.png'); }
+#SideBar .rightClickMenu LI.quit A { background-image: url('../../images/menu_images/door.png'); }
