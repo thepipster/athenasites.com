@@ -22,7 +22,7 @@ var UploadMediaFrame = {
 		var txt = "";
 		
 		
-		txt += "<h3 id='apollo_title_folder_name'></div>";
+		//txt += "<h3 id='apollo_title_folder_name'></div>";
 
 		txt += "<div id='apollo_image_library'></div>";		
 				
