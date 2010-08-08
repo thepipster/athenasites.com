@@ -125,7 +125,17 @@ class SecurityUtils {
 
 		// Create files directory
 		mkdir(self::getMediaFolder($user_id, $site_id));
-
+		
+		// Create site's tables
+		PageViewsTable::createTableForSite($site_id);
+		PageParasTable::createTableForSite($site_id);
+		GlobalParasTable::createTableForSite($site_id);
+		GalleryTable::createTableForSite($site_id);
+		FolderTable::createTableForSite($site_id);
+		PagesTable::createTableForSite($site_id);
+		PostsTable::createTableForSite($site_id);
+		CommentsTable::createTableForSite($site_id);
+		BlogFollowersTable::createTableForSite($site_id);
 	}
 
 }

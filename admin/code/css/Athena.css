@@ -82,6 +82,9 @@ html, body {
 	opacity:.50;
 }
 
+.apollo_light_blue { color: #129beb; }
+.apollo_dark_blue { color: #032f5d;}
+
 /* Main Frame Styles //////////////////////////////////////// */
 
 .frameTitle {
@@ -196,11 +199,11 @@ html, body {
 	border-width: 1px;
 	border-style: solid;
 	color: white;
-	background-color: #004080;
+	background-color: #032f5d;
 	font-size: 12px;
 	cursor: pointer;
 }
-.subframebox .cancel_button:hover { color: white; background-color: blue }
+.subframebox .cancel_button:hover { color: white; background-color: #0358b1 }
 
 /*
 .subframebox button {

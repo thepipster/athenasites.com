@@ -151,6 +151,10 @@ var DataStore = {
 			temp.id = folder_list[i].id;
 			temp.name = folder_list[i].name;
 			
+			if (i == 0){
+				//alert(temp.id + " " + temp.name);
+			}
+			
 			DataStore.m_folderList[i] = temp;
 			
 		}		

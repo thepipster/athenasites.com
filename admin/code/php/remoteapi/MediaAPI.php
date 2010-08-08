@@ -82,24 +82,6 @@ switch($cmd){
 // ///////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-/**
-* Check to see if folder belongs to user
-*/
-function checkValidFolder($site_id, $folder_id){
-		
-	$sql = DatabaseManager::prepare("SELECT id FROM athena_Folders WHERE site_id=%d AND id=%d",  $site_id, $folder_id ); 			
-	$found_id = DatabaseManager::getVar($sql);		
-	
-	if (!isset($found_id) || $found_id != $folder_id){
-		CommandHelper::sendAuthorizationFailMessage("You are not authorized to access this folder!");	
-		die();
-	}
-
-}
-
-// ///////////////////////////////////////////////////////////////////////////////////////
-// ///////////////////////////////////////////////////////////////////////////////////////
-
 function addPage($site_id, $title, $parent_page_id, $content, $status, $tamplate_name){
 
 	//Logger::debug("addPage(site_id=$site_id, title=$title, parent_page_id=$parent_page_id, content=$content, status=$status, tamplate_name=$tamplate_name)");
@@ -157,10 +139,8 @@ function addMediaToFolder($site_id, $media_id, $folder_id){
 // ///////////////////////////////////////////////////////////////////////////////////////
 
 function renameFolder($site_id, $folder_id, $name){
-	
-	checkValidFolder($site_id, $folder_id);
-			
-	$res = FolderTable::renameFolder($folder_id, $name);
+				
+	$res = FolderTable::renameFolder($site_id, $folder_id, $name);
 			
 	$msg['cmd'] = "renameFolder";
 	$msg['result'] = $res > 0 ? 'ok' : 'fail';
@@ -172,10 +152,8 @@ function renameFolder($site_id, $folder_id, $name){
 // ///////////////////////////////////////////////////////////////////////////////////////
 
 function deleteFolder($site_id, $folder_id){
-	
-	checkValidFolder($site_id, $folder_id);
-			
-	$res = FolderTable::deleteFolder($folder_id);
+				
+	$res = FolderTable::deleteFolder($site_id, $folder_id);
 			
 	$msg['cmd'] = "deleteFolder";
 	$msg['result'] = 'ok';
@@ -234,6 +212,8 @@ function getAll($site_id){
 		$temp['created'] = date("m/d/Y H:i", strtotime($media['created'])); // Convert to JS compatible date
 		$media_data[] = $temp;
 	}
+	
+	Logger::dump($folder_list);
 	
 	
 	$msg = array();	
