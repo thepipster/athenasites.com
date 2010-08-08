@@ -1,14 +1,15 @@
 RewriteEngine On
 #RewriteBase /
 
+
 # If file does not exist, redirect to page.php 
 # (this will mean that hits to /admin/index.html and /admin/main.php will go through as those files exist
 RewriteCond %{DOCUMENT_ROOT}/$1 !-d
-#RewriteCond %{DOCUMENT_ROOT}/$1 !-d
-#RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^([^/\.]+)/?$ /user.sites/page.php?cat=$1 [L]
+RewriteRule ^([^/\.]+)/*.(html|htm|php)$ /user.sites/page.php?page=$1 [L]
 
-RewriteRule ^([^/\.]+)/([^/\.]+)/?$ /user.sites/page.php?cat=$1&subcat=$2 [L]
+RewriteRule ^([^/\.]+)/([^/\.]+)/*.(html|htm|php)$ /user.sites/page.php?cat=$1&page=$2 [L]
+
+RewriteRule ^([^/\.]+)/([^/\.]+)/([^/\.]+)/*.(html|htm|php)$ /user.sites/page.php?cat=$1&subcat=$2&page=$3 [L]
 
 # See http://www.bloghash.com/2006/12/apache-mod_rewrite-examples/ for good exmaples
 
