@@ -1,0 +1,36 @@
+.ImagePicker .thumb {
+	
+	border-width: 4px;
+	border-style: solid;
+	/*border-color: #cccccc;*/
+	border-color: #bbc2c9;
+	background-color: #bbc2c9;
+	
+	margin: 0px;
+	padding: 0px;
+	z-index: 1;
+}
+
+.ImagePicker .thumbwrapper {
+	width: 60px;
+	height: 80px;
+	margin: 5px;	
+	float: left;
+	cursor: pointer;
+/*	text-align: center; */
+}
+
+.ImagePicker .imageTitle {
+	font-size: 8px;
+	overflow: hidden;
+	text-align: center;
+	display: block;
+}
+
+.ImagePicker .imageSize {
+	color: #a6adb3;
+	font-size: 8px;
+	overflow: hidden;
+	text-align: center;
+	display: block;
+}

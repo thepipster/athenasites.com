@@ -8,6 +8,8 @@ var DataStore = {
 
 	m_currentFolderID : 1, // folder id of 1 is considered 'unassigned'
 	
+	m_currentPageID : 0,
+	
 	/** Currently selected site id (if the user has more than 1 site!) */
 	m_siteID : 0,
 	
@@ -32,6 +34,20 @@ var DataStore = {
 			}
 		}
 		return false;
+	},
+	
+
+	getPage : function(page_id){
+		for(var i=0; i<DataStore.m_pageList.length; i++){
+			if (DataStore.m_pageList[i].id == page_id){
+				return DataStore.m_pageList[i];
+			}
+		}
+		return false;
+	},	
+	
+	getCurrentPage : function(){
+		return DataStore.getPage(DataStore.m_currentPageID);
 	},
 	
 	// //////////////////////////////////////////////////////////////////////////////////
@@ -59,17 +75,50 @@ var DataStore = {
 	// //////////////////////////////////////////////////////////////////////////////////
 	
 	load : function(callback){
-		MediaAPI.getAll(DataStore.m_siteID, function(folders, media){ DataStore.onGotData(folders, media, callback);} );
+		MediaAPI.getAll(DataStore.m_siteID, function(folders, media, pages){ DataStore.onGotData(folders, media, pages, callback);} );
 		//MediaAPI.getFolders(DataStore.m_siteID, DataStore.onGotFolders);
 		//MediaAPI.getMedia(DataStore.m_siteID, DataStore.onGotMedia);
 	},
 	
 	// //////////////////////////////////////////////////////////////////////////////////
 
-	onGotData : function(folder_list, media_list, callback){
+	onGotData : function(folder_list, media_list, page_list, callback){
 		DataStore.onGotFolders(folder_list);
 		DataStore.onGotMedia(media_list);
+		DataStore.onGotPages(page_list);
 		callback();
+	},
+	
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	onGotPages : function(page_list){
+
+		if (!page_list || page_list == undefined){
+			DataStore.m_pageList = new Array();			
+			return;
+		}
+		
+		DataStore.m_pageList = new Array(page_list.length);
+				
+		for(var i=0; i<page_list.length; i++){			
+			
+			var temp = new Object();
+			temp.id = page_list[i].id;
+			temp.title = AthenaUtils.htmlEncode(page_list[i].title);
+			temp.user_id = page_list[i].user_id;
+			temp.content = AthenaUtils.htmlEncode(page_list[i].content);
+			temp.status = page_list[i].status;
+			temp.last_edit = page_list[i].last_edit;
+			temp.created = page_list[i].created;
+			temp.status = page_list[i].status;
+						
+			DataStore.m_pageList[i] = temp;
+			
+		}	
+		
+		if (page_list.length > 0 && DataStore.m_currentPageID == 0){
+			DataStore.m_currentPageID = page_list[0].id;
+		} 
 	},
 	
 	// //////////////////////////////////////////////////////////////////////////////////

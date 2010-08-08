@@ -29,8 +29,25 @@
 
 /* SideBar Users /////////////////////////////// */
 
-#SideBar_Users {
+#SideBar .page {
+	padding-left: 10px;
+	padding-top: 3px;
 }
+
+#SideBar .page:hover {
+	color: white;
+	cursor: pointer;
+}
+
+#SideBar .page_name {
+	position: relative;
+	padding-left: 5px;
+	top: -4px;
+	font-size: 12px;
+	cursor: pointer;
+	height: 20px;
+}
+
 
 #SideBar .folder_filter {
 	padding-left: 10px;

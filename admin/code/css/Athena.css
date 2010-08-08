@@ -119,6 +119,45 @@ html, body {
 	padding: 0;
 }
 
+.subframebox input {
+	border-color: #a9b1bc;
+	border-width: 1px;
+	border-style: solid;
+	width: 130px;
+	background-color: #bec6d3;
+	overflow: hidden;
+	color: #386b93;
+	padding-left: 3px;
+}
+
+.subframebox select {
+	border-color: #a9b1bc;
+	border-width: 1px;
+	border-style: solid;
+	color: #386b93;
+	width: 136px;
+	background-color: #bec6d3;
+	overflow: hidden;
+}
+
+.subframebox textarea {
+	border-color: #a9b1bc;
+	border-width: 1px;
+	border-style: solid;
+	color: #386b93;
+	width: 136px;
+	background-color: #bec6d3;
+}
+
+/*
+.subframebox button {
+	border-color: #a9b1bc;
+	border-width: 1px;
+	border-style: solid;
+	color: #386b93;
+	background-color: #bec6d3;
+}
+*/
 
 /* Basic dialog box //////////////////////////////////////////// */
 

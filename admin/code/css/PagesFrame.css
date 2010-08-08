@@ -1,0 +1,24 @@
+
+#PagesFrame fieldset {
+	padding-left: 5px;
+	/*margin: 3px;*/
+	border: none;
+	margin-top: 15px;	
+	font-size: 12px;	
+}
+
+
+#PagesFrame .pageLabel {
+	color: #3f4040;
+	width: 80px;
+	display: inline-block;
+}
+
+#PagesFrame .pageData {
+	color: #386b93;
+	width: 170px;
+}
+
+#PagesFrame .pageInfoLine {
+	padding-bottom: 10px;
+}

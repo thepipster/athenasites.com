@@ -46,7 +46,7 @@ var MediaAPI = {
 		AthenaDialog.clearLoading();
 		
 		if (ret.result == 'ok'){	
-			callback(ret.data.folders, ret.data.media);
+			callback(ret.data.folders, ret.data.media, ret.data.pages);
 		}
 		else {
 			AthenaDialog.showAjaxError(ret);

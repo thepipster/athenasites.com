@@ -55,8 +55,11 @@ $current_site_id = $site_list[0]['id'];
 <link rel="stylesheet" href="code/css/SideBar.css" type="text/css" />
 
 <link rel="stylesheet" href="code/css/FilesFrame.css" type="text/css" />
+<link rel="stylesheet" href="code/css/PagesFrame.css" type="text/css" />
+
 <link rel="stylesheet" href="code/css/ImageEditDialog.css" type="text/css" />
 <link rel="stylesheet" href="code/css/ImageEditFrame.css" type="text/css" />
+<link rel="stylesheet" href="code/css/ImagePickerDialog.css" type="text/css" />
 
 <link rel="stylesheet" href="code/css/datePicker.css" type="text/css" />
 
@@ -91,6 +94,9 @@ $current_site_id = $site_list[0]['id'];
 <script type="text/javascript" src="code/js/3rdparty/SWFUpload/swfupload.js"></script>
 <script type="text/javascript" src="code/js/3rdparty/SWFUpload/plugins/swfupload.queue.js"></script>
 
+<!-- CKEditor -->
+<script type="text/javascript" src="code/ckeditor/ckeditor.js"></script>
+
 <!-- Utils -->
 <script src="code/js/defines.js" type="text/javascript"></script>
 <script src="code/js/utils/Message.class.js" type="text/javascript"></script>
@@ -111,11 +117,13 @@ $current_site_id = $site_list[0]['id'];
 
 <!-- Dialog Displays -->
 <script src="code/js/dialogs/ImageEditDialog.class.js" type="text/javascript"></script>
+<script src="code/js/dialogs/ImagePickerDialog.class.js" type="text/javascript"></script>
 
 <!-- Sub-Frame Displays -->
 <script src="code/js/subframes/ImageEditFrame.class.js" type="text/javascript"></script>
 <script src="code/js/subframes/UploadMediaFrame.class.js" type="text/javascript"></script>
 <script src="code/js/subframes/FolderSidebarFrame.class.js" type="text/javascript"></script>
+<script src="code/js/subframes/PagesSidebarFrame.class.js" type="text/javascript"></script>
 <script src="code/js/subframes/ImageSelector.class.js" type="text/javascript"></script>
 
 <!-- Frame Displays -->
@@ -139,7 +147,7 @@ $current_site_id = $site_list[0]['id'];
 	a.dp-choose-date {
 		display: none;
 	}	
-		
+			
 </style>
 
 <!-- Inline Style ///////////////////////////////////////////////////////////////// -->
@@ -173,16 +181,14 @@ $current_site_id = $site_list[0]['id'];
 				<div id='MainContent'>
 		
 					<div id='menu_container'>
-					<!--
 						<div id='dashboard_menu' class='menu_item' onclick='ssMain.onShowDashboard()'>Dashboard</div>				
-					-->
+						<div id='settings_menu' class='menu_item' onclick='ssMain.onShowSettings()'>Settings</div>
 						<div id='pages_menu' class='menu_item' onclick='ssMain.onShowPages()'>Pages</div>				
 						<div id='files_menu' class='menu_item' onclick='ssMain.onShowFiles()'>Upload Files</div>
 						<div id='edit_files_menu' class='menu_item' onclick='ssMain.onShowEditImages()'>Edit Images</div>
-						<div id='posts_menu' class='menu_item' onclick='ssMain.onShowPosts()'>Posts</div>
 						<div id='gallery_menu' class='menu_item' onclick='ssMain.onShowGalleries()'>Galleries</div>
+						<div id='posts_menu' class='menu_item' onclick='ssMain.onShowPosts()'>Posts</div>
 						<div id='stats_menu' class='menu_item' onclick='ssMain.onShowStats()'>Stats</div>				
-						<div id='settings_menu' class='menu_item' onclick='ssMain.onShowSettings()'>Settings</div>
 										
 						<div class='menu_link' onclick='ssMain.onLogout()'>Logout</div>
 						<div id='account_menu' class='menu_link' onclick='ssMain.onShowAccount()'>Account</div>
@@ -203,6 +209,12 @@ $current_site_id = $site_list[0]['id'];
 						}
 						?>				
 					</div>
+					
+					<!-- Settings Frame ///////////////////////////////////////////////////////////// -->
+				
+					<div id='SettingsFrame' class='ViewFrame'>
+						SETTINGS
+					</div> <!-- content -->						
 		
 					<!-- Dashboard Page Content ///////////////////////////////////////////////////////////// -->
 					
@@ -223,7 +235,6 @@ $current_site_id = $site_list[0]['id'];
 					<!-- Pages Page Content ///////////////////////////////////////////////////////////// -->
 					
 					<div id='PagesFrame' class='ViewFrame'>
-						PAGES
 					</div> <!-- content -->
 		
 					<!-- Posts Page Content ///////////////////////////////////////////////////////////// -->
@@ -243,16 +254,10 @@ $current_site_id = $site_list[0]['id'];
 					<div id='StatsFrame' class='ViewFrame'>
 						STATS
 					</div> <!-- content -->	
-		
-					<!-- Settings Frame ///////////////////////////////////////////////////////////// -->
-				
-					<div id='SettingsFrame' style='display:none' class='ViewFrame' align="center">
-						SETTINGS
-					</div> <!-- content -->	
-						
+								
 					<!-- Account Frame ///////////////////////////////////////////////////////////// -->
 				
-					<div id='AccountFrame' style='display:none' class='ViewFrame' align="center">
+					<div id='AccountFrame' class='ViewFrame'>
 						Account
 					</div> <!-- content -->					
 		
@@ -286,7 +291,7 @@ var ssMain = {
 	VIEW_ACCOUNT : 8,
 	VIEW_EDITFILES : 9,
 	
-	view : 9,
+	view : 3,
 		
 	pageTracker : '',
 	

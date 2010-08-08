@@ -1,0 +1,252 @@
+html, body {
+	font-family: century gothic, optima, Lucida Sans Unicode, Verdana, Tahoma, Trebuchet MS, Helvetica, Arial;
+	font-size: 11px;
+	height: 100%;
+	width:100%;
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	height: 100%;
+	width:100%;
+	margin: 0;
+	padding: 0;
+	background-color: #262636; 
+	background-image: url('../imgs/background.png'); 
+	background-repeat: repeat;
+} 
+
+
+#container {
+	width: 80%;
+	min-width: 800px;
+	min-height: 400px;
+	z-index: 1;	
+	background-color: white;
+	/*
+	filter: alpha(opacity=40);-moz-opacity:.40;opacity:.40;	
+	*/
+}
+		
+a { 
+	text-decoration: none;
+	outline:none;
+}		
+
+#debug_txt {
+	display: none;
+	position: absolute;
+	padding: 5px;
+	overflow: auto;
+	top: 20px;
+	left: 400px;
+	width: 250px;
+	height: 500px;
+	background-color: black;
+	z-index: 9999;
+	border: medium double gray;	
+	filter: alpha(opacity=60);-moz-opacity:.60;opacity:.60;	
+}	
+
+/* Style for images when no flash present //////////////////////// */
+
+#noFlashImage {
+	width: 90%;
+	padding-left: 15px;
+	margin: 20px;	
+}
+
+#noFlashImage .title{
+	font-family: century gothic, optima, Lucida Sans Unicode, Verdana, Tahoma, Trebuchet MS, Helvetica, Arial;
+	font-size: 15px !important;
+	color: #404040;
+	display: block;
+	font-weight: normal;	
+}
+
+#noFlashImage .caption{
+	font-family: century gothic, optima, Lucida Sans Unicode, Verdana, Tahoma, Trebuchet MS, Helvetica, Arial;
+	font-size: 13px !important;
+	color: #404040;
+	display: block;
+	font-weight: normal;
+}
+
+/* Global page styles ///////////////////////////////////////////////////// */
+
+.pageContents {
+	background-repeat: no-repeat;
+	background-position: bottom right;
+	background-image: url("../imgs/branch_large.png");	
+	padding-top: 25px;
+	margin-right: 10px;
+	padding-bottom: 10px;
+	height: auto;
+	width: 100%;
+}
+
+.pageContents h1 {
+	font-family: century gothic, optima, Lucida Sans Unicode, Verdana, Tahoma, Trebuchet MS, Helvetica, Arial;
+	font-size: 15px !important;
+	color: #404040;
+	display: block;
+	padding-top: 0px;
+	padding-left: 15px;
+	margin: 20px;
+	margin-top: 0px;
+	z-index: 10;
+	font-weight: normal;
+}
+
+.pageContents h2 {
+	font-family: century gothic, optima, Lucida Sans Unicode, Verdana, Tahoma, Trebuchet MS, Helvetica, Arial;
+	font-size: 13px !important;
+	color: #404040;
+	display: block;
+	padding-top: 0px;
+	padding-left: 35px;
+	margin: 0px;
+	margin-top: 0px;
+	z-index: 10;
+	font-weight: bold;
+}
+
+
+.pageContents h3 {
+	font-family: century gothic, optima, Lucida Sans Unicode, Verdana, Tahoma, Trebuchet MS, Helvetica, Arial;
+	font-size: 11.5px !important;
+	color: #404040;
+	display: block;
+	padding-top: 25px;
+	padding-left: 35px;
+	margin-top: 0px;
+	z-index: 10;
+	font-weight: normal;
+}
+
+
+.pageContents p {
+	font-family: century gothic, optima, Lucida Sans Unicode, Verdana, Tahoma, Trebuchet MS, Helvetica, Arial;
+	font-size: 11.5px !important;
+	line-height: 19px;
+	color: #404040;
+	display: block;
+	margin: 10px 20px 20px 20px;
+	padding-left: 15px;
+	padding-right: 15px;
+	z-index: 10;
+}
+
+.pageContents a:link {
+	color: #516b9e;
+}
+
+.pageContents a:hover {
+	color: #4b59e0;
+}
+
+.pageContents a:visited {
+	color: #68728d;
+}
+
+/* Menu Container ///////////////////////////////////////////////////// */
+		
+.treeMenuLogo {
+	background-image: url("../imgs/tree_whitebg.jpg");
+	background-position: bottom center;
+	background-repeat: no-repeat;	
+}
+	
+#menuContainer {
+	width: 100%;
+	height: 100%;
+	min-width:180px;
+	padding: 0px;
+	margin: 0px;
+	margin-top: 30px;
+}	
+
+#menuContainer .spacer {
+	height: 20px;
+	display: block;
+}
+		
+#navigation {
+	/* display: none; */
+	padding: 0px;
+	margin: 0px;
+}
+		
+#navigation .menuHead {
+	font-size: 15px !important;
+	color: #404040;
+	/*margin-top: 25px;
+	margin-bottom: 10px;*/
+	cursor: pointer;
+	padding: 0px;
+	margin: 0px;
+}
+
+#navigation .menuItem {
+	font-size: 13px;
+	color: #404040;
+	padding: 0px;
+	margin: 0px;
+}
+
+#navigation .menuItem:hover {
+	color: #9097b2;
+}
+
+#menuContainer ul li {
+	list-style: none;
+	margin-left: 0;
+	padding-left: 1em;
+	text-indent: -1em;
+}
+
+#menuContainer li li{
+	display: block;
+	text-align: right;
+	margin-top: 3px;
+	/* margin-bottom: 5px; */
+	padding-bottom: 5px;
+	cursor: pointer;
+}
+
+/* Logo ////////////////////////////////////////////////////////////// */
+
+#logo {
+	width: 80%; /* Same width as #container */
+	height: 67px;
+	background-image: url("../imgs/logo.png");
+	background-repeat: no-repeat;
+	margin-bottom: 5px;
+	margin-top: 5px;
+}
+			
+/* Footer /////////////////////////////////////////////////////////// */
+				
+#footer {
+	width: 80%; /* Same width as #container */
+	padding-top: 10px;
+	color: #8383a6;
+	font-size: 10px !important;
+}
+
+#footer .left {
+	float: left;
+}
+
+#footer .right {
+	float: right;
+}
+			
+#footer .info {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	font-size: 10px !important;
+	color: #8383a6;
+
+}

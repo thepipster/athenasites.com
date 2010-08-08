@@ -26,39 +26,26 @@ var SidebarFrame = {
 		switch(ssMain.view){
 			
 			case ssMain.VIEW_DASHBOARD : 
-				$('#SideBar').html("");
-				SidebarFrame.m_mode = '';
-				break;
-
-			case ssMain.VIEW_PAGES : 
-				$('#SideBar').html("");
-				SidebarFrame.m_mode = '';
-				break;
-
 			case ssMain.VIEW_POSTS : 
-				$('#SideBar').html("");
-				SidebarFrame.m_mode = '';
-				break;
-
 			case ssMain.VIEW_SETTINGS : 
-				$('#SideBar').html("");
-				SidebarFrame.m_mode = '';
-				break;
-
 			case ssMain.VIEW_STATS : 
-				$('#SideBar').html("");
-				SidebarFrame.m_mode = '';
-				break;
-
 			case ssMain.VIEW_ACCOUNT : 
-				$('#SideBar').html("");
-				SidebarFrame.m_mode = '';
-				break;
-
 			case ssMain.VIEW_GALLERIES : 
 				$('#SideBar').html("");
 				SidebarFrame.m_mode = '';
 				break;
+			
+			
+			case ssMain.VIEW_PAGES : 
+				if (SidebarFrame.m_mode != 'Pages'){
+					$('#SideBar').html("");
+					SidebarFrame.m_mode = 'Pages';
+					SidebarFrame.paintPages();				
+				}
+				break;
+				
+				
+
 			
 			case ssMain.VIEW_FILES : 
 			case ssMain.VIEW_EDITFILES : 
@@ -71,7 +58,24 @@ var SidebarFrame = {
 		}
 		
 	},
-	
+
+	// ////////////////////////////////////////////////////////////////////////////
+
+	paintPages : function(){
+
+		var txt = "";
+		txt += "<p>Pages<span class='add_new_project' onclick='PagesSidebarFrame.addPage()' title='Add a new blank page to you site.'>&nbsp;(add)</span></p>";		
+		txt += "<div id='SideBar_Pages'></div>";
+		
+		$('#SideBar').hide();
+		$('#SideBar').html(txt);
+
+		PagesSidebarFrame.paint('#SideBar_Pages');
+		
+		$('#SideBar').fadeIn('slow');
+		
+	},
+		
 	// ////////////////////////////////////////////////////////////////////////////
 	
 	paintFolders : function(){

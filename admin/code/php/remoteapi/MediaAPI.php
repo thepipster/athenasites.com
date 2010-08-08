@@ -183,6 +183,17 @@ function getAll($site_id){
 	
 	// Get the media list
 	$media_list = FolderTable::getMediaForSite($site_id);
+
+	// Get the page list
+	$page_list = PagesTable::getPages($site_id);
+		
+	$page_data = array();
+	foreach ($page_list as $page){
+		$temp = $page;
+		$temp['last_edit'] = date("m/d/Y H:i", strtotime($page['last_edit'])); // Convert to JS compatible date
+		$temp['created'] = date("m/d/Y H:i", strtotime($page['created'])); // Convert to JS compatible date
+		$page_data[] = $temp;
+	}	
 	
 	$media_data = array();
 	foreach ($media_list as $media){
@@ -195,7 +206,7 @@ function getAll($site_id){
 	$msg = array();	
 	$msg['cmd'] = 'getAll';
 	$msg['result'] = 'ok';			
-	$msg['data'] = array('folders' => $folder_list, 'media' => $media_data);
+	$msg['data'] = array('folders' => $folder_list, 'media' => $media_data, 'pages' => $page_data);
 				
 	CommandHelper::sendMessage($msg);		
 
