@@ -1,15 +1,16 @@
 RewriteEngine On
-RewriteBase /
+#RewriteBase /
 
-#uploaded files
-#RewriteRule ^(.*/)?files/$ index.php [L]
-#RewriteCond %{REQUEST_URI} !.*wp-content/plugins.*
-#RewriteRule ^(.*/)?files/(.*) wp-content/blogs.php?file=$2 [L]
-#RewriteRule ^(.*/)?files/(.*) wp-includes/ms-files.php?file=$2 [L]
+# If file does not exist, redirect to page.php 
+# (this will mean that hits to /admin/index.html and /admin/main.php will go through as those files exist
+RewriteCond %{DOCUMENT_ROOT}/$1 !-d
+#RewriteCond %{DOCUMENT_ROOT}/$1 !-d
+#RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^/\.]+)/?$ /user.sites/page.php?cat=$1 [L]
 
-RewriteRule ^page/([^/\.]+)/?$ index.php?page=$1 [L]
-#RewriteRule . index.php [L]
-#RewriteRule ^admin\.html$  test2.php
+RewriteRule ^([^/\.]+)/([^/\.]+)/?$ /user.sites/page.php?cat=$1&subcat=$2 [L]
+
+# See http://www.bloghash.com/2006/12/apache-mod_rewrite-examples/ for good exmaples
 
 <IfModule mod_security.c>
 <Files async-upload.php>
