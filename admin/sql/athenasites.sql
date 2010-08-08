@@ -2,9 +2,9 @@
 # Version 2210
 # http://code.google.com/p/sequel-pro
 #
-# Host: localhost (MySQL 5.0.41-log)
+# Host: localhost (MySQL 5.1.37)
 # Database: athenasites
-# Generation Time: 2010-08-07 18:01:13 -0600
+# Generation Time: 2010-08-08 01:25:32 -0600
 # ************************************************************
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -23,15 +23,15 @@
 DROP TABLE IF EXISTS `apollo_GalleryMeta`;
 
 CREATE TABLE `apollo_GalleryMeta` (
-  `id` int(11) NOT NULL auto_increment,
-  `page_id` bigint(20) default NULL,
-  `gallery_number` tinyint(2) default '0',
-  `title` varchar(255) default NULL,
-  `description` varchar(255) default NULL,
-  `image_post_id` bigint(20) default NULL,
-  `theme_para_id` bigint(20) default NULL,
-  `blog_id` bigint(20) default NULL,
-  PRIMARY KEY  (`id`)
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `page_id` bigint(20) DEFAULT NULL,
+  `gallery_number` tinyint(2) DEFAULT '0',
+  `title` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `image_post_id` bigint(20) DEFAULT NULL,
+  `theme_para_id` bigint(20) DEFAULT NULL,
+  `blog_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `apollo_GalleryMeta` WRITE;
@@ -50,14 +50,14 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `apollo_GalleryTable`;
 
 CREATE TABLE `apollo_GalleryTable` (
-  `id` bigint(20) NOT NULL auto_increment,
-  `image_post_id` bigint(20) default NULL,
-  `page_post_id` bigint(20) default NULL,
-  `slot_number` tinyint(3) default NULL,
-  `gallery_number` tinyint(2) default '0',
-  `theme_para_id` int(11) default NULL,
-  `blog_id` bigint(20) default '2',
-  PRIMARY KEY  (`id`)
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `image_post_id` bigint(20) DEFAULT NULL,
+  `page_post_id` bigint(20) DEFAULT NULL,
+  `slot_number` tinyint(3) DEFAULT NULL,
+  `gallery_number` tinyint(2) DEFAULT '0',
+  `theme_para_id` int(11) DEFAULT NULL,
+  `blog_id` bigint(20) DEFAULT '2',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=939 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `apollo_GalleryTable` WRITE;
@@ -272,11 +272,11 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `apollo_GlobalParas`;
 
 CREATE TABLE `apollo_GlobalParas` (
-  `id` bigint(20) NOT NULL auto_increment,
-  `blog_id` bigint(20) default NULL,
-  `para_value` varchar(255) default NULL,
-  `theme_para_id` bigint(20) default NULL,
-  PRIMARY KEY  (`id`)
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `blog_id` bigint(20) DEFAULT NULL,
+  `para_value` varchar(255) DEFAULT NULL,
+  `theme_para_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `apollo_GlobalParas` WRITE;
@@ -300,18 +300,353 @@ VALUES
 UNLOCK TABLES;
 
 
+# Dump of table apollo_MediaToFolder
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `apollo_MediaToFolder`;
+
+CREATE TABLE `apollo_MediaToFolder` (
+  `folder_id` int(11) DEFAULT NULL,
+  `media_post_id` bigint(20) DEFAULT NULL,
+  `blog_id` bigint(20) DEFAULT '2'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+LOCK TABLES `apollo_MediaToFolder` WRITE;
+/*!40000 ALTER TABLE `apollo_MediaToFolder` DISABLE KEYS */;
+INSERT INTO `apollo_MediaToFolder` (`folder_id`,`media_post_id`,`blog_id`)
+VALUES
+	(10,277,2),
+	(10,276,2),
+	(10,275,2),
+	(10,273,2),
+	(10,272,2),
+	(10,271,2),
+	(10,270,2),
+	(10,269,2),
+	(10,268,2),
+	(10,267,2),
+	(10,266,2),
+	(10,265,2),
+	(12,264,2),
+	(11,263,2),
+	(10,262,2),
+	(10,261,2),
+	(10,260,2),
+	(11,259,2),
+	(11,258,2),
+	(11,257,2),
+	(10,256,2),
+	(10,255,2),
+	(10,254,2),
+	(10,253,2),
+	(10,252,2),
+	(10,251,2),
+	(10,249,2),
+	(10,242,2),
+	(13,241,2),
+	(12,240,2),
+	(13,239,2),
+	(13,238,2),
+	(12,237,2),
+	(12,236,2),
+	(12,235,2),
+	(12,234,2),
+	(12,233,2),
+	(12,232,2),
+	(14,230,2),
+	(11,229,2),
+	(12,228,2),
+	(12,226,2),
+	(12,225,2),
+	(12,224,2),
+	(12,223,2),
+	(12,222,2),
+	(12,221,2),
+	(12,219,2),
+	(12,218,2),
+	(12,216,2),
+	(12,214,2),
+	(12,212,2),
+	(12,211,2),
+	(12,209,2),
+	(12,208,2),
+	(10,207,2),
+	(10,206,2),
+	(10,205,2),
+	(12,203,2),
+	(12,202,2),
+	(10,200,2),
+	(11,199,2),
+	(10,198,2),
+	(12,197,2),
+	(11,183,2),
+	(11,182,2),
+	(11,181,2),
+	(11,180,2),
+	(13,178,2),
+	(11,177,2),
+	(11,176,2),
+	(12,175,2),
+	(11,174,2),
+	(11,173,2),
+	(13,172,2),
+	(11,171,2),
+	(11,170,2),
+	(11,168,2),
+	(13,167,2),
+	(11,166,2),
+	(11,165,2),
+	(13,164,2),
+	(13,163,2),
+	(11,162,2),
+	(11,161,2),
+	(11,160,2),
+	(11,159,2),
+	(11,158,2),
+	(11,156,2),
+	(11,155,2),
+	(13,154,2),
+	(11,153,2),
+	(11,152,2),
+	(11,151,2),
+	(11,149,2),
+	(16,148,2),
+	(10,147,2),
+	(10,146,2),
+	(10,145,2),
+	(10,143,2),
+	(10,142,2),
+	(10,141,2),
+	(10,140,2),
+	(10,139,2),
+	(10,138,2),
+	(10,137,2),
+	(10,136,2),
+	(10,135,2),
+	(10,134,2),
+	(10,133,2),
+	(10,131,2),
+	(10,130,2),
+	(10,129,2),
+	(10,128,2),
+	(10,126,2),
+	(16,125,2),
+	(10,123,2),
+	(10,122,2),
+	(10,121,2),
+	(11,120,2),
+	(10,119,2),
+	(10,115,2),
+	(10,114,2),
+	(10,109,2),
+	(11,108,2),
+	(11,107,2),
+	(11,106,2),
+	(11,105,2),
+	(11,104,2),
+	(10,103,2),
+	(10,102,2),
+	(10,101,2),
+	(10,100,2),
+	(11,99,2),
+	(11,98,2),
+	(11,96,2),
+	(10,95,2),
+	(10,94,2),
+	(10,93,2),
+	(10,92,2),
+	(10,91,2),
+	(10,90,2),
+	(10,89,2),
+	(10,88,2),
+	(10,86,2),
+	(10,84,2),
+	(10,83,2),
+	(10,82,2),
+	(10,81,2),
+	(10,80,2),
+	(10,79,2),
+	(10,78,2),
+	(10,77,2),
+	(10,76,2),
+	(10,75,2),
+	(10,74,2),
+	(10,73,2),
+	(12,72,2),
+	(12,71,2),
+	(12,69,2),
+	(12,68,2),
+	(12,67,2),
+	(14,66,2),
+	(12,65,2),
+	(12,64,2),
+	(12,62,2),
+	(12,57,2),
+	(15,55,2),
+	(11,54,2),
+	(12,52,2),
+	(12,50,2),
+	(12,48,2),
+	(11,411,2),
+	(11,409,2),
+	(11,410,2),
+	(11,408,2),
+	(27,31,3),
+	(27,32,3),
+	(27,33,3),
+	(27,35,3),
+	(27,34,3),
+	(27,37,3),
+	(27,26,3),
+	(27,25,3),
+	(27,24,3),
+	(27,23,3),
+	(27,22,3),
+	(27,21,3),
+	(27,20,3),
+	(27,19,3),
+	(27,18,3),
+	(27,17,3),
+	(23,307,5),
+	(23,306,5),
+	(23,305,5),
+	(23,304,5),
+	(23,303,5),
+	(23,302,5),
+	(23,301,5),
+	(23,300,5),
+	(23,299,5),
+	(23,298,5),
+	(23,297,5),
+	(23,296,5),
+	(23,295,5),
+	(23,294,5),
+	(23,293,5),
+	(23,292,5),
+	(23,291,5),
+	(23,290,5),
+	(23,289,5),
+	(23,288,5),
+	(23,287,5),
+	(23,286,5),
+	(23,285,5),
+	(23,284,5),
+	(23,283,5),
+	(23,282,5),
+	(23,281,5),
+	(23,280,5),
+	(23,279,5),
+	(23,278,5),
+	(23,277,5),
+	(23,276,5),
+	(23,275,5),
+	(23,274,5),
+	(23,273,5),
+	(23,272,5),
+	(23,271,5),
+	(23,270,5),
+	(23,269,5),
+	(23,268,5),
+	(23,267,5),
+	(23,217,5),
+	(23,205,5),
+	(23,203,5),
+	(23,201,5),
+	(23,266,5),
+	(23,265,5),
+	(23,264,5),
+	(23,263,5),
+	(23,262,5),
+	(23,261,5),
+	(23,260,5),
+	(23,259,5),
+	(23,258,5),
+	(23,257,5),
+	(23,256,5),
+	(27,30,3),
+	(27,36,3),
+	(27,38,3),
+	(27,39,3),
+	(28,16,3),
+	(28,14,3),
+	(11,540,2),
+	(11,538,2),
+	(11,539,2),
+	(10,528,2),
+	(10,500,2),
+	(13,499,2),
+	(12,498,2),
+	(12,497,2),
+	(12,496,2),
+	(12,495,2),
+	(30,494,2),
+	(30,493,2),
+	(11,492,2),
+	(11,491,2),
+	(11,490,2),
+	(11,489,2),
+	(11,488,2),
+	(11,487,2),
+	(11,486,2),
+	(12,485,2),
+	(11,484,2),
+	(30,483,2),
+	(30,482,2),
+	(11,481,2),
+	(11,479,2),
+	(11,478,2),
+	(11,477,2),
+	(30,476,2),
+	(30,457,2),
+	(10,456,2),
+	(10,455,2),
+	(12,454,2),
+	(30,453,2),
+	(10,452,2),
+	(10,451,2),
+	(12,450,2),
+	(12,449,2),
+	(10,448,2),
+	(12,447,2),
+	(11,446,2),
+	(11,445,2),
+	(12,444,2),
+	(30,443,2),
+	(12,442,2),
+	(30,441,2),
+	(10,440,2),
+	(30,439,2),
+	(10,438,2),
+	(10,437,2),
+	(10,435,2),
+	(14,414,2),
+	(12,413,2),
+	(12,412,2),
+	(13,179,2),
+	(10,144,2),
+	(12,47,2),
+	(12,46,2),
+	(30,37,2),
+	(30,33,2),
+	(10,32,2),
+	(10,31,2);
+
+/*!40000 ALTER TABLE `apollo_MediaToFolder` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
 # Dump of table apollo_PageParas
 # ------------------------------------------------------------
 
 DROP TABLE IF EXISTS `apollo_PageParas`;
 
 CREATE TABLE `apollo_PageParas` (
-  `id` bigint(20) NOT NULL auto_increment,
-  `page_post_id` bigint(20) default NULL,
-  `theme_para_id` int(11) default NULL,
-  `para_value` varchar(255) default NULL,
-  `blog_id` bigint(20) default NULL,
-  PRIMARY KEY  (`id`)
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `page_post_id` bigint(20) DEFAULT NULL,
+  `theme_para_id` int(11) DEFAULT NULL,
+  `para_value` varchar(255) DEFAULT NULL,
+  `blog_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `apollo_PageParas` WRITE;
@@ -335,18 +670,18 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `apollo_PageViews`;
 
 CREATE TABLE `apollo_PageViews` (
-  `page_post_id` bigint(20) default NULL,
-  `view_date` datetime default NULL,
-  `ip_long` bigint(20) default NULL,
-  `blog_id` bigint(20) default NULL,
-  `is_bot` tinyint(1) default '0',
-  `browser` varchar(25) default NULL,
-  `browser_ver` varchar(8) default NULL,
-  `os_name` varchar(25) default NULL,
-  `os_ver` varchar(8) default NULL,
-  `referer` varchar(255) default NULL,
-  `user_agent` varchar(255) default NULL,
-  `server_ip` bigint(20) default NULL
+  `page_post_id` bigint(20) DEFAULT NULL,
+  `view_date` datetime DEFAULT NULL,
+  `ip_long` bigint(20) DEFAULT NULL,
+  `blog_id` bigint(20) DEFAULT NULL,
+  `is_bot` tinyint(1) DEFAULT '0',
+  `browser` varchar(25) DEFAULT NULL,
+  `browser_ver` varchar(8) DEFAULT NULL,
+  `os_name` varchar(25) DEFAULT NULL,
+  `os_ver` varchar(8) DEFAULT NULL,
+  `referer` varchar(255) DEFAULT NULL,
+  `user_agent` varchar(255) DEFAULT NULL,
+  `server_ip` bigint(20) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 LOCK TABLES `apollo_PageViews` WRITE;
@@ -18168,8 +18503,8 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `apollo_ParaTypes`;
 
 CREATE TABLE `apollo_ParaTypes` (
-  `id` int(11) NOT NULL auto_increment,
-  PRIMARY KEY  (`id`)
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -18180,13 +18515,13 @@ CREATE TABLE `apollo_ParaTypes` (
 DROP TABLE IF EXISTS `apollo_RollupBrowser`;
 
 CREATE TABLE `apollo_RollupBrowser` (
-  `id` int(11) NOT NULL auto_increment,
-  `blog_id` int(11) default NULL,
-  `rollup_date` date default NULL,
-  `browser` varchar(30) default NULL,
-  `browser_ver` varchar(10) default NULL,
-  `hits` int(11) default NULL,
-  PRIMARY KEY  (`id`)
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `blog_id` int(11) DEFAULT NULL,
+  `rollup_date` date DEFAULT NULL,
+  `browser` varchar(30) DEFAULT NULL,
+  `browser_ver` varchar(10) DEFAULT NULL,
+  `hits` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=763 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `apollo_RollupBrowser` WRITE;
@@ -18966,12 +19301,12 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `apollo_RollupCrawler`;
 
 CREATE TABLE `apollo_RollupCrawler` (
-  `id` int(11) NOT NULL auto_increment,
-  `blog_id` int(11) default NULL,
-  `rollup_date` date default NULL,
-  `crawler` varchar(25) default NULL,
-  `hits` int(11) default NULL,
-  PRIMARY KEY  (`id`)
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `blog_id` int(11) DEFAULT NULL,
+  `rollup_date` date DEFAULT NULL,
+  `crawler` varchar(25) DEFAULT NULL,
+  `hits` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=443 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `apollo_RollupCrawler` WRITE;
@@ -19431,13 +19766,13 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `apollo_RollupOS`;
 
 CREATE TABLE `apollo_RollupOS` (
-  `id` int(11) NOT NULL auto_increment,
-  `blog_id` int(11) default NULL,
-  `rollup_date` date default NULL,
-  `os_name` varchar(30) default NULL,
-  `os_ver` varchar(10) default NULL,
-  `hits` int(11) default NULL,
-  PRIMARY KEY  (`id`)
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `blog_id` int(11) DEFAULT NULL,
+  `rollup_date` date DEFAULT NULL,
+  `os_name` varchar(30) DEFAULT NULL,
+  `os_ver` varchar(10) DEFAULT NULL,
+  `hits` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=763 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `apollo_RollupOS` WRITE;
@@ -20217,14 +20552,14 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `apollo_RollupPageViews`;
 
 CREATE TABLE `apollo_RollupPageViews` (
-  `id` int(11) NOT NULL auto_increment,
-  `blog_id` int(11) default NULL,
-  `rollup_date` date default NULL,
-  `page_views` int(11) default NULL,
-  `unique_visitors` int(11) default NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `blog_id` int(11) DEFAULT NULL,
+  `rollup_date` date DEFAULT NULL,
+  `page_views` int(11) DEFAULT NULL,
+  `unique_visitors` int(11) DEFAULT NULL,
   `keywords` text,
-  `page_title` varchar(125) default NULL,
-  PRIMARY KEY  (`id`)
+  `page_title` varchar(125) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2518 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `apollo_RollupPageViews` WRITE;
@@ -22759,9 +23094,9 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `apollo_RollupServer`;
 
 CREATE TABLE `apollo_RollupServer` (
-  `server_no` tinyint(2) default NULL,
-  `page_views` int(11) default NULL,
-  `rollup_date` date default NULL
+  `server_no` tinyint(2) DEFAULT NULL,
+  `page_views` int(11) DEFAULT NULL,
+  `rollup_date` date DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 LOCK TABLES `apollo_RollupServer` WRITE;
@@ -22951,16 +23286,16 @@ DROP TABLE IF EXISTS `apollo_Sessions`;
 
 CREATE TABLE `apollo_Sessions` (
   `id` varchar(32) NOT NULL,
-  `access` int(10) unsigned default NULL,
+  `access` int(10) unsigned DEFAULT NULL,
   `data` text,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 LOCK TABLES `apollo_Sessions` WRITE;
 /*!40000 ALTER TABLE `apollo_Sessions` DISABLE KEYS */;
 INSERT INTO `apollo_Sessions` (`id`,`access`,`data`)
 VALUES
-	('dc4b2371ffa0621c2abcf70a3ea68f60',1281225592,'user_valid|b:1;user_id|s:1:\"1\";user_name|s:14:\"Mike Pritchard\";user_email|s:20:\"mike@apollosites.com\";user_level|s:1:\"1\";');
+	('5de2953247c1cdd1345f07fffe5ea36c',1281252246,'user_valid|b:1;user_id|s:1:\"1\";user_name|s:14:\"Mike Pritchard\";user_email|s:20:\"mike@apollosites.com\";user_level|s:1:\"1\";');
 
 /*!40000 ALTER TABLE `apollo_Sessions` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -22972,14 +23307,14 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `apollo_Theme`;
 
 CREATE TABLE `apollo_Theme` (
-  `id` int(11) NOT NULL auto_increment,
-  `theme_name` varchar(255) default NULL,
-  `theme_title` varchar(255) default NULL,
-  `price` int(11) default NULL,
-  `thumb_url` varchar(255) default NULL,
-  `description` varchar(255) default NULL,
-  `is_private` tinyint(1) default '0',
-  PRIMARY KEY  (`id`)
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `theme_name` varchar(255) DEFAULT NULL,
+  `theme_title` varchar(255) DEFAULT NULL,
+  `price` int(11) DEFAULT NULL,
+  `thumb_url` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `is_private` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `apollo_Theme` WRITE;
@@ -23001,16 +23336,16 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `apollo_ThemeParas`;
 
 CREATE TABLE `apollo_ThemeParas` (
-  `id` int(11) NOT NULL auto_increment,
-  `theme_id` int(11) default NULL,
-  `para_type` enum('email','image','gallery','font-family','favicon','font-size','color','text','small-int','multi-gallery') default NULL,
-  `page_template_name` varchar(255) default NULL,
-  `description` varchar(255) default NULL,
-  `admin_order` tinyint(3) default '1',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `theme_id` int(11) DEFAULT NULL,
+  `para_type` enum('email','image','gallery','font-family','favicon','font-size','color','text','small-int','multi-gallery') DEFAULT NULL,
+  `page_template_name` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `admin_order` tinyint(3) DEFAULT '1',
   `help_text` text,
-  `default_value` varchar(255) default NULL,
-  `is_public` tinyint(1) default '1',
-  PRIMARY KEY  (`id`)
+  `default_value` varchar(255) DEFAULT NULL,
+  `is_public` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=417 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `apollo_ThemeParas` WRITE;
@@ -23064,7 +23399,7 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_Comments`;
 
 CREATE TABLE `athena_Comments` (
-  `id` int(11) default NULL
+  `id` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -23075,11 +23410,11 @@ CREATE TABLE `athena_Comments` (
 DROP TABLE IF EXISTS `athena_Folders`;
 
 CREATE TABLE `athena_Folders` (
-  `id` int(11) NOT NULL auto_increment,
-  `site_id` bigint(20) default NULL,
-  `name` varchar(255) default 'Unamed Folder',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `site_id` bigint(20) DEFAULT NULL,
+  `name` varchar(255) DEFAULT 'Unamed Folder',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `athena_Folders` WRITE;
 /*!40000 ALTER TABLE `athena_Folders` DISABLE KEYS */;
@@ -23093,10 +23428,11 @@ VALUES
 	(7,0,'Reserved'),
 	(8,0,'Reserved'),
 	(9,0,'Reserved'),
-	(48,1,'test2'),
 	(61,1,'ally dog'),
 	(1,0,'Reserved (Unassigned)'),
-	(60,1,'test1');
+	(60,1,'test1'),
+	(65,1,'new folder'),
+	(66,1,'new folder');
 
 /*!40000 ALTER TABLE `athena_Folders` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -23108,46 +23444,37 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_Media`;
 
 CREATE TABLE `athena_Media` (
-  `id` bigint(20) NOT NULL auto_increment,
-  `folder_id` int(11) default '1',
-  `site_id` bigint(20) default '2',
-  `filename` varchar(255) default NULL,
-  `mime_type` varchar(20) default NULL,
-  `file_size` int(11) default NULL,
-  `created` timestamp NULL default NULL on update CURRENT_TIMESTAMP,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `folder_id` int(11) DEFAULT '1',
+  `site_id` bigint(20) DEFAULT '2',
+  `filename` varchar(255) DEFAULT NULL,
+  `mime_type` varchar(20) DEFAULT NULL,
+  `file_size` int(11) DEFAULT NULL,
+  `created` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `title` text,
   `description` text,
   `tags` text,
-  `width` int(9) default NULL,
-  `height` int(9) default NULL,
-  `thumb_filename` varchar(255) default NULL,
-  `thumb_width` int(9) default NULL,
-  `thumb_height` int(9) default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+  `width` int(9) DEFAULT NULL,
+  `height` int(9) DEFAULT NULL,
+  `thumb_filename` varchar(255) DEFAULT NULL,
+  `thumb_width` int(9) DEFAULT NULL,
+  `thumb_height` int(9) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `athena_Media` WRITE;
 /*!40000 ALTER TABLE `athena_Media` DISABLE KEYS */;
 INSERT INTO `athena_Media` (`id`,`folder_id`,`site_id`,`filename`,`mime_type`,`file_size`,`created`,`title`,`description`,`tags`,`width`,`height`,`thumb_filename`,`thumb_width`,`thumb_height`)
 VALUES
-	(38,1,1,'OzTrip026.JPG','image/jpeg',606802,'2010-08-07 01:19:19','OzTrip_026.JPG','','',1024,768,'OzTrip026_thumb.JPG',50,50),
-	(37,1,1,'OzTrip025.JPG','image/jpeg',494676,'2010-08-07 01:19:19','OzTrip_025.JPG','','',1024,768,'OzTrip025_thumb.JPG',50,50),
-	(36,1,1,'OzTrip024.JPG','image/jpeg',442516,'2010-08-07 01:19:18','OzTrip_024.JPG','','',1024,768,'OzTrip024_thumb.JPG',50,50),
-	(35,1,1,'OzTrip023.JPG','image/jpeg',386851,'2010-08-07 01:19:18','OzTrip_023.JPG','','',1024,768,'OzTrip023_thumb.JPG',50,50),
-	(34,1,1,'OzTrip022.JPG','image/jpeg',534496,'2010-08-07 01:19:18','OzTrip_022.JPG','','',1024,768,'OzTrip022_thumb.JPG',50,50),
-	(33,1,1,'OzTrip021.JPG','image/jpeg',375146,'2010-08-07 01:14:51','OzTrip_021.JPG','','',1024,768,'OzTrip021_thumb.JPG',50,50),
-	(32,1,1,'OzTrip018_1.JPG','image/jpeg',584899,'2010-08-07 01:14:46','OzTrip_018.JPG','','',1024,768,'OzTrip018_1_thumb.JPG',50,50),
-	(31,1,1,'OzTrip010_1.JPG','image/jpeg',351745,'2010-08-07 01:05:57','OzTrip_010.JPG','','',1024,768,'OzTrip010_1_thumb.JPG',50,50),
-	(30,1,1,'OzTrip009_1.JPG','image/jpeg',343058,'2010-08-07 01:05:57','OzTrip_009.JPG','','',1024,768,'OzTrip009_1_thumb.JPG',50,50),
-	(29,1,1,'OzTrip008_1.JPG','image/jpeg',357606,'2010-08-07 01:05:57','OzTrip_008.JPG','','',1024,768,'OzTrip008_1_thumb.JPG',50,50),
-	(28,1,1,'OzTrip007_1.JPG','image/jpeg',489871,'2010-08-07 01:05:57','OzTrip_007.JPG','','',1600,1200,'OzTrip007_1_thumb.JPG',50,50),
-	(27,1,1,'OzTrip006_1.JPG','image/jpeg',414403,'2010-08-07 01:05:57','OzTrip_006.JPG','','',1600,1200,'OzTrip006_1_thumb.JPG',50,50),
-	(26,1,1,'OzTrip005_1.JPG','image/jpeg',735837,'2010-08-07 01:05:57','OzTrip_005.JPG','','',1600,1200,'OzTrip005_1_thumb.JPG',50,50),
-	(25,1,1,'OzTrip004_1.JPG','image/jpeg',615570,'2010-08-07 01:05:56','OzTrip_004.JPG','','',1600,1200,'OzTrip004_1_thumb.JPG',50,50),
-	(24,1,1,'OzTrip003_1.JPG','image/jpeg',723476,'2010-08-07 01:05:56','OzTrip_003.JPG','','',1600,1200,'OzTrip003_1_thumb.JPG',50,50),
-	(23,1,1,'OzTrip002_1.JPG','image/jpeg',872627,'2010-08-07 01:05:56','OzTrip_002.JPG','','',1600,1200,'OzTrip002_1_thumb.JPG',50,50),
-	(22,1,1,'OzTrip001_1.JPG','image/jpeg',807827,'2010-08-07 01:05:56','OzTrip_001.JPG','','',1600,1200,'OzTrip001_1_thumb.JPG',50,50),
-	(39,61,1,'OzTrip017_1.JPG','image/jpeg',559583,'2010-08-07 01:20:23','OzTrip_017.JPG','','',1024,768,'OzTrip017_1_thumb.JPG',50,50);
+	(1,61,1,'200707250213_2.jpg','image/jpeg',115595,'2010-08-07 23:06:43','20070725_0213.jpg','','',900,600,'200707250213_2_thumb.jpg',50,50),
+	(2,60,1,'200707250324_1.jpg','image/jpeg',85450,'2010-08-07 23:06:45','20070725_0324.jpg','','',900,600,'200707250324_1_thumb.jpg',50,50),
+	(3,61,1,'200707250450_1.jpg','image/jpeg',66903,'2010-08-08 00:10:20','20070725_0450.jpg','','',400,600,'200707250450_1_thumb.jpg',50,50),
+	(4,61,1,'200707250522_1.jpg','image/jpeg',68639,'2010-08-08 00:10:13','20070725_0522.jpg','','',400,600,'200707250522_1_thumb.jpg',50,50),
+	(5,1,1,'200707250526_1.jpg','image/jpeg',71254,'2010-08-08 00:57:05','20070725_0526.jpg','','',400,600,'200707250526_1_thumb.jpg',50,50),
+	(6,60,1,'200707250641_1.jpg','image/jpeg',97982,'2010-08-08 00:10:16','20070725_0641.jpg','','',900,600,'200707250641_1_thumb.jpg',50,50),
+	(7,1,1,'20090822017_2.jpg','image/jpeg',120505,'2010-08-08 06:16:33','20090822_017.jpg','','',900,600,'20090822017_2_thumb.jpg',50,50),
+	(8,1,1,'20090822104_2.jpg','image/jpeg',154102,'2010-08-08 06:16:40','20090822_104.jpg','','',900,600,'20090822104_2_thumb.jpg',50,50),
+	(9,1,1,'20090822416_2.jpg','image/jpeg',118239,'2010-08-08 06:16:40','20090822_416.jpg','','',900,600,'20090822416_2_thumb.jpg',50,50);
 
 /*!40000 ALTER TABLE `athena_Media` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -23159,23 +23486,31 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_Pages`;
 
 CREATE TABLE `athena_Pages` (
-  `id` int(11) NOT NULL auto_increment,
-  `user_id` int(11) default NULL,
-  `site_id` int(11) default NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `site_id` int(11) DEFAULT NULL,
   `content` text,
-  `status` enum('Published','Draft','Revision') default 'Draft',
-  `last_edit` datetime default NULL,
-  `parent_page_id` int(11) default '0',
-  `title` varchar(255) default NULL,
-  `created` datetime default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  `status` enum('Published','Draft','Revision') DEFAULT 'Draft',
+  `last_edit` datetime DEFAULT NULL,
+  `parent_page_id` int(11) DEFAULT '0',
+  `title` varchar(255) DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `template` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_Pages` WRITE;
 /*!40000 ALTER TABLE `athena_Pages` DISABLE KEYS */;
-INSERT INTO `athena_Pages` (`id`,`user_id`,`site_id`,`content`,`status`,`last_edit`,`parent_page_id`,`title`,`created`)
+INSERT INTO `athena_Pages` (`id`,`user_id`,`site_id`,`content`,`status`,`last_edit`,`parent_page_id`,`title`,`created`,`template`)
 VALUES
-	(1,1,1,'dsgsdgsdgsd sdg s gsa\'sdg sgas gsad\'g asdg as gasd\"sa dgasdg asdg asdg asdg asd \"sa dgas gs dg','Published','2010-07-23 17:58:55',0,'Home Page','2010-07-23 17:58:55');
+	(1,1,1,'dsgsdgsdgsd sdg s gsa\'sdg sgas gsad\'g asdg as gasd\"sa dgasdg asdg asdg asdg asd \"sa dgas gs dg','Published','2010-07-23 17:58:55',0,'Home Page','2010-07-23 17:58:55','0'),
+	(2,1,1,'','Draft','2010-08-08 06:47:11',0,'New page','2010-08-08 06:47:11','0'),
+	(3,1,1,'','Draft','2010-08-08 06:48:53',1,'New page 3','2010-08-08 06:48:53','0'),
+	(4,1,1,'','Draft','2010-08-08 06:49:29',1,'New page 4','2010-08-08 06:49:29','0'),
+	(5,1,1,'','Draft','2010-08-08 06:50:21',2,'New page 5','2010-08-08 06:50:21','0'),
+	(6,1,1,'','Draft','2010-08-08 06:54:05',0,'New page 6','2010-08-08 06:54:05','0'),
+	(7,1,1,'','Draft','2010-08-08 06:55:04',0,'New page 7','2010-08-08 06:55:04','0'),
+	(8,1,1,'','Draft','2010-08-08 06:55:26',0,'New page 8','2010-08-08 06:55:26','0');
 
 /*!40000 ALTER TABLE `athena_Pages` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -23187,13 +23522,13 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_Posts`;
 
 CREATE TABLE `athena_Posts` (
-  `id` int(11) NOT NULL auto_increment,
-  `user_id` int(11) default NULL,
-  `site_id` int(11) default NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `site_id` int(11) DEFAULT NULL,
   `content` text,
-  `status` enum('published','draft','revision') default 'draft',
-  `last_edit` timestamp NULL default NULL on update CURRENT_TIMESTAMP,
-  PRIMARY KEY  (`id`)
+  `status` enum('published','draft','revision') DEFAULT 'draft',
+  `last_edit` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_Posts` WRITE;
@@ -23212,11 +23547,11 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_Sites`;
 
 CREATE TABLE `athena_Sites` (
-  `id` int(11) NOT NULL auto_increment,
-  `domain` varchar(200) default NULL,
-  `path` varchar(100) default NULL,
-  `theme_id` int(11) default NULL,
-  PRIMARY KEY  (`id`)
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `domain` varchar(200) DEFAULT NULL,
+  `path` varchar(100) DEFAULT NULL,
+  `theme_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_Sites` WRITE;
@@ -23230,21 +23565,53 @@ VALUES
 UNLOCK TABLES;
 
 
+# Dump of table athena_UserGroups
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `athena_UserGroups`;
+
+CREATE TABLE `athena_UserGroups` (
+  `id` int(11) DEFAULT NULL,
+  `name` varchar(12) DEFAULT NULL,
+  `level` tinyint(1) DEFAULT NULL,
+  `description` text,
+  `create_post` tinyint(4) DEFAULT '0',
+  `edit_post` int(11) DEFAULT NULL,
+  `delete_post` int(11) DEFAULT NULL,
+  `create_page` int(11) DEFAULT NULL,
+  `edit_page` int(11) DEFAULT NULL,
+  `delete_page` int(11) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+LOCK TABLES `athena_UserGroups` WRITE;
+/*!40000 ALTER TABLE `athena_UserGroups` DISABLE KEYS */;
+INSERT INTO `athena_UserGroups` (`id`,`name`,`level`,`description`,`create_post`,`edit_post`,`delete_post`,`create_page`,`edit_page`,`delete_page`)
+VALUES
+	(1,'Super Admin',1,'Access to all sites',1,1,1,1,1,1),
+	(2,'Admin',2,'Allowed to administer a given website',1,1,1,1,1,1),
+	(3,'Author',3,'Allowed to write posts and modify content for a given website',1,1,0,0,0,0),
+	(4,'Contributer',4,'Allowed to write posts for a given site',1,0,0,0,0,0),
+	(5,'Subscriber',5,'No rights',0,0,0,0,0,0);
+
+/*!40000 ALTER TABLE `athena_UserGroups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
 # Dump of table athena_UserLevels
 # ------------------------------------------------------------
 
 DROP TABLE IF EXISTS `athena_UserLevels`;
 
 CREATE TABLE `athena_UserLevels` (
-  `id` int(11) default NULL,
-  `name` varchar(12) default NULL,
+  `id` int(11) DEFAULT NULL,
+  `name` varchar(12) DEFAULT NULL,
   `description` text,
-  `create_post` tinyint(4) default '0',
-  `edit_post` int(11) default NULL,
-  `delete_post` int(11) default NULL,
-  `create_page` int(11) default NULL,
-  `edit_page` int(11) default NULL,
-  `delete_page` int(11) default NULL
+  `create_post` tinyint(4) DEFAULT '0',
+  `edit_post` int(11) DEFAULT NULL,
+  `delete_post` int(11) DEFAULT NULL,
+  `create_page` int(11) DEFAULT NULL,
+  `edit_page` int(11) DEFAULT NULL,
+  `delete_page` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_UserLevels` WRITE;
@@ -23267,21 +23634,21 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_Users`;
 
 CREATE TABLE `athena_Users` (
-  `id` int(11) NOT NULL auto_increment,
-  `email` varchar(255) default NULL,
-  `name` varchar(255) default NULL,
-  `password_hash` varchar(128) default NULL,
-  `account_created` datetime default NULL,
-  `last_login` datetime default NULL,
-  `user_level` tinyint(1) default NULL,
-  PRIMARY KEY  (`id`)
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `password_hash` varchar(128) DEFAULT NULL,
+  `account_created` datetime DEFAULT NULL,
+  `last_login` datetime DEFAULT NULL,
+  `user_level` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_Users` WRITE;
 /*!40000 ALTER TABLE `athena_Users` DISABLE KEYS */;
 INSERT INTO `athena_Users` (`id`,`email`,`name`,`password_hash`,`account_created`,`last_login`,`user_level`)
 VALUES
-	(1,'mike@apollosites.com','Mike Pritchard','4ee7c140e3566f2bfa60a65e13738fe5c1bcc48f5845f668fab1','2010-07-28 22:22:42','2010-08-06 00:34:07',1);
+	(1,'mike@apollosites.com','Mike Pritchard','4ee7c140e3566f2bfa60a65e13738fe5c1bcc48f5845f668fab1','2010-07-28 22:22:42','2010-08-08 01:36:20',1);
 
 /*!40000 ALTER TABLE `athena_Users` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -23293,8 +23660,8 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_UserToSite`;
 
 CREATE TABLE `athena_UserToSite` (
-  `user_id` int(11) default NULL,
-  `site_id` int(11) default NULL
+  `user_id` int(11) DEFAULT NULL,
+  `site_id` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_UserToSite` WRITE;
