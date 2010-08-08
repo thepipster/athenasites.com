@@ -406,9 +406,13 @@ var ssMain = {
 		ssMain.repaint();		
 	},
 
+	// ////////////////////////////////////////////////////////////////////////
+
 	onSelectSite : function(site_id){
-		DataStore.site_id = site_id;
-		ssMain.repaint();		
+		DataStore.m_siteID = site_id;
+		SidebarFrame.m_mode = ''; // Clear the mode to force the side bar to refresh
+		DataStore.clear();
+		DataStore.load(ssMain.onDataLoaded);
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////

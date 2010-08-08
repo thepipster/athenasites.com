@@ -62,7 +62,6 @@ class UserTable {
 	public static function getUser($id){
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_Users WHERE id = %d", $id);
 		$data = DatabaseManager::getResults($sql);
-		Logger::dump($data);
 		if (isset($data[0])){
 			return $data[0];
 		}
