@@ -82,7 +82,34 @@ html, body {
 	opacity:.50;
 }
 
+/* Main Frame Styles //////////////////////////////////////// */
+
+.frameTitle {
+	width: 100%;
+	display: block;
+	background-color: white;
+	height: 20px;
+}
+
 /* Sub-Frame box //////////////////////////////////////////// */
+
+.subframebox {
+	background-color: #d5dde5;
+	border-color: #a3a3a3;
+	border-width: 1px;
+	border-style: solid;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	margin-right: 5px;
+/*
+	position: relative;
+	float: right;
+	top: -15px;
+	left: 0px;
+	z-index: 100;
+*/
+}
 
 .subframebox .title {
 	background-color: #b8bfc8;
@@ -102,16 +129,6 @@ html, body {
 	padding: 3px;
 	padding-bottom: 0px;
 */
-}
-
-.subframebox {
-	background-color: #d5dde5;
-	border-color: #a3a3a3;
-	border-width: 1px;
-	border-style: solid;
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
 }
 
 .subframebox h3 {
@@ -147,7 +164,43 @@ html, body {
 	color: #386b93;
 	width: 136px;
 	background-color: #bec6d3;
+	cursor: pointer;
 }
+
+.subframebox .delete_button {
+	border-color: #a9b1bc;
+	border-width: 1px;
+	border-style: solid;
+	color: white;
+	background-color: maroon;
+	font-size: 12px;
+	cursor: pointer;
+}
+.subframebox .delete_button:hover { color: white; background-color: red }
+
+
+.subframebox .save_button {
+	border-color: #a9b1bc;
+	border-width: 1px;
+	border-style: solid;
+	color: white;
+	background-color: green;
+	font-size: 12px;
+	cursor: pointer;
+}
+.subframebox .save_button:hover { color: white; background-color: #5cd611 }
+
+
+.subframebox .cancel_button {
+	border-color: #a9b1bc;
+	border-width: 1px;
+	border-style: solid;
+	color: white;
+	background-color: #004080;
+	font-size: 12px;
+	cursor: pointer;
+}
+.subframebox .cancel_button:hover { color: white; background-color: blue }
 
 /*
 .subframebox button {
@@ -156,7 +209,10 @@ html, body {
 	border-style: solid;
 	color: #386b93;
 	background-color: #bec6d3;
+	font-size: 14px;
+	cursor: pointer;
 }
+.subframebox button:hover { background-color: red }
 */
 
 /* Basic dialog box //////////////////////////////////////////// */

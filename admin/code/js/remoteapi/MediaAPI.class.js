@@ -89,6 +89,30 @@ var MediaAPI = {
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////
+
+	addPage : function(siteID, pageTitle, pageContent, pageStatus, templateName, parentPageID, callback){
+		
+		var paras = {cmd: 'addPage', site_id: siteID, title: pageTitle, content: pageContent, status: pageStatus, template_id: templateName, parent_page_id: parentPageID};
+												
+		$.ajax({
+			url: MediaAPI.m_url,
+			dataType: "json",
+			data: paras,
+			success: function(ret){MediaAPI.onPageAdded(ret, callback)}
+		});	
+	},
+	
+	onPageAdded : function(ret, callback){
+								
+		if (ret.result == "ok"){		
+			callback(ret.data.page);			
+		}					
+		else {
+			AthenaDialog.showAjaxError(ret);
+		}		
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////
 	
 	addFolder : function(siteID, folderName, callback){
 

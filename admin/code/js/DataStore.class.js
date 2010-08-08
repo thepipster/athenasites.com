@@ -111,6 +111,8 @@ var DataStore = {
 			temp.last_edit = page_list[i].last_edit;
 			temp.created = page_list[i].created;
 			temp.status = page_list[i].status;
+			temp.template = page_list[i].template;
+			temp.parent_page_id = page_list[i].parent_page_id;
 						
 			DataStore.m_pageList[i] = temp;
 			

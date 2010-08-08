@@ -59,7 +59,6 @@ var FolderSidebarFrame = {
 		// Hard-coded 'all' folder....		
 		if (DataStore.m_currentFolderID == 0){
 			$('#folders_select_0').addClass('selected');
-			UploadMediaFrame.updateFolderName('(All)');
 		}
 		else {
 			$('#folders_select_0').removeClass('selected');
@@ -69,7 +68,6 @@ var FolderSidebarFrame = {
 		// Hard-coded 'unassigned' folder....		
 		if (DataStore.m_currentFolderID == FolderSidebarFrame.ID_UNASSIGNED){
 			$('#folders_select_'+FolderSidebarFrame.ID_UNASSIGNED).addClass('selected');
-			UploadMediaFrame.updateFolderName('(Unassigned images)');
 		}
 		else {
 			$('#folders_select_'+FolderSidebarFrame.ID_UNASSIGNED).removeClass('selected');
@@ -78,7 +76,6 @@ var FolderSidebarFrame = {
 		// Hard-coded 'last 7 days' folder....		
 		if (DataStore.m_currentFolderID == FolderSidebarFrame.ID_LAST_7_DAYS){
 			$('#folders_select_'+FolderSidebarFrame.ID_LAST_7_DAYS).addClass('selected');
-			UploadMediaFrame.updateFolderName('(Added in last 7 days)');
 		}
 		else {
 			$('#folders_select_'+FolderSidebarFrame.ID_LAST_7_DAYS).removeClass('selected');
@@ -87,7 +84,6 @@ var FolderSidebarFrame = {
 		// Hard-coded 'last hour' folder....		
 		if (DataStore.m_currentFolderID == FolderSidebarFrame.ID_LAST_1_HOUR){
 			$('#folders_select_'+FolderSidebarFrame.ID_LAST_1_HOUR).addClass('selected');
-			UploadMediaFrame.updateFolderName('(Added in last hour)');
 		}
 		else {
 			$('#folders_select_'+FolderSidebarFrame.ID_LAST_1_HOUR).removeClass('selected');
@@ -96,7 +92,6 @@ var FolderSidebarFrame = {
 		// Hard-coded 'added last 24 hours' folder....		
 		if (DataStore.m_currentFolderID == FolderSidebarFrame.ID_LAST_24_HOURS){
 			$('#folders_select_'+FolderSidebarFrame.ID_LAST_24_HOURS).addClass('selected');
-			UploadMediaFrame.updateFolderName('(Added in last 24 hours)');
 		}
 		else {
 			$('#folders_select_'+FolderSidebarFrame.ID_LAST_24_HOURS).removeClass('selected');
@@ -111,7 +106,6 @@ var FolderSidebarFrame = {
 			//alert(folder_name + " " + folder_id);
 			
 			if (folder_id == DataStore.m_currentFolderID){
-				UploadMediaFrame.updateFolderName('('+folder_name+')');
 				
 				//txt += "<div id='folder_"+folder_id+"' class='apollo_folder folder_with_menu' style='width:100%;' title='Right click to edit' onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\"><div class='folder_name folder_name_selected'>"+folder_name+"</div></div>";
 				txt += "<div class='folder droppable_folder' id='folder_"+folder_id+"' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/folder_icon.png'><span class='folder_name selected' onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\">"+folder_name+"</span></div>";
@@ -211,7 +205,7 @@ var FolderSidebarFrame = {
 			}
 		}
 		
-		UploadMediaFrame.repaint();			
+		FilesFrame.repaint();			
 	},
 
 	// ////////////////////////////////////////////////////////////////////////////
@@ -247,7 +241,7 @@ var FolderSidebarFrame = {
 		
 		$(divID).attr('onclick','');
 
-		$(divID + ' .folder_name').html("<input id='folder_name_edit' style='' type='text' value='"+name+"' onblur='FolderSidebarFrame.paintFolders()'/>");
+		$(divID + ' .folder_name').html("<input id='folder_name_edit' style='width:100px' type='text' value='"+name+"' onblur='FolderSidebarFrame.paintFolders()'/>");
 		
 		$("#folder_name_edit").keypress(function (e) {
 			if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
@@ -262,7 +256,7 @@ var FolderSidebarFrame = {
 		
 	onSelectFolder : function(folder_id){
 		DataStore.m_currentFolderID = parseInt(folder_id);
-		UploadMediaFrame.repaint();
+		FilesFrame.repaint();
 		FolderSidebarFrame.paintFolders();				
 	},
 			

@@ -20,7 +20,7 @@ var PagesFrame = {
 		if (PagesFrame.ckEditor != ''){
 			try {			
 				PagesFrame.ckEditor.destroy();
-				//CKEDITOR.instances.editor1.destroy();
+				//CKEDITOR.instances.pageContentEditor.destroy();
 			}
 			catch(error){
 				alert('could not destroy the CKEditor instance!' + error);
@@ -35,6 +35,7 @@ var PagesFrame = {
 		var created = "";		
 		var created = "";		
 		var status = "";		
+		var template = "";		
 		
 		if (pageObj != undefined && pageObj){
 			content = pageObj.content;
@@ -42,6 +43,7 @@ var PagesFrame = {
 			last_edit = pageObj.last_edit;
 			created = pageObj.created;
 			status = pageObj.status;
+			template = pageObj.template;
 		}
 			
 		var txt = "";
@@ -54,7 +56,7 @@ var PagesFrame = {
 		
 		txt += "	<td>";
 		txt += "        <div style='margin-top:5px; margin-left:5px'>";
-		txt += "		<textarea id='editor1' name='editor1' style='width:100%; height:100%;'>"+content+"</textarea>";
+		txt += "		<textarea id='pageContentEditor' name='pageContentEditor' style='width:100%; height:100%;'>"+content+"</textarea>";
 		txt += "	</div>";		
 		txt += "	</td>";
 							
@@ -97,8 +99,9 @@ var PagesFrame = {
 		txt += "            <span class='pageData'>";
 		txt += "            <select>";
 		txt += "                <option value='none'>(none)</selected>";
-		txt += "                <option value='45'>Page4</selected>";
-		txt += "                <option value='45'>Another page</selected>";
+		for (var i=0; i<DataStore.m_pageList.length; i++){
+			txt += "                <option value='"+DataStore.m_pageList[i].id+"'>"+DataStore.m_pageList[i].title+"</selected>";
+		}
 		txt += "            </select>";
 		txt += "            </span>";
 		txt += "			</div>";
@@ -122,7 +125,8 @@ var PagesFrame = {
 		txt += "            </fieldset>";
 
 		txt += "			<div align='right' style='padding-right:10px'>";
-		txt += "			<button>Save Changes</button>";
+		txt += "			<button class='delete_button' onclick=\"PagesFrame.onDeletePage()\">Delete Page</button>";
+		txt += "			<button class='save_button' onclick=\"PagesFrame.onSavePage()\">Save Changes</button>";
 		txt += "			</div>";
 
 
@@ -137,7 +141,7 @@ var PagesFrame = {
 		$('#PagesFrame').html(txt);
 
 		if (status != ''){
-			$('#pageStatusSelector').val('status');
+			$('#pageStatusSelector').val(status);
 		}
 		
 		
@@ -145,18 +149,42 @@ var PagesFrame = {
 		PagesFrame.paintCKEditor();
 
 	},
+
+	// ////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Delete the page!
+	*/
+	onDeletePage : function(){
+		AthenaDialog.confirm("Are you sure you want to delete this page?", function(){PagesFrame.onDoDelete();});		
+	},
+	
+	onDoDelete : function(){
+		alert('TBD');
+	},
+		
+	// ////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Save all the users changes to the site
+	*/
+	onSavePage : function(){
+		//var content = $('#pageContentEditor').html();
+		var content = CKEDITOR.instances.pageContentEditor.getData();		
+	},
 		
 	// ////////////////////////////////////////////////////////////////////////////
 	
 	paintCKEditor : function(){
 		
-		PagesFrame.ckEditor = CKEDITOR.replace( 'editor1',
+		PagesFrame.ckEditor = CKEDITOR.replace( 'pageContentEditor',
 			{
 				height: $('#PagesFrame').innerHeight() - 150,
 				// Note that we have added out "MyButton" button here.
 				//toolbar : [ [ 'Source', '-', 'Bold', 'Italic', 'Underline', 'Strike','-','Link', '-', 'MyButton' ] ]
 				toolbar : [
-						    ['Source','-','Save','NewPage','Preview','-','Templates'],
+				//		    ['Source','-','Save','NewPage','Preview','-','Templates'],
+						    ['Source'],
 						    ['Cut','Copy','Paste','PasteText','PasteFromWord','-','Print', 'SpellChecker', 'Scayt'],
 						    ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
 				//		    ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'],
@@ -188,7 +216,7 @@ var PagesFrame = {
 	onImageSelected : function(imageID){
 		var img = DataStore.getImage(imageID);
 		var txt = "<img src='"+img.file_url+"' alt='"+img.description+"' width='"+img.width+"px' height='"+img.height+"px'/>";
-		CKEDITOR.instances.editor1.insertHtml(txt);
+		CKEDITOR.instances.pageContentEditor.insertHtml(txt);
 	}
 
 }

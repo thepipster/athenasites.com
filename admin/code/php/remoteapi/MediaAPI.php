@@ -35,6 +35,15 @@ switch($cmd){
 	case "getMedia":
 		getImages($site_id); 
 		break;			
+
+	case "addPage":
+		$title = CommandHelper::getPara('title', true, CommandHelper::$PARA_TYPE_STRING);
+		$parent_page_id = CommandHelper::getPara('parent_page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$content = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
+		$status = CommandHelper::getPara('status', true, CommandHelper::$PARA_TYPE_STRING);
+		$template = CommandHelper::getPara('template_id', true, CommandHelper::$PARA_TYPE_STRING);
+		addPage($site_id, $title, $parent_page_id, $content, $status, $template);
+		break;
 		
 	case "addFolder":
 		$folder_name = CommandHelper::getPara('folder_name', true, CommandHelper::$PARA_TYPE_STRING);
@@ -91,6 +100,31 @@ function checkValidFolder($site_id, $folder_id){
 // ///////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////
 
+function addPage($site_id, $title, $parent_page_id, $content, $status, $tamplate_name){
+
+	//Logger::debug("addPage(site_id=$site_id, title=$title, parent_page_id=$parent_page_id, content=$content, status=$status, tamplate_name=$tamplate_name)");
+	
+	$user_id = SecurityUtils::getCurrentUserID();
+	
+	$page_id = PagesTable::create($user_id, $site_id, $parent_page_id, $content, $status, $title, $tamplate_name);
+	
+	$page_data = PagesTable::getPage($site_id, $page_id);
+	if (isset($page_data[0])){
+		$page = $page_data[0];
+		$page['last_edit'] = date("m/d/Y H:i", strtotime($page['last_edit'])); // Convert to JS compatible date
+		$page['created'] = date("m/d/Y H:i", strtotime($page['created'])); // Convert to JS compatible date
+	}
+		
+	$msg['cmd'] = "addPage";
+	$msg['result'] = $page_id > 0 ? 'ok' : 'fail';
+	$msg['data'] = array('page' => $page);
+	
+	CommandHelper::sendMessage($msg);	
+	
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
 function addMediaToFolder($site_id, $media_id, $folder_id){
 
 	//Logger::debug("addMediaToFolder(site_id = $site_id, media_id = $media_id, folder_id = $folder_id)");
@@ -116,7 +150,6 @@ function addMediaToFolder($site_id, $media_id, $folder_id){
 	
 	$msg['cmd'] = "addMediaToFolder";
 	$msg['data'] = array('folder_id' => $folder_id, 'media_id' => $media_id);
-
 
 	CommandHelper::sendMessage($msg);	
 }

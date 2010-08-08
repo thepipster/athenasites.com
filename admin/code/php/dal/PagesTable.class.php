@@ -11,13 +11,13 @@ class PagesTable {
     /**
      * Create a new site
      */
-	public static function create($user_id, $site_id, $parent_page_id, $content, $status, $title){	
+	public static function create($user_id, $site_id, $parent_page_id, $content, $status, $title, $template_name){	
 		
         // Get data in correct locale (SQL's NOW() doesn't do that)
         $target_date  = mktime(date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
         $date_str = date('Y-m-d H:i:s', $target_date);
 		
-		$sql = DatabaseManager::prepare("INSERT INTO athena_Pages (user_id, site_id, content, status, parent_page_id, title, last_edit, created) VALUES (%d, %d, %s, %s, %d, %s, '$date_str', '$date_str')", $user_id, $site_id, $content, $status, $parent_page_id, $title);			
+		$sql = DatabaseManager::prepare("INSERT INTO athena_Pages (user_id, site_id, content, status, parent_page_id, title, last_edit, created, template) VALUES (%d, %d, %s, %s, %d, %s, '$date_str', '$date_str', %s)", $user_id, $site_id, $content, $status, $parent_page_id, $title, $template_name);			
 		return DatabaseManager::insert($sql);
     }
 
@@ -35,6 +35,13 @@ class PagesTable {
 
 	public static function getPages($site_id){
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_Pages WHERE site_id = %d ", $site_id);			
+		return DatabaseManager::getResults($sql);				
+	}
+
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	public static function getPage($site_id, $page_id){
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_Pages WHERE site_id = %d AND id = %d", $site_id, $page_id);			
 		return DatabaseManager::getResults($sql);				
 	}
 	

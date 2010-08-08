@@ -86,7 +86,11 @@ var ImageEditFrame = {
 		txt += "   </tr>";
 
 		txt += "   <tr align='center'>";
-		txt += "      <td colspan='2'><div class='update_button' onclick=\"ImageEditFrame.onSave('"+image_id+"')\"></div></td>";
+//		txt += "      <td colspan='2'><div class='update_button' onclick=\"ImageEditFrame.onSave('"+image_id+"')\"></div></td>";
+		txt += "      <td colspan='2'>";
+		txt += "          <button class='cancel_button' onclick=\"ImageEditFrame.onCancel()\">Cancel</button>";
+		txt += "          <button class='save_button' onclick=\"ImageEditFrame.onSave('"+image_id+"')\">Save</button>";
+		txt += "      </td>";
 		txt += "   </tr>";
 
 
@@ -102,6 +106,12 @@ var ImageEditFrame = {
 
 	},
 
+	// ////////////////////////////////////////////////////////////////////////////
+
+	onCancel : function(){
+		FilesFrame.onCancelSelectImage();
+	},
+	
 	// ////////////////////////////////////////////////////////////////////////////
 
 	onSave : function(post_id){

@@ -44,24 +44,19 @@ var PagesSidebarFrame = {
 		var txt = "";		
 		
 		for (var i=0; i<pageList.length; i++){
-			
-			if (pageList[i].title != undefined || pageList[i].title != ''){
-				var page_title = AthenaUtils.htmlEncode(pageList[i].title);
+						
+			if (pageList[i].parent_page_id == 0){
+
+				txt += PagesSidebarFrame.getPageHtml(pageList[i].id, pageList[i].title, 0);
+				
+				for (var k=0; k<pageList.length; k++){
+					if (pageList[k].parent_page_id == pageList[i].id){
+						txt += PagesSidebarFrame.getPageHtml(pageList[k].id, pageList[k].title, 1);
+					}					
+				}
+
 			}
-			else {
-				var page_title = 'unnamed';
-			}
 			
-			var page_id = pageList[i].id;
-			
-			//alert(folder_name + " " + folder_id);
-			
-			if (page_id == DataStore.m_currentPageID){			
-				txt += "<div class='page' id='page_"+page_id+"' title=''><img class='page_icon' src='images/web_page.png'><span class='page_name selected' onclick=\"PagesSidebarFrame.onSelectPage('"+page_id+"')\">"+page_title+"</span></div>";
-			}
-			else {
-				txt += "<div class='page' id='page_"+page_id+"' title=''><img class='page_icon' src='images/web_page.png'><span class='page_name' onclick=\"PagesSidebarFrame.onSelectPage('"+page_id+"')\">"+page_title+"</span></div>";
-			}
 
 			
 		}
@@ -76,7 +71,44 @@ var PagesSidebarFrame = {
 
 	// ////////////////////////////////////////////////////////////////////////////
 
+	getPageHtml : function(page_id, page_title, page_depth){
+
+		var txt = '';
+				
+		if (page_id == DataStore.m_currentPageID){			
+			txt += "<div class='page page_depth_"+page_depth+"' id='page_"+page_id+"' title=''><img class='page_icon' src='images/web_page.png'><span class='page_name selected' onclick=\"PagesSidebarFrame.onSelectPage('"+page_id+"')\">"+page_title+"</span></div>";
+		}
+		else {
+			txt += "<div class='page page_depth_"+page_depth+"' id='page_"+page_id+"' title=''><img class='page_icon' src='images/web_page.png'><span class='page_name' onclick=\"PagesSidebarFrame.onSelectPage('"+page_id+"')\">"+page_title+"</span></div>";
+		}
+		
+		return txt;
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////////
+
 	addPage : function(){
+		var title = 'New page ' + (DataStore.m_pageList.length+1);
+		MediaAPI.addPage(DataStore.m_siteID, title, '', 'Draft', 0, 0, PagesSidebarFrame.onPageAdded);
+	},
+	
+	onPageAdded : function(pageObj){
+
+		var temp = new Object();
+		temp.id = pageObj.id;
+		temp.title = AthenaUtils.htmlEncode(pageObj.title);
+		temp.user_id = pageObj.user_id;
+		temp.content = AthenaUtils.htmlEncode(pageObj.content);
+		temp.status = pageObj.status;
+		temp.last_edit = pageObj.last_edit;
+		temp.created = pageObj.created;
+		temp.status = pageObj.status;
+		temp.template = pageObj.template;
+		temp.parent_page_id = pageObj.parent_page_id;
+							
+		DataStore.m_pageList.push(temp);
+
+		PagesSidebarFrame.paintPages()
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////////

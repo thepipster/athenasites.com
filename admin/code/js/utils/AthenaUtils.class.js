@@ -14,6 +14,9 @@ var AthenaUtils = {
 	* > becomes &gt;
 	*/
 	htmlEncode : function(string) {
+		if (string == '' || string == undefined){
+			return '';
+		}
 	    string = string.toString();	    
         string = string.replace(/&/g, '&amp;');	    
         string = string.replace(/'/g, '&#039;');

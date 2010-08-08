@@ -53,15 +53,14 @@ $current_site_id = $site_list[0]['id'];
 
 <link rel="stylesheet" href="code/css/Athena.css" type="text/css" /> 
 <link rel="stylesheet" href="code/css/SideBar.css" type="text/css" />
-
 <link rel="stylesheet" href="code/css/FilesFrame.css" type="text/css" />
 <link rel="stylesheet" href="code/css/PagesFrame.css" type="text/css" />
-
 <link rel="stylesheet" href="code/css/ImageEditDialog.css" type="text/css" />
-<link rel="stylesheet" href="code/css/ImageEditFrame.css" type="text/css" />
 <link rel="stylesheet" href="code/css/ImagePickerDialog.css" type="text/css" />
+<link rel="stylesheet" href="code/css/ImageEditFrame.css" type="text/css" />
 
 <link rel="stylesheet" href="code/css/datePicker.css" type="text/css" />
+
 
 <!-- Javascript includes /////////////////////////////////////////////////////////// -->
 
@@ -120,11 +119,10 @@ $current_site_id = $site_list[0]['id'];
 <script src="code/js/dialogs/ImagePickerDialog.class.js" type="text/javascript"></script>
 
 <!-- Sub-Frame Displays -->
-<script src="code/js/subframes/ImageEditFrame.class.js" type="text/javascript"></script>
-<script src="code/js/subframes/UploadMediaFrame.class.js" type="text/javascript"></script>
 <script src="code/js/subframes/FolderSidebarFrame.class.js" type="text/javascript"></script>
 <script src="code/js/subframes/PagesSidebarFrame.class.js" type="text/javascript"></script>
 <script src="code/js/subframes/ImageSelector.class.js" type="text/javascript"></script>
+<script src="code/js/subframes/ImageEditFrame.class.js" type="text/javascript"></script>
 
 <!-- Frame Displays -->
 <script src="code/js/frames/DashboardFrame.class.js" type="text/javascript"></script>
@@ -137,7 +135,9 @@ $current_site_id = $site_list[0]['id'];
 <script src="code/js/frames/EditImageFrame.class.js" type="text/javascript"></script>
 <script src="code/js/frames/SidebarFrame.class.js" type="text/javascript"></script>
 
-<!-- Dialog Displays -->
+<!-- Old
+<script src="code/js/subframes/UploadMediaFrame.class.js" type="text/javascript"></script>
+-->
 
 <!-- Inline Style ////////////////////////////////////////////////////////////////// -->
 
@@ -181,11 +181,13 @@ $current_site_id = $site_list[0]['id'];
 				<div id='MainContent'>
 		
 					<div id='menu_container'>
+					<!--
 						<div id='dashboard_menu' class='menu_item' onclick='ssMain.onShowDashboard()'>Dashboard</div>				
+						<div id='edit_files_menu' class='menu_item' onclick='ssMain.onShowEditImages()'>Edit Images</div>
+					-->
 						<div id='settings_menu' class='menu_item' onclick='ssMain.onShowSettings()'>Settings</div>
 						<div id='pages_menu' class='menu_item' onclick='ssMain.onShowPages()'>Pages</div>				
-						<div id='files_menu' class='menu_item' onclick='ssMain.onShowFiles()'>Upload Files</div>
-						<div id='edit_files_menu' class='menu_item' onclick='ssMain.onShowEditImages()'>Edit Images</div>
+						<div id='files_menu' class='menu_item' onclick='ssMain.onShowFiles()'>Files</div>
 						<div id='gallery_menu' class='menu_item' onclick='ssMain.onShowGalleries()'>Galleries</div>
 						<div id='posts_menu' class='menu_item' onclick='ssMain.onShowPosts()'>Posts</div>
 						<div id='stats_menu' class='menu_item' onclick='ssMain.onShowStats()'>Stats</div>				
