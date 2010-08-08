@@ -4,7 +4,7 @@
 #
 # Host: localhost (MySQL 5.0.41-log)
 # Database: athenasites
-# Generation Time: 2010-08-05 20:28:00 -0600
+# Generation Time: 2010-08-07 18:01:13 -0600
 # ************************************************************
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -22960,7 +22960,7 @@ LOCK TABLES `apollo_Sessions` WRITE;
 /*!40000 ALTER TABLE `apollo_Sessions` DISABLE KEYS */;
 INSERT INTO `apollo_Sessions` (`id`,`access`,`data`)
 VALUES
-	('dc4b2371ffa0621c2abcf70a3ea68f60',1281060540,'user_valid|b:1;user_id|s:1:\"1\";user_name|s:14:\"Mike Pritchard\";user_email|s:20:\"mike@apollosites.com\";user_level|s:1:\"1\";');
+	('dc4b2371ffa0621c2abcf70a3ea68f60',1281225592,'user_valid|b:1;user_id|s:1:\"1\";user_name|s:14:\"Mike Pritchard\";user_email|s:20:\"mike@apollosites.com\";user_level|s:1:\"1\";');
 
 /*!40000 ALTER TABLE `apollo_Sessions` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -22986,9 +22986,9 @@ LOCK TABLES `apollo_Theme` WRITE;
 /*!40000 ALTER TABLE `apollo_Theme` DISABLE KEYS */;
 INSERT INTO `apollo_Theme` (`id`,`theme_name`,`theme_title`,`price`,`thumb_url`,`description`,`is_private`)
 VALUES
-	(2,'HollyPacione','Holly Pacione Photography',1000,'wp-content/themes/HollyPacione/screenshot.png','Holly Pacione Photography',1),
-	(1,'ApolloSites','ApolloSites',5000,'wp-content/themes/ApolloSites/screenshot.png','ApolloSites',1),
-	(3,'CGP4','Charlotte Geary Photography',NULL,'wp-content/themes/cgp4/screenshot.png','Charlotte Geary Photography',1),
+	(2,'HollyPacione','Holly Pacione Photography',1000,'admin/themes/HollyPacione/screenshot.png','Holly Pacione Photography',1),
+	(1,'ApolloSites','ApolloSites',5000,'admin/themes/ApolloSites/screenshot.png','ApolloSites',1),
+	(3,'CGP4','Charlotte Geary Photography',5000,'admin/themes/cgp4/screenshot.png','Charlotte Geary Photography',1),
 	(4,'Callisto','Callisto',200,NULL,NULL,0);
 
 /*!40000 ALTER TABLE `apollo_Theme` ENABLE KEYS */;
@@ -23079,13 +23079,12 @@ CREATE TABLE `athena_Folders` (
   `site_id` bigint(20) default NULL,
   `name` varchar(255) default 'Unamed Folder',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `athena_Folders` WRITE;
 /*!40000 ALTER TABLE `athena_Folders` DISABLE KEYS */;
 INSERT INTO `athena_Folders` (`id`,`site_id`,`name`)
 VALUES
-	(1,0,'Reserved (Unassigned)'),
 	(2,0,'Reserved (Last 24 hours))'),
 	(3,0,'Reserved (Last 7 days)'),
 	(4,0,'Reserved (last 1 day)'),
@@ -23094,25 +23093,10 @@ VALUES
 	(7,0,'Reserved'),
 	(8,0,'Reserved'),
 	(9,0,'Reserved'),
-	(10,2,'wedding'),
-	(11,2,'couples'),
-	(12,2,'children'),
-	(13,2,'seniors, young adults'),
-	(14,2,'sports'),
-	(15,2,'pets'),
-	(16,2,'products'),
-	(19,1,'test images'),
-	(20,3,'test images'),
-	(21,0,'new folder'),
-	(22,5,'Home'),
-	(23,5,'Weddings 1'),
-	(24,5,'Weddings 2'),
-	(25,5,'Vail'),
-	(26,5,'Keystone'),
-	(27,3,'broadmoor'),
-	(28,3,'site graphics'),
-	(30,2,'families and maternity'),
-	(0,0,'Reserved (All)');
+	(48,1,'test2'),
+	(61,1,'ally dog'),
+	(1,0,'Reserved (Unassigned)'),
+	(60,1,'test1');
 
 /*!40000 ALTER TABLE `athena_Folders` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -23140,33 +23124,30 @@ CREATE TABLE `athena_Media` (
   `thumb_width` int(9) default NULL,
   `thumb_height` int(9) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `athena_Media` WRITE;
 /*!40000 ALTER TABLE `athena_Media` DISABLE KEYS */;
 INSERT INTO `athena_Media` (`id`,`folder_id`,`site_id`,`filename`,`mime_type`,`file_size`,`created`,`title`,`description`,`tags`,`width`,`height`,`thumb_filename`,`thumb_width`,`thumb_height`)
 VALUES
-	(1,1,1,'OzTrip001.JPG','image/jpeg',807827,'2010-08-06 01:31:42','OzTrip_001.JPG','','',1600,1200,'OzTrip001_thumb.JPG',50,37),
-	(2,1,1,'OzTrip002.JPG','image/jpeg',872627,'2010-08-06 01:31:42','OzTrip_002.JPG','','',1600,1200,'OzTrip002_thumb.JPG',50,37),
-	(3,1,1,'OzTrip003.JPG','image/jpeg',723476,'2010-08-06 01:31:42','OzTrip_003.JPG','','',1600,1200,'OzTrip003_thumb.JPG',50,37),
-	(4,1,1,'OzTrip004.JPG','image/jpeg',615570,'2010-08-06 01:31:42','OzTrip_004.JPG','','',1600,1200,'OzTrip004_thumb.JPG',50,37),
-	(5,1,1,'OzTrip005.JPG','image/jpeg',735837,'2010-08-06 01:31:43','OzTrip_005.JPG','','',1600,1200,'OzTrip005_thumb.JPG',50,37),
-	(6,1,1,'OzTrip006.JPG','image/jpeg',414403,'2010-08-06 01:31:43','OzTrip_006.JPG','','',1600,1200,'OzTrip006_thumb.JPG',50,37),
-	(7,1,1,'OzTrip007.JPG','image/jpeg',489871,'2010-08-06 01:31:43','OzTrip_007.JPG','','',1600,1200,'OzTrip007_thumb.JPG',50,37),
-	(8,1,1,'OzTrip008.JPG','image/jpeg',357606,'2010-08-06 01:31:43','OzTrip_008.JPG','','',1024,768,'OzTrip008_thumb.JPG',50,37),
-	(9,1,1,'OzTrip009.JPG','image/jpeg',343058,'2010-08-06 01:31:43','OzTrip_009.JPG','','',1024,768,'OzTrip009_thumb.JPG',50,37),
-	(10,1,1,'OzTrip010.JPG','image/jpeg',351745,'2010-08-06 01:31:43','OzTrip_010.JPG','','',1024,768,'OzTrip010_thumb.JPG',50,37),
-	(11,1,1,'OzTrip011.JPG','image/jpeg',374787,'2010-08-06 01:31:43','OzTrip_011.JPG','','',1024,768,'OzTrip011_thumb.JPG',50,37),
-	(12,1,1,'OzTrip012.JPG','image/jpeg',322263,'2010-08-06 01:31:43','OzTrip_012.JPG','','',1024,768,'OzTrip012_thumb.JPG',50,37),
-	(13,1,1,'OzTrip013.JPG','image/jpeg',330755,'2010-08-06 01:31:44','OzTrip_013.JPG','','',1024,768,'OzTrip013_thumb.JPG',50,37),
-	(14,1,1,'OzTrip014.JPG','image/jpeg',330122,'2010-08-06 01:31:44','OzTrip_014.JPG','','',1024,768,'OzTrip014_thumb.JPG',50,37),
-	(15,1,1,'OzTrip015.JPG','image/jpeg',319923,'2010-08-06 01:31:44','OzTrip_015.JPG','','',1024,768,'OzTrip015_thumb.JPG',50,37),
-	(16,1,1,'OzTrip016.JPG','image/jpeg',434645,'2010-08-06 01:31:44','OzTrip_016.JPG','','',1024,768,'OzTrip016_thumb.JPG',50,37),
-	(17,1,1,'OzTrip017.JPG','image/jpeg',559583,'2010-08-06 01:31:44','OzTrip_017.JPG','','',1024,768,'OzTrip017_thumb.JPG',50,37),
-	(18,1,1,'OzTrip018.JPG','image/jpeg',584899,'2010-08-06 01:31:44','OzTrip_018.JPG','','',1024,768,'OzTrip018_thumb.JPG',50,37),
-	(19,1,1,'OzTrip019.JPG','image/jpeg',675779,'2010-08-06 01:31:44','OzTrip_019.JPG','','',1024,768,'OzTrip019_thumb.JPG',50,37),
-	(20,1,1,'OzTrip020.JPG','image/jpeg',556474,'2010-08-06 01:31:44','OzTrip_020.JPG','','',1024,768,'OzTrip020_thumb.JPG',50,37),
-	(21,1,1,'OzTrip028.JPG','image/jpeg',406826,'2010-08-06 01:54:15','OzTrip_028.JPG','','',1024,768,'OzTrip028_thumb.JPG',50,37);
+	(38,1,1,'OzTrip026.JPG','image/jpeg',606802,'2010-08-07 01:19:19','OzTrip_026.JPG','','',1024,768,'OzTrip026_thumb.JPG',50,50),
+	(37,1,1,'OzTrip025.JPG','image/jpeg',494676,'2010-08-07 01:19:19','OzTrip_025.JPG','','',1024,768,'OzTrip025_thumb.JPG',50,50),
+	(36,1,1,'OzTrip024.JPG','image/jpeg',442516,'2010-08-07 01:19:18','OzTrip_024.JPG','','',1024,768,'OzTrip024_thumb.JPG',50,50),
+	(35,1,1,'OzTrip023.JPG','image/jpeg',386851,'2010-08-07 01:19:18','OzTrip_023.JPG','','',1024,768,'OzTrip023_thumb.JPG',50,50),
+	(34,1,1,'OzTrip022.JPG','image/jpeg',534496,'2010-08-07 01:19:18','OzTrip_022.JPG','','',1024,768,'OzTrip022_thumb.JPG',50,50),
+	(33,1,1,'OzTrip021.JPG','image/jpeg',375146,'2010-08-07 01:14:51','OzTrip_021.JPG','','',1024,768,'OzTrip021_thumb.JPG',50,50),
+	(32,1,1,'OzTrip018_1.JPG','image/jpeg',584899,'2010-08-07 01:14:46','OzTrip_018.JPG','','',1024,768,'OzTrip018_1_thumb.JPG',50,50),
+	(31,1,1,'OzTrip010_1.JPG','image/jpeg',351745,'2010-08-07 01:05:57','OzTrip_010.JPG','','',1024,768,'OzTrip010_1_thumb.JPG',50,50),
+	(30,1,1,'OzTrip009_1.JPG','image/jpeg',343058,'2010-08-07 01:05:57','OzTrip_009.JPG','','',1024,768,'OzTrip009_1_thumb.JPG',50,50),
+	(29,1,1,'OzTrip008_1.JPG','image/jpeg',357606,'2010-08-07 01:05:57','OzTrip_008.JPG','','',1024,768,'OzTrip008_1_thumb.JPG',50,50),
+	(28,1,1,'OzTrip007_1.JPG','image/jpeg',489871,'2010-08-07 01:05:57','OzTrip_007.JPG','','',1600,1200,'OzTrip007_1_thumb.JPG',50,50),
+	(27,1,1,'OzTrip006_1.JPG','image/jpeg',414403,'2010-08-07 01:05:57','OzTrip_006.JPG','','',1600,1200,'OzTrip006_1_thumb.JPG',50,50),
+	(26,1,1,'OzTrip005_1.JPG','image/jpeg',735837,'2010-08-07 01:05:57','OzTrip_005.JPG','','',1600,1200,'OzTrip005_1_thumb.JPG',50,50),
+	(25,1,1,'OzTrip004_1.JPG','image/jpeg',615570,'2010-08-07 01:05:56','OzTrip_004.JPG','','',1600,1200,'OzTrip004_1_thumb.JPG',50,50),
+	(24,1,1,'OzTrip003_1.JPG','image/jpeg',723476,'2010-08-07 01:05:56','OzTrip_003.JPG','','',1600,1200,'OzTrip003_1_thumb.JPG',50,50),
+	(23,1,1,'OzTrip002_1.JPG','image/jpeg',872627,'2010-08-07 01:05:56','OzTrip_002.JPG','','',1600,1200,'OzTrip002_1_thumb.JPG',50,50),
+	(22,1,1,'OzTrip001_1.JPG','image/jpeg',807827,'2010-08-07 01:05:56','OzTrip_001.JPG','','',1600,1200,'OzTrip001_1_thumb.JPG',50,50),
+	(39,61,1,'OzTrip017_1.JPG','image/jpeg',559583,'2010-08-07 01:20:23','OzTrip_017.JPG','','',1024,768,'OzTrip017_1_thumb.JPG',50,50);
 
 /*!40000 ALTER TABLE `athena_Media` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -23182,17 +23163,19 @@ CREATE TABLE `athena_Pages` (
   `user_id` int(11) default NULL,
   `site_id` int(11) default NULL,
   `content` text,
-  `status` enum('published','draft','revision') default 'draft',
-  `last_edit` timestamp NULL default NULL on update CURRENT_TIMESTAMP,
-  `parent_page_id` int(11) default NULL,
+  `status` enum('Published','Draft','Revision') default 'Draft',
+  `last_edit` datetime default NULL,
+  `parent_page_id` int(11) default '0',
+  `title` varchar(255) default NULL,
+  `created` datetime default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_Pages` WRITE;
 /*!40000 ALTER TABLE `athena_Pages` DISABLE KEYS */;
-INSERT INTO `athena_Pages` (`id`,`user_id`,`site_id`,`content`,`status`,`last_edit`,`parent_page_id`)
+INSERT INTO `athena_Pages` (`id`,`user_id`,`site_id`,`content`,`status`,`last_edit`,`parent_page_id`,`title`,`created`)
 VALUES
-	(1,1,1,NULL,'published','2010-07-23 17:58:55',NULL);
+	(1,1,1,'dsgsdgsdgsd sdg s gsa\'sdg sgas gsad\'g asdg as gasd\"sa dgasdg asdg asdg asdg asd \"sa dgas gs dg','Published','2010-07-23 17:58:55',0,'Home Page','2010-07-23 17:58:55');
 
 /*!40000 ALTER TABLE `athena_Pages` ENABLE KEYS */;
 UNLOCK TABLES;
