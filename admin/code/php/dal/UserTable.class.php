@@ -45,6 +45,10 @@ class UserTable {
 	
 	// /////////////////////////////////////////////////////////////////////////////////
 
+	public static function getNumberUsers(){return DatabaseManager::getVar("SELECT COUNT(id) AS no FROM athena_Users");}
+	
+	// /////////////////////////////////////////////////////////////////////////////////
+
 	public static function getPasswordFromEmail($email){
 		$sql = DatabaseManager::prepare("SELECT password_hash FROM athena_Users WHERE email = %s ", $email);			
 		return DatabaseManager::getVar($sql);				

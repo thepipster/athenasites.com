@@ -221,8 +221,8 @@ var ssLogin = {
 		SystemAPI.getStats(ssLogin.onGotStats);
 	},	
 			
-	onGotStats : function(data){
-    	var txt = data.no_pages + " pages from " + data.no_sites + " sites, with " + data.no_users + " users and " + data.no_posts + " blog posts";
+	onGotStats : function(no_users, no_sites, no_pageviews){
+    	var txt = no_sites + " sites, with " + no_users + " users with " + no_pageviews + " page views";
     	$('.stats').html(txt);
 	}
 }
@@ -231,4 +231,3 @@ ssLogin.init();
 //$(document).ready(ssLogin.init());
 
 </script>
-

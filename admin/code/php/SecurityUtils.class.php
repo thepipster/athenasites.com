@@ -128,6 +128,7 @@ class SecurityUtils {
 		
 		// Create site's tables
 		PageViewsTable::createTableForSite($site_id);
+		StatsRollupTables::createTableForSite($site_id);
 		PageParasTable::createTableForSite($site_id);
 		GlobalParasTable::createTableForSite($site_id);
 		GalleryTable::createTableForSite($site_id);

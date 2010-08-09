@@ -124,6 +124,7 @@ var DataStore = {
 			temp.status = page_list[i].status;
 			temp.template = page_list[i].template;
 			temp.parent_page_id = page_list[i].parent_page_id;
+			temp.slug = page_list[i].slug;
 						
 			DataStore.m_pageList[i] = temp;
 			

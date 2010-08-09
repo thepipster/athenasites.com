@@ -25,11 +25,12 @@
 </div>	
 
 <script type="text/javascript">
-
+/*
 try {
 	var pageTracker = _gat._getTracker("UA-534928-3");
-	pageTracker._trackPageview("<?= $page_title ?>");
+	pageTracker._trackPageview("<?= PageManager::$page_title ?>");
 } catch(err) {}
+*/
 
 /**
 * Class to contain common operators
@@ -130,6 +131,6 @@ cgpCommon.init();
 
 </script>
 
-<?php wp_footer(); ?>
+<?php PageManager::doFooter(); ?>
 </body>
 </html>

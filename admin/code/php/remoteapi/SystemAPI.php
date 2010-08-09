@@ -66,10 +66,9 @@ function getStats(){
 
 	$data = array(4);
 	
-	$data['no_users'] = DatabaseManager::getVar("SELECT COUNT(id) AS no FROM athena_Users");					
-	$data['no_sites'] = DatabaseManager::getVar("SELECT COUNT(id) AS no FROM athena_Sites");					
-	$data['no_pages'] = DatabaseManager::getVar("SELECT COUNT(id) AS no FROM athena_Pages");					
-	$data['no_posts'] = DatabaseManager::getVar("SELECT COUNT(id) AS no FROM athena_Posts");					
+	$data['no_users'] = UserTable::getNumberUsers();					
+	$data['no_sites'] = SitesTable::getNumberSites();					
+	$data['no_pageviews'] = StatsRollupTables::getGlobalNumberPageViews();					
 	
 	
 	$msg['cmd'] = 'getStats';

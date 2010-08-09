@@ -38,6 +38,10 @@ class SitesTable {
     
 	// /////////////////////////////////////////////////////////////////////////////////
 
+	public static function getNumberSites(){return DatabaseManager::getVar("SELECT COUNT(id) AS no FROM athena_Sites");}
+    
+	// /////////////////////////////////////////////////////////////////////////////////
+
 	public static function getSite($id){
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_Sites WHERE id = %d ", $id);			
 		return DatabaseManager::getResults($sql);				
@@ -76,6 +80,13 @@ class SitesTable {
 	public static function getSiteIDFromDomain($domain){
 		$sql = DatabaseManager::prepare("SELECT id FROM athena_Sites WHERE domain = %s", $domain);			
 		return DatabaseManager::getVar($sql);				
+	}
+
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	public static function getSiteFromDomain($domain){
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_Sites WHERE domain = %s", $domain);			
+		return DatabaseManager::getResults($sql);				
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////////////

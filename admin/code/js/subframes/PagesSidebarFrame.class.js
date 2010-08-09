@@ -89,7 +89,8 @@ var PagesSidebarFrame = {
 
 	addPage : function(){
 		var title = 'New page ' + (DataStore.m_pageList.length+1);
-		MediaAPI.addPage(DataStore.m_siteID, title, '', 'Draft', 0, 0, PagesSidebarFrame.onPageAdded);
+		var pageSlug = PagesSidebarFrame.encodeSlug(title) + '.html';
+		MediaAPI.addPage(DataStore.m_siteID, title, '', 'Draft', 0, 0, pageSlug, PagesSidebarFrame.onPageAdded);
 	},
 	
 	onPageAdded : function(pageObj){
@@ -105,11 +106,31 @@ var PagesSidebarFrame = {
 		temp.status = pageObj.status;
 		temp.template = pageObj.template;
 		temp.parent_page_id = pageObj.parent_page_id;
+		temp.slug = pageObj.slug;
 							
 		DataStore.m_pageList.push(temp);
 
-		PagesSidebarFrame.paintPages()
+		PagesSidebarFrame.onSelectPage(temp.id);
 	},
+	
+	/**
+	* Encode the page slug based on the title
+	*/
+	encodeSlug : function(title){
+	
+		var slug = title.replace(/ /g, ""); // Remove spaces
+		slug = slug.replace(/'/g, ""); // Remove single quotes
+		slug = slug.replace(/\"/g, ""); // Remove double quotes
+
+		slug = escape(slug);
+		slug = slug.replace(/\//g,"%2F");
+		slug = slug.replace(/\?/g,"%3F");
+		slug = slug.replace(/=/g,"%3D");
+		slug = slug.replace(/&/g,"%26");
+		slug = slug.replace(/@/g,"%40");
+		
+		return slug;
+   	},
 	
 	// ////////////////////////////////////////////////////////////////////////////
 

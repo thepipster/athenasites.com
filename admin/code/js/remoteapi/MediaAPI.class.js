@@ -90,10 +90,10 @@ var MediaAPI = {
 	
 	// ////////////////////////////////////////////////////////////////////////
 
-	addPage : function(siteID, pageTitle, pageContent, pageStatus, templateName, parentPageID, callback){
+	addPage : function(siteID, pageTitle, pageContent, pageStatus, templateName, parentPageID, pageSlug, callback){
 		
-		var paras = {cmd: 'addPage', site_id: siteID, title: pageTitle, content: pageContent, status: pageStatus, template_id: templateName, parent_page_id: parentPageID};
-												
+		var paras = {cmd: 'addPage', site_id: siteID, title: pageTitle, content: pageContent, status: pageStatus, template_id: templateName, parent_page_id: parentPageID, slug: pageSlug};
+				
 		$.ajax({
 			url: MediaAPI.m_url,
 			dataType: "json",

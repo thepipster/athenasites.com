@@ -7,36 +7,110 @@
   
 class StatsRollupTables {
 	
+	/**
+	* To keep the database table from growing huge, we break this table up by site id
+	*/
+	public static function createTableForSite($site_id){
+		
+		$sql = "CREATE TABLE `athena_{$site_id}_RollupBrowser` (
+		  `id` int(11) NOT NULL auto_increment,
+		  `rollup_date` date default NULL,
+		  `browser` varchar(30) default NULL,
+		  `browser_ver` varchar(10) default NULL,
+		  `hits` int(11) default NULL,
+		  PRIMARY KEY  (`id`)
+		) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+
+		DatabaseManager::submitQuery($sql);
+
+		$sql = "CREATE TABLE `athena_{$site_id}_RollupCrawler` (
+		  `id` int(11) NOT NULL auto_increment,
+		  `rollup_date` date default NULL,
+		  `crawler` varchar(25) default NULL,
+		  `hits` int(11) default NULL,
+		  PRIMARY KEY  (`id`)
+		) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+
+		DatabaseManager::submitQuery($sql);
+
+		$sql = "CREATE TABLE `athena_{$site_id}_RollupOS` (
+		  `id` int(11) NOT NULL auto_increment,
+		  `rollup_date` date default NULL,
+		  `os_name` varchar(30) default NULL,
+		  `os_ver` varchar(10) default NULL,
+		  `hits` int(11) default NULL,
+		  PRIMARY KEY  (`id`)
+		) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+
+		DatabaseManager::submitQuery($sql);
+
+		$sql = "CREATE TABLE `athena_{$site_id}_RollupPageViews` (
+		  `id` int(11) NOT NULL auto_increment,
+		  `rollup_date` date default NULL,
+		  `page_views` int(11) default NULL,
+		  `unique_visitors` int(11) default NULL,
+		  `keywords` text,
+		  `page_title` varchar(125) default NULL,
+		  PRIMARY KEY  (`id`)
+		) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+						
+		DatabaseManager::submitQuery($sql);
+
+	}
+	
+	// //////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Global stats
+	//
 	// //////////////////////////////////////////////////////////////////////////////////////
 
-	public static function getPageViewsRollup($blog_id, $no_days){
-		global $wpdb;
+	public static function getGlobalPageViews($no_days){
 
 		date_default_timezone_set('UTC');
 		
 		$date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m") , date("d")-$no_days, date("Y")));
 
-		$sql = $wpdb->prepare("SELECT * FROM apollo_RollupPageViews WHERE page_title != 'all' AND blog_id = %d AND rollup_date > %s ORDER BY rollup_date DESC, unique_visitors DESC",  $blog_id, $date_from ); 		
-		return $wpdb->get_results($sql, ARRAY_A);		
+		$sql = DatabaseManager::prepare("SELECT * FROM apollo_RollupServer WHERE rollup_date > %s ORDER BY rollup_date DESC",  $site_id, $date_from ); 		
+		return DatabaseManager::getResults($sql);		
+	}
+
+	public static function getGlobalNumberPageViews($no_days){
+
+		date_default_timezone_set('UTC');
+		
+		$date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m") , date("d")-$no_days, date("Y")));
+
+		$sql = DatabaseManager::prepare("SELECT sum(page_views) FROM apollo_RollupServer WHERE rollup_date > %s",  $site_id, $date_from ); 		
+		$no = DatabaseManager::getVar($sql);		
+		if (!isset($no)){
+			$no = 0;
+		}
+		return $no;
 	}
 	
 	// //////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Site stats
+	//
+	// //////////////////////////////////////////////////////////////////////////////////////
 
-	public static function getGlobalPageViewsRollup(){
-		global $wpdb;
-		$sql = $wpdb->prepare("SELECT * FROM apollo_RollupPageViews ORDER BY rollup_date DESC, unique_visitors DESC",  $blog_id ); 		
-		return $wpdb->get_results($sql, ARRAY_A);		
+	public static function getPageViewsRollup($site_id, $no_days){
+
+		date_default_timezone_set('UTC');
+		
+		$date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m") , date("d")-$no_days, date("Y")));
+
+		$sql = DatabaseManager::prepare("SELECT * FROM apollo_%d_RollupPageViews WHERE page_title != 'all' AND rollup_date > %s ORDER BY rollup_date DESC, unique_visitors DESC",  $site_id, $date_from ); 		
+		return DatabaseManager::getResults($sql);		
 	}
-	
+		
 	// //////////////////////////////////////////////////////////////////////////////////////
 
 	/**
 	* Return an array of page_views and unique_visits for the whole blog for the last n days
 	*/
-	public static function getPageViewsLastNDays($blog_id, $no_days){
+	public static function getPageViewsLastNDays($site_id, $no_days){
 	
-		global $wpdb;
-
 		$data = array($no_days);
 				
 		date_default_timezone_set('UTC');
@@ -44,28 +118,8 @@ class StatsRollupTables {
 		$date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m") , date("d")-$no_days, date("Y")));
 		$date_end = date("Y-m-d 23:59:59", mktime(date("H"), date("i"), date("s"), date("m") , date("d"), date("Y")));
 			
-		$sql = $wpdb->prepare("SELECT rollup_date, sum(page_views) as page_views, sum(unique_visitors) as unique_visits FROM apollo_RollupPageViews WHERE page_title='all' AND blog_id = %d AND rollup_date > %s AND rollup_date <= %s GROUP BY rollup_date",  $blog_id, $date_from, $date_end); 		
-		return $wpdb->get_results($sql, ARRAY_A);		
-	}
-
-	// //////////////////////////////////////////////////////////////////////////////////////
-
-	/**
-	* Return an array of page_views and unique_visits for the whole site for the last n days
-	*/
-	public static function getGlobalPageViewsLastNDays($no_days){
-	
-		global $wpdb;
-
-		$data = array($no_days);
-				
-		date_default_timezone_set('UTC');
-		
-		$date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m") , date("d")-$no_days, date("Y")));
-		$date_end = date("Y-m-d 23:59:59", mktime(date("H"), date("i"), date("s"), date("m") , date("d"), date("Y")));
-			
-		$sql = $wpdb->prepare("SELECT rollup_date, sum(page_views) as page_views, sum(unique_visitors) as unique_visits FROM apollo_RollupPageViews WHERE page_title='all' AND rollup_date > %s AND rollup_date <= %s GROUP BY rollup_date",  $date_from, $date_end); 		
-		return $wpdb->get_results($sql, ARRAY_A);		
+		$sql = DatabaseManager::prepare("SELECT rollup_date, sum(page_views) as page_views, sum(unique_visitors) as unique_visits FROM apollo_%d_RollupPageViews WHERE page_title='all' AND rollup_date > %s AND rollup_date <= %s GROUP BY rollup_date",  $site_id, $date_from, $date_end); 		
+		return DatabaseManager::getResults($sql);		
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////
@@ -73,10 +127,8 @@ class StatsRollupTables {
 	/**
 	* Return an array of page_views and unique_visits for the whole blog for the last n days
 	*/
-	public static function getCrawlerViewsLastNDays($blog_id, $no_days){
+	public static function getCrawlerViewsLastNDays($site_id, $no_days){
 	
-		global $wpdb;
-
 		$data = array($no_days);
 				
 		date_default_timezone_set('UTC');
@@ -84,9 +136,9 @@ class StatsRollupTables {
 		$date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m") , date("d")-$no_days, date("Y")));
 		$date_end = date("Y-m-d 23:59:59", mktime(date("H"), date("i"), date("s"), date("m") , date("d"), date("Y")));
 			
-		$sql = $wpdb->prepare("SELECT rollup_date, crawler, sum(hits) as hits FROM apollo_RollupCrawler WHERE blog_id = %d AND rollup_date > %s AND rollup_date <= %s GROUP BY rollup_date, crawler",  $blog_id, $date_from, $date_end); 		
+		$sql = DatabaseManager::prepare("SELECT rollup_date, crawler, sum(hits) as hits FROM apollo_%d_RollupCrawler WHERE rollup_date > %s AND rollup_date <= %s GROUP BY rollup_date, crawler",  $site_id, $date_from, $date_end); 		
 		//error_log($sql);
-		return $wpdb->get_results($sql, ARRAY_A);		
+		return DatabaseManager::getResults($sql);		
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////
@@ -94,7 +146,7 @@ class StatsRollupTables {
 	/**
 	* Return an array of page_views and unique_visits for the whole blog for the last n days
 	*/
-	public static function getGlobalCrawlerViewsLastNDays($no_days){
+	public static function getBrowserViewsLastNDays($site_id, $no_days){
 	
 		global $wpdb;
 
@@ -105,29 +157,8 @@ class StatsRollupTables {
 		$date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m") , date("d")-$no_days, date("Y")));
 		$date_end = date("Y-m-d 23:59:59", mktime(date("H"), date("i"), date("s"), date("m") , date("d"), date("Y")));
 			
-		$sql = $wpdb->prepare("SELECT rollup_date, crawler, sum(hits) as hits FROM apollo_RollupCrawler WHERE rollup_date > %s AND rollup_date <= %s GROUP BY rollup_date, crawler",  $date_from, $date_end); 		
-		return $wpdb->get_results($sql, ARRAY_A);		
-	}
-
-
-	// //////////////////////////////////////////////////////////////////////////////////////
-
-	/**
-	* Return an array of page_views and unique_visits for the whole blog for the last n days
-	*/
-	public static function getBrowserViewsLastNDays($blog_id, $no_days){
-	
-		global $wpdb;
-
-		$data = array($no_days);
-				
-		date_default_timezone_set('UTC');
-		
-		$date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m") , date("d")-$no_days, date("Y")));
-		$date_end = date("Y-m-d 23:59:59", mktime(date("H"), date("i"), date("s"), date("m") , date("d"), date("Y")));
-			
-		$sql = $wpdb->prepare("SELECT rollup_date, browser, browser_ver, sum(hits) as hits FROM apollo_RollupBrowser WHERE blog_id = %d AND rollup_date > %s AND rollup_date <= %s GROUP BY browser, browser_ver",  $blog_id, $date_from, $date_end); 		
-		return $wpdb->get_results($sql, ARRAY_A);		
+		$sql = DatabaseManager::prepare("SELECT rollup_date, browser, browser_ver, sum(hits) as hits FROM apollo_%d_RollupBrowser WHERE site_id = %d AND rollup_date > %s AND rollup_date <= %s GROUP BY browser, browser_ver",  $site_id, $date_from, $date_end); 		
+		return DatabaseManager::getResults($sql);		
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////
@@ -135,10 +166,8 @@ class StatsRollupTables {
 	/**
 	* Return an array of page_views and unique_visits for the whole blog for the last n days
 	*/
-	public static function getGlobalBrowserViewsLastNDays($no_days){
+	public static function getOSViewsLastNDays($site_id, $no_days){
 	
-		global $wpdb;
-
 		$data = array($no_days);
 				
 		date_default_timezone_set('UTC');
@@ -146,50 +175,10 @@ class StatsRollupTables {
 		$date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m") , date("d")-$no_days, date("Y")));
 		$date_end = date("Y-m-d 23:59:59", mktime(date("H"), date("i"), date("s"), date("m") , date("d"), date("Y")));
 			
-		$sql = $wpdb->prepare("SELECT rollup_date, browser, browser_ver, sum(hits) as hits FROM apollo_RollupBrowser WHERE rollup_date > %s AND rollup_date <= %s GROUP BY  browser, browser_ver",  $date_from, $date_end); 		
-		return $wpdb->get_results($sql, ARRAY_A);		
-	}
-	
-
-	// //////////////////////////////////////////////////////////////////////////////////////
-
-	/**
-	* Return an array of page_views and unique_visits for the whole blog for the last n days
-	*/
-	public static function getOSViewsLastNDays($blog_id, $no_days){
-	
-		global $wpdb;
-
-		$data = array($no_days);
-				
-		date_default_timezone_set('UTC');
-		
-		$date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m") , date("d")-$no_days, date("Y")));
-		$date_end = date("Y-m-d 23:59:59", mktime(date("H"), date("i"), date("s"), date("m") , date("d"), date("Y")));
-			
-		$sql = $wpdb->prepare("SELECT rollup_date, os_name, os_ver, sum(hits) as hits FROM apollo_RollupOS WHERE blog_id = %d AND rollup_date > %s AND rollup_date <= %s GROUP BY rollup_date, os_name, os_ver",  $blog_id, $date_from, $date_end); 		
-		return $wpdb->get_results($sql, ARRAY_A);		
+		$sql = DatabaseManager::prepare("SELECT rollup_date, os_name, os_ver, sum(hits) as hits FROM apollo_%d_RollupOS WHERE rollup_date > %s AND rollup_date <= %s GROUP BY rollup_date, os_name, os_ver",  $site_id, $date_from, $date_end); 		
+		return DatabaseManager::getResults($sql);		
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////
-
-	/**
-	* Return an array of page_views and unique_visits for the whole blog for the last n days
-	*/
-	public static function getGlobalOSViewsLastNDays($no_days){
-	
-		global $wpdb;
-
-		$data = array($no_days);
-				
-		date_default_timezone_set('UTC');
-		
-		$date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m") , date("d")-$no_days, date("Y")));
-		$date_end = date("Y-m-d 23:59:59", mktime(date("H"), date("i"), date("s"), date("m") , date("d"), date("Y")));
-			
-		$sql = $wpdb->prepare("SELECT rollup_date, os_name, os_ver, sum(hits) as hits FROM apollo_RollupOS WHERE rollup_date > %s AND rollup_date <= %s GROUP BY rollup_date, os_name, os_ver",  $date_from, $date_end); 		
-		return $wpdb->get_results($sql, ARRAY_A);		
-	}	
-
 }
 ?>

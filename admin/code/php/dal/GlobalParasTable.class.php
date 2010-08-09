@@ -34,13 +34,13 @@ class GlobalParasTable {
 		$current_val = self::getGlobalParaValue($blog_id, $theme_para_id);
 				
 		if (!isset($current_val)){
-			$sql = DatabaseManager::prepare("INSERT INTO athena_{$site_id}_GlobalParas (theme_para_id, para_value) VALUES (%d, %s)", $site_id, $theme_para_id, $new_value);
+			$sql = DatabaseManager::prepare("INSERT INTO athena_%d_GlobalParas (theme_para_id, para_value) VALUES (%d, %s)", $site_id, $theme_para_id, $new_value);
 		}			
 		else {
 			if ($current_val == $new_value){
 				return 1;
 			}
-			$sql = DatabaseManager::prepare("UPDATE athena_{$site_id}_GlobalParas SET para_value = %s WHERE theme_para_id = %d", $site_id, $new_value, $theme_para_id);
+			$sql = DatabaseManager::prepare("UPDATE athena_%d_GlobalParas SET para_value = %s WHERE theme_para_id = %d", $site_id, $new_value, $theme_para_id);
 		}
 		
 		return DatabaseManager::submitQuery($sql);
@@ -49,7 +49,7 @@ class GlobalParasTable {
 	// //////////////////////////////////////////////////////////////////////////////////////
 
 	public static function getGlobalParaValue($site_id, $theme_para_id){
-		$sql = DatabaseManager::prepare("SELECT para_value FROM athena_{$site_id}_GlobalParas WHERE blog_id = %d AND theme_para_id = %d",  $site_id, $theme_para_id); 		
+		$sql = DatabaseManager::prepare("SELECT para_value FROM athena_%d_GlobalParas WHERE blog_id = %d AND theme_para_id = %d",  $site_id, $theme_para_id); 		
 		return DatabaseManager::getVar($sql);
 	}
 

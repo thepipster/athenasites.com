@@ -27,51 +27,6 @@ class PageViewsTable {
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
 		DatabaseManager::submitQuery($sql);
-
-		$sql = "CREATE TABLE `athena_{$site_id}_RollupBrowser` (
-		  `id` int(11) NOT NULL auto_increment,
-		  `rollup_date` date default NULL,
-		  `browser` varchar(30) default NULL,
-		  `browser_ver` varchar(10) default NULL,
-		  `hits` int(11) default NULL,
-		  PRIMARY KEY  (`id`)
-		) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
-
-		DatabaseManager::submitQuery($sql);
-
-		$sql = "CREATE TABLE `athena_{$site_id}_RollupCrawler` (
-		  `id` int(11) NOT NULL auto_increment,
-		  `rollup_date` date default NULL,
-		  `crawler` varchar(25) default NULL,
-		  `hits` int(11) default NULL,
-		  PRIMARY KEY  (`id`)
-		) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
-
-		DatabaseManager::submitQuery($sql);
-
-		$sql = "CREATE TABLE `athena_{$site_id}_RollupOS` (
-		  `id` int(11) NOT NULL auto_increment,
-		  `rollup_date` date default NULL,
-		  `os_name` varchar(30) default NULL,
-		  `os_ver` varchar(10) default NULL,
-		  `hits` int(11) default NULL,
-		  PRIMARY KEY  (`id`)
-		) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
-
-		DatabaseManager::submitQuery($sql);
-
-		$sql = "CREATE TABLE `athena_{$site_id}_RollupPageViews` (
-		  `id` int(11) NOT NULL auto_increment,
-		  `rollup_date` date default NULL,
-		  `page_views` int(11) default NULL,
-		  `unique_visitors` int(11) default NULL,
-		  `keywords` text,
-		  `page_title` varchar(125) default NULL,
-		  PRIMARY KEY  (`id`)
-		) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
-						
-		DatabaseManager::submitQuery($sql);
-
 	}
 		
 	// //////////////////////////////////////////////////////////////////////////////////////
@@ -124,9 +79,9 @@ class PageViewsTable {
 		$true_ip = self::getRealIPAddr();		
 
 		if ($wp_query->post->ID != 0){
-//			$sql = DatabaseManager::prepare("INSERT INTO athena_{$site_id}_PageViews (blog_id, page_id, view_date, ip_long, browser, browser_ver, os_name, os_ver, referer) VALUES (%d, %d, %s, %d, %s, %s, %s, %s, %s)", 
+//			$sql = DatabaseManager::prepare("INSERT INTO athena_%d_PageViews (blog_id, page_id, view_date, ip_long, browser, browser_ver, os_name, os_ver, referer) VALUES (%d, %d, %s, %d, %s, %s, %s, %s, %s)", 
 //					$blog_id, $wp_query->post->ID, $date_now, ip2long($_SERVER['REMOTE_ADDR']), $browser_name, $browser_ver, $os, $os_ver, $referer );
-			$sql = DatabaseManager::prepare("INSERT INTO athena_{$site_id}_PageViews ( page_id, view_date, ip_long, browser, browser_ver, os_name, os_ver, referer, user_agent, is_bot, server_ip) VALUES (%d, %s, %d, %s, %s, %s, %s, %s, %s, %d, %d)", 
+			$sql = DatabaseManager::prepare("INSERT INTO athena_%d_PageViews ( page_id, view_date, ip_long, browser, browser_ver, os_name, os_ver, referer, user_agent, is_bot, server_ip) VALUES (%d, %s, %d, %s, %s, %s, %s, %s, %s, %d, %d)", 
 					$site_id, $page_id, $date_now, ip2long($true_ip), $browser_name, $browser_ver, $os, $os_ver, $referer, $user_agent, $is_bot, ip2long($server_ip) );
 			$wpdb->query($sql);		
 		}
@@ -162,7 +117,7 @@ class PageViewsTable {
 		$date_before = date("Y-m-d H:i:s", mktime(date("H"), date("i"), date("s")-10, date("m"), date("d"), date("Y")));
 		$date_now = date("Y-m-d H:i:s", mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
 		
-		$sql = DatabaseManager::prepare("SELECT count(*) FROM athena_{$site_id}_PageViews WHERE page_id = %d AND ip_long = %s AND view_date > %s",  $site_id, $page_id, $ip_long, $date_before ); 		
+		$sql = DatabaseManager::prepare("SELECT count(*) FROM athena_%d_PageViews WHERE page_id = %d AND ip_long = %s AND view_date > %s",  $site_id, $page_id, $ip_long, $date_before ); 		
 
 		$data = DatabaseManager::getResults($sql, ARRAY_N);
 		
@@ -176,7 +131,7 @@ class PageViewsTable {
 	// //////////////////////////////////////////////////////////////////////////////////////
 
 	public static function getStatsForSite($site_id){
-		$sql = DatabaseManager::prepare("SELECT * FROM athena_{$site_id}_PageViews",  $site_id ); 		
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_PageViews",  $site_id ); 		
 		return DatabaseManager::getResults($sql, ARRAY_A);		
 	}
 
@@ -193,7 +148,7 @@ class PageViewsTable {
 		date_default_timezone_set('UTC');
 		$date_before = date("Y-m-d H:i", mktime(date("H"), date("i"), date("s"), date("m")  , date("d")-$no_days_ago, date("Y")));
 	
-		$sql = DatabaseManager::prepare("SELECT count(blog_id) FROM athena_{$site_id}_PageViews WHERE blog_id = %d AND view_date > %s",  $site_id, $date_before ); 		
+		$sql = DatabaseManager::prepare("SELECT count(blog_id) FROM athena_%d_PageViews WHERE blog_id = %d AND view_date > %s",  $site_id, $date_before ); 		
 		$data = DatabaseManager::getResults($sql);		
 	
 		//error_log(print_r($data[0], true));
@@ -220,7 +175,7 @@ class PageViewsTable {
 			
 			$date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m") , date("d")-$n, date("Y")));
 			$date_end = date("Y-m-d 23:59:59", mktime(date("H"), date("i"), date("s"), date("m") , date("d")-$n, date("Y")));
-			$sql = DatabaseManager::prepare("SELECT count(distinct(ip_long)) FROM athena_{$site_id}_PageViews WHERE view_date > %s AND view_date < %s",  $date_from, $date_end ); 		
+			$sql = DatabaseManager::prepare("SELECT count(distinct(ip_long)) FROM athena_%d_PageViews WHERE view_date > %s AND view_date < %s",  $date_from, $date_end ); 		
 			$views = DatabaseManager::getVar($sql);		
 			//error_log($n . ' ' . $views);	
 			
@@ -251,7 +206,7 @@ class PageViewsTable {
 			
 			$date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m") , date("d")-$n, date("Y")));
 			$date_end = date("Y-m-d 23:59:59", mktime(date("H"), date("i"), date("s"), date("m") , date("d")-$n, date("Y")));
-			$sql = DatabaseManager::prepare("SELECT count(*) FROM athena_{$site_id}_PageViews WHERE view_date > %s AND view_date < %s",  $date_from, $date_end ); 		
+			$sql = DatabaseManager::prepare("SELECT count(*) FROM athena_%d_PageViews WHERE view_date > %s AND view_date < %s",  $date_from, $date_end ); 		
 			
 			$views = DatabaseManager::getVar($sql);	
 			//error_log($n . ' ' . $views);	
@@ -280,7 +235,7 @@ class PageViewsTable {
 			
 			$date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m") , date("d")-$n, date("Y")));
 			$date_end = date("Y-m-d 23:59:59", mktime(date("H"), date("i"), date("s"), date("m") , date("d")-$n, date("Y")));
-			$sql = DatabaseManager::prepare("SELECT count(distinct(ip_long)) FROM athena_{$site_id}_PageViews WHERE blog_id = %d AND view_date > %s AND view_date < %s",  $site_id, $date_from, $date_end ); 		
+			$sql = DatabaseManager::prepare("SELECT count(distinct(ip_long)) FROM athena_%d_PageViews WHERE blog_id = %d AND view_date > %s AND view_date < %s",  $site_id, $date_from, $date_end ); 		
 			$views = DatabaseManager::getVar($sql);		
 			//error_log($n . ' ' . $views);	
 			
@@ -308,7 +263,7 @@ class PageViewsTable {
 			
 			$date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m") , date("d")-$n, date("Y")));
 			$date_end = date("Y-m-d 23:59:59", mktime(date("H"), date("i"), date("s"), date("m") , date("d")-$n, date("Y")));
-			$sql = DatabaseManager::prepare("SELECT count(blog_id) FROM athena_{$site_id}_PageViews WHERE blog_id = %d AND view_date > %s AND view_date < %s",  $site_id, $date_from, $date_end ); 		
+			$sql = DatabaseManager::prepare("SELECT count(blog_id) FROM athena_%d_PageViews WHERE blog_id = %d AND view_date > %s AND view_date < %s",  $site_id, $date_from, $date_end ); 		
 			
 			$views = DatabaseManager::getVar($sql);	
 			//error_log($n . ' ' . $views);	
@@ -328,7 +283,7 @@ class PageViewsTable {
 
 	public static function getViewsAllTime($site_id){
 
-		$sql = DatabaseManager::prepare("SELECT count(blog_id) FROM athena_{$site_id}_PageViews WHERE blog_id = %d",  $site_id ); 		
+		$sql = DatabaseManager::prepare("SELECT count(blog_id) FROM athena_%d_PageViews WHERE blog_id = %d",  $site_id ); 		
 		$data = DatabaseManager::getResults($sql);		
 			
 		if (isset($data[0]) && isset($data[0][0])){
@@ -345,7 +300,7 @@ class PageViewsTable {
 		date_default_timezone_set('UTC');
 		$date_before = date("Y-m-d H:i", mktime(date("H"), date("i"), date("s"), date("m")  , date("d")-$no_days_ago, date("Y")));
 		
-		$sql = DatabaseManager::prepare("SELECT count(distinct(ip_long)) FROM athena_{$site_id}_PageViews WHERE blog_id = %d AND view_date > %s",  $site_id, $date_before ); 		
+		$sql = DatabaseManager::prepare("SELECT count(distinct(ip_long)) FROM athena_%d_PageViews WHERE blog_id = %d AND view_date > %s",  $site_id, $date_before ); 		
 		$data = DatabaseManager::getResults($sql);		
 	
 		//error_log(print_r($data[0], true));
@@ -361,7 +316,7 @@ class PageViewsTable {
 
 	public static function getUniqueViewsAllTime($site_id){
 
-		$sql = DatabaseManager::prepare("SELECT count(distinct(ip_long)) FROM athena_{$site_id}_PageViews WHERE blog_id = %d",  $site_id ); 		
+		$sql = DatabaseManager::prepare("SELECT count(distinct(ip_long)) FROM athena_%d_PageViews WHERE blog_id = %d",  $site_id ); 		
 		$data = DatabaseManager::getResults($sql);		
 			
 		if (isset($data[0]) && isset($data[0][0])){
@@ -377,7 +332,7 @@ class PageViewsTable {
 	* Return a list of all the views, and return the post_title
 	*/
 	//public static function getAllViews($site_id){	
-	//	$sql = DatabaseManager::prepare("select posts.post_title, views.page_id, views.view_date, views.ip_long, views.browser, views.browser_ver, views.os_name, views.os_ver, views.referer  from athena_{$site_id}_PageViews views inner join wp_%d_posts posts where views.blog_id = %d and views.page_id = posts.ID ORDER BY views.view_date DESC",  $blog_id, $blog_id ); 		
+	//	$sql = DatabaseManager::prepare("select posts.post_title, views.page_id, views.view_date, views.ip_long, views.browser, views.browser_ver, views.os_name, views.os_ver, views.referer  from athena_%d_PageViews views inner join wp_%d_posts posts where views.blog_id = %d and views.page_id = posts.ID ORDER BY views.view_date DESC",  $blog_id, $blog_id ); 		
 	//	return DatabaseManager::getResults($sql);		
 	//}
 

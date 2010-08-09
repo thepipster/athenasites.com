@@ -15,6 +15,7 @@ $site_id = CommandHelper::getPara('site_id', true, CommandHelper::$PARA_TYPE_STR
 
 // Check that a user is logged in, and that they have access to this site
 if (!SecurityUtils::isLoggedInForSite($site_id)){
+	error_log("You are not authorized for this site!");
 	CommandHelper::sendAuthorizationFailMessage("You are not authorized for this site!");	
 	die();
 }
@@ -38,11 +39,12 @@ switch($cmd){
 
 	case "addPage":
 		$title = CommandHelper::getPara('title', true, CommandHelper::$PARA_TYPE_STRING);
+		$slug = CommandHelper::getPara('slug', true, CommandHelper::$PARA_TYPE_STRING);
 		$parent_page_id = CommandHelper::getPara('parent_page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
 		$content = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
 		$status = CommandHelper::getPara('status', true, CommandHelper::$PARA_TYPE_STRING);
 		$template = CommandHelper::getPara('template_id', true, CommandHelper::$PARA_TYPE_STRING);
-		addPage($site_id, $title, $parent_page_id, $content, $status, $template);
+		addPage($site_id, $title, $parent_page_id, $content, $status, $template, $slug);
 		break;
 		
 	case "addFolder":
@@ -82,13 +84,15 @@ switch($cmd){
 // ///////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function addPage($site_id, $title, $parent_page_id, $content, $status, $tamplate_name){
+function addPage($site_id, $title, $parent_page_id, $content, $status, $tamplate_name, $slug){
 
-	//Logger::debug("addPage(site_id=$site_id, title=$title, parent_page_id=$parent_page_id, content=$content, status=$status, tamplate_name=$tamplate_name)");
+	//Logger::debug("addPage(site_id=$site_id, title=$title, parent_page_id=$parent_page_id, content=$content, status=$status, tamplate_name=$tamplate_name, slug=$slug)");
 	
 	$user_id = SecurityUtils::getCurrentUserID();
 	
-	$page_id = PagesTable::create($user_id, $site_id, $parent_page_id, $content, $status, $title, $tamplate_name);
+	$page_id = PagesTable::create($user_id, $site_id, $parent_page_id, $content, $status, $title, $tamplate_name, $slug);
+	
+	Logger::debug("Page id = $page_id");
 	
 	$page_data = PagesTable::getPage($site_id, $page_id);
 	if (isset($page_data[0])){
@@ -96,7 +100,9 @@ function addPage($site_id, $title, $parent_page_id, $content, $status, $tamplate
 		$page['last_edit'] = date("m/d/Y H:i", strtotime($page['last_edit'])); // Convert to JS compatible date
 		$page['created'] = date("m/d/Y H:i", strtotime($page['created'])); // Convert to JS compatible date
 	}
-		
+
+	Logger::dump($page);
+			
 	$msg['cmd'] = "addPage";
 	$msg['result'] = $page_id > 0 ? 'ok' : 'fail';
 	$msg['data'] = array('page' => $page);
@@ -180,8 +186,6 @@ function addFolder($site_id, $folder_name){
 		$msg['result'] = 'fail';			
 	}
 				
-	Logger::dump($msg);
-				
 	CommandHelper::sendMessage($msg);	
 }
 
@@ -212,10 +216,7 @@ function getAll($site_id){
 		$temp['created'] = date("m/d/Y H:i", strtotime($media['created'])); // Convert to JS compatible date
 		$media_data[] = $temp;
 	}
-	
-	Logger::dump($folder_list);
-	
-	
+		
 	$msg = array();	
 	$msg['cmd'] = 'getAll';
 	$msg['result'] = 'ok';			

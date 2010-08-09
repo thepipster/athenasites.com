@@ -63,21 +63,21 @@ class FolderTable {
 	* Get all the images associated with a page
 	*/
 	public static function getFoldersForSite($site_id){
-		$sql = DatabaseManager::prepare("SELECT * FROM athena_{$site_id}_Folders WHERE id > 9 ORDER BY name ASC",  $site_id ); 		
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Folders WHERE id > 9 ORDER BY name ASC",  $site_id ); 		
 		return DatabaseManager::getResults($sql);		
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////
 
 	public static function getImageEntriesForSite($site_id){
-		$sql = DatabaseManager::prepare("SELECT media.* FROM athena_{$site_id}_Media media INNER JOIN athena_{$site_id}_Folders folders WHERE folders.id = media.folder_id",  $site_id ); 		
+		$sql = DatabaseManager::prepare("SELECT media.* FROM athena_%d_Media media INNER JOIN athena_%d_Folders folders WHERE folders.id = media.folder_id",  $site_id ); 		
 		return DatabaseManager::getResults($sql);		
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////
 
 	public static function getMediaFolderID($media_id, $site_id){
-		$sql = DatabaseManager::prepare("SELECT folder_id FROM athena_{$site_id}_Media WHERE id = %d", $site_id, $media_id); 		
+		$sql = DatabaseManager::prepare("SELECT folder_id FROM athena_%d_Media WHERE id = %d", $site_id, $media_id); 		
 		return DatabaseManager::getVar($sql);		
 	}
 
@@ -87,14 +87,14 @@ class FolderTable {
 	* Get all the images associated with a page
 	*/
 	public static function getMediaForSite($site_id){
-		$sql = DatabaseManager::prepare("SELECT * FROM athena_{$site_id}_Media ORDER BY id ASC",  $site_id ); 		
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Media ORDER BY id ASC",  $site_id ); 		
 		return DatabaseManager::getResults($sql);		
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////
 
 	public static function getMediaForFolder($site_id, $folder_id){
-		$sql = DatabaseManager::prepare("SELECT * FROM athena_{$site_id}_Media WHERE folder_id = %d ORDER BY id ASC",  $site_id, $folder_id ); 		
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Media WHERE folder_id = %d ORDER BY id ASC",  $site_id, $folder_id ); 		
 		return DatabaseManager::getResults($sql);		
 	}
 	
@@ -106,9 +106,9 @@ class FolderTable {
         $target_date  = mktime(date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
         $date_str = date('Y-m-d H:i:s', $target_date);
 
-		$sql = DatabaseManager::prepare("INSERT INTO athena_{$site_id}_Media (folder_id, filename, mime_type, file_size, created, title, description, tags, width, height, thumb_filename, thumb_width, thumb_height) 
+		$sql = DatabaseManager::prepare("INSERT INTO athena_%d_Media (folder_id, filename, mime_type, file_size, created, title, description, tags, width, height, thumb_filename, thumb_width, thumb_height) 
 					VALUES (%d, %s, %s, %d, %s, %s, %s, %s, %d, %d, %s, %d, %d)",  
-						$folder_id, $filename, $mime_type, $file_size, $date_str,  $title, $descriptions, $tags, $width, $height, $thumb_filename, $thumb_width, $thumb_height); 		
+						$site_id, $folder_id, $filename, $mime_type, $file_size, $date_str,  $title, $descriptions, $tags, $width, $height, $thumb_filename, $thumb_width, $thumb_height); 		
 		return DatabaseManager::insert($sql);		
 	}
 
@@ -119,19 +119,19 @@ class FolderTable {
 	*/
 	public static function addMediaToFolder($folder_id, $media_id, $site_id){
 	
-		$sql = DatabaseManager::prepare("UPDATE athena_{$site_id}_Media SET folder_id = %d WHERE id = %d",  $site_id, $folder_id, $media_id); 		
+		$sql = DatabaseManager::prepare("UPDATE athena_%d_Media SET folder_id = %d WHERE id = %d",  $site_id, $folder_id, $media_id); 		
 		return DatabaseManager::update($sql);		
 /*
 		// Check to see if this media already has an entry (i.e. its being moved)		
-		$sql = DatabaseManager::prepare("SELECT folder_id FROM athena_{$site_id}_Media WHERE id = %d",  $site_id, $media_id); 		
+		$sql = DatabaseManager::prepare("SELECT folder_id FROM athena_%d_Media WHERE id = %d",  $site_id, $media_id); 		
 		$current_folder_id = DatabaseManager::getVar($sql);		
 		
 		if (isset($current_folder_id)){
-			$sql = DatabaseManager::prepare("UPDATE athena_{$site_id}_Media SET folder_id = %d WHERE id = %d",  $site_id, $folder_id, $media_id); 		
+			$sql = DatabaseManager::prepare("UPDATE athena_%d_Media SET folder_id = %d WHERE id = %d",  $site_id, $folder_id, $media_id); 		
 			return DatabaseManager::update($sql);		
 		}
 
-		$sql = DatabaseManager::prepare("INSERT INTO athena_{$site_id}_Media (folder_id, id) VALUES (%d, %d)",  $site_id, $folder_id, $media_id); 		
+		$sql = DatabaseManager::prepare("INSERT INTO athena_%d_Media (folder_id, id) VALUES (%d, %d)",  $site_id, $folder_id, $media_id); 		
 		return DatabaseManager::insert($sql);		
 */ 		
 	}
@@ -139,21 +139,21 @@ class FolderTable {
 	// //////////////////////////////////////////////////////////////////////////////////////
 
 	public static function removeMedia($media_id, $site_id){
-		$sql = DatabaseManager::prepare("DELETE FROM athena_{$site_id}_Media WHERE id = %d", $site_id, $media_id); 		
+		$sql = DatabaseManager::prepare("DELETE FROM athena_%d_Media WHERE id = %d", $site_id, $media_id); 		
 		return DatabaseManager::submitQuery($sql);		
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////
 
 	public static function addFolder($folder_name, $site_id){
-		$sql = DatabaseManager::prepare("INSERT INTO athena_{$site_id}_Folders (name) VALUES (%s)",  $site_id, $folder_name); 		
+		$sql = DatabaseManager::prepare("INSERT INTO athena_%d_Folders (name) VALUES (%s)",  $site_id, $folder_name); 		
 		return DatabaseManager::insert($sql);		
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////
 
 	public static function renameFolder($site_id, $folder_id, $folder_name){
-		$sql = DatabaseManager::prepare("UPDATE athena_{$site_id}_Folders SET name = %s WHERE id = %d",  $site_id, $folder_name, $folder_id); 		
+		$sql = DatabaseManager::prepare("UPDATE athena_%d_Folders SET name = %s WHERE id = %d",  $site_id, $folder_name, $folder_id); 		
 		return DatabaseManager::submitQuery($sql);		
 	}
 
@@ -163,10 +163,10 @@ class FolderTable {
 	* Delete a folder and move all associated meda from the media-to-folder table
 	*/
 	public static function deleteFolder($site_id, $folder_id){
-		$sql = DatabaseManager::prepare("DELETE FROM athena_{$site_id}_Folders WHERE id = %d",  $site_id, $folder_id); 		
+		$sql = DatabaseManager::prepare("DELETE FROM athena_%d_Folders WHERE id = %d",  $site_id, $folder_id); 		
 		$res = DatabaseManager::submitQuery($sql);		
 
-		$sql = DatabaseManager::prepare("UPDATE athena_{$site_id}_Media SET folder_id = 1 WHERE folder_id = %d",  $site_id, $folder_id); 		
+		$sql = DatabaseManager::prepare("UPDATE athena_%d_Media SET folder_id = 1 WHERE folder_id = %d",  $site_id, $folder_id); 		
 		$res = DatabaseManager::submitQuery($sql);		
 	}
 

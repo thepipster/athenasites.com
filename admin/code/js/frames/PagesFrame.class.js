@@ -36,6 +36,7 @@ var PagesFrame = {
 		var created = "";		
 		var status = "";		
 		var template = "";		
+		var slug = "";		
 		
 		if (pageObj != undefined && pageObj){
 			content = pageObj.content;
@@ -44,6 +45,7 @@ var PagesFrame = {
 			created = pageObj.created;
 			status = pageObj.status;
 			template = pageObj.template;
+			slug = pageObj.slug;
 		}
 			
 		var txt = "";
@@ -71,6 +73,11 @@ var PagesFrame = {
 		txt += "			<div class='pageInfoLine'>";
 		txt += "            <span class='pageLabel'>Title:</span>";
 		txt += "            <span class='pageData'><input type=text value='"+title+"'/></span>";
+		txt += "			</div>";
+
+		txt += "			<div class='pageInfoLine'>";
+		txt += "            <span class='pageLabel'>Slug:</span>";
+		txt += "            <span class='pageData'>"+slug+"</span>";
 		txt += "			</div>";
 
 		txt += "			<div class='pageInfoLine'>";

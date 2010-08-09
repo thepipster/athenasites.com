@@ -116,7 +116,7 @@ var SystemAPI = {
 		// $msg = '{"result":"true", "us": "'.$no_users.'", "si": "'.$no_sites.'", "pg": "'.$no_pages.'", "po": "'.$no_posts.'"}';
 
         if (ret.result == 'ok'){
-    		callback(ret.data);    	
+    		callback(ret.data.no_users, ret.data.no_sites, ret.data.no_pageviews);    	
 	    }
 		else {
 			AthenaDialog.showAjaxError(ret);
