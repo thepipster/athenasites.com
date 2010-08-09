@@ -49,6 +49,7 @@ var DataStore = {
 	
 
 	getPage : function(page_id){
+
 		for(var i=0; i<DataStore.m_pageList.length; i++){
 			if (DataStore.m_pageList[i].id == page_id){
 				return DataStore.m_pageList[i];
@@ -77,7 +78,76 @@ var DataStore = {
 		
 		return "? ("+folder_id+")";
 	},
+
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	getPageDepth : function(page_id){
+		
+		var page = DataStore.getPage(page_id);
+		if (page.parent_page_id == 0){
+			return 1;
+		}
+		else {
+			return 1 + DataStore.getPageDepth(page.parent_page_id);
+		}
+	},
 	
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Update an existing page
+	*/
+	updatePage : function(pageObj){
+		
+		for (var i=0; i<DataStore.m_pageList.length; i++){
+			if (DataStore.m_pageList[i].id == pageObj.id){
+			
+				DataStore.m_pageList[i].id = pageObj.id;
+				DataStore.m_pageList[i].title = AthenaUtils.htmlEncode(pageObj.title);
+				DataStore.m_pageList[i].user_id = pageObj.user_id;
+				DataStore.m_pageList[i].content = AthenaUtils.htmlEncode(pageObj.content);
+				DataStore.m_pageList[i].status = pageObj.status;
+				DataStore.m_pageList[i].last_edit = pageObj.last_edit;
+				DataStore.m_pageList[i].created = pageObj.created;
+				DataStore.m_pageList[i].status = pageObj.status;
+				DataStore.m_pageList[i].template = pageObj.template;
+				DataStore.m_pageList[i].parent_page_id = pageObj.parent_page_id;
+				DataStore.m_pageList[i].slug = pageObj.slug;
+				DataStore.m_pageList[i].path = pageObj.path;
+				DataStore.m_pageList[i].is_homepage = pageObj.is_homepage;
+				DataStore.m_pageList[i].order = pageObj.page_order;				
+								
+				return;
+			}
+		}
+	},
+	
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Add a page from a returned page object from the MediaAPI
+	*/
+	addPage : function(pageObj){
+	
+		var temp = new Object();
+		temp.id = pageObj.id;
+		temp.title = AthenaUtils.htmlEncode(pageObj.title);
+		temp.user_id = pageObj.user_id;
+		temp.content = AthenaUtils.htmlEncode(pageObj.content);
+		temp.status = pageObj.status;
+		temp.last_edit = pageObj.last_edit;
+		temp.created = pageObj.created;
+		temp.status = pageObj.status;
+		temp.template = pageObj.template;
+		temp.parent_page_id = pageObj.parent_page_id;
+		temp.slug = pageObj.slug;
+		temp.path = pageObj.path;
+		temp.is_homepage = pageObj.is_homepage;
+		temp.order = pageObj.page_order;
+						
+		DataStore.m_pageList.push(temp);
+	},
+		
 	// //////////////////////////////////////////////////////////////////////////////////
 
 	save : function(){
@@ -109,10 +179,12 @@ var DataStore = {
 			return;
 		}
 		
-		DataStore.m_pageList = new Array(page_list.length);
+		DataStore.m_pageList = new Array();
 				
 		for(var i=0; i<page_list.length; i++){			
 			
+			DataStore.addPage(page_list[i]);
+			/*
 			var temp = new Object();
 			temp.id = page_list[i].id;
 			temp.title = AthenaUtils.htmlEncode(page_list[i].title);
@@ -125,9 +197,12 @@ var DataStore = {
 			temp.template = page_list[i].template;
 			temp.parent_page_id = page_list[i].parent_page_id;
 			temp.slug = page_list[i].slug;
+			temp.path = page_list[i].path;
+			temp.is_homepage = page_list[i].is_homepage;
+			temp.order = page_list[i].order;
 						
 			DataStore.m_pageList[i] = temp;
-			
+			*/
 		}	
 		
 		if (page_list.length > 0 && DataStore.m_currentPageID == 0){

@@ -6,7 +6,7 @@
 var PagesFrame = {
 
 	ckEditor : '',
-	
+		
 	// ////////////////////////////////////////////////////////////////////////////
 
 	init : function(){
@@ -29,6 +29,8 @@ var PagesFrame = {
 		}
 			
 		var pageObj = DataStore.getCurrentPage();
+		
+		var parent_page = "";		
 		var content = "";		
 		var title = "";		
 		var last_edit = "";		
@@ -37,6 +39,11 @@ var PagesFrame = {
 		var status = "";		
 		var template = "";		
 		var slug = "";		
+		var order = "";		
+
+		if (pageObj.parent_page_id != 0){
+			var parentPage = DataStore.getPage(pageObj.parent_page_id);
+		}
 		
 		if (pageObj != undefined && pageObj){
 			content = pageObj.content;
@@ -46,6 +53,7 @@ var PagesFrame = {
 			status = pageObj.status;
 			template = pageObj.template;
 			slug = pageObj.slug;
+			order = pageObj.order;
 		}
 			
 		var txt = "";
@@ -72,7 +80,7 @@ var PagesFrame = {
 
 		txt += "			<div class='pageInfoLine'>";
 		txt += "            <span class='pageLabel'>Title:</span>";
-		txt += "            <span class='pageData'><input type=text value='"+title+"'/></span>";
+		txt += "            <span class='pageData'><input id='pageTitle' type=text value='"+title+"'/></span>";
 		txt += "			</div>";
 
 		txt += "			<div class='pageInfoLine'>";
@@ -104,10 +112,17 @@ var PagesFrame = {
 		txt += "			<div class='pageInfoLine'>";
 		txt += "            <span class='pageLabel'>Parent Page:</span>";
 		txt += "            <span class='pageData'>";
-		txt += "            <select>";
-		txt += "                <option value='none'>(none)</selected>";
+		txt += "            <select id='pageParent' >";
+		txt += "                <option value='0'>(none)</selected>";
 		for (var i=0; i<DataStore.m_pageList.length; i++){
-			txt += "                <option value='"+DataStore.m_pageList[i].id+"'>"+DataStore.m_pageList[i].title+"</selected>";
+			if (DataStore.m_pageList[i].id != pageObj.id){
+				if (DataStore.m_pageList[i].id == pageObj.parent_page_id){
+					txt += "                <option value='"+DataStore.m_pageList[i].id+"' selected>"+DataStore.m_pageList[i].title+"</selected>";
+				}
+				else {
+					txt += "                <option value='"+DataStore.m_pageList[i].id+"'>"+DataStore.m_pageList[i].title+"</selected>";
+				}
+			}
 		}
 		txt += "            </select>";
 		txt += "            </span>";
@@ -116,17 +131,17 @@ var PagesFrame = {
 		txt += "			<div class='pageInfoLine'>";
 		txt += "            <span class='pageLabel'>Template:</span>";
 		txt += "            <span class='pageData'>";
-		txt += "            <select>";
-		txt += "                <option value='43'>Template1</selected>";
-		txt += "                <option value='45'>Template2</selected>";
-		txt += "                <option value='45'>Template3</selected>";
+		txt += "            <select id='pageTemplate' >";
+		txt += "                <option value='Template1'>Template1</selected>";
+		txt += "                <option value='Template2'>Template2</selected>";
+		txt += "                <option value='Template3'>Template3</selected>";
 		txt += "            </select>";
 		txt += "            </span>";
 		txt += "			</div>";
 
 		txt += "			<div class='pageInfoLine'>";
 		txt += "            <span class='pageLabel'>Order:</span>";
-		txt += "            <span class='pageData'><input type=text size=5/></span>";
+		txt += "            <span class='pageData'><input id='pageOrder' type=text size=5 value='"+order+"'/></span>";
 		txt += "			</div>";
 		
 		txt += "            </fieldset>";
@@ -176,8 +191,64 @@ var PagesFrame = {
 	* Save all the users changes to the site
 	*/
 	onSavePage : function(){
+	
+		var originalPage = DataStore.getCurrentPage();
+		
 		//var content = $('#pageContentEditor').html();
 		var content = CKEDITOR.instances.pageContentEditor.getData();		
+		
+		var title = $('#pageTitle').val();		
+		var status = $('#pageStatusSelector').val();		
+		var parent_id = $('#pageParent').val();		
+		var template = $('#pageTemplate').val();		
+		var order = $('#pageOrder').val();		
+		var pageDepth = DataStore.getPageDepth(DataStore.m_currentPageID);
+		var slug = PagesSidebarFrame.encodeSlug(title) + '.html';
+		var path = '';
+		var ishome = 0;		
+		
+		// Check what the new depth would be.....
+		
+		var old_parent_id = originalPage.parent_page_id;
+		originalPage.parent_page_id = parent_id;
+		DataStore.updatePage(originalPage);
+		
+		try {
+			var newDepth = DataStore.getPageDepth(DataStore.m_currentPageID);
+		}
+		catch (e){
+			var newDepth = 4;		
+		}
+		
+		// Revert the original back
+		originalPage.parent_page_id = old_parent_id;
+		DataStore.updatePage(originalPage);
+		
+		if (newDepth > 3){
+			AthenaDialog.alert("Sorry, your theme does not support page depths of more than 3, please choose another parent page!");
+			return;
+		}
+				
+		if (parent_id != 0){
+			path = PagesFrame.getPagePath('');
+		}
+		
+		MediaAPI.updatePage(DataStore.m_siteID, DataStore.m_currentPageID, title, content, status, template, parent_id, slug, path, order, ishome, PagesFrame.onPageSaved)
+	},
+		
+	getPagePath : function(path){
+		
+		var page_id = DataStore.m_currentPageID;
+		var parent_page = DataStore.getPage(DataStore.m_currentPageID);
+		
+		return path + path.substring(0, path.indexOf('.html'));
+		
+	},
+	
+	onPageSaved : function(pageObj){
+		DataStore.updatePage(pageObj);
+		PagesFrame.repaint();
+		PagesSidebarFrame.repaint();
 	},
 		
 	// ////////////////////////////////////////////////////////////////////////////

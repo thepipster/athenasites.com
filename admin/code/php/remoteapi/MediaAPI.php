@@ -37,14 +37,31 @@ switch($cmd){
 		getImages($site_id); 
 		break;			
 
-	case "addPage":
+	case "updatePage":
+		$page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_STRING);
 		$title = CommandHelper::getPara('title', true, CommandHelper::$PARA_TYPE_STRING);
 		$slug = CommandHelper::getPara('slug', true, CommandHelper::$PARA_TYPE_STRING);
+		$path = CommandHelper::getPara('path', true, CommandHelper::$PARA_TYPE_STRING);
 		$parent_page_id = CommandHelper::getPara('parent_page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
 		$content = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
 		$status = CommandHelper::getPara('status', true, CommandHelper::$PARA_TYPE_STRING);
 		$template = CommandHelper::getPara('template_id', true, CommandHelper::$PARA_TYPE_STRING);
-		addPage($site_id, $title, $parent_page_id, $content, $status, $template, $slug);
+		$order = CommandHelper::getPara('order', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$ishome = CommandHelper::getPara('ishome', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $template, $slug, $path, $order, $ishome);
+		break;
+		
+	case "addPage":
+		$title = CommandHelper::getPara('title', true, CommandHelper::$PARA_TYPE_STRING);
+		$slug = CommandHelper::getPara('slug', true, CommandHelper::$PARA_TYPE_STRING);
+		$path = CommandHelper::getPara('path', true, CommandHelper::$PARA_TYPE_STRING);
+		$parent_page_id = CommandHelper::getPara('parent_page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$content = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
+		$status = CommandHelper::getPara('status', true, CommandHelper::$PARA_TYPE_STRING);
+		$template = CommandHelper::getPara('template_id', true, CommandHelper::$PARA_TYPE_STRING);
+		$order = CommandHelper::getPara('order', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$ishome = CommandHelper::getPara('ishome', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		addPage($site_id, $title, $parent_page_id, $content, $status, $template, $slug, $path, $order, $ishome);
 		break;
 		
 	case "addFolder":
@@ -84,16 +101,14 @@ switch($cmd){
 // ///////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function addPage($site_id, $title, $parent_page_id, $content, $status, $tamplate_name, $slug){
+function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $tamplate_name, $slug, $path, $order, $ishome){
 
-	//Logger::debug("addPage(site_id=$site_id, title=$title, parent_page_id=$parent_page_id, content=$content, status=$status, tamplate_name=$tamplate_name, slug=$slug)");
+	Logger::debug("updatePage(page_id=$page_id, site_id=$site_id, title=$title, parent_page_id=$parent_page_id, content=$content, status=$status, tamplate_name=$tamplate_name, slug=$slug, path=$path)");
 	
 	$user_id = SecurityUtils::getCurrentUserID();
 	
-	$page_id = PagesTable::create($user_id, $site_id, $parent_page_id, $content, $status, $title, $tamplate_name, $slug);
-	
-	Logger::debug("Page id = $page_id");
-	
+	PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $content, $status, $title, $tamplate_name, $slug, $path, $order, $ishome);
+		
 	$page_data = PagesTable::getPage($site_id, $page_id);
 	if (isset($page_data[0])){
 		$page = $page_data[0];
@@ -101,7 +116,29 @@ function addPage($site_id, $title, $parent_page_id, $content, $status, $tamplate
 		$page['created'] = date("m/d/Y H:i", strtotime($page['created'])); // Convert to JS compatible date
 	}
 
-	Logger::dump($page);
+	$msg['cmd'] = "addPage";
+	$msg['result'] = $page_id > 0 ? 'ok' : 'fail';
+	$msg['data'] = array('page' => $page);
+	
+	CommandHelper::sendMessage($msg);	
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function addPage($site_id, $title, $parent_page_id, $content, $status, $tamplate_name, $slug, $path, $order, $ishome){
+
+	//Logger::debug("addPage(site_id=$site_id, title=$title, parent_page_id=$parent_page_id, content=$content, status=$status, tamplate_name=$tamplate_name, slug=$slug, path=$path)");
+	
+	$user_id = SecurityUtils::getCurrentUserID();
+	
+	$page_id = PagesTable::create($user_id, $site_id, $parent_page_id, $content, $status, $title, $tamplate_name, $slug, $path, $order, $ishome);
+		
+	$page_data = PagesTable::getPage($site_id, $page_id);
+	if (isset($page_data[0])){
+		$page = $page_data[0];
+		$page['last_edit'] = date("m/d/Y H:i", strtotime($page['last_edit'])); // Convert to JS compatible date
+		$page['created'] = date("m/d/Y H:i", strtotime($page['created'])); // Convert to JS compatible date
+	}
 			
 	$msg['cmd'] = "addPage";
 	$msg['result'] = $page_id > 0 ? 'ok' : 'fail';

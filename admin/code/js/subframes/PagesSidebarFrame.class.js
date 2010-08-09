@@ -7,12 +7,16 @@
 */
 var PagesSidebarFrame = {
 	
+	m_targetDiv : '',
+	
 	// ////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	*
 	*/
 	paint : function(targetDiv){
+		
+		PagesSidebarFrame.m_targetDiv = targetDiv;
 		
 		var txt = "";
 
@@ -36,6 +40,12 @@ var PagesSidebarFrame = {
 	},
 
 	// ////////////////////////////////////////////////////////////////////////////
+
+	repaint : function(){
+		PagesSidebarFrame.paint(PagesSidebarFrame.m_targetDiv);
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////////
 	
 	paintPages : function(){
 		
@@ -49,9 +59,20 @@ var PagesSidebarFrame = {
 
 				txt += PagesSidebarFrame.getPageHtml(pageList[i].id, pageList[i].title, 0);
 				
+				// Paint children...
+				
 				for (var k=0; k<pageList.length; k++){
+
 					if (pageList[k].parent_page_id == pageList[i].id){
+						
 						txt += PagesSidebarFrame.getPageHtml(pageList[k].id, pageList[k].title, 1);
+						
+						// Paint grand-children....						
+						for (var m=0; m<pageList.length; m++){
+							if (pageList[m].parent_page_id == pageList[k].id){
+								txt += PagesSidebarFrame.getPageHtml(pageList[m].id, pageList[m].title, 2);
+							}					
+						}
 					}					
 				}
 
@@ -90,27 +111,17 @@ var PagesSidebarFrame = {
 	addPage : function(){
 		var title = 'New page ' + (DataStore.m_pageList.length+1);
 		var pageSlug = PagesSidebarFrame.encodeSlug(title) + '.html';
-		MediaAPI.addPage(DataStore.m_siteID, title, '', 'Draft', 0, 0, pageSlug, PagesSidebarFrame.onPageAdded);
+		var pagePath = '';
+		var order = 0;
+		var isHome = 0;
+		MediaAPI.addPage(DataStore.m_siteID, title, '', 'Draft', 0, 0, pageSlug, pagePath, order, isHome, PagesSidebarFrame.onPageAdded);
 	},
 	
 	onPageAdded : function(pageObj){
 
-		var temp = new Object();
-		temp.id = pageObj.id;
-		temp.title = AthenaUtils.htmlEncode(pageObj.title);
-		temp.user_id = pageObj.user_id;
-		temp.content = AthenaUtils.htmlEncode(pageObj.content);
-		temp.status = pageObj.status;
-		temp.last_edit = pageObj.last_edit;
-		temp.created = pageObj.created;
-		temp.status = pageObj.status;
-		temp.template = pageObj.template;
-		temp.parent_page_id = pageObj.parent_page_id;
-		temp.slug = pageObj.slug;
-							
-		DataStore.m_pageList.push(temp);
+		DataStore.addPage(pageObj);
 
-		PagesSidebarFrame.onSelectPage(temp.id);
+		PagesSidebarFrame.onSelectPage(pageObj.id);
 	},
 	
 	/**
@@ -131,7 +142,7 @@ var PagesSidebarFrame = {
 		
 		return slug;
    	},
-	
+		
 	// ////////////////////////////////////////////////////////////////////////////
 
 	onRightClickFolder : function(e, obj){

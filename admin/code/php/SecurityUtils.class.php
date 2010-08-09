@@ -98,7 +98,11 @@ class SecurityUtils {
 	// //////////////////////////////////////////////////////////////
 
 	public static function getMediaFolder($site_id){
-		return FILE_ROOT . "user.files/$site_id/";
+		return FILE_ROOT . "user_files/$site_id/";
+	}
+
+	public static function getSitesFolder($site_id){
+		return FILE_ROOT . "user_sites/$site_id/";
 	}
 	
 	// //////////////////////////////////////////////////////////////
@@ -118,13 +122,16 @@ class SecurityUtils {
 	public static function createSite($user_id, $site_domain, $site_path, $site_theme){
 
 		// Create entry in site table
-		$site_id= SitesTable::create($site_domain, $site_path, $site_theme);
-
+		$site_id = SitesTable::create($site_domain, $site_path, $site_theme);
+	
+		Logger::debug("Created site $site_domain, id = $site_id");
+		
 		// Create entry in site table
 		SitesTable::addUserToSite($user_id, $site_id);
 
 		// Create files directory
-		mkdir(self::getMediaFolder($user_id, $site_id));
+		mkdir(self::getMediaFolder($site_id));
+		mkdir(self::getSitesFolder($site_id));				
 		
 		// Create site's tables
 		PageViewsTable::createTableForSite($site_id);

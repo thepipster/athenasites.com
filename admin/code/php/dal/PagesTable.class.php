@@ -20,9 +20,11 @@ class PagesTable {
 		  `parent_page_id` int(11) default '0',
 		  `title` varchar(255) default NULL,
 		  `slug` varchar(255) default NULL,
+		  `path` varchar(255) default NULL,
 		  `created` datetime default NULL,
 		  `template` varchar(255) default NULL,
 		  `is_homepage` tinyint(1) default '0',
+		  `page_order` tinyint(3) default '0',
 		  PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;";
 						
@@ -35,13 +37,15 @@ class PagesTable {
     /**
      * Create a new site
      */
-	public static function create($user_id, $site_id, $parent_page_id, $content, $status, $title, $template_name, $slug){	
+	public static function create($user_id, $site_id, $parent_page_id, $content, $status, $title, $template_name, $slug, $path, $order, $ishome){	
 		
         // Get data in correct locale (SQL's NOW() doesn't do that)
         $target_date  = mktime(date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
         $date_str = date('Y-m-d H:i:s', $target_date);
 		
-		$sql = DatabaseManager::prepare("INSERT INTO athena_%d_Pages (user_id, content, status, parent_page_id, title, last_edit, created, template, slug) VALUES (%d, %s, %s, %d, %s, '$date_str', '$date_str', %s, %s)", $site_id, $user_id, $content, $status, $parent_page_id, $title, $template_name, $slug);			
+		$sql = DatabaseManager::prepare("INSERT INTO athena_%d_Pages (user_id, content, status, parent_page_id, title, last_edit, created, template, slug, path, page_order, is_homepage) VALUES (%d, %s, %s, %d, %s, '$date_str', '$date_str', %s, %s, %s, %d, %d)", 
+			$site_id, $user_id, $content, $status, $parent_page_id, $title, $template_name, $slug, $path, $order, $ishome);
+			
 		return DatabaseManager::insert($sql);
     }
 
@@ -50,8 +54,9 @@ class PagesTable {
     /**
      * Update a site
      */
-    public static function update($site_id, $page_id, $parent_page_id, $content, $title, $slug){
-		$sql = DatabaseManager::prepare("UPDATE athena_%d_Pages SET parent_page_id=%d, content=%s, title=%s, slug=%s WHERE id = %d", $site_id, $parent_page_id, $content, $title, $slug, $page_id);
+    public static function update($page_id, $user_id, $site_id, $parent_page_id, $content, $status, $title, $template_name, $slug, $path, $order, $ishome){
+		$sql = DatabaseManager::prepare("UPDATE athena_%d_Pages SET parent_page_id=%d, content=%s, title=%s, slug=%s, status=%s, path=%s, user_id=%d, page_order=%d, is_homepage=%d WHERE id = %d", 
+			$site_id, $parent_page_id, $content, $title, $slug, $status, $path, $user_id, $order, $ishome, $page_id);
 		return DatabaseManager::update($sql);
     }
     

@@ -21,5 +21,5 @@ var defines = {
 	upload_processor:		code_url + "php/ProcessUpload.php",
 	root_url: 				admin_base_url,
 	code_url: 				code_url,
-	user_files_root_url: 	base_url + "user.files/"
+	user_files_root_url: 	base_url + "user_files/"
 };
