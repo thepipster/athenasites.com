@@ -4,7 +4,7 @@
 #
 # Host: localhost (MySQL 5.0.41-log)
 # Database: athenasites
-# Generation Time: 2010-08-09 14:17:51 -0600
+# Generation Time: 2010-08-09 16:23:44 -0600
 # ************************************************************
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -46,7 +46,8 @@ LOCK TABLES `apollo_Sessions` WRITE;
 /*!40000 ALTER TABLE `apollo_Sessions` DISABLE KEYS */;
 INSERT INTO `apollo_Sessions` (`id`,`access`,`data`)
 VALUES
-	('134bc1c4e6d0e6c41b19cb1af63d5283',1281384980,'user_valid|b:1;user_id|s:1:\"1\";user_name|s:14:\"Mike Pritchard\";user_email|s:20:\"mike@apollosites.com\";user_level|s:1:\"1\";');
+	('7626901e8c96fbc3281df27e686b4e2f',1281392320,''),
+	('134bc1c4e6d0e6c41b19cb1af63d5283',1281392572,'user_valid|b:1;user_id|s:1:\"1\";user_name|s:14:\"Mike Pritchard\";user_email|s:20:\"mike@apollosites.com\";user_level|s:1:\"1\";');
 
 /*!40000 ALTER TABLE `apollo_Sessions` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -275,8 +276,25 @@ CREATE TABLE `athena_1_Media` (
   `thumb_width` int(9) default NULL,
   `thumb_height` int(9) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
+LOCK TABLES `athena_1_Media` WRITE;
+/*!40000 ALTER TABLE `athena_1_Media` DISABLE KEYS */;
+INSERT INTO `athena_1_Media` (`id`,`folder_id`,`filename`,`mime_type`,`file_size`,`created`,`title`,`description`,`tags`,`width`,`height`,`thumb_filename`,`thumb_width`,`thumb_height`)
+VALUES
+	(1,1,'OzTrip001.JPG','image/jpeg',807827,'2010-08-09 22:22:51','OzTrip_001.JPG','','',1600,1200,'OzTrip001_thumb.JPG',50,50),
+	(2,1,'OzTrip002.JPG','image/jpeg',872627,'2010-08-09 22:22:51','OzTrip_002.JPG','','',1600,1200,'OzTrip002_thumb.JPG',50,50),
+	(3,1,'OzTrip003.JPG','image/jpeg',723476,'2010-08-09 22:22:51','OzTrip_003.JPG','','',1600,1200,'OzTrip003_thumb.JPG',50,50),
+	(4,1,'OzTrip004.JPG','image/jpeg',615570,'2010-08-09 22:22:51','OzTrip_004.JPG','','',1600,1200,'OzTrip004_thumb.JPG',50,50),
+	(5,1,'OzTrip005.JPG','image/jpeg',735837,'2010-08-09 22:22:52','OzTrip_005.JPG','','',1600,1200,'OzTrip005_thumb.JPG',50,50),
+	(6,1,'OzTrip006.JPG','image/jpeg',414403,'2010-08-09 22:22:52','OzTrip_006.JPG','','',1600,1200,'OzTrip006_thumb.JPG',50,50),
+	(7,1,'OzTrip007.JPG','image/jpeg',489871,'2010-08-09 22:22:52','OzTrip_007.JPG','','',1600,1200,'OzTrip007_thumb.JPG',50,50),
+	(8,1,'OzTrip008.JPG','image/jpeg',357606,'2010-08-09 22:22:52','OzTrip_008.JPG','','',1024,768,'OzTrip008_thumb.JPG',50,50),
+	(9,1,'OzTrip009.JPG','image/jpeg',343058,'2010-08-09 22:22:52','OzTrip_009.JPG','','',1024,768,'OzTrip009_thumb.JPG',50,50),
+	(10,1,'OzTrip010.JPG','image/jpeg',351745,'2010-08-09 22:22:52','OzTrip_010.JPG','','',1024,768,'OzTrip010_thumb.JPG',50,50);
+
+/*!40000 ALTER TABLE `athena_1_Media` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table athena_1_PageParas
@@ -320,9 +338,9 @@ LOCK TABLES `athena_1_Pages` WRITE;
 /*!40000 ALTER TABLE `athena_1_Pages` DISABLE KEYS */;
 INSERT INTO `athena_1_Pages` (`id`,`user_id`,`content`,`status`,`last_edit`,`parent_page_id`,`title`,`slug`,`path`,`created`,`template`,`is_homepage`,`page_order`)
 VALUES
-	(9,1,'','Draft','2010-08-09 19:54:03',0,'New page 1','Newpage1.html','','2010-08-09 19:54:03','0',0,1),
-	(10,1,'','Draft','2010-08-09 19:54:51',9,'New page 2','Newpage2.html','','2010-08-09 19:54:51','0',0,0),
-	(11,1,'','Draft','2010-08-09 19:54:51',10,'New page 3','Newpage3.html','','2010-08-09 19:54:51','0',0,0),
+	(9,1,'<p>gjgkjk gkgkg kk</p>','Draft','2010-08-09 19:54:03',0,'Home','Home.html','/','2010-08-09 19:54:03','0',0,1),
+	(10,1,'','Draft','2010-08-09 19:54:51',9,'New page 2','Newpage2.html','/home/','2010-08-09 19:54:51','0',0,0),
+	(11,1,'','Draft','2010-08-09 19:54:51',10,'New page 3','Newpage3.html','/home/newpage2/','2010-08-09 19:54:51','0',0,0),
 	(12,1,'','Draft','2010-08-09 19:54:51',0,'New page 4','Newpage4.html','','2010-08-09 19:54:51','0',0,0);
 
 /*!40000 ALTER TABLE `athena_1_Pages` ENABLE KEYS */;
@@ -1156,8 +1174,24 @@ CREATE TABLE `athena_4_Pages` (
   `is_homepage` tinyint(1) default '0',
   `page_order` tinyint(3) default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 
+LOCK TABLES `athena_4_Pages` WRITE;
+/*!40000 ALTER TABLE `athena_4_Pages` DISABLE KEYS */;
+INSERT INTO `athena_4_Pages` (`id`,`user_id`,`content`,`status`,`last_edit`,`parent_page_id`,`title`,`slug`,`path`,`created`,`template`,`is_homepage`,`page_order`)
+VALUES
+	(9,1,'','Draft','2010-08-09 21:34:34',0,'Home','Home.html','/','2010-08-09 21:34:34','0',0,0),
+	(10,1,'','Draft','2010-08-09 21:34:40',0,'PORTRAITS','PORTRAITS.html','/','2010-08-09 21:34:40','0',0,0),
+	(11,1,'<p>\\n	 FISH d FISH d FISH g FISH g FISH g FISH d</p>\\n','Draft','2010-08-09 21:35:18',10,'Gallery 1','Gallery1.html','/portraits/','2010-08-09 21:35:18','0',0,0),
+	(12,1,'<p>\\n	Test gallery 2</p>\\n','Draft','2010-08-09 21:35:18',10,'Gallery 2','Gallery2.html','/portraits/','2010-08-09 21:35:18','0',0,0),
+	(13,1,'','Draft','2010-08-09 21:35:50',0,'WEDDINGS','WEDDINGS.html','/','2010-08-09 21:35:50','0',0,0),
+	(14,1,'','Draft','2010-08-09 21:36:29',13,'Wedding gallery 1','Weddinggallery1.html','/weddings/','2010-08-09 21:36:29','0',0,0),
+	(15,1,'','Draft','2010-08-09 21:36:29',13,'Wedding gallery 2','Weddinggallery2.html','/weddings/','2010-08-09 21:36:29','0',0,0),
+	(16,1,'','Draft','2010-08-09 21:36:29',13,'Wedding gallery 3','Weddinggallery3.html','/weddings/','2010-08-09 21:36:29','0',0,0),
+	(17,1,'','Draft','2010-08-09 21:36:29',0,'INFORMATION','INFORMATION.html','/','2010-08-09 21:36:29','0',0,0);
+
+/*!40000 ALTER TABLE `athena_4_Pages` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table athena_4_PageViews
