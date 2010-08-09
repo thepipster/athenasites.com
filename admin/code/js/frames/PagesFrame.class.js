@@ -40,6 +40,7 @@ var PagesFrame = {
 		var template = "";		
 		var slug = "";		
 		var order = "";		
+		var path = "";		
 
 		if (pageObj.parent_page_id != 0){
 			var parentPage = DataStore.getPage(pageObj.parent_page_id);
@@ -54,6 +55,7 @@ var PagesFrame = {
 			template = pageObj.template;
 			slug = pageObj.slug;
 			order = pageObj.order;
+			path = pageObj.path;
 		}
 			
 		var txt = "";
@@ -86,6 +88,11 @@ var PagesFrame = {
 		txt += "			<div class='pageInfoLine'>";
 		txt += "            <span class='pageLabel'>Slug:</span>";
 		txt += "            <span class='pageData'>"+slug+"</span>";
+		txt += "			</div>";
+
+		txt += "			<div class='pageInfoLine'>";
+		txt += "            <span class='pageLabel'>Path:</span>";
+		txt += "            <span class='pageData'>"+path+"</span>";
 		txt += "			</div>";
 
 		txt += "			<div class='pageInfoLine'>";
@@ -148,7 +155,7 @@ var PagesFrame = {
 
 		txt += "			<div align='right' style='padding-right:10px'>";
 		txt += "			<button class='delete_button' onclick=\"PagesFrame.onDeletePage()\">Delete Page</button>";
-		txt += "			<button class='save_button' onclick=\"PagesFrame.onSavePage()\">Save Changes</button>";
+		txt += "			<button class='save_button' onclick=\"PagesFrame.onSavePage('"+DataStore.m_currentPage+"')\">Save Changes</button>";
 		txt += "			</div>";
 
 
@@ -190,9 +197,9 @@ var PagesFrame = {
 	/**
 	* Save all the users changes to the site
 	*/
-	onSavePage : function(){
+	onSavePage : function(page_id){
 	
-		var originalPage = DataStore.getCurrentPage();
+		var originalPage = DataStore.getPage(page_id);
 		
 		//var content = $('#pageContentEditor').html();
 		var content = CKEDITOR.instances.pageContentEditor.getData();		
@@ -204,9 +211,8 @@ var PagesFrame = {
 		var order = $('#pageOrder').val();		
 		var pageDepth = DataStore.getPageDepth(DataStore.m_currentPageID);
 		var slug = PagesSidebarFrame.encodeSlug(title) + '.html';
-		var path = '';
+		//var path = DataStore.getPagePath();
 		var ishome = 0;		
-		
 		// Check what the new depth would be.....
 		
 		var old_parent_id = originalPage.parent_page_id;
@@ -228,21 +234,9 @@ var PagesFrame = {
 			AthenaDialog.alert("Sorry, your theme does not support page depths of more than 3, please choose another parent page!");
 			return;
 		}
+						
+		MediaAPI.updatePage(DataStore.m_siteID, DataStore.m_currentPageID, title, content, status, template, parent_id, slug, order, ishome, PagesFrame.onPageSaved)
 				
-		if (parent_id != 0){
-			path = PagesFrame.getPagePath('');
-		}
-		
-		MediaAPI.updatePage(DataStore.m_siteID, DataStore.m_currentPageID, title, content, status, template, parent_id, slug, path, order, ishome, PagesFrame.onPageSaved)
-	},
-		
-	getPagePath : function(path){
-		
-		var page_id = DataStore.m_currentPageID;
-		var parent_page = DataStore.getPage(DataStore.m_currentPageID);
-		
-		return path + path.substring(0, path.indexOf('.html'));
-		
 	},
 	
 	onPageSaved : function(pageObj){
@@ -250,7 +244,12 @@ var PagesFrame = {
 		PagesFrame.repaint();
 		PagesSidebarFrame.repaint();
 	},
-		
+
+	// ////////////////////////////////////////////////////////////////////////////
+
+	saveChildPages : function(){
+	},
+				
 	// ////////////////////////////////////////////////////////////////////////////
 	
 	paintCKEditor : function(){
@@ -258,6 +257,23 @@ var PagesFrame = {
 		PagesFrame.ckEditor = CKEDITOR.replace( 'pageContentEditor',
 			{
 				height: $('#PagesFrame').innerHeight() - 150,
+				
+			     on :
+			      {
+			         instanceReady : function( ev )
+			         {
+			            this.dataProcessor.writer.setRules( 'p',
+			               {
+			                  indent : false,
+			                  breakBeforeOpen : true,
+			                  breakAfterOpen : false,
+			                  breakBeforeClose : false,
+			                  breakAfterClose : true
+			               });
+			         }
+			       },
+         
+			
 				// Note that we have added out "MyButton" button here.
 				//toolbar : [ [ 'Source', '-', 'Bold', 'Italic', 'Underline', 'Strike','-','Link', '-', 'MyButton' ] ]
 				toolbar : [

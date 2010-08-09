@@ -90,10 +90,10 @@ var MediaAPI = {
 	
 	// ////////////////////////////////////////////////////////////////////////
 
-	updatePage : function(siteID, pageID, pageTitle, pageContent, pageStatus, templateName, parentPageID, pageSlug, pagePath, pageOrder, isHome, callback){
+	updatePage : function(siteID, pageID, pageTitle, pageContent, pageStatus, templateName, parentPageID, pageSlug, pageOrder, isHome, callback){
 		
 		var paras = {cmd: 'updatePage', site_id: siteID, page_id: pageID, title: pageTitle, content: pageContent, status: pageStatus, template_id: templateName, 
-				parent_page_id: parentPageID, slug: pageSlug, path:pagePath, ishome: isHome, order: pageOrder};
+				parent_page_id: parentPageID, slug: pageSlug, ishome: isHome, order: pageOrder};
 				
 		$.ajax({
 			url: MediaAPI.m_url,
@@ -103,10 +103,10 @@ var MediaAPI = {
 		});	
 	},
 
-	addPage : function(siteID, pageTitle, pageContent, pageStatus, templateName, parentPageID, pageSlug, pagePath, pageOrder, isHome, callback){
+	addPage : function(siteID, pageTitle, pageContent, pageStatus, templateName, parentPageID, pageSlug, pageOrder, isHome, callback){
 		
 		var paras = {cmd: 'addPage', site_id: siteID, title: pageTitle, content: pageContent, status: pageStatus, 
-				template_id: templateName, parent_page_id: parentPageID, slug: pageSlug, path:pagePath, ishome: isHome, order: pageOrder};
+				template_id: templateName, parent_page_id: parentPageID, slug: pageSlug, ishome: isHome, order: pageOrder};
 				
 		$.ajax({
 			url: MediaAPI.m_url,

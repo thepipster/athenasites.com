@@ -62,6 +62,43 @@ var DataStore = {
 		return DataStore.getPage(DataStore.m_currentPageID);
 	},
 	
+	// ////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Get the path to a page
+	*/
+	/*
+	getPagePath : function(page_id){
+		var pathObj = new Array();
+		var pathObj = DataStore.buildPagePath(DataStore.m_currentPageID, pathObj);
+		var txt = '/';
+		for (var i=pathObj.length-1; i>=0; i--){
+			txt += pathObj[i] + "/";
+		}
+		return txt;
+	},
+			
+	buildPagePath : function(page_id, pathObj){
+			
+		var page = DataStore.getPage(page_id);
+		if (page.parent_page_id == 0){
+			return pathObj;
+		}
+		else {
+			var parentPage = DataStore.getPage(page.parent_page_id);
+			var path = parentPage.slug.substring(0, parentPage.slug.indexOf('.html'));
+			pathObj.push(path);
+			
+			if (parentPage.parent_page_id == 0){
+				return pathObj;
+			}
+			else {
+				return DataStore.buildPagePath(page.parent_page_id, pathObj);
+			}
+		}
+			
+	},	
+	*/
 	// //////////////////////////////////////////////////////////////////////////////////
 	
 	getFolderName : function(folder_id){

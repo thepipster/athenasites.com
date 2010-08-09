@@ -51,15 +51,26 @@ class PagesTable {
 
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
-    /**
-     * Update a site
-     */
     public static function update($page_id, $user_id, $site_id, $parent_page_id, $content, $status, $title, $template_name, $slug, $path, $order, $ishome){
 		$sql = DatabaseManager::prepare("UPDATE athena_%d_Pages SET parent_page_id=%d, content=%s, title=%s, slug=%s, status=%s, path=%s, user_id=%d, page_order=%d, is_homepage=%d WHERE id = %d", 
 			$site_id, $parent_page_id, $content, $title, $slug, $status, $path, $user_id, $order, $ishome, $page_id);
 		return DatabaseManager::update($sql);
     }
+
+	// /////////////////////////////////////////////////////////////////////////////////
+
+    public static function updatePath($page_id, $site_id, $path){
+		$sql = DatabaseManager::prepare("UPDATE athena_%d_Pages SET path=%s WHERE id = %d", $site_id, $path, $page_id);
+		return DatabaseManager::update($sql);
+    }
+
+	// /////////////////////////////////////////////////////////////////////////////////
     
+	public static function getChildPages($site_id, $parent_page_id){
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages WHERE parent_page_id=%d", $site_id, $parent_page_id);			
+		return DatabaseManager::getResults($sql);				
+	}
+
 	// /////////////////////////////////////////////////////////////////////////////////
 
 	public static function getPages($site_id){
@@ -72,7 +83,11 @@ class PagesTable {
 	public static function getPage($site_id, $page_id){
 		//Logger::debug("getPage(site_id = $site_id, page_id = $page_id");	
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages WHERE id = %d", $site_id, $page_id);		
-		return DatabaseManager::getResults($sql);				
+		$data = DatabaseManager::getResults($sql);				
+		if (isset($data[0])){
+			return $data[0];
+		}
+		return null;
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////////////
@@ -80,7 +95,11 @@ class PagesTable {
 	public static function getHomepage($site_id){
 		//Logger::debug("getPage(site_id = $site_id, page_id = $page_id");	
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages WHERE is_homepage = 1", $site_id);		
-		return DatabaseManager::getResults($sql);				
+		$data = DatabaseManager::getResults($sql);				
+		if (isset($data[0])){
+			return $data[0];
+		}
+		return null;
 	}
 
 	// /////////////////////////////////////////////////////////////////////////////////
@@ -88,7 +107,11 @@ class PagesTable {
 	public static function getPageFromSlug($site_id, $page_slug){
 		//Logger::debug("getPageFromSlug(site_id = $site_id, page_slug = $page_slug");	
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages WHERE slug = %s", $site_id, $page_slug);		
-		return DatabaseManager::getResults($sql);				
+		$data = DatabaseManager::getResults($sql);				
+		if (isset($data[0])){
+			return $data[0];
+		}
+		return null;
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////////////

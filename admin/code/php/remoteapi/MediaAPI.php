@@ -41,27 +41,25 @@ switch($cmd){
 		$page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_STRING);
 		$title = CommandHelper::getPara('title', true, CommandHelper::$PARA_TYPE_STRING);
 		$slug = CommandHelper::getPara('slug', true, CommandHelper::$PARA_TYPE_STRING);
-		$path = CommandHelper::getPara('path', true, CommandHelper::$PARA_TYPE_STRING);
 		$parent_page_id = CommandHelper::getPara('parent_page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
 		$content = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
 		$status = CommandHelper::getPara('status', true, CommandHelper::$PARA_TYPE_STRING);
 		$template = CommandHelper::getPara('template_id', true, CommandHelper::$PARA_TYPE_STRING);
 		$order = CommandHelper::getPara('order', true, CommandHelper::$PARA_TYPE_NUMERIC);
 		$ishome = CommandHelper::getPara('ishome', true, CommandHelper::$PARA_TYPE_NUMERIC);
-		updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $template, $slug, $path, $order, $ishome);
+		updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $template, $slug, $order, $ishome);
 		break;
 		
 	case "addPage":
 		$title = CommandHelper::getPara('title', true, CommandHelper::$PARA_TYPE_STRING);
 		$slug = CommandHelper::getPara('slug', true, CommandHelper::$PARA_TYPE_STRING);
-		$path = CommandHelper::getPara('path', true, CommandHelper::$PARA_TYPE_STRING);
 		$parent_page_id = CommandHelper::getPara('parent_page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
 		$content = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
 		$status = CommandHelper::getPara('status', true, CommandHelper::$PARA_TYPE_STRING);
 		$template = CommandHelper::getPara('template_id', true, CommandHelper::$PARA_TYPE_STRING);
 		$order = CommandHelper::getPara('order', true, CommandHelper::$PARA_TYPE_NUMERIC);
 		$ishome = CommandHelper::getPara('ishome', true, CommandHelper::$PARA_TYPE_NUMERIC);
-		addPage($site_id, $title, $parent_page_id, $content, $status, $template, $slug, $path, $order, $ishome);
+		addPage($site_id, $title, $parent_page_id, $content, $status, $template, $slug, $order, $ishome);
 		break;
 		
 	case "addFolder":
@@ -101,21 +99,99 @@ switch($cmd){
 // ///////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $tamplate_name, $slug, $path, $order, $ishome){
+/**
+* If a page title has changed, then we need to update its path and all of its children
+*/
+function updatePageAndChildPaths($site_id, $page_id){
 
-	Logger::debug("updatePage(page_id=$page_id, site_id=$site_id, title=$title, parent_page_id=$parent_page_id, content=$content, status=$status, tamplate_name=$tamplate_name, slug=$slug, path=$path)");
+	// Update this page's path
+	$path = getPath($site_id, $page_id);
+	PagesTable::updatePath($page_id, $site_id, $path);	
+
+	// Update its kids
+	$children = PagesTable::getChildPages($site_id, $page_id);
+	
+	if (isset($children)){
+		foreach($children as $child){	
+			updatePageAndChildPaths($site_id, $child['id']);
+		}
+	}
+	
+}
+
+/**
+* Get the path for the given page
+*/
+function getPath($site_id, $page_id){
+
+	$path_array = array();
+	$path_array = buildPagePath($page_id, $site_id, $path_array);
+	
+	$path = "/";
+	for($i=count($path_array)-1; $i>=0; $i--){
+		if ($path_array[$i] != ''){
+			$path .= $path_array[$i] . "/";
+		}
+	}
+	
+	return $path;
+
+}
+
+function buildPagePath($page_id, $site_id, $path_array){
+
+	$page = PagesTable::getPage($site_id, $page_id);
+	
+	if ($page['parent_page_id'] == 0){
+		return $path_array;
+	}
+	else {
+		$parentPage = PagesTable::getPage($site_id, $page['parent_page_id']);
+		$path = substr($parentPage['slug'], 0, strrpos($parentPage['slug'], '.')); 
+		//$path = $parentPage['slug']; 
+		$path_array[] =strtolower($path);
+		
+		if ($parentPage['parent_page_id'] == 0){
+			return $path_array;
+		}
+		else {
+			return buildPagePath($parentPage['id'], $site_id, $path_array);
+		}
+	}
+		
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $tamplate_name, $slug, $order, $ishome){
+
+	//Logger::debug("updatePage(page_id=$page_id, site_id=$site_id, title=$title, parent_page_id=$parent_page_id, content=$content, status=$status, tamplate_name=$tamplate_name, slug=$slug, path=$path)");
 	
 	$user_id = SecurityUtils::getCurrentUserID();
+	$path = ''; //getPath($site_id, $page_id);
 	
-	PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $content, $status, $title, $tamplate_name, $slug, $path, $order, $ishome);
+	
+	$tags   = array("\\n", "\\r", "s");
+	$replace = '';
+	$safe_content = str_ireplace($tags, $replace, $content);
+	//$safe_content = nl2br($content);
+	
+	Logger::debug(">>> content = $safe_content");
 		
-	$page_data = PagesTable::getPage($site_id, $page_id);
-	if (isset($page_data[0])){
-		$page = $page_data[0];
+	PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $title, $tamplate_name, $slug, $path, $order, $ishome);
+		
+	$page = PagesTable::getPage($site_id, $page_id);
+	if (isset($page_data)){
 		$page['last_edit'] = date("m/d/Y H:i", strtotime($page['last_edit'])); // Convert to JS compatible date
 		$page['created'] = date("m/d/Y H:i", strtotime($page['created'])); // Convert to JS compatible date
 	}
 
+	// Update the path for all the page children, as they may have changed
+	//updateChildrensPath($site_id, $page_id);
+	updatePageAndChildPaths($site_id, $page_id);
+
+	
 	$msg['cmd'] = "addPage";
 	$msg['result'] = $page_id > 0 ? 'ok' : 'fail';
 	$msg['data'] = array('page' => $page);
@@ -125,17 +201,18 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function addPage($site_id, $title, $parent_page_id, $content, $status, $tamplate_name, $slug, $path, $order, $ishome){
+function addPage($site_id, $title, $parent_page_id, $content, $status, $tamplate_name, $slug, $order, $ishome){
 
 	//Logger::debug("addPage(site_id=$site_id, title=$title, parent_page_id=$parent_page_id, content=$content, status=$status, tamplate_name=$tamplate_name, slug=$slug, path=$path)");
 	
 	$user_id = SecurityUtils::getCurrentUserID();
+	//$path = getPath($site_id, $page_id);
+	$path = '';
 	
 	$page_id = PagesTable::create($user_id, $site_id, $parent_page_id, $content, $status, $title, $tamplate_name, $slug, $path, $order, $ishome);
 		
-	$page_data = PagesTable::getPage($site_id, $page_id);
-	if (isset($page_data[0])){
-		$page = $page_data[0];
+	$page = PagesTable::getPage($site_id, $page_id);
+	if (isset($page_data)){
 		$page['last_edit'] = date("m/d/Y H:i", strtotime($page['last_edit'])); // Convert to JS compatible date
 		$page['created'] = date("m/d/Y H:i", strtotime($page['created'])); // Convert to JS compatible date
 	}
