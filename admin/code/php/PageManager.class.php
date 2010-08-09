@@ -17,6 +17,8 @@ class PageManager {
 	public static $theme_id;
 	public static $theme_file_root;
 
+	public static $page_list;
+
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
 	public static function init(){
@@ -35,11 +37,16 @@ class PageManager {
 		self::$site_id = $site['id'];
 		//self::$user_id = SecurityUtils::getCurrentUserID();
 		
+		// Get the list of pages
+		self::$page_list = PagesTable::getPages(self::$site_id);
+		
 		// Get the current page id
 		$page = PagesTable::getPageFromSlug(self::$site_id, self::$page_slug);
-
+		
+		Logger::debug(">>>> " . self::$page_slug);
+		
 		if (!isset($page[0])){
-			$page = PagesTable::getHomepage(self::$site_id);
+			//$page = PagesTable::getHomepage(self::$site_id);
 		}
 		
 		self::$page_id = $page[0]['id'];
@@ -70,30 +77,34 @@ class PageManager {
 
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
-	public static function getPageLink($page_id, $parent_page_id, $page_slug, $page_list){
+	public static function getPageLink($page_id){
 	
-		if ($parent_page_id == 0){
-			return self::$url_root . "/" . $page_slug;
-		}
-		else {
+		foreach(self::$page_list as $page){
+	
+			if ($page['id'] == $page_id){
 			
-			foreach($page_list as $child){
-			
-				if ($child['id'] == $parent_page_id){
-					
-					// Strip the extension from the slug, and use as the category name
-					// so the final url would be <url>/<cat>/<childpage>
-					$cat = substr($child['slug'], 0, strrpos($child['slug'], '.'));
-					
-					//if ($child['parent_page_id'] != 0){
-					//}
-					
-					return self::$url_root . "/" . $cat . "/" . $page_slug;
-					
+				if ($page['parent_page_id'] == 0){
+					return self::$url_root . "/" . $page['slug'];
 				}
+				else {
+					
+					foreach(self::$page_list as $child){
+					
+						if ($child['id'] == $page['parent_page_id']){
+							
+							// Strip the extension from the slug, and use as the category name
+							// so the final url would be <url>/<cat>/<childpage>
+							$cat = substr($child['slug'], 0, strrpos($child['slug'], '.'));
+							
+							return self::$url_root . "/" . $cat . "/" . $child['slug'];
+							
+						}
+					}
+				}
+				
 			}
-			
-		}
+
+		}			
 	}
 	
 	// ///////////////////////////////////////////////////////////////////////////////////////

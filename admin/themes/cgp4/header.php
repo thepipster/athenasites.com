@@ -102,12 +102,10 @@ function getTopParentPageTitle($post){
 						<ul id='navigation'>
 										
 						<?php 
-						
-							$pages = PagesTable::getPages(PageManager::$site_id);
-														
+																				
 							// Construct menu.....
 																				
-							foreach ($pages as $page){
+							foreach (PageManager::$page_list as $page){
 							
 								//Logger::dump($page);
 								
@@ -118,7 +116,7 @@ function getTopParentPageTitle($post){
 							
 								if ($parent_page_id == 0 && $title != 'Home'){
 																		
-									$link = PageManager::getPageLink($page_id, $parent_page_id, $page_slug, $pages);
+									$link = PageManager::getPageLink($page_id);
 									
 									//Logger::debug("Page: $title Link: $link");
 									
@@ -128,16 +126,16 @@ function getTopParentPageTitle($post){
 																																							
 									
 									// Get child pages 
-									foreach($pages as $child){
+									foreach(PageManager::$page_list as $child){
 										
 										if ($child['parent_page_id'] == $page_id){
 	
 											$child_id = $child['id'];
 											$child_title = $child['title'];
 
-											$child_link = PageManager::getPageLink($child['id'], $child['parent_page_id'], $child['slug'], $pages);
+											$child_link = PageManager::getPageLink($child['id']);
 													
-											Logger::debug(">> Child Page: $child_title Link: $child_link");
+											//Logger::debug(">> Child Page: $child_title Link: $child_link");
 																				
 											if ($child['id'] == $page_id){
 												print("<li><a href='$child_link' onclick=''><span class='menuItem' id='$child_id'><b>$child_title</b></span></a></li>");
