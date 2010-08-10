@@ -83,11 +83,11 @@ if (hasFlash){
 	txt += "<object classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000' codebase='http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0' width='100%' height='100%' id='homeGalFlashObject' align='middle'>";
 	txt += "	<param name='allowScriptAccess' value='sameDomain' /> ";
 	txt += "	<param name='wmode' value='transparent' /> ";
-	txt += "	<param name='movie' value='<?php bloginfo('stylesheet_directory'); ?>/code/flash/spGallery.swf' /> ";
+	txt += "	<param name='movie' value='<?= PageManager::$theme_url_root; ?>/code/flash/spGallery.swf' /> ";
 	txt += "	<param name='quality' value='high' /> ";
 	txt += "	<param name='bgcolor' value='#ffffff' /> ";
-	txt += "	<param name='FlashVars' value='xmlFile=<?php bloginfo('stylesheet_directory'); ?>/code/php/getUserGalleryXML.php?pageid=<?=$page_id ?>' /> ";
-	txt += "	<embed FlashVars='xmlFile=<?php bloginfo('stylesheet_directory'); ?>/code/php/getUserGalleryXML.php?pageid=<?=$page_id ?>' src='<?php bloginfo('stylesheet_directory'); ?>/code/flash/spGallery.swf' quality='high' bgcolor='#ffffff' wmode='transparent' width='100%' height='100%' name='homeGalFlashObject' align='middle' allowScriptAccess='sameDomain' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' /> ";
+	txt += "	<param name='FlashVars' value='xmlFile=<?= PageManager::$theme_url_root; ?>/code/php/getUserGalleryXML.php?pageid=<?=$page_id ?>' /> ";
+	txt += "	<embed FlashVars='xmlFile=<?= PageManager::$theme_url_root; ?>/code/php/getUserGalleryXML.php?pageid=<?=$page_id ?>' src='<?= PageManager::$theme_url_root; ?>/code/flash/spGallery.swf' quality='high' bgcolor='#ffffff' wmode='transparent' width='100%' height='100%' name='homeGalFlashObject' align='middle' allowScriptAccess='sameDomain' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' /> ";
 	txt += "</object>";
 	document.getElementById('galleryContent').innerHTML = txt;
 }		

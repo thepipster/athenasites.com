@@ -46,20 +46,20 @@ if (stripos($_SERVER['HTTP_HOST'], 'local') > 0){
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" <?php language_attributes(); ?>>
+<html xmlns="http://www.w3.org/1999/xhtml" <?= PageManager::getLanguageAttributes(); ?>>
 
 <head profile="http://gmpg.org/xfn/11">
 
-	<meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-	<title><?php wp_title('&laquo;', true, 'right'); ?> <?php bloginfo('name'); ?></title>
+	<title><?= PageManager::$page_title ?></title>
 	
 	<!-- Favicon ///////////////////////////////////////////////////// -->
 
 	<?php
 	if (!isset($fav_url)){
 	?>
-		<link rel="shortcut icon" type="image/ico" href="<?php bloginfo('stylesheet_directory'); ?>/favicon.ico"> 
+		<link rel="shortcut icon" type="image/ico" href="<?= PageManager::$theme_url_root; ?>/favicon.ico"> 
 	<?php
 	}
 	else {
@@ -72,45 +72,45 @@ if (stripos($_SERVER['HTTP_HOST'], 'local') > 0){
 	<!-- Style sheets ///////////////////////////////////////////////////// -->
 	
 <!--
-	<link rel="stylesheet" href="<?php bloginfo('stylesheet_directory'); ?>/pandora-min.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>/pandora-min.css" type="text/css" media="screen" />
 -->
-	<link rel="stylesheet" href="<?php bloginfo('stylesheet_directory'); ?>/datePicker.css" type="text/css" media="screen" />
-	<link rel="stylesheet" href="<?php bloginfo('stylesheet_directory'); ?>/style.css" type="text/css" media="screen" />
-	<link rel="stylesheet" href="<?php bloginfo('stylesheet_directory'); ?>/jscrollpane.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>/datePicker.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>/style.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>/jscrollpane.css" type="text/css" media="screen" />
 
-	<link rel="stylesheet" href="<?php bloginfo('stylesheet_directory'); ?>/coda-slider.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>/coda-slider.css" type="text/css" media="screen" />
 
 	
 	<!-- JS Includes ///////////////////////////////////////////////////// -->
 <!--
-	<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/pandora-min.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/pandora-min.js"></script>
 -->
-	<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery-1.3.2.min.js"></script>
-	<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/AC_OETags.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/jquery-1.3.2.min.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/AC_OETags.js"></script>
 	
-	<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery.validate.min.js"></script>
-	<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/date.js"></script>
-	<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery.datePicker.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/date.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/jquery.datePicker.js"></script>
 
-	<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery.easing.1.3.js"></script>
-	<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery.coda-slider-2.0.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/jquery.easing.1.3.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/jquery.coda-slider-2.0.js"></script>
 
 <!--
-	<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/jScrollPane-1.2.3.min.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/jScrollPane-1.2.3.min.js"></script>
 -->
-	<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/jScrollPane.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/jScrollPane.js"></script>
 
 
-	<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/pandoraCommon.js"></script>
-	<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/pandoraSliderGallery.js"></script>
-	<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/pandoraInfoPage.js"></script>
-	<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/pandoraGallery.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/pandoraCommon.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/pandoraSliderGallery.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/pandoraInfoPage.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/pandoraGallery.js"></script>
 
 <!--	
-	<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/pandoraPage.js"></script>
-	<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/pandoraMiniGallery.js"></script>
-	<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/pandoraContactPage.js"></script>
-	<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/pandoraBlogPage.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/pandoraPage.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/pandoraMiniGallery.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/pandoraContactPage.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/pandoraBlogPage.js"></script>
 -->
 
 <!--
@@ -139,7 +139,7 @@ if (stripos($_SERVER['HTTP_HOST'], 'local') > 0){
 	<style type="text/css">
 
 		/* ie6 png fix */		
-		div { behavior: url("<?php bloginfo('stylesheet_directory'); ?>/iepngfix.htc") }
+		div { behavior: url("<?= PageManager::$theme_url_root; ?>/iepngfix.htc") }
 
 		<?php
 			if (isset($background_col)){
@@ -183,7 +183,7 @@ if (stripos($_SERVER['HTTP_HOST'], 'local') > 0){
 
 	<!-- Pingback ////////////////////////////////////////////////////////////// -->
 
-	<link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
+	<link rel="pingback" href="<?= PageManager::getPingBackURL();?>" />
 		
 	
 	<?php wp_head(); ?>

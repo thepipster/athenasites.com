@@ -73,7 +73,7 @@ get_header();
 <script type="text/javascript">
 
 	hollyGallery.init({
-		swf:"<?php bloginfo('stylesheet_directory'); ?>/flash/homeGal.swf", 
+		swf:"<?= PageManager::$theme_url_root; ?>/flash/homeGal.swf", 
 		xml:"<?= $xml_url?>",
 		width: 1200,
 		height: 800,

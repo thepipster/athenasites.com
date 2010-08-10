@@ -27,7 +27,7 @@ global $copyright_notice, $google_tracking_code;
 							<a href='<?= bloginfo('url'); ?>'>
 								<div style='font-size:60px; height:100%; width:200px; padding-left:10px; color:white' align="left">Logo</div>
 								<!--
-								<img src='<?php bloginfo('stylesheet_directory'); ?>/res/logo.png' height='80px'/>
+								<img src='<?= PageManager::$theme_url_root; ?>/res/logo.png' height='80px'/>
 								-->
 							</a>
 						<?php

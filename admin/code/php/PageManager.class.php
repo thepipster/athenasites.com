@@ -32,7 +32,6 @@ class PageManager {
 		self::$domain = str_replace('www.','',self::$domain);
 		
 		$site = SitesTable::getSiteFromDomain(self::$domain);
-		$site = $site[0];
 		
 		self::$site_id = $site['id'];
 		//self::$user_id = SecurityUtils::getCurrentUserID();
@@ -42,12 +41,12 @@ class PageManager {
 		
 		// Get the current page id
 		$page = PagesTable::getPageFromSlug(self::$site_id, self::$page_slug);
-		
-		Logger::debug(">>>> " . self::$page_slug);
-		
+				
 		if (!isset($page)){
 			$page = PagesTable::getHomepage(self::$site_id);
 		}
+		
+		//Logger::debug(">>>> " . self::$page_slug);
 		
 		self::$page_id = $page['id'];
 		self::$page_parent_id = $page['parent_page_id'];
@@ -69,6 +68,18 @@ class PageManager {
 	public static function doHeader(){	
 	}
 		
+	// ///////////////////////////////////////////////////////////////////////////////////////
+
+	public static function getCurrentPageContent(){return self::getPageContent(self::$page_id);}
+
+	public static function getPageContent($page_id){
+		foreach(self::$page_list as $page){	
+			if ($page['id'] == $page_id){
+				return $page['content'];				
+			}
+		}			
+	}
+	
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
 	public static function getFavIcon(){

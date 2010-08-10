@@ -10,7 +10,7 @@ class ThemeTable {
 
 	public static function getTheme($theme_id){		
 		$sql = DatabaseManager::prepare("SELECT * FROM apollo_Theme WHERE id = %d", $theme_id);
-		return DatabaseManager::getResults($sql);
+		return DatabaseManager::getSingleResult($sql);
 	}
 	
 	// //////////////////////////////////////////////////////////////////////////////////////

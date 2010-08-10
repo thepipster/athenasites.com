@@ -46,7 +46,7 @@ var MediaAPI = {
 		AthenaDialog.clearLoading();
 		
 		if (ret.result == 'ok'){	
-			callback(ret.data.folders, ret.data.media, ret.data.pages);
+			callback(ret.data.folders, ret.data.media, ret.data.pages, ret.data.theme, ret.data.page_templates);
 		}
 		else {
 			AthenaDialog.showAjaxError(ret);
@@ -125,7 +125,29 @@ var MediaAPI = {
 			AthenaDialog.showAjaxError(ret);
 		}		
 	},
+
+	// ////////////////////////////////////////////////////////////////////////
+
+	deletePage : function(siteID, pageID, callback){
+		var paras = {cmd: 'deletePage', site_id: siteID, page_id: pageID};
+				
+		$.ajax({
+			url: MediaAPI.m_url,
+			dataType: "json",
+			data: paras,
+			success: function(ret){MediaAPI.onPageDeleted(ret, callback)}
+		});	
+	},
 	
+	onPageDeleted : function(ret, callback){
+		if (ret.result == "ok"){		
+			callback(ret.data.page_id);			
+		}					
+		else {
+			AthenaDialog.showAjaxError(ret);
+		}	
+	},
+		
 	// ////////////////////////////////////////////////////////////////////////
 	
 	addFolder : function(siteID, folderName, callback){

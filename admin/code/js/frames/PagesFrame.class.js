@@ -41,6 +41,9 @@ var PagesFrame = {
 		var slug = "";		
 		var order = "";		
 		var path = "";		
+		var parent_page_id = "";	
+		var template = "";
+		var page_id = DataStore.m_currentPageID;
 
 		if (pageObj.parent_page_id != 0){
 			var parentPage = DataStore.getPage(pageObj.parent_page_id);
@@ -56,6 +59,8 @@ var PagesFrame = {
 			slug = pageObj.slug;
 			order = pageObj.order;
 			path = pageObj.path;
+			parent_page_id = pageObj.parent_page_id;
+			template = pageObj.template;
 		}
 			
 		var txt = "";
@@ -89,15 +94,16 @@ var PagesFrame = {
 		txt += "            <span class='pageLabel'>Slug:</span>";
 		txt += "            <span class='pageData'>"+slug+"</span>";
 		txt += "			</div>";
-
+/*
 		txt += "			<div class='pageInfoLine'>";
 		txt += "            <span class='pageLabel'>Path:</span>";
 		txt += "            <span class='pageData'>"+path+"</span>";
 		txt += "			</div>";
-
+*/
 		txt += "			<div class='pageInfoLine'>";
 		txt += "            <span class='pageLabel'>Status:</span>";
 		txt += "            <span class='pageData'>";
+		
 		txt += "            <select id='pageStatusSelector'>";
 		txt += "                <option value='Published'>Published</selected>";
 		txt += "                <option value='Draft'>Draft</selected>";
@@ -122,8 +128,12 @@ var PagesFrame = {
 		txt += "            <select id='pageParent' >";
 		txt += "                <option value='0'>(none)</selected>";
 		for (var i=0; i<DataStore.m_pageList.length; i++){
-			if (DataStore.m_pageList[i].id != pageObj.id){
-				if (DataStore.m_pageList[i].id == pageObj.parent_page_id){
+			
+			var isChild = DataStore.isChildOff(page_id, DataStore.m_pageList[i].id);
+			
+//			if (DataStore.m_pageList[i].id != page_id || !DataStore.isChildOff(page_id, DataStore.m_pageList[i].id)){
+			if (DataStore.m_pageList[i].id != page_id && !isChild){
+				if (DataStore.m_pageList[i].id == parent_page_id){
 					txt += "                <option value='"+DataStore.m_pageList[i].id+"' selected>"+DataStore.m_pageList[i].title+"</selected>";
 				}
 				else {
@@ -139,9 +149,17 @@ var PagesFrame = {
 		txt += "            <span class='pageLabel'>Template:</span>";
 		txt += "            <span class='pageData'>";
 		txt += "            <select id='pageTemplate' >";
-		txt += "                <option value='Template1'>Template1</selected>";
-		txt += "                <option value='Template2'>Template2</selected>";
-		txt += "                <option value='Template3'>Template3</selected>";
+		txt += "                <option value=''>(none)</selected>";
+
+		for (var i=0; i<DataStore.m_templateList.length; i++){
+			if (DataStore.m_templateList[i].template_file == template){
+				txt += "                <option value='"+DataStore.m_templateList[i].template_file+"' selected>"+DataStore.m_templateList[i].template_name+"</selected>";
+			}
+			else {
+				txt += "                <option value='"+DataStore.m_templateList[i].template_file+"'>"+DataStore.m_templateList[i].template_name+"</selected>";
+			}
+		}
+
 		txt += "            </select>";
 		txt += "            </span>";
 		txt += "			</div>";
@@ -155,7 +173,7 @@ var PagesFrame = {
 
 		txt += "			<div align='right' style='padding-right:10px'>";
 		txt += "			<button class='delete_button' onclick=\"PagesFrame.onDeletePage()\">Delete Page</button>";
-		txt += "			<button class='save_button' onclick=\"PagesFrame.onSavePage('"+DataStore.m_currentPage+"')\">Save Changes</button>";
+		txt += "			<button class='save_button' onclick=\"PagesFrame.onSavePage('"+DataStore.m_currentPageID+"')\">Save Changes</button>";
 		txt += "			</div>";
 
 
@@ -189,7 +207,19 @@ var PagesFrame = {
 	},
 	
 	onDoDelete : function(){
-		alert('TBD');
+		MediaAPI.deletePage(DataStore.m_siteID, DataStore.m_currentPageID, PagesFrame.onPageDeleted);
+	},
+	
+	onPageDeleted : function(page_id){
+		DataStore.deletePage(page_id);
+		if (DataStore.m_pageList.length > 0){
+			DataStore.m_currentPageID = DataStore.m_pageList[0].id;
+		}
+		else {
+			DataStore.m_currentPageID = 0;
+		}
+		PagesFrame.repaint();
+		PagesSidebarFrame.repaint();		
 	},
 		
 	// ////////////////////////////////////////////////////////////////////////////
@@ -198,7 +228,7 @@ var PagesFrame = {
 	* Save all the users changes to the site
 	*/
 	onSavePage : function(page_id){
-	
+			
 		var originalPage = DataStore.getPage(page_id);
 		
 		//var content = $('#pageContentEditor').html();
@@ -212,25 +242,29 @@ var PagesFrame = {
 		var pageDepth = DataStore.getPageDepth(DataStore.m_currentPageID);
 		var slug = PagesSidebarFrame.encodeSlug(title) + '.html';
 		//var path = DataStore.getPagePath();
-		var ishome = 0;		
-		// Check what the new depth would be.....
+		var ishome = 0;	
+			
+		// Check what the new max depth would be.....
+		
+		// Need to get the root page for this branch
 		
 		var old_parent_id = originalPage.parent_page_id;
 		originalPage.parent_page_id = parent_id;
 		DataStore.updatePage(originalPage);
 		
 		try {
-			var newDepth = DataStore.getPageDepth(DataStore.m_currentPageID);
+			//var newDepth = DataStore.getPageDepth(rootPage.id);
+			var newDepth = DataStore.getMaxDepth();
 		}
 		catch (e){
-			var newDepth = 4;		
+			var newDepth = 99;		
 		}
 		
 		// Revert the original back
 		originalPage.parent_page_id = old_parent_id;
 		DataStore.updatePage(originalPage);
-		
-		if (newDepth > 3){
+				
+		if (newDepth > DataStore.m_theme.max_page_depth){
 			AthenaDialog.alert("Sorry, your theme does not support page depths of more than 3, please choose another parent page!");
 			return;
 		}
@@ -257,7 +291,7 @@ var PagesFrame = {
 		PagesFrame.ckEditor = CKEDITOR.replace( 'pageContentEditor',
 			{
 				height: $('#PagesFrame').innerHeight() - 150,
-				
+		/*		
 			     on :
 			      {
 			         instanceReady : function( ev )
@@ -272,7 +306,7 @@ var PagesFrame = {
 			               });
 			         }
 			       },
-         
+         */
 			
 				// Note that we have added out "MyButton" button here.
 				//toolbar : [ [ 'Source', '-', 'Bold', 'Italic', 'Underline', 'Strike','-','Link', '-', 'MyButton' ] ]
@@ -296,15 +330,16 @@ var PagesFrame = {
 						]
 				
 				
-			});
+		});
 
-		PagesFrame.ckEditor.ui.addButton( 'MyButton', {
+		var ret = PagesFrame.ckEditor.ui.addButton( 'MyButton', {
 								label : 'My Dialog', 
 								click : function(){ImagePickerDialog.show('#PagesFrameImagePicker', PagesFrame.onImageSelected)}, 
 								icon: defines.root_url + 'images/insert_media_button.png' 
 		});
+		
 	},
-	
+		
 	// ////////////////////////////////////////////////////////////////////////////
 	
 	onImageSelected : function(imageID){

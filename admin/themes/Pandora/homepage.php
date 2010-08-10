@@ -29,7 +29,7 @@ get_header();
 
 		<div id='content'>
 		<!--
-			<img id='backImg' src="<?php bloginfo('stylesheet_directory'); ?>/res/test_images/intro_02.jpg" height='100%' />
+			<img id='backImg' src="<?= PageManager::$theme_url_root; ?>/res/test_images/intro_02.jpg" height='100%' />
 		-->
 		</div>
 
@@ -37,7 +37,7 @@ get_header();
 
 
 	pandoraGallery.init({
-		swf:"<?php bloginfo('stylesheet_directory'); ?>/flash/homeGal.swf", 
+		swf:"<?= PageManager::$theme_url_root; ?>/flash/homeGal.swf", 
 		xml:"<?= $xml_url?>",
 		targetDiv:"content"
 		});
@@ -56,7 +56,7 @@ var pandoraHome = {
 		pandoraHome.imageList = new Array();
 	
 		pandoraHome.imageList[0] = new Image(); 
-		pandoraHome.imageList[0].src = "<?php bloginfo('stylesheet_directory'); ?>/res/test_images/intro_02.jpg";
+		pandoraHome.imageList[0].src = "<?= PageManager::$theme_url_root; ?>/res/test_images/intro_02.jpg";
 		//pandoraHome.imageList[0].onLoad = pandoraHome.onResize();
 		
 		// Set resize listener

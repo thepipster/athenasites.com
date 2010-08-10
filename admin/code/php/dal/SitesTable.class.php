@@ -44,7 +44,11 @@ class SitesTable {
 
 	public static function getSite($id){
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_Sites WHERE id = %d ", $id);			
-		return DatabaseManager::getResults($sql);				
+		$data = DatabaseManager::getResults($sql);				
+		if (isset($data[0])){
+			return $data[0];
+		}
+		return null;
 	}
 
 	// /////////////////////////////////////////////////////////////////////////////////

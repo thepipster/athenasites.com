@@ -58,6 +58,7 @@ $current_site_id = $site_list[0]['id'];
 <link rel="stylesheet" href="code/css/ImageEditDialog.css" type="text/css" />
 <link rel="stylesheet" href="code/css/ImagePickerDialog.css" type="text/css" />
 <link rel="stylesheet" href="code/css/ImageEditFrame.css" type="text/css" />
+<link rel="stylesheet" href="code/css/GalleryFrame.css" type="text/css" />
 
 <link rel="stylesheet" href="code/css/datePicker.css" type="text/css" />
 
@@ -162,6 +163,10 @@ $current_site_id = $site_list[0]['id'];
 </div>
 
 <!-- Main  //////////////////////////////////////////////////////////////////////////////// -->
+
+<!--
+<img class='apollo_logo' src='images/logo.png' height='40px'/>
+-->
 
 <div id='sync_spinner'></div>	
 

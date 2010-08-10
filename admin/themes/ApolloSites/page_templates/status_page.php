@@ -1,15 +1,10 @@
 <?php
 /**
- * @package WordPress
- * @subpackage Apollo Theme
+* @Theme: ApolloSites
+* @Template: Status Page
+* @Description: Status Page
  */
-/*
-Template Name: Status Page
-*/
 ?>
-
-<?php get_header(); ?>
-
 
 <div id="page_contents" align="center">
 		
@@ -19,9 +14,3 @@ Template Name: Status Page
 	</div>	
 						
 </div>
-
-		
-<script type="text/javascript">
-</script>
-
-<?php get_footer(); ?>

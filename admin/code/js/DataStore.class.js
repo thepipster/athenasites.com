@@ -21,7 +21,10 @@ var DataStore = {
 
 	/** List of pages for the site */
 	m_pageList : '',
-	
+
+	/** Page template list */
+	m_templateList : '',
+		
 	// //////////////////////////////////////////////////////////////////////////////////
 	
 	init : function(){
@@ -118,6 +121,67 @@ var DataStore = {
 
 	// //////////////////////////////////////////////////////////////////////////////////
 
+	/**
+	* For a given page, traverse up the branch to find the root page
+	*/
+	getRootPage : function(page_id){
+	
+		var page = DataStore.getPage(page_id);
+		
+		//alert(page_id + ' ' + page.title + ' ' + page.parent_page_id);
+		
+		if (page.parent_page_id == 0){
+			return page;
+		}
+		
+		return DataStore.getRootPage(page.parent_page_id);
+	},
+			
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Check to see if test_page_id is a child of page_id
+	*/
+	isChildOff : function(page_id, test_page_id){
+
+		var testPage = DataStore.getPage(test_page_id);
+
+		if (testPage.parent_page_id == 0){
+			return false;
+		}
+		
+		if (testPage.parent_page_id == page_id){
+			return true;
+		}
+		else {
+			return DataStore.isChildOff(page_id, testPage.parent_page_id);
+		}
+
+	},
+	
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Get the deepest page depth
+	*/
+	getMaxDepth : function(){
+	
+		var max_depth = 0;
+		for (var i=0; i<DataStore.m_pageList.length; i++){
+			var depth = DataStore.getPageDepth(DataStore.m_pageList[i].id);
+			
+			//alert(DataStore.m_pageList[i].title + " " + depth);
+			
+			if (depth > max_depth){
+				max_depth = depth;
+			}
+		}
+		
+		return max_depth;
+	},
+	
+	// //////////////////////////////////////////////////////////////////////////////////
+	
 	getPageDepth : function(page_id){
 		
 		var page = DataStore.getPage(page_id);
@@ -161,6 +225,22 @@ var DataStore = {
 	
 	// //////////////////////////////////////////////////////////////////////////////////
 
+	deletePage : function(page_id){
+	
+		var tempList = new Array();
+		
+		for(var i=0; i<DataStore.m_pageList.length; i++){
+			if (DataStore.m_pageList[i].id != page_id){
+				tempList.push(DataStore.m_pageList[i]);
+			}
+		}
+		
+		DataStore.m_pageList = tempList;
+			
+	},
+	
+	// //////////////////////////////////////////////////////////////////////////////////
+
 	/**
 	* Add a page from a returned page object from the MediaAPI
 	*/
@@ -193,18 +273,47 @@ var DataStore = {
 	// //////////////////////////////////////////////////////////////////////////////////
 	
 	load : function(callback){
-		MediaAPI.getAll(DataStore.m_siteID, function(folders, media, pages){ DataStore.onGotData(folders, media, pages, callback);} );
+		MediaAPI.getAll(DataStore.m_siteID, function(folders, media, pages, theme, page_templates){ DataStore.onGotData(folders, media, pages, theme, page_templates, callback);} );
 		//MediaAPI.getFolders(DataStore.m_siteID, DataStore.onGotFolders);
 		//MediaAPI.getMedia(DataStore.m_siteID, DataStore.onGotMedia);
 	},
 	
 	// //////////////////////////////////////////////////////////////////////////////////
 
-	onGotData : function(folder_list, media_list, page_list, callback){
+	onGotData : function(folder_list, media_list, page_list, theme, page_templates, callback){
+
 		DataStore.onGotFolders(folder_list);
 		DataStore.onGotMedia(media_list);
 		DataStore.onGotPages(page_list);
+		DataStore.onGotPageTemplates(page_templates);
+
+		DataStore.m_theme = theme; // id, theme_name, theme_title, price, thumb_url, description, is_private, max_page_depth
+
 		callback();
+	},
+			
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	onGotPageTemplates : function(page_templates){
+
+		if (!page_templates || page_templates == undefined){
+			DataStore.m_templateList = new Array();			
+			return;
+		}
+		
+		DataStore.m_templateList = new Array();
+				
+		for(var i=0; i<page_templates.length; i++){			
+			
+			var temp = new Object();
+			temp.template_name = page_templates[i].template_name;
+			temp.template_description = page_templates[i].template_description;
+			temp.template_file = page_templates[i].template_file;
+			
+			DataStore.m_templateList[i] = temp;			
+
+		}	
+		
 	},
 	
 	// //////////////////////////////////////////////////////////////////////////////////
@@ -221,25 +330,7 @@ var DataStore = {
 		for(var i=0; i<page_list.length; i++){			
 			
 			DataStore.addPage(page_list[i]);
-			/*
-			var temp = new Object();
-			temp.id = page_list[i].id;
-			temp.title = AthenaUtils.htmlEncode(page_list[i].title);
-			temp.user_id = page_list[i].user_id;
-			temp.content = AthenaUtils.htmlEncode(page_list[i].content);
-			temp.status = page_list[i].status;
-			temp.last_edit = page_list[i].last_edit;
-			temp.created = page_list[i].created;
-			temp.status = page_list[i].status;
-			temp.template = page_list[i].template;
-			temp.parent_page_id = page_list[i].parent_page_id;
-			temp.slug = page_list[i].slug;
-			temp.path = page_list[i].path;
-			temp.is_homepage = page_list[i].is_homepage;
-			temp.order = page_list[i].order;
-						
-			DataStore.m_pageList[i] = temp;
-			*/
+
 		}	
 		
 		if (page_list.length > 0 && DataStore.m_currentPageID == 0){

@@ -18,7 +18,7 @@ var pandoraHome = {
 			pandoraHome.imageList = new Array();
 
 			pandoraHome.imageList[0] = new Image(); 
-			pandoraHome.imageList[0].src = "<?php bloginfo('stylesheet_directory'); ?>/res/test_images/intro_02.jpg";
+			pandoraHome.imageList[0].src = "<?= PageManager::$theme_url_root; ?>/res/test_images/intro_02.jpg";
 			pandoraHome.imageList[0].onLoad = pandoraHome.paintBackgroundImage();
 
 		}

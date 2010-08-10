@@ -1,10 +1,8 @@
 <?php
 /**
- * @package WordPress
- * @subpackage Alpha Theme
- */
-/*
-Template Name: Signup Page
+* @Theme: ApolloSites
+* @Template: Signup Page
+* @Description: Signup Page
 */
 /*
 require_once('/Users/mikep/Sites/apollosites.com/wp-admin/admin.php');
@@ -43,12 +41,8 @@ $wpdb->query($wpdb->prepare("UPDATE wp_".$blog_id."_options SET option_value = %
 		
 ?>
 
-<?php get_header(); ?>
-
 <div id="content" class="widecolumn">
 				
 <h2>Signup Page</h2>
 
 </div>
-
-<?php get_footer(); ?>

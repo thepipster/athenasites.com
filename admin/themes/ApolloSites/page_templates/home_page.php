@@ -1,10 +1,8 @@
 <?php
 /**
- * @package WordPress
- * @subpackage Alpha Theme
- */
-/*
-Template Name: Home Page
+* @Theme: ApolloSites
+* @Template: Home Page
+* @Description: Home Page
 */
 
 // Figure out the location of this file
@@ -107,7 +105,7 @@ get_header();
 <script type="text/javascript">
 
 	apolloMiniGallery.init({
-		swf:"<?php bloginfo('stylesheet_directory'); ?>/flash/homeGal.swf", 
+		swf:"<?= PageManager::$theme_url_root; ?>/flash/homeGal.swf", 
 		xml:"<?= $xml_url?>",
 		div: 'miniGallery',
 		width: 1350,

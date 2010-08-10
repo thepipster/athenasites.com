@@ -81,7 +81,7 @@ $noflash = 1;
 	$(document).ready(
 		function(){
 			pandoraGallery.init({
-				swf:"<?php bloginfo('stylesheet_directory'); ?>/flash/spGallery.swf", 
+				swf:"<?= PageManager::$theme_url_root; ?>/flash/spGallery.swf", 
 				xml:"<?= $xml_url?>",
 				targetDiv:"content"
 				});				

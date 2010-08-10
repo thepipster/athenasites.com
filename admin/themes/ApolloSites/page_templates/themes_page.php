@@ -1,10 +1,8 @@
 <?php
 /**
- * @package WordPress
- * @subpackage Alpha Theme
- */
-/*
-Template Name: Themes Page
+* @Theme: ApolloSites
+* @Template: Themes Page
+* @Description: Themes Page
 */
 		
 get_header();
@@ -29,8 +27,6 @@ $theme_list = $wpdb->get_results($query, ARRAY_A);
 //$NO_IMAGES_PER_ROW = 3;
 				
 ?>
-
-<?php get_header(); ?>
 
 <div id="page_contents">
 	
@@ -152,6 +148,3 @@ $().ready(function() {
 
 		
 </script>
-
-
-<?php get_footer(); ?>

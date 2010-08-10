@@ -37,8 +37,13 @@ switch($cmd){
 		getImages($site_id); 
 		break;			
 
+	case "deletePage":
+		$page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		deletePage($site_id, $page_id);
+		break;
+		
 	case "updatePage":
-		$page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_STRING);
+		$page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
 		$title = CommandHelper::getPara('title', true, CommandHelper::$PARA_TYPE_STRING);
 		$slug = CommandHelper::getPara('slug', true, CommandHelper::$PARA_TYPE_STRING);
 		$parent_page_id = CommandHelper::getPara('parent_page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
@@ -96,6 +101,8 @@ switch($cmd){
 		
 }
 
+// ///////////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -162,6 +169,23 @@ function buildPagePath($page_id, $site_id, $path_array){
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function deletePage($site_id, $page_id){
+
+	//Logger::debug("deletePage($site_id, $page_id)");
+	
+	PagesTable::delete($site_id, $page_id);
+	
+	$msg['cmd'] = "deletePage";
+	$msg['result'] = 'ok';
+	$msg['data'] = array('page_id' => $page_id);
+
+	CommandHelper::sendMessage($msg);	
+}
+
 // ///////////////////////////////////////////////////////////////////////////////////////
 
 function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $tamplate_name, $slug, $order, $ishome){
@@ -331,10 +355,15 @@ function getAll($site_id){
 		$media_data[] = $temp;
 	}
 		
+	// Get theme and page template data
+	$site = SitesTable::getSite($site_id);
+	$theme = ThemeTable::getTheme($site['theme_id']);
+	$page_templates = TemplateManager::getThemePageTemplates($theme['theme_name']);
+		
 	$msg = array();	
 	$msg['cmd'] = 'getAll';
 	$msg['result'] = 'ok';			
-	$msg['data'] = array('folders' => $folder_list, 'media' => $media_data, 'pages' => $page_data);
+	$msg['data'] = array('folders' => $folder_list, 'media' => $media_data, 'pages' => $page_data, 'theme' => $theme, 'page_templates' => $page_templates);
 				
 	CommandHelper::sendMessage($msg);		
 

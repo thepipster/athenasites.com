@@ -4,8 +4,6 @@
  * @subpackage CGP3_Theme
  */
  
-//require_once("../../admin/code/php/setup.php");
-
 // Do default actions
 PageManager::doHeader();
 

@@ -51,9 +51,16 @@ class PagesTable {
 
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
+	public static function delete($site_id, $page_id){
+		$sql = DatabaseManager::prepare("DELETE FROM athena_%d_Pages WHERE id = %d", $site_id, $page_id);			
+		return DatabaseManager::submitQuery($sql);
+	}
+	
+	// ///////////////////////////////////////////////////////////////////////////////////////
+
     public static function update($page_id, $user_id, $site_id, $parent_page_id, $content, $status, $title, $template_name, $slug, $path, $order, $ishome){
-		$sql = DatabaseManager::prepare("UPDATE athena_%d_Pages SET parent_page_id=%d, content=%s, title=%s, slug=%s, status=%s, path=%s, user_id=%d, page_order=%d, is_homepage=%d WHERE id = %d", 
-			$site_id, $parent_page_id, $content, $title, $slug, $status, $path, $user_id, $order, $ishome, $page_id);
+		$sql = DatabaseManager::prepare("UPDATE athena_%d_Pages SET parent_page_id=%d, content=%s, title=%s, slug=%s, status=%s, path=%s, user_id=%d, page_order=%d, is_homepage=%d, template=%s WHERE id = %d", 
+			$site_id, $parent_page_id, $content, $title, $slug, $status, $path, $user_id, $order, $ishome, $template_name, $page_id);
 		return DatabaseManager::update($sql);
     }
 

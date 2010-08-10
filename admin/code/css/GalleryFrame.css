@@ -1,0 +1,111 @@
+
+#apollo_gallery_edit {
+	width: 100%;
+	font-family: Arial, Arial, Helvetica, sans-serif;
+}
+
+#apollo_gallery {
+	padding-right: 30px;
+}
+
+#apollo_gallery .multicontrols {
+	width: 100%;
+	padding-bottom: 5px;
+}
+
+#apollo_gallery .gallery_meta_thumb {
+	width: 30px;
+	height: 30px;
+	border-style: solid;
+	border-color: #6b6b6b;
+	border-width: 3px;
+	background-color: #ededed;
+	display: block;
+}
+
+#apollo_gallery_edit .box {
+	border-width: 1px;
+	padding: 5px;
+	margin: 0px;
+	border-style: solid;
+	border-color: #6b6b6b;
+	background-color: #ededed;
+	width: 100%;
+	min-height: 200px;
+	min-width: 900px;
+	width: 100%;
+	height: auto;
+}
+
+#apollo_gallery_edit .box_title {
+	color: #24628a;
+	font-size: 16px;
+	font-style: normal;
+}
+
+#apollo_gallery_edit h2 {
+	font-family: Arial, Arial, Helvetica, sans-serif;
+	color: #24628a;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: normal;
+	padding: 0px;
+	margin: 0px;
+	margin-top: 15px;
+	margin-bottom: 5px;
+}
+/*
+#apollo_gallery_edit .thumb {
+	margin: 2px;
+	border-width: 4px;
+	border-style: solid;
+	border-color: white;	
+	width: 50px;
+	height: 50px;
+	z-index: 1;
+}
+*/
+.colorBox {
+	width: 20px;
+	height: 20px;
+	border-width: 2px;
+	border-style: solid;
+	border-color: #cccccc;			
+}
+
+#apollo_gallery .gallery_slot {
+	margin-left: 2px;
+	margin-right: 2px;
+	padding-top: 2px;
+	border-width: 4px;
+	border-style: solid;
+	border-color: white;
+	width: 66px;
+	height: 60px;
+	background-color: #fffde5;
+	/*float: left;*/
+	margin: 3px;
+	display: inline-block;
+}
+
+#apollo_gallery_edit .gallery_slot_image {
+	width: 60px;
+	height: 56px;
+}
+
+#apollo_gallery .gallery_slot_text{
+	font-size: 24px;
+	color: gray;
+	width: 66px;
+	height: 60px;
+	padding-top: 18px;
+}
+
+
+#apollo_stats_view .stat_field {
+	color: #14608a;
+}
+
+#apollo_stats_view .stat_value {
+	padding-left: 3px;
+}

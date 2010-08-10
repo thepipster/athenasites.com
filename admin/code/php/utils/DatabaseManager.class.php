@@ -296,6 +296,33 @@ class DatabaseManager {
 	
     // //////////////////////////////////////////////////////////////////////////////////////
 
+
+	/**
+	* Get a single result and return as an asssociative array
+	*/
+	public static function getSingleResult($sql){
+		
+		$results = DatabaseManager::submitQuery($sql);
+
+		if (!$results || mysql_num_rows($results) == 0) {
+			return null;
+		}
+		
+		$data = array();
+		
+		// Build the output data		
+		while ($row = mysql_fetch_assoc($results)) {
+			$data[] = $row;
+		}
+
+		if (isset($data[0])){
+			$data = $data[0];
+		}
+		
+		mysql_free_result($results);
+
+		return $data;		
+	}
 	
 }
 ?>

@@ -1,10 +1,8 @@
 <?php
 /**
- * @package WordPress
- * @subpackage Alpha Theme
- */
-/*
-Template Name: View Theme Page
+* @Theme: ApolloSites
+* @Template: View Theme Page
+* @Description: View Theme Page
 */
 		
 $url_root = 'http://' . $_SERVER['HTTP_HOST']; 
@@ -18,8 +16,6 @@ $theme_list = $wpdb->get_results($query, ARRAY_A);
 $theme = $theme_list[0];
 
 ?>
-
-<?php get_header(); ?>
 
 <div id="page_contents" align="left">
 
@@ -37,6 +33,3 @@ $theme = $theme_list[0];
 <script type="text/javascript">
 
 </script>
-
-
-<?php get_footer(); ?>

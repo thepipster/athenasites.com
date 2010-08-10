@@ -85,6 +85,19 @@ html, body {
 .apollo_light_blue { color: #129beb; }
 .apollo_dark_blue { color: #032f5d;}
 
+.apollo_logo {
+	/*
+	background-image: url('../../images/logo.png');
+	background-repeat: no-repeat;
+	width: 256px;
+	height: 60px;
+	*/
+	position: absolute;
+	top: 0px;
+	left: 10px;
+	background-color: transparent;
+}
+
 /* Main Frame Styles //////////////////////////////////////// */
 
 .frameTitle {
