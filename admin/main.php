@@ -124,6 +124,7 @@ $current_site_id = $site_list[0]['id'];
 <script src="code/js/subframes/PagesSidebarFrame.class.js" type="text/javascript"></script>
 <script src="code/js/subframes/ImageSelector.class.js" type="text/javascript"></script>
 <script src="code/js/subframes/ImageEditFrame.class.js" type="text/javascript"></script>
+<script src="code/js/subframes/PostsSidebarFrame.class.js" type="text/javascript"></script>
 
 <!-- Frame Displays -->
 <script src="code/js/frames/DashboardFrame.class.js" type="text/javascript"></script>
@@ -135,7 +136,6 @@ $current_site_id = $site_list[0]['id'];
 <script src="code/js/frames/AccountFrame.class.js" type="text/javascript"></script>
 <script src="code/js/frames/EditImageFrame.class.js" type="text/javascript"></script>
 <script src="code/js/frames/SidebarFrame.class.js" type="text/javascript"></script>
-<script src="code/js/frames/PostsSidebarFrame.class.js" type="text/javascript"></script>
 
 
 <!-- Old
@@ -416,6 +416,16 @@ var ssMain = {
 	// ////////////////////////////////////////////////////////////////////////
 
 	onSelectSite : function(site_id){
+
+		// Reset frames
+		DashboardFrame.init();
+        FilesFrame.init();
+        GalleriesFrame.init();
+        PagesFrame.init();
+        PostsFrame.init();
+        SettingsFrame.init();	
+        EditImageFrame.init();	
+		
 		DataStore.m_siteID = site_id;
 		SidebarFrame.m_mode = ''; // Clear the mode to force the side bar to refresh
 		DataStore.clear();

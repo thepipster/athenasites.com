@@ -59,7 +59,11 @@ class PagesTable {
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
     public static function update($page_id, $user_id, $site_id, $parent_page_id, $content, $status, $title, $template_name, $slug, $path, $order, $ishome){
-		$sql = DatabaseManager::prepare("UPDATE athena_%d_Pages SET parent_page_id=%d, content=%s, title=%s, slug=%s, status=%s, path=%s, user_id=%d, page_order=%d, is_homepage=%d, template=%s WHERE id = %d", 
+
+        $target_date  = mktime(date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
+        $date_str = date('Y-m-d H:i:s', $target_date);
+
+		$sql = DatabaseManager::prepare("UPDATE athena_%d_Pages SET parent_page_id=%d, content=%s, title=%s, slug=%s, status=%s, path=%s, user_id=%d, page_order=%d, is_homepage=%d, template=%s, last_edit='$date_str' WHERE id = %d", 
 			$site_id, $parent_page_id, $content, $title, $slug, $status, $path, $user_id, $order, $ishome, $template_name, $page_id);
 		return DatabaseManager::update($sql);
     }

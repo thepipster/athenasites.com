@@ -94,7 +94,7 @@ FileProgress.prototype.setComplete = function () {
 	var oSelf = this;
 	this.setTimer(setTimeout(function () {
 		oSelf.disappear();
-	}, 10000));
+	}, 5000));
 };
 FileProgress.prototype.setError = function () {
 	this.fileProgressElement.className = "progressContainer red";

@@ -21,7 +21,8 @@ var PagesSidebarFrame = {
 		var txt = "";
 
 		txt += "<div id='apollo_page_list'></div>";
-						/*
+		
+		/*
 		// Right click pop-up menu....
 		txt += "<ul id='pagesMenu' class='rightClickMenu'>";
 		txt += "	<li class='edit'><a href='#edit'>Rename</a></li>";
@@ -29,7 +30,8 @@ var PagesSidebarFrame = {
 		txt += "	<li class='delete'><a href='#delete'>Delete</a></li>";
 		txt += "	<li class='quit separator'><a href='#quit'>Cancel</a></li>";
 		txt += "</ul>";
-*/
+		*/
+
 		$(targetDiv).html(txt);
 		
 		PagesSidebarFrame.paintPages();		

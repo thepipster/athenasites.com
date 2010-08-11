@@ -5,39 +5,33 @@
 */
 var FilesFrame = {
 	
+	painted : false,
+	
 	// ////////////////////////////////////////////////////////////////////////
 
 	init : function(){
-		
+		PagesFrame.painted = false;		
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////
 	
 	repaint : function(){
+					
+		if (!FilesFrame.painted){
+			FilesFrame.fullRepaint();
+			FilesFrame.painted = true;
+		}
+		else {
+			FilesFrame.repaintData();
+		}					
 							
-		var txt = "";
-		/*
-		txt += "<div id='FilesFrameContent' align='left'>";
+	},
 
-		txt += "<div class='frameTitle'>Folder: </div>";		
-		txt += "<div id='athena_folder_contents'></div>";
-					
-		txt += "<div id='flashUploderContent' class='subframebox' style='height:100%;'>";
-								
-		txt += "			<span class='title'>Upload Files</span>";
-													
-		txt += "			<div class='uploadControls'>";
-		txt += "				<span id='flashUploadButton'></span>";
-		txt += "				<button id='flashUploadCancelButton' onclick='swfu.cancelQueue();' disabled='disabled'>Cancel</button>";						
-		txt += "			</div>";				
-					
-		txt += "			<div class='uploadProgress' id='flashUploaderProgress'>";
-		txt += "			</div>";
-					
-		txt += "		</div>";											
-	
-		txt += "</div><!-- FilesFrameContent -->";
-		*/
+	// ////////////////////////////////////////////////////////////////////////////
+
+	fullRepaint : function(){
+
+		var txt = "";
 			
 		txt += "<div id='FilesFrameContent' align='left'>";
 
@@ -82,12 +76,18 @@ var FilesFrame = {
 							
 		$('#FilesFrame').html(txt);
 
-		FilesFrame.paintUploader();
+		FilesFrame.paintUploader();		
 		FilesFrame.paintImages();
-		
 		FilesFrame.onShowUploader();
 	},
-	
+
+	// ////////////////////////////////////////////////////////////////////////////
+
+	repaintData : function(){
+		FilesFrame.paintImages();
+		FilesFrame.onShowUploader();
+	},
+		
 	// ////////////////////////////////////////////////////////////////////////////
 
 	onCancelSelectImage : function(){
