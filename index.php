@@ -28,7 +28,6 @@ else {
 	Logger::fatal("Domain does not exist!");
 }
 
-
 // Echo header
 require_once(PageManager::$theme_file_root . 'header.php');
 

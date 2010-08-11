@@ -135,6 +135,8 @@ $current_site_id = $site_list[0]['id'];
 <script src="code/js/frames/AccountFrame.class.js" type="text/javascript"></script>
 <script src="code/js/frames/EditImageFrame.class.js" type="text/javascript"></script>
 <script src="code/js/frames/SidebarFrame.class.js" type="text/javascript"></script>
+<script src="code/js/frames/PostsSidebarFrame.class.js" type="text/javascript"></script>
+
 
 <!-- Old
 <script src="code/js/subframes/UploadMediaFrame.class.js" type="text/javascript"></script>

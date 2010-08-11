@@ -22,11 +22,11 @@ var FolderSidebarFrame = {
 		
 		var txt = "";
 
-		txt += "<div class='folder_filter' id='folders_select_0' title='Select to display all of your images'><img class='folder_filter_icon' src='images/system_folder_icon.png'><span class='folder_name' onclick=\"FolderSidebarFrame.onSelectFolder('0')\">Show All</span></div>";
-		txt += "<div class='folder_filter droppable_folder' id='folders_select_1' title='Select to display all unassigned files (files that have not been added to a folder'><img class='folder_filter_icon' src='images/system_folder_icon.png'><span class='folder_name' onclick=\"FolderSidebarFrame.onSelectFolder('1')\">Unassigned Files</span></div>";
-		txt += "<div class='folder_filter' id='folders_select_4' title='Select to display all files uploaded in the last hour'><img class='folder_filter_icon' src='images/system_folder_icon.png'><span class='folder_name' onclick=\"FolderSidebarFrame.onSelectFolder('4')\">Added in last hour</span></div>";
-		txt += "<div class='folder_filter' id='folders_select_2' title='Select to display all files uploaded in the last 24 hours'><img class='folder_filter_icon' src='images/system_folder_icon.png'><span class='folder_name' onclick=\"FolderSidebarFrame.onSelectFolder('2')\">Added in last 24 hours</span></div>";
-		txt += "<div class='folder_filter' id='folders_select_3' title='Select to display all files uploaded in the last 7 days'><img class='folder_filter_icon' src='images/system_folder_icon.png'><span class='folder_name' onclick=\"FolderSidebarFrame.onSelectFolder('3')\">Added in last 7 days</span></div>";						
+		txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('0')\" class='folder_filter' id='folders_select_0' title='Select to display all of your images'><img class='folder_filter_icon' src='images/system_folder_icon.png'><span class='folder_name'>Show All</span></div>";
+		txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('1')\" class='folder_filter droppable_folder' id='folders_select_1' title='Select to display all unassigned files (files that have not been added to a folder'><img class='folder_filter_icon' src='images/system_folder_icon.png'><span class='folder_name'>Unassigned Files</span></div>";
+		txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('4')\" class='folder_filter' id='folders_select_4' title='Select to display all files uploaded in the last hour'><img class='folder_filter_icon' src='images/system_folder_icon.png'><span class='folder_name'>Added in last hour</span></div>";
+		txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('2')\" class='folder_filter' id='folders_select_2' title='Select to display all files uploaded in the last 24 hours'><img class='folder_filter_icon' src='images/system_folder_icon.png'><span class='folder_name'>Added in last 24 hours</span></div>";
+		txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('3')\" class='folder_filter' id='folders_select_3' title='Select to display all files uploaded in the last 7 days'><img class='folder_filter_icon' src='images/system_folder_icon.png'><span class='folder_name'>Added in last 7 days</span></div>";						
 					
 		txt += "<div id='apollo_folder_list'></div>";
 						
@@ -107,11 +107,11 @@ var FolderSidebarFrame = {
 			if (folder_id == DataStore.m_currentFolderID){
 				
 				//txt += "<div id='folder_"+folder_id+"' class='apollo_folder folder_with_menu' style='width:100%;' title='Right click to edit' onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\"><div class='folder_name folder_name_selected'>"+folder_name+"</div></div>";
-				txt += "<div class='folder droppable_folder' id='folder_"+folder_id+"' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/folder_icon.png'><span class='folder_name selected' onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\">"+folder_name+"</span></div>";
+				txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\" class='folder droppable_folder' id='folder_"+folder_id+"' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/folder_icon.png'><span class='folder_name selected'>"+folder_name+"</span></div>";
 			}
 			else {
 //				txt += "<div id='folder_"+folder_id+"' class='apollo_folder folder_with_menu' style='width:100%;' title='Right click to edit' onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\"><div class='folder_name'>"+folder_name+"</div></div>";
-				txt += "<div class='folder droppable_folder' id='folder_"+folder_id+"' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/folder_icon.png'><span class='folder_name' onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\">"+folder_name+"</span></div>";
+				txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\" class='folder droppable_folder' id='folder_"+folder_id+"' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/folder_icon.png'><span class='folder_name'>"+folder_name+"</span></div>";
 			}	
 			
 		}

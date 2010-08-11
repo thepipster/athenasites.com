@@ -56,8 +56,8 @@ class PageManager {
 		$theme_id = $site['theme_id'];
 		$theme = ThemeTable::getTheme($theme_id);
 		
-		self::$theme_url_root = self::$url_root . '/admin/themes/' . $theme[0]['theme_name'] ."/";
-		self::$theme_file_root = FILE_ROOT . '/admin/themes/' . $theme[0]['theme_name'] ."/";
+		self::$theme_url_root = self::$url_root . '/admin/themes/' . $theme['theme_name'] ."/";
+		self::$theme_file_root = FILE_ROOT . '/admin/themes/' . $theme['theme_name'] ."/";
 	}
 	
 	// ///////////////////////////////////////////////////////////////////////////////////////

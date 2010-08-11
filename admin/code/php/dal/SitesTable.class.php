@@ -44,11 +44,7 @@ class SitesTable {
 
 	public static function getSite($id){
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_Sites WHERE id = %d ", $id);			
-		$data = DatabaseManager::getResults($sql);				
-		if (isset($data[0])){
-			return $data[0];
-		}
-		return null;
+		return DatabaseManager::getSingleResult($sql);				
 	}
 
 	// /////////////////////////////////////////////////////////////////////////////////
@@ -90,7 +86,7 @@ class SitesTable {
 
 	public static function getSiteFromDomain($domain){
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_Sites WHERE domain = %s", $domain);			
-		return DatabaseManager::getResults($sql);				
+		return DatabaseManager::getSingleResult($sql);				
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////////////

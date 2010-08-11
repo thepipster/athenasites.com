@@ -26,26 +26,37 @@ var SidebarFrame = {
 		switch(ssMain.view){
 			
 			case ssMain.VIEW_DASHBOARD : 
-			case ssMain.VIEW_POSTS : 
 			case ssMain.VIEW_SETTINGS : 
-			case ssMain.VIEW_STATS : 
 			case ssMain.VIEW_ACCOUNT : 
-			case ssMain.VIEW_GALLERIES : 
 				$('#SideBar').html("");
 				SidebarFrame.m_mode = '';
 				break;
 			
+			case ssMain.VIEW_POSTS : 
+				if (SidebarFrame.m_mode != 'Posts'){
+					$('#SideBar').html("");
+					SidebarFrame.m_mode = 'Posts';
+					SidebarFrame.paintPosts();				
+				}
+				break;	
+				
+			case ssMain.VIEW_GALLERIES : 
+				if (SidebarFrame.m_mode != 'Galleries'){
+					$('#SideBar').html("");
+					SidebarFrame.m_mode = 'Galleries';
+					SidebarFrame.paintPages();				
+					SidebarFrame.paintFolders();				
+				}
+				break;
 			
+			case ssMain.VIEW_STATS : 
 			case ssMain.VIEW_PAGES : 
 				if (SidebarFrame.m_mode != 'Pages'){
 					$('#SideBar').html("");
 					SidebarFrame.m_mode = 'Pages';
 					SidebarFrame.paintPages();				
 				}
-				break;
-				
-				
-
+				break;								
 			
 			case ssMain.VIEW_FILES : 
 			case ssMain.VIEW_EDITFILES : 
@@ -61,18 +72,27 @@ var SidebarFrame = {
 
 	// ////////////////////////////////////////////////////////////////////////////
 
+	paintPosts : function(){
+		var txt = "";
+		txt += "<p>Blog Posts<span class='add_new_project' onclick='PostsSidebarFrame.addPost()' title='Add a new blank post to you blog.'>&nbsp;(add)</span></p>";		
+		txt += "<div id='SideBar_Posts'></div>";
+		
+		$('#SideBar').append(txt);
+
+		PostsSidebarFrame.paint('#SideBar_Posts');
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////////
+
 	paintPages : function(){
 
 		var txt = "";
 		txt += "<p>Pages<span class='add_new_project' onclick='PagesSidebarFrame.addPage()' title='Add a new blank page to you site.'>&nbsp;(add)</span></p>";		
 		txt += "<div id='SideBar_Pages'></div>";
 		
-		$('#SideBar').hide();
-		$('#SideBar').html(txt);
+		$('#SideBar').append(txt);
 
 		PagesSidebarFrame.paint('#SideBar_Pages');
-		
-		$('#SideBar').fadeIn('slow');
 		
 	},
 		
@@ -84,13 +104,9 @@ var SidebarFrame = {
 		txt += "<p>Folders<span class='add_new_project' onclick='FolderSidebarFrame.addFolder()' title='Add a new folder to help organize your images and other media files'>&nbsp;(add)</span></p>";		
 		txt += "<div id='SideBar_Folders'></div>";
 		
-		$('#SideBar').hide();
-		$('#SideBar').html(txt);
+		$('#SideBar').append(txt);
 
 		FolderSidebarFrame.paint('#SideBar_Folders');
-		
-		$('#SideBar').fadeIn('slow');
-		
 		
 	}
 	

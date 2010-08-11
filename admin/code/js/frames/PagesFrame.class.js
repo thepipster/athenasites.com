@@ -66,15 +66,18 @@ var PagesFrame = {
 		var txt = "";
 	
 		txt += "<div id='PagesFrameImagePicker'></div>";		
-
+		
 		txt += "<table border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>";
 
 		txt += "<tr valign='top'>";
 		
 		txt += "	<td>";
+		//txt += "        <div class='frame_control_bar'>";
+		//txt += "            <button class='basic_button' style='position:absolute; top:50px; left:700px'>Insert Image</button>";
+		//txt += "        </div>";
 		txt += "        <div style='margin-top:5px; margin-left:5px'>";
-		txt += "		<textarea id='pageContentEditor' name='pageContentEditor' style='width:100%; height:100%;'>"+content+"</textarea>";
-		txt += "	</div>";		
+		txt += "		    <textarea id='pageContentEditor' name='pageContentEditor' style='width:100%; height:100%;'>"+content+"</textarea>";
+		txt += "	    </div>";		
 		txt += "	</td>";
 							
 		txt += "	<td width='250px' style='height:100%; padding:5px'>";
