@@ -4,7 +4,7 @@
 #
 # Host: localhost (MySQL 5.1.37)
 # Database: athenasites
-# Generation Time: 2010-08-09 23:19:41 -0600
+# Generation Time: 2010-08-11 15:19:02 -0600
 # ************************************************************
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -46,7 +46,7 @@ LOCK TABLES `apollo_Sessions` WRITE;
 /*!40000 ALTER TABLE `apollo_Sessions` DISABLE KEYS */;
 INSERT INTO `apollo_Sessions` (`id`,`access`,`data`)
 VALUES
-	('01ca1763fa1efa87b674da20912727d1',1281417531,'user_valid|b:1;user_id|s:1:\"1\";user_name|s:14:\"Mike Pritchard\";user_email|s:20:\"mike@apollosites.com\";user_level|s:1:\"1\";');
+	('01ca1763fa1efa87b674da20912727d1',1281561468,'user_valid|b:1;user_id|s:1:\"1\";user_name|s:14:\"Mike Pritchard\";user_email|s:20:\"mike@apollosites.com\";user_level|s:1:\"1\";');
 
 /*!40000 ALTER TABLE `apollo_Sessions` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -187,7 +187,7 @@ CREATE TABLE `athena_1_Folders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT 'Unamed Folder',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=69 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `athena_1_Folders` WRITE;
 /*!40000 ALTER TABLE `athena_1_Folders` DISABLE KEYS */;
@@ -200,7 +200,8 @@ VALUES
 	(6,'Reserved'),
 	(7,'Reserved'),
 	(8,'Reserved'),
-	(9,'Reserved');
+	(9,'Reserved'),
+	(68,'cgp images');
 
 /*!40000 ALTER TABLE `athena_1_Folders` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -276,7 +277,7 @@ CREATE TABLE `athena_1_Media` (
   `thumb_width` int(9) DEFAULT NULL,
   `thumb_height` int(9) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `athena_1_Media` WRITE;
 /*!40000 ALTER TABLE `athena_1_Media` DISABLE KEYS */;
@@ -291,7 +292,48 @@ VALUES
 	(7,1,'OzTrip007.JPG','image/jpeg',489871,'2010-08-09 22:22:52','OzTrip_007.JPG','','',1600,1200,'OzTrip007_thumb.JPG',50,50),
 	(8,1,'OzTrip008.JPG','image/jpeg',357606,'2010-08-09 22:22:52','OzTrip_008.JPG','','',1024,768,'OzTrip008_thumb.JPG',50,50),
 	(9,1,'OzTrip009.JPG','image/jpeg',343058,'2010-08-09 22:22:52','OzTrip_009.JPG','','',1024,768,'OzTrip009_thumb.JPG',50,50),
-	(10,1,'OzTrip010.JPG','image/jpeg',351745,'2010-08-09 22:22:52','OzTrip_010.JPG','','',1024,768,'OzTrip010_thumb.JPG',50,50);
+	(10,1,'OzTrip010.JPG','image/jpeg',351745,'2010-08-09 22:22:52','OzTrip_010.JPG','','',1024,768,'OzTrip010_thumb.JPG',50,50),
+	(11,1,'intro01.jpg','image/jpeg',193833,'2010-08-11 20:01:25','intro_01.jpg','','',1260,800,'intro01_thumb.jpg',50,50),
+	(12,1,'intro02.jpg','image/jpeg',174858,'2010-08-11 20:01:25','intro_02.jpg','','',1260,800,'intro02_thumb.jpg',50,50),
+	(13,1,'intro03.jpg','image/jpeg',198904,'2010-08-11 20:01:25','intro_03.jpg','','',1260,800,'intro03_thumb.jpg',50,50),
+	(14,1,'intro04.jpg','image/jpeg',167628,'2010-08-11 20:01:26','intro_04.jpg','','',1260,800,'intro04_thumb.jpg',50,50),
+	(15,1,'intro05.jpg','image/jpeg',138222,'2010-08-11 20:01:26','intro_05.jpg','','',1260,800,'intro05_thumb.jpg',50,50),
+	(16,68,'intro20.jpg','image/jpeg',239069,'2010-08-11 20:02:45','intro_20.jpg','','',1260,800,'intro20_thumb.jpg',50,50),
+	(17,68,'intro21.jpg','image/jpeg',175167,'2010-08-11 20:02:46','intro_21.jpg','','',1260,800,'intro21_thumb.jpg',50,50),
+	(18,68,'intro22.jpg','image/jpeg',174838,'2010-08-11 20:02:46','intro_22.jpg','','',1260,800,'intro22_thumb.jpg',50,50),
+	(19,68,'intro23.jpg','image/jpeg',170592,'2010-08-11 20:02:46','intro_23.jpg','','',1260,800,'intro23_thumb.jpg',50,50),
+	(20,68,'intro24.jpg','image/jpeg',153034,'2010-08-11 20:02:46','intro_24.jpg','','',1260,800,'intro24_thumb.jpg',50,50),
+	(21,68,'intro25.jpg','image/jpeg',111709,'2010-08-11 20:02:47','intro_25.jpg','','',1280,800,'intro25_thumb.jpg',50,50),
+	(22,1,'intro01_1.jpg','image/jpeg',193833,'2010-08-11 20:48:04','intro_01.jpg','','',1260,800,'intro01_1_thumb.jpg',50,50),
+	(23,1,'intro02_1.jpg','image/jpeg',174858,'2010-08-11 20:48:04','intro_02.jpg','','',1260,800,'intro02_1_thumb.jpg',50,50),
+	(24,1,'intro03_1.jpg','image/jpeg',198904,'2010-08-11 20:48:04','intro_03.jpg','','',1260,800,'intro03_1_thumb.jpg',50,50),
+	(25,1,'intro04_1.jpg','image/jpeg',167628,'2010-08-11 20:48:05','intro_04.jpg','','',1260,800,'intro04_1_thumb.jpg',50,50),
+	(26,1,'intro05_1.jpg','image/jpeg',138222,'2010-08-11 20:48:05','intro_05.jpg','','',1260,800,'intro05_1_thumb.jpg',50,50),
+	(27,1,'intro06.jpg','image/jpeg',117995,'2010-08-11 20:48:05','intro_06.jpg','','',1260,800,'intro06_thumb.jpg',50,50),
+	(28,1,'intro07.jpg','image/jpeg',159482,'2010-08-11 20:48:05','intro_07.jpg','','',1260,800,'intro07_thumb.jpg',50,50),
+	(29,1,'intro08.jpg','image/jpeg',131547,'2010-08-11 20:48:05','intro_08.jpg','','',1260,840,'intro08_thumb.jpg',50,50),
+	(30,1,'intro09.jpg','image/jpeg',170500,'2010-08-11 20:48:06','intro_09.jpg','','',1260,800,'intro09_thumb.jpg',50,50),
+	(31,1,'intro10.jpg','image/jpeg',136606,'2010-08-11 20:48:06','intro_10.jpg','','',1260,800,'intro10_thumb.jpg',50,50),
+	(32,1,'intro11.jpg','image/jpeg',181283,'2010-08-11 20:48:06','intro_11.jpg','','',1260,800,'intro11_thumb.jpg',50,50),
+	(33,1,'intro12.jpg','image/jpeg',167444,'2010-08-11 20:48:06','intro_12.jpg','','',1260,800,'intro12_thumb.jpg',50,50),
+	(34,1,'intro13.jpg','image/jpeg',151707,'2010-08-11 20:48:06','intro_13.jpg','','',1260,800,'intro13_thumb.jpg',50,50),
+	(35,1,'intro14.jpg','image/jpeg',165953,'2010-08-11 20:48:06','intro_14.jpg','','',1260,800,'intro14_thumb.jpg',50,50),
+	(36,1,'intro15.jpg','image/jpeg',94604,'2010-08-11 20:48:07','intro_15.jpg','','',1260,800,'intro15_thumb.jpg',50,50),
+	(37,1,'intro16.jpg','image/jpeg',197056,'2010-08-11 20:48:07','intro_16.jpg','','',1260,800,'intro16_thumb.jpg',50,50),
+	(38,1,'intro17.jpg','image/jpeg',158170,'2010-08-11 20:48:07','intro_17.jpg','','',1260,800,'intro17_thumb.jpg',50,50),
+	(39,1,'intro18.jpg','image/jpeg',167154,'2010-08-11 20:48:07','intro_18.jpg','','',1260,800,'intro18_thumb.jpg',50,50),
+	(40,1,'intro19.jpg','image/jpeg',191870,'2010-08-11 20:48:07','intro_19.jpg','','',1260,800,'intro19_thumb.jpg',50,50),
+	(41,1,'intro20_1.jpg','image/jpeg',239069,'2010-08-11 20:48:08','intro_20.jpg','','',1260,800,'intro20_1_thumb.jpg',50,50),
+	(42,1,'intro21_1.jpg','image/jpeg',175167,'2010-08-11 20:48:08','intro_21.jpg','','',1260,800,'intro21_1_thumb.jpg',50,50),
+	(43,1,'intro22_1.jpg','image/jpeg',174838,'2010-08-11 20:48:08','intro_22.jpg','','',1260,800,'intro22_1_thumb.jpg',50,50),
+	(44,1,'intro23_1.jpg','image/jpeg',170592,'2010-08-11 20:48:08','intro_23.jpg','','',1260,800,'intro23_1_thumb.jpg',50,50),
+	(45,1,'intro24_1.jpg','image/jpeg',153034,'2010-08-11 20:48:08','intro_24.jpg','','',1260,800,'intro24_1_thumb.jpg',50,50),
+	(46,1,'intro25_1.jpg','image/jpeg',111709,'2010-08-11 20:48:09','intro_25.jpg','','',1280,800,'intro25_1_thumb.jpg',50,50),
+	(47,1,'intro26.jpg','image/jpeg',306763,'2010-08-11 20:48:09','intro_26.jpg','','',1280,800,'intro26_thumb.jpg',50,50),
+	(48,1,'intro27.jpg','image/jpeg',195623,'2010-08-11 20:48:09','intro_27.jpg','','',1260,800,'intro27_thumb.jpg',50,50),
+	(49,1,'intro28.jpg','image/jpeg',146378,'2010-08-11 20:48:09','intro_28.jpg','','',1260,800,'intro28_thumb.jpg',50,50),
+	(50,1,'intro29.jpg','image/jpeg',125793,'2010-08-11 20:48:10','intro_29.jpg','','',1260,800,'intro29_thumb.jpg',50,50),
+	(51,1,'intro30.jpg','image/jpeg',134266,'2010-08-11 20:48:10','intro_30.jpg','','',1260,800,'intro30_thumb.jpg',50,50);
 
 /*!40000 ALTER TABLE `athena_1_Media` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -338,10 +380,10 @@ LOCK TABLES `athena_1_Pages` WRITE;
 /*!40000 ALTER TABLE `athena_1_Pages` DISABLE KEYS */;
 INSERT INTO `athena_1_Pages` (`id`,`user_id`,`content`,`status`,`last_edit`,`parent_page_id`,`title`,`slug`,`path`,`created`,`template`,`is_homepage`,`page_order`)
 VALUES
-	(9,1,'<p>gjgkjk gkgkg kk</p>','Draft','2010-08-09 19:54:03',0,'Home','Home.html','/','2010-08-09 19:54:03','home_page.php',0,1),
+	(9,1,'<p>dgdgdgdgdgd gdg &#39;dg dg g&#39;d g d&quot; adgad gad g&#39; d</p>','Draft','2010-08-11 21:16:03',0,'Home','Home.html','/','2010-08-09 19:54:03','home_page.php',0,1),
 	(10,1,'','Draft','2010-08-09 19:54:51',9,'New page 2','Newpage2.html','/home/','2010-08-09 19:54:51','',0,0),
 	(20,1,'','Draft','2010-08-10 04:15:38',0,'New page 4','Newpage4.html','','2010-08-10 04:15:38','0',0,0),
-	(19,1,'','Draft','2010-08-10 04:09:09',10,'New page 4','Newpage4.html','/home/newpage2/','2010-08-10 04:09:09','',0,0);
+	(19,1,'','Draft','2010-08-11 21:17:08',10,'New page 5','Newpage5.html','/home/newpage2/','2010-08-10 04:09:09','',0,1);
 
 /*!40000 ALTER TABLE `athena_1_Pages` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1046,7 +1088,7 @@ CREATE TABLE `athena_4_Folders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT 'Unamed Folder',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=69 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `athena_4_Folders` WRITE;
 /*!40000 ALTER TABLE `athena_4_Folders` DISABLE KEYS */;
@@ -1059,7 +1101,8 @@ VALUES
 	(6,'Reserved'),
 	(7,'Reserved'),
 	(8,'Reserved'),
-	(9,'Reserved');
+	(9,'Reserved'),
+	(68,'home');
 
 /*!40000 ALTER TABLE `athena_4_Folders` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1135,8 +1178,45 @@ CREATE TABLE `athena_4_Media` (
   `thumb_width` int(9) DEFAULT NULL,
   `thumb_height` int(9) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 
+LOCK TABLES `athena_4_Media` WRITE;
+/*!40000 ALTER TABLE `athena_4_Media` DISABLE KEYS */;
+INSERT INTO `athena_4_Media` (`id`,`folder_id`,`filename`,`mime_type`,`file_size`,`created`,`title`,`description`,`tags`,`width`,`height`,`thumb_filename`,`thumb_width`,`thumb_height`)
+VALUES
+	(1,68,'intro01.jpg','image/jpeg',193833,'2010-08-11 20:50:52','intro_01.jpg','','',1260,800,'intro01_thumb.jpg',50,50),
+	(2,68,'intro02.jpg','image/jpeg',174858,'2010-08-11 20:50:53','intro_02.jpg','','',1260,800,'intro02_thumb.jpg',50,50),
+	(3,68,'intro03.jpg','image/jpeg',198904,'2010-08-11 20:50:53','intro_03.jpg','','',1260,800,'intro03_thumb.jpg',50,50),
+	(4,68,'intro04.jpg','image/jpeg',167628,'2010-08-11 20:50:53','intro_04.jpg','','',1260,800,'intro04_thumb.jpg',50,50),
+	(5,68,'intro05.jpg','image/jpeg',138222,'2010-08-11 20:50:53','intro_05.jpg','','',1260,800,'intro05_thumb.jpg',50,50),
+	(6,68,'intro06.jpg','image/jpeg',117995,'2010-08-11 20:51:01','intro_06.jpg','','',1260,800,'intro06_thumb.jpg',50,50),
+	(7,68,'intro07.jpg','image/jpeg',159482,'2010-08-11 20:51:01','intro_07.jpg','','',1260,800,'intro07_thumb.jpg',50,50),
+	(8,68,'intro08.jpg','image/jpeg',131547,'2010-08-11 20:51:02','intro_08.jpg','','',1260,840,'intro08_thumb.jpg',50,50),
+	(9,68,'intro09.jpg','image/jpeg',170500,'2010-08-11 20:51:02','intro_09.jpg','','',1260,800,'intro09_thumb.jpg',50,50),
+	(10,68,'intro10.jpg','image/jpeg',136606,'2010-08-11 20:51:02','intro_10.jpg','','',1260,800,'intro10_thumb.jpg',50,50),
+	(11,68,'intro11.jpg','image/jpeg',181283,'2010-08-11 20:51:02','intro_11.jpg','','',1260,800,'intro11_thumb.jpg',50,50),
+	(12,68,'intro12.jpg','image/jpeg',167444,'2010-08-11 20:51:02','intro_12.jpg','','',1260,800,'intro12_thumb.jpg',50,50),
+	(13,68,'intro13.jpg','image/jpeg',151707,'2010-08-11 20:51:03','intro_13.jpg','','',1260,800,'intro13_thumb.jpg',50,50),
+	(14,68,'intro14.jpg','image/jpeg',165953,'2010-08-11 20:51:03','intro_14.jpg','','',1260,800,'intro14_thumb.jpg',50,50),
+	(15,68,'intro15.jpg','image/jpeg',94604,'2010-08-11 20:51:03','intro_15.jpg','','',1260,800,'intro15_thumb.jpg',50,50),
+	(16,68,'intro16.jpg','image/jpeg',197056,'2010-08-11 20:51:03','intro_16.jpg','','',1260,800,'intro16_thumb.jpg',50,50),
+	(17,68,'intro17.jpg','image/jpeg',158170,'2010-08-11 20:51:03','intro_17.jpg','','',1260,800,'intro17_thumb.jpg',50,50),
+	(18,68,'intro18.jpg','image/jpeg',167154,'2010-08-11 20:51:04','intro_18.jpg','','',1260,800,'intro18_thumb.jpg',50,50),
+	(19,68,'intro19.jpg','image/jpeg',191870,'2010-08-11 20:51:04','intro_19.jpg','','',1260,800,'intro19_thumb.jpg',50,50),
+	(20,68,'intro20.jpg','image/jpeg',239069,'2010-08-11 20:51:04','intro_20.jpg','','',1260,800,'intro20_thumb.jpg',50,50),
+	(21,68,'intro21.jpg','image/jpeg',175167,'2010-08-11 20:51:04','intro_21.jpg','','',1260,800,'intro21_thumb.jpg',50,50),
+	(22,68,'intro22.jpg','image/jpeg',174838,'2010-08-11 20:51:04','intro_22.jpg','','',1260,800,'intro22_thumb.jpg',50,50),
+	(23,68,'intro23.jpg','image/jpeg',170592,'2010-08-11 20:51:04','intro_23.jpg','','',1260,800,'intro23_thumb.jpg',50,50),
+	(24,68,'intro24.jpg','image/jpeg',153034,'2010-08-11 20:51:05','intro_24.jpg','','',1260,800,'intro24_thumb.jpg',50,50),
+	(25,68,'intro25.jpg','image/jpeg',111709,'2010-08-11 20:51:05','intro_25.jpg','','',1280,800,'intro25_thumb.jpg',50,50),
+	(26,68,'intro26.jpg','image/jpeg',306763,'2010-08-11 20:51:05','intro_26.jpg','','',1280,800,'intro26_thumb.jpg',50,50),
+	(27,68,'intro27.jpg','image/jpeg',195623,'2010-08-11 20:51:05','intro_27.jpg','','',1260,800,'intro27_thumb.jpg',50,50),
+	(28,68,'intro28.jpg','image/jpeg',146378,'2010-08-11 20:51:05','intro_28.jpg','','',1260,800,'intro28_thumb.jpg',50,50),
+	(29,68,'intro29.jpg','image/jpeg',125793,'2010-08-11 20:51:06','intro_29.jpg','','',1260,800,'intro29_thumb.jpg',50,50),
+	(30,68,'intro30.jpg','image/jpeg',134266,'2010-08-11 20:51:06','intro_30.jpg','','',1260,800,'intro30_thumb.jpg',50,50);
+
+/*!40000 ALTER TABLE `athena_4_Media` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table athena_4_PageParas
@@ -1182,8 +1262,8 @@ INSERT INTO `athena_4_Pages` (`id`,`user_id`,`content`,`status`,`last_edit`,`par
 VALUES
 	(9,1,'','Draft','2010-08-09 21:34:34',0,'Home','Home.html','/','2010-08-09 21:34:34','0',0,0),
 	(10,1,'','Draft','2010-08-09 21:34:40',0,'PORTRAITS','PORTRAITS.html','/','2010-08-09 21:34:40','0',0,0),
-	(11,1,'<p>\\n	 FISH d FISH d FISH g FISH g FISH g FISH d</p>\\n','Draft','2010-08-09 21:35:18',10,'Gallery 1','Gallery1.html','/portraits/','2010-08-09 21:35:18','0',0,0),
-	(12,1,'<p>\\n	Test gallery 2</p>\\n','Draft','2010-08-09 21:35:18',10,'Gallery 2','Gallery2.html','/portraits/','2010-08-09 21:35:18','0',0,0),
+	(11,1,'<p>FIH d FIH d FIH g FIH g FIH g FIH</p>','Draft','2010-08-11 20:58:05',10,'Gallery 1','Gallery1.html','/portraits/','2010-08-09 21:35:18','',0,0),
+	(12,1,'<p>Tet gallery</p>','Draft','2010-08-11 20:57:47',10,'Gallery 2','Gallery2.html','/portraits/','2010-08-09 21:35:18','',0,0),
 	(13,1,'','Draft','2010-08-09 21:35:50',0,'WEDDINGS','WEDDINGS.html','/','2010-08-09 21:35:50','0',0,0),
 	(14,1,'','Draft','2010-08-09 21:36:29',13,'Wedding gallery 1','Weddinggallery1.html','/weddings/','2010-08-09 21:36:29','0',0,0),
 	(15,1,'','Draft','2010-08-09 21:36:29',13,'Wedding gallery 2','Weddinggallery2.html','/weddings/','2010-08-09 21:36:29','0',0,0),
@@ -1653,7 +1733,7 @@ LOCK TABLES `athena_Users` WRITE;
 /*!40000 ALTER TABLE `athena_Users` DISABLE KEYS */;
 INSERT INTO `athena_Users` (`id`,`email`,`name`,`password_hash`,`account_created`,`last_login`,`user_level`)
 VALUES
-	(1,'mike@apollosites.com','Mike Pritchard','22d500a499157bcb53edd6703f8b78fb132fb1698735af66fcca','2010-08-09 19:54:00','2010-08-10 02:41:01',1);
+	(1,'mike@apollosites.com','Mike Pritchard','22d500a499157bcb53edd6703f8b78fb132fb1698735af66fcca','2010-08-09 19:54:00','2010-08-11 19:38:18',1);
 
 /*!40000 ALTER TABLE `athena_Users` ENABLE KEYS */;
 UNLOCK TABLES;
