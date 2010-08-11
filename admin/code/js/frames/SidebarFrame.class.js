@@ -87,7 +87,13 @@ var SidebarFrame = {
 	paintPages : function(){
 
 		var txt = "";
-		txt += "<p>Pages<span class='add_new_project' onclick='PagesSidebarFrame.addPage()' title='Add a new blank page to you site.'>&nbsp;(add)</span></p>";		
+		
+		if (ssMain.view == ssMain.VIEW_GALLERIES){
+			txt += "<p>Pages with Galleries</p>";		
+		}
+		else {
+			txt += "<p>Pages<span class='add_new_project' onclick='PagesSidebarFrame.addPage()' title='Add a new blank page to you site.'>&nbsp;(add)</span></p>";		
+		}
 		txt += "<div id='SideBar_Pages'></div>";
 		
 		$('#SideBar').append(txt);

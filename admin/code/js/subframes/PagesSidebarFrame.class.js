@@ -53,31 +53,46 @@ var PagesSidebarFrame = {
 				
 		var txt = "";		
 		
-		for (var i=0; i<pageList.length; i++){
-						
-			if (pageList[i].parent_page_id == 0){
-
-				txt += PagesSidebarFrame.getPageHtml(pageList[i].id, pageList[i].title, 0);
-				
-				// Paint children...
-				
-				for (var k=0; k<pageList.length; k++){
-
-					if (pageList[k].parent_page_id == pageList[i].id){
-						
-						txt += PagesSidebarFrame.getPageHtml(pageList[k].id, pageList[k].title, 1);
-						
-						// Paint grand-children....						
-						for (var m=0; m<pageList.length; m++){
-							if (pageList[m].parent_page_id == pageList[k].id){
-								txt += PagesSidebarFrame.getPageHtml(pageList[m].id, pageList[m].title, 2);
-							}					
-						}
-					}					
+		if (ssMain.view == ssMain.VIEW_GALLERIES){
+		
+			for (var i=0; i<pageList.length; i++){
+				var hasGallery = false;
+				if (hasGallery){
+					txt += PagesSidebarFrame.getPageHtml(pageList[i].id, pageList[i].title, 0);
 				}
-
 			}
 			
+		}
+		else {
+		
+			for (var i=0; i<pageList.length; i++){
+							
+				if (pageList[i].parent_page_id == 0){
+	
+					txt += PagesSidebarFrame.getPageHtml(pageList[i].id, pageList[i].title, 0);
+					
+					// Paint children...
+					
+					for (var k=0; k<pageList.length; k++){
+	
+						if (pageList[k].parent_page_id == pageList[i].id){
+							
+							txt += PagesSidebarFrame.getPageHtml(pageList[k].id, pageList[k].title, 1);
+							
+							// Paint grand-children....						
+							for (var m=0; m<pageList.length; m++){
+	
+								if (pageList[m].parent_page_id == pageList[k].id){
+									txt += PagesSidebarFrame.getPageHtml(pageList[m].id, pageList[m].title, 2);
+								}					
+							}
+						}					
+						
+					}
+	
+				}
+				
+		}
 
 			
 		}
