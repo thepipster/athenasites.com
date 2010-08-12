@@ -60,7 +60,7 @@ var PagesSidebarFrame = {
 			for (var i=0; i<pageList.length; i++){
 				var hasGallery = false;
 				if (hasGallery){
-					txt += PagesSidebarFrame.getPageHtml(pageList[i].id, pageList[i].title, 0);
+					txt += PagesSidebarFrame.getPageHtml(pageList[i].id, pageList[i].title, pageList[i].status, 0);
 				}
 			}
 			
@@ -71,7 +71,7 @@ var PagesSidebarFrame = {
 							
 				if (pageList[i].parent_page_id == 0){
 	
-					txt += PagesSidebarFrame.getPageHtml(pageList[i].id, pageList[i].title, 0);
+					txt += PagesSidebarFrame.getPageHtml(pageList[i].id, pageList[i].title, pageList[i].status, 0);
 					
 					// Paint children...
 					
@@ -79,13 +79,13 @@ var PagesSidebarFrame = {
 	
 						if (pageList[k].parent_page_id == pageList[i].id){
 							
-							txt += PagesSidebarFrame.getPageHtml(pageList[k].id, pageList[k].title, 1);
+							txt += PagesSidebarFrame.getPageHtml(pageList[k].id, pageList[k].title, pageList[k].status, 1);
 							
 							// Paint grand-children....						
 							for (var m=0; m<pageList.length; m++){
 	
 								if (pageList[m].parent_page_id == pageList[k].id){
-									txt += PagesSidebarFrame.getPageHtml(pageList[m].id, pageList[m].title, 2);
+									txt += PagesSidebarFrame.getPageHtml(pageList[m].id, pageList[m].title, pageList[m].status, 2);
 								}					
 							}
 						}					
@@ -109,17 +109,28 @@ var PagesSidebarFrame = {
 
 	// ////////////////////////////////////////////////////////////////////////////
 
-	getPageHtml : function(page_id, page_title, page_depth){
+	getPageHtml : function(page_id, page_title, page_status, page_depth){
 
 		var txt = '';
+		
+		var status = "";
+		if (page_status == 'Draft'){
+			status = "<span class='page_status_draft'>(draft)</span>";
+		}
+		else if (page_status == 'Private'){
+			status = "<span class='page_status_private'>(private)</span>";
+		}
+		//else if (page_status == 'Published'){
+		//	status = "<span class='page_status_public'>(public)</span>";
+		//}
 				
 		if (page_id == DataStore.m_currentPageID){			
-			txt += "<div onclick=\"PagesSidebarFrame.onSelectPage('"+page_id+"')\" class='page page_depth_"+page_depth+"' id='page_"+page_id+"' title=''><img class='page_icon' src='images/web_page.png'><span class='page_name selected'>"+page_title+"</span></div>";
+			txt += "<div onclick=\"PagesSidebarFrame.onSelectPage('"+page_id+"')\" class='page page_depth_"+page_depth+"' id='page_"+page_id+"' title=''><img class='page_icon' src='images/web_page.png'><span class='page_name selected'>"+page_title+status+"</span></div>";
 		}
 		else {
-			txt += "<div onclick=\"PagesSidebarFrame.onSelectPage('"+page_id+"')\" class='page page_depth_"+page_depth+"' id='page_"+page_id+"' title=''><img class='page_icon' src='images/web_page.png'><span class='page_name'>"+page_title+"</span></div>";
+			txt += "<div onclick=\"PagesSidebarFrame.onSelectPage('"+page_id+"')\" class='page page_depth_"+page_depth+"' id='page_"+page_id+"' title=''><img class='page_icon' src='images/web_page.png'><span class='page_name'>"+page_title+status+"</span></div>";
 		}
-		
+				
 		return txt;
 	},
 	

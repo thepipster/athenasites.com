@@ -39,6 +39,10 @@
 	cursor: pointer;
 }
 
+#SideBar .page_status_draft { font-size: 9px; color: #990000; padding-left: 4px;}
+#SideBar .page_status_private { font-size: 9px; color: #ffcc66; padding-left: 4px;}
+#SideBar .page_status_public { font-size: 9px; color: #b9ff79; padding-left: 4px;}
+
 #SideBar .page_depth_0 { padding-left: 10px;}
 #SideBar .page_depth_1 { padding-left: 25px; }
 #SideBar .page_depth_2 { padding-left: 40px; }
