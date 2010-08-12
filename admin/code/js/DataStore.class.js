@@ -304,6 +304,8 @@ var DataStore = {
 		DataStore.m_themeParaList = theme_paras;
 		DataStore.m_theme = theme; // id, theme_name, theme_title, price, thumb_url, description, is_private, max_page_depth
 
+		if (DataStore.m_themeParaList == undefined) DataStore.m_themeParaList = new Array();
+
 		callback();
 	},
 
