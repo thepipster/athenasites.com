@@ -25,9 +25,74 @@ Logger::debug("Command = " . $cmd);
 // Get the command type, and process
 switch($cmd){
 
+		
 	case "getAll":
 		getAll($site_id); 
 		break;			
+/*		
+	case $CMD_GET_GALLERY_IMAGE_LIST : // Get the images for the given page (gallery)	
+		$page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$theme_para_id = CommandHelper::getPara('theme_para_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		listImages($page_id, $theme_para_id);			
+		break;
+*/
+	case "addImage" : // Process a new file upload
+		$image_id = CommandHelper::getPara('image_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$slot_no = CommandHelper::getPara('slot_no', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$gal_no = CommandHelper::getPara('gallery_no', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$theme_para_id = CommandHelper::getPara('theme_para_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		addImageToGallery($image_id, $page_id, $slot_no, $gal_no, $theme_para_id);
+		break;
+
+	case "moveImage" : // Process a new file upload
+		$old_slot_no = CommandHelper::getPara('old_slot_no', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$new_slot_no = CommandHelper::getPara('new_slot_no', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$old_gal_no = CommandHelper::getPara('old_gallery_no', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$new_gal_no = CommandHelper::getPara('new_gallery_no', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$theme_para_id = CommandHelper::getPara('theme_para_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$image_id = CommandHelper::getPara('image_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		moveImage($old_slot_no, $new_slot_no, $page_id, $old_gal_no, $new_gal_no, $theme_para_id, $image_id);
+		break;
+
+	case "removeImage" : 
+		$image_id = CommandHelper::getPara('image_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$gal_no = CommandHelper::getPara('gallery_no', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$theme_para_id = CommandHelper::getPara('theme_para_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$slot_no = CommandHelper::getPara('slot_no', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		removeImage($image_id, $page_id, $gal_no, $theme_para_id, $slot_no);
+		break;
+
+	case "addMultiGal" : 
+		$page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$theme_para_id = CommandHelper::getPara('theme_para_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		addMultiGal($page_id, $theme_para_id);
+		break;
+
+	case "deleteMultiGal" :
+		$page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$theme_para_id = CommandHelper::getPara('theme_para_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$gallery_number = CommandHelper::getPara('gallery_no', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		deleteMultiGal($page_id, $theme_para_id, $gallery_number);
+		break;
+		
+	case "setGalThumb" :
+		$image_id = CommandHelper::getPara('image_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$gal_no = CommandHelper::getPara('gallery_no', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$theme_para_id = CommandHelper::getPara('theme_para_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		assignGalleryThumbnail($image_id, $page_id, $gal_no, $theme_para_id);
+		break;
+
+	case "setGalTitle" :
+		$title = CommandHelper::getPara('title', true, CommandHelper::$PARA_TYPE_STRING);
+		$page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$gal_no = CommandHelper::getPara('gallery_no', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$theme_para_id = CommandHelper::getPara('theme_para_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		assignGalleryTitle($title, $page_id, $gal_no, $theme_para_id);
+		break;
 
 	default :
 		CommandHelper::sendTextMessage("Undefined command '$cmd'");
@@ -102,54 +167,178 @@ function getAll($site_id){
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function getFolders($site_id){
-					
-	// Get the folder list.........
-	$folder_list = FolderTable::getFoldersForSite($site_id);
-	
-	$msg = array();	
-	$msg['cmd'] = 'getFolders';
-	$msg['result'] = 'ok';			
-	$msg['data'] = $folder_list;
+function addMultiGal($page_post_id, $theme_para_id){
+
+	//error_log("addMultiGal($page_post_id, $theme_para_id)");
+	checkPageValidForBlog($page_post_id);
+		
+	$blogid = Session::get('apollo_blog_id');
+		
+	// Get the current number of sub-galleries
+	$no_galleries = PageParasTable::getParaValue($page_post_id, $theme_para_id, $blogid);
 				
-	CommandHelper::sendMessage($msg);		
-	
-}
-
-// //// ///////////////////////////////////////////////////////////////////////////////////////
-
-function getImages($site_id){
-	
-	$media_list = FolderTable::getMediaForSite($site_id);
-	
-	$msg = array();	
-	$msg['cmd'] = 'getMedia';
-	$msg['result'] = 'ok';			
-
-	$data = array();
-	foreach ($media_list as $media){
-		$temp = $media;
-		$temp['created'] = date("m/d/Y H:i", strtotime($media['created'])); // Convert to JS compatible date
-		$data[] = $temp;
+	if (!isset($no_galleries)){
+		$result = PageParasTable::createParaValue($blog_id, $page_post_id, $theme_para_id, 1);
+		$gallery_number = 1;
+	}
+	else {
+		if ($no_galleries+1 < 99){
+			$gallery_number = $no_galleries+1;
+			$result = PageParasTable::updateParaValue($blogid, $page_post_id, $theme_para_id, $gallery_number);
+		}	
 	}
 	
+	// Create entry in GalleryMeta table
+	GalleryTable::setGalleryTitle($page_post_id, $theme_para_id, $gallery_number, '', $blogid);			
+			
+	$data = array();
+	$data['theme_para_id'] = $theme_para_id;
+	$data['page_post_id'] = $page_post_id;
+	
+	$msg = array();
+	
+	$msg['cmd'] = 7;
+	$msg['result'] = $result > 0 ? 'ok' : 'fail';
 	$msg['data'] = $data;
-				
 
-	CommandHelper::sendMessage($msg);		
+	CommandHelper::sendMessage($msg);
+		
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function deleteMultiGal($page_post_id, $theme_para_id, $gallery_number){
+
+	checkPageValidForBlog($page_post_id);
+
+	$blogid = Session::get('apollo_blog_id');
+
+	$msg['cmd'] = 18;
+	
+	// Update the sub-gallery count...............
+	
+	// Get the current number of sub-galleries
+	$no_subgalleries = PageParasTable::getParaValue($page_post_id, $theme_para_id, $blogid);
+				
+	if ($no_subgalleries > 1){
+
+		PageParasTable::updateParaValue($blogid, $page_post_id, $theme_para_id, $no_subgalleries-1);
+		GalleryTable::deleteSubGallery($page_post_id, $theme_para_id, $gallery_number, $blogid);		
+		
+		$msg['result'] = 'ok';
+	}	
+	else {
+		$msg['result'] = 'fail';
+	}	
+	
+	CommandHelper::sendMessage($msg);
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function assignGalleryThumbnail($image_post_id, $page_post_id, $gal_no, $theme_para_id){
+
+	checkPageValidForBlog($page_post_id);
+	
+	$blogid = Session::get('apollo_blog_id');
+
+	Logger::debug("assignGalleryThumbnail($image_post_id, $page_post_id, $gal_no, $theme_para_id)");
+		
+	$result = GalleryTable::setGalleryThumbnail($page_post_id, $theme_para_id, $gal_no, $image_post_id, $blogid);
+
+	$msg['cmd'] = 8;
+	$msg['result'] = $result > 0 ? 'ok' : 'fail';
+
+	CommandHelper::sendMessage($msg);
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function assignGalleryTitle($title, $page_post_id, $gal_no, $theme_para_id){
+
+	checkPageValidForBlog($page_post_id);
+
+	$blogid = Session::get('apollo_blog_id');
+	
+	//Logger::debug("assignGalleryTitle($title, $page_post_id, $gal_no, $theme_para_id)");
+	
+	$result = GalleryTable::setGalleryTitle($page_post_id, $theme_para_id, $gal_no, $title, $blogid);
+	
+	$msg['cmd'] = 9;
+	$msg['result'] = $result > 0 ? 'ok' : 'fail';
+
+	CommandHelper::sendMessage($msg);
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function addImageToGallery($image_id, $page_id, $slot_no, $gal_no, $theme_para_id){
+
+	checkPageValidForBlog($page_id);
+
+	$blog_id = Session::get('apollo_blog_id');			
+
+	//addImageToGallery(53, 3, 0, 0, 408) 
+	Logger::debug("addImageToGallery($image_id, $page_id, $slot_no, $gal_no, $theme_para_id)");
+	
+	$id = GalleryTable::addImageToSlot($image_id, $page_id, $slot_no, $theme_para_id, $gal_no, $blog_id);
+	
+	if (isset($id) && $id > 0){
+		//$msg['cmd'] = 2;
+		//$msg['result'] = 'ok';
+		//$msg['data'] = $id;
+		listImages($page_id, $theme_para_id);
+	}
+	else {
+		$msg['cmd'] = 2;
+		$msg['result'] = 'error';
+		CommandHelper::sendMessage($msg);	
+	}
 	
 }
 
-// //// ///////////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////////////
 
-function saveMediaInfo($site_id, $title, $desc, $tags){
+function moveImage($old_slot_no, $new_slot_no, $page_id, $old_gal_no, $new_gal_no, $theme_para_id, $image_id){
 
-	$msg = array();	
-	$msg['cmd'] = 'saveMediaInfo';
-	$msg['result'] = 'ok';			
-	$msg['data'] = '';
-				
+	checkPageValidForBlog($page_id);
+
+	Logger::debug("moveImage(old_slot_no=$old_slot_no, new_slot_no=$new_slot_no, page_id=$page_id, gal_no=$gal_no, theme_para_id=$theme_para_id, image_id=$image_id)");
+
+	$blog_id = Session::get('apollo_blog_id');			
+
+	$result = GalleryTable::moveSlot($image_id, $old_slot_no, $new_slot_no, $page_id, $theme_para_id, $old_gal_no, $new_gal_no, $blog_id);
+		
+	$msg['cmd'] = 3;
+	
+	if (!$result){
+		$msg['result'] = 'fail';
+		CommandHelper::sendMessage($msg);	
+	}	
+	else {
+		$msg['result'] = 'ok';
+		listImages($page_id, $theme_para_id);
+	} 
+		
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function removeImage($image_id, $page_id, $gal_no, $theme_para_id, $slot_no){
+	
+	checkPageValidForBlog($page_id);
+	
+	$blog_id = Session::get('apollo_blog_id');			
+	
+	GalleryTable::removeImage($image_id, $page_id, $slot_no, $theme_para_id, $gal_no, $blog_id);
+
+	$msg['cmd'] = 4;
+	$msg['result'] = 'ok';
+
 	CommandHelper::sendMessage($msg);	
 }
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
 
 ?>

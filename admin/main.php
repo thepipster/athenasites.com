@@ -23,7 +23,13 @@ else {
 //Logger::debug("User has " . count($site_list) . " sites!");
 //Logger::debug("User level = $user_level");
 
-$current_site_id = $site_list[0]['id'];
+$site_id = CommandHelper::getPara('site_id', false, CommandHelper::$PARA_TYPE_NUMERIC);
+if (isset($site_id) && $site_id > 0){
+	$current_site_id = $site_id;
+}
+else {
+	$current_site_id = $site_list[0]['id'];
+}
 
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -417,6 +423,9 @@ var ssMain = {
 
 	onSelectSite : function(site_id){
 
+		window.location = "main.php?site_id=" + site_id;	
+		
+/*
 		// Reset frames
 		DashboardFrame.init();
         FilesFrame.init();
@@ -430,6 +439,7 @@ var ssMain = {
 		SidebarFrame.m_mode = ''; // Clear the mode to force the side bar to refresh
 		DataStore.clear();
 		DataStore.load(ssMain.onDataLoaded);
+*/
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////
