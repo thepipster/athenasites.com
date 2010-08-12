@@ -74,6 +74,9 @@ class SecurityUtils {
 			$user_level = SecurityUtils::getCurrentUserLevel();
 			$user_id = SecurityUtils::getCurrentUserID();
 			
+			//Logger::debug(">>> User ID : $user_id");
+			//Logger::debug(">>> User Level : $user_level");
+			
 			// If this is a super-user, then allow access. Otherwise check that the
 			// user has access to this site
 			if ($user_level == 1){	

@@ -4,6 +4,7 @@ require_once("code/php/setup.php");
 
 if(!SecurityUtils::isLoggedIn()){
 //	header("Location: http://".$_SERVER['HTTP_HOST']."/admin/index.html");
+	SecurityUtils::logOut();
 	header("Location: index.html");
 } 
 
@@ -24,11 +25,30 @@ else {
 //Logger::debug("User level = $user_level");
 
 $site_id = CommandHelper::getPara('site_id', false, CommandHelper::$PARA_TYPE_NUMERIC);
-if (isset($site_id) && $site_id > 0){
+
+if (isset($site_id) && $site_id > 0){	
+	// Check user has access to this site!!!!
+	if (!SecurityUtils::isLoggedInForSite($site_id)){
+		SecurityUtils::logOut();
+		header("Location: index.html");
+	}
 	$current_site_id = $site_id;
 }
 else {
-	$current_site_id = $site_list[0]['id'];
+
+	// Look at domain for site id
+	$domain = str_replace('www.','',$_SERVER['HTTP_HOST']);
+	$site_id = SitesTable::getSiteIDFromDomain($domain);
+	Logger::debug("$domain has site_id = $site_id");
+	// If the domain isn't the main domain (site_id = 1) then select from the users site list
+	if ($site_id != 1){
+		$current_site_id = $site_list[0]['id'];
+	}
+	else {
+		$current_site_id = $site_id;
+	}
+	
+	
 }
 
 ?>
@@ -172,11 +192,9 @@ else {
 
 <!-- Main  //////////////////////////////////////////////////////////////////////////////// -->
 
-<!--
-<img class='apollo_logo' src='images/logo.png' height='40px'/>
--->
+<img class='apollo_logo' src='images/logo.png' height='35px' style='padding-top:5px; padding-left:5px;'/>
 
-<div id='sync_spinner'></div>	
+<div id='apollo_loading_display' class='transparent_50' align="center"></div>	
 
 <div id='Content' align='center'>
 
@@ -210,7 +228,7 @@ else {
 						
 						<?php
 						if (count($site_list) > 1){
-							echo '<select style=\'float:right; margin-right:20px; margin-top:3px;\' onchange=\'ssMain.onSelectSite($(this).val())\'>';
+							echo '<select class="menu_site_selector" onchange=\'ssMain.onSelectSite($(this).val())\'>';
 							foreach($site_list as $site){
 								
 								$selected = '';

@@ -339,7 +339,7 @@ function getAll($site_id){
 
 	// Get the page list
 	$page_list = PagesTable::getPages($site_id);
-		
+				
 	$page_data = array();
 	foreach ($page_list as $page){
 		$temp = $page;
@@ -360,10 +360,13 @@ function getAll($site_id){
 	$theme = ThemeTable::getTheme($site['theme_id']);
 	$page_templates = TemplateManager::getThemePageTemplates($theme['theme_name']);
 		
+	// Get page theme variables
+	$site_theme_paras = ThemeTable::getAllThemeParas($site['theme_id']);
+			
 	$msg = array();	
 	$msg['cmd'] = 'getAll';
 	$msg['result'] = 'ok';			
-	$msg['data'] = array('folders' => $folder_list, 'media' => $media_data, 'pages' => $page_data, 'theme' => $theme, 'page_templates' => $page_templates);
+	$msg['data'] = array('folders' => $folder_list, 'media' => $media_data, 'pages' => $page_data, 'theme' => $theme, 'page_templates' => $page_templates, 'theme_paras' => $site_theme_paras);
 				
 	CommandHelper::sendMessage($msg);		
 

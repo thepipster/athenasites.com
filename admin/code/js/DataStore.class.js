@@ -24,6 +24,9 @@ var DataStore = {
 
 	/** Page template list */
 	m_templateList : '',
+	
+	/** Theme parameter list */	
+	m_themeParaList : '',
 		
 	// //////////////////////////////////////////////////////////////////////////////////
 	
@@ -41,6 +44,16 @@ var DataStore = {
 	
 	// //////////////////////////////////////////////////////////////////////////////////
 
+	getPageThemeParas : function(template_name){	
+		var list = new Array();
+		for(var i=0; i<DataStore.m_themeParaList.length; i++){
+			if (DataStore.m_themeParaList[i].page_template_name == template_name){
+				list.push(DataStore.m_themeParaList[i]);
+			}
+		}
+		return list;
+	},
+	
 	getImage : function(image_id){
 		for(var i=0; i<DataStore.m_mediaList.length; i++){
 			if (DataStore.m_mediaList[i].id == image_id){
@@ -216,7 +229,7 @@ var DataStore = {
 				DataStore.m_pageList[i].slug = pageObj.slug;
 				DataStore.m_pageList[i].path = pageObj.path;
 				DataStore.m_pageList[i].is_homepage = pageObj.is_homepage;
-				DataStore.m_pageList[i].order = pageObj.page_order;				
+				DataStore.m_pageList[i].order = pageObj.page_order;		
 								
 				return;
 			}
@@ -273,25 +286,51 @@ var DataStore = {
 	// //////////////////////////////////////////////////////////////////////////////////
 	
 	load : function(callback){
-		MediaAPI.getAll(DataStore.m_siteID, function(folders, media, pages, theme, page_templates){ DataStore.onGotData(folders, media, pages, theme, page_templates, callback);} );
-		//MediaAPI.getFolders(DataStore.m_siteID, DataStore.onGotFolders);
-		//MediaAPI.getMedia(DataStore.m_siteID, DataStore.onGotMedia);
+		MediaAPI.getAll(DataStore.m_siteID, function(folders, media, pages, theme, page_templates, theme_paras){ 
+			DataStore.onGotData(folders, media, pages, theme, page_templates, theme_paras, callback);
+		});
 	},
 	
 	// //////////////////////////////////////////////////////////////////////////////////
 
-	onGotData : function(folder_list, media_list, page_list, theme, page_templates, callback){
+	onGotData : function(folder_list, media_list, page_list, theme, page_templates, theme_paras, callback){
 
 		DataStore.onGotFolders(folder_list);
 		DataStore.onGotMedia(media_list);
 		DataStore.onGotPages(page_list);
 		DataStore.onGotPageTemplates(page_templates);
+		//DataStore.onGotThemeParas(theme_paras);
 
+		DataStore.m_themeParaList = theme_paras;
 		DataStore.m_theme = theme; // id, theme_name, theme_title, price, thumb_url, description, is_private, max_page_depth
 
 		callback();
 	},
+
+	// //////////////////////////////////////////////////////////////////////////////////
+	/*
+	onGotThemeParas : function(theme_paras){
+
+		if (!theme_paras || theme_paras == undefined){
+			DataStore.m_themeParaList = new Array();			
+			return;
+		}
+		
+		DataStore.m_themeParaList = new Array();
+				
+		for(var i=0; i<theme_paras.length; i++){			
 			
+			var temp = new Object();
+			temp.template_name = page_templates[i].template_name;
+			temp.template_description = page_templates[i].template_description;
+			temp.template_file = page_templates[i].template_file;
+			
+			DataStore.m_themeParaList[i] = temp;			
+
+		}	
+		
+	},
+	*/			
 	// //////////////////////////////////////////////////////////////////////////////////
 
 	onGotPageTemplates : function(page_templates){

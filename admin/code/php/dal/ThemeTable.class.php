@@ -97,6 +97,13 @@ class ThemeTable {
 		
 	// //////////////////////////////////////////////////////////////////////////////////////
 
+	public static function getAllThemeParas($theme_id){
+		$sql = DatabaseManager::prepare("SELECT * FROM apollo_ThemeParas WHERE theme_id = %d AND is_public='1' ORDER BY admin_order",  $theme_id ); 		
+		return DatabaseManager::getResults($sql);
+	}
+
+	// //////////////////////////////////////////////////////////////////////////////////////
+
 	public static function getGlobalThemeParas($theme_id){
 		return self::getThemeParas($theme_id, 'all');
 	}

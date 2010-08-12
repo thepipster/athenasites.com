@@ -4,7 +4,8 @@
 	/*margin: 3px;*/
 	border: none;
 	margin-top: 15px;	
-	font-size: 12px;	
+	font-size: 12px;
+	display: block;	
 }
 
 
@@ -21,4 +22,16 @@
 
 #PagesFrame .pageInfoLine {
 	padding-bottom: 10px;
+	height: auto;
+}
+
+#PagesFrame .customPageLabel {
+	color: #3f4040;
+	width: 100%;
+	display: inline-block;
+}
+
+#PagesFrame .customPageData {
+	color: #386b93;
+	width: 100%;
 }

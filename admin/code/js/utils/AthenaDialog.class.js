@@ -6,13 +6,22 @@ var AthenaDialog = {
 	// ////////////////////////////////////////////////////////////////////////
 
 	showLoading : function(msg){
-		$('#sync_spinner').html("<img height='12xpx' src='/images/loading_spinner.gif'/>");
+
+		var txt = "";
+		txt += "<div class='loading_box' style='position:relative; top:45%; width:200px; overflow:hidden' align='center'>";		
+		txt += "    <img  src='"+defines.root_url+"images/loading_spinner.gif'/>";
+		txt += "    <br/><span>" + msg + "</span>";
+		txt += "</div>";
+		
+		$('#apollo_loading_display').html(txt);
+		$('#apollo_loading_display').show();
 	},
 
 	// ////////////////////////////////////////////////////////////////////////
 
 	clearLoading : function(){
-		$('#sync_spinner').html("");
+		$('#apollo_loading_display').html("");
+		$('#apollo_loading_display').hide();
 	},
 
 	// ////////////////////////////////////////////////////////////////////////

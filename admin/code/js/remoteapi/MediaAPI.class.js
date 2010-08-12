@@ -25,7 +25,7 @@ var MediaAPI = {
 	*/
 	getAll : function(siteID, callback){
 	
-		AthenaDialog.showLoading();
+		AthenaDialog.showLoading("Loading media data");
 		
 		var paras = {cmd : 'getAll', site_id: siteID};
 
@@ -46,7 +46,7 @@ var MediaAPI = {
 		AthenaDialog.clearLoading();
 		
 		if (ret.result == 'ok'){	
-			callback(ret.data.folders, ret.data.media, ret.data.pages, ret.data.theme, ret.data.page_templates);
+			callback(ret.data.folders, ret.data.media, ret.data.pages, ret.data.theme, ret.data.page_templates, ret.data.theme_paras);
 		}
 		else {
 			AthenaDialog.showAjaxError(ret);
@@ -92,6 +92,8 @@ var MediaAPI = {
 
 	updatePage : function(siteID, pageID, pageTitle, pageContent, pageStatus, templateName, parentPageID, pageSlug, pageOrder, isHome, callback){
 		
+		AthenaDialog.showLoading("Updating page");
+		
 		var paras = {cmd: 'updatePage', site_id: siteID, page_id: pageID, title: pageTitle, content: pageContent, status: pageStatus, template_id: templateName, 
 				parent_page_id: parentPageID, slug: pageSlug, ishome: isHome, order: pageOrder};
 				
@@ -105,6 +107,8 @@ var MediaAPI = {
 
 	addPage : function(siteID, pageTitle, pageContent, pageStatus, templateName, parentPageID, pageSlug, pageOrder, isHome, callback){
 		
+		AthenaDialog.showLoading("Adding page");
+		
 		var paras = {cmd: 'addPage', site_id: siteID, title: pageTitle, content: pageContent, status: pageStatus, 
 				template_id: templateName, parent_page_id: parentPageID, slug: pageSlug, ishome: isHome, order: pageOrder};
 				
@@ -117,6 +121,8 @@ var MediaAPI = {
 	},
 	
 	onPageAdded : function(ret, callback){
+			
+		AthenaDialog.clearLoading();
 								
 		if (ret.result == "ok"){		
 			callback(ret.data.page);			
@@ -129,6 +135,9 @@ var MediaAPI = {
 	// ////////////////////////////////////////////////////////////////////////
 
 	deletePage : function(siteID, pageID, callback){
+
+		AthenaDialog.showLoading("Deleting page");
+
 		var paras = {cmd: 'deletePage', site_id: siteID, page_id: pageID};
 				
 		$.ajax({
@@ -140,6 +149,9 @@ var MediaAPI = {
 	},
 	
 	onPageDeleted : function(ret, callback){
+
+		AthenaDialog.clearLoading();
+
 		if (ret.result == "ok"){		
 			callback(ret.data.page_id);			
 		}					
@@ -151,6 +163,8 @@ var MediaAPI = {
 	// ////////////////////////////////////////////////////////////////////////
 	
 	addFolder : function(siteID, folderName, callback){
+
+		AthenaDialog.showLoading("Adding folder");
 
 		if (folderName == undefined){
 			folderName = 'new folder';
@@ -167,6 +181,8 @@ var MediaAPI = {
 	},
 	
 	onAddedFolder : function(ret, callback){
+		
+		AthenaDialog.clearLoading();
 								
 		if (ret.result == "ok"){		
 			callback(ret.data.name, ret.data.id);			
@@ -179,7 +195,7 @@ var MediaAPI = {
 	// ////////////////////////////////////////////////////////////////////////
 		
 	renameFolder : function(siteID, folderID, newName, callback){
-		
+				
 		var paras = {cmd: 'renameFolder', site_id: siteID, folder_id: folderID, folder_name: newName};
 												
 		$.ajax({

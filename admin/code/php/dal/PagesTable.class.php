@@ -85,7 +85,7 @@ class PagesTable {
 	// /////////////////////////////////////////////////////////////////////////////////
 
 	public static function getPages($site_id){
-		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages", $site_id);			
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages ORDER BY page_order", $site_id);			
 		return DatabaseManager::getResults($sql);				
 	}
 

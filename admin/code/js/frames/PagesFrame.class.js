@@ -142,7 +142,7 @@ var PagesFrame = {
 		txt += "			<div class='pageInfoLine'>";
 		txt += "            <span class='pageLabel'>Template:</span>";
 		txt += "            <span class='pageData'>";
-		txt += "            <select id='pageTemplate' >";
+		txt += "            <select id='pageTemplate' onchange=\"PagesFrame.paintThemeParas()\">";
 		txt += "                <option value=''>(none)</selected>";
 
 		for (var i=0; i<DataStore.m_templateList.length; i++){
@@ -162,6 +162,8 @@ var PagesFrame = {
 		txt += "            <span class='pageLabel'>Order:</span>";
 		txt += "            <span class='pageData'><input id='pageOrder' type=text size=5 value='"+pageObj.order+"'/></span>";
 		txt += "			</div>";
+
+		txt += "            <div id='apollo_page_theme_paras'></div>"
 		
 		txt += "            </fieldset>";
 
@@ -169,7 +171,6 @@ var PagesFrame = {
 		txt += "			<button class='delete_button' onclick=\"PagesFrame.onDeletePage()\">Delete Page</button>";
 		txt += "			<button class='save_button' onclick=\"PagesFrame.onSavePage()\">Save Changes</button>";
 		txt += "			</div>";
-
 
 		txt += "		</div>";											
 			
@@ -190,6 +191,7 @@ var PagesFrame = {
 		// Good article on customization of CKEditor - http://www.voofie.com/content/2/ckeditor-plugin-development/		
 		PagesFrame.paintCKEditor();
 		
+		PagesFrame.paintThemeParas();
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////////
@@ -206,10 +208,61 @@ var PagesFrame = {
 		$('#pageStatusSelector').val(pageObj.status);
 		$('#pageParent').val(pageObj.parent_page_id);
 		$('#pageTemplate').val(pageObj.template);
+		$('#pageOrder').val(pageObj.order);
 		
 		// Paint the parent pages...
 		PagesFrame.paintParentPages(pageObj);
+					
+		PagesFrame.paintThemeParas();
 						
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Paint any special theme paras associated with the chosen template
+	*/
+	paintThemeParas : function(){
+	
+		var template_name = $('#pageTemplate').val();
+		var template_list = DataStore.getPageThemeParas(template_name);
+				
+		var txt = "";
+
+		if (template_list.length > 0){
+			txt += "<p><strong>Custom Parameters</strong></p>";
+			txt += "<table border='0' width='100%'>";
+		}
+		
+		for (var i=0; i<template_list.length; i++){
+			
+			var paraType = template_list[i].para_type;
+			var paraDesc = template_list[i].description;
+			var paraVal = '';
+			
+			txt += "<tr valign='top'>";
+			txt += "    <td width='5px'><span class='customPageLabel'>Para:</span></td>";
+			txt += "    <td><span class='customPageData'>"+paraDesc+"</span></td>";
+			txt += "</tr>";
+
+			txt += "<tr valign='top'>";
+			txt += "    <td><span class='customPageLabel'>Value:</span></td>";
+			txt += "    <td><span class='customPageData'>"+paraVal+"</span></td>";
+			txt += "</tr>";
+
+			txt += "<tr valign='top'>";
+			txt += "    <td><span class='customPageLabel'>Change:</span></td>";
+			txt += "    <td><span class='customPageData'><button class='save_button' style='font-size:10px'>Change</button></span></td>";
+			txt += "</tr>";
+
+		}
+		
+		if (template_list.length > 0){
+			txt += "</table><br/>";
+		}
+		
+				
+		$('#apollo_page_theme_paras').html(txt);
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////////
