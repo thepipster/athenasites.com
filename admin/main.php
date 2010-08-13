@@ -144,6 +144,7 @@ else {
 <!-- Remote APIs -->
 <script src="code/js/remoteapi/SystemAPI.class.js" type="text/javascript"></script>
 <script src="code/js/remoteapi/MediaAPI.class.js" type="text/javascript"></script>
+<script src="code/js/remoteapi/GalleryAPI.class.js" type="text/javascript"></script>
 
 <!-- Dialog Displays -->
 <script src="code/js/dialogs/ImageEditDialog.class.js" type="text/javascript"></script>
@@ -348,6 +349,7 @@ var ssMain = {
 		// Initialize the remote API's
 		SystemAPI.init();
 		MediaAPI.init();
+		GalleryAPI.init();
 
 		// Setup the JS logger
 		Message.init('#debug_txt');

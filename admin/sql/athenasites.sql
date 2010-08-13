@@ -4,7 +4,7 @@
 #
 # Host: localhost (MySQL 5.0.41-log)
 # Database: athenasites
-# Generation Time: 2010-08-12 22:11:13 -0600
+# Generation Time: 2010-08-13 14:50:16 -0600
 # ************************************************************
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -46,22 +46,7 @@ LOCK TABLES `apollo_Sessions` WRITE;
 /*!40000 ALTER TABLE `apollo_Sessions` DISABLE KEYS */;
 INSERT INTO `apollo_Sessions` (`id`,`access`,`data`)
 VALUES
-	('1e183e9810f300cc420b3eb37f8dfce8',1281650563,''),
-	('be52bbd0040b60fc2aec06fcc60f7af7',1281652365,''),
-	('a88668101455a97a484aaf5a6543ec83',1281653210,''),
-	('42221cf1e929cdbe1a7013252ad259a9',1281653022,'user_valid|b:1;user_id|s:1:\"1\";user_name|s:14:\"Mike Pritchard\";user_email|s:20:\"mike@apollosites.com\";user_level|s:1:\"2\";'),
-	('27f361c2e779eec8a90de4f590b8ffc6',1281653210,''),
-	('c64b8a587f7ee0d346075d95fc617ac5',1281653214,''),
-	('bec9ca98e293d59377893fdc719b6b71',1281654166,''),
-	('4ea98f450d02d532946a29db6dbef8c5',1281655968,''),
-	('71ef8117eacdee88deb96fa6b2cd9188',1281657770,''),
-	('6377858021c5a002f3fc46a658fd41b4',1281663905,'user_valid|b:1;user_id|s:1:\"1\";user_name|s:14:\"Mike Pritchard\";user_email|s:20:\"mike@apollosites.com\";user_level|s:1:\"2\";'),
-	('5fcd3922022da03f55e6cb45cd7caa87',1281659571,''),
-	('fedc9847434eab033ded10fc3a1f07fc',1281660010,'user_valid|b:1;user_id|s:1:\"1\";user_name|s:14:\"Mike Pritchard\";user_email|s:20:\"mike@apollosites.com\";user_level|s:1:\"2\";'),
-	('a665356a27b1e1cee16512fb2bf5d955',1281661372,''),
-	('39cb8281f2ca28ba2e46bc79d0a2c502',1281663173,''),
-	('4b2aeb364e09418b9f885b42124cf558',1281671382,''),
-	('1107c8431a293ac19b7c565c184f7c30',1281672613,'');
+	('4b2aeb364e09418b9f885b42124cf558',1281732576,'user_valid|b:1;user_id|s:1:\"1\";user_name|s:14:\"Mike Pritchard\";user_email|s:20:\"mike@apollosites.com\";user_level|s:1:\"2\";');
 
 /*!40000 ALTER TABLE `apollo_Sessions` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1607,7 +1592,7 @@ LOCK TABLES `athena_5_Pages` WRITE;
 /*!40000 ALTER TABLE `athena_5_Pages` DISABLE KEYS */;
 INSERT INTO `athena_5_Pages` (`id`,`user_id`,`content`,`status`,`last_edit`,`parent_page_id`,`title`,`slug`,`path`,`created`,`template`,`is_homepage`,`page_order`)
 VALUES
-	(9,1,'','Published','2010-08-13 00:41:07',0,'Home','Home.html','/','2010-08-12 06:01:28','homepage.php',0,0),
+	(9,1,'','Published','2010-08-13 00:41:07',0,'Home','Home.html','/','2010-08-12 06:01:28','homepage.php',1,0),
 	(10,1,'','Published','2010-08-13 01:06:54',0,'Portfolio','Portfolio.html','/','2010-08-12 06:01:52','gallerypage.php',0,2),
 	(11,1,'','Draft','2010-08-13 01:08:15',0,'Blog','Blog.html','/','2010-08-12 06:03:10','blog_page.php',0,3),
 	(12,1,'<div align=\\\\\\\"left\\\\\\\" cla=\\\\\\\"rightCol\\\\\\\" tyle=\\\\\\\"width: 675px;\\\\\\\">	<div cla=\\\\\\\"contentText\\\\\\\">		<div cla=\\\\\\\"torycontent\\\\\\\">			<p>Holly Pacione Photography<br />			719-321-9419</p>			<p>hollypacionephotography@gmail.com</p>			<p tyle=\\\\\\\"text-align: jutify;\\\\\\\"><trong>Portrait Invetment</trong></p>			<p>The itting fee for portrait i $100 and include:</p>			<p tyle=\\\\\\\"text-align: jutify;\\\\\\\">-Time and talent</p>			<p tyle=\\\\\\\"text-align: jutify;\\\\\\\">-Photography at a location of your choice within the Colorado pring area and mot of Denver</p>			<p>-Print begin at $15</p>			<p>-Digital File are Available</p>			<p><trong>Wedding Invetment</trong></p>			<p>Package begin at $2300 for two photographer, digital negative, and 6 hour and more.</p>			<p>We offer an aortment of earth friendly product, album, print and more.</p>			<p>We would be happy to e-mail you a more detailed price heet upon requet!</p>		</div>	</div></div>','Published','2010-08-13 01:30:05',0,'Investment','Investment.html','/','2010-08-12 06:03:20','contentrightpage.php',0,4),
@@ -1797,14 +1782,18 @@ CREATE TABLE `athena_Users` (
   `last_login` datetime default NULL,
   `user_level` tinyint(1) default NULL,
   `service_client_gallery` tinyint(1) default '0',
+  `payment_plan` enum('Monthly','Annually') default 'Annually',
+  `last_payment` date default NULL,
+  `next_payment_due` date default NULL,
+  `monthly_fee` float(3,2) default '8.00',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_Users` WRITE;
 /*!40000 ALTER TABLE `athena_Users` DISABLE KEYS */;
-INSERT INTO `athena_Users` (`id`,`email`,`name`,`password_hash`,`account_created`,`last_login`,`user_level`,`service_client_gallery`)
+INSERT INTO `athena_Users` (`id`,`email`,`name`,`password_hash`,`account_created`,`last_login`,`user_level`,`service_client_gallery`,`payment_plan`,`last_payment`,`next_payment_due`,`monthly_fee`)
 VALUES
-	(1,'mike@apollosites.com','Mike Pritchard','22d500a499157bcb53edd6703f8b78fb132fb1698735af66fcca','2010-08-09 19:54:00','2010-08-13 00:40:09',2,1);
+	(1,'mike@apollosites.com','Mike Pritchard','22d500a499157bcb53edd6703f8b78fb132fb1698735af66fcca','2010-08-09 19:54:00','2010-08-13 18:18:40',2,1,'Annually','2010-08-09','2011-08-09',8.00);
 
 /*!40000 ALTER TABLE `athena_Users` ENABLE KEYS */;
 UNLOCK TABLES;

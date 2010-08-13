@@ -30,6 +30,12 @@ var DataStore = {
 	
 	/** List of parameters set for this site */
 	m_siteParaList : '',
+	
+	/** Gallery image list */		
+	m_galleryImageList : '',
+	
+	/** Gallery meta information */
+	m_galleryMetaList : '',
 		
 	// //////////////////////////////////////////////////////////////////////////////////
 	
@@ -82,6 +88,25 @@ var DataStore = {
 		}
 		return false;
 	},
+	
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Check to see if a page can have a gallery, based on its template
+	*/
+	isGalleryPage : function(page_id){
+	
+		var page = DataStore.getPage(page_id);
+		var pageParas = DataStore.getPageThemeParas(page.template);
+		
+		for (var i=0; i<pageParas.length; i++){
+			if (pageParas[i].para_type == 'gallery'){
+				return true;
+			}
+		}
+		return false;
+	},
+	
 	
 	// //////////////////////////////////////////////////////////////////////////////////
 
@@ -323,9 +348,22 @@ var DataStore = {
 	// //////////////////////////////////////////////////////////////////////////////////
 	
 	load : function(callback){
+	
+		GalleryAPI.getAll(DataStore.m_siteID, function(gallery_images, gallery_meta){DataStore.onGotGalleryData(gallery_images, gallery_meta);});
+		
 		MediaAPI.getAll(DataStore.m_siteID, function(folders, media, pages, theme, page_templates, theme_paras, page_paras){ 
 			DataStore.onGotData(folders, media, pages, theme, page_templates, theme_paras, page_paras, callback);
 		});
+	},
+	
+	// //////////////////////////////////////////////////////////////////////////////////
+	
+	onGotGalleryData : function(gallery_images, gallery_meta){
+		DataStore.m_galleryImageList = gallery_images;
+		DataStore.m_galleryMetaList = gallery_meta;
+		
+		if (DataStore.m_galleryImageList == undefined) DataStore.DataStore.m_galleryImageList = new Array();
+		if (DataStore.m_galleryMetaList == undefined) DataStore.m_galleryMetaList = new Array();		
 	},
 	
 	// //////////////////////////////////////////////////////////////////////////////////

@@ -103,63 +103,49 @@ switch($cmd){
 
 function getAll($site_id){
 
-	
-	//Logger::debug("listImages($page_id, $theme_para_id)");
-	$blog_id = Session::get('apollo_blog_id');			
-	
 	$imageList = array();
+
+	$pages = PagesTable::getPages($site_id);
 	
-	$gal_images = GalleryTable::getImages($page_id, $theme_para_id, $blog_id);	
-	$no_subgalleries = ThemeTable::getNumberGalleriesForMultiGallery($page_id);
-	if (!isset($no_subgalleries) || $no_subgalleries == 0) $no_subgalleries = 1;
-	
-	if (isset($images)){	
-		foreach($images as $image){
+	foreach($pages as $page){
+
+		$page_id = $page['id'];
 		
-			$temp = array();
-			$temp['id'] = $image['id'];
-			$temp['image_post_id'] = $image['image_post_id'];
-			//$temp['url'] = $image['url'];
+		$gal_images = GalleryTable::getImages($page_id, $theme_para_id, $site_id);	
+	
+		$no_subgalleries = ThemeTable::getNumberGalleriesForMultiGallery($site_id, $page_id);
+	
+		if (!isset($no_subgalleries) || $no_subgalleries == 0) $no_subgalleries = 1;
+		
+		if (isset($images)){	
+			foreach($gal_images as $gal_image){
 			
-			$temp['url'] = WordPressHelper::getRealThumbURL($image['image_post_id'], $blog_id);
-			
-			//$temp['url'] = wp_get_attachment_thumb_url($image['image_post_id']);
-			
-			if (!isset($temp['url']) || $temp['url'] == ''){
-				// Force thumbnail generation!
-				Logger::warn("Warning, thumbnail missing for image {$image['id']}, for the blog id $blog_id");
-				WordPressHelper::regenerateThumbnail($image['id'], $blog_id, $blog_downloads_root);	
+				$image = FolderTable::getMedia($site_id, $gal_image['image_id']);
+				
+				$temp = array();
+				$temp['id'] = $gal_image['id'];			
+				$temp['image_id'] = $image['id'];
+				$temp['thumbname'] = $image['thumb_filename'];			
+				$temp['slot_number'] = $gal_image['slot_number'];
+				$temp['gallery_number'] = $gal_image['gallery_number'];
+				$temp['theme_para_id'] = $gal_image['theme_para_id'];
+				$temp['page_id'] = $gal_image['page_id'];
+								
+				$imageList[] = $temp;
 			}
-			
-			// wp_create_thumbnail
-			//$temp['url'] = wp_get_attachment_image_src($image['image_post_id']);
-			
-			$temp['slot_number'] = $image['slot_number'];
-			$temp['gallery_number'] = $image['gallery_number'];
-			$temp['theme_para_id'] = $image['theme_para_id'];
-			$temp['page_post_id'] = $image['page_post_id'];
-			$temp['blog_id'] = $image['blog_id'];
-			
-			$gal_number = $image['gallery_number'];
-			
-			$imageList[$gal_number][] = $temp;
 		}
+
 	}
 	
+	Logger::dump($imageList);
 	
-	$msg['cmd'] = 1;
-	$msg['result'] = 'ok';
-	$msg['data'] = $imageList;
-	$msg['number_galleries'] = $no_subgalleries;
-		
-	CommandHelper::sendMessage($msg);	
+	// Get gallery meta data...
+	$meta = GalleryTable::getAllMeta($site_id);
 	
-	
-			
 	$msg = array();	
 	$msg['cmd'] = 'getAll';
 	$msg['result'] = 'ok';			
-	$msg['data'] = array('folders' => $folder_list, 'media' => $media_data, 'pages' => $page_data, 'theme' => $theme, 'page_templates' => $page_templates);
+	$msg['data'] = array('gallery_images' => $imageList, 'gallery_meta' => $meta);
 				
 	CommandHelper::sendMessage($msg);		
 

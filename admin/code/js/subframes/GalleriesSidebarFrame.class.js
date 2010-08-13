@@ -59,18 +59,20 @@ var GalleriesSidebarFrame = {
 		
 		// Get number of pages with galleries
 		for (var i=0; i<pageList.length; i++){
-			var hasGallery = false;
+			var hasGallery = DataStore.isGalleryPage(pageList[i].id);
 			if (hasGallery){
 				noGalPages++;
 			}
 		}
-		
+				
 		if (noGalPages == 0){
 			txt += "<div style='padding-left:10px; color:#444444'>(you have no pages using a gallery template yet)</div>";
 		}
 		else {
 			for (var i=0; i<pageList.length; i++){
-				var hasGallery = false;
+				
+				var hasGallery = DataStore.isGalleryPage(pageList[i].id);
+				
 				if (hasGallery){
 					txt += GalleriesSidebarFrame.getPageHtml(pageList[i].id, pageList[i].title, pageList[i].status, 0);
 				}

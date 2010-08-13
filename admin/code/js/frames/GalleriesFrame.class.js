@@ -46,7 +46,7 @@ var GalleriesFrame = {
 							
 		$('#GalleriesFrame').html(txt);
 
-			
+		GalleriesFrame.paintGallerySlots();	
 /*
 		var txt = "";
 		
@@ -106,6 +106,39 @@ var GalleriesFrame = {
 		$('#GalleriesFrame').html(txt);
 		
 		*/
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////////
+	
+	paintGallerySlots : function(){
+	
+		var txt = "";
+					/*		
+		for (var i=0; i<EditGallery.m_slots[gal_no].length; i++){
+						
+			txt += "<div class='gallery_slot' id='slot_"+gal_nostr+"_"+i+"' align='center'><table><tr><td>";
+			
+//				alert('['+gal_no+'] ' + EditGallery.m_slots[gal_no][i].gallery_number + ' ' + gal_no);
+			
+			if (EditGallery.m_slots[gal_no][i].url == ''){
+				txt += "<div class='gallery_slot_text' align='center'>"+(i+1)+"</div>";
+			}
+			else {
+				var img_id = EditGallery.m_slots[gal_no][i].image_id;
+				var url = EditGallery.m_slots[gal_no][i].url;				
+				var style = "style='background-image: url("+url+")'; margin:0; padding:0;";
+					
+				txt += "<img src='"+url+"' id='galimg_"+gal_nostr+"_"+img_id+"' slot='"+i+"' class='gallery_slot_image gallery_thumb' width='100%' />";
+				
+			}
+			
+			txt += "</td></tr></table></div>";
+		}	
+		
+		txt += "</div>";
+					
+		*/
+		$('#apollo_gallery_contents').html(txt);
 	}
 
 }

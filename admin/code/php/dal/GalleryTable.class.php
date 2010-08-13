@@ -169,6 +169,11 @@ class GalleryTable {
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_GalleryMeta WHERE page_id = %d AND theme_para_id = %d ORDER BY gallery_number ASC", $site_id, $page_id, $theme_para_id); 		
 		return DatabaseManager::getResults($sql);
 	}
+
+	public static function getAllMeta($site_id){
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_GalleryMeta ORDER BY gallery_number ASC", $site_id); 		
+		return DatabaseManager::getResults($sql);
+	}
 	
 	// //////////////////////////////////////////////////////////////////////////////////////
 
