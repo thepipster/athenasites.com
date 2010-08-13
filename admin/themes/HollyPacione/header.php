@@ -120,16 +120,16 @@ PageManager::doHeader();
 	
 	var hpNav = {
 		
-		timer : -1,
+		//timeoutHandle : -1,
 		
-		mouseOver : function(level, parentID, thisID){
-			jQuery('#'+parentID).css('border-color', border_color);	
-			jQuery('#'+thisID).addClass('sfhover'); // IE hover fix		
+		mouseOver : function(level, parentID, thisID){			
+			$('#'+parentID).css('border-color', border_color);	
+			$('#'+thisID).addClass('sfhover'); // IE hover fix		
 		},
 	
 		mouseOut : function(level, parentID, thisID){
-			jQuery('#'+parentID).css('border-color', 'transparent');	
-			jQuery('#'+thisID).removeClass('sfhover'); // IE hover fix	
+			$('#'+parentID).css('border-color', 'transparent');	
+			$('#'+thisID).removeClass('sfhover'); // IE hover fix	
 		}
 		
 	}

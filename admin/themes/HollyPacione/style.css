@@ -527,17 +527,29 @@ a {
 }
 
 #nav .level2 {
-	margin-top: 2px;
-	margin-bottom: 2px;
+/*
+	margin-top: 1px;
+	margin-bottom: 1px;
+*/		
+/*
+	border-width: 0px;
+	border-bottom-width: 2px;
+	border-top-width: 2px;
+	border-color: transparent;
+	border-style: solid;
+*/
 	padding-top: 6px;
 	height: 14px;
 	width: 220px;
-	background-image: url('res/white80.png');
-	background-repeat: repeat;
+
+	background-image: url('res/menu_item_background_white80_2.png');
+	background-repeat: no-repeat;
+	
+	display: block;
 }
 
 #nav .level2:hover {
-	background-image: url('res/back60.png');
-	background-repeat: repeat;
+	background-image: url('res/menu_item_background_black60_2.png');
+	background-repeat: no-repeat;
 	color: white;
 }

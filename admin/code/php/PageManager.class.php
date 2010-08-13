@@ -48,6 +48,13 @@ class PageManager {
 		if (!isset($page)){
 			$page = PagesTable::getHomepage(self::$site_id);
 		}
+
+		// If page is still not set, select the first in the page list
+		if (!isset($page)){
+			$page = self::$page_list[0];
+		}
+		
+		//Logger::dump($page);
 		
 		//Logger::debug(">>>> " . self::$page_slug);
 		
@@ -63,7 +70,7 @@ class PageManager {
 		
 		self::$theme_url_root = self::$url_root . '/admin/themes/' . $theme['theme_name'] ."/";
 		self::$theme_file_root = FILE_ROOT . 'admin/themes/' . $theme['theme_name'] ."/";
-		
+		/*
 		Logger::debug(">>>>>>>>>>");
 		Logger::debug("Request URI: " . $_SERVER['REQUEST_URI']);
 		Logger::debug("Host: " . $_SERVER['HTTP_HOST']);
@@ -73,7 +80,7 @@ class PageManager {
 		Logger::debug("Theme file root: " . self::$theme_file_root);
 		Logger::debug("Templeta File: " . self::$template_filename);
 		Logger::debug("Medi Root URL: " . self::$media_root_url);
-		
+		*/
 	}
 	
 	

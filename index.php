@@ -8,7 +8,7 @@ require_once("admin/code/php/setup.php");
 
 $domain = strtolower($_SERVER['HTTP_HOST']);
 
-$path_parts = explode("/", substr($_SERVER['REQUEST_URI'], 1));
+//$path_parts = explode("/", substr($_SERVER['REQUEST_URI'], 1));
 
 $page = strtolower(basename($_SERVER['REQUEST_URI']));
 
@@ -16,7 +16,7 @@ $ext = strtolower(substr(strrchr($page,'.'),1));
 
 Logger::Debug(">>>> Request page: $page Ext: $ext. Full request: " . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
 
-if (($ext == 'html') || ($ext == 'htm') || ($ext == 'php')){
+if ($page == '' || (($ext == 'html') || ($ext == 'htm') || ($ext == 'php'))){
 	
 	// Strip www..
 	$domain = str_replace('www.','',$domain);

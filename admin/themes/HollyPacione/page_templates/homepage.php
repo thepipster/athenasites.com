@@ -7,7 +7,7 @@
 
 $xml_url = "http://" . $_SERVER['HTTP_HOST'] ."/admin/code/php/getUserGalleryXML.php?site_id=".PageManager::$site_id."&page_id=".PageManager::$page_id."&cache=" . mt_rand();
 
-$gallery_image_list = ClientGalleryTable::getImagesForPage($site_id, $page_id);
+$gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id, PageManager::$page_id);
 
 ?>
 <script type="text/javascript">
