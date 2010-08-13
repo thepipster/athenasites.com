@@ -39,9 +39,9 @@
 	cursor: pointer;
 }
 
-#SideBar .page_status_draft { font-size: 9px; color: #990000; padding-left: 4px;}
-#SideBar .page_status_private { font-size: 9px; color: #ffcc66; padding-left: 4px;}
-#SideBar .page_status_public { font-size: 9px; color: #b9ff79; padding-left: 4px;}
+.status_draft { color: #990000 !important;}
+.status_private { color: #ffcc66 !important;}
+.status_public { color: #b9ff79 !important;}
 
 #SideBar .page_depth_0 { padding-left: 10px;}
 #SideBar .page_depth_1 { padding-left: 25px; }
@@ -57,6 +57,9 @@
 	height: 20px;
 }
 
+#SideBar .page_icon{
+	height: 22px;
+}
 
 #SideBar .folder_filter {
 	padding-left: 10px;

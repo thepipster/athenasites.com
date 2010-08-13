@@ -11,7 +11,6 @@ else {
 
 // Load defines and class auto-loader....
 include_once(realpath(dirname(__FILE__)) . '/setup.php');
-//include_once('../code/common/php/CommonDefines.php');
 
 Logger::debug("Entering ProcessUpload.php");
 

@@ -124,6 +124,25 @@ html, body {
 	height: 20px;
 }
 
+.colorBox {
+	width: 30px;
+	height: 30px;
+	border-width: 2px;
+	border-style: solid;
+	border-color: #cccccc;			
+	cursor:pointer
+}
+
+.thumbBox {
+	width: 30px;
+	height: 30px;
+	border-width: 2px;
+	border-style: solid;
+	border-color: #cccccc;	
+	cursor:pointer;
+	display: block;		
+}
+
 /* Sub-Frame box //////////////////////////////////////////// */
 
 .subframebox {
@@ -305,21 +324,27 @@ html, body {
 
 #menu_container .menu_item {		
 	color: white;		
-	width: 100px;
+	width: 85px;
 	height: 20px;
 	float: left;
-	font-size: 14px;
+	font-size: 13px;
 	padding: 0px;
 	margin: 0px;
 	margin-top: 2px;
 	padding-top: 3px;
 	margin-left: 5px;
-	padding-left: 5px;
 	/*background-color: #999999;*/
 	background-color: #5d5d5d;
 	color: #acd6eb;
 	cursor: pointer;
 	text-align: center;	
+}
+
+/* Special case, title too long to fit */
+#menu_container .client_gallery_title {
+	font-size: 11px;
+	height: 18px;
+	padding-top: 5px;
 }
 
 #menu_container .menu_item:hover {

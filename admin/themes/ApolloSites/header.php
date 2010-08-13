@@ -1,11 +1,5 @@
 <?php
-/**
- * @package WordPress
- * @subpackage AdAstra_Theme
- */
- 
 PageManager::doHeader();
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" <?= PageManager::getLanguageAttributes(); ?>>
@@ -18,16 +12,11 @@ PageManager::doHeader();
 	
 	<!-- Favicon ///////////////////////////////////////////////////// -->
 
-	<link rel="icon" type="image/png" href="<?= PageManager::$theme_url_root; ?>/favicon.png">
-
-	<!--[if IE]>
-	<link rel="shortcut icon" href="<?= PageManager::$theme_url_root; ?>/favicon.ico">
-	<![endif]-->
+	<link rel="icon" type="image/png" href="<?= PageManager::getFavIconURL() ?>/favicon.png">
 
 	<!-- Style sheets //////////////////////////////////////////////////////////// -->
 
 	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>/style.css" type="text/css" media="screen" />
-
 	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>/css/coda-slider-2.0.css" type="text/css" media="screen" />
 
 	<!-- Page Styles  ..///////////////////////////////////////////////////////// -->

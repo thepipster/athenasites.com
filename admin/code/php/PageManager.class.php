@@ -7,6 +7,7 @@ class PageManager {
 
 	public static $url_root;
 	public static $theme_url_root;
+	public static $media_root_url;
 	public static $domain;
 	public static $page_slug;
 	public static $site_id;
@@ -16,18 +17,20 @@ class PageManager {
 	public static $page_title;
 	public static $theme_id;
 	public static $theme_file_root;
+	public static $template_filename;
 
 	public static $page_list;
 
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
-	public static function init(){
+	public static function init($page_name){
 
 		self::$url_root = 'http://' . $_SERVER['HTTP_HOST'];
 		
-		self::$domain = $_SERVER['HTTP_HOST'];
-		self::$page_slug = basename($_SERVER['REQUEST_URI']);
-		
+		self::$domain = $_SERVER['HTTP_HOST'];		
+		//self::$page_slug = $_SERVER['REQUEST_URI'];
+		self::$page_slug = $page_name;
+				
 		// Strip www..
 		self::$domain = str_replace('www.','',self::$domain);
 		
@@ -51,14 +54,28 @@ class PageManager {
 		self::$page_id = $page['id'];
 		self::$page_parent_id = $page['parent_page_id'];
 		self::$page_title = $page['title'];
-
+		self::$media_root_url = self::$url_root . "/user_files/".self::$site_id."/";
+		self::$template_filename = $page['template'];
+		
 		// Get the theme info	
 		$theme_id = $site['theme_id'];
 		$theme = ThemeTable::getTheme($theme_id);
 		
 		self::$theme_url_root = self::$url_root . '/admin/themes/' . $theme['theme_name'] ."/";
-		self::$theme_file_root = FILE_ROOT . '/admin/themes/' . $theme['theme_name'] ."/";
+		self::$theme_file_root = FILE_ROOT . 'admin/themes/' . $theme['theme_name'] ."/";
+		
+		Logger::debug(">>>>>>>>>>");
+		Logger::debug("Request URI: " . $_SERVER['REQUEST_URI']);
+		Logger::debug("Host: " . $_SERVER['HTTP_HOST']);
+		Logger::debug("Domain: " . self::$domain);
+		Logger::debug("Page Slug: " . self::$page_slug);
+		Logger::debug("Theme URL root: " . self::$theme_url_root);
+		Logger::debug("Theme file root: " . self::$theme_file_root);
+		Logger::debug("Templeta File: " . self::$template_filename);
+		Logger::debug("Medi Root URL: " . self::$media_root_url);
+		
 	}
+	
 	
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -82,10 +99,81 @@ class PageManager {
 	
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
-	public static function getFavIcon(){
-		ThemeTable::getFavicon(self::$site_id);
+	public static function getBlogContent(){
+		echo "TBD";
 	}
+	
+	// ///////////////////////////////////////////////////////////////////////////////////////
 
+	public static function echoGoogleTracker(){
+	
+		$tracker_code = '';
+		$page_title = '';
+		$domain = '';
+		
+		echo "<!-- Global tracking -->";
+		echo "<!--";
+		echo "<script type='text/javascript'>";
+		echo "var gaJsHost = (('https:' == document.location.protocol) ? 'https://ssl.' : 'http://www.');";
+		echo "document.write(unescape('%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E'));";
+		echo "</script>";
+		echo "<script type='text/javascript'>";
+		echo "try {";
+		echo "var pageTracker = _gat._getTracker('$tracker_code');";
+		echo "pageTracker._setDomainName('$domain');";
+		echo "pageTracker._trackPageview('$page_title');";
+		echo "} catch(err) {}</script>";
+		echo "-->";	
+		
+	}
+	
+	// ///////////////////////////////////////////////////////////////////////////////////////
+
+	public static function getFavIconURL(){
+				
+		// See if the user has set a fav icon
+		$fav_image_id = ThemeTable::getFavicon(PageManager::$site_id);
+		
+		if (isset($fav_image_id)){
+			$media_folder = SecurityUtils::getMediaFolder(PageManager::$site_id);
+			$image = FolderTable::getMedia(self::$site_id, $fav_image_id);
+			if (isset($image)){
+				return $media_root_url . $image['filename'];
+			}
+		}
+		
+		return self::$theme_url_root . 'favicon.png';
+	}
+	
+	// ///////////////////////////////////////////////////////////////////////////////////////
+	
+	public static function getMediaURL($media_id){
+				
+		$image = FolderTable::getMedia(PageManager::$site_id, $media_id);
+		
+		if (isset($image)){
+			return self::$media_root_url . $image['filename'];
+		}
+		
+		return '';
+	}	
+
+	public static function getMediaURLFromThemePara($theme_para_id){				
+		$media_id = PageParasTable::getParaValue(self::$page_id, $theme_para_id, self::$site_id);
+		if (isset($media_id)){
+			return self::getMediaURL($media_id);
+		}
+		return "";
+	}	
+
+	public static function getMediaFromThemePara($theme_para_id){				
+		$media_id = PageParasTable::getParaValue(self::$page_id, $theme_para_id, self::$site_id);
+		if (isset($media_id)){
+			return FolderTable::getMedia(self::$site_id, $media_id);
+		}
+		return null;
+	}	
+	
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
 	public static function getPageLink($page_id){
@@ -98,7 +186,7 @@ class PageManager {
 
 		}			
 	}
-	
+		
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
 	/**

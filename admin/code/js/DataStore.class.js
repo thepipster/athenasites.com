@@ -27,6 +27,9 @@ var DataStore = {
 	
 	/** Theme parameter list */	
 	m_themeParaList : '',
+	
+	/** List of parameters set for this site */
+	m_siteParaList : '',
 		
 	// //////////////////////////////////////////////////////////////////////////////////
 	
@@ -44,6 +47,20 @@ var DataStore = {
 	
 	// //////////////////////////////////////////////////////////////////////////////////
 
+	getSiteParaValue : function(page_id, theme_para_id){
+
+		for(var i=0; i<DataStore.m_siteParaList.length; i++){
+
+ 			if ((DataStore.m_siteParaList[i].theme_para_id == theme_para_id) && (DataStore.m_siteParaList[i].page_id == page_id)){
+				return DataStore.m_siteParaList[i].para_value;
+			}
+		}
+		
+		return false;
+	},
+		
+	// //////////////////////////////////////////////////////////////////////////////////
+
 	getPageThemeParas : function(template_name){	
 		var list = new Array();
 		for(var i=0; i<DataStore.m_themeParaList.length; i++){
@@ -54,7 +71,10 @@ var DataStore = {
 		return list;
 	},
 	
+	// //////////////////////////////////////////////////////////////////////////////////
+
 	getImage : function(image_id){
+	
 		for(var i=0; i<DataStore.m_mediaList.length; i++){
 			if (DataStore.m_mediaList[i].id == image_id){
 				return DataStore.m_mediaList[i];
@@ -63,6 +83,7 @@ var DataStore = {
 		return false;
 	},
 	
+	// //////////////////////////////////////////////////////////////////////////////////
 
 	getPage : function(page_id){
 
@@ -74,6 +95,8 @@ var DataStore = {
 		return false;
 	},	
 	
+	// //////////////////////////////////////////////////////////////////////////////////
+
 	getCurrentPage : function(){
 		return DataStore.getPage(DataStore.m_currentPageID);
 	},
@@ -208,6 +231,20 @@ var DataStore = {
 	
 	// //////////////////////////////////////////////////////////////////////////////////
 
+	updateSitePara : function(theme_para_id, page_id, new_para_val){
+
+		for (var i=0; i<DataStore.m_siteParaList.length; i++){
+		
+ 			if ((DataStore.m_siteParaList[i].theme_para_id == theme_para_id) && (DataStore.m_siteParaList[i].page_id == page_id)){
+ 				DataStore.m_siteParaList[i].para_value = new_para_val;
+ 				return;
+			}
+					
+		}
+	},
+	
+	// //////////////////////////////////////////////////////////////////////////////////
+
 	/**
 	* Update an existing page
 	*/
@@ -286,14 +323,14 @@ var DataStore = {
 	// //////////////////////////////////////////////////////////////////////////////////
 	
 	load : function(callback){
-		MediaAPI.getAll(DataStore.m_siteID, function(folders, media, pages, theme, page_templates, theme_paras){ 
-			DataStore.onGotData(folders, media, pages, theme, page_templates, theme_paras, callback);
+		MediaAPI.getAll(DataStore.m_siteID, function(folders, media, pages, theme, page_templates, theme_paras, page_paras){ 
+			DataStore.onGotData(folders, media, pages, theme, page_templates, theme_paras, page_paras, callback);
 		});
 	},
 	
 	// //////////////////////////////////////////////////////////////////////////////////
 
-	onGotData : function(folder_list, media_list, page_list, theme, page_templates, theme_paras, callback){
+	onGotData : function(folder_list, media_list, page_list, theme, page_templates, theme_paras, paga_paras, callback){
 
 		DataStore.onGotFolders(folder_list);
 		DataStore.onGotMedia(media_list);
@@ -301,10 +338,12 @@ var DataStore = {
 		DataStore.onGotPageTemplates(page_templates);
 		//DataStore.onGotThemeParas(theme_paras);
 
+		DataStore.m_siteParaList = paga_paras;
 		DataStore.m_themeParaList = theme_paras;
 		DataStore.m_theme = theme; // id, theme_name, theme_title, price, thumb_url, description, is_private, max_page_depth
 
 		if (DataStore.m_themeParaList == undefined) DataStore.m_themeParaList = new Array();
+		if (DataStore.m_siteParaList == undefined) DataStore.m_siteParaList = new Array();
 
 		callback();
 	},

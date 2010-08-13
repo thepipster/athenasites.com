@@ -1,40 +1,13 @@
 <?php
 /**
- * @package WordPress
- * @subpackage Holly Pacione Theme
- */
-/*
-Template Name: Contact Page
+* @Theme: HollyPacione
+* @Template: Contact Page
+* @Description: Contact Page
 */
 
-$bloginfo = get_bloginfo("template_url"); 
-//$url_root = "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
-$url_root = get_bloginfo("template_url");
-error_log("URL Root : " . $url_root);
-
-// Get the current user info
-get_currentuserinfo();
-
-// Get the current page id
-$page_id = $wp_query->post->ID;
-
-$page_id = $wpdb->escape($page_id);
-$query = "SELECT pp.*, tp.para_type FROM apollo_PageParas pp INNER JOIN apollo_ThemeParas tp WHERE pp.page_post_id = $page_id AND pp.theme_para_id = tp.id";
-$data_list = $wpdb->get_results($query, ARRAY_A);
-
-$background_image = '';
-
-foreach($data_list as $data){
-	if ($data['para_type'] == 'image'){
-		$temp_post = get_post($data['para_value']);
-		$background_image = $temp_post->guid;				
-	}
-}
-
-// Check for form submission
+$background_image = PageParasTable::getMediaURLFromThemePara(205);
+// Email = 206 
 ?>
-
-<?php get_header(); ?>
 
 		<div id='content'><div id='scroller'>
 
@@ -99,9 +72,9 @@ var hpContact = {
 	/** Minimum allowed width */
 	minWidth : 800,
 	
-	commandURL : '<?=$url_root?>/php/SendEmail.php',
+	commandURL : '<?=PageManager::$theme_url_root?>/php/SendEmail.php',
 	
-	page_id : <?=$page_id?>,
+	page_id : <?=PageManager::$page_id?>,
 	
 	nonce : '<?=wp_create_nonce( 'contact_page' )?>',
 	
@@ -237,5 +210,3 @@ $(document).ready(hpContact.init);
 $(window).resize(hpContact.onResize);
 
 </script>
-
-<?php get_footer(); ?>

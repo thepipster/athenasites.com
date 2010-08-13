@@ -46,7 +46,7 @@ var MediaAPI = {
 		AthenaDialog.clearLoading();
 		
 		if (ret.result == 'ok'){	
-			callback(ret.data.folders, ret.data.media, ret.data.pages, ret.data.theme, ret.data.page_templates, ret.data.theme_paras);
+			callback(ret.data.folders, ret.data.media, ret.data.pages, ret.data.theme, ret.data.page_templates, ret.data.theme_paras, ret.data.page_paras);
 		}
 		else {
 			AthenaDialog.showAjaxError(ret);
@@ -87,6 +87,52 @@ var MediaAPI = {
 			AthenaDialog.showAjaxError(ret);
 		}
 	},
+	
+	// ////////////////////////////////////////////////////////////////////////
+	
+	setPagePara : function(themeParaID, paraValue, callback){
+			
+		var paras = {cmd: 'setPagePara', site_id: DataStore.m_siteID, page_id: DataStore.m_currentPageID, theme_para_id: themeParaID, para_value: paraValue};
+												
+		jQuery.ajax({
+			url: MediaAPI.m_url,
+			dataType: "json",
+			data: paras,
+			success: function(ret){MediaAPI.onPageParaSet(ret, callback);}
+		});	
+	},
+
+	onPageParaSet : function(ret, callback){
+		if (ret.result == "ok"){		
+			callback(ret.data.theme_para_id, ret.data.new_value, ret.data.page_id);			
+		}					
+		else {
+			AthenaDialog.showAjaxError(ret);
+		}
+	},	
+	
+	// ////////////////////////////////////////////////////////////////////////
+	
+	setGlobalPara : function(themeParaID, paraValue, callback){
+	
+		var paras = {cmd: 'setGlobalPara', site_id: DataStore.m_siteID, theme_para_id: themeParaID, para_value: paraValue};
+
+		jQuery.ajax({
+			url: MediaAPI.m_url,
+			dataType: "json",
+			data: paras,
+			success: function(ret){MediaAPI.onGlobalParaSet(ret, callback);}
+		});	
+	},
+
+	onGlobalParaSet : function(ret, callback){
+		if (ret.result == "ok"){		
+			callback(ret.data.theme_para_id, ret.data.new_value);			
+		}					
+		else {
+			AthenaDialog.showAjaxError(ret);
+		}
+	},		
 	
 	// ////////////////////////////////////////////////////////////////////////
 

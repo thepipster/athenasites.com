@@ -118,9 +118,9 @@ class PagesTable {
 	public static function getPageFromSlug($site_id, $page_slug){
 		//Logger::debug("getPageFromSlug(site_id = $site_id, page_slug = $page_slug");	
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages WHERE slug = %s", $site_id, $page_slug);		
-		$data = DatabaseManager::getResults($sql);				
-		if (isset($data[0])){
-			return $data[0];
+		$data = DatabaseManager::getSingleResult($sql);				
+		if (isset($data)){
+			return $data;
 		}
 		return null;
 	}

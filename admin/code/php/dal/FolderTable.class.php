@@ -100,6 +100,14 @@ class FolderTable {
 	
 	// //////////////////////////////////////////////////////////////////////////////////////
 
+	public static function getMedia($site_id, $media_id){
+		Logger::debug(">>>> getMedia($site_id, $media_id");
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Media WHERE id = %d",  $site_id, $media_id); 		
+		return DatabaseManager::getSingleResult($sql);		
+	}
+		
+	// //////////////////////////////////////////////////////////////////////////////////////
+
 	public static function addMedia($folder_id, $site_id, $filename, $mime_type, $file_size, $title, $descriptions, $tags, $width, $height, $thumb_filename, $thumb_width, $thumb_height){
 
         // Get data in correct locale (SQL's NOW() doesn't do that)

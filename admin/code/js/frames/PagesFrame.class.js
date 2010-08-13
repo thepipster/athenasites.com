@@ -92,6 +92,7 @@ var PagesFrame = {
 		txt += "	<td width='250px' style='height:100%; padding:5px'>";
 																
 		txt += "		<div class='subframebox' style='height:100%;width:250px'>"		
+				
 		txt += "			<span class='title'>Page Settings</span>";																	
 
 //		txt += "            <fieldset><legend>Publish</legend>";
@@ -115,7 +116,8 @@ var PagesFrame = {
 		txt += "			<div class='pageInfoLine'>";
 		txt += "            <span class='pageLabel'>Status:</span>";
 		txt += "            <span class='pageData'>";
-		
+																
+//		txt += "            <select id='pageStatusSelector' onchange='PagesFrame.updateStatusColor()'>";
 		txt += "            <select id='pageStatusSelector'>";
 		txt += "                <option value='Published'>Published</selected>";
 		txt += "                <option value='Draft'>Draft</selected>";
@@ -159,11 +161,17 @@ var PagesFrame = {
 		txt += "			</div>";
 
 		txt += "			<div class='pageInfoLine'>";
-		txt += "            <span class='pageLabel'>Order:</span>";
-		txt += "            <span class='pageData'><input id='pageOrder' type=text size=5 value='"+pageObj.order+"'/></span>";
+		txt += "            <span class='pageLabel'>Menu Order:</span>";
+//		txt += "            <span class='pageData'><input id='pageOrder' type=text size=5 value='"+pageObj.order+"'/></span>";
+		txt += "                                <span class='pageData'>";
+		txt += "            <select id='pageOrder'>";
+		for (var i=0; i<50; i++){
+			txt += "            <option value='"+i+"'>"+i+"</selected>";
+		}
+		txt += "                        </select>";
+		txt += "                        </span>";
+		
 		txt += "			</div>";
-
-		txt += "            <div id='apollo_page_theme_paras'></div>"
 		
 		txt += "            </fieldset>";
 
@@ -171,6 +179,10 @@ var PagesFrame = {
 		txt += "			<button class='delete_button' onclick=\"PagesFrame.onDeletePage()\">Delete Page</button>";
 		txt += "			<button class='save_button' onclick=\"PagesFrame.onSavePage()\">Save Changes</button>";
 		txt += "			</div>";
+
+		txt += "            <fieldset>";
+		txt += "                <div id='apollo_page_theme_paras'>sdgdsgsd</div>"
+		txt += "            </fieldset>";
 
 		txt += "		</div>";											
 			
@@ -184,7 +196,9 @@ var PagesFrame = {
 		if (pageObj.status != ''){
 			$('#pageStatusSelector').val(pageObj.status);
 		}	
-	
+		
+		//PagesFrame.updateStatusColor();
+		
 		// Paint the parent pages...
 		PagesFrame.paintParentPages(pageObj);
 		
@@ -210,11 +224,30 @@ var PagesFrame = {
 		$('#pageTemplate').val(pageObj.template);
 		$('#pageOrder').val(pageObj.order);
 		
+		//PagesFrame.updateStatusColor();
+				
 		// Paint the parent pages...
 		PagesFrame.paintParentPages(pageObj);
 					
 		PagesFrame.paintThemeParas();
 						
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////////
+
+	updateStatusColor : function(){
+				
+		var status = $('#pageStatusSelector').val();
+		
+		$('#pageStatusSelector').removeClass('status_draft');
+		$('#pageStatusSelector').removeClass('status_private');
+		$('#pageStatusSelector').removeClass('status_public');
+		
+		switch (status){
+			case 'Draft': $('#pageStatusSelector').addClass('status_draft'); break;
+			case 'Private': $('#pageStatusSelector').addClass('status_private'); break;
+			case 'Published': $('#pageStatusSelector').addClass('status_public'); break;
+		}
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////////
@@ -225,24 +258,90 @@ var PagesFrame = {
 	paintThemeParas : function(){
 	
 		var template_name = $('#pageTemplate').val();
-		var template_list = DataStore.getPageThemeParas(template_name);
+		var theme_para_list = DataStore.getPageThemeParas(template_name);
 				
 		var txt = "";
 
-		if (template_list.length > 0){
+		if (theme_para_list.length > 0){
 			txt += "<p><strong>Custom Parameters</strong></p>";
 			txt += "<table border='0' width='100%'>";
 		}
 		
-		for (var i=0; i<template_list.length; i++){
+		for (var i=0; i<theme_para_list.length; i++){
 			
-			var paraType = template_list[i].para_type;
-			var paraDesc = template_list[i].description;
-			var paraVal = '';
+			var paraVal = DataStore.getSiteParaValue(DataStore.m_currentPageID, theme_para_list[i].id);
+			var para_html = '';			
+				
+										
+			// 'email','image','gallery','font-family','favicon','font-size','color','text','small-int','multi-gallery'
+			switch(theme_para_list[i].para_type){
 			
+				case 'image': 
+
+					onclick = "PagesFrame.selectImagePara("+theme_para_list[i].id+")"; 
+										
+					txt += "<table border='0'>";							
+					txt += "<tr valign='top'>";										
+					txt += "    <td width='40px'>";					
+					var image_url = '';
+					if (paraVal){
+						var image = DataStore.getImage(parseInt(paraVal));
+						if (image){image_url = image.thumb_url}
+					}
+					txt += "<img src='"+image_url+"' class='thumbBox' width='30px' height='30px' onclick=\""+onclick+"\" >";
+					txt += "    </td>";	
+					
+					txt += "    <td>";					
+					txt += "        <span class='paraTitle'>"+theme_para_list[i].description+"</span>";
+					txt += "        <span class='paraDesc'>"+theme_para_list[i].help_text+"</span>";
+					//txt += "        <button class='save_button' onclick=\""+onclick+"\" style='font-size:10px'>Change</button>";
+					txt += "    </td>";	
+					txt += "</tr>";					
+					txt += "</table>";
+					
+					break;
+
+				case 'color': 
+				
+					onclick = "PagesFrame.selectColorPara("+theme_para_list[i].id+", '"+paraVal+"')"; 
+									
+					txt += "<table border='0'>";							
+					txt += "<tr valign='top'>";										
+					txt += "    <td width='40px'>";					
+					txt += "        <div class='colorBox' style='background-color:#"+paraVal+";' onclick=\""+onclick+"\"></div>";
+					txt += "    </td>";	
+					
+					txt += "    <td>";					
+					txt += "        <span class='paraTitle'>"+theme_para_list[i].description+"</span>";
+					txt += "        <span class='paraDesc'>"+theme_para_list[i].help_text+"</span>";
+					txt += "    </td>";	
+					txt += "</tr>";					
+					txt += "</table>";
+									
+					break;
+				
+				case 'email': break;
+				case 'text': break;
+				case 'small-int': break;
+				case 'font-family': break;
+				case 'font-size': break;
+				
+				case 'favicon':
+				case 'multi-gallery':
+				case 'gallery': break;
+			}
+			
+						
+			
+			/*
 			txt += "<tr valign='top'>";
 			txt += "    <td width='5px'><span class='customPageLabel'>Para:</span></td>";
-			txt += "    <td><span class='customPageData'>"+paraDesc+"</span></td>";
+			txt += "    <td><span class='customPageData'>"+theme_para_list[i].description+"</span></td>";
+			txt += "</tr>";
+
+			txt += "<tr valign='top'>";
+			txt += "    <td width='5px'><span class='customPageLabel'>Para:</span></td>";
+			txt += "    <td><span class='customPageData'>"+theme_para_list[i].help_text+"</span></td>";
 			txt += "</tr>";
 
 			txt += "<tr valign='top'>";
@@ -254,15 +353,43 @@ var PagesFrame = {
 			txt += "    <td><span class='customPageLabel'>Change:</span></td>";
 			txt += "    <td><span class='customPageData'><button class='save_button' style='font-size:10px'>Change</button></span></td>";
 			txt += "</tr>";
+			*/
 
 		}
 		
-		if (template_list.length > 0){
+		if (theme_para_list.length > 0){
 			txt += "</table><br/>";
 		}
 		
-				
 		$('#apollo_page_theme_paras').html(txt);
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////////
+
+	m_themeParaID : 0,
+	
+	selectColorPara : function(themeParaID, paraVal){
+		PagesFrame.m_themeParaID = themeParaID;
+		ColorPickerDialog.show('#PagesFrameImagePicker', paraVal, PagesFrame.onParaSelected)
+	},
+	
+	selectImagePara : function(themeParaID){
+		PagesFrame.m_themeParaID = themeParaID;
+		ImagePickerDialog.show('#PagesFrameImagePicker', PagesFrame.onParaSelected)
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////////
+
+	onParaSelected : function(newParaVal){
+		MediaAPI.setPagePara(PagesFrame.m_themeParaID, newParaVal, PagesFrame.onPagesParaChanged);
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////////
+
+	onPagesParaChanged : function(theme_para_id, new_value, page_id){
+		//location.href = location.href;
+		DataStore.updateSitePara(theme_para_id, page_id, new_value);
+		PagesFrame.repaint();
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////////

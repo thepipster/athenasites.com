@@ -14,7 +14,40 @@ var GalleriesFrame = {
 	// ////////////////////////////////////////////////////////////////////////////
 	
 	repaint : function(){
+	
 
+		var txt = "";
+			
+		txt += "<div id='GalleryFrameContent' align='left'>";
+
+		txt += "<table border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>";
+
+		txt += "<tr valign='top'>";
+		
+		txt += "	<td>";
+		txt += "		<div id='apollo_gallery_contents'></div>";
+		txt += "	</td>";
+							
+		// Gallery settings frame (for multi-gal)...........
+							
+		txt += "	<td width='250px' id='gallerySettings' style='height:100%; padding:5px'>";																
+		txt += "		<div class='subframebox' style='height:100%; width:100%;'>";								
+		txt += "			<span class='title'>Gallery Settings</span>";																		
+		txt += "			<div id='gallerySettingsContent'>";
+		txt += "			</div>";					
+		txt += "		</div>";														
+		txt += "	</td>";
+
+		txt += "</tr>";
+
+		txt += "</table>";
+	
+		txt += "</div>"					
+							
+		$('#GalleriesFrame').html(txt);
+
+			
+/*
 		var txt = "";
 		
 		txt += "<div id='apollo_gallery_edit'>";
@@ -26,7 +59,7 @@ var GalleriesFrame = {
 	    txt += "            <td><span class='box_title'>Gallery</span></td>";
 	    txt += "            <td style='padding-left:10px' >";
 	    txt += "               <select id='apollo_edit_gallery_select' onChange='EditGallery.selectGallery(this.value)'>";
-		/*
+		
 		for($i=0; $i<$no_galleries; $i++){
 		
 			$desc = $gallery_pages[$i]['description'];
@@ -47,7 +80,7 @@ var GalleriesFrame = {
 			    txt += "            <option value='".$theme_para_id."_".$page_id."' title='$desc'>$title</option>";
 		    }
 		}
-		*/
+	
 		//Logger::dump($gallery_pages);
 	
 	    txt += "               </select>";
@@ -71,6 +104,8 @@ var GalleriesFrame = {
 		txt += "</div> <!-- apollo_gallery_edit -->\n";
 
 		$('#GalleriesFrame').html(txt);
+		
+		*/
 	}
 
 }

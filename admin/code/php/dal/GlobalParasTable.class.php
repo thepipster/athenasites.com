@@ -35,15 +35,16 @@ class GlobalParasTable {
 				
 		if (!isset($current_val)){
 			$sql = DatabaseManager::prepare("INSERT INTO athena_%d_GlobalParas (theme_para_id, para_value) VALUES (%d, %s)", $site_id, $theme_para_id, $new_value);
+			return DatabaseManager::insert($sql);
 		}			
 		else {
 			if ($current_val == $new_value){
 				return 1;
 			}
 			$sql = DatabaseManager::prepare("UPDATE athena_%d_GlobalParas SET para_value = %s WHERE theme_para_id = %d", $site_id, $new_value, $theme_para_id);
+			return DatabaseManager::update($sql);
 		}
 		
-		return DatabaseManager::submitQuery($sql);
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////

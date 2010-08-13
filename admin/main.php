@@ -10,6 +10,8 @@ if(!SecurityUtils::isLoggedIn()){
 
 $user_id = SecurityUtils::getCurrentUserID();
 $user_level = SecurityUtils::getCurrentUserLevel();
+$user = UserTable::getUser($user_id);
+//Logger::dump($user);
 
 // Get the site id's for this user
 
@@ -39,15 +41,17 @@ else {
 	// Look at domain for site id
 	$domain = str_replace('www.','',$_SERVER['HTTP_HOST']);
 	$site_id = SitesTable::getSiteIDFromDomain($domain);
-	Logger::debug("$domain has site_id = $site_id");
+	Logger::debug("Found site id = $site_id for domain $domain");
+	
 	// If the domain isn't the main domain (site_id = 1) then select from the users site list
-	if ($site_id != 1){
+	if ($site_id == 1){
 		$current_site_id = $site_list[0]['id'];
 	}
 	else {
 		$current_site_id = $site_id;
 	}
 	
+	Logger::debug("$domain has site_id = $current_site_id");
 	
 }
 
@@ -85,9 +89,9 @@ else {
 <link rel="stylesheet" href="code/css/ImagePickerDialog.css" type="text/css" />
 <link rel="stylesheet" href="code/css/ImageEditFrame.css" type="text/css" />
 <link rel="stylesheet" href="code/css/GalleryFrame.css" type="text/css" />
-
 <link rel="stylesheet" href="code/css/datePicker.css" type="text/css" />
 
+<link rel="stylesheet" href="code/colorpicker/css/colorpicker.css" type="text/css" />
 
 <!-- Javascript includes /////////////////////////////////////////////////////////// -->
 
@@ -144,6 +148,9 @@ else {
 <!-- Dialog Displays -->
 <script src="code/js/dialogs/ImageEditDialog.class.js" type="text/javascript"></script>
 <script src="code/js/dialogs/ImagePickerDialog.class.js" type="text/javascript"></script>
+<script src="code/colorpicker/js/colorpicker.js" type="text/javascript"></script>
+<script src="code/js/dialogs/ColorPickerDialog.class.js" type="text/javascript"></script>
+
 
 <!-- Sub-Frame Displays -->
 <script src="code/js/subframes/FolderSidebarFrame.class.js" type="text/javascript"></script>
@@ -151,6 +158,7 @@ else {
 <script src="code/js/subframes/ImageSelector.class.js" type="text/javascript"></script>
 <script src="code/js/subframes/ImageEditFrame.class.js" type="text/javascript"></script>
 <script src="code/js/subframes/PostsSidebarFrame.class.js" type="text/javascript"></script>
+<script src="code/js/subframes/GalleriesSidebarFrame.class.js" type="text/javascript"></script>
 
 <!-- Frame Displays -->
 <script src="code/js/frames/DashboardFrame.class.js" type="text/javascript"></script>
@@ -213,15 +221,19 @@ else {
 		
 					<div id='menu_container'>
 					<!--
-						<div id='dashboard_menu' class='menu_item' onclick='ssMain.onShowDashboard()'>Dashboard</div>				
-						<div id='edit_files_menu' class='menu_item' onclick='ssMain.onShowEditImages()'>Edit Images</div>
-					-->
 						<div id='settings_menu' class='menu_item' onclick='ssMain.onShowSettings()'>Settings</div>
+					-->
+						<div id='dashboard_menu' class='menu_item' onclick='ssMain.onShowDashboard()'>Dashboard</div>				
 						<div id='pages_menu' class='menu_item' onclick='ssMain.onShowPages()'>Pages</div>				
 						<div id='files_menu' class='menu_item' onclick='ssMain.onShowFiles()'>Files</div>
 						<div id='gallery_menu' class='menu_item' onclick='ssMain.onShowGalleries()'>Galleries</div>
 						<div id='posts_menu' class='menu_item' onclick='ssMain.onShowPosts()'>Posts</div>
-						<div id='stats_menu' class='menu_item' onclick='ssMain.onShowStats()'>Stats</div>				
+						<div id='stats_menu' class='menu_item' onclick='ssMain.onShowStats()'>Stats</div>
+										
+						<?php if ($user['service_client_gallery'] == 1){ ?>
+						<div id='' class='menu_item client_gallery_title' onclick=''>Client Gallery</div>				
+						<div id='' class='menu_item' onclick=''>eStore</div>				
+						<?php } ?>
 										
 						<div class='menu_link' onclick='ssMain.onLogout()'>Logout</div>
 						<div id='account_menu' class='menu_link' onclick='ssMain.onShowAccount()'>Account</div>
@@ -393,8 +405,9 @@ var ssMain = {
 	isResizing : false,
 	
 	onResizeComplete : function(){
-		ssMain.init();
-		ssMain.isResizing = false;
+		//ssMain.init();
+		//ssMain.isResizing = false;
+		window.location = "main.php?site_id=" + DataStore.m_siteID;	
 	},
 	
 	onResize : function(){
@@ -486,7 +499,7 @@ var ssMain = {
 		// Update menu
 		$('.menu_item').removeClass('selected');
 		$('.menu_link').removeClass('selected');
-
+		
 		switch(ssMain.view){
 			case ssMain.VIEW_DASHBOARD : $('#DashboardFrame').show(); $('#dashboard_menu').addClass('selected'); DashboardFrame.repaint(); break;
 			case ssMain.VIEW_PAGES : $('#PagesFrame').show(); $('#pages_menu').addClass('selected'); PagesFrame.repaint(); break;
@@ -499,6 +512,8 @@ var ssMain = {
 			case ssMain.VIEW_EDITFILES : $('#EditFilesFrame').show(); $('#edit_files_menu').addClass('selected'); EditImageFrame.repaint(); break;
 		}
 		
+		//window.location.hash = ssMain.view;
+
 		SidebarFrame.repaint();
 	}
 }

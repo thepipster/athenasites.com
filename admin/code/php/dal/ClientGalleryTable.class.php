@@ -11,26 +11,11 @@ class ClientGalleryTable {
 	/**
 	* Get all the images associated with a page
 	*/
-	public static function getImagesForPage($blog_id, $page_post_id){
-		global $wpdb;
-		$sql = $wpdb->prepare("SELECT * FROM apollo_GalleryTable WHERE page_post_id = %d AND blog_id = %d ORDER BY slot_number ASC",  $page_post_id, $blog_id); 		
-		return $wpdb->get_results($sql, ARRAY_A);		
+	public static function getImagesForPage($site_id, $page_post_id){
+		$sql = DatabaseManager::prepare("SELECT * FROM apollo_%d_GalleryTable WHERE page_id = %d ORDER BY slot_number ASC",  $site_id, $page_id); 		
+		return DatabaseManager::getResults($sql);		
 	}
 
-	// //////////////////////////////////////////////////////////////////////////////////////
-
-	public static function getImagePostData($blog_id, $image_post_id){
-		global $wpdb;
-		
-		$sql = $wpdb->prepare("SELECT guid, post_excerpt, post_title, post_content FROM wp_%d_posts WHERE ID=%d",  $blog_id, $image_post_id ); 			
-		$data = $wpdb->get_results($sql, ARRAY_A);		
-		
-		if (isset($data) && isset($data[0])){
-			return $data[0];
-		}
-		return null;
-	}
-		 	
 	// //////////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -38,10 +23,9 @@ class ClientGalleryTable {
      * @param <type> $id
      * @return <type>
      */
-	public static function getFromID($id){	
-		global $wpdb;
-		$sql = $wpdb->prepare('SELECT * FROM apollo_GalleryTable WHERE id = %d',  $id ); 		
-		return $wpdb->get_results($sql, ARRAY_A);		
+	public static function getFromID($site_id, $id){	
+		$sql = DatabaseManager::prepare('SELECT * FROM apollo_%d_GalleryTable WHERE id = %d',  $site_id, $id ); 		
+		return DatabaseManager::getSingleResult($sql);		
 	}
 
 }

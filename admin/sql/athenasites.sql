@@ -2,9 +2,9 @@
 # Version 2210
 # http://code.google.com/p/sequel-pro
 #
-# Host: localhost (MySQL 5.1.37)
+# Host: localhost (MySQL 5.0.41-log)
 # Database: athenasites
-# Generation Time: 2010-08-12 01:04:44 -0600
+# Generation Time: 2010-08-12 22:11:13 -0600
 # ************************************************************
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -23,9 +23,9 @@
 DROP TABLE IF EXISTS `apollo_RollupServer`;
 
 CREATE TABLE `apollo_RollupServer` (
-  `server_no` tinyint(2) DEFAULT NULL,
-  `page_views` int(11) DEFAULT NULL,
-  `rollup_date` date DEFAULT NULL
+  `server_no` tinyint(2) default NULL,
+  `page_views` int(11) default NULL,
+  `rollup_date` date default NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -37,16 +37,31 @@ DROP TABLE IF EXISTS `apollo_Sessions`;
 
 CREATE TABLE `apollo_Sessions` (
   `id` varchar(32) NOT NULL,
-  `access` int(10) unsigned DEFAULT NULL,
+  `access` int(10) unsigned default NULL,
   `data` text,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 LOCK TABLES `apollo_Sessions` WRITE;
 /*!40000 ALTER TABLE `apollo_Sessions` DISABLE KEYS */;
 INSERT INTO `apollo_Sessions` (`id`,`access`,`data`)
 VALUES
-	('01ca1763fa1efa87b674da20912727d1',1281596640,'user_valid|b:1;user_id|s:1:\"1\";user_name|s:14:\"Mike Pritchard\";user_email|s:20:\"mike@apollosites.com\";user_level|s:1:\"2\";');
+	('1e183e9810f300cc420b3eb37f8dfce8',1281650563,''),
+	('be52bbd0040b60fc2aec06fcc60f7af7',1281652365,''),
+	('a88668101455a97a484aaf5a6543ec83',1281653210,''),
+	('42221cf1e929cdbe1a7013252ad259a9',1281653022,'user_valid|b:1;user_id|s:1:\"1\";user_name|s:14:\"Mike Pritchard\";user_email|s:20:\"mike@apollosites.com\";user_level|s:1:\"2\";'),
+	('27f361c2e779eec8a90de4f590b8ffc6',1281653210,''),
+	('c64b8a587f7ee0d346075d95fc617ac5',1281653214,''),
+	('bec9ca98e293d59377893fdc719b6b71',1281654166,''),
+	('4ea98f450d02d532946a29db6dbef8c5',1281655968,''),
+	('71ef8117eacdee88deb96fa6b2cd9188',1281657770,''),
+	('6377858021c5a002f3fc46a658fd41b4',1281663905,'user_valid|b:1;user_id|s:1:\"1\";user_name|s:14:\"Mike Pritchard\";user_email|s:20:\"mike@apollosites.com\";user_level|s:1:\"2\";'),
+	('5fcd3922022da03f55e6cb45cd7caa87',1281659571,''),
+	('fedc9847434eab033ded10fc3a1f07fc',1281660010,'user_valid|b:1;user_id|s:1:\"1\";user_name|s:14:\"Mike Pritchard\";user_email|s:20:\"mike@apollosites.com\";user_level|s:1:\"2\";'),
+	('a665356a27b1e1cee16512fb2bf5d955',1281661372,''),
+	('39cb8281f2ca28ba2e46bc79d0a2c502',1281663173,''),
+	('4b2aeb364e09418b9f885b42124cf558',1281671382,''),
+	('1107c8431a293ac19b7c565c184f7c30',1281672613,'');
 
 /*!40000 ALTER TABLE `apollo_Sessions` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -58,15 +73,15 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `apollo_Theme`;
 
 CREATE TABLE `apollo_Theme` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `theme_name` varchar(255) DEFAULT NULL,
-  `theme_title` varchar(255) DEFAULT NULL,
-  `price` int(11) DEFAULT NULL,
-  `thumb_url` varchar(255) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `is_private` tinyint(1) DEFAULT '0',
-  `max_page_depth` tinyint(1) DEFAULT '2',
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `theme_name` varchar(255) default NULL,
+  `theme_title` varchar(255) default NULL,
+  `price` int(11) default NULL,
+  `thumb_url` varchar(255) default NULL,
+  `description` varchar(255) default NULL,
+  `is_private` tinyint(1) default '0',
+  `max_page_depth` tinyint(1) default '2',
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `apollo_Theme` WRITE;
@@ -89,16 +104,16 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `apollo_ThemeParas`;
 
 CREATE TABLE `apollo_ThemeParas` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `theme_id` int(11) DEFAULT NULL,
-  `para_type` enum('email','image','gallery','font-family','favicon','font-size','color','text','small-int','multi-gallery') DEFAULT NULL,
-  `page_template_name` varchar(255) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `admin_order` tinyint(3) DEFAULT '1',
+  `id` int(11) NOT NULL auto_increment,
+  `theme_id` int(11) default NULL,
+  `para_type` enum('email','image','gallery','font-family','favicon','font-size','color','text','small-int','multi-gallery') default NULL,
+  `page_template_name` varchar(255) default NULL,
+  `description` varchar(255) default NULL,
+  `admin_order` tinyint(3) default '1',
   `help_text` text,
-  `default_value` varchar(255) DEFAULT NULL,
-  `is_public` tinyint(1) DEFAULT '1',
-  PRIMARY KEY (`id`)
+  `default_value` varchar(255) default NULL,
+  `is_public` tinyint(1) default '1',
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=417 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `apollo_ThemeParas` WRITE;
@@ -120,7 +135,7 @@ VALUES
 	(215,2,'image','page.php','background photo',1,'Choose a background picture that will appear as the background of this page',NULL,1),
 	(217,2,'color','all','Menu Text Color',1,'This allows you to change the color of the text in the menu',NULL,1),
 	(218,2,'color','all','Border Color',1,'This allows you to change the color of the borders used throughout your site',NULL,1),
-	(101,1,'image','home_page.php','Home page image',1,NULL,NULL,1),
+	(101,1,'image','home_page.php','Home page image',1,'This allows you to set the image used on the home page.',NULL,1),
 	(400,4,'image','all','Logo',1,'Set your company logo',NULL,1),
 	(401,4,'image','all','Favicon',2,'This allows you to select a favicon for your site, this is the small logo that appears in the browsers navigation bar. Its best to uses a .ico image, but you can also use a png image. The image MUST be 16x16 pixels in size.',NULL,1),
 	(402,4,'color','all','Background color',3,'The background color for the site',NULL,1),
@@ -140,7 +155,8 @@ VALUES
 	(102,1,'multi-gallery','themes_page.php','Themes page multi-gallery',1,NULL,NULL,1),
 	(219,2,'color','all','Blog post title color',1,'This is the color used for the title for each of your blog posts.',NULL,1),
 	(220,2,'small-int','all','Blog image border width',1,'This is the width of the border used for images in your blog posts. Set to 0 to remove borders.',NULL,1),
-	(221,2,'color','all','Blog image border color',1,'This is the color of the border used for images in your blog posts. ',NULL,1);
+	(221,2,'color','all','Blog image border color',1,'This is the color of the border used for images in your blog posts. ',NULL,1),
+	(103,1,'color','home_page.php','Home page color',1,'This sets the color for something or other!',NULL,1);
 
 /*!40000 ALTER TABLE `apollo_ThemeParas` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -152,11 +168,11 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_1_BlogFollowers`;
 
 CREATE TABLE `athena_1_BlogFollowers` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `isFollowing` tinyint(1) DEFAULT '0',
-  `name` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `isFollowing` tinyint(1) default '0',
+  `name` varchar(255) default NULL,
+  `email` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 
@@ -167,13 +183,13 @@ CREATE TABLE `athena_1_BlogFollowers` (
 DROP TABLE IF EXISTS `athena_1_Comments`;
 
 CREATE TABLE `athena_1_Comments` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL auto_increment,
   `content` text,
-  `status` enum('Pending','Published','Trash','Spam','PossibleSpam') DEFAULT 'Pending',
-  `last_edit` datetime DEFAULT NULL,
-  `created` datetime DEFAULT NULL,
+  `status` enum('Pending','Published','Trash','Spam','PossibleSpam') default 'Pending',
+  `last_edit` datetime default NULL,
+  `created` datetime default NULL,
   `blog_follower_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 
@@ -184,9 +200,9 @@ CREATE TABLE `athena_1_Comments` (
 DROP TABLE IF EXISTS `athena_1_Folders`;
 
 CREATE TABLE `athena_1_Folders` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT 'Unamed Folder',
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default 'Unamed Folder',
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=69 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `athena_1_Folders` WRITE;
@@ -213,14 +229,14 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_1_GalleryMeta`;
 
 CREATE TABLE `athena_1_GalleryMeta` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `page_id` bigint(20) DEFAULT NULL,
-  `gallery_number` tinyint(2) DEFAULT '0',
-  `title` varchar(255) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `image_id` bigint(20) DEFAULT NULL,
-  `theme_para_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `page_id` bigint(20) default NULL,
+  `gallery_number` tinyint(2) default '0',
+  `title` varchar(255) default NULL,
+  `description` varchar(255) default NULL,
+  `image_id` bigint(20) default NULL,
+  `theme_para_id` bigint(20) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -231,13 +247,13 @@ CREATE TABLE `athena_1_GalleryMeta` (
 DROP TABLE IF EXISTS `athena_1_GalleryTable`;
 
 CREATE TABLE `athena_1_GalleryTable` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `image_id` bigint(20) DEFAULT NULL,
-  `page_id` bigint(20) DEFAULT NULL,
-  `slot_number` tinyint(3) DEFAULT NULL,
-  `gallery_number` tinyint(2) DEFAULT '0',
-  `theme_para_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` bigint(20) NOT NULL auto_increment,
+  `image_id` bigint(20) default NULL,
+  `page_id` bigint(20) default NULL,
+  `slot_number` tinyint(3) default NULL,
+  `gallery_number` tinyint(2) default '0',
+  `theme_para_id` int(11) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -248,10 +264,10 @@ CREATE TABLE `athena_1_GalleryTable` (
 DROP TABLE IF EXISTS `athena_1_GlobalParas`;
 
 CREATE TABLE `athena_1_GlobalParas` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `para_value` varchar(255) DEFAULT NULL,
-  `theme_para_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` bigint(20) NOT NULL auto_increment,
+  `para_value` varchar(255) default NULL,
+  `theme_para_id` bigint(20) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -262,21 +278,21 @@ CREATE TABLE `athena_1_GlobalParas` (
 DROP TABLE IF EXISTS `athena_1_Media`;
 
 CREATE TABLE `athena_1_Media` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `folder_id` int(11) DEFAULT '1',
-  `filename` varchar(255) DEFAULT NULL,
-  `mime_type` varchar(20) DEFAULT NULL,
-  `file_size` int(11) DEFAULT NULL,
-  `created` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `id` bigint(20) NOT NULL auto_increment,
+  `folder_id` int(11) default '1',
+  `filename` varchar(255) default NULL,
+  `mime_type` varchar(20) default NULL,
+  `file_size` int(11) default NULL,
+  `created` timestamp NULL default NULL on update CURRENT_TIMESTAMP,
   `title` text,
   `description` text,
   `tags` text,
-  `width` int(9) DEFAULT NULL,
-  `height` int(9) DEFAULT NULL,
-  `thumb_filename` varchar(255) DEFAULT NULL,
-  `thumb_width` int(9) DEFAULT NULL,
-  `thumb_height` int(9) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `width` int(9) default NULL,
+  `height` int(9) default NULL,
+  `thumb_filename` varchar(255) default NULL,
+  `thumb_width` int(9) default NULL,
+  `thumb_height` int(9) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `athena_1_Media` WRITE;
@@ -345,13 +361,24 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_1_PageParas`;
 
 CREATE TABLE `athena_1_PageParas` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `page_id` bigint(20) DEFAULT NULL,
-  `theme_para_id` int(11) DEFAULT NULL,
-  `para_value` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `id` bigint(20) NOT NULL auto_increment,
+  `page_id` bigint(20) default NULL,
+  `theme_para_id` int(11) default NULL,
+  `para_value` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
+LOCK TABLES `athena_1_PageParas` WRITE;
+/*!40000 ALTER TABLE `athena_1_PageParas` DISABLE KEYS */;
+INSERT INTO `athena_1_PageParas` (`id`,`page_id`,`theme_para_id`,`para_value`)
+VALUES
+	(1,9,101,'7'),
+	(2,20,101,'32'),
+	(3,20,103,'2c473d'),
+	(4,9,103,'c0cc42');
+
+/*!40000 ALTER TABLE `athena_1_PageParas` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table athena_1_Pages
@@ -360,31 +387,31 @@ CREATE TABLE `athena_1_PageParas` (
 DROP TABLE IF EXISTS `athena_1_Pages`;
 
 CREATE TABLE `athena_1_Pages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL auto_increment,
+  `user_id` int(11) default NULL,
   `content` text,
-  `status` enum('Published','Draft','Private','Revision') DEFAULT 'Draft',
-  `last_edit` datetime DEFAULT NULL,
-  `parent_page_id` int(11) DEFAULT '0',
-  `title` varchar(255) DEFAULT NULL,
-  `slug` varchar(255) DEFAULT NULL,
-  `path` varchar(255) DEFAULT NULL,
-  `created` datetime DEFAULT NULL,
-  `template` varchar(255) DEFAULT NULL,
-  `is_homepage` tinyint(1) DEFAULT '0',
-  `page_order` tinyint(3) DEFAULT '0',
-  PRIMARY KEY (`id`)
+  `status` enum('Published','Draft','Private','Revision') default 'Draft',
+  `last_edit` datetime default NULL,
+  `parent_page_id` int(11) default '0',
+  `title` varchar(255) default NULL,
+  `slug` varchar(255) default NULL,
+  `path` varchar(255) default NULL,
+  `created` datetime default NULL,
+  `template` varchar(255) default NULL,
+  `is_homepage` tinyint(1) default '0',
+  `page_order` tinyint(3) default '0',
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_1_Pages` WRITE;
 /*!40000 ALTER TABLE `athena_1_Pages` DISABLE KEYS */;
 INSERT INTO `athena_1_Pages` (`id`,`user_id`,`content`,`status`,`last_edit`,`parent_page_id`,`title`,`slug`,`path`,`created`,`template`,`is_homepage`,`page_order`)
 VALUES
-	(9,1,'<p>dgdgdgdgdgd gdg &#39;dg dg g&#39;d g d&quot; adgad gad g&#39; d</p>','Draft','2010-08-11 21:16:03',0,'Home','Home.html','/','2010-08-09 19:54:03','home_page.php',0,1),
-	(10,1,'','Draft','2010-08-12 06:48:52',9,'New page 2','Newpage2.html','/home/','2010-08-09 19:54:51','themes_page.php',0,0),
-	(20,1,'','Draft','2010-08-10 04:15:38',0,'New page 4','Newpage4.html','','2010-08-10 04:15:38','0',0,0),
-	(19,1,'','Draft','2010-08-11 21:17:08',10,'New page 5','Newpage5.html','/home/newpage2/','2010-08-10 04:09:09','',0,1),
-	(21,1,'','Draft','2010-08-12 06:45:12',0,'Themes','Themes.html','/','2010-08-12 05:30:28','themes_page.php',0,0);
+	(9,1,'<p>dgdgdgdgdgd gdg &#39;dg dg g&#39;d g d&quot; adgad gad g&#39; d</p>','Published','2010-08-12 20:05:39',0,'Home','Home.html','/','2010-08-09 19:54:03','home_page.php',0,1),
+	(10,1,'','Private','2010-08-12 20:50:57',9,'A very long page name that breaks the style','Averylongpagenamethatbreaksthestyle.html','/home/','2010-08-09 19:54:51','themes_page.php',0,4),
+	(20,1,'','Draft','2010-08-12 21:45:31',0,'New page 4','Newpage4.html','/','2010-08-10 04:15:38','home_page.php',0,0),
+	(19,1,'','Draft','2010-08-11 21:17:08',10,'New page 5','Newpage5.html','/home/averylongpagenamethatbreaksthestyle/','2010-08-10 04:09:09','',0,1),
+	(21,1,'','Private','2010-08-12 20:05:44',0,'Themes','Themes.html','/','2010-08-12 05:30:28','themes_page.php',0,0);
 
 /*!40000 ALTER TABLE `athena_1_Pages` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -396,17 +423,17 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_1_PageViews`;
 
 CREATE TABLE `athena_1_PageViews` (
-  `page_id` bigint(20) DEFAULT NULL,
-  `view_date` datetime DEFAULT NULL,
-  `ip_long` bigint(20) DEFAULT NULL,
-  `is_bot` tinyint(1) DEFAULT '0',
-  `browser` varchar(25) DEFAULT NULL,
-  `browser_ver` varchar(8) DEFAULT NULL,
-  `os_name` varchar(25) DEFAULT NULL,
-  `os_ver` varchar(8) DEFAULT NULL,
-  `referer` varchar(255) DEFAULT NULL,
-  `user_agent` varchar(255) DEFAULT NULL,
-  `server_ip` bigint(20) DEFAULT NULL
+  `page_id` bigint(20) default NULL,
+  `view_date` datetime default NULL,
+  `ip_long` bigint(20) default NULL,
+  `is_bot` tinyint(1) default '0',
+  `browser` varchar(25) default NULL,
+  `browser_ver` varchar(8) default NULL,
+  `os_name` varchar(25) default NULL,
+  `os_ver` varchar(8) default NULL,
+  `referer` varchar(255) default NULL,
+  `user_agent` varchar(255) default NULL,
+  `server_ip` bigint(20) default NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -417,15 +444,15 @@ CREATE TABLE `athena_1_PageViews` (
 DROP TABLE IF EXISTS `athena_1_Posts`;
 
 CREATE TABLE `athena_1_Posts` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL auto_increment,
+  `user_id` int(11) default NULL,
   `content` text,
-  `status` enum('Published','Draft','Private','Revision') DEFAULT 'Draft',
-  `last_edit` datetime DEFAULT NULL,
-  `created` datetime DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `canComment` tinyint(1) DEFAULT '1',
-  PRIMARY KEY (`id`)
+  `status` enum('Published','Draft','Private','Revision') default 'Draft',
+  `last_edit` datetime default NULL,
+  `created` datetime default NULL,
+  `title` varchar(255) default NULL,
+  `canComment` tinyint(1) default '1',
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 
@@ -436,12 +463,12 @@ CREATE TABLE `athena_1_Posts` (
 DROP TABLE IF EXISTS `athena_1_RollupBrowser`;
 
 CREATE TABLE `athena_1_RollupBrowser` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rollup_date` date DEFAULT NULL,
-  `browser` varchar(30) DEFAULT NULL,
-  `browser_ver` varchar(10) DEFAULT NULL,
-  `hits` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `rollup_date` date default NULL,
+  `browser` varchar(30) default NULL,
+  `browser_ver` varchar(10) default NULL,
+  `hits` int(11) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -452,11 +479,11 @@ CREATE TABLE `athena_1_RollupBrowser` (
 DROP TABLE IF EXISTS `athena_1_RollupCrawler`;
 
 CREATE TABLE `athena_1_RollupCrawler` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rollup_date` date DEFAULT NULL,
-  `crawler` varchar(25) DEFAULT NULL,
-  `hits` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `rollup_date` date default NULL,
+  `crawler` varchar(25) default NULL,
+  `hits` int(11) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -467,12 +494,12 @@ CREATE TABLE `athena_1_RollupCrawler` (
 DROP TABLE IF EXISTS `athena_1_RollupOS`;
 
 CREATE TABLE `athena_1_RollupOS` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rollup_date` date DEFAULT NULL,
-  `os_name` varchar(30) DEFAULT NULL,
-  `os_ver` varchar(10) DEFAULT NULL,
-  `hits` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `rollup_date` date default NULL,
+  `os_name` varchar(30) default NULL,
+  `os_ver` varchar(10) default NULL,
+  `hits` int(11) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -483,13 +510,13 @@ CREATE TABLE `athena_1_RollupOS` (
 DROP TABLE IF EXISTS `athena_1_RollupPageViews`;
 
 CREATE TABLE `athena_1_RollupPageViews` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rollup_date` date DEFAULT NULL,
-  `page_views` int(11) DEFAULT NULL,
-  `unique_visitors` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL auto_increment,
+  `rollup_date` date default NULL,
+  `page_views` int(11) default NULL,
+  `unique_visitors` int(11) default NULL,
   `keywords` text,
-  `page_title` varchar(125) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `page_title` varchar(125) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -500,11 +527,11 @@ CREATE TABLE `athena_1_RollupPageViews` (
 DROP TABLE IF EXISTS `athena_2_BlogFollowers`;
 
 CREATE TABLE `athena_2_BlogFollowers` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `isFollowing` tinyint(1) DEFAULT '0',
-  `name` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `isFollowing` tinyint(1) default '0',
+  `name` varchar(255) default NULL,
+  `email` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 
@@ -515,13 +542,13 @@ CREATE TABLE `athena_2_BlogFollowers` (
 DROP TABLE IF EXISTS `athena_2_Comments`;
 
 CREATE TABLE `athena_2_Comments` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL auto_increment,
   `content` text,
-  `status` enum('Pending','Published','Trash','Spam','PossibleSpam') DEFAULT 'Pending',
-  `last_edit` datetime DEFAULT NULL,
-  `created` datetime DEFAULT NULL,
+  `status` enum('Pending','Published','Trash','Spam','PossibleSpam') default 'Pending',
+  `last_edit` datetime default NULL,
+  `created` datetime default NULL,
   `blog_follower_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 
@@ -532,9 +559,9 @@ CREATE TABLE `athena_2_Comments` (
 DROP TABLE IF EXISTS `athena_2_Folders`;
 
 CREATE TABLE `athena_2_Folders` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT 'Unamed Folder',
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default 'Unamed Folder',
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `athena_2_Folders` WRITE;
@@ -560,14 +587,14 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_2_GalleryMeta`;
 
 CREATE TABLE `athena_2_GalleryMeta` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `page_id` bigint(20) DEFAULT NULL,
-  `gallery_number` tinyint(2) DEFAULT '0',
-  `title` varchar(255) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `image_id` bigint(20) DEFAULT NULL,
-  `theme_para_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `page_id` bigint(20) default NULL,
+  `gallery_number` tinyint(2) default '0',
+  `title` varchar(255) default NULL,
+  `description` varchar(255) default NULL,
+  `image_id` bigint(20) default NULL,
+  `theme_para_id` bigint(20) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -578,13 +605,13 @@ CREATE TABLE `athena_2_GalleryMeta` (
 DROP TABLE IF EXISTS `athena_2_GalleryTable`;
 
 CREATE TABLE `athena_2_GalleryTable` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `image_id` bigint(20) DEFAULT NULL,
-  `page_id` bigint(20) DEFAULT NULL,
-  `slot_number` tinyint(3) DEFAULT NULL,
-  `gallery_number` tinyint(2) DEFAULT '0',
-  `theme_para_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` bigint(20) NOT NULL auto_increment,
+  `image_id` bigint(20) default NULL,
+  `page_id` bigint(20) default NULL,
+  `slot_number` tinyint(3) default NULL,
+  `gallery_number` tinyint(2) default '0',
+  `theme_para_id` int(11) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -595,10 +622,10 @@ CREATE TABLE `athena_2_GalleryTable` (
 DROP TABLE IF EXISTS `athena_2_GlobalParas`;
 
 CREATE TABLE `athena_2_GlobalParas` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `para_value` varchar(255) DEFAULT NULL,
-  `theme_para_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` bigint(20) NOT NULL auto_increment,
+  `para_value` varchar(255) default NULL,
+  `theme_para_id` bigint(20) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -609,21 +636,21 @@ CREATE TABLE `athena_2_GlobalParas` (
 DROP TABLE IF EXISTS `athena_2_Media`;
 
 CREATE TABLE `athena_2_Media` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `folder_id` int(11) DEFAULT '1',
-  `filename` varchar(255) DEFAULT NULL,
-  `mime_type` varchar(20) DEFAULT NULL,
-  `file_size` int(11) DEFAULT NULL,
-  `created` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `id` bigint(20) NOT NULL auto_increment,
+  `folder_id` int(11) default '1',
+  `filename` varchar(255) default NULL,
+  `mime_type` varchar(20) default NULL,
+  `file_size` int(11) default NULL,
+  `created` timestamp NULL default NULL on update CURRENT_TIMESTAMP,
   `title` text,
   `description` text,
   `tags` text,
-  `width` int(9) DEFAULT NULL,
-  `height` int(9) DEFAULT NULL,
-  `thumb_filename` varchar(255) DEFAULT NULL,
-  `thumb_width` int(9) DEFAULT NULL,
-  `thumb_height` int(9) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `width` int(9) default NULL,
+  `height` int(9) default NULL,
+  `thumb_filename` varchar(255) default NULL,
+  `thumb_width` int(9) default NULL,
+  `thumb_height` int(9) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -634,11 +661,11 @@ CREATE TABLE `athena_2_Media` (
 DROP TABLE IF EXISTS `athena_2_PageParas`;
 
 CREATE TABLE `athena_2_PageParas` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `page_id` bigint(20) DEFAULT NULL,
-  `theme_para_id` int(11) DEFAULT NULL,
-  `para_value` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` bigint(20) NOT NULL auto_increment,
+  `page_id` bigint(20) default NULL,
+  `theme_para_id` int(11) default NULL,
+  `para_value` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -649,20 +676,20 @@ CREATE TABLE `athena_2_PageParas` (
 DROP TABLE IF EXISTS `athena_2_Pages`;
 
 CREATE TABLE `athena_2_Pages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL auto_increment,
+  `user_id` int(11) default NULL,
   `content` text,
-  `status` enum('Published','Draft','Private','Revision') DEFAULT 'Draft',
-  `last_edit` datetime DEFAULT NULL,
-  `parent_page_id` int(11) DEFAULT '0',
-  `title` varchar(255) DEFAULT NULL,
-  `slug` varchar(255) DEFAULT NULL,
-  `path` varchar(255) DEFAULT NULL,
-  `created` datetime DEFAULT NULL,
-  `template` varchar(255) DEFAULT NULL,
-  `is_homepage` tinyint(1) DEFAULT '0',
-  `page_order` tinyint(3) DEFAULT '0',
-  PRIMARY KEY (`id`)
+  `status` enum('Published','Draft','Private','Revision') default 'Draft',
+  `last_edit` datetime default NULL,
+  `parent_page_id` int(11) default '0',
+  `title` varchar(255) default NULL,
+  `slug` varchar(255) default NULL,
+  `path` varchar(255) default NULL,
+  `created` datetime default NULL,
+  `template` varchar(255) default NULL,
+  `is_homepage` tinyint(1) default '0',
+  `page_order` tinyint(3) default '0',
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 
@@ -673,17 +700,17 @@ CREATE TABLE `athena_2_Pages` (
 DROP TABLE IF EXISTS `athena_2_PageViews`;
 
 CREATE TABLE `athena_2_PageViews` (
-  `page_id` bigint(20) DEFAULT NULL,
-  `view_date` datetime DEFAULT NULL,
-  `ip_long` bigint(20) DEFAULT NULL,
-  `is_bot` tinyint(1) DEFAULT '0',
-  `browser` varchar(25) DEFAULT NULL,
-  `browser_ver` varchar(8) DEFAULT NULL,
-  `os_name` varchar(25) DEFAULT NULL,
-  `os_ver` varchar(8) DEFAULT NULL,
-  `referer` varchar(255) DEFAULT NULL,
-  `user_agent` varchar(255) DEFAULT NULL,
-  `server_ip` bigint(20) DEFAULT NULL
+  `page_id` bigint(20) default NULL,
+  `view_date` datetime default NULL,
+  `ip_long` bigint(20) default NULL,
+  `is_bot` tinyint(1) default '0',
+  `browser` varchar(25) default NULL,
+  `browser_ver` varchar(8) default NULL,
+  `os_name` varchar(25) default NULL,
+  `os_ver` varchar(8) default NULL,
+  `referer` varchar(255) default NULL,
+  `user_agent` varchar(255) default NULL,
+  `server_ip` bigint(20) default NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -694,15 +721,15 @@ CREATE TABLE `athena_2_PageViews` (
 DROP TABLE IF EXISTS `athena_2_Posts`;
 
 CREATE TABLE `athena_2_Posts` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL auto_increment,
+  `user_id` int(11) default NULL,
   `content` text,
-  `status` enum('Published','Draft','Private','Revision') DEFAULT 'Draft',
-  `last_edit` datetime DEFAULT NULL,
-  `created` datetime DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `canComment` tinyint(1) DEFAULT '1',
-  PRIMARY KEY (`id`)
+  `status` enum('Published','Draft','Private','Revision') default 'Draft',
+  `last_edit` datetime default NULL,
+  `created` datetime default NULL,
+  `title` varchar(255) default NULL,
+  `canComment` tinyint(1) default '1',
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 
@@ -713,12 +740,12 @@ CREATE TABLE `athena_2_Posts` (
 DROP TABLE IF EXISTS `athena_2_RollupBrowser`;
 
 CREATE TABLE `athena_2_RollupBrowser` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rollup_date` date DEFAULT NULL,
-  `browser` varchar(30) DEFAULT NULL,
-  `browser_ver` varchar(10) DEFAULT NULL,
-  `hits` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `rollup_date` date default NULL,
+  `browser` varchar(30) default NULL,
+  `browser_ver` varchar(10) default NULL,
+  `hits` int(11) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -729,11 +756,11 @@ CREATE TABLE `athena_2_RollupBrowser` (
 DROP TABLE IF EXISTS `athena_2_RollupCrawler`;
 
 CREATE TABLE `athena_2_RollupCrawler` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rollup_date` date DEFAULT NULL,
-  `crawler` varchar(25) DEFAULT NULL,
-  `hits` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `rollup_date` date default NULL,
+  `crawler` varchar(25) default NULL,
+  `hits` int(11) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -744,12 +771,12 @@ CREATE TABLE `athena_2_RollupCrawler` (
 DROP TABLE IF EXISTS `athena_2_RollupOS`;
 
 CREATE TABLE `athena_2_RollupOS` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rollup_date` date DEFAULT NULL,
-  `os_name` varchar(30) DEFAULT NULL,
-  `os_ver` varchar(10) DEFAULT NULL,
-  `hits` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `rollup_date` date default NULL,
+  `os_name` varchar(30) default NULL,
+  `os_ver` varchar(10) default NULL,
+  `hits` int(11) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -760,13 +787,13 @@ CREATE TABLE `athena_2_RollupOS` (
 DROP TABLE IF EXISTS `athena_2_RollupPageViews`;
 
 CREATE TABLE `athena_2_RollupPageViews` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rollup_date` date DEFAULT NULL,
-  `page_views` int(11) DEFAULT NULL,
-  `unique_visitors` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL auto_increment,
+  `rollup_date` date default NULL,
+  `page_views` int(11) default NULL,
+  `unique_visitors` int(11) default NULL,
   `keywords` text,
-  `page_title` varchar(125) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `page_title` varchar(125) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -777,11 +804,11 @@ CREATE TABLE `athena_2_RollupPageViews` (
 DROP TABLE IF EXISTS `athena_3_BlogFollowers`;
 
 CREATE TABLE `athena_3_BlogFollowers` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `isFollowing` tinyint(1) DEFAULT '0',
-  `name` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `isFollowing` tinyint(1) default '0',
+  `name` varchar(255) default NULL,
+  `email` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 
@@ -792,13 +819,13 @@ CREATE TABLE `athena_3_BlogFollowers` (
 DROP TABLE IF EXISTS `athena_3_Comments`;
 
 CREATE TABLE `athena_3_Comments` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL auto_increment,
   `content` text,
-  `status` enum('Pending','Published','Trash','Spam','PossibleSpam') DEFAULT 'Pending',
-  `last_edit` datetime DEFAULT NULL,
-  `created` datetime DEFAULT NULL,
+  `status` enum('Pending','Published','Trash','Spam','PossibleSpam') default 'Pending',
+  `last_edit` datetime default NULL,
+  `created` datetime default NULL,
   `blog_follower_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 
@@ -809,9 +836,9 @@ CREATE TABLE `athena_3_Comments` (
 DROP TABLE IF EXISTS `athena_3_Folders`;
 
 CREATE TABLE `athena_3_Folders` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT 'Unamed Folder',
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default 'Unamed Folder',
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `athena_3_Folders` WRITE;
@@ -837,14 +864,14 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_3_GalleryMeta`;
 
 CREATE TABLE `athena_3_GalleryMeta` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `page_id` bigint(20) DEFAULT NULL,
-  `gallery_number` tinyint(2) DEFAULT '0',
-  `title` varchar(255) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `image_id` bigint(20) DEFAULT NULL,
-  `theme_para_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `page_id` bigint(20) default NULL,
+  `gallery_number` tinyint(2) default '0',
+  `title` varchar(255) default NULL,
+  `description` varchar(255) default NULL,
+  `image_id` bigint(20) default NULL,
+  `theme_para_id` bigint(20) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -855,13 +882,13 @@ CREATE TABLE `athena_3_GalleryMeta` (
 DROP TABLE IF EXISTS `athena_3_GalleryTable`;
 
 CREATE TABLE `athena_3_GalleryTable` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `image_id` bigint(20) DEFAULT NULL,
-  `page_id` bigint(20) DEFAULT NULL,
-  `slot_number` tinyint(3) DEFAULT NULL,
-  `gallery_number` tinyint(2) DEFAULT '0',
-  `theme_para_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` bigint(20) NOT NULL auto_increment,
+  `image_id` bigint(20) default NULL,
+  `page_id` bigint(20) default NULL,
+  `slot_number` tinyint(3) default NULL,
+  `gallery_number` tinyint(2) default '0',
+  `theme_para_id` int(11) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -872,10 +899,10 @@ CREATE TABLE `athena_3_GalleryTable` (
 DROP TABLE IF EXISTS `athena_3_GlobalParas`;
 
 CREATE TABLE `athena_3_GlobalParas` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `para_value` varchar(255) DEFAULT NULL,
-  `theme_para_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` bigint(20) NOT NULL auto_increment,
+  `para_value` varchar(255) default NULL,
+  `theme_para_id` bigint(20) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -886,21 +913,21 @@ CREATE TABLE `athena_3_GlobalParas` (
 DROP TABLE IF EXISTS `athena_3_Media`;
 
 CREATE TABLE `athena_3_Media` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `folder_id` int(11) DEFAULT '1',
-  `filename` varchar(255) DEFAULT NULL,
-  `mime_type` varchar(20) DEFAULT NULL,
-  `file_size` int(11) DEFAULT NULL,
-  `created` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `id` bigint(20) NOT NULL auto_increment,
+  `folder_id` int(11) default '1',
+  `filename` varchar(255) default NULL,
+  `mime_type` varchar(20) default NULL,
+  `file_size` int(11) default NULL,
+  `created` timestamp NULL default NULL on update CURRENT_TIMESTAMP,
   `title` text,
   `description` text,
   `tags` text,
-  `width` int(9) DEFAULT NULL,
-  `height` int(9) DEFAULT NULL,
-  `thumb_filename` varchar(255) DEFAULT NULL,
-  `thumb_width` int(9) DEFAULT NULL,
-  `thumb_height` int(9) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `width` int(9) default NULL,
+  `height` int(9) default NULL,
+  `thumb_filename` varchar(255) default NULL,
+  `thumb_width` int(9) default NULL,
+  `thumb_height` int(9) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -911,11 +938,11 @@ CREATE TABLE `athena_3_Media` (
 DROP TABLE IF EXISTS `athena_3_PageParas`;
 
 CREATE TABLE `athena_3_PageParas` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `page_id` bigint(20) DEFAULT NULL,
-  `theme_para_id` int(11) DEFAULT NULL,
-  `para_value` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` bigint(20) NOT NULL auto_increment,
+  `page_id` bigint(20) default NULL,
+  `theme_para_id` int(11) default NULL,
+  `para_value` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -926,20 +953,20 @@ CREATE TABLE `athena_3_PageParas` (
 DROP TABLE IF EXISTS `athena_3_Pages`;
 
 CREATE TABLE `athena_3_Pages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL auto_increment,
+  `user_id` int(11) default NULL,
   `content` text,
-  `status` enum('Published','Draft','Private','Revision') DEFAULT 'Draft',
-  `last_edit` datetime DEFAULT NULL,
-  `parent_page_id` int(11) DEFAULT '0',
-  `title` varchar(255) DEFAULT NULL,
-  `slug` varchar(255) DEFAULT NULL,
-  `path` varchar(255) DEFAULT NULL,
-  `created` datetime DEFAULT NULL,
-  `template` varchar(255) DEFAULT NULL,
-  `is_homepage` tinyint(1) DEFAULT '0',
-  `page_order` tinyint(3) DEFAULT '0',
-  PRIMARY KEY (`id`)
+  `status` enum('Published','Draft','Private','Revision') default 'Draft',
+  `last_edit` datetime default NULL,
+  `parent_page_id` int(11) default '0',
+  `title` varchar(255) default NULL,
+  `slug` varchar(255) default NULL,
+  `path` varchar(255) default NULL,
+  `created` datetime default NULL,
+  `template` varchar(255) default NULL,
+  `is_homepage` tinyint(1) default '0',
+  `page_order` tinyint(3) default '0',
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 
@@ -950,17 +977,17 @@ CREATE TABLE `athena_3_Pages` (
 DROP TABLE IF EXISTS `athena_3_PageViews`;
 
 CREATE TABLE `athena_3_PageViews` (
-  `page_id` bigint(20) DEFAULT NULL,
-  `view_date` datetime DEFAULT NULL,
-  `ip_long` bigint(20) DEFAULT NULL,
-  `is_bot` tinyint(1) DEFAULT '0',
-  `browser` varchar(25) DEFAULT NULL,
-  `browser_ver` varchar(8) DEFAULT NULL,
-  `os_name` varchar(25) DEFAULT NULL,
-  `os_ver` varchar(8) DEFAULT NULL,
-  `referer` varchar(255) DEFAULT NULL,
-  `user_agent` varchar(255) DEFAULT NULL,
-  `server_ip` bigint(20) DEFAULT NULL
+  `page_id` bigint(20) default NULL,
+  `view_date` datetime default NULL,
+  `ip_long` bigint(20) default NULL,
+  `is_bot` tinyint(1) default '0',
+  `browser` varchar(25) default NULL,
+  `browser_ver` varchar(8) default NULL,
+  `os_name` varchar(25) default NULL,
+  `os_ver` varchar(8) default NULL,
+  `referer` varchar(255) default NULL,
+  `user_agent` varchar(255) default NULL,
+  `server_ip` bigint(20) default NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -971,15 +998,15 @@ CREATE TABLE `athena_3_PageViews` (
 DROP TABLE IF EXISTS `athena_3_Posts`;
 
 CREATE TABLE `athena_3_Posts` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL auto_increment,
+  `user_id` int(11) default NULL,
   `content` text,
-  `status` enum('Published','Draft','Private','Revision') DEFAULT 'Draft',
-  `last_edit` datetime DEFAULT NULL,
-  `created` datetime DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `canComment` tinyint(1) DEFAULT '1',
-  PRIMARY KEY (`id`)
+  `status` enum('Published','Draft','Private','Revision') default 'Draft',
+  `last_edit` datetime default NULL,
+  `created` datetime default NULL,
+  `title` varchar(255) default NULL,
+  `canComment` tinyint(1) default '1',
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 
@@ -990,12 +1017,12 @@ CREATE TABLE `athena_3_Posts` (
 DROP TABLE IF EXISTS `athena_3_RollupBrowser`;
 
 CREATE TABLE `athena_3_RollupBrowser` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rollup_date` date DEFAULT NULL,
-  `browser` varchar(30) DEFAULT NULL,
-  `browser_ver` varchar(10) DEFAULT NULL,
-  `hits` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `rollup_date` date default NULL,
+  `browser` varchar(30) default NULL,
+  `browser_ver` varchar(10) default NULL,
+  `hits` int(11) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -1006,11 +1033,11 @@ CREATE TABLE `athena_3_RollupBrowser` (
 DROP TABLE IF EXISTS `athena_3_RollupCrawler`;
 
 CREATE TABLE `athena_3_RollupCrawler` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rollup_date` date DEFAULT NULL,
-  `crawler` varchar(25) DEFAULT NULL,
-  `hits` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `rollup_date` date default NULL,
+  `crawler` varchar(25) default NULL,
+  `hits` int(11) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -1021,12 +1048,12 @@ CREATE TABLE `athena_3_RollupCrawler` (
 DROP TABLE IF EXISTS `athena_3_RollupOS`;
 
 CREATE TABLE `athena_3_RollupOS` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rollup_date` date DEFAULT NULL,
-  `os_name` varchar(30) DEFAULT NULL,
-  `os_ver` varchar(10) DEFAULT NULL,
-  `hits` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `rollup_date` date default NULL,
+  `os_name` varchar(30) default NULL,
+  `os_ver` varchar(10) default NULL,
+  `hits` int(11) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -1037,13 +1064,13 @@ CREATE TABLE `athena_3_RollupOS` (
 DROP TABLE IF EXISTS `athena_3_RollupPageViews`;
 
 CREATE TABLE `athena_3_RollupPageViews` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rollup_date` date DEFAULT NULL,
-  `page_views` int(11) DEFAULT NULL,
-  `unique_visitors` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL auto_increment,
+  `rollup_date` date default NULL,
+  `page_views` int(11) default NULL,
+  `unique_visitors` int(11) default NULL,
   `keywords` text,
-  `page_title` varchar(125) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `page_title` varchar(125) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -1054,11 +1081,11 @@ CREATE TABLE `athena_3_RollupPageViews` (
 DROP TABLE IF EXISTS `athena_4_BlogFollowers`;
 
 CREATE TABLE `athena_4_BlogFollowers` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `isFollowing` tinyint(1) DEFAULT '0',
-  `name` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `isFollowing` tinyint(1) default '0',
+  `name` varchar(255) default NULL,
+  `email` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 
@@ -1069,13 +1096,13 @@ CREATE TABLE `athena_4_BlogFollowers` (
 DROP TABLE IF EXISTS `athena_4_Comments`;
 
 CREATE TABLE `athena_4_Comments` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL auto_increment,
   `content` text,
-  `status` enum('Pending','Published','Trash','Spam','PossibleSpam') DEFAULT 'Pending',
-  `last_edit` datetime DEFAULT NULL,
-  `created` datetime DEFAULT NULL,
+  `status` enum('Pending','Published','Trash','Spam','PossibleSpam') default 'Pending',
+  `last_edit` datetime default NULL,
+  `created` datetime default NULL,
   `blog_follower_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 
@@ -1086,9 +1113,9 @@ CREATE TABLE `athena_4_Comments` (
 DROP TABLE IF EXISTS `athena_4_Folders`;
 
 CREATE TABLE `athena_4_Folders` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT 'Unamed Folder',
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default 'Unamed Folder',
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=69 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `athena_4_Folders` WRITE;
@@ -1115,14 +1142,14 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_4_GalleryMeta`;
 
 CREATE TABLE `athena_4_GalleryMeta` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `page_id` bigint(20) DEFAULT NULL,
-  `gallery_number` tinyint(2) DEFAULT '0',
-  `title` varchar(255) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `image_id` bigint(20) DEFAULT NULL,
-  `theme_para_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `page_id` bigint(20) default NULL,
+  `gallery_number` tinyint(2) default '0',
+  `title` varchar(255) default NULL,
+  `description` varchar(255) default NULL,
+  `image_id` bigint(20) default NULL,
+  `theme_para_id` bigint(20) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -1133,13 +1160,13 @@ CREATE TABLE `athena_4_GalleryMeta` (
 DROP TABLE IF EXISTS `athena_4_GalleryTable`;
 
 CREATE TABLE `athena_4_GalleryTable` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `image_id` bigint(20) DEFAULT NULL,
-  `page_id` bigint(20) DEFAULT NULL,
-  `slot_number` tinyint(3) DEFAULT NULL,
-  `gallery_number` tinyint(2) DEFAULT '0',
-  `theme_para_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` bigint(20) NOT NULL auto_increment,
+  `image_id` bigint(20) default NULL,
+  `page_id` bigint(20) default NULL,
+  `slot_number` tinyint(3) default NULL,
+  `gallery_number` tinyint(2) default '0',
+  `theme_para_id` int(11) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -1150,10 +1177,10 @@ CREATE TABLE `athena_4_GalleryTable` (
 DROP TABLE IF EXISTS `athena_4_GlobalParas`;
 
 CREATE TABLE `athena_4_GlobalParas` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `para_value` varchar(255) DEFAULT NULL,
-  `theme_para_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` bigint(20) NOT NULL auto_increment,
+  `para_value` varchar(255) default NULL,
+  `theme_para_id` bigint(20) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -1164,21 +1191,21 @@ CREATE TABLE `athena_4_GlobalParas` (
 DROP TABLE IF EXISTS `athena_4_Media`;
 
 CREATE TABLE `athena_4_Media` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `folder_id` int(11) DEFAULT '1',
-  `filename` varchar(255) DEFAULT NULL,
-  `mime_type` varchar(20) DEFAULT NULL,
-  `file_size` int(11) DEFAULT NULL,
-  `created` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `id` bigint(20) NOT NULL auto_increment,
+  `folder_id` int(11) default '1',
+  `filename` varchar(255) default NULL,
+  `mime_type` varchar(20) default NULL,
+  `file_size` int(11) default NULL,
+  `created` timestamp NULL default NULL on update CURRENT_TIMESTAMP,
   `title` text,
   `description` text,
   `tags` text,
-  `width` int(9) DEFAULT NULL,
-  `height` int(9) DEFAULT NULL,
-  `thumb_filename` varchar(255) DEFAULT NULL,
-  `thumb_width` int(9) DEFAULT NULL,
-  `thumb_height` int(9) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `width` int(9) default NULL,
+  `height` int(9) default NULL,
+  `thumb_filename` varchar(255) default NULL,
+  `thumb_width` int(9) default NULL,
+  `thumb_height` int(9) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `athena_4_Media` WRITE;
@@ -1226,11 +1253,11 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_4_PageParas`;
 
 CREATE TABLE `athena_4_PageParas` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `page_id` bigint(20) DEFAULT NULL,
-  `theme_para_id` int(11) DEFAULT NULL,
-  `para_value` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` bigint(20) NOT NULL auto_increment,
+  `page_id` bigint(20) default NULL,
+  `theme_para_id` int(11) default NULL,
+  `para_value` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -1241,20 +1268,20 @@ CREATE TABLE `athena_4_PageParas` (
 DROP TABLE IF EXISTS `athena_4_Pages`;
 
 CREATE TABLE `athena_4_Pages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL auto_increment,
+  `user_id` int(11) default NULL,
   `content` text,
-  `status` enum('Published','Draft','Private','Revision') DEFAULT 'Draft',
-  `last_edit` datetime DEFAULT NULL,
-  `parent_page_id` int(11) DEFAULT '0',
-  `title` varchar(255) DEFAULT NULL,
-  `slug` varchar(255) DEFAULT NULL,
-  `path` varchar(255) DEFAULT NULL,
-  `created` datetime DEFAULT NULL,
-  `template` varchar(255) DEFAULT NULL,
-  `is_homepage` tinyint(1) DEFAULT '0',
-  `page_order` tinyint(3) DEFAULT '0',
-  PRIMARY KEY (`id`)
+  `status` enum('Published','Draft','Private','Revision') default 'Draft',
+  `last_edit` datetime default NULL,
+  `parent_page_id` int(11) default '0',
+  `title` varchar(255) default NULL,
+  `slug` varchar(255) default NULL,
+  `path` varchar(255) default NULL,
+  `created` datetime default NULL,
+  `template` varchar(255) default NULL,
+  `is_homepage` tinyint(1) default '0',
+  `page_order` tinyint(3) default '0',
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_4_Pages` WRITE;
@@ -1281,17 +1308,17 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_4_PageViews`;
 
 CREATE TABLE `athena_4_PageViews` (
-  `page_id` bigint(20) DEFAULT NULL,
-  `view_date` datetime DEFAULT NULL,
-  `ip_long` bigint(20) DEFAULT NULL,
-  `is_bot` tinyint(1) DEFAULT '0',
-  `browser` varchar(25) DEFAULT NULL,
-  `browser_ver` varchar(8) DEFAULT NULL,
-  `os_name` varchar(25) DEFAULT NULL,
-  `os_ver` varchar(8) DEFAULT NULL,
-  `referer` varchar(255) DEFAULT NULL,
-  `user_agent` varchar(255) DEFAULT NULL,
-  `server_ip` bigint(20) DEFAULT NULL
+  `page_id` bigint(20) default NULL,
+  `view_date` datetime default NULL,
+  `ip_long` bigint(20) default NULL,
+  `is_bot` tinyint(1) default '0',
+  `browser` varchar(25) default NULL,
+  `browser_ver` varchar(8) default NULL,
+  `os_name` varchar(25) default NULL,
+  `os_ver` varchar(8) default NULL,
+  `referer` varchar(255) default NULL,
+  `user_agent` varchar(255) default NULL,
+  `server_ip` bigint(20) default NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -1302,15 +1329,15 @@ CREATE TABLE `athena_4_PageViews` (
 DROP TABLE IF EXISTS `athena_4_Posts`;
 
 CREATE TABLE `athena_4_Posts` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL auto_increment,
+  `user_id` int(11) default NULL,
   `content` text,
-  `status` enum('Published','Draft','Private','Revision') DEFAULT 'Draft',
-  `last_edit` datetime DEFAULT NULL,
-  `created` datetime DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `canComment` tinyint(1) DEFAULT '1',
-  PRIMARY KEY (`id`)
+  `status` enum('Published','Draft','Private','Revision') default 'Draft',
+  `last_edit` datetime default NULL,
+  `created` datetime default NULL,
+  `title` varchar(255) default NULL,
+  `canComment` tinyint(1) default '1',
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 
@@ -1321,12 +1348,12 @@ CREATE TABLE `athena_4_Posts` (
 DROP TABLE IF EXISTS `athena_4_RollupBrowser`;
 
 CREATE TABLE `athena_4_RollupBrowser` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rollup_date` date DEFAULT NULL,
-  `browser` varchar(30) DEFAULT NULL,
-  `browser_ver` varchar(10) DEFAULT NULL,
-  `hits` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `rollup_date` date default NULL,
+  `browser` varchar(30) default NULL,
+  `browser_ver` varchar(10) default NULL,
+  `hits` int(11) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -1337,11 +1364,11 @@ CREATE TABLE `athena_4_RollupBrowser` (
 DROP TABLE IF EXISTS `athena_4_RollupCrawler`;
 
 CREATE TABLE `athena_4_RollupCrawler` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rollup_date` date DEFAULT NULL,
-  `crawler` varchar(25) DEFAULT NULL,
-  `hits` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `rollup_date` date default NULL,
+  `crawler` varchar(25) default NULL,
+  `hits` int(11) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -1352,12 +1379,12 @@ CREATE TABLE `athena_4_RollupCrawler` (
 DROP TABLE IF EXISTS `athena_4_RollupOS`;
 
 CREATE TABLE `athena_4_RollupOS` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rollup_date` date DEFAULT NULL,
-  `os_name` varchar(30) DEFAULT NULL,
-  `os_ver` varchar(10) DEFAULT NULL,
-  `hits` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `rollup_date` date default NULL,
+  `os_name` varchar(30) default NULL,
+  `os_ver` varchar(10) default NULL,
+  `hits` int(11) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -1368,13 +1395,13 @@ CREATE TABLE `athena_4_RollupOS` (
 DROP TABLE IF EXISTS `athena_4_RollupPageViews`;
 
 CREATE TABLE `athena_4_RollupPageViews` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rollup_date` date DEFAULT NULL,
-  `page_views` int(11) DEFAULT NULL,
-  `unique_visitors` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL auto_increment,
+  `rollup_date` date default NULL,
+  `page_views` int(11) default NULL,
+  `unique_visitors` int(11) default NULL,
   `keywords` text,
-  `page_title` varchar(125) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `page_title` varchar(125) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -1385,11 +1412,11 @@ CREATE TABLE `athena_4_RollupPageViews` (
 DROP TABLE IF EXISTS `athena_5_BlogFollowers`;
 
 CREATE TABLE `athena_5_BlogFollowers` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `isFollowing` tinyint(1) DEFAULT '0',
-  `name` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `isFollowing` tinyint(1) default '0',
+  `name` varchar(255) default NULL,
+  `email` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 
@@ -1400,13 +1427,13 @@ CREATE TABLE `athena_5_BlogFollowers` (
 DROP TABLE IF EXISTS `athena_5_Comments`;
 
 CREATE TABLE `athena_5_Comments` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL auto_increment,
   `content` text,
-  `status` enum('Pending','Published','Trash','Spam','PossibleSpam') DEFAULT 'Pending',
-  `last_edit` datetime DEFAULT NULL,
-  `created` datetime DEFAULT NULL,
+  `status` enum('Pending','Published','Trash','Spam','PossibleSpam') default 'Pending',
+  `last_edit` datetime default NULL,
+  `created` datetime default NULL,
   `blog_follower_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 
@@ -1417,9 +1444,9 @@ CREATE TABLE `athena_5_Comments` (
 DROP TABLE IF EXISTS `athena_5_Folders`;
 
 CREATE TABLE `athena_5_Folders` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT 'Unamed Folder',
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default 'Unamed Folder',
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=69 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `athena_5_Folders` WRITE;
@@ -1446,14 +1473,14 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_5_GalleryMeta`;
 
 CREATE TABLE `athena_5_GalleryMeta` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `page_id` bigint(20) DEFAULT NULL,
-  `gallery_number` tinyint(2) DEFAULT '0',
-  `title` varchar(255) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `image_id` bigint(20) DEFAULT NULL,
-  `theme_para_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `page_id` bigint(20) default NULL,
+  `gallery_number` tinyint(2) default '0',
+  `title` varchar(255) default NULL,
+  `description` varchar(255) default NULL,
+  `image_id` bigint(20) default NULL,
+  `theme_para_id` bigint(20) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -1464,13 +1491,13 @@ CREATE TABLE `athena_5_GalleryMeta` (
 DROP TABLE IF EXISTS `athena_5_GalleryTable`;
 
 CREATE TABLE `athena_5_GalleryTable` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `image_id` bigint(20) DEFAULT NULL,
-  `page_id` bigint(20) DEFAULT NULL,
-  `slot_number` tinyint(3) DEFAULT NULL,
-  `gallery_number` tinyint(2) DEFAULT '0',
-  `theme_para_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` bigint(20) NOT NULL auto_increment,
+  `image_id` bigint(20) default NULL,
+  `page_id` bigint(20) default NULL,
+  `slot_number` tinyint(3) default NULL,
+  `gallery_number` tinyint(2) default '0',
+  `theme_para_id` int(11) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -1481,10 +1508,10 @@ CREATE TABLE `athena_5_GalleryTable` (
 DROP TABLE IF EXISTS `athena_5_GlobalParas`;
 
 CREATE TABLE `athena_5_GlobalParas` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `para_value` varchar(255) DEFAULT NULL,
-  `theme_para_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` bigint(20) NOT NULL auto_increment,
+  `para_value` varchar(255) default NULL,
+  `theme_para_id` bigint(20) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -1495,21 +1522,21 @@ CREATE TABLE `athena_5_GlobalParas` (
 DROP TABLE IF EXISTS `athena_5_Media`;
 
 CREATE TABLE `athena_5_Media` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `folder_id` int(11) DEFAULT '1',
-  `filename` varchar(255) DEFAULT NULL,
-  `mime_type` varchar(20) DEFAULT NULL,
-  `file_size` int(11) DEFAULT NULL,
-  `created` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `id` bigint(20) NOT NULL auto_increment,
+  `folder_id` int(11) default '1',
+  `filename` varchar(255) default NULL,
+  `mime_type` varchar(20) default NULL,
+  `file_size` int(11) default NULL,
+  `created` timestamp NULL default NULL on update CURRENT_TIMESTAMP,
   `title` text,
   `description` text,
   `tags` text,
-  `width` int(9) DEFAULT NULL,
-  `height` int(9) DEFAULT NULL,
-  `thumb_filename` varchar(255) DEFAULT NULL,
-  `thumb_width` int(9) DEFAULT NULL,
-  `thumb_height` int(9) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `width` int(9) default NULL,
+  `height` int(9) default NULL,
+  `thumb_filename` varchar(255) default NULL,
+  `thumb_width` int(9) default NULL,
+  `thumb_height` int(9) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `athena_5_Media` WRITE;
@@ -1537,13 +1564,21 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_5_PageParas`;
 
 CREATE TABLE `athena_5_PageParas` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `page_id` bigint(20) DEFAULT NULL,
-  `theme_para_id` int(11) DEFAULT NULL,
-  `para_value` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `id` bigint(20) NOT NULL auto_increment,
+  `page_id` bigint(20) default NULL,
+  `theme_para_id` int(11) default NULL,
+  `para_value` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
+LOCK TABLES `athena_5_PageParas` WRITE;
+/*!40000 ALTER TABLE `athena_5_PageParas` DISABLE KEYS */;
+INSERT INTO `athena_5_PageParas` (`id`,`page_id`,`theme_para_id`,`para_value`)
+VALUES
+	(1,12,204,'9');
+
+/*!40000 ALTER TABLE `athena_5_PageParas` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table athena_5_Pages
@@ -1552,35 +1587,35 @@ CREATE TABLE `athena_5_PageParas` (
 DROP TABLE IF EXISTS `athena_5_Pages`;
 
 CREATE TABLE `athena_5_Pages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL auto_increment,
+  `user_id` int(11) default NULL,
   `content` text,
-  `status` enum('Published','Draft','Private','Revision') DEFAULT 'Draft',
-  `last_edit` datetime DEFAULT NULL,
-  `parent_page_id` int(11) DEFAULT '0',
-  `title` varchar(255) DEFAULT NULL,
-  `slug` varchar(255) DEFAULT NULL,
-  `path` varchar(255) DEFAULT NULL,
-  `created` datetime DEFAULT NULL,
-  `template` varchar(255) DEFAULT NULL,
-  `is_homepage` tinyint(1) DEFAULT '0',
-  `page_order` tinyint(3) DEFAULT '0',
-  PRIMARY KEY (`id`)
+  `status` enum('Published','Draft','Private','Revision') default 'Draft',
+  `last_edit` datetime default NULL,
+  `parent_page_id` int(11) default '0',
+  `title` varchar(255) default NULL,
+  `slug` varchar(255) default NULL,
+  `path` varchar(255) default NULL,
+  `created` datetime default NULL,
+  `template` varchar(255) default NULL,
+  `is_homepage` tinyint(1) default '0',
+  `page_order` tinyint(3) default '0',
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_5_Pages` WRITE;
 /*!40000 ALTER TABLE `athena_5_Pages` DISABLE KEYS */;
 INSERT INTO `athena_5_Pages` (`id`,`user_id`,`content`,`status`,`last_edit`,`parent_page_id`,`title`,`slug`,`path`,`created`,`template`,`is_homepage`,`page_order`)
 VALUES
-	(9,1,'','Published','2010-08-12 06:06:24',0,'Home','Home.html','/','2010-08-12 06:01:28','',0,1),
-	(10,1,'','Published','2010-08-12 06:04:01',0,'Portfolio','Portfolio.html','/','2010-08-12 06:01:52','',0,2),
-	(11,1,'','Draft','2010-08-12 06:06:36',0,'Blog','Blog.html','/','2010-08-12 06:03:10','',0,3),
-	(12,1,'','Published','2010-08-12 06:08:21',0,'Investment','Investment.html','/','2010-08-12 06:03:20','',0,4),
-	(13,1,'','Published','2010-08-12 06:08:51',0,'Testimonials','Testimonials.html','/','2010-08-12 06:08:24','',0,6),
-	(14,1,'','Published','2010-08-12 06:09:05',0,'About Us','AboutUs.html','/','2010-08-12 06:08:56','',0,5),
-	(15,1,'','Published','2010-08-12 06:09:24',10,'Wedding Gallery 1','WeddingGallery1.html','/portfolio/','2010-08-12 06:09:11','',0,1),
-	(16,1,'','Published','2010-08-12 06:09:39',10,'Wedding Gallery 2','WeddingGallery2.html','/portfolio/','2010-08-12 06:09:12','',0,2),
-	(17,1,'','Published','2010-08-12 06:10:23',0,'Contact Us','ContactUs.html','/','2010-08-12 06:10:13','',0,7);
+	(9,1,'','Published','2010-08-13 00:41:07',0,'Home','Home.html','/','2010-08-12 06:01:28','homepage.php',0,0),
+	(10,1,'','Published','2010-08-13 01:06:54',0,'Portfolio','Portfolio.html','/','2010-08-12 06:01:52','gallerypage.php',0,2),
+	(11,1,'','Draft','2010-08-13 01:08:15',0,'Blog','Blog.html','/','2010-08-12 06:03:10','blog_page.php',0,3),
+	(12,1,'<div align=\\\\\\\"left\\\\\\\" cla=\\\\\\\"rightCol\\\\\\\" tyle=\\\\\\\"width: 675px;\\\\\\\">	<div cla=\\\\\\\"contentText\\\\\\\">		<div cla=\\\\\\\"torycontent\\\\\\\">			<p>Holly Pacione Photography<br />			719-321-9419</p>			<p>hollypacionephotography@gmail.com</p>			<p tyle=\\\\\\\"text-align: jutify;\\\\\\\"><trong>Portrait Invetment</trong></p>			<p>The itting fee for portrait i $100 and include:</p>			<p tyle=\\\\\\\"text-align: jutify;\\\\\\\">-Time and talent</p>			<p tyle=\\\\\\\"text-align: jutify;\\\\\\\">-Photography at a location of your choice within the Colorado pring area and mot of Denver</p>			<p>-Print begin at $15</p>			<p>-Digital File are Available</p>			<p><trong>Wedding Invetment</trong></p>			<p>Package begin at $2300 for two photographer, digital negative, and 6 hour and more.</p>			<p>We offer an aortment of earth friendly product, album, print and more.</p>			<p>We would be happy to e-mail you a more detailed price heet upon requet!</p>		</div>	</div></div>','Published','2010-08-13 01:30:05',0,'Investment','Investment.html','/','2010-08-12 06:03:20','contentrightpage.php',0,4),
+	(13,1,'','Published','2010-08-13 01:08:59',0,'Testimonials','Testimonials.html','/','2010-08-12 06:08:24','page.php',0,6),
+	(14,1,'','Published','2010-08-13 01:08:48',0,'About Us','AboutUs.html','/','2010-08-12 06:08:56','contentleftpage.php',0,5),
+	(15,1,'','Published','2010-08-13 01:07:01',10,'Wedding Gallery 1','WeddingGallery1.html','/portfolio/','2010-08-12 06:09:11','gallerypage.php',0,1),
+	(16,1,'','Published','2010-08-13 01:07:06',10,'Wedding Gallery 2','WeddingGallery2.html','/portfolio/','2010-08-12 06:09:12','gallerypage.php',0,2),
+	(17,1,'','Published','2010-08-13 01:09:10',0,'Contact Us','ContactUs.html','/','2010-08-12 06:10:13','contactpage.php',0,7);
 
 /*!40000 ALTER TABLE `athena_5_Pages` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1592,17 +1627,17 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_5_PageViews`;
 
 CREATE TABLE `athena_5_PageViews` (
-  `page_id` bigint(20) DEFAULT NULL,
-  `view_date` datetime DEFAULT NULL,
-  `ip_long` bigint(20) DEFAULT NULL,
-  `is_bot` tinyint(1) DEFAULT '0',
-  `browser` varchar(25) DEFAULT NULL,
-  `browser_ver` varchar(8) DEFAULT NULL,
-  `os_name` varchar(25) DEFAULT NULL,
-  `os_ver` varchar(8) DEFAULT NULL,
-  `referer` varchar(255) DEFAULT NULL,
-  `user_agent` varchar(255) DEFAULT NULL,
-  `server_ip` bigint(20) DEFAULT NULL
+  `page_id` bigint(20) default NULL,
+  `view_date` datetime default NULL,
+  `ip_long` bigint(20) default NULL,
+  `is_bot` tinyint(1) default '0',
+  `browser` varchar(25) default NULL,
+  `browser_ver` varchar(8) default NULL,
+  `os_name` varchar(25) default NULL,
+  `os_ver` varchar(8) default NULL,
+  `referer` varchar(255) default NULL,
+  `user_agent` varchar(255) default NULL,
+  `server_ip` bigint(20) default NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -1613,15 +1648,15 @@ CREATE TABLE `athena_5_PageViews` (
 DROP TABLE IF EXISTS `athena_5_Posts`;
 
 CREATE TABLE `athena_5_Posts` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL auto_increment,
+  `user_id` int(11) default NULL,
   `content` text,
-  `status` enum('Published','Draft','Private','Revision') DEFAULT 'Draft',
-  `last_edit` datetime DEFAULT NULL,
-  `created` datetime DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `canComment` tinyint(1) DEFAULT '1',
-  PRIMARY KEY (`id`)
+  `status` enum('Published','Draft','Private','Revision') default 'Draft',
+  `last_edit` datetime default NULL,
+  `created` datetime default NULL,
+  `title` varchar(255) default NULL,
+  `canComment` tinyint(1) default '1',
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 
@@ -1632,12 +1667,12 @@ CREATE TABLE `athena_5_Posts` (
 DROP TABLE IF EXISTS `athena_5_RollupBrowser`;
 
 CREATE TABLE `athena_5_RollupBrowser` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rollup_date` date DEFAULT NULL,
-  `browser` varchar(30) DEFAULT NULL,
-  `browser_ver` varchar(10) DEFAULT NULL,
-  `hits` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `rollup_date` date default NULL,
+  `browser` varchar(30) default NULL,
+  `browser_ver` varchar(10) default NULL,
+  `hits` int(11) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -1648,11 +1683,11 @@ CREATE TABLE `athena_5_RollupBrowser` (
 DROP TABLE IF EXISTS `athena_5_RollupCrawler`;
 
 CREATE TABLE `athena_5_RollupCrawler` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rollup_date` date DEFAULT NULL,
-  `crawler` varchar(25) DEFAULT NULL,
-  `hits` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `rollup_date` date default NULL,
+  `crawler` varchar(25) default NULL,
+  `hits` int(11) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -1663,12 +1698,12 @@ CREATE TABLE `athena_5_RollupCrawler` (
 DROP TABLE IF EXISTS `athena_5_RollupOS`;
 
 CREATE TABLE `athena_5_RollupOS` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rollup_date` date DEFAULT NULL,
-  `os_name` varchar(30) DEFAULT NULL,
-  `os_ver` varchar(10) DEFAULT NULL,
-  `hits` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `rollup_date` date default NULL,
+  `os_name` varchar(30) default NULL,
+  `os_ver` varchar(10) default NULL,
+  `hits` int(11) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -1679,13 +1714,13 @@ CREATE TABLE `athena_5_RollupOS` (
 DROP TABLE IF EXISTS `athena_5_RollupPageViews`;
 
 CREATE TABLE `athena_5_RollupPageViews` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rollup_date` date DEFAULT NULL,
-  `page_views` int(11) DEFAULT NULL,
-  `unique_visitors` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL auto_increment,
+  `rollup_date` date default NULL,
+  `page_views` int(11) default NULL,
+  `unique_visitors` int(11) default NULL,
   `keywords` text,
-  `page_title` varchar(125) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `page_title` varchar(125) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -1696,11 +1731,11 @@ CREATE TABLE `athena_5_RollupPageViews` (
 DROP TABLE IF EXISTS `athena_Sites`;
 
 CREATE TABLE `athena_Sites` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `domain` varchar(200) DEFAULT NULL,
-  `path` varchar(100) DEFAULT NULL,
-  `theme_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `domain` varchar(200) default NULL,
+  `path` varchar(100) default NULL,
+  `theme_id` int(11) default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_Sites` WRITE;
@@ -1723,15 +1758,15 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_UserLevels`;
 
 CREATE TABLE `athena_UserLevels` (
-  `id` int(11) DEFAULT NULL,
-  `name` varchar(12) DEFAULT NULL,
+  `id` int(11) default NULL,
+  `name` varchar(12) default NULL,
   `description` text,
-  `create_post` tinyint(4) DEFAULT '0',
-  `edit_post` int(11) DEFAULT NULL,
-  `delete_post` int(11) DEFAULT NULL,
-  `create_page` int(11) DEFAULT NULL,
-  `edit_page` int(11) DEFAULT NULL,
-  `delete_page` int(11) DEFAULT NULL
+  `create_post` tinyint(4) default '0',
+  `edit_post` int(11) default NULL,
+  `delete_post` int(11) default NULL,
+  `create_page` int(11) default NULL,
+  `edit_page` int(11) default NULL,
+  `delete_page` int(11) default NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_UserLevels` WRITE;
@@ -1754,21 +1789,22 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_Users`;
 
 CREATE TABLE `athena_Users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `password_hash` varchar(128) DEFAULT NULL,
-  `account_created` datetime DEFAULT NULL,
-  `last_login` datetime DEFAULT NULL,
-  `user_level` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL auto_increment,
+  `email` varchar(255) default NULL,
+  `name` varchar(255) default NULL,
+  `password_hash` varchar(128) default NULL,
+  `account_created` datetime default NULL,
+  `last_login` datetime default NULL,
+  `user_level` tinyint(1) default NULL,
+  `service_client_gallery` tinyint(1) default '0',
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_Users` WRITE;
 /*!40000 ALTER TABLE `athena_Users` DISABLE KEYS */;
-INSERT INTO `athena_Users` (`id`,`email`,`name`,`password_hash`,`account_created`,`last_login`,`user_level`)
+INSERT INTO `athena_Users` (`id`,`email`,`name`,`password_hash`,`account_created`,`last_login`,`user_level`,`service_client_gallery`)
 VALUES
-	(1,'mike@apollosites.com','Mike Pritchard','22d500a499157bcb53edd6703f8b78fb132fb1698735af66fcca','2010-08-09 19:54:00','2010-08-12 04:49:00',2);
+	(1,'mike@apollosites.com','Mike Pritchard','22d500a499157bcb53edd6703f8b78fb132fb1698735af66fcca','2010-08-09 19:54:00','2010-08-13 00:40:09',2,1);
 
 /*!40000 ALTER TABLE `athena_Users` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1780,8 +1816,8 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `athena_UserToSite`;
 
 CREATE TABLE `athena_UserToSite` (
-  `user_id` int(11) DEFAULT NULL,
-  `site_id` int(11) DEFAULT NULL
+  `user_id` int(11) default NULL,
+  `site_id` int(11) default NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_UserToSite` WRITE;

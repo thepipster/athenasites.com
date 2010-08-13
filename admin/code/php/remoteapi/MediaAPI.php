@@ -95,7 +95,22 @@ switch($cmd){
 		$tags = CommandHelper::getPara('tags', true, CommandHelper::$PARA_TYPE_STRING);
 		saveMediaInfo($site_id, $title, $desc, $tags);
 		break;			
-			
+					
+	// Para management..............
+
+	case "setGlobalPara" : 
+		$theme_para_id = CommandHelper::getPara('theme_para_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$new_value = CommandHelper::getPara('para_value', true, CommandHelper::$PARA_TYPE_STRING);
+		assignGlobalPara($site_id, $theme_para_id, $new_value);
+		break;
+
+	case "setPagePara" : 
+		$page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$theme_para_id = CommandHelper::getPara('theme_para_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$new_value = CommandHelper::getPara('para_value', true, CommandHelper::$PARA_TYPE_STRING);
+		assignPagePara($site_id, $page_id, $theme_para_id, $new_value);
+		break;
+					
 	default :
 		CommandHelper::sendTextMessage("Undefined command '$cmd'");
 		
@@ -362,11 +377,14 @@ function getAll($site_id){
 		
 	// Get page theme variables
 	$site_theme_paras = ThemeTable::getAllThemeParas($site['theme_id']);
+
+	// Get any set page paras
+	$page_paras = PageParasTable::getAllParas($site_id);
 			
 	$msg = array();	
 	$msg['cmd'] = 'getAll';
 	$msg['result'] = 'ok';			
-	$msg['data'] = array('folders' => $folder_list, 'media' => $media_data, 'pages' => $page_data, 'theme' => $theme, 'page_templates' => $page_templates, 'theme_paras' => $site_theme_paras);
+	$msg['data'] = array('folders' => $folder_list, 'media' => $media_data, 'pages' => $page_data, 'theme' => $theme, 'page_templates' => $page_templates, 'theme_paras' => $site_theme_paras, 'page_paras' => $page_paras);
 				
 	CommandHelper::sendMessage($msg);		
 
@@ -424,4 +442,46 @@ function saveMediaInfo($site_id, $title, $desc, $tags){
 	CommandHelper::sendMessage($msg);	
 }
 
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function assignGlobalPara($site_id, $theme_para_id, $new_value){
+
+	//Logger::debug("assignGlobalPara($site_id, $theme_para_id, $new_value)");
+
+	$result = GlobalParasTable::setGlobalParaValue($site_id, $theme_para_id, $new_value);
+			
+	Logger::debug("Result: $result");
+			
+	$msg = array();
+	
+	$msg['cmd'] = 5;
+	$msg['result'] = $result > 0 ? 'ok' : 'fail';
+	$msg['data'] = array('theme_para_id' => $theme_para_id, 'new_value' => $new_value);
+
+	CommandHelper::sendMessage($msg);		
+
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+
+function assignPagePara($site_id, $page_id, $theme_para_id, $new_value){
+
+	//Logger::debug("assignPagePara($site_id, $page_post_id, $theme_para_id, $new_value)");
+	
+
+	$id = PageParasTable::setParaValue($site_id, $page_id, $theme_para_id, $new_value);
+	
+	$msg = array();
+	
+	$msg['cmd'] = 6;
+	$msg['result'] = $id > 0 ? 'ok' : 'fail';
+	$msg['data'] = array('theme_para_id' => $theme_para_id, 'new_value' => $new_value, 'page_id' => $page_id);
+
+	CommandHelper::sendMessage($msg);		
+
+}
 ?>

@@ -5,33 +5,57 @@
 	border: none;
 	margin-top: 15px;	
 	font-size: 12px;
-	display: block;	
 }
 
 
-#PagesFrame .pageLabel {
+#PagesFrame .subframebox .pageLabel {
 	color: #3f4040;
 	width: 80px;
-	display: inline-block;
+	float: left;
+	display: inline-block;	
 }
 
-#PagesFrame .pageData {
+#PagesFrame .subframebox .pageData {
 	color: #386b93;
-	width: 170px;
+	width: 150px;
+	overflow: hidden;
+	float: left;
+	display: inline-block;	
 }
 
-#PagesFrame .pageInfoLine {
+#PagesFrame .subframebox input {
+	width: 140px;
+}
+
+#PagesFrame .subframebox select {
+	width: 140px;
+}
+
+#PagesFrame .subframebox .pageInfoLine {
 	padding-bottom: 10px;
 	height: auto;
+	display: inline-block;	
 }
 
-#PagesFrame .customPageLabel {
+#PagesFrame .subframebox .customPageLabel {
 	color: #3f4040;
 	width: 100%;
 	display: inline-block;
 }
 
-#PagesFrame .customPageData {
+#PagesFrame .subframebox .customPageData {
 	color: #386b93;
 	width: 100%;
+}
+
+#PagesFrame .paraTitle {
+	color: #386b93;
+	display: block;
+	padding-bottom: 3px;
+}
+
+#PagesFrame .paraDesc {
+	color: #3f4040;
+	display: block;
+	padding-bottom: 3px;
 }

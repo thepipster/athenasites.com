@@ -1,30 +1,21 @@
 <?php
 ob_start();
 
-
-$discRoot = realpath(dirname(__FILE__)) . "/";
-$common_code_root = substr($discRoot, 0, strpos($discRoot, 'wp-content')) . 'wp-content/CommonCode/';
-$wp_root = substr($discRoot, 0, strpos($discRoot, 'wp-content')) . '/';
-$blog_downloads_root = substr($discRoot, 0, strpos($discRoot, 'wp-content')) . 'wp-content/blogs.dir/';
-
-require_once($wp_root . 'wp-load.php');
-require_once($wp_root . 'wp-admin/includes/admin.php');
-
-//require_once($wp_root . 'wp-blog-header.php');
-require_once($common_code_root . 'php/dal/ClientGalleryTable.class.php');
-require_once($common_code_root . 'php/utils/WordPressHelper.class.php');
+// Load defines and class auto-loader....
+include_once(realpath(dirname(__FILE__)) . '/setup.php');
 
 
 // Get the page post id...
 $paras = $_GET['p']; // WP is cutting off the 2nd para somehow, so merge them
-//$blogid = getNumericPara('bid');
+//$site_id = getNumericPara('bid');
 
-$bits = explode(",", $paras);
-$page_id = $bits[1];
-$blogid = $bits[0];
+
+$page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+$site_id = CommandHelper::getPara('site_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+
 
 // Now get the images for this page....
-$images = ClientGalleryTable::getImagesForPage($blogid, $page_id);
+$images = ClientGalleryTable::getImagesForPage($site_id, $page_id);
 
 //error_log(print_r($images, true));
 
@@ -40,7 +31,7 @@ echo "<?xml version='1.0' encoding='UTF-8'?>
 		//$meta = get_post_meta($image_id, '_wp_attachment_image_alt');
 
 		//$post = get_post($image_id);
-		$post = ClientGalleryTable::getImagePostData($blogid, $image_id);
+		$post = ClientGalleryTable::getImagePostData($site_id, $image_id);
 
 		//$image_url = $post->guid;
 		//$thumb_url = $image['url'];
@@ -49,11 +40,11 @@ echo "<?xml version='1.0' encoding='UTF-8'?>
 		//$description = $post->post_content;
 
 		//$image_url = $post['guid'];
-		$image_url = WordPressHelper::getRealImageURL($image_id, $blogid);
+		$image_url = WordPressHelper::getRealImageURL($image_id, $site_id);
 		
 		//$thumb_url = $image['url'];
 		//$thumb_url = wp_get_attachment_thumb_url($image_id);		
-		$thumb_url = WordPressHelper::getRealThumbURL($image_id, $blogid);
+		$thumb_url = WordPressHelper::getRealThumbURL($image_id, $site_id);
 		
 		if (!isset($thumb_url) || $thumb_url == ''){
 			WordPressHelper::regenerateThumbnail($image_id, $blog_id, $blog_downloads_root);	

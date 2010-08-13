@@ -33,6 +33,11 @@ class PageParasTable {
 		return DatabaseManager::getVar($sql);
 	}
 
+	public static function getAllParas($site_id){			
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_PageParas",  $site_id ); 		
+		return DatabaseManager::getResults($sql);
+	}
+
 	// //////////////////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -63,7 +68,7 @@ class PageParasTable {
 	// //////////////////////////////////////////////////////////////////////////////////////
 
 	public static function createParaValue($site_id, $page_id, $theme_para_id, $new_value){	
-		$sql = DatabaseManager::prepare("INSERT INTO athena_%d_PageParas (para_value, page_id, theme_para_id, blog_id) VALUES (%s, %d, %d, %d)",  $site_id, $new_value, $page_id, $theme_para_id); 		
+		$sql = DatabaseManager::prepare("INSERT INTO athena_%d_PageParas (para_value, page_id, theme_para_id) VALUES (%s, %d, %d)",  $site_id, $new_value, $page_id, $theme_para_id); 		
 		return DatabaseManager::insert($sql);		
 	}
 
