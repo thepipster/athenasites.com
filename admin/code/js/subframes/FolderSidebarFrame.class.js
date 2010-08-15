@@ -249,9 +249,15 @@ var FolderSidebarFrame = {
 	// ////////////////////////////////////////////////////////////////////////////
 		
 	onSelectFolder : function(folder_id){
+
 		DataStore.m_currentFolderID = parseInt(folder_id);
-		FilesFrame.repaint();
 		FolderSidebarFrame.paintFolders();				
+
+		switch(ssMain.view){			
+			case ssMain.VIEW_GALLERIES : GalleriesFrame.repaint(); break;
+			case ssMain.VIEW_FILES : FilesFrame.repaint(); break;
+		}
+		
 	},
 			
 	// ////////////////////////////////////////////////////////////////////////////

@@ -1,8 +1,10 @@
 <?php
 /**
- * @package WordPress
- * @subpackage CGP4_Theme
+ * @Theme: CGP4
  */
+ 
+global $tracker_code;
+
 ?>
 
 				</td>
@@ -25,13 +27,9 @@
 </div>	
 
 <script type="text/javascript">
-/*
-try {
-	var pageTracker = _gat._getTracker("UA-534928-3");
-	pageTracker._trackPageview("<?= PageManager::$page_title ?>");
-} catch(err) {}
-*/
 
+<?= PageManager::echoGoogleTracker($tracker_code); ?>
+		
 /**
 * Class to contain common operators
 */

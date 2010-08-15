@@ -51,7 +51,71 @@ var GalleryAPI = {
 		else {
 			AthenaDialog.showAjaxError(ret);
 		}
-	}
+	},
 	
+	// ////////////////////////////////////////////////////////////////////////
+	
+	onMoveImage : function(siteID, pageID, imageID, old_slot, new_slot, oldGalleryNo, newGalleryNo, themeParaID, callback) {
+		
+		//alert('moving image: imageID = ' + imageID + ' slot = ' + slot);
+		
+		var paras = {cmd: 'moveImage', site_id: siteID, image_id: imageID, old_slot_no: old_slot, new_slot_no: new_slot, page_id: pageID, 
+				old_gallery_no: oldGalleryNo, new_gallery_no: newGalleryNo, theme_para_id: themeParaID};
+		
+		AthenaDialog.showLoading("Moving image");
+				
+		jQuery.ajax({
+			url: GalleryAPI.m_url,
+			dataType: "json",
+			data: paras,
+			success: function(ret){GalleryAPI.onGotAll(ret, callback);}
+		});
+	
+	},
+			
+	// ////////////////////////////////////////////////////////////////////////////
+	
+	onAddImage : function(siteID, pageID, imageID, slot, galleryNo, themeParaID, callback){
+		
+		//alert('adding image: pageID = ' + GalleryAPI.m_galleryPageID + ' imageID = ' + imageID + ' slot = ' + slot + ' gallery = ' + galleryNo);
+		
+		var paras = {cmd: 'addImage', site_id: siteID, page_id: pageID, image_id: imageID, slot_no: slot, gallery_no: galleryNo, theme_para_id: themeParaID};
+			
+		AthenaDialog.showLoading("Adding image");
+				
+		jQuery.ajax({
+			url: GalleryAPI.m_url,
+			dataType: "json",
+			data: paras,
+			success: function(ret){GalleryAPI.onGotAll(ret, callback);}
+		});	
+		
+	},
+
+	// ////////////////////////////////////////////////////////////////////////////
+	
+	onRemoveImage : function(siteID, pageID, imageID, galleryNo, slot, themeParaID, callback){
+
+		var paras = {cmd: 'removeImage', site_id: siteID, page_id: pageID, slot_no: slot, image_id: imageID, gallery_no: galleryNo, theme_para_id: themeParaID};
+				
+		jQuery.ajax({
+			url: GalleryAPI.m_url,
+			dataType: "json",
+			data: paras,
+			success: function(ret){GalleryAPI.onImageRemoved(ret, callback);}
+		});	
+		
+	},
+	
+	onImageRemoved : function(ret, callback){
+				
+		if (ret.result == "ok"){
+			callback();
+		}
+		else {
+			AthenaDialog.showAjaxError(ret);
+		}
+				
+	}	
 }
     

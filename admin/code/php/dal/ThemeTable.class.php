@@ -85,9 +85,9 @@ class ThemeTable {
 	/**
 	* If the specified page has a multi-gallery, get the theme para value for it (which will be the number of galleries)
 	*/
-	public static function getNumberGalleriesForMultiGallery($site_id, $page_post_id){
+	public static function getNumberGalleriesForMultiGallery($site_id, $page_id){
 
-		$sql = DatabaseManager::prepare("SELECT para_value FROM athena_%d_PageParas gp INNER JOIN apollo_ThemeParas tp WHERE page_post_id = %d AND gp.theme_para_id = tp.id AND tp.para_type = 'multi-gallery'", $site_id, $page_post_id);
+		$sql = DatabaseManager::prepare("SELECT para_value FROM athena_%d_PageParas gp INNER JOIN apollo_ThemeParas tp WHERE page_id = %d AND gp.theme_para_id = tp.id AND tp.para_type = 'multi-gallery'", $site_id, $page_id);
 		$val = DatabaseManager::getVar($sql);
 		if (!isset($val)){
 			$val = 0;

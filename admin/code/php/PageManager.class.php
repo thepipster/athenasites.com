@@ -112,12 +112,12 @@ class PageManager {
 	
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
-	public static function echoGoogleTracker(){
+	public static function echoGoogleTracker($tracker_code){
 	
-		$tracker_code = '';
-		$page_title = '';
-		$domain = '';
+		$domain = PageManager::$domain;
+		$page_title = PageManager::$page_title;
 		
+		/*
 		echo "<!-- Global tracking -->";
 		echo "<!--";
 		echo "<script type='text/javascript'>";
@@ -131,7 +131,17 @@ class PageManager {
 		echo "pageTracker._trackPageview('$page_title');";
 		echo "} catch(err) {}</script>";
 		echo "-->";	
+		*/
 		
+		if (!isset($tracker_code) || $tracker_code == '') return;
+		
+		echo "// Tracking";
+		echo "try {";
+		echo "    var pageTracker = _gat._getTracker('$tracker_code');";
+		echo "    pageTracker._setDomainName('$domain');";
+		echo "    pageTracker._trackPageview('$page_title');";
+		echo "} catch(err) {}";
+	
 	}
 	
 	// ///////////////////////////////////////////////////////////////////////////////////////

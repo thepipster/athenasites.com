@@ -1,11 +1,15 @@
 <?php
 /**
- * @package WordPress
- * @subpackage CGP3_Theme
+ * @Theme: CGP4
  */
  
 // Do default actions
 PageManager::doHeader();
+
+global $tracker_code;
+		
+// Get the google tracker code (if set)	
+$tracker_code = ThemeTable::getGlobalParaValue(PageManager::$site_id, 301);
 
 /*
 // Get the pages top level parent page title
@@ -41,7 +45,7 @@ function getTopParentPageTitle($post){
 	
 	<!-- Favicon ///////////////////////////////////////////////////// -->
 
-	<link rel="icon" type="image/png" href="<?= PageManager::getFavIcon() ?>">
+	<link rel="icon" type="image/png" href="<?= PageManager::getFavIconURL() ?>">
 	
 	<!-- Style sheets ///////////////////////////////////////////////////// -->
 

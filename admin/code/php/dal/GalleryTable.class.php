@@ -47,6 +47,14 @@ class GalleryTable {
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_GalleryTable WHERE page_id = %d AND theme_para_id = %d ORDER BY slot_number ASC",  $site_id, $page_id, $theme_para_id ); 
 		return DatabaseManager::getResults($sql);
 	}
+
+	/**
+	* Get all the images associated with a page
+	*/
+	public static function getAllImages($page_id, $site_id){	
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_GalleryTable WHERE page_id = %d ORDER BY slot_number ASC",  $site_id, $page_id ); 
+		return DatabaseManager::getResults($sql);
+	}
 	
 	// //////////////////////////////////////////////////////////////////////////////////////
 

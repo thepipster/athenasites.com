@@ -6,10 +6,10 @@
 */
 var DataStore = {
 
-	m_currentFolderID : 1, // folder id of 1 is considered 'unassigned'
-	
+	m_currentFolderID : 1, // folder id of 1 is considered 'unassigned'	
 	m_currentPageID : 0,
-	
+	m_currentGalleryNo : 1, // For multi-galleries
+		
 	/** Currently selected site id (if the user has more than 1 site!) */
 	m_siteID : 0,
 	
@@ -90,6 +90,53 @@ var DataStore = {
 	},
 	
 	// //////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	* Add a new image to a gallery. If the slot is currently full, then insert the image by moving all the laters image
+	* by one slot. 
+	*/ 
+	/*
+	addGalleryImage : function(media_id, slot_no, theme_para_id){
+
+			
+		var slotContents = DataStore.getGallerySlotImage(slot_no, gallery_no);
+		var currentImage = false;
+		var newImage = DataStore.getImage(media_id);
+		
+		if (slotContents){
+			image = DataStore.getImage(slotContents.image_id);
+		}
+
+		// If the slot is not open, then increment the slot counter for all images 
+		// with slot numbers equal to or greater than this one	
+		if (!DataStore.isSlotFree(slot_no)){
+			for (var i=0; i<DataStore.m_galleryImageList.length; i++){
+				if (DataStore.m_galleryImageList[i].slot_number >= slot_no){
+					DataStore.m_galleryImageList[i].slot_number++;
+				}
+			}		
+		}
+	
+		// Add the new image.....
+		var galImg = new Array();
+		galImg.image_id = media_id;
+		galImg.slot_number = slot_no;
+		galImg.theme_para_id = theme_para_id;
+		galImg.gallery_number = DataStore.m_currentGalleryNo;
+		galImg.page_id = DataStore.m_currentPageID;
+					
+		DataStore.m_galleryImageList.push(img);					
+	},
+	*/
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	isSlotFree : function(slot_no){
+		var slotContents = DataStore.getGallerySlotImage(slot_no, gallery_no);
+		if (slotContents == undefined || !slotContents) return false;
+		return true;		
+	},
+	
+	// //////////////////////////////////////////////////////////////////////////////////
 
 	/**
 	* Check to see if a page can have a gallery, based on its template
@@ -106,7 +153,18 @@ var DataStore = {
 		}
 		return false;
 	},
-	
+		
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	getGallerySlotImage : function(slot_no, gallery_no){
+		for (var i=0; i<DataStore.m_galleryImageList.length; i++){
+			if (DataStore.m_galleryImageList[i].slot_number == slot_no && 
+					DataStore.m_galleryImageList[i].gallery_number == gallery_no){
+				return DataStore.m_galleryImageList[i];
+			}
+		}
+		return false;
+	},
 	
 	// //////////////////////////////////////////////////////////////////////////////////
 
@@ -126,43 +184,6 @@ var DataStore = {
 		return DataStore.getPage(DataStore.m_currentPageID);
 	},
 	
-	// ////////////////////////////////////////////////////////////////////////////
-
-	/**
-	* Get the path to a page
-	*/
-	/*
-	getPagePath : function(page_id){
-		var pathObj = new Array();
-		var pathObj = DataStore.buildPagePath(DataStore.m_currentPageID, pathObj);
-		var txt = '/';
-		for (var i=pathObj.length-1; i>=0; i--){
-			txt += pathObj[i] + "/";
-		}
-		return txt;
-	},
-			
-	buildPagePath : function(page_id, pathObj){
-			
-		var page = DataStore.getPage(page_id);
-		if (page.parent_page_id == 0){
-			return pathObj;
-		}
-		else {
-			var parentPage = DataStore.getPage(page.parent_page_id);
-			var path = parentPage.slug.substring(0, parentPage.slug.indexOf('.html'));
-			pathObj.push(path);
-			
-			if (parentPage.parent_page_id == 0){
-				return pathObj;
-			}
-			else {
-				return DataStore.buildPagePath(page.parent_page_id, pathObj);
-			}
-		}
-			
-	},	
-	*/
 	// //////////////////////////////////////////////////////////////////////////////////
 	
 	getFolderName : function(folder_id){
@@ -359,11 +380,40 @@ var DataStore = {
 	// //////////////////////////////////////////////////////////////////////////////////
 	
 	onGotGalleryData : function(gallery_images, gallery_meta){
-		DataStore.m_galleryImageList = gallery_images;
+		
+		DataStore.onGotGalleryImages(gallery_images);
+		//DataStore.m_galleryImageList = gallery_images;
 		DataStore.m_galleryMetaList = gallery_meta;
 		
 		if (DataStore.m_galleryImageList == undefined) DataStore.DataStore.m_galleryImageList = new Array();
 		if (DataStore.m_galleryMetaList == undefined) DataStore.m_galleryMetaList = new Array();		
+	},
+	
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	onGotGalleryImages : function(gallery_images){
+		
+		if (!gallery_images || gallery_images == undefined){
+			DataStore.m_galleryImageList = new Array();			
+			return;
+		}
+		
+		DataStore.m_galleryImageList = new Array(gallery_images.length);
+				
+		for(var i=0; i<gallery_images.length; i++){			
+			
+			var temp = new Object();
+
+			temp.id = gallery_images[i].id;
+			temp.image_id = gallery_images[i].image_id;
+			temp.slot_number = gallery_images[i].slot_number;
+			temp.gallery_number = gallery_images[i].gallery_number;
+			temp.theme_para_id = gallery_images[i].theme_para_id;
+			temp.page_id = gallery_images[i].page_id;
+			
+			DataStore.m_galleryImageList[i] = temp;
+		}
+		
 	},
 	
 	// //////////////////////////////////////////////////////////////////////////////////

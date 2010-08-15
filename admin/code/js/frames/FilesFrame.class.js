@@ -38,12 +38,13 @@ var FilesFrame = {
 		txt += "<table border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>";
 
 		txt += "<tr valign='top'>";
+
 		
-		txt += "	<td>";
-		//txt += "		<div class='frameTitle'>Folder: </div>";		
-		txt += "		<div id='apollo_folder_contents'></div>";
+		txt += "	<td class='frameContents'>";
+		txt += "        <span class='frameTitle'>Images</span>";
+		txt += "        <div id='apollo_folder_contents'></div>";
 		txt += "	</td>";
-							
+		
 		// Edit images frame...........
 							
 		txt += "	<td id='imageEditContent' style='height:100%; padding:5px'>";																
@@ -77,14 +78,14 @@ var FilesFrame = {
 		$('#FilesFrame').html(txt);
 
 		FilesFrame.paintUploader();		
-		FilesFrame.paintImages();
+		FilesFrame.paintImages('#apollo_folder_contents');
 		FilesFrame.onShowUploader();
 	},
 
 	// ////////////////////////////////////////////////////////////////////////////
 
 	repaintData : function(){
-		FilesFrame.paintImages();
+		FilesFrame.paintImages('#apollo_folder_contents');
 		FilesFrame.onShowUploader();
 	},
 		
@@ -176,7 +177,7 @@ var FilesFrame = {
 	
 	// ////////////////////////////////////////////////////////////////////////////
 	
-	paintImages : function(){
+	paintImages : function(targetDiv){
 		
 		var imageList = DataStore.m_mediaList;
 		
@@ -242,11 +243,11 @@ var FilesFrame = {
 			}
 			
 		}
-								
-		$('#apollo_folder_contents').html(txt);
+	
+		$(targetDiv).html(txt);
 
-		$('#apollo_folder_contents').disableSelection();
-		$('#apollo_folder_contents').noContext();
+		$(targetDiv).disableSelection();
+		$(targetDiv).noContext();
 
 		//$(".thumb").rightClick( function(e) {FilesFrame.onRightClickImage(e, this);});
 				

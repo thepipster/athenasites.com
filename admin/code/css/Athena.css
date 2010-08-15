@@ -36,7 +36,7 @@ html, body {
 	margin: 0px;
 	padding: 0;
 	width: 98%;
-	height: 95%;
+	height: 100%;
 	/*border: medium double rgb(250,0,255);*/
 }
 
@@ -117,11 +117,16 @@ html, body {
 
 /* Main Frame Styles //////////////////////////////////////// */
 
+.frameContents {
+	padding-left: 10px;
+}
+
 .frameTitle {
-	width: 100%;
+	font-size: 16px;
+	color: #032f5d;
+	margin-top: 5px;
+	margin-bottom: 10px;
 	display: block;
-	background-color: white;
-	height: 20px;
 }
 
 .colorBox {
@@ -348,6 +353,12 @@ html, body {
 }
 
 #menu_container .menu_item:hover {
+	background-color: #e4e4e4;
+	color: #032f5d;	
+}
+
+/*
+#menu_container .menu_item:hover {
 	background-color: #f3f2f1;
 	color: #032f5d;	
 	border-width: 0px;
@@ -355,7 +366,7 @@ html, body {
 	border-bottom-width: 1px;
 	border-style: solid;	
 }
-
+*/
 #menu_container .menu_item.selected {
 	background-color: #f3f2f1;
 	color: #032f5d;

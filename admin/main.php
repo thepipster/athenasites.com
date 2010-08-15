@@ -55,6 +55,8 @@ else {
 	
 }
 
+//$page = PagesTable::getPage($current_site_id, $page_id);
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -337,7 +339,7 @@ var ssMain = {
 	VIEW_ACCOUNT : 8,
 	VIEW_EDITFILES : 9,
 	
-	view : 3,
+	view : 5,
 		
 	pageTracker : '',
 	
