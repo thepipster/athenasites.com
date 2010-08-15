@@ -5,32 +5,31 @@
 * @Description: Home Page
 */
 
-$noflash = $_GET['noflash'];
+//$noflash = $_GET['noflash'];
 $xml_url = "http://" . $_SERVER['HTTP_HOST'] ."/admin/code/php/getUserGalleryXML.php?site_id=".PageManager::$site_id."&page_id=".PageManager::$page_id."&cache=" . mt_rand();
 
 $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id, PageManager::$page_id);
 
 ?>
 
-<?php get_header(); ?>
-
-	<div id='galleryContent' class='pageContents' style="padding:0px; padding-left:25px; background-image:url('')">
+	<div id='galleryContent' class='pageContents' style="padding:0px; padding-left:25px; background-image:url('');">
 		<?php
 			foreach($gallery_image_list as $gal_mapping){
 			
 				$image_id = $gal_mapping['image_id'];
 				$image = FolderTable::getMedia(PageManager::$site_id, $image_id);
 				
-				$image_url = PageManager::$media_root_url . $image['file_url'];
+				$image_url = PageManager::$media_root_url . $image['filename'];
+				$thumb_url = PageManager::$media_root_url . $image['thumb_filename'];
 				$title =  $image['title'];
 				$description = $image['description'];										
 				$tags = $image['tags'];
 				
 				
 				echo "<div id='noFlashImage'>";
-				echo "    <img src='$image_url' title='$title' alt='$alt_text' width='100%'/>";   
+				echo "    <img src='$image_url' title='$title' alt='$description, $tags' width='100%'/>";   
 				echo "    <span class='title'>$title</span>";
-				echo "    <span class='caption'>$caption</span>"; 
+				echo "    <span class='caption'>$description</span>"; 
 				echo "</div>";
 				echo "<br/>";
 				
@@ -60,12 +59,12 @@ if (hasFlash){
 	var txt = "";
 	txt += "<object classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000' codebase='http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0' width='100%' height='100%' id='homeGalFlashObject' align='middle'>";
 	txt += "	<param name='allowScriptAccess' value='sameDomain' /> ";
-	txt += "	<param name='wmode' value='transparent' /> ";
-	txt += "	<param name='movie' value='<?= PageManager::$theme_url_root; ?>/code/flash/homeGal.swf' /> ";
+	txt += "	<param name='wmode' value='opaque' /> ";
+	txt += "	<param name='movie' value='<?= PageManager::$theme_url_root; ?>code/flash/homeGal.swf' /> ";
 	txt += "	<param name='quality' value='high' /> ";
-	txt += "	<param name='bgcolor' value='#ffffff' /> ";
-	txt += "	<param name='FlashVars' value='xmlFile=<?= PageManager::$theme_url_root; ?>/code/php/getUserGalleryXML.php?pageid=<?=$page_id ?>' /> ";
-	txt += "	<embed FlashVars='xmlFile=<?= PageManager::$theme_url_root; ?>/code/php/getUserGalleryXML.php?pageid=<?=$page_id ?>' src='<?= PageManager::$theme_url_root; ?>/code/flash/homeGal.swf' quality='high' bgcolor='#ffffff' wmode='transparent' width='100%' height='100%' name='homeGalFlashObject' align='middle' allowScriptAccess='sameDomain' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' /> ";
+	txt += "	<param name='bgcolor' value='#cccccc' /> ";
+	txt += "	<param name='FlashVars' value='xmlFile=<?= $xml_url; ?>' /> ";
+	txt += "	<embed FlashVars='xmlFile=<?= $xml_url; ?>' src='<?= PageManager::$theme_url_root; ?>code/flash/homeGal.swf' quality='high' bgcolor='#cccccc' wmode='opaque' width='100%' height='100%' name='homeGalFlashObject' align='middle' allowScriptAccess='sameDomain' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' /> ";
 	txt += "</object>";
 	document.getElementById('galleryContent').innerHTML = txt;
 }		
@@ -113,8 +112,11 @@ var cgpHome = {
 			
 			$("#galleryContent").height(galH);
 			$("#galleryContent").width(galW);
+									
+			//alert( $('#homeGalFlashObject').width() + ", " + $('#homeGalFlashObject').height() );
+			//alert( $('#galleryContent').width() + ", " + $('#galleryContent').height() );
 			
-			//Logger.info("galW = " + galW + " galH = " + galH);
+			//alert("galW = " + galW + " galH = " + galH);
 		}
 		
 	}

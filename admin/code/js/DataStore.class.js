@@ -6,7 +6,7 @@
 */
 var DataStore = {
 
-	m_currentFolderID : 1, // folder id of 1 is considered 'unassigned'	
+	m_currentFolderID : -1, // folder id of 1 is considered 'unassigned'	
 	m_currentPageID : 0,
 	m_currentGalleryNo : 1, // For multi-galleries
 		
@@ -128,6 +128,23 @@ var DataStore = {
 		DataStore.m_galleryImageList.push(img);					
 	},
 	*/
+	
+	removeGalleryImage : function(slot_no){
+		
+		var tempList = new Array();
+		
+		for (var i=0; i<DataStore.m_galleryImageList.length; i++){
+		
+			if (!(DataStore.m_galleryImageList[i].slot_number == slot_no && 
+					DataStore.m_galleryImageList[i].gallery_number == DataStore.m_currentGalleryNo)){
+				tempList.push(DataStore.m_galleryImageList[i]);
+			}
+		}
+		
+		DataStore.m_galleryImageList = tempList;
+		
+	},
+	
 	// //////////////////////////////////////////////////////////////////////////////////
 
 	isSlotFree : function(slot_no){
@@ -372,9 +389,10 @@ var DataStore = {
 	
 		GalleryAPI.getAll(DataStore.m_siteID, function(gallery_images, gallery_meta){DataStore.onGotGalleryData(gallery_images, gallery_meta);});
 		
-		MediaAPI.getAll(DataStore.m_siteID, function(folders, media, pages, theme, page_templates, theme_paras, page_paras){ 
-			DataStore.onGotData(folders, media, pages, theme, page_templates, theme_paras, page_paras, callback);
-		});
+		MediaAPI.getAll(DataStore.m_siteID, 
+				function(folders, media, pages, theme, page_templates, theme_paras, page_paras){ 
+					DataStore.onGotData(folders, media, pages, theme, page_templates, theme_paras, page_paras, callback);
+				});
 	},
 	
 	// //////////////////////////////////////////////////////////////////////////////////
@@ -432,7 +450,7 @@ var DataStore = {
 
 		if (DataStore.m_themeParaList == undefined) DataStore.m_themeParaList = new Array();
 		if (DataStore.m_siteParaList == undefined) DataStore.m_siteParaList = new Array();
-
+		
 		callback();
 	},
 
@@ -527,9 +545,9 @@ var DataStore = {
 				//alert(temp.id + " " + temp.name);
 			}
 			
-			DataStore.m_folderList[i] = temp;
-			
+			DataStore.m_folderList[i] = temp;			
 		}		
+		
 	},
 	
 	// //////////////////////////////////////////////////////////////////////////////////

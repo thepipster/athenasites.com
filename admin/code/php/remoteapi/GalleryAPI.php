@@ -283,6 +283,8 @@ function removeImage($site_id, $image_id, $page_id, $gal_no, $theme_para_id, $sl
 
 	$msg['cmd'] = 'removeImage';
 	$msg['result'] = 'ok';
+	$msg['data'] = array('slot_no' => $slot_no);
+	//$msg['data'] = array('gallery_images' => getGalleryImageList($site_id), 'gallery_meta' => GalleryTable::getAllMeta($site_id));
 
 	CommandHelper::sendMessage($msg);	
 }

@@ -179,6 +179,8 @@ var FilesFrame = {
 	
 	paintImages : function(targetDiv){
 		
+		$(".thumb").draggable('destroy');	
+		
 		var imageList = DataStore.m_mediaList;
 		
 		var txt = "";
@@ -190,6 +192,7 @@ var FilesFrame = {
 		var utc_time = localTime + localOffset;
 								
 		//alert(DataStore.m_currentFolderID + " " + FolderSidebarFrame.ID_UNASSIGNED);
+		//alert("Folder id = " + DataStore.m_currentFolderID + " " + imageList.length + " images");
 								
 		for (var i=0; i<imageList.length; i++){
 
@@ -244,6 +247,10 @@ var FilesFrame = {
 			
 		}
 	
+		if (txt == ""){
+			txt += "<div style='color:#444444;'>This folder is empy</div>";
+		}
+		
 		$(targetDiv).html(txt);
 
 		$(targetDiv).disableSelection();

@@ -66,7 +66,7 @@ var GalleriesSidebarFrame = {
 		}
 				
 		if (noGalPages == 0){
-			txt += "<div style='padding-left:10px; color:#444444'>You have no pages using a gallery template yet</div>";
+			txt += "<div style='padding-left:10px;color:#444444;'>You have no pages using a gallery template yet</div>";
 		}
 		else {
 			for (var i=0; i<pageList.length; i++){

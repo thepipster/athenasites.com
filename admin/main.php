@@ -114,13 +114,16 @@ else {
 
 <script type="text/javascript" src="code/js/3rdparty/jquery.advancedClick.js"></script>
 
+<script type="text/javascript" src="code/js/3rdparty/jquery-ui-1.8.4.custom.min.js"></script>
+
+<!--
 <script type="text/javascript" src="code/js/3rdparty/jquery_ui/ui/ui.core.js"></script>
 <script type="text/javascript" src="code/js/3rdparty/jquery_ui/ui/ui.draggable.js"></script>
 <script type="text/javascript" src="code/js/3rdparty/jquery_ui/ui/ui.droppable.js"></script>
 <script type="text/javascript" src="code/js/3rdparty/jquery_ui/ui/ui.sortable.js"></script>
 <script type="text/javascript" src="code/js/3rdparty/jquery_ui/ui/ui.resizable.js"></script>
 <script type="text/javascript" src="code/js/3rdparty/jquery_ui/ui/ui.dialog.js"></script>
-
+-->
 <script type="text/javascript" src="code/js/3rdparty/swfobject.js"></script>
 
 <script type="text/javascript" src="code/js/3rdparty/SWFUpload/swfupload.js"></script>
@@ -451,6 +454,14 @@ var ssMain = {
 	// ////////////////////////////////////////////////////////////////////////
 	
 	onDataLoaded : function(){	
+	
+		if (DataStore.m_currentFolderID == -1 && DataStore.m_folderList.length > 0){
+			FolderSidebarFrame.onSelectFolder(DataStore.m_folderList[0].id);
+		}
+		else {
+			FolderSidebarFrame.onSelectFolder(1); // unassigned folders
+		}
+		
 		ssMain.repaint();		
 	},
 

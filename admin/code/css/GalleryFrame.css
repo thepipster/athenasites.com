@@ -31,14 +31,7 @@
 }
 
 #GalleryFrameContent .gallery_slot {
-/*
-	margin-left: 2px;
-	margin-right: 2px;
-	margin: 3px;
-	padding-top: 2px;
-*/
-	margin: 5px;
-	
+	margin: 5px;	
 	border-width: 4px;
 	border-style: solid;
 	border-color: white;
@@ -49,7 +42,7 @@
 	float: left;
 }
 
-#GalleryFrameContent .gallery_slot_hover { background-color: #e6e4d0;}
+#GalleryFrameContent .gallery_slot_hover { background-color: #e6e4d0 !important;}
 
 #GalleryFrameContent .gallery_thumb {	
 }
@@ -60,8 +53,8 @@
 	border-color: white;
 	padding: 0px;
 	margin: 0px;
-	width: 50px;
-	height: 50px;
+	width: 54px;
+	height: 52px;
 }
 
 #GalleryFrameContent .gallery_slot_text{
@@ -70,6 +63,16 @@
 	width: 66px;
 	height: 46px;
 	padding-top: 14px;
+}
+
+#GalleryFrameContent .delete_slot_text {
+	font-size: 24px;
+	color: black;
+	width: 66px;
+	height: 41px;
+	padding-top: 20px;
+	background-color: #d00202;
+	font-size: 14px;
 }
 
 #GalleryFrameContent #apollo_image_contents {

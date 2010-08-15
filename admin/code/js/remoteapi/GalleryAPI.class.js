@@ -110,7 +110,7 @@ var GalleryAPI = {
 	onImageRemoved : function(ret, callback){
 				
 		if (ret.result == "ok"){
-			callback();
+			callback(ret.data.slot_no);
 		}
 		else {
 			AthenaDialog.showAjaxError(ret);

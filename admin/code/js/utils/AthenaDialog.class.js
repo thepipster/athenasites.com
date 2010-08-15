@@ -14,6 +14,8 @@ var AthenaDialog = {
 		txt += "</div>";
 		
 		$('#apollo_loading_display').html(txt);
+		$('#apollo_loading_display').width($(window).width());
+		$('#apollo_loading_display').height($(window).height());
 		$('#apollo_loading_display').show();
 	},
 

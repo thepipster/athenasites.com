@@ -4,7 +4,7 @@
 #
 # Host: localhost (MySQL 5.1.37)
 # Database: athenasites
-# Generation Time: 2010-08-14 21:18:21 -0600
+# Generation Time: 2010-08-15 01:34:31 -0600
 # ************************************************************
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -46,7 +46,8 @@ LOCK TABLES `apollo_Sessions` WRITE;
 /*!40000 ALTER TABLE `apollo_Sessions` DISABLE KEYS */;
 INSERT INTO `apollo_Sessions` (`id`,`access`,`data`)
 VALUES
-	('95f1abcd20e0ab311bae332ec2d5fc38',1281842283,'user_valid|b:1;user_id|s:1:\"1\";user_name|s:14:\"Mike Pritchard\";user_email|s:20:\"mike@apollosites.com\";user_level|s:1:\"2\";');
+	('95f1abcd20e0ab311bae332ec2d5fc38',1281855242,'user_valid|b:1;user_id|s:1:\"1\";user_name|s:14:\"Mike Pritchard\";user_email|s:20:\"mike@apollosites.com\";user_level|s:1:\"2\";'),
+	('f3e080d3d17f68988081e11b226de078',1281857563,'');
 
 /*!40000 ALTER TABLE `apollo_Sessions` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1159,25 +1160,42 @@ CREATE TABLE `athena_4_GalleryTable` (
   `gallery_number` tinyint(2) DEFAULT '0',
   `theme_para_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=84 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_4_GalleryTable` WRITE;
 /*!40000 ALTER TABLE `athena_4_GalleryTable` DISABLE KEYS */;
 INSERT INTO `athena_4_GalleryTable` (`id`,`image_id`,`page_id`,`slot_number`,`gallery_number`,`theme_para_id`)
 VALUES
-	(1,3,9,30,1,303),
-	(2,3,9,29,1,303),
-	(3,29,9,2,1,303),
-	(21,30,9,1,1,303),
-	(20,21,9,0,1,303),
-	(6,9,9,4,1,303),
-	(22,10,9,3,1,303),
-	(19,11,9,19,1,303),
-	(23,24,9,5,1,303),
-	(10,24,9,8,1,303),
-	(11,27,9,12,1,303),
-	(12,15,9,10,1,303),
-	(14,5,9,23,1,303);
+	(79,26,9,25,1,303),
+	(68,15,9,14,1,303),
+	(61,8,9,7,1,303),
+	(62,9,9,8,1,303),
+	(70,17,9,16,1,303),
+	(69,16,9,15,1,303),
+	(71,18,9,17,1,303),
+	(72,19,9,18,1,303),
+	(74,21,9,20,1,303),
+	(65,12,9,11,1,303),
+	(67,14,9,13,1,303),
+	(76,23,9,22,1,303),
+	(24,1,9,0,1,303),
+	(25,2,9,1,1,303),
+	(26,3,9,2,1,303),
+	(33,4,9,3,1,303),
+	(34,5,9,4,1,303),
+	(35,6,9,5,1,303),
+	(37,7,9,6,1,303),
+	(66,13,9,12,1,303),
+	(73,20,9,19,1,303),
+	(63,10,9,9,1,303),
+	(80,27,9,26,1,303),
+	(64,11,9,10,1,303),
+	(77,24,9,23,1,303),
+	(78,25,9,24,1,303),
+	(81,28,9,27,1,303),
+	(82,29,9,28,1,303),
+	(75,22,9,21,1,303),
+	(83,30,9,29,1,303);
 
 /*!40000 ALTER TABLE `athena_4_GalleryTable` ENABLE KEYS */;
 UNLOCK TABLES;
