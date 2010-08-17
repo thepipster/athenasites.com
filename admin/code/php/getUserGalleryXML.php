@@ -1,12 +1,25 @@
 <?php
-ob_start();
+//ob_start();
 
 // Load defines and class auto-loader....
 include_once(realpath(dirname(__FILE__)) . '/setup.php');
 
+Logger::dump($_GET);
+
 // Get the page post id...
-$page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
-$site_id = CommandHelper::getPara('site_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+//$page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+//$site_id = CommandHelper::getPara('site_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+
+//$paras = $_GET['p']; // WP is cutting off the 2nd para somehow, so merge them
+$paras = CommandHelper::getPara('p', true, CommandHelper::$PARA_TYPE_STRING);
+//$blogid = getNumericPara('bid');
+
+$bits = explode(",", $paras);
+$page_id = $bits[1];
+$site_id = $bits[0];
+
+
+Logger::debug(">>> Site ID = $site_id, Page ID = $page_id");
 
 // Now get the images for this page....
 $gal_images = ClientGalleryTable::getImagesForPage($site_id, $page_id);
@@ -15,7 +28,7 @@ $gal_images = ClientGalleryTable::getImagesForPage($site_id, $page_id);
 
 $media_root_url = 'http://' . $_SERVER['HTTP_HOST'] . "/user_files/".$site_id."/";
 
-ob_end_clean();
+//ob_end_clean();
 
 $title = 'Test gal';
 $description = 'Test gal';

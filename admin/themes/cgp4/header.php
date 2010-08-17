@@ -115,44 +115,52 @@ function getTopParentPageTitle($post){
 								$parent_page_id = $page['parent_page_id'];
 								$title = $page['title'];								
 								$page_slug = $page['slug'];
+								$is_homepage = $page['is_homepage'];
+								$is_blogpage = $page['is_blogpage'];
 							
-								if ($parent_page_id == 0 && $title != 'Home'){
-																		
-									$link = PageManager::getPageLink($page_id);
-									
-									//Logger::debug("Page: $title Link: $link");
-									
-									print("<li>");
-									print("    <span class='menuHead'>$title</span>");									
-									print("    <ul>");
-																																							
-									
-									// Get child pages 
-									foreach(PageManager::$page_list as $child){
-										
-										if ($child['parent_page_id'] == $page_id){
-	
-											$child_id = $child['id'];
-											$child_title = $child['title'];
-
-											$child_link = PageManager::getPageLink($child['id']);
-													
-											//Logger::debug(">> Child Page: $child_title Link: $child_link");
-																				
-											if ($child['id'] == $page_id){
-												print("<li><a href='$child_link' onclick=''><span class='menuItem' id='$child_id'><b>$child_title</b></span></a></li>");
-											}
-											else {											
-												print("<li><a href='$child_link' onclick=''><span class='menuItem' id='$child_id'>$child_title</span></a></li>");
-											}											
+								if (!$is_homepage){
+								
+									if ($parent_page_id == 0 && $title != 'Home'){
+											
+										print("<li>");
+										if ($is_blogpage){
+											$link = PageManager::getPageLink($page_id);
+											print("    <a href='$link' onclick=''><span class='menuHead_NonAccordian'>$title</span></a>");									
 										}
+										else {
+											print("    <span class='menuHead'>$title</span>");									
+										}
+										print("    <ul>");
+																																								
+										
+										// Get child pages 
+										foreach(PageManager::$page_list as $child){
+											
+											if ($child['parent_page_id'] == $page_id){
+		
+												$child_id = $child['id'];
+												$child_title = $child['title'];
+	
+												$child_link = PageManager::getPageLink($child['id']);
+														
+												//Logger::debug(">> Child Page: $child_title Link: $child_link");
+																					
+												if ($child['id'] == $page_id){
+													print("<li><a href='$child_link' onclick=''><span class='menuItem' id='$child_id'><b>$child_title</b></span></a></li>");
+												}
+												else {											
+													print("<li><a href='$child_link' onclick=''><span class='menuItem' id='$child_id'>$child_title</span></a></li>");
+												}											
+											}
+										}
+																			
+										print("    </ul>");									
+										print("</li>");
+										
+										print("<div class='spacer'></div>");
+										
 									}
-																		
-									print("    </ul>");									
-									print("</li>");
-									
-									print("<div class='spacer'></div>");
-									
+
 								}
 								
 							}			

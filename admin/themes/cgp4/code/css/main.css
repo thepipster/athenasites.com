@@ -177,6 +177,16 @@ a {
 	padding: 0px;
 	margin: 0px;
 }
+
+#navigation .menuHead_NonAccordian {
+	font-size: 15px !important;
+	color: #404040;
+	/*margin-top: 25px;
+	margin-bottom: 10px;*/
+	cursor: pointer;
+	padding: 0px;
+	margin: 0px;
+}
 		
 #navigation .menuHead {
 	font-size: 15px !important;

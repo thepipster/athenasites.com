@@ -1,10 +1,8 @@
 <?php
 /**
- * @package WordPress
- * @subpackage CGP4 Theme
- */
-/*
-Template Name: Contact Page
+* @Theme: CGP4
+* @Template: Contact Page
+* @Description: Contact Page
 */
 
 $page_id = $wp_query->post->ID;

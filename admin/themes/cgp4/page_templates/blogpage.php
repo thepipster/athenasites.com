@@ -1,17 +1,15 @@
 <?php
 /**
- * @package WordPress
- * @subpackage CGP3_Theme
- */
-/*
-Template Name: Blog Page
+* @Theme: CGP4
+* @Template: Blog Page
+* @Description: Blog Page
 */
-get_header();
 
-//$url_root = 'http://' . $_SERVER['HTTP_HOST']; 
 ?>
 
 	<div id='blogPage' class='pageContents' style="background-image:url('')">
+
+		<?php echo PageManager::getCurrentPageContent(); ?>
 
 		<h1>BLOG</h1>
 		
@@ -32,7 +30,7 @@ get_header();
 			<span class='blogDate'><?php the_date('','',''); ?></span>
 		
 			<div class="storycontent">
-				<?php the_content(__('(more...)')); ?>
+				<?php echo PageManager::getBlogContent(); ?>
 			</div>
 			
 			<p>

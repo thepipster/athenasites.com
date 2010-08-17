@@ -48,8 +48,8 @@ var cgpCommon = {
 		$('#navigation').accordion({ 
 		    active: true, 
 		    header: '.menuHead', 
-		    navigation: true,
-		    event: 'mouseover'
+//		    event: 'mouseover',
+		    navigation: true
 		});		
 		
 		// Do any IE6 hackes (ugh, hate IE6!)

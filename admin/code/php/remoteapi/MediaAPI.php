@@ -37,6 +37,38 @@ switch($cmd){
 		getImages($site_id); 
 		break;			
 
+	// POSTS /////////////////////////////////////////////////////////////////////////
+
+	case "deletePost":
+		$post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		deletePage($site_id, $page_id);
+		break;
+		
+	case "updatePost":
+		$post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$title = CommandHelper::getPara('title', true, CommandHelper::$PARA_TYPE_STRING);
+		$slug = CommandHelper::getPara('slug', true, CommandHelper::$PARA_TYPE_STRING);
+		$content = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
+		$status = CommandHelper::getPara('status', true, CommandHelper::$PARA_TYPE_STRING);
+		$can_comment = CommandHelper::getPara('can_comment', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$tags = CommandHelper::getPara('tags', true, CommandHelper::$PARA_TYPE_STRING);
+		$categories = CommandHelper::getPara('categories', true, CommandHelper::$PARA_TYPE_STRING);
+		updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_comment, $tags, $categories);
+		break;
+		
+	case "addPost":
+		$title = CommandHelper::getPara('title', true, CommandHelper::$PARA_TYPE_STRING);
+		$slug = CommandHelper::getPara('slug', true, CommandHelper::$PARA_TYPE_STRING);
+		$content = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
+		$status = CommandHelper::getPara('status', true, CommandHelper::$PARA_TYPE_STRING);
+		$can_comment = CommandHelper::getPara('can_comment', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$tags = CommandHelper::getPara('tags', true, CommandHelper::$PARA_TYPE_STRING);
+		$categories = CommandHelper::getPara('categories', true, CommandHelper::$PARA_TYPE_STRING);
+		addPost($site_id, $title, $content, $status, $slug, $can_comment, $tags, $categories);
+		break;
+
+	// PAGES /////////////////////////////////////////////////////////////////////////
+
 	case "deletePage":
 		$page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
 		deletePage($site_id, $page_id);
@@ -188,6 +220,96 @@ function buildPagePath($page_id, $site_id, $path_array){
 // ///////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////
 
+// ///////////////////////////////////////////////////////////////////////////////////////
+//
+// Posts....
+//
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+
+function deletePost($site_id, $post_id){
+
+	//Logger::debug("deletePage($site_id, $page_id)");
+	
+	PostsTable::delete($site_id, $post_id);
+	
+	$msg['cmd'] = "deletePost";
+	$msg['result'] = 'ok';
+	$msg['data'] = array('post_id' => $post_id);
+
+	CommandHelper::sendMessage($msg);	
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_comment, $tags, $categories){
+
+	Logger::debug("updatePost(site_id=$site_id, post_id=$post_id, title=$title, content=$content, status=$status, slug=$slug, can_comment=$can_comment)");
+	
+	$user_id = SecurityUtils::getCurrentUserID();
+	
+	$tags   = array("\\n", "\\r", "s");
+	$replace = '';
+	$safe_content = str_ireplace($tags, $replace, $content);
+	//$safe_content = nl2br($content);
+	
+	//Logger::debug(">>> content = $safe_content");
+		
+	PostsTable::update($site_id, $post_id, $safe_content, $status, $title, $can_comment, $slug, $tags, $categories);
+		
+	$post = PostsTable::getPost($site_id, $post_id);
+
+	if (isset($post)){
+		$post['last_edit'] = date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
+		$post['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
+	}
+
+	$msg['cmd'] = "addPost";
+	$msg['result'] = 'ok';
+	$msg['data'] = array('post' => $post);
+	
+	CommandHelper::sendMessage($msg);	
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function addPost($site_id, $title, $content, $status, $slug, $can_comment, $tags, $categories){
+
+	//Logger::debug("addPage(site_id=$site_id, title=$title, parent_page_id=$parent_page_id, content=$content, status=$status, tamplate_name=$tamplate_name, slug=$slug, path=$path)");
+	
+	$user_id = SecurityUtils::getCurrentUserID();
+	//$path = getPath($site_id, $page_id);
+	$path = '';
+	
+	$tags   = array("\\n", "\\r", "s");
+	$replace = '';
+	$safe_content = str_ireplace($tags, $replace, $content);
+	//$safe_content = nl2br($content);	
+	
+	$post_id = PostsTable::create($site_id, $user_id, $safe_content, $status, $title, $can_comment, $slug, $tags, $categories);
+		
+	$post = PostsTable::getPost($site_id, $post_id);
+	
+	if (isset($post)){
+		$post['last_edit'] = date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
+		$post['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
+	}
+			
+	$msg['cmd'] = "addPost";
+	$msg['result'] = $post_id > 0 ? 'ok' : 'fail';
+	$msg['data'] = array('post' => $post);
+	
+	CommandHelper::sendMessage($msg);	
+	
+}
+
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+//
+// Pages....
+//
+// ///////////////////////////////////////////////////////////////////////////////////////
+
 function deletePage($site_id, $page_id){
 
 	//Logger::debug("deletePage($site_id, $page_id)");
@@ -221,7 +343,7 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
 	PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $title, $tamplate_name, $slug, $path, $order, $ishome);
 		
 	$page = PagesTable::getPage($site_id, $page_id);
-	if (isset($page_data)){
+	if (isset($page)){
 		$page['last_edit'] = date("m/d/Y H:i", strtotime($page['last_edit'])); // Convert to JS compatible date
 		$page['created'] = date("m/d/Y H:i", strtotime($page['created'])); // Convert to JS compatible date
 	}
@@ -248,7 +370,11 @@ function addPage($site_id, $title, $parent_page_id, $content, $status, $tamplate
 	//$path = getPath($site_id, $page_id);
 	$path = '';
 	
-	$page_id = PagesTable::create($user_id, $site_id, $parent_page_id, $content, $status, $title, $tamplate_name, $slug, $path, $order, $ishome);
+	$tags   = array("\\n", "\\r", "s");
+	$replace = '';
+	$safe_content = str_ireplace($tags, $replace, $content);
+	
+	$page_id = PagesTable::create($user_id, $site_id, $parent_page_id, $safe_content, $status, $title, $tamplate_name, $slug, $path, $order, $ishome);
 		
 	$page = PagesTable::getPage($site_id, $page_id);
 	if (isset($page_data)){
@@ -363,6 +489,18 @@ function getAll($site_id){
 		$page_data[] = $temp;
 	}	
 	
+	// Get the post list
+	$post_list = PostsTable::getPosts($site_id);
+
+	$post_data = array();
+	foreach ($post_list as $post){
+		$temp = $post;
+		$temp['last_edit'] = date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
+		$temp['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
+		$post_data[] = $temp;
+	}	
+	
+		
 	$media_data = array();
 	foreach ($media_list as $media){
 		$temp = $media;
@@ -384,7 +522,8 @@ function getAll($site_id){
 	$msg = array();	
 	$msg['cmd'] = 'getAll';
 	$msg['result'] = 'ok';			
-	$msg['data'] = array('folders' => $folder_list, 'media' => $media_data, 'pages' => $page_data, 'theme' => $theme, 'page_templates' => $page_templates, 'theme_paras' => $site_theme_paras, 'page_paras' => $page_paras);
+	$msg['data'] = array('folders' => $folder_list, 'media' => $media_data, 'pages' => $page_data, 'theme' => $theme, 'page_templates' => $page_templates, 
+				'theme_paras' => $site_theme_paras, 'page_paras' => $page_paras,  'posts' => $post_data, );
 				
 	CommandHelper::sendMessage($msg);		
 

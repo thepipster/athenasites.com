@@ -168,52 +168,55 @@ var GalleriesFrame = {
 		var prev_slot_id = -1;
 				
 			
-		if ($(this).attr('id') == 'delete_slot'){
-			img_id = parseInt($(ui.draggable).attr('id').substring(7));
-			prev_slot_id = $(ui.draggable).attr('slot');
-			//slot_id = parseInt($(this).attr('id').substring(5));			
-			GalleryAPI.onRemoveImage(	DataStore.m_siteID, 
+		if ($(ui.draggable).attr('id').substring(0,3) == 'gal'){
+
+			if ($(this).attr('id') == 'delete_slot'){
+				img_id = parseInt($(ui.draggable).attr('id').substring(7));
+				prev_slot_id = $(ui.draggable).attr('slot');
+				//slot_id = parseInt($(this).attr('id').substring(5));			
+				GalleryAPI.onRemoveImage(	DataStore.m_siteID, 
+											DataStore.m_currentPageID, 
+											img_id, 
+											DataStore.m_currentGalleryNo, 
+											prev_slot_id, 
+											GalleriesFrame.m_themeParaID, 
+											GalleriesFrame.onImageRemoved);				
+			}										
+			else {			
+				// This is an existing image being moved!				
+				img_id = parseInt($(ui.draggable).attr('id').substring(7));
+				slot_id = parseInt($(this).attr('id').substring(5));			
+				url = $('#galimg_'+img_id).attr('src');						
+				prev_slot_id = $(ui.draggable).attr('slot');
+				
+				GalleryAPI.onMoveImage( DataStore.m_siteID, 
 										DataStore.m_currentPageID, 
 										img_id, 
+										prev_slot_id,
+										slot_id, 
 										DataStore.m_currentGalleryNo, 
-										prev_slot_id, 
+										DataStore.m_currentGalleryNo, 
 										GalleriesFrame.m_themeParaID, 
-										GalleriesFrame.onImageRemoved);
-			
-		}										
-		else if ($(ui.draggable).attr('id').substring(0,3) == 'gal'){
-			
-			// This is an existing image being moved!				
-			img_id = parseInt($(ui.draggable).attr('id').substring(7));
-			slot_id = parseInt($(this).attr('id').substring(5));			
-			url = $('#galimg_'+img_id).attr('src');						
-			prev_slot_id = $(ui.draggable).attr('slot');
-			
-			GalleryAPI.onMoveImage( DataStore.m_siteID, 
-									DataStore.m_currentPageID, 
-									img_id, 
-									prev_slot_id,
-									slot_id, 
-									DataStore.m_currentGalleryNo, 
-									DataStore.m_currentGalleryNo, 
-									GalleriesFrame.m_themeParaID, 
-									GalleriesFrame.onImageMoved);
-				
+										GalleriesFrame.onImageMoved);
+			}	
 		}
 		else {			
-			// This is a new image being added
-			image_moved = false;			
-			img_id = parseInt($(ui.draggable).attr('id').substring(4));			
-			slot_id = parseInt($(this).attr('id').substring(5));			
-			url = $('#img_'+img_id).attr('src');
-			
-			GalleryAPI.onAddImage(	DataStore.m_siteID, 
-									DataStore.m_currentPageID, 
-									img_id, 
-									slot_id,
-									DataStore.m_currentGalleryNo, 
-									GalleriesFrame.m_themeParaID, 
-									GalleriesFrame.onImageAdded);
+
+			if ($(this).attr('id') != 'delete_slot'){
+				// This is a new image being added
+				image_moved = false;			
+				img_id = parseInt($(ui.draggable).attr('id').substring(4));			
+				slot_id = parseInt($(this).attr('id').substring(5));			
+				url = $('#img_'+img_id).attr('src');
+				
+				GalleryAPI.onAddImage(	DataStore.m_siteID, 
+										DataStore.m_currentPageID, 
+										img_id, 
+										slot_id,
+										DataStore.m_currentGalleryNo, 
+										GalleriesFrame.m_themeParaID, 
+										GalleriesFrame.onImageAdded);
+			}
 			
 		}
 /*

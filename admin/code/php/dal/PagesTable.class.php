@@ -24,6 +24,7 @@ class PagesTable {
 		  `created` datetime default NULL,
 		  `template` varchar(255) default NULL,
 		  `is_homepage` tinyint(1) default '0',
+		  `is_blogpage` tinyint(1) default '0',
 		  `page_order` tinyint(3) default '0',
 		  PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;";

@@ -9,6 +9,7 @@ var DataStore = {
 	m_currentFolderID : -1, // folder id of 1 is considered 'unassigned'	
 	m_currentPageID : 0,
 	m_currentGalleryNo : 1, // For multi-galleries
+	m_currentPostID : 0,
 		
 	/** Currently selected site id (if the user has more than 1 site!) */
 	m_siteID : 0,
@@ -18,6 +19,9 @@ var DataStore = {
 
 	/** List of media for the site */
 	m_mediaList : '',
+	
+	/** List of posts */
+	m_postList : '',
 
 	/** List of pages for the site */
 	m_pageList : '',
@@ -323,19 +327,19 @@ var DataStore = {
 				DataStore.m_pageList[i].status = pageObj.status;
 				DataStore.m_pageList[i].last_edit = pageObj.last_edit;
 				DataStore.m_pageList[i].created = pageObj.created;
-				DataStore.m_pageList[i].status = pageObj.status;
 				DataStore.m_pageList[i].template = pageObj.template;
 				DataStore.m_pageList[i].parent_page_id = pageObj.parent_page_id;
 				DataStore.m_pageList[i].slug = pageObj.slug;
 				DataStore.m_pageList[i].path = pageObj.path;
 				DataStore.m_pageList[i].is_homepage = pageObj.is_homepage;
+				DataStore.m_pageList[i].is_blogpage = pageObj.is_blogpage;
 				DataStore.m_pageList[i].order = pageObj.page_order;		
 								
 				return;
 			}
 		}
 	},
-	
+		
 	// //////////////////////////////////////////////////////////////////////////////////
 
 	deletePage : function(page_id){
@@ -367,17 +371,101 @@ var DataStore = {
 		temp.status = pageObj.status;
 		temp.last_edit = pageObj.last_edit;
 		temp.created = pageObj.created;
-		temp.status = pageObj.status;
 		temp.template = pageObj.template;
 		temp.parent_page_id = pageObj.parent_page_id;
 		temp.slug = pageObj.slug;
 		temp.path = pageObj.path;
 		temp.is_homepage = pageObj.is_homepage;
+		temp.is_blogpage = pageObj.is_blogpage;
 		temp.order = pageObj.page_order;
 						
 		DataStore.m_pageList.push(temp);
 	},
+	
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Add a post from a returned page object from the MediaAPI
+	*/
+	addPost : function(postObj){
+	
+		var temp = new Object();
+		temp.id = postObj.id;
+		temp.title = AthenaUtils.htmlEncode(postObj.title);
+		temp.user_id = postObj.user_id;
+		temp.content = postObj.content;
+		temp.status = postObj.status;
+		temp.last_edit = postObj.last_edit;
+		temp.created = postObj.created;
+		temp.slug = postObj.slug;
+		temp.canComment = postObj.canComment;
+		temp.tags = postObj.tags;
+		temp.categories = postObj.categories;
+						
+		DataStore.m_postList.push(temp);
+	},
 		
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Update an existing page
+	*/
+	updatePost : function(postObj){
+		
+		for (var i=0; i<DataStore.m_postList.length; i++){
+			if (DataStore.m_postList[i].id == postObj.id){
+			
+				DataStore.m_postList[i].id = postObj.id;
+				DataStore.m_postList[i].title = AthenaUtils.htmlEncode(postObj.title);
+				DataStore.m_postList[i].user_id = postObj.user_id;
+				DataStore.m_postList[i].content = postObj.content;
+				DataStore.m_postList[i].status = postObj.status;
+				DataStore.m_postList[i].last_edit = postObj.last_edit;
+				DataStore.m_postList[i].created = postObj.created;
+				DataStore.m_postList[i].slug = postObj.slug;
+				DataStore.m_postList[i].canComment = postObj.canComment;
+				DataStore.m_postList[i].tags = postObj.tags;
+				DataStore.m_postList[i].categories = postObj.categories;
+								
+				return;
+			}
+		}
+	},
+		
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	deletePost : function(post_id){
+	
+		var tempList = new Array();
+		
+		for(var i=0; i<DataStore.m_postList.length; i++){
+			if (DataStore.m_postList[i].id != post_id){
+				tempList.push(DataStore.m_postList[i]);
+			}
+		}
+		
+		DataStore.m_postList = tempList;
+			
+	},
+	
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	getPost : function(post_id){
+
+		for(var i=0; i<DataStore.m_postList.length; i++){
+			if (DataStore.m_postList[i].id == post_id){
+				return DataStore.m_postList[i];
+			}
+		}
+		return false;
+	},	
+	
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	getCurrentPost : function(){
+		return DataStore.getPost(DataStore.m_currentPostID);
+	},
+			
 	// //////////////////////////////////////////////////////////////////////////////////
 
 	save : function(){
@@ -390,8 +478,8 @@ var DataStore = {
 		GalleryAPI.getAll(DataStore.m_siteID, function(gallery_images, gallery_meta){DataStore.onGotGalleryData(gallery_images, gallery_meta);});
 		
 		MediaAPI.getAll(DataStore.m_siteID, 
-				function(folders, media, pages, theme, page_templates, theme_paras, page_paras){ 
-					DataStore.onGotData(folders, media, pages, theme, page_templates, theme_paras, page_paras, callback);
+				function(folders, media, pages, theme, page_templates, theme_paras, page_paras, posts){ 
+					DataStore.onGotData(folders, media, pages, theme, page_templates, theme_paras, page_paras, posts, callback);
 				});
 	},
 	
@@ -436,11 +524,12 @@ var DataStore = {
 	
 	// //////////////////////////////////////////////////////////////////////////////////
 
-	onGotData : function(folder_list, media_list, page_list, theme, page_templates, theme_paras, paga_paras, callback){
+	onGotData : function(folder_list, media_list, page_list, theme, page_templates, theme_paras, paga_paras, post_list, callback){
 
 		DataStore.onGotFolders(folder_list);
 		DataStore.onGotMedia(media_list);
 		DataStore.onGotPages(page_list);
+		DataStore.onGotPosts(post_list);
 		DataStore.onGotPageTemplates(page_templates);
 		//DataStore.onGotThemeParas(theme_paras);
 
@@ -503,7 +592,30 @@ var DataStore = {
 	},
 	
 	// //////////////////////////////////////////////////////////////////////////////////
+	
+	onGotPosts : function(post_list){
 
+		if (!post_list || post_list == undefined){
+			DataStore.m_postList = new Array();			
+			return;
+		}
+		
+		DataStore.m_postList = new Array();
+				
+		for(var i=0; i<post_list.length; i++){			
+			
+			DataStore.addPost(post_list[i]);
+
+		}	
+		
+		if (post_list.length > 0 && DataStore.m_currentPostID == 0){
+			DataStore.m_currentPostID = post_list[0].id;
+		} 
+		
+	},
+	
+	// //////////////////////////////////////////////////////////////////////////////////
+	
 	onGotPages : function(page_list){
 
 		if (!page_list || page_list == undefined){

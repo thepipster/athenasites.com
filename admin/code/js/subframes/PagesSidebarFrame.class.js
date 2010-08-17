@@ -109,13 +109,19 @@ var PagesSidebarFrame = {
 		else if (page_status == 'Published'){
 			icon = "images/webpage_published.png";
 		}
-				
+		
+		var nodeIcon = "images/FileTreeIcons/collapsed.png";
+			
+		var selected = '';		
 		if (page_id == DataStore.m_currentPageID){			
-			txt += "<div onclick=\"PagesSidebarFrame.onSelectPage('"+page_id+"')\" class='page page_depth_"+page_depth+"' id='page_"+page_id+"' title=''><img class='page_icon' src='"+icon+"'><span class='page_name selected'>"+page_title+"</span></div>";
+			selected = 'selected';	
 		}
-		else {
-			txt += "<div onclick=\"PagesSidebarFrame.onSelectPage('"+page_id+"')\" class='page page_depth_"+page_depth+"' id='page_"+page_id+"' title=''><img class='page_icon' src='"+icon+"'><span class='page_name'>"+page_title+"</span></div>";
-		}
+			
+		txt += "<div onclick=\"PagesSidebarFrame.onSelectPage('"+page_id+"')\" class='page page_depth_"+page_depth+"' id='page_"+page_id+"' title=''>";
+		//txt += "    <img class='node_icon' src='"+nodeIcon+"'>";
+		txt += "    <img class='page_icon' src='"+icon+"'>";
+		txt += "    <span class='page_name "+selected+"'>"+page_title+"</span>";
+		txt += "</div>";
 				
 		return txt;
 	},

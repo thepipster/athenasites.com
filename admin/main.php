@@ -87,6 +87,7 @@ else {
 <link rel="stylesheet" href="code/css/SideBar.css" type="text/css" />
 <link rel="stylesheet" href="code/css/FilesFrame.css" type="text/css" />
 <link rel="stylesheet" href="code/css/PagesFrame.css" type="text/css" />
+<link rel="stylesheet" href="code/css/PostsFrame.css" type="text/css" />
 <link rel="stylesheet" href="code/css/ImageEditDialog.css" type="text/css" />
 <link rel="stylesheet" href="code/css/ImagePickerDialog.css" type="text/css" />
 <link rel="stylesheet" href="code/css/ImageEditFrame.css" type="text/css" />
@@ -291,13 +292,11 @@ else {
 					<!-- Posts Page Content ///////////////////////////////////////////////////////////// -->
 					
 					<div id='PostsFrame' class='ViewFrame'>
-						POSTS
 					</div> <!-- content -->
 		
 					<!-- Galleries Page Content ///////////////////////////////////////////////////////////// -->
 					
 					<div id='GalleriesFrame' class='ViewFrame'>
-						GALLERIES
 					</div> <!-- content -->	
 		
 					<!-- Stats Page Content ///////////////////////////////////////////////////////////// -->
@@ -342,7 +341,7 @@ var ssMain = {
 	VIEW_ACCOUNT : 8,
 	VIEW_EDITFILES : 9,
 	
-	view : 5,
+	view : 4,
 		
 	pageTracker : '',
 	

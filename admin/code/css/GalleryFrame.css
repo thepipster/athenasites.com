@@ -67,11 +67,11 @@
 
 #GalleryFrameContent .delete_slot_text {
 	font-size: 24px;
-	color: black;
+	color: white;
 	width: 66px;
 	height: 41px;
 	padding-top: 20px;
-	background-color: #d00202;
+	background-color: #ed613c;
 	font-size: 14px;
 }
 

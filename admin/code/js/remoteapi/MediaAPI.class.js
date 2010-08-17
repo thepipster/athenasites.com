@@ -46,7 +46,7 @@ var MediaAPI = {
 		AthenaDialog.clearLoading();
 		
 		if (ret.result == 'ok'){	
-			callback(ret.data.folders, ret.data.media, ret.data.pages, ret.data.theme, ret.data.page_templates, ret.data.theme_paras, ret.data.page_paras);
+			callback(ret.data.folders, ret.data.media, ret.data.pages, ret.data.theme, ret.data.page_templates, ret.data.theme_paras, ret.data.page_paras, ret.data.posts);
 		}
 		else {
 			AthenaDialog.showAjaxError(ret);
@@ -134,6 +134,82 @@ var MediaAPI = {
 		}
 	},		
 	
+	// ////////////////////////////////////////////////////////////////////////
+	// ////////////////////////////////////////////////////////////////////////
+	// ////////////////////////////////////////////////////////////////////////
+			
+	updatePost : function(siteID, postID, postTitle, postContent, postStatus, postCanComment, postSlug, postTags, postCategories, callback){
+		
+		AthenaDialog.showLoading("Updating post");
+		
+		var paras = {cmd: 'updatePost', site_id: siteID, post_id: postID, title: postTitle, content: postContent, status: postStatus, 
+				can_comment: postCanComment, slug: postSlug, tags: postTags, categories: postCategories};
+				
+		$.ajax({
+			url: MediaAPI.m_url,
+			dataType: "json",
+			data: paras,
+			success: function(ret){MediaAPI.onPostAdded(ret, callback)}
+		});	
+	},
+
+	addPost : function(siteID, postTitle, postContent, postStatus, postCanComment, postSlug, postTags, postCategories, callback){
+		
+		AthenaDialog.showLoading("Adding post");
+		
+		var paras = {cmd: 'addPost', site_id: siteID, title: postTitle, content: postContent, status: postStatus, can_comment: postCanComment, 
+				slug: postSlug, tags: postTags, categories: postCategories};
+						
+		$.ajax({
+			url: MediaAPI.m_url,
+			dataType: "json",
+			data: paras,
+			success: function(ret){MediaAPI.onPostAdded(ret, callback)}
+		});	
+	},
+	
+	onPostAdded : function(ret, callback){
+			
+		AthenaDialog.clearLoading();
+								
+		if (ret.result == "ok"){		
+			callback(ret.data.post);			
+		}					
+		else {
+			AthenaDialog.showAjaxError(ret);
+		}		
+	},
+
+	// ////////////////////////////////////////////////////////////////////////
+
+	deletePost : function(siteID, postID, callback){
+
+		AthenaDialog.showLoading("Deleting post");
+
+		var paras = {cmd: 'deletePost', site_id: siteID, post_id: postID};
+				
+		$.ajax({
+			url: MediaAPI.m_url,
+			dataType: "json",
+			data: paras,
+			success: function(ret){MediaAPI.onPostDeleted(ret, callback)}
+		});	
+	},
+	
+	onPostDeleted : function(ret, callback){
+
+		AthenaDialog.clearLoading();
+
+		if (ret.result == "ok"){		
+			callback(ret.data.post_id);			
+		}					
+		else {
+			AthenaDialog.showAjaxError(ret);
+		}	
+	},
+		
+	// ////////////////////////////////////////////////////////////////////////
+	// ////////////////////////////////////////////////////////////////////////
 	// ////////////////////////////////////////////////////////////////////////
 
 	updatePage : function(siteID, pageID, pageTitle, pageContent, pageStatus, templateName, parentPageID, pageSlug, pageOrder, isHome, callback){

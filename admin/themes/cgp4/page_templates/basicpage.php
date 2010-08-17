@@ -1,14 +1,11 @@
 <?php
 /**
- * @package WordPress
- * @subpackage CGP4 Theme
- */
-/*
-Template Name: Basic Page
+* @Theme: CGP4
+* @Template: Basic Page
+* @Description: Basic Page
 */
-?>
 
-<?php get_header(); ?>
+?>
 
 <div class='pageContents'>
 
@@ -48,5 +45,4 @@ Template Name: Basic Page
 	
 	</p>
 		
-</div>		
-<?php get_footer(); ?>
+</div>

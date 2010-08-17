@@ -215,14 +215,14 @@ class PageManager {
 	// ///////////////////////////////////////////////////////////////////////////////////////
 		
 	public static function getPingBackURL(){
-		Logger::debug("TBD");
+		//Logger::debug("TBD");
 		// TBD
 	}
 		
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
 	public static function getLanguageAttributes(){
-		Logger::debug("TBD");
+		//Logger::debug("TBD");
 		// TBD
 	}
 }

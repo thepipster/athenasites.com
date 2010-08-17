@@ -1,10 +1,10 @@
 # Sequel Pro dump
-# Version 2210
+# Version 2492
 # http://code.google.com/p/sequel-pro
 #
 # Host: localhost (MySQL 5.1.37)
 # Database: athenasites
-# Generation Time: 2010-08-15 01:34:31 -0600
+# Generation Time: 2010-08-17 02:03:11 -0600
 # ************************************************************
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -46,8 +46,7 @@ LOCK TABLES `apollo_Sessions` WRITE;
 /*!40000 ALTER TABLE `apollo_Sessions` DISABLE KEYS */;
 INSERT INTO `apollo_Sessions` (`id`,`access`,`data`)
 VALUES
-	('95f1abcd20e0ab311bae332ec2d5fc38',1281855242,'user_valid|b:1;user_id|s:1:\"1\";user_name|s:14:\"Mike Pritchard\";user_email|s:20:\"mike@apollosites.com\";user_level|s:1:\"2\";'),
-	('f3e080d3d17f68988081e11b226de078',1281857563,'');
+	('95f1abcd20e0ab311bae332ec2d5fc38',1282029997,'user_valid|b:1;user_id|s:1:\"1\";user_name|s:14:\"Mike Pritchard\";user_email|s:20:\"mike@apollosites.com\";user_level|s:1:\"2\";');
 
 /*!40000 ALTER TABLE `apollo_Sessions` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -389,18 +388,21 @@ CREATE TABLE `athena_1_Pages` (
   `template` varchar(255) DEFAULT NULL,
   `is_homepage` tinyint(1) DEFAULT '0',
   `page_order` tinyint(3) DEFAULT '0',
+  `is_blogpage` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_1_Pages` WRITE;
 /*!40000 ALTER TABLE `athena_1_Pages` DISABLE KEYS */;
-INSERT INTO `athena_1_Pages` (`id`,`user_id`,`content`,`status`,`last_edit`,`parent_page_id`,`title`,`slug`,`path`,`created`,`template`,`is_homepage`,`page_order`)
+INSERT INTO `athena_1_Pages` (`id`,`user_id`,`content`,`status`,`last_edit`,`parent_page_id`,`title`,`slug`,`path`,`created`,`template`,`is_homepage`,`page_order`,`is_blogpage`)
 VALUES
-	(9,1,'<p>dgdgdgdgdgd gdg &#39;dg dg g&#39;d g d&quot; adgad gad g&#39; d</p>','Published','2010-08-12 20:05:39',0,'Home','Home.html','/','2010-08-09 19:54:03','home_page.php',0,1),
-	(10,1,'','Private','2010-08-12 20:50:57',9,'A very long page name that breaks the style','Averylongpagenamethatbreaksthestyle.html','/home/','2010-08-09 19:54:51','themes_page.php',0,4),
-	(20,1,'','Draft','2010-08-12 21:45:31',0,'New page 4','Newpage4.html','/','2010-08-10 04:15:38','home_page.php',0,0),
-	(19,1,'','Draft','2010-08-11 21:17:08',10,'New page 5','Newpage5.html','/home/averylongpagenamethatbreaksthestyle/','2010-08-10 04:09:09','',0,1),
-	(21,1,'','Private','2010-08-12 20:05:44',0,'Themes','Themes.html','/','2010-08-12 05:30:28','themes_page.php',0,0);
+	(9,1,'<p>dgdgdgdgdgd gdg &#39;dg dg g&#39;d g d&quot; adgad gad g&#39; d</p>','Published','2010-08-12 20:05:39',0,'Home','Home.html','/','2010-08-09 19:54:03','home_page.php',0,1,0),
+	(10,1,'','Private','2010-08-12 20:50:57',9,'A very long page name that breaks the style','Averylongpagenamethatbreaksthestyle.html','/home/','2010-08-09 19:54:51','themes_page.php',0,4,0),
+	(20,1,'','Draft','2010-08-12 21:45:31',0,'New page 4','Newpage4.html','/','2010-08-10 04:15:38','home_page.php',0,0,0),
+	(19,1,'','Draft','2010-08-11 21:17:08',10,'New page 5','Newpage5.html','/home/averylongpagenamethatbreaksthestyle/','2010-08-10 04:09:09','',0,1,0),
+	(21,1,'','Private','2010-08-12 20:05:44',0,'Themes','Themes.html','/','2010-08-12 05:30:28','themes_page.php',0,0,0),
+	(22,4,'Draft','','2010-08-17 06:44:35',0,'0','','','2010-08-17 06:44:35','0',0,0,0),
+	(23,4,'Draft','','2010-08-17 06:45:41',0,'1','','','2010-08-17 06:45:41','Newpage1.html',0,0,0);
 
 /*!40000 ALTER TABLE `athena_1_Pages` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -441,6 +443,9 @@ CREATE TABLE `athena_1_Posts` (
   `created` datetime DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `canComment` tinyint(1) DEFAULT '1',
+  `slug` varchar(255) DEFAULT NULL,
+  `tags` varchar(255) DEFAULT NULL,
+  `categories` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
@@ -678,6 +683,7 @@ CREATE TABLE `athena_2_Pages` (
   `template` varchar(255) DEFAULT NULL,
   `is_homepage` tinyint(1) DEFAULT '0',
   `page_order` tinyint(3) DEFAULT '0',
+  `is_blogpage` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
@@ -718,6 +724,9 @@ CREATE TABLE `athena_2_Posts` (
   `created` datetime DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `canComment` tinyint(1) DEFAULT '1',
+  `slug` varchar(255) DEFAULT NULL,
+  `tags` varchar(255) DEFAULT NULL,
+  `categories` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
@@ -955,6 +964,7 @@ CREATE TABLE `athena_3_Pages` (
   `template` varchar(255) DEFAULT NULL,
   `is_homepage` tinyint(1) DEFAULT '0',
   `page_order` tinyint(3) DEFAULT '0',
+  `is_blogpage` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
@@ -995,6 +1005,9 @@ CREATE TABLE `athena_3_Posts` (
   `created` datetime DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `canComment` tinyint(1) DEFAULT '1',
+  `slug` varchar(255) DEFAULT NULL,
+  `tags` varchar(255) DEFAULT NULL,
+  `categories` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
@@ -1160,12 +1173,13 @@ CREATE TABLE `athena_4_GalleryTable` (
   `gallery_number` tinyint(2) DEFAULT '0',
   `theme_para_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=84 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=89 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_4_GalleryTable` WRITE;
 /*!40000 ALTER TABLE `athena_4_GalleryTable` DISABLE KEYS */;
 INSERT INTO `athena_4_GalleryTable` (`id`,`image_id`,`page_id`,`slot_number`,`gallery_number`,`theme_para_id`)
 VALUES
+	(84,1,11,0,1,302),
 	(79,26,9,25,1,303),
 	(68,15,9,14,1,303),
 	(61,8,9,7,1,303),
@@ -1193,9 +1207,11 @@ VALUES
 	(77,24,9,23,1,303),
 	(78,25,9,24,1,303),
 	(81,28,9,27,1,303),
-	(82,29,9,28,1,303),
+	(82,29,9,29,1,303),
 	(75,22,9,21,1,303),
-	(83,30,9,29,1,303);
+	(88,8,9,28,1,303),
+	(85,2,11,1,1,302),
+	(86,3,11,2,1,302);
 
 /*!40000 ALTER TABLE `athena_4_GalleryTable` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1591,22 +1607,24 @@ CREATE TABLE `athena_4_Pages` (
   `template` varchar(255) DEFAULT NULL,
   `is_homepage` tinyint(1) DEFAULT '0',
   `page_order` tinyint(3) DEFAULT '0',
+  `is_blogpage` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_4_Pages` WRITE;
 /*!40000 ALTER TABLE `athena_4_Pages` DISABLE KEYS */;
-INSERT INTO `athena_4_Pages` (`id`,`user_id`,`content`,`status`,`last_edit`,`parent_page_id`,`title`,`slug`,`path`,`created`,`template`,`is_homepage`,`page_order`)
+INSERT INTO `athena_4_Pages` (`id`,`user_id`,`content`,`status`,`last_edit`,`parent_page_id`,`title`,`slug`,`path`,`created`,`template`,`is_homepage`,`page_order`,`is_blogpage`)
 VALUES
-	(9,1,'','Draft','2010-08-15 00:36:06',0,'HOME','HOME.html','/','2010-08-09 21:34:34','homepage.php',0,0),
-	(10,1,'','Draft','2010-08-15 00:34:07',0,'PORTRAITS','PORTRAITS.html','/','2010-08-09 21:34:40','gallerypage.php',0,0),
-	(11,1,'<p>FIH d FIH d FIH g FIH g FIH g FIH</p>','Draft','2010-08-15 00:33:59',10,'Gallery 1','Gallery1.html','/portraits/','2010-08-09 21:35:18','gallerypage.php',0,0),
-	(12,1,'<p>Tet gallery</p>','Draft','2010-08-15 00:34:03',10,'Gallery 2','Gallery2.html','/portraits/','2010-08-09 21:35:18','gallerypage.php',0,0),
-	(13,1,'','Draft','2010-08-15 00:36:14',0,'WEDDINGS','WEDDINGS.html','/','2010-08-09 21:35:50','gallerypage.php',0,0),
-	(14,1,'','Draft','2010-08-15 00:36:17',13,'Wedding gallery 1','Weddinggallery1.html','/weddings/','2010-08-09 21:36:29','gallerypage.php',0,0),
-	(15,1,'','Draft','2010-08-15 00:36:20',13,'Wedding gallery 2','Weddinggallery2.html','/weddings/','2010-08-09 21:36:29','gallerypage.php',0,0),
-	(16,1,'','Draft','2010-08-15 00:36:25',13,'Wedding gallery 3','Weddinggallery3.html','/weddings/','2010-08-09 21:36:29','gallerypage.php',0,0),
-	(17,1,'','Draft','2010-08-09 21:36:29',0,'INFORMATION','INFORMATION.html','/','2010-08-09 21:36:29','0',0,0);
+	(9,1,'','Draft','2010-08-15 00:36:06',0,'HOME','HOME.html','/','2010-08-09 21:34:34','homepage.php',1,0,0),
+	(10,1,'','Draft','2010-08-15 00:34:07',0,'PORTRAITS','PORTRAITS.html','/','2010-08-09 21:34:40','gallerypage.php',0,0,0),
+	(11,1,'<p>FIH d FIH d FIH g FIH g FIH g FIH</p>','Draft','2010-08-15 00:33:59',10,'Gallery 1','Gallery1.html','/portraits/','2010-08-09 21:35:18','gallerypage.php',0,0,0),
+	(12,1,'<p>Tet gallery</p>','Draft','2010-08-15 00:34:03',10,'Gallery 2','Gallery2.html','/portraits/','2010-08-09 21:35:18','gallerypage.php',0,0,0),
+	(13,1,'','Draft','2010-08-15 00:36:14',0,'WEDDINGS','WEDDINGS.html','/','2010-08-09 21:35:50','gallerypage.php',0,0,0),
+	(14,1,'','Draft','2010-08-15 00:36:17',13,'Wedding gallery 1','Weddinggallery1.html','/weddings/','2010-08-09 21:36:29','gallerypage.php',0,0,0),
+	(15,1,'','Draft','2010-08-15 00:36:20',13,'Wedding gallery 2','Weddinggallery2.html','/weddings/','2010-08-09 21:36:29','gallerypage.php',0,0,0),
+	(16,1,'','Draft','2010-08-15 00:36:25',13,'Wedding gallery 3','Weddinggallery3.html','/weddings/','2010-08-09 21:36:29','gallerypage.php',0,0,0),
+	(17,1,'','Draft','2010-08-09 21:36:29',0,'INFORMATION','INFORMATION.html','/','2010-08-09 21:36:29','0',0,0,0),
+	(18,1,'','Published','2010-08-17 05:14:12',0,'BLOG','BLOG.html','/','2010-08-17 05:13:53','blogpage.php',0,5,1);
 
 /*!40000 ALTER TABLE `athena_4_Pages` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1647,9 +1665,24 @@ CREATE TABLE `athena_4_Posts` (
   `created` datetime DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `canComment` tinyint(1) DEFAULT '1',
+  `slug` varchar(255) DEFAULT NULL,
+  `tags` varchar(255) DEFAULT NULL,
+  `categories` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
+LOCK TABLES `athena_4_Posts` WRITE;
+/*!40000 ALTER TABLE `athena_4_Posts` DISABLE KEYS */;
+INSERT INTO `athena_4_Posts` (`id`,`user_id`,`content`,`status`,`last_edit`,`created`,`title`,`canComment`,`slug`,`tags`,`categories`)
+VALUES
+	(2,1,'<p>dgdgdgdg dg gdg dg dg adgadg</p>','Draft','2010-08-17 07:16:03','2010-08-17 07:00:52','Hello World!',1,'HelloWorld%21.html',NULL,NULL),
+	(3,1,'','Draft','2010-08-17 07:16:12','2010-08-17 07:13:22','My 2nd post',1,'My2ndpost.html',NULL,NULL),
+	(4,1,'','Draft','2010-08-17 07:16:34','2010-08-17 07:13:23','Another post',1,'Anotherpost.html',NULL,NULL),
+	(5,1,'','Draft','2010-08-17 07:17:35','2010-08-17 07:17:35','New post 4',1,'Newpost4.html',NULL,NULL),
+	(6,1,'','Draft','2010-08-17 07:26:37','2010-08-17 07:26:37','New post 5',1,'Newpost5.html','','');
+
+/*!40000 ALTER TABLE `athena_4_Posts` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table athena_4_RollupBrowser
@@ -1808,8 +1841,23 @@ CREATE TABLE `athena_5_GalleryTable` (
   `gallery_number` tinyint(2) DEFAULT '0',
   `theme_para_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
+LOCK TABLES `athena_5_GalleryTable` WRITE;
+/*!40000 ALTER TABLE `athena_5_GalleryTable` DISABLE KEYS */;
+INSERT INTO `athena_5_GalleryTable` (`id`,`image_id`,`page_id`,`slot_number`,`gallery_number`,`theme_para_id`)
+VALUES
+	(1,1,9,0,1,202),
+	(2,2,9,1,1,202),
+	(3,3,9,2,1,202),
+	(4,6,15,0,1,201),
+	(5,7,15,1,1,201),
+	(6,8,15,2,1,201),
+	(7,9,15,3,1,201),
+	(8,10,15,4,1,201);
+
+/*!40000 ALTER TABLE `athena_5_GalleryTable` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table athena_5_GlobalParas
@@ -1910,22 +1958,23 @@ CREATE TABLE `athena_5_Pages` (
   `template` varchar(255) DEFAULT NULL,
   `is_homepage` tinyint(1) DEFAULT '0',
   `page_order` tinyint(3) DEFAULT '0',
+  `is_blogpage` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `athena_5_Pages` WRITE;
 /*!40000 ALTER TABLE `athena_5_Pages` DISABLE KEYS */;
-INSERT INTO `athena_5_Pages` (`id`,`user_id`,`content`,`status`,`last_edit`,`parent_page_id`,`title`,`slug`,`path`,`created`,`template`,`is_homepage`,`page_order`)
+INSERT INTO `athena_5_Pages` (`id`,`user_id`,`content`,`status`,`last_edit`,`parent_page_id`,`title`,`slug`,`path`,`created`,`template`,`is_homepage`,`page_order`,`is_blogpage`)
 VALUES
-	(9,1,'','Published','2010-08-13 00:41:07',0,'Home','Home.html','/','2010-08-12 06:01:28','homepage.php',1,0),
-	(10,1,'','Published','2010-08-13 01:06:54',0,'Portfolio','Portfolio.html','/','2010-08-12 06:01:52','gallerypage.php',0,2),
-	(11,1,'','Draft','2010-08-13 01:08:15',0,'Blog','Blog.html','/','2010-08-12 06:03:10','blog_page.php',0,3),
-	(12,1,'<div align=\\\\\\\"left\\\\\\\" cla=\\\\\\\"rightCol\\\\\\\" tyle=\\\\\\\"width: 675px;\\\\\\\">	<div cla=\\\\\\\"contentText\\\\\\\">		<div cla=\\\\\\\"torycontent\\\\\\\">			<p>Holly Pacione Photography<br />			719-321-9419</p>			<p>hollypacionephotography@gmail.com</p>			<p tyle=\\\\\\\"text-align: jutify;\\\\\\\"><trong>Portrait Invetment</trong></p>			<p>The itting fee for portrait i $100 and include:</p>			<p tyle=\\\\\\\"text-align: jutify;\\\\\\\">-Time and talent</p>			<p tyle=\\\\\\\"text-align: jutify;\\\\\\\">-Photography at a location of your choice within the Colorado pring area and mot of Denver</p>			<p>-Print begin at $15</p>			<p>-Digital File are Available</p>			<p><trong>Wedding Invetment</trong></p>			<p>Package begin at $2300 for two photographer, digital negative, and 6 hour and more.</p>			<p>We offer an aortment of earth friendly product, album, print and more.</p>			<p>We would be happy to e-mail you a more detailed price heet upon requet!</p>		</div>	</div></div>','Published','2010-08-13 01:30:05',0,'Investment','Investment.html','/','2010-08-12 06:03:20','contentrightpage.php',0,4),
-	(13,1,'','Published','2010-08-13 01:08:59',0,'Testimonials','Testimonials.html','/','2010-08-12 06:08:24','page.php',0,6),
-	(14,1,'','Published','2010-08-13 01:08:48',0,'About Us','AboutUs.html','/','2010-08-12 06:08:56','contentleftpage.php',0,5),
-	(15,1,'','Published','2010-08-13 01:07:01',10,'Wedding Gallery 1','WeddingGallery1.html','/portfolio/','2010-08-12 06:09:11','gallerypage.php',0,1),
-	(16,1,'','Published','2010-08-13 01:07:06',10,'Wedding Gallery 2','WeddingGallery2.html','/portfolio/','2010-08-12 06:09:12','gallerypage.php',0,2),
-	(17,1,'','Published','2010-08-13 01:09:10',0,'Contact Us','ContactUs.html','/','2010-08-12 06:10:13','contactpage.php',0,7);
+	(9,1,'','Published','2010-08-13 00:41:07',0,'Home','Home.html','/','2010-08-12 06:01:28','homepage.php',1,0,0),
+	(10,1,'','Published','2010-08-13 01:06:54',0,'Portfolio','Portfolio.html','/','2010-08-12 06:01:52','gallerypage.php',0,2,0),
+	(11,1,'','Draft','2010-08-13 01:08:15',0,'Blog','Blog.html','/','2010-08-12 06:03:10','blog_page.php',0,3,0),
+	(12,1,'<div align=\\\\\\\"left\\\\\\\" cla=\\\\\\\"rightCol\\\\\\\" tyle=\\\\\\\"width: 675px;\\\\\\\">	<div cla=\\\\\\\"contentText\\\\\\\">		<div cla=\\\\\\\"torycontent\\\\\\\">			<p>Holly Pacione Photography<br />			719-321-9419</p>			<p>hollypacionephotography@gmail.com</p>			<p tyle=\\\\\\\"text-align: jutify;\\\\\\\"><trong>Portrait Invetment</trong></p>			<p>The itting fee for portrait i $100 and include:</p>			<p tyle=\\\\\\\"text-align: jutify;\\\\\\\">-Time and talent</p>			<p tyle=\\\\\\\"text-align: jutify;\\\\\\\">-Photography at a location of your choice within the Colorado pring area and mot of Denver</p>			<p>-Print begin at $15</p>			<p>-Digital File are Available</p>			<p><trong>Wedding Invetment</trong></p>			<p>Package begin at $2300 for two photographer, digital negative, and 6 hour and more.</p>			<p>We offer an aortment of earth friendly product, album, print and more.</p>			<p>We would be happy to e-mail you a more detailed price heet upon requet!</p>		</div>	</div></div>','Published','2010-08-13 01:30:05',0,'Investment','Investment.html','/','2010-08-12 06:03:20','contentrightpage.php',0,4,0),
+	(13,1,'','Published','2010-08-13 01:08:59',0,'Testimonials','Testimonials.html','/','2010-08-12 06:08:24','page.php',0,6,0),
+	(14,1,'','Published','2010-08-13 01:08:48',0,'About Us','AboutUs.html','/','2010-08-12 06:08:56','contentleftpage.php',0,5,0),
+	(15,1,'','Published','2010-08-13 01:07:01',10,'Wedding Gallery 1','WeddingGallery1.html','/portfolio/','2010-08-12 06:09:11','gallerypage.php',0,1,0),
+	(16,1,'','Published','2010-08-13 01:07:06',10,'Wedding Gallery 2','WeddingGallery2.html','/portfolio/','2010-08-12 06:09:12','gallerypage.php',0,2,0),
+	(17,1,'','Published','2010-08-13 01:09:10',0,'Contact Us','ContactUs.html','/','2010-08-12 06:10:13','contactpage.php',0,7,0);
 
 /*!40000 ALTER TABLE `athena_5_Pages` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1966,6 +2015,9 @@ CREATE TABLE `athena_5_Posts` (
   `created` datetime DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `canComment` tinyint(1) DEFAULT '1',
+  `slug` varchar(255) DEFAULT NULL,
+  `tags` varchar(255) DEFAULT NULL,
+  `categories` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
@@ -2118,7 +2170,7 @@ LOCK TABLES `athena_Users` WRITE;
 /*!40000 ALTER TABLE `athena_Users` DISABLE KEYS */;
 INSERT INTO `athena_Users` (`id`,`email`,`name`,`password_hash`,`account_created`,`last_login`,`user_level`,`service_client_gallery`,`payment_plan`,`last_payment`,`next_payment_due`,`monthly_fee`)
 VALUES
-	(1,'mike@apollosites.com','Mike Pritchard','22d500a499157bcb53edd6703f8b78fb132fb1698735af66fcca','2010-08-09 19:54:00','2010-08-14 22:05:00',2,1,'Annually','2010-08-09','2011-08-09',8.00);
+	(1,'mike@apollosites.com','Mike Pritchard','22d500a499157bcb53edd6703f8b78fb132fb1698735af66fcca','2010-08-09 19:54:00','2010-08-17 03:26:13',2,1,'Annually','2010-08-09','2011-08-09',8.00);
 
 /*!40000 ALTER TABLE `athena_Users` ENABLE KEYS */;
 UNLOCK TABLES;

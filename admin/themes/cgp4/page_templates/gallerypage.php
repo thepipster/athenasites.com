@@ -6,7 +6,8 @@
 */
 
 $noflash = $_GET['noflash'];
-$xml_url = "http://" . $_SERVER['HTTP_HOST'] ."/admin/code/php/getUserGalleryXML.php?site_id=".PageManager::$site_id."&page_id=".PageManager::$page_id."&cache=" . mt_rand();
+//$xml_url = "http://" . $_SERVER['HTTP_HOST'] ."/admin/code/php/getUserGalleryXML.php?site_id=".PageManager::$site_id."&page_id=".PageManager::$page_id."&cache=" . mt_rand();
+$xml_url = "http://" . $_SERVER['HTTP_HOST'] ."/admin/code/php/getUserGalleryXML.php?p=".PageManager::$site_id.",".PageManager::$page_id."&cache=" . mt_rand();
 
 $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id, PageManager::$page_id);
 
@@ -19,12 +20,12 @@ $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id
 					$image_id = $gal_mapping['image_id'];
 					$image = FolderTable::getMedia(PageManager::$site_id, $image_id);
 					
-					$image_url = PageManager::$media_root_url . $image['file_url'];
+					$image_url = PageManager::$media_root_url . $image['filename'];
+					$thumb_url = PageManager::$media_root_url . $image['thumb_filename'];
 					$title =  $image['title'];
 					$description = $image['description'];										
 					$tags = $image['tags'];
-					
-					
+										
 					echo "<div id='noFlashImage'>";
 					echo "    <img src='$image_url' title='$title' alt='$alt_text' width='100%'/>";   
 					echo "    <span class='title'>$title</span>";
@@ -61,8 +62,8 @@ if (hasFlash){
 	txt += "	<param name='movie' value='<?= PageManager::$theme_url_root; ?>/code/flash/spGallery.swf' /> ";
 	txt += "	<param name='quality' value='high' /> ";
 	txt += "	<param name='bgcolor' value='#ffffff' /> ";
-	txt += "	<param name='FlashVars' value='xmlFile=<?= PageManager::$theme_url_root; ?>/code/php/getUserGalleryXML.php?pageid=<?=$page_id ?>' /> ";
-	txt += "	<embed FlashVars='xmlFile=<?= PageManager::$theme_url_root; ?>/code/php/getUserGalleryXML.php?pageid=<?=$page_id ?>' src='<?= PageManager::$theme_url_root; ?>/code/flash/spGallery.swf' quality='high' bgcolor='#ffffff' wmode='transparent' width='100%' height='100%' name='homeGalFlashObject' align='middle' allowScriptAccess='sameDomain' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' /> ";
+	txt += "	<param name='FlashVars' value='xmlFile=<?= $xml_url; ?>' /> ";
+	txt += "	<embed FlashVars='xmlFile=<?= $xml_url; ?>' src='<?= PageManager::$theme_url_root; ?>/code/flash/spGallery.swf' quality='high' bgcolor='#ffffff' wmode='transparent' width='100%' height='100%' name='homeGalFlashObject' align='middle' allowScriptAccess='sameDomain' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' /> ";
 	txt += "</object>";
 	document.getElementById('galleryContent').innerHTML = txt;
 }		
