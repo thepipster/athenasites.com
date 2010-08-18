@@ -181,7 +181,7 @@ var PagesFrame = {
 		txt += "			</div>";
 
 		txt += "            <fieldset>";
-		txt += "                <div id='apollo_page_theme_paras'>sdgdsgsd</div>"
+		txt += "                <div id='apollo_page_theme_paras'></div>"
 		txt += "            </fieldset>";
 
 		txt += "		</div>";											
@@ -266,7 +266,9 @@ var PagesFrame = {
 			txt += "<p><strong>Custom Parameters</strong></p>";
 			txt += "<table border='0' width='100%'>";
 		}
-		
+	
+		var noParas = 0;
+			
 		for (var i=0; i<theme_para_list.length; i++){
 			
 			var paraVal = DataStore.getSiteParaValue(DataStore.m_currentPageID, theme_para_list[i].id);
@@ -299,6 +301,8 @@ var PagesFrame = {
 					txt += "</tr>";					
 					txt += "</table>";
 					
+					noParas++;
+					
 					break;
 
 				case 'color': 
@@ -317,6 +321,8 @@ var PagesFrame = {
 					txt += "    </td>";	
 					txt += "</tr>";					
 					txt += "</table>";
+
+					noParas++;
 									
 					break;
 				
@@ -330,30 +336,7 @@ var PagesFrame = {
 				case 'multi-gallery':
 				case 'gallery': break;
 			}
-			
-						
-			
-			/*
-			txt += "<tr valign='top'>";
-			txt += "    <td width='5px'><span class='customPageLabel'>Para:</span></td>";
-			txt += "    <td><span class='customPageData'>"+theme_para_list[i].description+"</span></td>";
-			txt += "</tr>";
 
-			txt += "<tr valign='top'>";
-			txt += "    <td width='5px'><span class='customPageLabel'>Para:</span></td>";
-			txt += "    <td><span class='customPageData'>"+theme_para_list[i].help_text+"</span></td>";
-			txt += "</tr>";
-
-			txt += "<tr valign='top'>";
-			txt += "    <td><span class='customPageLabel'>Value:</span></td>";
-			txt += "    <td><span class='customPageData'>"+paraVal+"</span></td>";
-			txt += "</tr>";
-
-			txt += "<tr valign='top'>";
-			txt += "    <td><span class='customPageLabel'>Change:</span></td>";
-			txt += "    <td><span class='customPageData'><button class='save_button' style='font-size:10px'>Change</button></span></td>";
-			txt += "</tr>";
-			*/
 
 		}
 		
@@ -361,7 +344,8 @@ var PagesFrame = {
 			txt += "</table><br/>";
 		}
 		
-		$('#apollo_page_theme_paras').html(txt);
+		if (noParas > 0)
+			$('#apollo_page_theme_paras').html(txt);
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////////

@@ -94,7 +94,7 @@ var PostsSidebarFrame = {
 		var postSlug = PostsSidebarFrame.encodeSlug(title) + '.html';
 		var order = 0;
 		var isHome = 0;
-		MediaAPI.addPost(DataStore.m_siteID, title, '', 'Draft', 1, postSlug, '', '', PostsSidebarFrame.onPostAdded);
+		MediaAPI.addPost(DataStore.m_siteID, title, '', 'Draft', 1, postSlug, PostsSidebarFrame.onPostAdded);
 	},
 	
 	onPostAdded : function(postObj){

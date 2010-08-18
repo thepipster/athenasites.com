@@ -129,10 +129,6 @@ var PostsFrame = {
 		txt += "            <span class='postData' id='postCreated'>"+postObj.created+"</span>";
 		txt += "			</div>";
 		
-		txt += "			<div class='postInfoLine'>";
-		txt += "            <span class='postLabel'>Tags:</span>";
-		txt += "            <span class='postData' id='postTags'>"+postObj.tags+"</span>";
-		txt += "			</div>";
 
 		txt += "			<div class='postInfoLine'>";
 		txt += "            <span class='postLabel'>Categories:</span>";
@@ -147,7 +143,21 @@ var PostsFrame = {
 		txt += "			</div>";
 
 		txt += "            <fieldset>";
-		txt += "                <div id='apollo_post_theme_paras'></div>"
+		
+		txt += "                <p><strong>Tags</strong></p>";
+		txt += "			    <div class='postInfoLine'>";
+		txt += "                    <span class='postData' id='postTags'><input id='postTag' type='text' value=''/></span>";
+		txt += "                    <span class='postLabel'><button class='basic_button' onclick='PostsFrame.addTag();'>Add</button></span>";
+		txt += "			    </div>";
+		txt += "                <div id='apollo_post_categories'></div>"
+
+		txt += "                <p><strong>Categories</strong></p>";
+		txt += "			    <div class='postInfoLine'>";
+		txt += "                    <span class='postData' id='postCategories'><input id='postCategory' type='text' value=''/></span>";
+		txt += "                    <span class='postLabel'><button class='basic_button' onclick='PostsFrame.addCategory()';>Add</button></span>";
+		txt += "			    </div>";
+		txt += "                <div id='apollo_post_tags'></div>";
+		
 		txt += "            </fieldset>";
 
 		txt += "		</div>";											
@@ -224,11 +234,8 @@ var PostsFrame = {
 		var status = $('#postStatusSelector').val();		
 		var canComment = $('#postCanCommentSelector').val();
 		var slug = PagesSidebarFrame.encodeSlug(title) + '.html';
-
-		var tags = $('#postTags').val();
-		var cats = $('#postCategories').val();
 			
-		MediaAPI.updatePost(DataStore.m_siteID, DataStore.m_currentPostID, title, content, status, canComment, slug, tags, catgs, PostsFrame.onPostSaved)
+		MediaAPI.updatePost(DataStore.m_siteID, DataStore.m_currentPostID, title, content, status, canComment, slug, PostsFrame.onPostSaved)
 				
 	},
 	
@@ -238,6 +245,28 @@ var PostsFrame = {
 		PagesSidebarFrame.repaint();
 	},
 
+	// ////////////////////////////////////////////////////////////////////////////
+
+	addTag : function(){
+		var tag = $('#postTag').val();
+		MediaAPI.addTag(DataStore.m_siteID, DataStore.m_currentPostID, tag, PostsFrame.onTagAdded);
+	},
+
+	onTagAdded : function(post_id, tag){
+		alert('tag ' + tag + ' added!');
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////////
+
+	addCategory : function(){
+		var cat = $('#postCategory').val();
+		MediaAPI.addCategory(DataStore.m_siteID, DataStore.m_currentPostID, cat, PostsFrame.onCategoryAdded);
+	},
+	
+	onCategoryAdded : function(post_id, category){
+		alert('category ' + category + ' added!');
+	},
+	
 	// ////////////////////////////////////////////////////////////////////////////
 	
 	paintCKEditor : function(){

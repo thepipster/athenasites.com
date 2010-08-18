@@ -2,18 +2,22 @@
 
 require_once("code/php/setup.php");
 
-$file_root = dirname(__FILE__);
+Logger::echoLog();
 
-$mime_type = 'image/jpeg';
+Logger::debug("Clearing tables");
 
-$filepath = $file_root . '/test2.jpg';
-$thumbfilepath = $file_root . '/test2_thumb.png';
+for ($i=1; $i<=5; $i++){
+	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_Posts");
+	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_PostTags");
+	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_PostToTags");
+	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_PostCategories");
+	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_PostToCategories");
+}
 
-$src_image = ImageUtils::createImageFromFile($filepath, $mime_type);
-$thumb_img = ImageUtils::resizeImage($src_image, $mime_type, 'letterbox', 400, 400);
+Logger::debug("Creating user tables");
 
-header('Content-type: image/png');
-imagepng($thumb_img);
-imagedestroy($thumb_img);
+for ($i=1; $i<=5; $i++){
+	PostsTable::createTableForSite($i);
+}
 
 ?>

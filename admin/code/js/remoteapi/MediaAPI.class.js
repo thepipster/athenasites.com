@@ -135,15 +135,17 @@ var MediaAPI = {
 	},		
 	
 	// ////////////////////////////////////////////////////////////////////////
-	// ////////////////////////////////////////////////////////////////////////
+	//
+	// Posts.....
+	//
 	// ////////////////////////////////////////////////////////////////////////
 			
-	updatePost : function(siteID, postID, postTitle, postContent, postStatus, postCanComment, postSlug, postTags, postCategories, callback){
+	updatePost : function(siteID, postID, postTitle, postContent, postStatus, postCanComment, postSlug, callback){
 		
 		AthenaDialog.showLoading("Updating post");
 		
 		var paras = {cmd: 'updatePost', site_id: siteID, post_id: postID, title: postTitle, content: postContent, status: postStatus, 
-				can_comment: postCanComment, slug: postSlug, tags: postTags, categories: postCategories};
+				can_comment: postCanComment, slug: postSlug};
 				
 		$.ajax({
 			url: MediaAPI.m_url,
@@ -153,12 +155,12 @@ var MediaAPI = {
 		});	
 	},
 
-	addPost : function(siteID, postTitle, postContent, postStatus, postCanComment, postSlug, postTags, postCategories, callback){
+	addPost : function(siteID, postTitle, postContent, postStatus, postCanComment, postSlug, callback){
 		
 		AthenaDialog.showLoading("Adding post");
 		
 		var paras = {cmd: 'addPost', site_id: siteID, title: postTitle, content: postContent, status: postStatus, can_comment: postCanComment, 
-				slug: postSlug, tags: postTags, categories: postCategories};
+				slug: postSlug};
 						
 		$.ajax({
 			url: MediaAPI.m_url,
@@ -207,9 +209,67 @@ var MediaAPI = {
 			AthenaDialog.showAjaxError(ret);
 		}	
 	},
-		
+
 	// ////////////////////////////////////////////////////////////////////////
+
+	addTag : function(siteID, postID, postTag, callback){
+
+		AthenaDialog.showLoading("Adding tag");
+
+		var paras = {cmd: 'addTag', site_id: siteID, post_id: postID, tag: postTag};
+				
+		$.ajax({
+			url: MediaAPI.m_url,
+			dataType: "json",
+			data: paras,
+			success: function(ret){MediaAPI.onTagAdded(ret, callback)}
+		});	
+	},
+	
+	onTagAdded : function(ret, callback){
+
+		AthenaDialog.clearLoading();
+
+		if (ret.result == "ok"){		
+			callback(ret.data.post_id, ret.data.tag);			
+		}					
+		else {
+			AthenaDialog.showAjaxError(ret);
+		}	
+	},
+	
 	// ////////////////////////////////////////////////////////////////////////
+
+	addCategory : function(siteID, postID, postCategory, callback){
+
+		AthenaDialog.showLoading("Adding category");
+
+		var paras = {cmd: 'addCategory', site_id: siteID, post_id: postID, category: postCategory};
+				
+		$.ajax({
+			url: MediaAPI.m_url,
+			dataType: "json",
+			data: paras,
+			success: function(ret){MediaAPI.onCategoryAdded(ret, callback)}
+		});	
+	},
+	
+	onCategoryAdded : function(ret, callback){
+
+		AthenaDialog.clearLoading();
+
+		if (ret.result == "ok"){		
+			callback(ret.data.post_id, ret.data.category);			
+		}					
+		else {
+			AthenaDialog.showAjaxError(ret);
+		}	
+	},	
+			
+	// ////////////////////////////////////////////////////////////////////////
+	//
+	// Pages.....
+	//
 	// ////////////////////////////////////////////////////////////////////////
 
 	updatePage : function(siteID, pageID, pageTitle, pageContent, pageStatus, templateName, parentPageID, pageSlug, pageOrder, isHome, callback){

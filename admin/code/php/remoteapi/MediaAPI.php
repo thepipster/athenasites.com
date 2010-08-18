@@ -51,9 +51,7 @@ switch($cmd){
 		$content = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
 		$status = CommandHelper::getPara('status', true, CommandHelper::$PARA_TYPE_STRING);
 		$can_comment = CommandHelper::getPara('can_comment', true, CommandHelper::$PARA_TYPE_NUMERIC);
-		$tags = CommandHelper::getPara('tags', true, CommandHelper::$PARA_TYPE_STRING);
-		$categories = CommandHelper::getPara('categories', true, CommandHelper::$PARA_TYPE_STRING);
-		updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_comment, $tags, $categories);
+		updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_comment);
 		break;
 		
 	case "addPost":
@@ -62,9 +60,19 @@ switch($cmd){
 		$content = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
 		$status = CommandHelper::getPara('status', true, CommandHelper::$PARA_TYPE_STRING);
 		$can_comment = CommandHelper::getPara('can_comment', true, CommandHelper::$PARA_TYPE_NUMERIC);
-		$tags = CommandHelper::getPara('tags', true, CommandHelper::$PARA_TYPE_STRING);
-		$categories = CommandHelper::getPara('categories', true, CommandHelper::$PARA_TYPE_STRING);
-		addPost($site_id, $title, $content, $status, $slug, $can_comment, $tags, $categories);
+		addPost($site_id, $title, $content, $status, $slug, $can_comment);
+		break;
+
+	case "addTag":
+		$tag = CommandHelper::getPara('tag', true, CommandHelper::$PARA_TYPE_STRING);
+		$post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		addTag($site_id, $post_id, $tag);
+		break;
+
+	case "addCategory":
+		$category = CommandHelper::getPara('category', true, CommandHelper::$PARA_TYPE_STRING);
+		$post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		addCategory($site_id, $post_id, $category);
 		break;
 
 	// PAGES /////////////////////////////////////////////////////////////////////////
@@ -242,9 +250,7 @@ function deletePost($site_id, $post_id){
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_comment, $tags, $categories){
-
-	Logger::debug("updatePost(site_id=$site_id, post_id=$post_id, title=$title, content=$content, status=$status, slug=$slug, can_comment=$can_comment)");
+function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_comment){
 	
 	$user_id = SecurityUtils::getCurrentUserID();
 	
@@ -255,7 +261,7 @@ function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_c
 	
 	//Logger::debug(">>> content = $safe_content");
 		
-	PostsTable::update($site_id, $post_id, $safe_content, $status, $title, $can_comment, $slug, $tags, $categories);
+	PostsTable::update($site_id, $post_id, $safe_content, $status, $title, $can_comment, $slug);
 		
 	$post = PostsTable::getPost($site_id, $post_id);
 
@@ -273,9 +279,7 @@ function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_c
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function addPost($site_id, $title, $content, $status, $slug, $can_comment, $tags, $categories){
-
-	//Logger::debug("addPage(site_id=$site_id, title=$title, parent_page_id=$parent_page_id, content=$content, status=$status, tamplate_name=$tamplate_name, slug=$slug, path=$path)");
+function addPost($site_id, $title, $content, $status, $slug, $can_comment){
 	
 	$user_id = SecurityUtils::getCurrentUserID();
 	//$path = getPath($site_id, $page_id);
@@ -286,7 +290,7 @@ function addPost($site_id, $title, $content, $status, $slug, $can_comment, $tags
 	$safe_content = str_ireplace($tags, $replace, $content);
 	//$safe_content = nl2br($content);	
 	
-	$post_id = PostsTable::create($site_id, $user_id, $safe_content, $status, $title, $can_comment, $slug, $tags, $categories);
+	$post_id = PostsTable::create($site_id, $user_id, $safe_content, $status, $title, $can_comment, $slug);
 		
 	$post = PostsTable::getPost($site_id, $post_id);
 	
@@ -303,6 +307,32 @@ function addPost($site_id, $title, $content, $status, $slug, $can_comment, $tags
 	
 }
 
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function addCategory($site_id, $post_id, $category){
+
+	$category_id = PostsTable::addCategory($site_id, $post_id, $category);
+					
+	$msg['cmd'] = "addCategory";
+	$msg['result'] = $category_id > 0 ? 'ok' : 'fail';
+	$msg['data'] = array('category' => $category, 'post_id' => $post_id);
+	
+	CommandHelper::sendMessage($msg);	
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function addTag($site_id, $post_id, $tag){
+
+	$tag_id = PostsTable::addTag($site_id, $post_id, $tag);
+
+	$msg['cmd'] = "addTag";
+	$msg['result'] = $tag_id > 0 ? 'ok' : 'fail';
+	$msg['data'] = array('tag' => $tag, 'post_id' => $post_id);
+	
+	CommandHelper::sendMessage($msg);	
+}
+
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -316,9 +346,9 @@ function deletePage($site_id, $page_id){
 	
 	PagesTable::delete($site_id, $page_id);
 	
-	$msg['cmd'] = "deletePage";
-	$msg['result'] = 'ok';
-	$msg['data'] = array('page_id' => $page_id);
+	$msg['cmd'] = "addCategory";
+	$msg['result'] = $category_id > 0 ? 'ok' : 'fail';
+	$msg['data'] = array('category' => $category, 'post_id' => $post_id);
 
 	CommandHelper::sendMessage($msg);	
 }
