@@ -59,3 +59,41 @@
 	display: block;
 	padding-bottom: 3px;
 }
+
+/*
+#PostsFrame .postRemoveTagCat {
+	font-size: 9px;
+	color: #990000;
+	cursor: pointer;
+	padding-left: 5px;
+}
+#PostsFrame .postRemoveTagCat:hover {
+	color: white;
+}
+*/
+
+#PostsFrame .postRemoveTagCat {
+	background-image: url('../../images/delete.png');
+	background-repeat: no-repeat;
+	display: inline-block;
+	cursor: pointer;	
+	width: 15px;
+	height: 15px;
+	float: left;
+}
+
+#PostsFrame .postTagCat {
+	float: left;
+}
+
+#PostsFrame .postTagCatLine {
+	color: #00204b;
+	display: inline-block;
+	margin-right: 6px;
+	padding: 3px;
+	padding-left: 5px;	
+	padding-right: 5px;	
+	background-color: #afb9c9;
+	-moz-border-radius: 8px;
+	border-radius: 8px;	
+}

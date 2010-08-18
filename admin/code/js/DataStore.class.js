@@ -40,6 +40,12 @@ var DataStore = {
 	
 	/** Gallery meta information */
 	m_galleryMetaList : '',
+
+	/** List of post categories */		
+	m_categories : '',
+	
+	/** List of post tags */
+	m_tags : '',
 		
 	// //////////////////////////////////////////////////////////////////////////////////
 	
@@ -353,6 +359,13 @@ var DataStore = {
 		}
 		
 		DataStore.m_pageList = tempList;
+
+		// update any pages that had this page as their parent page id
+		for(var i=0; i<DataStore.m_pageList.length; i++){
+			if (DataStore.m_pageList[i].parent_page_id == page_id){
+				DataStore.m_pageList[i].parent_page_id = 0;
+			}
+		}
 			
 	},
 	
@@ -402,6 +415,17 @@ var DataStore = {
 		temp.tags = postObj.tags;
 		temp.categories = postObj.categories;
 						
+		if (temp.tags == undefined){
+			temp.tags = new Array();
+		}
+		if (temp.categories == undefined){
+			temp.categories = new Array();
+		}
+
+		for (var i=0; i<temp.tags.length; i++){
+			alert(temp.tags);
+		}
+												
 		DataStore.m_postList.push(temp);
 	},
 		
@@ -426,7 +450,14 @@ var DataStore = {
 				DataStore.m_postList[i].canComment = postObj.canComment;
 				DataStore.m_postList[i].tags = postObj.tags;
 				DataStore.m_postList[i].categories = postObj.categories;
-								
+					
+				if (DataStore.m_postList[i].tags == undefined){
+					DataStore.m_postList[i].tags = new Array();
+				}
+				if (DataStore.m_postList[i].categories == undefined){
+					DataStore.m_postList[i].categories = new Array();
+				}
+				
 				return;
 			}
 		}
@@ -478,8 +509,8 @@ var DataStore = {
 		GalleryAPI.getAll(DataStore.m_siteID, function(gallery_images, gallery_meta){DataStore.onGotGalleryData(gallery_images, gallery_meta);});
 		
 		MediaAPI.getAll(DataStore.m_siteID, 
-				function(folders, media, pages, theme, page_templates, theme_paras, page_paras, posts){ 
-					DataStore.onGotData(folders, media, pages, theme, page_templates, theme_paras, page_paras, posts, callback);
+				function(folders, media, pages, theme, page_templates, theme_paras, page_paras, posts, tags, categories){ 
+					DataStore.onGotData(folders, media, pages, theme, page_templates, theme_paras, page_paras, posts, tags, categories, callback);
 				});
 	},
 	
@@ -523,8 +554,8 @@ var DataStore = {
 	},
 	
 	// //////////////////////////////////////////////////////////////////////////////////
-
-	onGotData : function(folder_list, media_list, page_list, theme, page_templates, theme_paras, paga_paras, post_list, callback){
+	
+	onGotData : function(folder_list, media_list, page_list, theme, page_templates, theme_paras, paga_paras, post_list, tag_list, categories_list, callback){
 
 		DataStore.onGotFolders(folder_list);
 		DataStore.onGotMedia(media_list);
@@ -536,10 +567,14 @@ var DataStore = {
 		DataStore.m_siteParaList = paga_paras;
 		DataStore.m_themeParaList = theme_paras;
 		DataStore.m_theme = theme; // id, theme_name, theme_title, price, thumb_url, description, is_private, max_page_depth
+		DataStore.m_categories = categories_list;
+		DataStore.m_tags = tag_list;
 
 		if (DataStore.m_themeParaList == undefined) DataStore.m_themeParaList = new Array();
 		if (DataStore.m_siteParaList == undefined) DataStore.m_siteParaList = new Array();
-		
+		if (DataStore.m_categories == undefined) DataStore.m_categories = new Array();
+		if (DataStore.m_tags == undefined) DataStore.m_tags = new Array();
+				
 		callback();
 	},
 

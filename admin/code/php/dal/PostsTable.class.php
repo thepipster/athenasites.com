@@ -112,8 +112,14 @@ class PostsTable {
 			$tag_id = DatabaseManager::insert($sql);
 		}
 
-		$sql = DatabaseManager::prepare("DELETE FROM athena_%d_PostToTags WHERE tag_id=%d AND post_id=%d", $site_id, $tag_id, $post_id);
-		DatabaseManager::submitQuery($sql);
+		// Does this post already have this category assigned?
+		$sql = DatabaseManager::prepare("SELECT id FROM athena_%d_PostToTags WHERE tag_id=%d AND post_id=%d", $site_id, $tag_id, $post_id);
+		$id = DatabaseManager::getVar($sql);
+
+		if (isset($id)){
+			Logger::debug(">>> Tag already assigned to this post!");
+			return null;
+		}
 		
 		$sql = DatabaseManager::prepare("INSERT INTO athena_%d_PostToTags (tag_id, post_id) VALUES (%d, %d)", $site_id, $tag_id, $post_id);
 		DatabaseManager::insert($sql);
@@ -130,14 +136,20 @@ class PostsTable {
 		$sql = DatabaseManager::prepare("SELECT id FROM athena_%d_PostCategories WHERE category = %s", $site_id, $category);
 		$category_id = DatabaseManager::getVar($sql);
 		
-		if (!isset($tag_id)){
+		if (!isset($category_id)){
 			$sql = DatabaseManager::prepare("INSERT INTO athena_%d_PostCategories (category) VALUES (%s)", $site_id, $category);
 			$category_id = DatabaseManager::insert($sql);
 		}
 
-		$sql = DatabaseManager::prepare("DELETE FROM athena_%d_PostToCategories WHERE category_id=%d AND post_id=%d", $site_id, $category_id, $post_id);
-		DatabaseManager::submitQuery($sql);
-		
+		// Does this post already have this category assigned?
+		$sql = DatabaseManager::prepare("SELECT id FROM athena_%d_PostToCategories WHERE category_id=%d AND post_id=%d", $site_id, $category_id, $post_id);
+		$id = DatabaseManager::getVar($sql);
+
+		if (isset($id)){
+			Logger::debug(">>> Category already assigned to this post!");
+			return null;
+		}
+				
 		$sql = DatabaseManager::prepare("INSERT INTO athena_%d_PostToCategories (category_id, post_id) VALUES (%d, %d)", $site_id, $category_id, $post_id);
 		DatabaseManager::insert($sql);
 		
@@ -147,22 +159,115 @@ class PostsTable {
 
 	// /////////////////////////////////////////////////////////////////////////////////
 
-	public static function getPostTags($site_id, $post_id){
-//		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_PostToTags", $site_id);			
-//		return DatabaseManager::getResults($sql);				
+	/**
+	* Remove a tag from a post, and remove from the list of tags if there are no other references
+	*/
+	public static function removeTag($site_id, $post_id, $tag){
+	
+		// Delete post-tag mapping
+		$tag_id = self::getTagID($site_id, $tag);
+		$sql = DatabaseManager::prepare("DELETE FROM athena_%d_PostToTags WHERE tag_id = %d AND post_id = %d", $site_id, $tag_id, $post_id);
+		DatabaseManager::submitQuery($sql);
+		
+		$freq = self::getTagFrequency($site_id, $tag);
+		
+		// If there are no more references to this tag, remove the tag
+		if ($freq == 0){
+			$sql = DatabaseManager::prepare("DELETE FROM athena_%d_PostTags WHERE id=%d", $site_id, $tag_id);
+			DatabaseManager::submitQuery($sql);
+		}
+		
 	}
 
-	public static function getPostCategories($site_id, $post_id){
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Remove a tag from a post, and remove from the list of tags if there are no other references
+	*/
+	public static function removeCategory($site_id, $post_id, $cat){
+	
+		// Delete post-tag mapping
+		$cat_id = self::getCategoryID($site_id, $cat);
+		$sql = DatabaseManager::prepare("DELETE FROM athena_%d_PostToCategories WHERE category_id = %d AND post_id = %d", $site_id, $cat_id, $post_id);
+		DatabaseManager::submitQuery($sql);
+		
+		$freq = self::getCategoryFrequency($site_id, $cat);
+		Logger::debug("Cat $cat frequency = $freq");
+		
+		// If there are no more references to this tag, remove the tag
+		if ($freq == 0){
+			$sql = DatabaseManager::prepare("DELETE FROM athena_%d_PostCategories WHERE id=%d", $site_id, $cat_id);
+			DatabaseManager::submitQuery($sql);
+		}
+		
+	}
+
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	public static function getTagFrequency($site_id, $tag){
+		$sql = DatabaseManager::prepare("SELECT count(pt.id) FROM athena_%d_PostToTags pt INNER JOIN athena_%d_PostTags t WHERE pt.tag_id = t.id AND t.tag = %s", $site_id, $site_id, $tag);
+		$freq = DatabaseManager::getVar($sql);
+		if (!isset($freq)){
+			$freq=0;
+		}
+		return $freq;
+	}
+
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	public static function getCategoryFrequency($site_id, $cat){
+		$sql = DatabaseManager::prepare("SELECT count(pc.id) FROM  athena_%d_PostToCategories pc INNER JOIN athena_%d_PostCategories c WHERE pc.category_id = c.id AND c.category = %s", $site_id, $site_id, $cat);
+		$freq = DatabaseManager::getVar($sql);
+		if (!isset($freq)){
+			$freq=0;
+		}
+		return $freq;
 	}
 	
-	public static function getTags($site_id){
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	public static function getPostTags($site_id, $post_id){
+		$sql = DatabaseManager::prepare("SELECT t.tag FROM athena_%d_PostTags t INNER JOIN athena_%d_PostToTags pt WHERE pt.post_id = %d AND pt.tag_id = t.id", $site_id, $site_id, $post_id);
+		return DatabaseManager::getColumn($sql);
 	}
 
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	public static function getPostCategories($site_id, $post_id){
+		$sql = DatabaseManager::prepare("SELECT c.category FROM athena_%d_PostCategories c INNER JOIN athena_%d_PostToCategories pc WHERE pc.post_id = %d AND pc.category_id = c.id", $site_id, $site_id, $post_id);
+		return DatabaseManager::getColumn($sql);
+	}
+	
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	public static function getTagID($site_id, $tag){
+		$sql = DatabaseManager::prepare("SELECT id FROM athena_%d_PostTags WHERE tag = %s", $site_id, $tag);			
+		return DatabaseManager::getVar($sql);				
+	}
+
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	public static function getCategoryID($site_id, $cat){
+		$sql = DatabaseManager::prepare("SELECT id FROM athena_%d_PostCategories WHERE category = %s", $site_id, $cat);			
+		return DatabaseManager::getVar($sql);				
+	}
+
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	public static function getTags($site_id){
+		$sql = DatabaseManager::prepare("SELECT tag FROM athena_%d_PostTags", $site_id);
+		return DatabaseManager::getColumn($sql);
+	}
+
+	// /////////////////////////////////////////////////////////////////////////////////
+
 	public static function getCategories($site_id){
+		$sql = DatabaseManager::prepare("SELECT category FROM athena_%d_PostCategories", $site_id);
+		return DatabaseManager::getColumn($sql);
 	}
 		    
 	// /////////////////////////////////////////////////////////////////////////////////
-
+		
 	public static function getPosts($site_id){
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts ORDER BY created DESC", $site_id);			
 		return DatabaseManager::getResults($sql);				

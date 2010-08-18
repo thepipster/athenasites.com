@@ -20,31 +20,13 @@ var PagesFrame = {
 
 	repaint : function(){
 	
-		var pageObj = DataStore.getCurrentPage();
-		
-		var page_id = DataStore.m_currentPageID;
+		if (DataStore.m_pageList.length == 0){
+			AthenaDialog.alert("You currently have no pages, you can add a post using the side-bar");	
+			return;	
+		}
 
-		if (pageObj.parent_page_id != 0){
-			var parentPage = DataStore.getPage(pageObj.parent_page_id);
-		}
-		
-		if (pageObj == undefined || !pageObj){
-			pageObj = new Object();
-			pageObj.content = '';
-			pageObj.title = '';
-			pageObj.last_edit = '';
-			pageObj.created = '';
-			pageObj.status = '';
-			pageObj.template = '';
-			pageObj.slug = '';
-			pageObj.order = '';
-			pageObj.path = '';
-			pageObj.parent_page_id = 0;
-			pageObj.template = '';
-			pageObj.id = '';
-		}
-			
-			
+		var pageObj = DataStore.getCurrentPage();
+					
 		if (!PagesFrame.painted){
 			PagesFrame.fullRepaint(pageObj);
 			PagesFrame.painted = true;

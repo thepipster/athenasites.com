@@ -19,26 +19,14 @@ var PostsFrame = {
 	// ////////////////////////////////////////////////////////////////////////////
 
 	repaint : function(){
+			
+		if (DataStore.m_postList.length == 0){
+			AthenaDialog.alert("<div class='noContent'>You currently have no posts, you can add a post using the side-bar</div>");	
+			return;	
+		}
 	
 		var postObj = DataStore.getCurrentPost();
-		
-		var post_id = DataStore.m_currentPostID;
-		
-		if (postObj == undefined || !postObj){				
-			postObj = new Object();
-			postObj.id = '';
-			postObj.title = '';
-			postObj.content = '';
-			postObj.last_edit = '';
-			postObj.created = '';
-			postObj.status = '';
-			postObj.slug = '';
-			postObj.canComment = '';
-			postObj.tags = '';
-			postObj.categories = '';
-		}
-			
-			
+								
 		if (!PostsFrame.painted){
 			PostsFrame.fullRepaint(postObj);
 			PostsFrame.painted = true;
@@ -149,14 +137,14 @@ var PostsFrame = {
 		txt += "                    <span class='postData' id='postTags'><input id='postTag' type='text' value=''/></span>";
 		txt += "                    <span class='postLabel'><button class='basic_button' onclick='PostsFrame.addTag();'>Add</button></span>";
 		txt += "			    </div>";
-		txt += "                <div id='apollo_post_categories'></div>"
+		txt += "                <div id='apollo_post_tags'></div>";
 
 		txt += "                <p><strong>Categories</strong></p>";
 		txt += "			    <div class='postInfoLine'>";
 		txt += "                    <span class='postData' id='postCategories'><input id='postCategory' type='text' value=''/></span>";
 		txt += "                    <span class='postLabel'><button class='basic_button' onclick='PostsFrame.addCategory()';>Add</button></span>";
 		txt += "			    </div>";
-		txt += "                <div id='apollo_post_tags'></div>";
+		txt += "                <div id='apollo_post_categories'></div>"
 		
 		txt += "            </fieldset>";
 
@@ -200,11 +188,30 @@ var PostsFrame = {
 		
 	// ////////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Get the complete list of tags and categories for the entire site, and populate an auto-complete field with this data
+	*/
 	updateTagsAndCategoris : function(){
 
-		var availableTags = ["ActionScript", "AppleScript", "Asp", "BASIC", "C", "C++", "Clojure", "COBOL", "ColdFusion", "Erlang", "Fortran", "Groovy", "Haskell", "Java", "JavaScript", "Lisp", "Perl", "PHP", "Python", "Ruby", "Scala", "Scheme"];
-		$("#postTag").autocomplete({source: availableTags});
-		$("#postCategory").autocomplete({source: availableTags});
+		$("#postTag").autocomplete({source: DataStore.m_tags});
+		$("#postCategory").autocomplete({source: DataStore.m_categories});
+		
+		var post = DataStore.getPost(DataStore.m_currentPostID);
+		
+		var txt = "";
+		var onclick = "";
+		for (var i=0; i<post.tags.length; i++){
+			onclick = "PostsFrame.deleteTag(\""+post.tags[i]+"\")";
+			txt += "<div class='postTagCatLine'><span class='postTagCat'>"+post.tags[i]+"</span><span class='postRemoveTagCat' onclick='"+onclick+"'></span></div>";			
+		}		
+		$('#apollo_post_tags').html(txt);
+
+		txt = "";		
+		for (var i=0; i<post.categories.length; i++){
+			onclick = "PostsFrame.deleteCategory(\""+post.categories[i]+"\")";
+			txt += "<div class='postTagCatLine'><span class='postTagCat'>"+post.categories[i]+"</span><span class='postRemoveTagCat' onclick='"+onclick+"'></span></div>";			
+		}		
+		$('#apollo_post_categories').html(txt);
 
 	},
 		
@@ -260,24 +267,108 @@ var PostsFrame = {
 
 	addTag : function(){
 		var tag = $('#postTag').val();
+		$('#postTag').val('');
 		MediaAPI.addTag(DataStore.m_siteID, DataStore.m_currentPostID, tag, PostsFrame.onTagAdded);
 	},
 
 	onTagAdded : function(post_id, tag){
-		alert('tag ' + tag + ' added!');
+		
+		var post = DataStore.getPost(post_id);
+		post.tags.push(tag);
+		DataStore.updatePost(post);
+		
+		// Is this a new tag?
+		var newTag = true;
+		for (var i=0; i<DataStore.m_tags.length; i++){
+			if (DataStore.m_tags[i] == tag){
+				newTag = false;
+				break;
+			}
+		}
+		
+		if (newTag){
+			DataStore.m_tags.push(tag);
+		}
+		
+		PostsFrame.repaint();
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////////
 
 	addCategory : function(){
 		var cat = $('#postCategory').val();
+		$('#postCategory').val('');
 		MediaAPI.addCategory(DataStore.m_siteID, DataStore.m_currentPostID, cat, PostsFrame.onCategoryAdded);
 	},
 	
 	onCategoryAdded : function(post_id, category){
-		alert('category ' + category + ' added!');
+	
+		var post = DataStore.getPost(post_id);
+		post.categories.push(category);
+		DataStore.updatePost(post);	
+	
+		// Is this a new cat?
+		var newCat = true;
+		for (var i=0; i<DataStore.m_categories.length; i++){
+			if (DataStore.m_categories[i] == category){
+				newCat = false;
+				break;
+			}
+		}
+		
+		if (newCat){
+			DataStore.m_categories.push(category);
+		}
+
+		PostsFrame.repaint();
 	},
 	
+	// ////////////////////////////////////////////////////////////////////////////
+	
+	deleteCategory : function(cat){
+		AthenaDialog.confirm("Are you sure you want to remove this tag from this post?", function(){ MediaAPI.removeCategory(DataStore.m_siteID, DataStore.m_currentPostID, cat, PostsFrame.onCategoryDeleted);});
+	},
+	
+	onCategoryDeleted : function(post_id, cat){
+				
+		// Update post....
+		var post = DataStore.getPost(post_id);
+		var newList = new Array();
+		for (var i=0; i<post.categories.length; i++){
+			if (post.categories[i] != cat){
+				newList.push(post.categories[i]);
+			}
+		}
+		post.categories = newList;
+		DataStore.updatePost(post);	
+	
+		PostsFrame.repaint();
+			
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////////
+	
+	deleteTag : function(tag){
+		AthenaDialog.confirm("Are you sure you want to remove this tag from this post?", function(){ MediaAPI.removeTag(DataStore.m_siteID, DataStore.m_currentPostID, tag, PostsFrame.onTagDeleted);});
+	},
+
+	onTagDeleted : function(post_id, tag){
+
+		// Update post....
+		var post = DataStore.getPost(post_id);
+		var newList = new Array();
+		for (var i=0; i<post.tags.length; i++){
+			if (post.tags[i] != tag){
+				newList.push(post.tags[i]);
+			}
+		}
+		post.tags = newList;
+		DataStore.updatePost(post);	
+	
+		PostsFrame.repaint();
+
+	},
+
 	// ////////////////////////////////////////////////////////////////////////////
 	
 	paintCKEditor : function(){

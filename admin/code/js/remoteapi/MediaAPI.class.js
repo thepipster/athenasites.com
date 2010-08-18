@@ -46,7 +46,7 @@ var MediaAPI = {
 		AthenaDialog.clearLoading();
 		
 		if (ret.result == 'ok'){	
-			callback(ret.data.folders, ret.data.media, ret.data.pages, ret.data.theme, ret.data.page_templates, ret.data.theme_paras, ret.data.page_paras, ret.data.posts);
+			callback(ret.data.folders, ret.data.media, ret.data.pages, ret.data.theme, ret.data.page_templates, ret.data.theme_paras, ret.data.page_paras, ret.data.posts, ret.data.tags, ret.data.categories);
 		}
 		else {
 			AthenaDialog.showAjaxError(ret);
@@ -265,6 +265,62 @@ var MediaAPI = {
 			AthenaDialog.showAjaxError(ret);
 		}	
 	},	
+	
+	// ////////////////////////////////////////////////////////////////////////
+
+	removeTag : function(siteID, postID, postTag, callback){
+
+		AthenaDialog.showLoading("Removing tag");
+
+		var paras = {cmd: 'removeTag', site_id: siteID, post_id: postID, tag: postTag};
+				
+		$.ajax({
+			url: MediaAPI.m_url,
+			dataType: "json",
+			data: paras,
+			success: function(ret){MediaAPI.onTagRemoved(ret, callback)}
+		});	
+	},
+	
+	onTagRemoved : function(ret, callback){
+
+		AthenaDialog.clearLoading();
+
+		if (ret.result == "ok"){		
+			callback(ret.data.post_id, ret.data.tag);			
+		}					
+		else {
+			AthenaDialog.showAjaxError(ret);
+		}	
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////
+
+	removeCategory : function(siteID, postID, postCategory, callback){
+
+		AthenaDialog.showLoading("Removing category");
+
+		var paras = {cmd: 'removeCategory', site_id: siteID, post_id: postID, category: postCategory};
+				
+		$.ajax({
+			url: MediaAPI.m_url,
+			dataType: "json",
+			data: paras,
+			success: function(ret){MediaAPI.onCategoryRemoved(ret, callback)}
+		});	
+	},
+	
+	onCategoryRemoved : function(ret, callback){
+
+		AthenaDialog.clearLoading();
+
+		if (ret.result == "ok"){		
+			callback(ret.data.post_id, ret.data.category);			
+		}					
+		else {
+			AthenaDialog.showAjaxError(ret);
+		}	
+	},		
 			
 	// ////////////////////////////////////////////////////////////////////////
 	//

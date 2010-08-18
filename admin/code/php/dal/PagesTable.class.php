@@ -53,8 +53,15 @@ class PagesTable {
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
 	public static function delete($site_id, $page_id){
+	
+		// Update any pages with this as the parent page id
+		$sql = DatabaseManager::prepare("UPDATE athena_%d_Pages SET parent_page_id = 0 WHERE parent_page_id = %d", $site_id, $page_id);			
+		DatabaseManager::update($sql);
+
+		// Delete the page	
 		$sql = DatabaseManager::prepare("DELETE FROM athena_%d_Pages WHERE id = %d", $site_id, $page_id);			
 		return DatabaseManager::submitQuery($sql);
+		
 	}
 	
 	// ///////////////////////////////////////////////////////////////////////////////////////

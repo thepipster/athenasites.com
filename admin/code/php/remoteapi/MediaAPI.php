@@ -75,6 +75,18 @@ switch($cmd){
 		addCategory($site_id, $post_id, $category);
 		break;
 
+	case "removeTag":
+		$tag = CommandHelper::getPara('tag', true, CommandHelper::$PARA_TYPE_STRING);
+		$post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		removeTag($site_id, $post_id, $tag);
+		break;
+
+	case "removeCategory":
+		$category = CommandHelper::getPara('category', true, CommandHelper::$PARA_TYPE_STRING);
+		$post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		removeCategory($site_id, $post_id, $category);
+		break;
+		
 	// PAGES /////////////////////////////////////////////////////////////////////////
 
 	case "deletePage":
@@ -159,6 +171,56 @@ switch($cmd){
 // ///////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+* Make basic text safe, strip out anything that isn't (e.g. for tags and categories)
+*/ 
+function makeTextSafe($content){
+
+	$tags = array("\\n", "\\r", "\\'", "\\\"");
+	$replace = '';
+	$safe_content = str_ireplace($tags, $replace, $content);
+	$safe_content = stripslashes(stripslashes($safe_content));
+
+	// Remove all remaining slashes
+	$tags = array("\\");
+	$safe_content = str_ireplace($tags, $replace, $safe_content);
+
+	// Remove all remaining quotes
+	$tags = array("\'", "\"");
+	$safe_content = str_ireplace($tags, $replace, $safe_content);
+		
+	//Logger::debug(">>> content = $content");
+	//Logger::debug(">>> safe content = $safe_content");
+
+	return $safe_content;
+}
+
+/**
+* Make content that is supposed to be HTML safe (for posts and pages for example)
+*/
+function makeHtmlSafe($content){
+
+	// Json converts single slashes to quadruple slashes
+	$tags = array("\\\\\\\\");
+	$replace = "\\";
+	$safe_content = str_ireplace($tags, $replace, $content);
+
+	$tags = array("\\n", "\\r");
+	$replace = '';
+	$safe_content = str_ireplace($tags, $replace, $safe_content);
+
+	//$safe_content = htmlspecialchars($safe_content, ENT_QUOTES);
+	//$safe_content = nl2br($content);
+	
+	//Logger::debug(">>> content = $content");
+	//Logger::debug(">>> safe content = $safe_content");
+
+	return $safe_content;
+}
+
+
 // ///////////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -253,15 +315,8 @@ function deletePost($site_id, $post_id){
 function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_comment){
 	
 	$user_id = SecurityUtils::getCurrentUserID();
-	
-	$tags   = array("\\n", "\\r", "s");
-	$replace = '';
-	$safe_content = str_ireplace($tags, $replace, $content);
-	//$safe_content = nl2br($content);
-	
-	//Logger::debug(">>> content = $safe_content");
-		
-	PostsTable::update($site_id, $post_id, $safe_content, $status, $title, $can_comment, $slug);
+			
+	PostsTable::update($site_id, $post_id, makeHtmlSafe($content), $status, $title, $can_comment, $slug);
 		
 	$post = PostsTable::getPost($site_id, $post_id);
 
@@ -285,12 +340,7 @@ function addPost($site_id, $title, $content, $status, $slug, $can_comment){
 	//$path = getPath($site_id, $page_id);
 	$path = '';
 	
-	$tags   = array("\\n", "\\r", "s");
-	$replace = '';
-	$safe_content = str_ireplace($tags, $replace, $content);
-	//$safe_content = nl2br($content);	
-	
-	$post_id = PostsTable::create($site_id, $user_id, $safe_content, $status, $title, $can_comment, $slug);
+	$post_id = PostsTable::create($site_id, $user_id, makeHtmlSafe($content), $status, $title, $can_comment, $slug);
 		
 	$post = PostsTable::getPost($site_id, $post_id);
 	
@@ -311,11 +361,13 @@ function addPost($site_id, $title, $content, $status, $slug, $can_comment){
 
 function addCategory($site_id, $post_id, $category){
 
-	$category_id = PostsTable::addCategory($site_id, $post_id, $category);
+	$safecat = makeTextSafe($category);
+	
+	$category_id = PostsTable::addCategory($site_id, $post_id, $safecat);
 					
 	$msg['cmd'] = "addCategory";
 	$msg['result'] = $category_id > 0 ? 'ok' : 'fail';
-	$msg['data'] = array('category' => $category, 'post_id' => $post_id);
+	$msg['data'] = array('category' => $safecat, 'post_id' => $post_id);
 	
 	CommandHelper::sendMessage($msg);	
 }
@@ -324,10 +376,38 @@ function addCategory($site_id, $post_id, $category){
 
 function addTag($site_id, $post_id, $tag){
 
-	$tag_id = PostsTable::addTag($site_id, $post_id, $tag);
+	$safetag = makeTextSafe($tag);
+	
+	$tag_id = PostsTable::addTag($site_id, $post_id, $safetag);
 
 	$msg['cmd'] = "addTag";
 	$msg['result'] = $tag_id > 0 ? 'ok' : 'fail';
+	$msg['data'] = array('tag' => $safetag, 'post_id' => $post_id);
+	
+	CommandHelper::sendMessage($msg);	
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function removeCategory($site_id, $post_id, $category){
+
+	PostsTable::removeCategory($site_id, $post_id, $category);
+					
+	$msg['cmd'] = "removeCategory";
+	$msg['result'] = 'ok';
+	$msg['data'] = array('category' => $category, 'post_id' => $post_id);
+	
+	CommandHelper::sendMessage($msg);	
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function removeTag($site_id, $post_id, $tag){
+
+	PostsTable::removeTag($site_id, $post_id, $tag);
+
+	$msg['cmd'] = "removeTag";
+	$msg['result'] = 'ok';
 	$msg['data'] = array('tag' => $tag, 'post_id' => $post_id);
 	
 	CommandHelper::sendMessage($msg);	
@@ -344,11 +424,11 @@ function deletePage($site_id, $page_id){
 
 	//Logger::debug("deletePage($site_id, $page_id)");
 	
-	PagesTable::delete($site_id, $page_id);
+	PagesTable::delete($site_id, $page_id);	
 	
-	$msg['cmd'] = "addCategory";
-	$msg['result'] = $category_id > 0 ? 'ok' : 'fail';
-	$msg['data'] = array('category' => $category, 'post_id' => $post_id);
+	$msg['cmd'] = "deletePage";
+	$msg['result'] = 'ok';
+	$msg['data'] = array('page_id' => $page_id);
 
 	CommandHelper::sendMessage($msg);	
 }
@@ -362,13 +442,7 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
 	$user_id = SecurityUtils::getCurrentUserID();
 	$path = ''; //getPath($site_id, $page_id);
 	
-	
-	$tags   = array("\\n", "\\r", "s");
-	$replace = '';
-	$safe_content = str_ireplace($tags, $replace, $content);
-	//$safe_content = nl2br($content);
-	
-	Logger::debug(">>> content = $safe_content");
+	$safe_content = makeHtmlSafe($content);
 		
 	PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $title, $tamplate_name, $slug, $path, $order, $ishome);
 		
@@ -400,10 +474,8 @@ function addPage($site_id, $title, $parent_page_id, $content, $status, $tamplate
 	//$path = getPath($site_id, $page_id);
 	$path = '';
 	
-	$tags   = array("\\n", "\\r", "s");
-	$replace = '';
-	$safe_content = str_ireplace($tags, $replace, $content);
-	
+	$safe_content = makeHtmlSafe($content);
+		
 	$page_id = PagesTable::create($user_id, $site_id, $parent_page_id, $safe_content, $status, $title, $tamplate_name, $slug, $path, $order, $ishome);
 		
 	$page = PagesTable::getPage($site_id, $page_id);
@@ -527,9 +599,12 @@ function getAll($site_id){
 		$temp = $post;
 		$temp['last_edit'] = date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
 		$temp['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
+		$temp['tags'] = PostsTable::getPostTags($site_id, $post['id']);
+		$temp['categories'] = PostsTable::getPostCategories($site_id, $post['id']);
 		$post_data[] = $temp;
 	}	
 	
+	Logger::dump($post_data);
 		
 	$media_data = array();
 	foreach ($media_list as $media){
@@ -549,11 +624,17 @@ function getAll($site_id){
 	// Get any set page paras
 	$page_paras = PageParasTable::getAllParas($site_id);
 			
+	// Get the tag list
+	$tag_list = PostsTable::getTags($site_id);
+	$cat_list = PostsTable::getCategories($site_id);
+
+	Logger::dump($tag_list);
+						
 	$msg = array();	
 	$msg['cmd'] = 'getAll';
 	$msg['result'] = 'ok';			
 	$msg['data'] = array('folders' => $folder_list, 'media' => $media_data, 'pages' => $page_data, 'theme' => $theme, 'page_templates' => $page_templates, 
-				'theme_paras' => $site_theme_paras, 'page_paras' => $page_paras,  'posts' => $post_data, );
+				'theme_paras' => $site_theme_paras, 'page_paras' => $page_paras,  'posts' => $post_data, 'tags' => $tag_list, 'categories' => $cat_list);
 				
 	CommandHelper::sendMessage($msg);		
 

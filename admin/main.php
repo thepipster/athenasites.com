@@ -81,7 +81,7 @@ else {
 
 <!-- Load styles //////////////////////////////////////////////////////////////////// -->
 
-<link rel="stylesheet" href="code/js/3rdparty/jquery-ui/smoothness/jquery-ui-1.8.4.custom.css" type="text/css"/>
+<link rel="stylesheet" href="code/js/3rdparty/jquery-ui/overcast/jquery-ui-1.8.4.custom.css" type="text/css"/>
 
 <link rel="stylesheet" href="code/css/Athena.css" type="text/css" /> 
 <link rel="stylesheet" href="code/css/SideBar.css" type="text/css" />
@@ -202,14 +202,15 @@ else {
 
 <!-- Debug box //////////////////////////////////////////////////////////////////////////// -->
 
-<div id='debug_txt'>
-</div>
+<div id='debug_txt'></div>
 
 <!-- Main  //////////////////////////////////////////////////////////////////////////////// -->
 
 <img class='apollo_logo' src='images/logo.png' height='35px' style='padding-top:5px; padding-left:5px;'/>
 
 <div id='apollo_loading_display' class='transparent_50' align="center"></div>	
+
+<div id='apollo_dialog'></div>	
 
 <div id='Content' align='center'>
 

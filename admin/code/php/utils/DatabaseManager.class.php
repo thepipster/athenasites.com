@@ -252,6 +252,32 @@ class DatabaseManager {
     // //////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	* Get an array for a single column, i.e. similar to getVar but returns an array of results
+	* rather then a single result
+	*/
+	public static function getColumn($sql){
+		
+		$results = DatabaseManager::submitQuery($sql);
+
+		if (!$results || mysql_num_rows($results) == 0) {
+			return null;
+		}
+		
+		$data = array();
+		
+		// Build the output data		
+		while ($row = mysql_fetch_array($results)) {
+			$data[] = $row[0];
+		}
+
+		mysql_free_result($results);
+
+		return $data;		
+	}
+    	
+    // //////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
 	* Return the first row as an associative array from a result set, or null if no results found
 	*/
 	public static function getRow($sql){
@@ -270,7 +296,7 @@ class DatabaseManager {
 	}
 	
     // //////////////////////////////////////////////////////////////////////////////////////
-
+	
 	/**
 	* Get all the results for a query as an associative array, returns null if no results found
 	*/
