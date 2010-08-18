@@ -81,7 +81,7 @@ else {
 
 <!-- Load styles //////////////////////////////////////////////////////////////////// -->
 
-<link type="text/css" href="code/js/3rdparty/jquery_ui/themes/base/ui.all.css" rel="stylesheet" />
+<link rel="stylesheet" href="code/js/3rdparty/jquery-ui/smoothness/jquery-ui-1.8.4.custom.css" type="text/css"/>
 
 <link rel="stylesheet" href="code/css/Athena.css" type="text/css" /> 
 <link rel="stylesheet" href="code/css/SideBar.css" type="text/css" />
@@ -115,7 +115,7 @@ else {
 
 <script type="text/javascript" src="code/js/3rdparty/jquery.advancedClick.js"></script>
 
-<script type="text/javascript" src="code/js/3rdparty/jquery-ui-1.8.4.custom.min.js"></script>
+<script type="text/javascript" src="code/js/3rdparty/jquery-ui/jquery-ui-1.8.4.custom.min.js"></script>
 
 <!--
 <script type="text/javascript" src="code/js/3rdparty/jquery_ui/ui/ui.core.js"></script>

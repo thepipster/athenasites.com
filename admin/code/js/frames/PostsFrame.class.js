@@ -176,6 +176,7 @@ var PostsFrame = {
 		// Good article on customization of CKEditor - http://www.voofie.com/content/2/ckeditor-plugin-development/		
 		PostsFrame.paintCKEditor();
 		
+		PostsFrame.updateTagsAndCategoris();
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////////
@@ -194,7 +195,17 @@ var PostsFrame = {
 		$('#postTemplate').val(postObj.template);
 		$('#postOrder').val(postObj.order);
 		
-		//PostsFrame.updateStatusColor();
+		PostsFrame.updateTagsAndCategoris();
+	},
+		
+	// ////////////////////////////////////////////////////////////////////////////
+
+	updateTagsAndCategoris : function(){
+
+		var availableTags = ["ActionScript", "AppleScript", "Asp", "BASIC", "C", "C++", "Clojure", "COBOL", "ColdFusion", "Erlang", "Fortran", "Groovy", "Haskell", "Java", "JavaScript", "Lisp", "Perl", "PHP", "Python", "Ruby", "Scala", "Scheme"];
+		$("#postTag").autocomplete({source: availableTags});
+		$("#postCategory").autocomplete({source: availableTags});
+
 	},
 		
 	// ////////////////////////////////////////////////////////////////////////////
