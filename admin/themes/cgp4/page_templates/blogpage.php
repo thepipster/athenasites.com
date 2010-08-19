@@ -17,28 +17,31 @@
 		important moments in people's lives. My blog showcases some of my favorite photos of my clients and adventures. I update this 
 		blog several times a week, so please visit frequently to see my latest images.</p>
 		
-		<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+		<?php 
+			$post_list = PageManager::getPosts();
+			foreach($post_list as $post){
+		?>
 		
 		<div align="left" class='post_spacer_outer'><div class='post_spacer'></div></div>
 		
-		<div <?php post_class() ?> id="post-<?php the_ID(); ?>">
+		<div id="post-<?= $post['id']; ?>">
 		
 			<h2 class="storytitle">
-			<a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title(); ?></a>
+			<a href="<?= PageManager::getPostLink($post['id']) ?>" rel="bookmark"><?= $post['title'] ?></a>
 			</h2>
 
-			<span class='blogDate'><?php the_date('','',''); ?></span>
+			<span class='blogDate'><?= PageManager::getPostDate($post['id']) ?></span>
 		
 			<div class="storycontent">
 				<?php echo PageManager::getBlogContent(); ?>
 			</div>
 			
 			<p>
-				Categories: <?php the_category(',') ?><br/>
-				Tags: <?php the_tags('', ', ', ''); ?><br/>
-				<?php wp_link_pages(); ?>
-				<?php comments_popup_link(__('Comments (0)'), __('Comments (1)'), __('Comments (%)')); ?><br/>
-				<?php edit_post_link(__('Edit This')); ?><br/>
+				Categories: <?php PageManager::getCategories($post['id']); ?><br/>
+				Tags: <?php PageManager::getTags($post['id']); ?><br/>
+				<?php //wp_link_pages(); ?>
+				<?php //comments_popup_link(__('Comments (0)'), __('Comments (1)'), __('Comments (%)')); ?><br/>
+				<?php //edit_post_link(__('Edit This')); ?><br/>
 			</p>
 			
 		</div>

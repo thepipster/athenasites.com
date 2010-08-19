@@ -4,6 +4,7 @@ require_once("admin/code/php/setup.php");
 
 $domain = strtolower($_SERVER['HTTP_HOST']);
 $page = strtolower(basename($_SERVER['REQUEST_URI']));
+$path = strtolower(dirname($_SERVER['REQUEST_URI']));
 $ext = strtolower(substr(strrchr($page,'.'),1));
 
 Logger::debug(">>>> Request page: $page Ext: $ext. Full request: " . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
@@ -16,7 +17,7 @@ if ($page == '' || (($ext == 'html') || ($ext == 'htm') || ($ext == 'php'))){
 	//Logger::debug("Domain: $domain");
 	//Logger::debug("Page: $page");
 	
-	PageManager::init($page);
+	PageManager::init($page, $path."/");
 	
 	/*
 	if (PageManager::$site_id){

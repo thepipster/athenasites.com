@@ -53,7 +53,9 @@ var PostsFrame = {
 		}
 				
 		var post_id = DataStore.m_currentPostID;
-	
+			
+		var postLink = postObj.path + postObj.slug;
+		
 		var txt = "";
 	
 		txt += "<div id='PostsFrameImagePicker'></div>";		
@@ -62,24 +64,22 @@ var PostsFrame = {
 
 		txt += "<tr valign='top'>";
 		
-		txt += "	<td>";
-		txt += "        <div style='margin-top:5px; margin-left:5px'>";
-		txt += "		    <textarea id='postContentEditor' name='postContentEditor' style='width:100%; height:100%;'>"+postObj.content+"</textarea>";
-		txt += "	    </div>";		
+		txt += "	<td height='30px'>";
+		txt += "        <div class='frameControlsBar'>";
+		txt += "            <span class='label'>Title:</span>";
+		txt += "            <input id='postTitle' type='text' value='"+postObj.title+"'/>";
+		txt += "            <button class='basic_button' style='' onclick=\"ImagePickerDialog.show('#PagesFrameImagePicker', PostsFrame.onImageSelected);\">Insert Image</button>";
+		txt += "            <a href='"+postLink+"' style='font-size:10px'>View Page</a>";
+		txt += "        </div>";
 		txt += "	</td>";
-							
-		txt += "	<td width='250px' style='height:100%; padding:5px'>";
+											
+		txt += "	<td rowspan='2' width='250px' style='height:100%; padding:5px'>";
 																
 		txt += "		<div class='subframebox' style='height:100%;width:250px'>"		
 				
 		txt += "			<span class='title'>Post Settings</span>";																	
 
 		txt += "            <fieldset>";
-
-		txt += "			<div class='postInfoLine'>";
-		txt += "            <span class='postLabel'>Title:</span>";
-		txt += "            <span class='postData'><input id='postTitle' type=text value='"+postObj.title+"'/></span>";
-		txt += "			</div>";
 
 		txt += "			<div class='postInfoLine'>";
 		txt += "            <span class='postLabel'>Slug:</span>";
@@ -116,13 +116,7 @@ var PostsFrame = {
 		txt += "            <span class='postLabel'>Created:</span>";
 		txt += "            <span class='postData' id='postCreated'>"+postObj.created+"</span>";
 		txt += "			</div>";
-		
-
-		txt += "			<div class='postInfoLine'>";
-		txt += "            <span class='postLabel'>Categories:</span>";
-		txt += "            <span class='postData' id='postCategories'>"+postObj.categories+"</span>";
-		txt += "			</div>";
-		
+				
 		txt += "            </fieldset>";
 
 		txt += "			<div align='right' style='padding-right:10px'>";
@@ -153,6 +147,15 @@ var PostsFrame = {
 		txt += "	</td>";
 		txt += "</tr>";
 
+
+		txt += "<tr valign='top'>";
+		txt += "	<td>";
+		txt += "        <div style='margin-top:5px; margin-left:5px'>";
+		txt += "		    <textarea id='postContentEditor' name='postContentEditor' style='width:100%; height:100%;'>"+postObj.content+"</textarea>";
+		txt += "	    </div>";		
+		txt += "	</td>";
+		txt += "</tr>";
+
 		txt += "</table>";
 					
 		$('#PostsFrame').html(txt);		
@@ -179,10 +182,7 @@ var PostsFrame = {
 		$('#postCreated').html(postObj.created);
 		
 		$('#postStatusSelector').val(postObj.status);
-		$('#postParent').val(postObj.parent_post_id);
-		$('#postTemplate').val(postObj.template);
-		$('#postOrder').val(postObj.order);
-		
+				
 		PostsFrame.updateTagsAndCategoris();
 	},
 		
@@ -197,7 +197,7 @@ var PostsFrame = {
 		$("#postCategory").autocomplete({source: DataStore.m_categories});
 		
 		var post = DataStore.getPost(DataStore.m_currentPostID);
-		
+			
 		var txt = "";
 		var onclick = "";
 		for (var i=0; i<post.tags.length; i++){
@@ -251,8 +251,7 @@ var PostsFrame = {
 		var title = $('#postTitle').val();		
 		var status = $('#postStatusSelector').val();		
 		var canComment = $('#postCanCommentSelector').val();
-		var slug = PagesSidebarFrame.encodeSlug(title) + '.html';
-			
+		var slug = AthenaUtils.encodeSlug(title);
 		MediaAPI.updatePost(DataStore.m_siteID, DataStore.m_currentPostID, title, content, status, canComment, slug, PostsFrame.onPostSaved)
 				
 	},
@@ -260,7 +259,7 @@ var PostsFrame = {
 	onPostSaved : function(postObj){
 		DataStore.updatePost(postObj);
 		PostsFrame.repaint();
-		PagesSidebarFrame.repaint();
+		PostsSidebarFrame.repaint();
 	},
 
 	// ////////////////////////////////////////////////////////////////////////////
@@ -416,13 +415,13 @@ var PostsFrame = {
 				
 				
 		});
-
+/*
 		var ret = PostsFrame.ckEditor.ui.addButton( 'MyButton', {
 								label : 'My Dialog', 
 								click : function(){ImagePickerDialog.show('#PostsFrameImagePicker', PostsFrame.onImageSelected)}, 
 								icon: defines.root_url + 'images/insert_media_button.png' 
 		});
-		
+*/		
 	},
 		
 	// ////////////////////////////////////////////////////////////////////////////

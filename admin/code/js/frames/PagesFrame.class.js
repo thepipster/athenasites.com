@@ -62,44 +62,38 @@ var PagesFrame = {
 
 		txt += "<tr valign='top'>";
 		
-		txt += "	<td>";
-		//txt += "        <div class='frame_control_bar'>";
-		//txt += "            <button class='basic_button' style='position:absolute; top:50px; left:700px'>Insert Image</button>";
-		//txt += "        </div>";
-		txt += "        <div style='margin-top:5px; margin-left:5px'>";
-		txt += "		    <textarea id='pageContentEditor' name='pageContentEditor' style='width:100%; height:100%;'>"+pageObj.content+"</textarea>";
-		txt += "	    </div>";		
+		txt += "	<td height='30px'>";
+		txt += "        <div class='frameControlsBar'>";
+		txt += "            <span class='label'>Title:</span>";
+		txt += "            <input id='pageTitle' type='text' value='"+pageObj.title+"'/>";
+		txt += "            <button class='basic_button' style='' onclick=\"ImagePickerDialog.show('#PagesFrameImagePicker', PagesFrame.onImageSelected);\">Insert Image</button>";
+//		txt += "            <button class='basic_button' style='' onclick=\"\">View Page</button>";
+		txt += "        </div>";
 		txt += "	</td>";
 							
-		txt += "	<td width='250px' style='height:100%; padding:5px'>";
+		txt += "	<td rowspan='2' width='250px' style='height:100%; padding:5px'>";
 																
 		txt += "		<div class='subframebox' style='height:100%;width:250px'>"		
 				
 		txt += "			<span class='title'>Page Settings</span>";																	
 
-//		txt += "            <fieldset><legend>Publish</legend>";
 		txt += "            <fieldset>";
-
+/*
 		txt += "			<div class='pageInfoLine'>";
 		txt += "            <span class='pageLabel'>Title:</span>";
 		txt += "            <span class='pageData'><input id='pageTitle' type=text value='"+pageObj.title+"'/></span>";
 		txt += "			</div>";
-
+*/
+/*
 		txt += "			<div class='pageInfoLine'>";
 		txt += "            <span class='pageLabel'>Slug:</span>";
 		txt += "            <span class='pageData' id='pageSlug'>"+pageObj.slug+"</span>";
-		txt += "			</div>";
-/*
-		txt += "			<div class='pageInfoLine'>";
-		txt += "            <span class='pageLabel'>Path:</span>";
-		txt += "            <span class='pageData'>"+path+"</span>";
 		txt += "			</div>";
 */
 		txt += "			<div class='pageInfoLine'>";
 		txt += "            <span class='pageLabel'>Status:</span>";
 		txt += "            <span class='pageData'>";
 																
-//		txt += "            <select id='pageStatusSelector' onchange='PagesFrame.updateStatusColor()'>";
 		txt += "            <select id='pageStatusSelector'>";
 		txt += "                <option value='Published'>Published</selected>";
 		txt += "                <option value='Draft'>Draft</selected>";
@@ -169,6 +163,15 @@ var PagesFrame = {
 		txt += "		</div>";											
 			
 		txt += "	</td>";
+		
+		txt += "<tr valign='top'>";
+		txt += "	<td>";
+		txt += "        <div style='margin-top:5px; margin-left:5px;'>";
+		txt += "		    <textarea id='pageContentEditor' name='pageContentEditor' style='width:100%; height:100%;'>"+pageObj.content+"</textarea>";
+		txt += "	    </div>";		
+		txt += "	</td>";
+		txt += "</tr>";
+		
 		txt += "</tr>";
 
 		txt += "</table>";
@@ -436,7 +439,7 @@ var PagesFrame = {
 		var template = $('#pageTemplate').val();		
 		var order = $('#pageOrder').val();		
 		var pageDepth = DataStore.getPageDepth(DataStore.m_currentPageID);
-		var slug = PagesSidebarFrame.encodeSlug(title) + '.html';
+		var slug = AthenaUtils.encodeSlug(title);
 		//var path = DataStore.getPagePath();
 		var ishome = 0;	
 			
@@ -527,13 +530,13 @@ var PagesFrame = {
 				
 				
 		});
-
+		/*
 		var ret = PagesFrame.ckEditor.ui.addButton( 'MyButton', {
 								label : 'My Dialog', 
 								click : function(){ImagePickerDialog.show('#PagesFrameImagePicker', PagesFrame.onImageSelected)}, 
 								icon: defines.root_url + 'images/insert_media_button.png' 
 		});
-		
+		*/
 	},
 		
 	// ////////////////////////////////////////////////////////////////////////////

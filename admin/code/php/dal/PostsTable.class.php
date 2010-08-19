@@ -22,6 +22,7 @@ class PostsTable {
 		  `created` datetime default NULL,
 		  `title` varchar(255) default NULL,
 		  `slug` varchar(255) default NULL,
+		  `path` varchar(255) default NULL,
 		  `canComment` tinyint(1) default '1',
 		  PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;";
@@ -95,6 +96,26 @@ class PostsTable {
 			$site_id, $content, $status, $title, $canComment, $slug, $post_id);
 		return DatabaseManager::update($sql);
     }
+
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	public static function getPostFromSlug($site_id, $path, $slug){
+		//Logger::debug("getPageFromSlug(site_id = $site_id, page_slug = $page_slug");	
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts WHERE slug = %s AND path = %s", $site_id, $slug, $path);		
+		$data = DatabaseManager::getSingleResult($sql);				
+		if (isset($data)){
+			return $data;
+		}
+		return null;
+	}
+	
+	
+	// /////////////////////////////////////////////////////////////////////////////////
+    
+    public static function updatePath($post_id, $site_id, $path){
+		$sql = DatabaseManager::prepare("UPDATE athena_%d_Posts SET path=%s WHERE id = %d", $site_id, $path, $post_id);
+		return DatabaseManager::update($sql);
+    }    
 
 	// /////////////////////////////////////////////////////////////////////////////////
 

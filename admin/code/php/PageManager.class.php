@@ -23,28 +23,47 @@ class PageManager {
 
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
-	public static function init($page_name){
+	public static function init($page_name, $page_path){
 
 		self::$url_root = 'http://' . $_SERVER['HTTP_HOST'];
 		
 		self::$domain = $_SERVER['HTTP_HOST'];		
 		//self::$page_slug = $_SERVER['REQUEST_URI'];
 		self::$page_slug = $page_name;
-				
+						
 		// Strip www..
 		self::$domain = str_replace('www.','',self::$domain);
-		
+				
 		$site = SitesTable::getSiteFromDomain(self::$domain);
 		
 		self::$site_id = $site['id'];
 		//self::$user_id = SecurityUtils::getCurrentUserID();
 		
+		$blogPage = PagesTable::getBlogpage(self::$site_id);
+		$blog_url = $blogPage['path'] . $blogPage['slug'];
+		$post_path = $blog_url . $page_path."/";
+
 		// Get the list of pages
 		self::$page_list = PagesTable::getPages(self::$site_id);
+
+		// Remove the blog url from the path, e.g.
+		// /blog/19/Aug/2010/danielle-and-jeff-wild-basin-lodge-wedding.html
+		// becomes
+		// /19/Aug/2010/danielle-and-jeff-wild-basin-lodge-wedding.html
+		$page_path = substr($page_path, (strlen($blog_url) - strlen('.html')));
 		
-		// Get the current page id
-		$page = PagesTable::getPageFromSlug(self::$site_id, self::$page_slug);
-				
+		// Match the page against all posts, to see if this is a request for a blog post page
+		$post = PostsTable::getPostFromSlug(self::$site_id, $page_path, self::$page_slug);
+		
+		if (isset($post)){
+			Logger::debug(">>>> THIS IS A POST!");
+			$page = $blogPage;
+		}
+		else {
+			// Get the current page id
+			$page = PagesTable::getPageFromSlug(self::$site_id, self::$page_slug);
+		}		
+								
 		if (!isset($page)){
 			$page = PagesTable::getHomepage(self::$site_id);
 		}
@@ -70,17 +89,20 @@ class PageManager {
 		
 		self::$theme_url_root = self::$url_root . '/admin/themes/' . $theme['theme_name'] ."/";
 		self::$theme_file_root = FILE_ROOT . 'admin/themes/' . $theme['theme_name'] ."/";
-		/*
+		
+	
+		
 		Logger::debug(">>>>>>>>>>");
 		Logger::debug("Request URI: " . $_SERVER['REQUEST_URI']);
 		Logger::debug("Host: " . $_SERVER['HTTP_HOST']);
 		Logger::debug("Domain: " . self::$domain);
 		Logger::debug("Page Slug: " . self::$page_slug);
+		Logger::debug("Page Path: " . $page_path);
 		Logger::debug("Theme URL root: " . self::$theme_url_root);
 		Logger::debug("Theme file root: " . self::$theme_file_root);
 		Logger::debug("Templeta File: " . self::$template_filename);
 		Logger::debug("Medi Root URL: " . self::$media_root_url);
-		*/
+		
 	}
 	
 	
@@ -103,13 +125,7 @@ class PageManager {
 			}
 		}			
 	}
-	
-	// ///////////////////////////////////////////////////////////////////////////////////////
-
-	public static function getBlogContent(){
-		echo "TBD";
-	}
-	
+		
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
 	public static function echoGoogleTracker($tracker_code){
@@ -225,6 +241,73 @@ class PageManager {
 		//Logger::debug("TBD");
 		// TBD
 	}
+	
+	// ///////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Blog functions
+	//
+	// ///////////////////////////////////////////////////////////////////////////////////////
+
+	public static function getPosts(){
+
+		$temp_list = PostsTable::getPosts(self::$site_id);
+
+		$post_list = array();
+		
+		foreach($temp_list as $post){
+			$post['last_edit'] = date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
+			$post['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
+			$post['tags'] = PostsTable::getPostTags(self::$site_id, $post['id']);
+			$post['categories'] = PostsTable::getPostCategories(self::$site_id, $post['id']);
+			$post_list[] = $post;
+		}
+		
+		return $post_list;
+	}
+	
+	// ///////////////////////////////////////////////////////////////////////////////////////
+	
+	public static function getPostLink(){
+
+		foreach(self::$post_list as $post){
+	
+			if ($page['id'] == $page_id){
+				return $page['path'] . $page['slug'];				
+			}
+
+		}
+	}
+	
+	/*
+	public static function getPost($post_id){
+	
+		$post = PostsTable::getPost(self::$site_id, $post_id);
+		
+		if (isset($post)){
+			$post['last_edit'] = date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
+			$post['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
+			$post['tags'] = PostsTable::getPostTags(self::$site_id, $post['id']);
+			$post['categories'] = PostsTable::getPostCategories(self::$site_id, $post['id']);
+		}
+		
+	}
+	*/
+	// ///////////////////////////////////////////////////////////////////////////////////////
+	
+	public static function getBlogContent(){
+		echo "TBD";
+	}
+
+	// ///////////////////////////////////////////////////////////////////////////////////////
+
+	public static function getCategories(){
+		echo "TBD";
+	}
+
+	public static function getTags(){
+		echo "TBD";
+	}
+	
 }
 
 ?>

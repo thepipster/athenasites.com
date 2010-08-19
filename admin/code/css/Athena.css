@@ -117,6 +117,25 @@ html, body {
 
 /* Main Frame Styles //////////////////////////////////////// */
 
+.frameControlsBar {
+	/*margin: 3px;*/
+	border: none;
+	margin-top: 5px;	
+	font-size: 16px;
+	height: 25px;
+	padding-top: 3px;
+}
+
+.frameControlsBar .label {
+	padding-left: 5px;
+	padding-right: 3px;
+}
+
+.frameControlsBar input {
+	width: 400px;
+	color: #032f5d;
+}
+
 .frameContents {
 	padding-left: 10px;
 }

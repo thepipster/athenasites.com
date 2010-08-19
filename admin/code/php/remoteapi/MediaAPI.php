@@ -203,13 +203,18 @@ function makeTextSafe($content){
 function makeHtmlSafe($content){
 
 	// Json converts single slashes to quadruple slashes
-	$tags = array("\\\\\\\\");
-	$replace = "\\";
-	$safe_content = str_ireplace($tags, $replace, $content);
+//	$tags = array("\\\\\\\\");
+//	$tags = array("\\\\");
+//	$replace = "\\";
+//	$safe_content = str_ireplace($tags, $replace, $content);
 
 	$tags = array("\\n", "\\r");
 	$replace = '';
-	$safe_content = str_ireplace($tags, $replace, $safe_content);
+	$safe_content = str_ireplace($tags, $replace, $content);
+
+
+	$safe_content = stripslashes($safe_content);
+
 
 	//$safe_content = htmlspecialchars($safe_content, ENT_QUOTES);
 	//$safe_content = nl2br($content);
@@ -220,6 +225,34 @@ function makeHtmlSafe($content){
 	return $safe_content;
 }
 
+function encodeTitleAsSlug($post_title){
+
+	// Strip any new lines, just in case
+	$tags = array("\\n", "\\r");
+	$replace = '';
+	$safe_slug = str_ireplace($tags, $replace, $post_title);
+
+	// Replace space with dashes
+	$tags = array(" ");
+	$replace = '-';
+	$safe_slug = str_ireplace($tags, $replace, $safe_slug);
+	
+	// Strip any special characters
+    $tags = array('!', '*', "'", "(", ")", ";", ":", "@", "&", "=", "+", "$", ",", "/", "?", "%", "#", "[", "]");
+    //$entities = array('%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F', '%25', '%23', '%5B', '%5D');
+	$replace = '';
+    $safe_slug = str_replace($tags, $replace, $safe_slug);	
+    
+    // Encode anyting thats left
+    $safe_slug = urlencode($safe_slug);
+
+	// Add html extension
+	$safe_slug = $safe_slug . '.html';
+	
+	$safe_slug = strtolower($safe_slug);
+	
+	return $safe_slug;
+}
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -296,7 +329,6 @@ function buildPagePath($page_id, $site_id, $path_array){
 //
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-
 function deletePost($site_id, $post_id){
 
 	//Logger::debug("deletePage($site_id, $page_id)");
@@ -314,15 +346,26 @@ function deletePost($site_id, $post_id){
 
 function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_comment){
 	
+	Logger::debug($slug);
+	
 	$user_id = SecurityUtils::getCurrentUserID();
 			
-	PostsTable::update($site_id, $post_id, makeHtmlSafe($content), $status, $title, $can_comment, $slug);
-		
+	PostsTable::update($site_id, $post_id, makeHtmlSafe($content), $status, $title, $can_comment, encodeTitleAsSlug($title));
+			
 	$post = PostsTable::getPost($site_id, $post_id);
+
+	$day = date("d", strtotime($post['created']));
+	$month = date("M", strtotime($post['created']));
+	$year = date("Y", strtotime($post['created']));
+		
+	$path = "/$day/$month/$year/";
+	PostsTable::updatePath($post_id, $site_id, $path);
 
 	if (isset($post)){
 		$post['last_edit'] = date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
 		$post['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
+		$post['tags'] = PostsTable::getPostTags($site_id, $post['id']);
+		$post['categories'] = PostsTable::getPostCategories($site_id, $post['id']);
 	}
 
 	$msg['cmd'] = "addPost";
@@ -340,13 +383,22 @@ function addPost($site_id, $title, $content, $status, $slug, $can_comment){
 	//$path = getPath($site_id, $page_id);
 	$path = '';
 	
-	$post_id = PostsTable::create($site_id, $user_id, makeHtmlSafe($content), $status, $title, $can_comment, $slug);
+	$post_id = PostsTable::create($site_id, $user_id, makeHtmlSafe($content), $status, $title, $can_comment, encodeTitleAsSlug($title));
 		
 	$post = PostsTable::getPost($site_id, $post_id);
-	
+		
+	$day = date("d", strtotime($post['created']));
+	$month = date("M", strtotime($post['created']));
+	$year = date("Y", strtotime($post['created']));
+		
+	$path = "/$day/$month/$year/";
+	PostsTable::updatePath($post_id, $site_id, $path);
+			
 	if (isset($post)){
 		$post['last_edit'] = date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
 		$post['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
+		$post['tags'] = PostsTable::getPostTags($site_id, $post['id']);
+		$post['categories'] = PostsTable::getPostCategories($site_id, $post['id']);
 	}
 			
 	$msg['cmd'] = "addPost";
@@ -444,7 +496,7 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
 	
 	$safe_content = makeHtmlSafe($content);
 		
-	PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $title, $tamplate_name, $slug, $path, $order, $ishome);
+	PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $title, $tamplate_name, encodeTitleAsSlug($title), $path, $order, $ishome);
 		
 	$page = PagesTable::getPage($site_id, $page_id);
 	if (isset($page)){
@@ -476,7 +528,7 @@ function addPage($site_id, $title, $parent_page_id, $content, $status, $tamplate
 	
 	$safe_content = makeHtmlSafe($content);
 		
-	$page_id = PagesTable::create($user_id, $site_id, $parent_page_id, $safe_content, $status, $title, $tamplate_name, $slug, $path, $order, $ishome);
+	$page_id = PagesTable::create($user_id, $site_id, $parent_page_id, $safe_content, $status, $title, $tamplate_name, encodeTitleAsSlug($title), $path, $order, $ishome);
 		
 	$page = PagesTable::getPage($site_id, $page_id);
 	if (isset($page_data)){
@@ -603,9 +655,7 @@ function getAll($site_id){
 		$temp['categories'] = PostsTable::getPostCategories($site_id, $post['id']);
 		$post_data[] = $temp;
 	}	
-	
-	Logger::dump($post_data);
-		
+			
 	$media_data = array();
 	foreach ($media_list as $media){
 		$temp = $media;
@@ -627,8 +677,6 @@ function getAll($site_id){
 	// Get the tag list
 	$tag_list = PostsTable::getTags($site_id);
 	$cat_list = PostsTable::getCategories($site_id);
-
-	Logger::dump($tag_list);
 						
 	$msg = array();	
 	$msg['cmd'] = 'getAll';

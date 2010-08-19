@@ -91,7 +91,7 @@ var PostsSidebarFrame = {
 
 	addPost : function(){
 		var title = 'New post ' + (DataStore.m_postList.length+1);
-		var postSlug = PostsSidebarFrame.encodeSlug(title) + '.html';
+		var postSlug = AthenaUtils.encodeSlug(title);
 		var order = 0;
 		var isHome = 0;
 		MediaAPI.addPost(DataStore.m_siteID, title, '', 'Draft', 1, postSlug, PostsSidebarFrame.onPostAdded);

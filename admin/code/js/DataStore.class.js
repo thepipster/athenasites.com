@@ -327,7 +327,7 @@ var DataStore = {
 			if (DataStore.m_pageList[i].id == pageObj.id){
 			
 				DataStore.m_pageList[i].id = pageObj.id;
-				DataStore.m_pageList[i].title = AthenaUtils.htmlEncode(pageObj.title);
+				DataStore.m_pageList[i].title = AthenaUtils.encodeTitle(pageObj.title);
 				DataStore.m_pageList[i].user_id = pageObj.user_id;
 				DataStore.m_pageList[i].content = pageObj.content;
 				DataStore.m_pageList[i].status = pageObj.status;
@@ -378,7 +378,7 @@ var DataStore = {
 	
 		var temp = new Object();
 		temp.id = pageObj.id;
-		temp.title = AthenaUtils.htmlEncode(pageObj.title);
+		temp.title = AthenaUtils.encodeTitle(pageObj.title);
 		temp.user_id = pageObj.user_id;
 		temp.content = pageObj.content;
 		temp.status = pageObj.status;
@@ -404,13 +404,14 @@ var DataStore = {
 	
 		var temp = new Object();
 		temp.id = postObj.id;
-		temp.title = AthenaUtils.htmlEncode(postObj.title);
+		temp.title = AthenaUtils.encodeTitle(postObj.title);
 		temp.user_id = postObj.user_id;
-		temp.content = postObj.content;
+		temp.content = AthenaUtils.decodeContent(postObj.content);
 		temp.status = postObj.status;
 		temp.last_edit = postObj.last_edit;
 		temp.created = postObj.created;
 		temp.slug = postObj.slug;
+		temp.path = postObj.path;
 		temp.canComment = postObj.canComment;
 		temp.tags = postObj.tags;
 		temp.categories = postObj.categories;
@@ -434,15 +435,16 @@ var DataStore = {
 		
 		for (var i=0; i<DataStore.m_postList.length; i++){
 			if (DataStore.m_postList[i].id == postObj.id){
-			
+							
 				DataStore.m_postList[i].id = postObj.id;
-				DataStore.m_postList[i].title = AthenaUtils.htmlEncode(postObj.title);
+				DataStore.m_postList[i].title = AthenaUtils.encodeTitle(postObj.title);
 				DataStore.m_postList[i].user_id = postObj.user_id;
-				DataStore.m_postList[i].content = postObj.content;
+				DataStore.m_postList[i].content = AthenaUtils.decodeContent(postObj.content);
 				DataStore.m_postList[i].status = postObj.status;
 				DataStore.m_postList[i].last_edit = postObj.last_edit;
 				DataStore.m_postList[i].created = postObj.created;
 				DataStore.m_postList[i].slug = postObj.slug;
+				DataStore.m_postList[i].path = postObj.path;
 				DataStore.m_postList[i].canComment = postObj.canComment;
 				DataStore.m_postList[i].tags = postObj.tags;
 				DataStore.m_postList[i].categories = postObj.categories;

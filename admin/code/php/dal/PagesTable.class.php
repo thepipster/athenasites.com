@@ -123,6 +123,18 @@ class PagesTable {
 
 	// /////////////////////////////////////////////////////////////////////////////////
 
+	public static function getBlogpage($site_id){
+		//Logger::debug("getPage(site_id = $site_id, page_id = $page_id");	
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages WHERE is_blogpage = 1", $site_id);		
+		$data = DatabaseManager::getResults($sql);				
+		if (isset($data[0])){
+			return $data[0];
+		}
+		return null;
+	}
+	
+	// /////////////////////////////////////////////////////////////////////////////////
+
 	public static function getPageFromSlug($site_id, $page_slug){
 		//Logger::debug("getPageFromSlug(site_id = $site_id, page_slug = $page_slug");	
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages WHERE slug = %s", $site_id, $page_slug);		

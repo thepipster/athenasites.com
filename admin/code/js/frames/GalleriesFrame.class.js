@@ -25,9 +25,10 @@ var GalleriesFrame = {
 
 		txt += "<table border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>";
 
-		txt += "<tr valign='top' height='40%' width='100%'>";
+//		txt += "<tr valign='top' height='40%' width='100%'>";
+		txt += "<tr valign='top' height='250px' width='100%' id='galleryRow'>";
 		
-		txt += "	<td class='frameContents'>";
+		txt += "	<td class='frame_controls_bar'>";
 		txt += "        <span class='frameTitle'>Gallery Contents</span>";
 		txt += "        <div align='left' id='apollo_gallery_contents'></div>";
 		txt += "	</td>";
@@ -44,7 +45,8 @@ var GalleriesFrame = {
 
 		txt += "</tr>";
 
-		txt += "<tr valign='top' height='60%' width='100%'>";
+//		txt += "<tr valign='top' height='60%' width='100%'>";
+		txt += "<tr valign='top' width='100%'>";
 		
 		txt += "	<td class='frameContents'>";
 		txt += "        <span class='frameTitle'>Images</span>";
@@ -61,6 +63,8 @@ var GalleriesFrame = {
 
 		GalleriesFrame.paintGallerySlots();	
 		FilesFrame.paintImages('#apollo_image_contents');
+		
+		//$('#galleryRow').height( $('#apollo_gallery_contents').height() );
 				
 	},
 	

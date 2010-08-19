@@ -38,7 +38,7 @@
 	width: 66px;
 	height: 60px;
 	background-color: #fffde5;
-	display: block;
+	display: inline-block;
 	float: left;
 }
 
