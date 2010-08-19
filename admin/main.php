@@ -342,7 +342,7 @@ var ssMain = {
 	VIEW_ACCOUNT : 8,
 	VIEW_EDITFILES : 9,
 	
-	view : 4,
+	view : 1,
 		
 	pageTracker : '',
 	

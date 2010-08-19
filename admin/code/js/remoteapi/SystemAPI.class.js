@@ -57,9 +57,7 @@ var SystemAPI = {
 	* Check to see if the user exists, if so then log that user in
 	*/
 	checkUser : function(email, pass, callback){
-	
-		AthenaDialog.showLoading();
-		
+			
 		var paras = {cmd : 'checkUser', em: email, ps: pass};
 
 		$.ajax({
@@ -77,9 +75,7 @@ var SystemAPI = {
 	* Check the response from the server, and load data if login is good
 	*/
 	onUserChecked : function(ret, callback){
-		
-		AthenaDialog.clearLoading();
-		
+				
 		if (ret.result == 'ok'){	
 			if (ret.data == 'true'){
 				callback(true);
