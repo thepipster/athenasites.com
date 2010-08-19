@@ -421,10 +421,6 @@ var DataStore = {
 		if (temp.categories == undefined){
 			temp.categories = new Array();
 		}
-
-		for (var i=0; i<temp.tags.length; i++){
-			alert(temp.tags);
-		}
 												
 		DataStore.m_postList.push(temp);
 	},

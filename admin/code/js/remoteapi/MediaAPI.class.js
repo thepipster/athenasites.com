@@ -214,7 +214,7 @@ var MediaAPI = {
 
 	addTag : function(siteID, postID, postTag, callback){
 
-		AthenaDialog.showLoading("Adding tag");
+		//AthenaDialog.showLoading("Adding tag");
 
 		var paras = {cmd: 'addTag', site_id: siteID, post_id: postID, tag: postTag};
 				
@@ -228,7 +228,7 @@ var MediaAPI = {
 	
 	onTagAdded : function(ret, callback){
 
-		AthenaDialog.clearLoading();
+		//AthenaDialog.clearLoading();
 
 		if (ret.result == "ok"){		
 			callback(ret.data.post_id, ret.data.tag);			
@@ -242,7 +242,7 @@ var MediaAPI = {
 
 	addCategory : function(siteID, postID, postCategory, callback){
 
-		AthenaDialog.showLoading("Adding category");
+		//AthenaDialog.showLoading("Adding category");
 
 		var paras = {cmd: 'addCategory', site_id: siteID, post_id: postID, category: postCategory};
 				
@@ -256,7 +256,7 @@ var MediaAPI = {
 	
 	onCategoryAdded : function(ret, callback){
 
-		AthenaDialog.clearLoading();
+		//AthenaDialog.clearLoading();
 
 		if (ret.result == "ok"){		
 			callback(ret.data.post_id, ret.data.category);			
