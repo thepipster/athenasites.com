@@ -1,7 +1,0 @@
-<?php
-define("database_user", "mike");
-define("database_pass", "mike76");
-define("database_name", "athenasites");
-define("database_host", "localhost");
-define("database_verbose", false);
-?>
