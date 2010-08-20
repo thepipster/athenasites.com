@@ -338,7 +338,7 @@ class PageManager {
 	// ///////////////////////////////////////////////////////////////////////////////////////
 	
 	public static function getPostLink($post){
-		return self::$blog_base_url . $post['path'] . $post['slug'];
+		return "http://" . $_SERVER['HTTP_HOST'] . self::$blog_base_url . $post['path'] . $post['slug'];
 	}
 	
 	// ///////////////////////////////////////////////////////////////////////////////////////
