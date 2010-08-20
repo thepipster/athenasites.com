@@ -204,10 +204,15 @@ a {
 	padding: 0px;
 	margin: 0px;
 }
+#navigation .menuItem:hover {color: #9097b2;}
 
-#navigation .menuItem:hover {
-	color: #9097b2;
+#navigation .menuTagItem {
+	font-size: 10px;
+	color: #404040;
+	padding: 0px;
+	margin: 0px;
 }
+#navigation .menuTagItem:hover {color: #9097b2;}
 
 #menuContainer ul li {
 	list-style: none;

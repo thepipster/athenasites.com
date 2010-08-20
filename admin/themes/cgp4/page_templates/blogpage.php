@@ -35,12 +35,12 @@
 			<span class='blogDate'><?= PageManager::getPostDate($post); ?></span>
 		
 			<div class="storycontent">
-				<?= PageManager::getBlogShortContent($post); ?>
+				<?= PageManager::getBlogContent($post); ?>
 			</div>
 			
 			<p>
-				Categories: <?= PageManager::getPostCategories($post); ?><br/>
-				Tags: <?= PageManager::getPostTags($post); ?><br/>
+				Categories: <?= PageManager::getCategories($post); ?><br/>
+				Tags: <?= PageManager::getTags($post); ?><br/>
 				<?php //wp_link_pages(); ?>
 				<?php //comments_popup_link(__('Comments (0)'), __('Comments (1)'), __('Comments (%)')); ?><br/>
 				<?php //edit_post_link(__('Edit This')); ?><br/>

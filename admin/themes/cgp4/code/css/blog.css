@@ -11,14 +11,6 @@ Modifications by Mike Pritchard || http://blog.thepipster.com
 This is the blog theme for the integrated blog on Charlotte Geary Photography v3
 */
 
-#navigation .menuTagItem {
-	font-size: 10px;
-	color: #404040;
-	margin-right: 25px;
-	z-index: 10;
-	font-weight: normal;
-}
-
 #blogPage {
 	font-family: century gothic, optima, Lucida Sans Unicode, Verdana, Tahoma, Trebuchet MS, Helvetica, Arial;
 	font-size: 12px !important;

@@ -124,17 +124,46 @@ function getTopParentPageTitle($post){
 									if ($parent_page_id == 0 && $title != 'Home'){
 											
 										print("<li>");
+										
 										if ($is_blogpage){
+										
 											$link = PageManager::getPageLink($page_id);
-											print("    <a href='$link' onclick=''><span class='menuHead_NonAccordian'>$title</span></a>");									
+											print("    <a href='$link' onclick=''><span class='menuHead_NonAccordian'>$title</span></a>");
+																																	
+											if (PageManager::$is_blogpage){
+											
+												$catList = PostsTable::getCategories(PageManager::$site_id);
+
+												print("<ul>");
+												foreach($catList as $cat){
+													$cat_slug = StringUtils::encodeSlug($cat, '');
+													$link = PageManager::$blog_url . "?category=" . $cat_slug;
+													echo "<li><a href='{$link}'><span class='menuItem' id='blogMenuItem_{$cat_slug}'>{$cat_slug}</span></a></li>";
+												}											
+												print("</ul>");	
+												
+												$tagList = PostsTable::getTags(PageManager::$site_id);
+												
+												print("<div class='spacer'></div>");
+												
+												foreach($tagList as $tag){
+													$tag_slug = StringUtils::encodeSlug($tag, '');
+													$link = PageManager::$blog_url . "?tag=" . $tag_slug;
+													echo "<li><a href='{$link}'><span class='menuTagItem' id='blogMenuItem_{$tag_slug}'>{$tag_slug}</span></a></li>";
+													// <li><a href='/blog/?tag=air-force-academy'><span class='menuTagItem' id='blogMenuItem_air-force-academy'>air force academy</span></a></li>
+												}											
+												
+												
+												
+											}								
 										}
 										else {
 											print("    <span class='menuHead'>$title</span>");									
 										}
-										print("    <ul>");
-																																								
+										
 										
 										// Get child pages 
+										print("    <ul>");																																																		
 										foreach(PageManager::$page_list as $child){
 											
 											if ($child['parent_page_id'] == $page_id){
@@ -153,9 +182,9 @@ function getTopParentPageTitle($post){
 													print("<li><a href='$child_link' onclick=''><span class='menuItem' id='$child_id'>$child_title</span></a></li>");
 												}											
 											}
-										}
-																			
-										print("    </ul>");									
+										}																			
+										print("    </ul>");		
+																	
 										print("</li>");
 										
 										print("<div class='spacer'></div>");

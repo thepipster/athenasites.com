@@ -99,6 +99,30 @@ class PostsTable {
 
 	// /////////////////////////////////////////////////////////////////////////////////
 
+	public static function delete($site_id, $post_id){
+		$sql = DatabaseManager::prepare("DELETE FROM athena_%d_Posts WHERE id = %d", $site_id, $post_id);
+		return DatabaseManager::submitQuery($sql);
+	}
+	
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	public static function getPostsFromTag($site_id, $tag){
+		Logger::debug("getPostsFromTag($site_id, $tag)");
+		$tag_id = self::getTagID($site_id, $tag);
+		$sql = DatabaseManager::prepare("SELECT p.* FROM athena_%d_Posts p INNER JOIN athena_%d_PostToTags pt WHERE pt.tag_id = %d AND pt.post_id = p.id", $site_id, $site_id, $tag_id);		
+		return DatabaseManager::getResults($sql);				
+	}
+
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	public static function getPostsFromCategory($site_id, $category){
+		$cat_id = self::getCategoryID($site_id, $category);
+		$sql = DatabaseManager::prepare("SELECT p.* FROM athena_%d_Posts p INNER JOIN athena_%d_PostToCategories pc WHERE pc.category_id = %d AND pc.post_id = p.id", $site_id, $site_id, $cat_id);		
+		return DatabaseManager::getResults($sql);				
+	}
+		
+	// /////////////////////////////////////////////////////////////////////////////////
+
 	public static function getPostFromSlug($site_id, $path, $slug){
 		//Logger::debug("getPageFromSlug(site_id = $site_id, page_slug = $page_slug");	
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts WHERE slug = %s AND path = %s", $site_id, $slug, $path);		

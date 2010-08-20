@@ -41,7 +41,7 @@ switch($cmd){
 
 	case "deletePost":
 		$post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
-		deletePage($site_id, $page_id);
+		deletePost($site_id, $post_id);
 		break;
 		
 	case "updatePost":
@@ -272,10 +272,10 @@ function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_c
 	$post = PostsTable::getPost($site_id, $post_id);
 
 	$day = date("d", strtotime($post['created']));
-	$month = date("M", strtotime($post['created']));
+	$month = date("n", strtotime($post['created']));
 	$year = date("Y", strtotime($post['created']));
 		
-	$path = "/$day/$month/$year/";
+	$path = "/$year/$month/$day/";
 	PostsTable::updatePath($post_id, $site_id, $path);
 
 	if (isset($post)){
@@ -305,10 +305,10 @@ function addPost($site_id, $title, $content, $status, $slug, $can_comment){
 	$post = PostsTable::getPost($site_id, $post_id);
 		
 	$day = date("d", strtotime($post['created']));
-	$month = date("M", strtotime($post['created']));
+	$month = date("n", strtotime($post['created']));
 	$year = date("Y", strtotime($post['created']));
 		
-	$path = "/$day/$month/$year/";
+	$path = "/$year/$month/$day/";
 	PostsTable::updatePath($post_id, $site_id, $path);
 			
 	if (isset($post)){
