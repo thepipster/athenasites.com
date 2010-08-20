@@ -174,89 +174,6 @@ switch($cmd){
 // ///////////////////////////////////////////////////////////////////////////////////////
 
 /**
-* Make basic text safe, strip out anything that isn't (e.g. for tags and categories)
-*/ 
-function makeTextSafe($content){
-
-	$tags = array("\\n", "\\r", "\\'", "\\\"");
-	$replace = '';
-	$safe_content = str_ireplace($tags, $replace, $content);
-	$safe_content = stripslashes(stripslashes($safe_content));
-
-	// Remove all remaining slashes
-	$tags = array("\\");
-	$safe_content = str_ireplace($tags, $replace, $safe_content);
-
-	// Remove all remaining quotes
-	$tags = array("\'", "\"");
-	$safe_content = str_ireplace($tags, $replace, $safe_content);
-		
-	//Logger::debug(">>> content = $content");
-	//Logger::debug(">>> safe content = $safe_content");
-
-	return $safe_content;
-}
-
-/**
-* Make content that is supposed to be HTML safe (for posts and pages for example)
-*/
-function makeHtmlSafe($content){
-
-	// Json converts single slashes to quadruple slashes
-//	$tags = array("\\\\\\\\");
-//	$tags = array("\\\\");
-//	$replace = "\\";
-//	$safe_content = str_ireplace($tags, $replace, $content);
-
-	$tags = array("\\n", "\\r");
-	$replace = '';
-	$safe_content = str_ireplace($tags, $replace, $content);
-
-
-	$safe_content = stripslashes($safe_content);
-
-
-	//$safe_content = htmlspecialchars($safe_content, ENT_QUOTES);
-	//$safe_content = nl2br($content);
-	
-	//Logger::debug(">>> content = $content");
-	//Logger::debug(">>> safe content = $safe_content");
-
-	return $safe_content;
-}
-
-function encodeTitleAsSlug($post_title){
-
-	// Strip any new lines, just in case
-	$tags = array("\\n", "\\r");
-	$replace = '';
-	$safe_slug = str_ireplace($tags, $replace, $post_title);
-
-	// Replace space with dashes
-	$tags = array(" ");
-	$replace = '-';
-	$safe_slug = str_ireplace($tags, $replace, $safe_slug);
-	
-	// Strip any special characters
-    $tags = array('!', '*', "'", "(", ")", ";", ":", "@", "&", "=", "+", "$", ",", "/", "?", "%", "#", "[", "]");
-    //$entities = array('%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F', '%25', '%23', '%5B', '%5D');
-	$replace = '';
-    $safe_slug = str_replace($tags, $replace, $safe_slug);	
-    
-    // Encode anyting thats left
-    $safe_slug = urlencode($safe_slug);
-
-	// Add html extension
-	$safe_slug = $safe_slug . '.html';
-	
-	$safe_slug = strtolower($safe_slug);
-	
-	return $safe_slug;
-}
-
-// ///////////////////////////////////////////////////////////////////////////////////////
-
-/**
 * If a page title has changed, then we need to update its path and all of its children
 */
 function updatePageAndChildPaths($site_id, $page_id){
@@ -350,7 +267,7 @@ function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_c
 	
 	$user_id = SecurityUtils::getCurrentUserID();
 			
-	PostsTable::update($site_id, $post_id, makeHtmlSafe($content), $status, $title, $can_comment, encodeTitleAsSlug($title));
+	PostsTable::update($site_id, $post_id, StringUtils::makeHtmlSafe($content), $status, $title, $can_comment, StringUtils::encodeSlug($title));
 			
 	$post = PostsTable::getPost($site_id, $post_id);
 
@@ -383,7 +300,7 @@ function addPost($site_id, $title, $content, $status, $slug, $can_comment){
 	//$path = getPath($site_id, $page_id);
 	$path = '';
 	
-	$post_id = PostsTable::create($site_id, $user_id, makeHtmlSafe($content), $status, $title, $can_comment, encodeTitleAsSlug($title));
+	$post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, $title, $can_comment, StringUtils::encodeSlug($title));
 		
 	$post = PostsTable::getPost($site_id, $post_id);
 		
@@ -413,7 +330,7 @@ function addPost($site_id, $title, $content, $status, $slug, $can_comment){
 
 function addCategory($site_id, $post_id, $category){
 
-	$safecat = makeTextSafe($category);
+	$safecat = StringUtils::makeTextSafe($category);
 	
 	$category_id = PostsTable::addCategory($site_id, $post_id, $safecat);
 					
@@ -428,7 +345,7 @@ function addCategory($site_id, $post_id, $category){
 
 function addTag($site_id, $post_id, $tag){
 
-	$safetag = makeTextSafe($tag);
+	$safetag = StringUtils::makeTextSafe($tag);
 	
 	$tag_id = PostsTable::addTag($site_id, $post_id, $safetag);
 
@@ -494,9 +411,9 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
 	$user_id = SecurityUtils::getCurrentUserID();
 	$path = ''; //getPath($site_id, $page_id);
 	
-	$safe_content = makeHtmlSafe($content);
+	$safe_content = StringUtils::makeHtmlSafe($content);
 		
-	PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $title, $tamplate_name, encodeTitleAsSlug($title), $path, $order, $ishome);
+	PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $title, $tamplate_name, StringUtils::encodeSlug($title), $path, $order, $ishome);
 		
 	$page = PagesTable::getPage($site_id, $page_id);
 	if (isset($page)){
@@ -526,9 +443,9 @@ function addPage($site_id, $title, $parent_page_id, $content, $status, $tamplate
 	//$path = getPath($site_id, $page_id);
 	$path = '';
 	
-	$safe_content = makeHtmlSafe($content);
+	$safe_content = StringUtils::makeHtmlSafe($content);
 		
-	$page_id = PagesTable::create($user_id, $site_id, $parent_page_id, $safe_content, $status, $title, $tamplate_name, encodeTitleAsSlug($title), $path, $order, $ishome);
+	$page_id = PagesTable::create($user_id, $site_id, $parent_page_id, $safe_content, $status, $title, $tamplate_name, StringUtils::encodeSlug($title), $path, $order, $ishome);
 		
 	$page = PagesTable::getPage($site_id, $page_id);
 	if (isset($page_data)){

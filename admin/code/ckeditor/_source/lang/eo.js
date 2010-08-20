@@ -55,7 +55,7 @@ CKEDITOR.lang['eo'] =
 	subscript		: 'Subskribo',
 	superscript		: 'Superskribo',
 	horizontalrule	: 'Enmeti Horizonta Linio',
-	pagebreak		: 'Insert Page Break for Printing', // MISSING
+	pagebreak		: 'Insert page break', // MISSING
 	unlink			: 'Forigi Ligilon',
 	undo			: 'Malfari',
 	redo			: 'Refari',

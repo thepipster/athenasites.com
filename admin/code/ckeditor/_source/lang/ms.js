@@ -55,7 +55,7 @@ CKEDITOR.lang['ms'] =
 	subscript		: 'Subscript',
 	superscript		: 'Superscript',
 	horizontalrule	: 'Masukkan Garisan Membujur',
-	pagebreak		: 'Insert Page Break for Printing', // MISSING
+	pagebreak		: 'Insert page break', // MISSING
 	unlink			: 'Buang Sambungan',
 	undo			: 'Batalkan',
 	redo			: 'Ulangkan',

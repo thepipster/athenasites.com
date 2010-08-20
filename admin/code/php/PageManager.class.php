@@ -19,6 +19,9 @@ class PageManager {
 	public static $theme_file_root;
 	public static $template_filename;
 
+	public static $blog_url;
+	public static $blog_base_url;
+
 	public static $page_list;
 
 	// ///////////////////////////////////////////////////////////////////////////////////////
@@ -34,26 +37,27 @@ class PageManager {
 		// Strip www..
 		self::$domain = str_replace('www.','',self::$domain);
 				
-		$site = SitesTable::getSiteFromDomain(self::$domain);
-		
+		$site = SitesTable::getSiteFromDomain(self::$domain);		
 		self::$site_id = $site['id'];
-		//self::$user_id = SecurityUtils::getCurrentUserID();
-		
-		$blogPage = PagesTable::getBlogpage(self::$site_id);
-		$blog_url = $blogPage['path'] . $blogPage['slug'];
-		$post_path = $blog_url . $page_path."/";
 
 		// Get the list of pages
 		self::$page_list = PagesTable::getPages(self::$site_id);
+
+		//self::$user_id = SecurityUtils::getCurrentUserID();
+
+		// Get blog info....				
+		$blogPage = PagesTable::getBlogpage(self::$site_id);
+		self::$blog_url = $blogPage['path'] . $blogPage['slug'];
+		$post_path = $blog_url . $page_path."/";
 
 		// Remove the blog url from the path, e.g.
 		// /blog/19/Aug/2010/danielle-and-jeff-wild-basin-lodge-wedding.html
 		// becomes
 		// /19/Aug/2010/danielle-and-jeff-wild-basin-lodge-wedding.html
-		$page_path = substr($page_path, (strlen($blog_url) - strlen('.html')));
+		self::$blog_base_url = substr($page_path, (strlen(self::$blog_url) - strlen('.html')));
 		
 		// Match the page against all posts, to see if this is a request for a blog post page
-		$post = PostsTable::getPostFromSlug(self::$site_id, $page_path, self::$page_slug);
+		$post = PostsTable::getPostFromSlug(self::$site_id, self::$blog_base_url, self::$page_slug);
 		
 		if (isset($post)){
 			Logger::debug(">>>> THIS IS A POST!");
@@ -97,7 +101,7 @@ class PageManager {
 		Logger::debug("Host: " . $_SERVER['HTTP_HOST']);
 		Logger::debug("Domain: " . self::$domain);
 		Logger::debug("Page Slug: " . self::$page_slug);
-		Logger::debug("Page Path: " . $page_path);
+		Logger::debug("Blog base path: " . self::$blog_base_url);
 		Logger::debug("Theme URL root: " . self::$theme_url_root);
 		Logger::debug("Theme file root: " . self::$theme_file_root);
 		Logger::debug("Templeta File: " . self::$template_filename);
@@ -248,66 +252,114 @@ class PageManager {
 	//
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
+	public static $post_list = '';
+	
 	public static function getPosts(){
 
 		$temp_list = PostsTable::getPosts(self::$site_id);
 
-		$post_list = array();
+		self::$post_list = array();
 		
 		foreach($temp_list as $post){
 			$post['last_edit'] = date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
 			$post['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
 			$post['tags'] = PostsTable::getPostTags(self::$site_id, $post['id']);
 			$post['categories'] = PostsTable::getPostCategories(self::$site_id, $post['id']);
-			$post_list[] = $post;
+			self::$post_list[] = $post;
 		}
 		
-		return $post_list;
+		return self::$post_list;
 	}
-	
+
 	// ///////////////////////////////////////////////////////////////////////////////////////
-	
-	public static function getPostLink(){
 
-		foreach(self::$post_list as $post){
-	
-			if ($page['id'] == $page_id){
-				return $page['path'] . $page['slug'];				
-			}
-
-		}
-	}
-	
-	/*
-	public static function getPost($post_id){
-	
-		$post = PostsTable::getPost(self::$site_id, $post_id);
-		
-		if (isset($post)){
-			$post['last_edit'] = date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
-			$post['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
-			$post['tags'] = PostsTable::getPostTags(self::$site_id, $post['id']);
-			$post['categories'] = PostsTable::getPostCategories(self::$site_id, $post['id']);
-		}
-		
-	}
+	/**
+	* Grab a post from the stored post list by post_id
 	*/
+	private static function getStoredPost($post_id){
+		foreach(self::$post_list as $post){	
+			if ($post['id'] == $post_id){
+				return $post;				
+			}
+		}
+		return null;
+	}
+		
 	// ///////////////////////////////////////////////////////////////////////////////////////
 	
-	public static function getBlogContent(){
-		echo "TBD";
+	public static function getPostLink($post){
+		return self::$blog_base_url . $post['path'] . $post['slug'];
+	}
+	
+	// ///////////////////////////////////////////////////////////////////////////////////////
+
+	public static function getPostDate($post){
+		//August 19, 2010
+		return date("F j, Y", strtotime($post['created']));
+	}
+	
+	// ///////////////////////////////////////////////////////////////////////////////////////
+	
+	public static function getBlogShortContent($post){
+		
+		$content = stripslashes($post['content']);
+		
+		$s_pos = strpos($content, '<div class="apolloPageBreak"');
+		$i_pos = strpos($content, ">", $s_pos);
+		$e_pos = strpos($content, "</div>", $i_pos);
+		
+		$more_text = substr($content, $i_pos+1, ($e_pos-$i_pos-1));
+		//Logger::debug(">>> Pos $i_pos - $e_pos");
+		Logger::debug(">>> More content = " . $more_text);
+		
+		$content = substr($content, 0, $s_pos);
+		
+		$post_link = self::getPostLink($post);
+		
+		// Add the more link back in
+		$content .= "<p><a href='$post_link' class='apolloPageBreak'>$more_text</a></p>";
+		
+		return $content;
 	}
 
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
-	public static function getCategories(){
-		echo "TBD";
+	/**
+	* Get a csv list of categories for this post, which are links
+	*/ 
+	public static function getPostCategories($post){
+		$cats = $post['categories'];
+		$cat_str = '';
+		for($i=0; $i<count($cats); $i++){
+			if ($i != 0){ $cat_str .= ', ';}
+			$link = self::$blog_url . "/tag/" . StringUtils::encodeSlug($cats[$i], '');
+			$cat_str .= "<a href='$link'>".$cats[$i]."</a>";
+		}
+		return $cat_str;
 	}
 
-	public static function getTags(){
-		echo "TBD";
+	// ///////////////////////////////////////////////////////////////////////////////////////
+
+	public static function getPostTags($post){		
+		
+		$tags = $post['tags'];
+		
+		$tag_str = '';
+		for($i=0; $i<count($tags); $i++){		
+			if ($i != 0){ $tag_str .= ', ';}
+			$link = self::$blog_url . "/tag/" . StringUtils::encodeSlug($tags[$i], '');
+			$tag_str .= "<a href='$link'>".$tags[$i]."</a>";
+		}
+		return $tag_str;
 	}
 	
+	// ///////////////////////////////////////////////////////////////////////////////////////
+	
+	public static function getOlderPostsLink($text){
+	}
+
+	public static function getNewerPostsLink($text){
+	}
 }
 
 ?>

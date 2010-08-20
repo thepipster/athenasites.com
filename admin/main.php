@@ -117,21 +117,16 @@ else {
 
 <script type="text/javascript" src="code/js/3rdparty/jquery-ui/jquery-ui-1.8.4.custom.min.js"></script>
 
-<!--
-<script type="text/javascript" src="code/js/3rdparty/jquery_ui/ui/ui.core.js"></script>
-<script type="text/javascript" src="code/js/3rdparty/jquery_ui/ui/ui.draggable.js"></script>
-<script type="text/javascript" src="code/js/3rdparty/jquery_ui/ui/ui.droppable.js"></script>
-<script type="text/javascript" src="code/js/3rdparty/jquery_ui/ui/ui.sortable.js"></script>
-<script type="text/javascript" src="code/js/3rdparty/jquery_ui/ui/ui.resizable.js"></script>
-<script type="text/javascript" src="code/js/3rdparty/jquery_ui/ui/ui.dialog.js"></script>
--->
 <script type="text/javascript" src="code/js/3rdparty/swfobject.js"></script>
 
 <script type="text/javascript" src="code/js/3rdparty/SWFUpload/swfupload.js"></script>
 <script type="text/javascript" src="code/js/3rdparty/SWFUpload/plugins/swfupload.queue.js"></script>
 
 <!-- CKEditor -->
+<!--
 <script type="text/javascript" src="code/ckeditor/ckeditor.js"></script>
+-->
+<script type="text/javascript" src="code/ckeditor/ckeditor_source.js"></script>
 
 <!-- Utils -->
 <script src="code/js/defines.js" type="text/javascript"></script>
@@ -342,7 +337,7 @@ var ssMain = {
 	VIEW_ACCOUNT : 8,
 	VIEW_EDITFILES : 9,
 	
-	view : 4,
+	view : 1,
 		
 	pageTracker : '',
 	

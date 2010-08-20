@@ -55,7 +55,7 @@ CKEDITOR.lang['ko'] =
 	subscript		: '아래 첨자',
 	superscript		: '위 첨자',
 	horizontalrule	: '수평선 삽입',
-	pagebreak		: 'Insert Page Break for Printing', // MISSING
+	pagebreak		: 'Insert page break', // MISSING
 	unlink			: '링크 삭제',
 	undo			: '취소',
 	redo			: '재실행',

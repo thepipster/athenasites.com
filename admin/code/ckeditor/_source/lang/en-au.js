@@ -55,7 +55,7 @@ CKEDITOR.lang['en-au'] =
 	subscript		: 'Subscript',
 	superscript		: 'Superscript',
 	horizontalrule	: 'Insert Horizontal Line',
-	pagebreak		: 'Insert Page Break for Printing',
+	pagebreak		: 'Insert page break',
 	unlink			: 'Unlink',
 	undo			: 'Undo',
 	redo			: 'Redo',

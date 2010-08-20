@@ -17,7 +17,7 @@ var cgpCommon = {
 		    active: true, 
 		    header: '.menuHead', 
 		    navigation: true,
-		    event: 'mouseover'
+		   // event: 'mouseover'
 		});		
 		
 		// Update nav with current page		

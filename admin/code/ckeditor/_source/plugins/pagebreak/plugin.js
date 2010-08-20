@@ -18,8 +18,9 @@ CKEDITOR.plugins.add( 'pagebreak',
 		// Register the toolbar button.
 		editor.ui.addButton( 'PageBreak',
 			{
-				label : editor.lang.pagebreak,
-				command : 'pagebreak'
+//				label : editor.lang.pagebreak,
+				label : 'Insert a page break, which will become a more tag in the case of blog posts',
+				command : 'pagebreak',
 			});
 
 		// Add the style that renders our placeholder.
@@ -75,12 +76,13 @@ CKEDITOR.plugins.add( 'pagebreak',
 CKEDITOR.plugins.pagebreakCmd =
 {
 	exec : function( editor )
-	{
+	{		
 		// Create the element that represents a print break.
-		var breakObject = CKEDITOR.dom.element.createFromHtml( '<div style="page-break-after: always;"><span style="display: none;">&nbsp;</span></div>' );
+		//var breakObject = CKEDITOR.dom.element.createFromHtml( '<div style="page-break-after: always;"><span style="display: none;">&nbsp;</span></div>' );
+		var breakObject = CKEDITOR.dom.element.createFromHtml( "<div class='apolloPageBreak' style='border: 1px solid blue'>More...</div> ");
 
 		// Creates the fake image used for this element.
-		breakObject = editor.createFakeElement( breakObject, 'cke_pagebreak', 'div' );
+		//breakObject = editor.createFakeElement( breakObject, 'cke_pagebreak', 'div' );
 
 		var ranges = editor.getSelection().getRanges();
 

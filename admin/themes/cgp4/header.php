@@ -69,6 +69,7 @@ function getTopParentPageTitle($post){
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/code/js/3rdparty/jquery_plugins/jquery.datePicker.min-2.1.2.js"></script>
 
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/code/js/Logger-min.class.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/code/js/cgpCommon.class.js"></script>
 
 	<!-- Page Styles  //////////////////////////////////////////////////// -->
 

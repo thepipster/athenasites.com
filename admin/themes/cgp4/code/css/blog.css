@@ -98,6 +98,13 @@ This is the blog theme for the integrated blog on Charlotte Geary Photography v3
 	text-decoration: underline;
 }
 
+#blogPage .apolloPageBreak {
+	font-weight: bold;
+	font-size: 12px !important;
+	text-decoration: underline;
+}
+
+
 /* Spacer between blog posts (horizontal dotted line) */
 #blogPage .post_spacer_outer {
 	width: auto;

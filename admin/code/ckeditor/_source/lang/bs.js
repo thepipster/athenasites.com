@@ -55,7 +55,7 @@ CKEDITOR.lang['bs'] =
 	subscript		: 'Subscript',
 	superscript		: 'Superscript',
 	horizontalrule	: 'Ubaci horizontalnu liniju',
-	pagebreak		: 'Insert Page Break for Printing', // MISSING
+	pagebreak		: 'Insert page break', // MISSING
 	unlink			: 'Izbriši link',
 	undo			: 'Vrati',
 	redo			: 'Ponovi',

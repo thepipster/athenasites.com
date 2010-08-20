@@ -55,7 +55,7 @@ CKEDITOR.lang['sr'] =
 	subscript		: 'Индекс',
 	superscript		: 'Степен',
 	horizontalrule	: 'Унеси хоризонталну линију',
-	pagebreak		: 'Insert Page Break for Printing', // MISSING
+	pagebreak		: 'Insert page break', // MISSING
 	unlink			: 'Уклони линк',
 	undo			: 'Поништи акцију',
 	redo			: 'Понови акцију',
