@@ -158,7 +158,7 @@ function getTopParentPageTitle($post){
 											}								
 										}
 										else {
-											print("    <span class='menuHead'>$title</span>");									
+											print("    <span class='menuHead'>".strtoupper($title)."</span>");									
 										}
 										
 										

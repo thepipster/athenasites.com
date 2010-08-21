@@ -16,7 +16,9 @@ $category = '';
 $domain = $parts['host'];
 $page = strtolower(basename($parts['path']));
 $path = strtolower(dirname($parts['path'])) . "/";
-parse_str($parts['query']);
+if (isset($parts['query'])){
+	parse_str($parts['query']);
+}
 $ext = substr(strrchr($page,'.'),1);
 
 //Logger::debug("Domain: $domain Page: $page Path: $path Tag: $tag Category: $category");
@@ -32,6 +34,9 @@ if ($page == '' || (($ext == 'html') || ($ext == 'htm') || ($ext == 'php'))){
 	//Logger::debug("Page: $page");
 	
 	PageManager::init($page, $path, $tag, $category);
+	
+	// Log the page view if this is a real page
+	PageViewsTable::logView(PageManager::$site_id, PageManager::$page_id);
 	
 	/*
 	if (PageManager::$site_id){
@@ -53,8 +58,8 @@ if ($page == '' || (($ext == 'html') || ($ext == 'htm') || ($ext == 'php'))){
 	require_once(PageManager::$theme_file_root . 'footer.php');
 
 }
-
-// Redirect to correct site!
-//header("Location: athena.html");
+else {
+	echo "Oops, 404 ERROR!";
+}
 
 ?>

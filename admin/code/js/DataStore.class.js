@@ -207,6 +207,30 @@ var DataStore = {
 	
 	// //////////////////////////////////////////////////////////////////////////////////
 
+	getHomePage : function(){
+
+		for(var i=0; i<DataStore.m_pageList.length; i++){
+			if (DataStore.m_pageList[i].is_homepage == 1){
+				return DataStore.m_pageList[i];
+			}
+		}
+		return false;
+	},
+
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	getBlogPage : function(){
+
+		for(var i=0; i<DataStore.m_pageList.length; i++){
+			if (DataStore.m_pageList[i].is_blogpage == 1){
+				return DataStore.m_pageList[i];
+			}
+		}
+		return false;
+	},
+		
+	// //////////////////////////////////////////////////////////////////////////////////
+
 	getCurrentPage : function(){
 		return DataStore.getPage(DataStore.m_currentPageID);
 	},

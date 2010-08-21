@@ -67,7 +67,7 @@ var PagesFrame = {
 		txt += "            <span class='label'>Title:</span>";
 		txt += "            <input id='pageTitle' type='text' value='"+pageObj.title+"'/>";
 		txt += "            <button class='basic_button' style='' onclick=\"ImagePickerDialog.show('#PagesFrameImagePicker', PagesFrame.onImageSelected);\">Insert Image</button>";
-//		txt += "            <button class='basic_button' style='' onclick=\"\">View Page</button>";
+		txt += "            <a id='pageLink' href='' style='font-size:10px'>View Page</a>";
 		txt += "        </div>";
 		txt += "	</td>";
 							
@@ -191,6 +191,7 @@ var PagesFrame = {
 		PagesFrame.paintCKEditor();
 		
 		PagesFrame.paintThemeParas();
+		PagesFrame.updatePageLink(pageObj);
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////////
@@ -215,11 +216,18 @@ var PagesFrame = {
 		PagesFrame.paintParentPages(pageObj);
 					
 		PagesFrame.paintThemeParas();
+		PagesFrame.updatePageLink(pageObj);
 						
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////////
 
+	updatePageLink : function(pageObj){	
+		$('#pageLink').attr('href', 'http://' + defines.domain + pageObj.path + pageObj.slug);			
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////////
+	
 	updateStatusColor : function(){
 				
 		var status = $('#pageStatusSelector').val();

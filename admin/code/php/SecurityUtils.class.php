@@ -146,7 +146,7 @@ class SecurityUtils {
 		PagesTable::createTableForSite($site_id);
 		PostsTable::createTableForSite($site_id);
 		CommentsTable::createTableForSite($site_id);
-		BlogFollowersTable::createTableForSite($site_id);
+		//BlogFollowersTable::createTableForSite($site_id);
 	}
 
 }

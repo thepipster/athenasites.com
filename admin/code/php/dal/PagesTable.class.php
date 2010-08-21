@@ -44,9 +44,14 @@ class PagesTable {
         $target_date  = mktime(date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
         $date_str = date('Y-m-d H:i:s', $target_date);
 		
-		$sql = DatabaseManager::prepare("INSERT INTO athena_%d_Pages (user_id, content, status, parent_page_id, title, last_edit, created, template, slug, path, page_order, is_homepage) VALUES (%d, %s, %s, %d, %s, '$date_str', '$date_str', %s, %s, %s, %d, %d)", 
+		$is_blogpage = 0;
+		if (strpos(strtolower("  " . $template_name), 'blog') > 0){
+			$is_blogpage = 1;			
+		}
+		
+		$sql = DatabaseManager::prepare("INSERT INTO athena_%d_Pages (user_id, content, status, parent_page_id, title, last_edit, created, template, slug, path, page_order, is_homepage, is_blogpage) VALUES (%d, %s, %s, %d, %s, '$date_str', '$date_str', %s, %s, %s, %d, %d, $is_blogpage)", 
 			$site_id, $user_id, $content, $status, $parent_page_id, $title, $template_name, $slug, $path, $order, $ishome);
-			
+					
 		return DatabaseManager::insert($sql);
     }
 
@@ -71,7 +76,12 @@ class PagesTable {
         $target_date  = mktime(date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
         $date_str = date('Y-m-d H:i:s', $target_date);
 
-		$sql = DatabaseManager::prepare("UPDATE athena_%d_Pages SET parent_page_id=%d, content=%s, title=%s, slug=%s, status=%s, path=%s, user_id=%d, page_order=%d, is_homepage=%d, template=%s, last_edit='$date_str' WHERE id = %d", 
+		$is_blogpage = 0;
+		if (strpos(strtolower("  " . $template_name), 'blog') > 0){
+			$is_blogpage = 1;			
+		}
+
+		$sql = DatabaseManager::prepare("UPDATE athena_%d_Pages SET parent_page_id=%d, content=%s, title=%s, slug=%s, status=%s, path=%s, user_id=%d, page_order=%d, is_homepage=%d, template=%s, last_edit='$date_str', is_blogpage = $is_blogpage  WHERE id = %d", 
 			$site_id, $parent_page_id, $content, $title, $slug, $status, $path, $user_id, $order, $ishome, $template_name, $page_id);
 		return DatabaseManager::update($sql);
     }
