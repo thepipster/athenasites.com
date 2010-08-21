@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<methodResponse>
+	<params>
+		<param>
+			<value>
+				<struct>
+					<member>
+						<name>events</name>
+						<value>
+							<array>
+								<data>
+									<value>
+										<struct>
+											<member>
+												<name>itemid</name>
+												<value>
+													<int>1093</int>
+												</value>
+											</member>
+											<member>
+												<name>url</name>
+												<value>
+													<string>http://charlottegeary.livejournal.com/279942.html</string>
+												</value>
+											</member>
+											<member>
+												<name>anum</name>
+												<value>
+													<int>134</int>
+												</value>
+											</member>
+											<member>
+												<name>event</name>
+												<value>
+													<string>&lt;p align="center"&lt;img border="1" alt="Colorado wildflowers" src="http://charlottegeary.smugmug.com/photos/558242328_TbEjL-O.jpg"
+														A rainbow of Colorado wildflowers
+														Red Rock Canyon Open Space, Colorado Springs
+														June 7, 2009&lt;/pOver the weekend I took a walk through the canyon, on a scavenger hunt to find as many colors as I could. All of these photos were taken within a two-hour walk in the hills. I love June.
+			
+														&lt;lj-cut text="More photos of wildflowers"
+														&lt;p align="center"&lt;img border="1" alt="Tiny new evergreen tree" src="http://charlottegeary.smugmug.com/photos/558242856_bWPB7-O.jpg"
+														A tiny new evergreen tree
+														
+														
+														&lt;img border="1" alt="Colorado wildflowers" src="http://charlottegeary.smugmug.com/photos/558242847_dfPZf-O.jpg"
+														
+														
+														&lt;img border="1" alt="" src="http://charlottegeary.smugmug.com/photos/558242826_y6amp-O.jpg"
+														
+														
+														&lt;img border="1" alt="Colorado wildflowers" src="http://charlottegeary.smugmug.com/photos/558242804_qMNVR-O.jpg"
+														
+														
+														&lt;img border="1" alt="" src="http://charlottegeary.smugmug.com/photos/558242773_qw5eW-O.jpg"
+														
+														
+														&lt;img border="1" alt="cactus blossom" src="http://charlottegeary.smugmug.com/photos/558242721_XvfbW-O.jpg"
+														
+														
+														&lt;img border="1" alt="wild sage" src="http://charlottegeary.smugmug.com/photos/558242689_cKch7-O.jpg"
+														
+														
+														&lt;img border="1" alt="" src="http://charlottegeary.smugmug.com/photos/558242684_syB9a-O.jpg"
+														
+														
+														&lt;img border="1" alt="Colorado wildflowers" src="http://charlottegeary.smugmug.com/photos/558242760_k9AEW-O.jpg"
+														
+														
+														&lt;img border="1" alt="Colorado wildflowers" src="http://charlottegeary.smugmug.com/photos/558242666_Y7jiL-O.jpg"
+														
+														
+														&lt;img border="1" alt="cactus blossom" src="http://charlottegeary.smugmug.com/photos/558242704_fKj2Q-O.jpg"
+														
+														
+														&lt;img border="1" alt="Colorado wildflowers" src="http://charlottegeary.smugmug.com/photos/558242608_7jcRx-O.jpg"
+														
+														
+														&lt;img border="1" alt="" src="http://charlottegeary.smugmug.com/photos/558242593_y7fEM-O.jpg"
+														A tiny new oak tree
+														
+														
+														&lt;img border="1" alt="Colorado wildflowers" src="http://charlottegeary.smugmug.com/photos/558242578_RkSQ6-O.jpg"
+														
+														
+														&lt;img border="1" alt="maple leaves" src="http://charlottegeary.smugmug.com/photos/558242548_dAfWe-O.jpg"
+														
+														
+														&lt;img border="1" alt="Colorado wildflowers" src="http://charlottegeary.smugmug.com/photos/558242534_uqMoe-O.jpg"
+														
+														
+														&lt;img border="1" alt="Colorado wildflowers" src="http://charlottegeary.smugmug.com/photos/558242453_niqZ6-O.jpg"
+														
+														
+														&lt;img border="1" alt="oak leaves" src="http://charlottegeary.smugmug.com/photos/558242481_rkhtV-O.jpg"
+														
+														
+														&lt;img border="1" alt="yellow daisy" src="http://charlottegeary.smugmug.com/photos/558242363_2SpsA-O.jpg"
+														
+														
+														&lt;img border="1" alt="Colorado wildflowers" src="http://charlottegeary.smugmug.com/photos/558242504_ifc6V-O.jpg"
+														
+														
+														&lt;img border="1" alt="Colorado oak leaves" src="http://charlottegeary.smugmug.com/photos/558242422_LkaaK-O.jpg"
+														
+														
+														&lt;img border="1" alt="Colorado wildflowers" src="http://charlottegeary.smugmug.com/photos/558242342_r638b-O.jpg"
+														
+														
+														&lt;img border="1" alt="Colorado wildflowers" src="http://charlottegeary.smugmug.com/photos/558242334_K8EH4-O.jpg"&lt;/p
+													</string>
+												</value>
+											</member>
+											<member>
+												<name>eventtime</name>
+												<value>
+													<string>2009-06-09 00:20:00</string>
+												</value>
+											</member>
+										</struct>
+									</value>
+									<value>
+										<struct>
+											<member>
+												<name>itemid</name>
+												<value>
+													<int>1092</int>
+												</value>
+											</member>
+											<member>
+												<name>subject</name>
+												<value>
+													<string>Ally and the mountains</string>
+												</value>
+											</member>
+											<member>
+												<name>url</name>
+												<value>
+													<string>http://charlottegeary.livejournal.com/279652.html</string>
+												</value>
+											</member>
+											<member>
+												<name>anum</name>
+												<value>
+													<int>100</int>
+												</value>
+											</member>
+											<member>
+												<name>event</name>
+												<value>
+													<string>
+														&lt;p align="center"&lt;img border="1" alt="Colorado Springs mountains" src="http://charlottegeary.smugmug.com/photos/558242440_pXtfq-O.jpg"
+														Ally 
+														Near Red Rock Canyon Open Space and Section 16
+														Colorado Springs
+														June 7, 2009&lt;/pYesterday Ally and I went hiking through Red Rock Canyon. We reached the top of the canyon just as the sun dipped behind the clouds, casting a warm evening glow over two happy hikers.
+														
+														On a separate note, I've been nominated as Colorado Springs' best photographer.  If you'd like to vote for me, I'd greatly appreciate it!  You can vote here: &lt;bhttp://tinyurl.com/nb64gw&lt;/b
+													</string>
+												</value>
+											</member>
+											<member>
+												<name>eventtime</name>
+												<value>
+													<string>2009-06-08 13:05:00</string>
+												</value>
+											</member>
+										</struct>
+									</value>
+								</data>
+							</array>
+						</value>
+					</member>
+				</struct>
+			</value>
+		</param>
+	</params>
+</methodResponse>
