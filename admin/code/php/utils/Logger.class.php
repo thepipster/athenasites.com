@@ -118,6 +118,7 @@ class Logger {
 			}
 			$msg .= "}";
 
+			//error_log($msg."\n");		
 			error_log($msg);		
 		}
 			

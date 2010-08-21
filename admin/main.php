@@ -50,10 +50,20 @@ else {
 	else {
 		$current_site_id = $site_id;
 	}
-	
-	Logger::debug("$domain has site_id = $current_site_id");
-	
+		
 }
+
+$domain = '';
+
+// Get the current site domain from the site list
+foreach($site_list as $site){
+	if ($site['id'] == $current_site_id){
+		$domain = $site['domain'];
+		break;
+	}
+}
+
+Logger::debug("$domain has site_id = $current_site_id");
 
 //$page = PagesTable::getPage($current_site_id, $page_id);
 
@@ -324,6 +334,7 @@ else {
 <script type="text/javascript">
 
 defines.session_id = '<?php echo session_id(); ?>';
+defines.domain = '<?php echo $domain; ?>';
 
 var ssMain = {
 
@@ -450,11 +461,16 @@ var ssMain = {
 	
 	onDataLoaded : function(){	
 	
-		if (DataStore.m_currentFolderID == -1 && DataStore.m_folderList.length > 0){
-			FolderSidebarFrame.onSelectFolder(DataStore.m_folderList[0].id);
+		if (DataStore.m_currentFolderID > 0){
+			FolderSidebarFrame.onSelectFolder(DataStore.m_currentFolderID);
 		}
 		else {
-			FolderSidebarFrame.onSelectFolder(1); // unassigned folders
+			if (DataStore.m_currentFolderID == -1 && DataStore.m_folderList.length > 0){
+				FolderSidebarFrame.onSelectFolder(DataStore.m_folderList[0].id);
+			}
+			else {
+				FolderSidebarFrame.onSelectFolder(1); // unassigned folders
+			}
 		}
 		
 		ssMain.repaint();		

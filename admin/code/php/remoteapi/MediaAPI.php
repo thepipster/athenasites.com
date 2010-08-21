@@ -425,8 +425,9 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
 	//updateChildrensPath($site_id, $page_id);
 	updatePageAndChildPaths($site_id, $page_id);
 
+	$page = PagesTable::getPage($site_id, $page_id);
 	
-	$msg['cmd'] = "addPage";
+	$msg['cmd'] = "updatePage";
 	$msg['result'] = $page_id > 0 ? 'ok' : 'fail';
 	$msg['data'] = array('page' => $page);
 	

@@ -53,9 +53,7 @@ var PostsFrame = {
 		}
 				
 		var post_id = DataStore.m_currentPostID;
-			
-		var postLink = postObj.path + postObj.slug;
-		
+				
 		var txt = "";
 	
 		txt += "<div id='PostsFrameImagePicker'></div>";		
@@ -69,7 +67,7 @@ var PostsFrame = {
 		txt += "            <span class='label'>Title:</span>";
 		txt += "            <input id='postTitle' type='text' value='"+postObj.title+"'/>";
 		txt += "            <button class='basic_button' style='' onclick=\"ImagePickerDialog.show('#PagesFrameImagePicker', PostsFrame.onImageSelected);\">Insert Image</button>";
-		txt += "            <a href='"+postLink+"' style='font-size:10px'>View Page</a>";
+		txt += "            <a id='postLink' href='' style='font-size:10px'></a>";
 		txt += "        </div>";
 		txt += "	</td>";
 											
@@ -167,6 +165,7 @@ var PostsFrame = {
 		// Good article on customization of CKEditor - http://www.voofie.com/content/2/ckeditor-plugin-development/		
 		PostsFrame.paintCKEditor();
 		
+		PostsFrame.updatePostLink(postObj);
 		PostsFrame.updateTagsAndCategoris();
 	},
 	
@@ -183,11 +182,36 @@ var PostsFrame = {
 		
 		$('#postStatusSelector').val(postObj.status);
 				
+		PostsFrame.updatePostLink(postObj);
 		PostsFrame.updateTagsAndCategoris();
 	},
 		
 	// ////////////////////////////////////////////////////////////////////////////
 
+	updatePostLink : function(postObj){
+
+		var blogPage = DataStore.getBlogPage();
+		//alert(blogPage.title + " " + blogPage.status);
+				
+		if (!blogPage || blogPage == undefined){
+			AthenaDialog.alert("You do not have a blog page for your site yet. You can add one using the pages tab. You can continue to create blog posts, but they will not be visible to users", "No Blog Page!");			
+			$('#postLink').html("");
+		}
+		else {
+			if (blogPage.status != 'Published'){
+				AthenaDialog.alert("Your blog page is not public, therefore visitors to your site will not be able to see your blog. You can change your blog pages status using the Pages tab", "Blog Page is not public!");			
+			}
+		
+			var blogslug = blogPage.path + blogPage.slug;
+			blogslug = blogslug.substring(0, blogslug.length-5); // Strip .html
+			$('#postLink').html("View Post");
+			$('#postLink').attr('href', 'http://' + defines.domain + blogslug + postObj.path + postObj.slug);
+		}
+			
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	* Get the complete list of tags and categories for the entire site, and populate an auto-complete field with this data
 	*/

@@ -1,18 +1,16 @@
 <?php
+// Load defines and class auto-loader....
+include_once(realpath(dirname(__FILE__)) . '/setup.php');
 
 // We passed the php session id from the flash uploader, so load the session from it!
 if (isset($_POST["PHPSESSID"])) {
-	session_id(mysql_real_escape_string($_POST["PHPSESSID"]));
+	$result = session_id(mysql_real_escape_string($_POST["PHPSESSID"]));
 }
 else {
 	error_log("[FATAL] No valid php session id! {ProcessUpload}");
 	die();
 }
 
-// Load defines and class auto-loader....
-include_once(realpath(dirname(__FILE__)) . '/setup.php');
-
-Logger::debug("Entering ProcessUpload.php");
 
 // Check for credentials
 if(!SecurityUtils::isLoggedIn()){

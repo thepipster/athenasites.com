@@ -21,6 +21,8 @@ define("CODE_ROOT", $code_root); // The root for the code tree
 // see setup.php.sticky_example
 require_once($code_root . "setup.php.sticky");
 
+DatabaseManager::connect();
+
 Logger::catchSysErrors();
 Logger::setLevelDebug();
 
