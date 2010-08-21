@@ -10,6 +10,7 @@ class PageViewsTable {
 	/**
 	* To keep the database table from growing huge, we break this table up by site id
 	*/
+	/*
 	public static function createTableForSite($site_id){
 		
 		$sql = "CREATE TABLE `athena_{$site_id}_PageViews` (
@@ -28,10 +29,11 @@ class PageViewsTable {
 
 		DatabaseManager::submitQuery($sql);
 	}
+	*/
 		
 	// //////////////////////////////////////////////////////////////////////////////////////
 
-	public static function logView($site_id, $page_id){
+	public static function logView($site_id, $page_id, $page, $path, $query_string){
 				
 		if (Session::exists('pageview_etime')){
 			$etime = microtime(true) - Session::get('pageview_etime');
@@ -42,15 +44,15 @@ class PageViewsTable {
 			$etime = 99999;			
 		}
 		
-		Logger::debug("eTime = $etime");
-
 		// If its been less than this number of seconds, for the same session, then disregard this
 		// page view		
-		if ($etime < 0.25){
+		if ($etime < 1.0){
 			return;
 		}
-				
-		
+		else {
+			Logger::debug("Duplicated view: eTime = $etime");
+		}
+						
 		$browser = new Browser();
 		
 		$browser_name = $browser->getBrowser();
@@ -73,23 +75,21 @@ class PageViewsTable {
 		else {
 			$referer = '';
 		}
-		
-		$referer = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-		
-		$user_agent = $_SERVER['HTTP_USER_AGENT'];
-		
-		$server_ip = $_SERVER['SERVER_ADDR'];
-		error_log("Referer >>>> " . $server_ip);
-		
+				
+		$user_agent = $_SERVER['HTTP_USER_AGENT'];		
+		$server_ip = $_SERVER['SERVER_ADDR'];		
 		$true_ip = self::getRealIPAddr();		
 
-		$sql = DatabaseManager::prepare("INSERT INTO stats_PageViews ( site_id, page_id, view_date, ip_long, browser, browser_ver, os, referer, user_agent, is_bot, server_ip) VALUES (%d, %d, %s, %d, %s, %s, %s, %s, %s, %d, %d)", 
-					$site_id, $page_id, $date_now, ip2long($true_ip), $browser_name, $browser_ver, $os, $referer, $user_agent, $is_bot, ip2long($server_ip) );
+		$sql = DatabaseManager::prepare("INSERT INTO stats_PageViews ( site_id, page_id, page, path, query_string, view_date, ip_long, browser, browser_ver, os, referer, user_agent, is_bot, server_ip) VALUES (%d, %d, %s, %s, %s, %s, %d, %s, %s, %s, %s, %s, %d, %d)", 
+					$site_id, $page_id, $page, $path, $query_string, $date_now, ip2long($true_ip), $browser_name, $browser_ver, $os, $referer, $user_agent, $is_bot, ip2long($server_ip) );
 		DatabaseManager::insert($sql);
 	}
 	
 	// //////////////////////////////////////////////////////////////////////////////////////
 	
+	/**
+	* Try to get the IP address of the browser
+	*/
 	private static function getRealIPAddr(){
 	    if (!empty($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
 	    {

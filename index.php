@@ -11,19 +11,21 @@ require_once("admin/code/php/setup.php");
 $url = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 $parts = parse_url($url);
 
-$tag = '';
-$category = '';
+$tag = ''; $category = ''; $query_string = '';
+
 $domain = $parts['host'];
 $page = strtolower(basename($parts['path']));
-$path = strtolower(dirname($parts['path'])) . "/";
+$path = strtolower(dirname($parts['path']));
+if ($path != "/") $path .= "/";
+
 if (isset($parts['query'])){
+	$query_string = $parts['query'];
 	parse_str($parts['query']);
 }
 $ext = substr(strrchr($page,'.'),1);
 
-//Logger::debug("Domain: $domain Page: $page Path: $path Tag: $tag Category: $category");
-
 Logger::debug(">>>> Request page: $page Ext: $ext Full request: " . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+Logger::debug(">>>> Domain: $domain Page: $page Path: $path Tag: $tag Category: $category");
 
 if ($page == '' || (($ext == 'html') || ($ext == 'htm') || ($ext == 'php'))){
 	
@@ -36,7 +38,7 @@ if ($page == '' || (($ext == 'html') || ($ext == 'htm') || ($ext == 'php'))){
 	PageManager::init($page, $path, $tag, $category);
 	
 	// Log the page view if this is a real page
-	PageViewsTable::logView(PageManager::$site_id, PageManager::$page_id);
+	PageViewsTable::logView(PageManager::$site_id, PageManager::$page_id, $page, $path, $query_string);
 	
 	/*
 	if (PageManager::$site_id){
