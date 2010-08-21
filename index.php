@@ -35,6 +35,9 @@ if ($page == '' || (($ext == 'html') || ($ext == 'htm') || ($ext == 'php'))){
 	
 	PageManager::init($page, $path, $tag, $category);
 	
+	// Log the page view if this is a real page
+	PageViewsTable::logView(PageManager::$site_id, PageManager::$page_id);
+	
 	/*
 	if (PageManager::$site_id){
 		Logger::debug("Site ID: ".PageManager::$site_id." Theme ID: ".PageManager::$theme_id." Theme URL: ".PageManager::$theme_url_root);

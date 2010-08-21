@@ -139,7 +139,7 @@ class PageManager {
 		
 		self::$theme_url_root = self::$url_root . '/admin/themes/' . $theme['theme_name'] ."/";
 		self::$theme_file_root = FILE_ROOT . 'admin/themes/' . $theme['theme_name'] ."/";
-		
+				
 	/*	
 		Logger::debug(">>>>>>>>>>");
 		Logger::debug("Request URI: " . $_SERVER['REQUEST_URI']);

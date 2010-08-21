@@ -6,7 +6,7 @@
  */
   
 class PageViewsTable {
-	
+		
 	/**
 	* To keep the database table from growing huge, we break this table up by site id
 	*/
@@ -32,61 +32,63 @@ class PageViewsTable {
 	// //////////////////////////////////////////////////////////////////////////////////////
 
 	public static function logView($site_id, $page_id){
+				
+		if (Session::exists('pageview_etime')){
+			$etime = microtime(true) - Session::get('pageview_etime');
+			Session::set('pageview_etime', microtime(true));
+		}
+		else {
+			Session::set('pageview_etime', microtime(true));
+			$etime = 99999;			
+		}
 		
-		//if (self::isSameView($site_id, $page_id)){
-		//	return;
-		//}
+		Logger::debug("eTime = $etime");
+
+		// If its been less than this number of seconds, for the same session, then disregard this
+		// page view		
+		if ($etime < 0.25){
+			return;
+		}
+				
 		
-		$browser = new BrowserDetect();
+		$browser = new Browser();
 		
 		$browser_name = $browser->getBrowser();
 		$browser_ver =  $browser->getVersion();
-		$platform = $browser->getPlatform();
-		$os = $browser->getOS();
+		$os = $browser->getPlatform();
 		$is_bot = $browser->isRobot();
 	
-			
-		// If BrowserDetect could not find it, try the browser_detection script instead	
-		if ($browser_name == BrowserDetect::BROWSER_UNKNOWN){
-			$browser_name = browser_detection('browser_name');
-		}
-		if ($browser_ver == BrowserDetect::VERSION_UNKNOWN){
-			$browser_ver = browser_detection('browser_number');
-		}
-		if ($os == BrowserDetect::OPERATING_SYSTEM_UNKNOWN){
-			$os = browser_detection('os');
-		}
-
-		$os_ver = browser_detection('os_number');
+		//$os_ver = browser_detection('os_number');
 		
 		date_default_timezone_set('UTC');
 		$date_now = date("Y-m-d H:i:s", mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
 		
 		//$referer = $_SERVER['HTTP_REFERER'];
-		$referer = $_SERVER['HTTP_REFERER'] OR $_ENV['HTTP_REFERER'];
-		$user_agent = $_SERVER['HTTP_USER_AGENT'];
-
-		//if (!isset($referer) || stripos($referer,  $_SERVER['HTTP_HOST']) > 0){
-		//	$referer = '';	
-		//}
-		if (!isset($referer)){
-			$referer = '';	
+		if (isset($_SERVER['HTTP_REFERER'])){
+			$referer = $_SERVER['HTTP_REFERER'];
 		}
+		else if (isset($_ENV['HTTP_REFERER'])){
+			$referer = $_ENV['HTTP_REFERER'];
+		}
+		else {
+			$referer = '';
+		}
+		
+		$referer = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		
+		$user_agent = $_SERVER['HTTP_USER_AGENT'];
 		
 		$server_ip = $_SERVER['SERVER_ADDR'];
 		error_log("Referer >>>> " . $server_ip);
 		
 		$true_ip = self::getRealIPAddr();		
 
-		if ($wp_query->post->ID != 0){
-//			$sql = DatabaseManager::prepare("INSERT INTO athena_%d_PageViews (blog_id, page_id, view_date, ip_long, browser, browser_ver, os_name, os_ver, referer) VALUES (%d, %d, %s, %d, %s, %s, %s, %s, %s)", 
-//					$blog_id, $wp_query->post->ID, $date_now, ip2long($_SERVER['REMOTE_ADDR']), $browser_name, $browser_ver, $os, $os_ver, $referer );
-			$sql = DatabaseManager::prepare("INSERT INTO athena_%d_PageViews ( page_id, view_date, ip_long, browser, browser_ver, os_name, os_ver, referer, user_agent, is_bot, server_ip) VALUES (%d, %s, %d, %s, %s, %s, %s, %s, %s, %d, %d)", 
-					$site_id, $page_id, $date_now, ip2long($true_ip), $browser_name, $browser_ver, $os, $os_ver, $referer, $user_agent, $is_bot, ip2long($server_ip) );
-			$wpdb->query($sql);		
-		}
-		
+		$sql = DatabaseManager::prepare("INSERT INTO stats_PageViews ( site_id, page_id, view_date, ip_long, browser, browser_ver, os, referer, user_agent, is_bot, server_ip) VALUES (%d, %d, %s, %d, %s, %s, %s, %s, %s, %d, %d)", 
+					$site_id, $page_id, $date_now, ip2long($true_ip), $browser_name, $browser_ver, $os, $referer, $user_agent, $is_bot, ip2long($server_ip) );
+		DatabaseManager::insert($sql);
 	}
+	
+	// //////////////////////////////////////////////////////////////////////////////////////
 	
 	private static function getRealIPAddr(){
 	    if (!empty($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet

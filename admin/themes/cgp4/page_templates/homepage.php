@@ -15,6 +15,7 @@ $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id
 
 	<div id='galleryContent' class='pageContents' style="padding:0px; padding-left:25px; background-image:url('');">
 		<?php
+		/*
 			foreach($gallery_image_list as $gal_mapping){
 			
 				$image_id = $gal_mapping['image_id'];
@@ -35,6 +36,7 @@ $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id
 				echo "<br/>";
 				
 			}
+			*/
 		?>
 	</div>
 
@@ -52,7 +54,7 @@ var requiredMinorVersion = 0;
 var requiredRevision = 0;
 
 var hasFlash = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
-
+hasFlash = false;
 if (hasFlash){
 				
 	// Clear the div as fast as possible			
@@ -126,7 +128,7 @@ var cgpHome = {
 
 // /////////////////////////////////////////////////////////////////////////////////
 
-$(document).ready(cgpHome.init);
-$(window).resize(cgpHome.onResize);
+//$(document).ready(cgpHome.init);
+//$(window).resize(cgpHome.onResize);
 
 </script>

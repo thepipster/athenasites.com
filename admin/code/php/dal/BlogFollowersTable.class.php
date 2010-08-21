@@ -11,6 +11,7 @@ class BlogFollowersTable {
 	/**
 	* To keep the database table from growing huge, we break this table up by site id
 	*/
+	/*
 	public static function createTableForSite($site_id){
 		
 		$sql = "CREATE TABLE `athena_{$site_id}_BlogFollowers` (
@@ -24,6 +25,7 @@ class BlogFollowersTable {
 		DatabaseManager::submitQuery($sql);
 		
 	}
+	*/
 	
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
