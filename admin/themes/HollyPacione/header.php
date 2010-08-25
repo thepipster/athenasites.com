@@ -172,6 +172,7 @@ PageManager::doHeader();
 										print("        <li onmouseover=\"hpNav.mouseOver(2, $id, $child_id)\" onmouseout=\"hpNav.mouseOut(2, $id, $child_id)\" id='$child_id' ><a id='$child_id' class='level2' href='$child_link'>$child_title</a>");
 										
 										// Paint sub-children
+										/*
 										print("        <ul>");
 										foreach(PageManager::$page_list as $sub_child){
 											
@@ -184,6 +185,7 @@ PageManager::doHeader();
 											}
 										}
 										print("        </ul>");
+										*/
 										
 									}
 								}

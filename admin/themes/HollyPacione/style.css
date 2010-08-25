@@ -473,9 +473,7 @@ a {
 	border-width: 0.25em;
 	margin: 0;	
 	z-index: 100;	
-	padding-top: 5px;
-/*	background-image: url('res/white10.png');
-	background-repeat: repeat; */
+	/* padding-top: 5px;*/
 }
 
 #nav li li {
@@ -541,10 +539,8 @@ a {
 	padding-top: 6px;
 	height: 14px;
 	width: 220px;
-
 	background-image: url('res/menu_item_background_white80_2.png');
-	background-repeat: no-repeat;
-	
+	background-repeat: no-repeat;	
 	display: block;
 }
 
