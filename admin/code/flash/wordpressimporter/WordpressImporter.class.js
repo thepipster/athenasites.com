@@ -55,12 +55,25 @@ var WordpressImporter = {
 
 	// ////////////////////////////////////////////////////////////////////////
 
+	ct : 0,
+	
 	/**
 	* Respond to the flash player extracting a post
 	* {title:postTitle, date:postDate, date_gmt:postDateGMT, can_comment:canComment, password: postPassword, author: postCreator, tags: postTags, categories: postCategories, content: postContent, excerpt: postExcerpt}
+	* comment: id, author, author_email, author_url, author_ip, date, date_gmt, content, approved, parent_id
 	*/
-	onPost : function(postObj){
-		WordpressImporter.onMessage("Post Title: " + postObj[0].title + " Tags: " + postObj[0].tags);
+	onPost : function(postJSONString){
+	
+		WordpressImporter.ct++;
+			
+		var postObj = eval('(' + postJSONString + ')');
+		
+		//alert(postObj);
+		WordpressImporter.onMessage("Post Title: " + postObj.title + " Tags: " + postObj.tags + " No Comments: " + postObj.comments.length);
+		for (var i=0; i<postObj.comments.length; i++){
+			var id = postObj.comments[i].id;
+			WordpressImporter.onMessage("    >> Comment: id= " + id+"");
+		}
 	},
 
 	// ////////////////////////////////////////////////////////////////////////
