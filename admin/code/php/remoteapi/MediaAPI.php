@@ -339,7 +339,35 @@ function addPost($site_id, $title, $content, $status, $slug, $can_comment){
 // ///////////////////////////////////////////////////////////////////////////////////////
 
 function importPost($site_id, $user_id, $content, $status, $title, $created_date, $can_comment, $import_source){
-	addPost($site_id, $title, $content, $status, $slug, $can_comment);	
+
+	$user_id = SecurityUtils::getCurrentUserID();
+	//$path = getPath($site_id, $page_id);
+	$path = '';
+	
+	$post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, $title, $can_comment, StringUtils::encodeSlug($title));
+		
+	$post = PostsTable::getPost($site_id, $post_id);
+		
+	$day = date("d", strtotime($post['created']));
+	$month = date("n", strtotime($post['created']));
+	$year = date("Y", strtotime($post['created']));
+		
+	$path = "/$year/$month/$day/";
+	PostsTable::updatePath($post_id, $site_id, $path);
+			
+	if (isset($post)){
+		$post['last_edit'] = date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
+		$post['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
+		$post['tags'] = PostsTable::getPostTags($site_id, $post['id']);
+		$post['categories'] = PostsTable::getPostCategories($site_id, $post['id']);
+	}
+			
+	$msg['cmd'] = "importPost";
+	$msg['result'] = $post_id > 0 ? 'ok' : 'fail';
+	$msg['data'] = array('post' => $post);
+	
+	CommandHelper::sendMessage($msg);	
+	
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////
