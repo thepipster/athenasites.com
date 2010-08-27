@@ -15,9 +15,10 @@ class CommentsTable {
 		
 		$sql = "CREATE TABLE `athena_{$site_id}_Comments` (
 		  `id` int(11) NOT NULL auto_increment,
+		  `post_id` int(11) NOT NULL,
+		  `parent_id` int(11) NOT NULL,
 		  `content` text,
 		  `status` enum('Pending','Published', 'Trash', 'Spam', 'PossibleSpam') default 'Pending',
-		  `last_edit` datetime default NULL,
 		  `created` datetime default NULL,
 		  `blog_follower_id` int(11) NOT NULL,
 		  PRIMARY KEY  (`id`)

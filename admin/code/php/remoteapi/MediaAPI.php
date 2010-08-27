@@ -62,6 +62,16 @@ switch($cmd){
 		$can_comment = CommandHelper::getPara('can_comment', true, CommandHelper::$PARA_TYPE_NUMERIC);
 		addPost($site_id, $title, $content, $status, $slug, $can_comment);
 		break;
+		
+	case "importPost":
+		$title = CommandHelper::getPara('title', true, CommandHelper::$PARA_TYPE_STRING);
+		$content = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
+		$status = CommandHelper::getPara('status', true, CommandHelper::$PARA_TYPE_STRING);
+		$can_comment = CommandHelper::getPara('comment', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$created_date = CommandHelper::getPara('pubdate', true, CommandHelper::$PARA_TYPE_STRING);
+		$import_source = CommandHelper::getPara('source', true, CommandHelper::$PARA_TYPE_STRING);
+		importPost($site_id, $content, $status, $title, $created_date, $can_comment, $import_source);
+		break;				
 
 	case "addTag":
 		$tag = CommandHelper::getPara('tag', true, CommandHelper::$PARA_TYPE_STRING);
@@ -285,7 +295,7 @@ function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_c
 		$post['categories'] = PostsTable::getPostCategories($site_id, $post['id']);
 	}
 
-	$msg['cmd'] = "addPost";
+	$msg['cmd'] = "updatePost";
 	$msg['result'] = 'ok';
 	$msg['data'] = array('post' => $post);
 	
@@ -324,6 +334,12 @@ function addPost($site_id, $title, $content, $status, $slug, $can_comment){
 	
 	CommandHelper::sendMessage($msg);	
 	
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function importPost($site_id, $user_id, $content, $status, $title, $created_date, $can_comment, $import_source){
+	addPost($site_id, $title, $content, $status, $slug, $can_comment);	
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////
