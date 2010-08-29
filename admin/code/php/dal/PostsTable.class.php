@@ -106,8 +106,20 @@ class PostsTable {
 	
 	// /////////////////////////////////////////////////////////////////////////////////
 
+	public static function getPostFromDate($site_id, $datestr){
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts WHERE created = %s", $site_id, $datestr);		
+		return DatabaseManager::getSingleResult($sql);				
+	}
+
+	public static function getPostIDFromDate($site_id, $datestr){
+		$sql = DatabaseManager::prepare("SELECT id FROM athena_%d_Posts WHERE created = %s", $site_id, $datestr);		
+		return DatabaseManager::getVar($sql);				
+	}
+
+	// /////////////////////////////////////////////////////////////////////////////////
+
 	public static function getPostsFromTag($site_id, $tag){
-		Logger::debug("getPostsFromTag($site_id, $tag)");
+		//Logger::debug("getPostsFromTag($site_id, $tag)");
 		$tag_id = self::getTagID($site_id, $tag);
 		$sql = DatabaseManager::prepare("SELECT p.* FROM athena_%d_Posts p INNER JOIN athena_%d_PostToTags pt WHERE pt.tag_id = %d AND pt.post_id = p.id", $site_id, $site_id, $tag_id);		
 		return DatabaseManager::getResults($sql);				
@@ -141,12 +153,56 @@ class PostsTable {
 		return DatabaseManager::update($sql);
     }    
 
+    public static function updateCreatedDate($post_id, $site_id, $created_date){
+		$sql = DatabaseManager::prepare("UPDATE athena_%d_Posts SET created=%s WHERE id = %d", $site_id, $created_date, $post_id);
+		return DatabaseManager::update($sql);
+    }    
+
 	// /////////////////////////////////////////////////////////////////////////////////
 
 	/**
-	* Add a new post tag
+	* Add a new category, but only if doesn't exist already.
 	*/
-	public static function addTag($site_id, $post_id, $tag){
+	public static function addCategory($site_id, $category){
+
+		// Does the category already exist
+		$sql = DatabaseManager::prepare("SELECT id FROM athena_%d_PostCategories WHERE category = %s", $site_id, $category);
+		$category_id = DatabaseManager::getVar($sql);
+		
+		if (!isset($category_id)){
+			$sql = DatabaseManager::prepare("INSERT INTO athena_%d_PostCategories (category) VALUES (%s)", $site_id, $category);
+			$category_id = DatabaseManager::insert($sql);
+		}
+		
+		return $category_id;
+	}	
+		
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Add a new tag, but only if doesn't exist already.
+	*/ 
+	public static function addTag($site_id, $tag){
+	
+		// Does the tag already exist
+		$sql = DatabaseManager::prepare("SELECT id FROM athena_%d_PostTags WHERE tag = %s", $site_id, $tag);
+		$tag_id = DatabaseManager::getVar($sql);
+		
+		if (!isset($tag_id)){
+			$sql = DatabaseManager::prepare("INSERT INTO athena_%d_PostTags (tag) VALUES (%s)", $site_id, $tag);
+			$tag_id = DatabaseManager::insert($sql);
+		}
+
+		return $tag_id;
+
+	}
+	
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Assign a tag to a post
+	*/
+	public static function addTagToPost($site_id, $post_id, $tag){
 	
 		// Does the tag already exist
 		$sql = DatabaseManager::prepare("SELECT id FROM athena_%d_PostTags WHERE tag = %s", $site_id, $tag);
@@ -162,7 +218,7 @@ class PostsTable {
 		$id = DatabaseManager::getVar($sql);
 
 		if (isset($id)){
-			Logger::debug(">>> Tag already assigned to this post!");
+			//Logger::debug(">>> Tag already assigned to this post!");
 			return null;
 		}
 		
@@ -175,7 +231,10 @@ class PostsTable {
 
 	// /////////////////////////////////////////////////////////////////////////////////
 
-	public static function addCategory($site_id, $post_id, $category){
+	/**
+	* Assign a category to a post
+	*/
+	public static function addCategoryToPost($site_id, $post_id, $category){
 
 		// Does the category already exist
 		$sql = DatabaseManager::prepare("SELECT id FROM athena_%d_PostCategories WHERE category = %s", $site_id, $category);
@@ -191,7 +250,7 @@ class PostsTable {
 		$id = DatabaseManager::getVar($sql);
 
 		if (isset($id)){
-			Logger::debug(">>> Category already assigned to this post!");
+			//Logger::debug(">>> Category already assigned to this post!");
 			return null;
 		}
 				
@@ -237,7 +296,7 @@ class PostsTable {
 		DatabaseManager::submitQuery($sql);
 		
 		$freq = self::getCategoryFrequency($site_id, $cat);
-		Logger::debug("Cat $cat frequency = $freq");
+		//Logger::debug("Cat $cat frequency = $freq");
 		
 		// If there are no more references to this tag, remove the tag
 		if ($freq == 0){

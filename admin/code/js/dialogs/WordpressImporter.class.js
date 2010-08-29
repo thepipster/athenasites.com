@@ -68,35 +68,37 @@ var WordpressImporter = {
 	* comment: id, author, author_email, author_url, author_ip, date, date_gmt, content, approved, parent_id
 	*/
 	onPost : function(postJSONString, commentsJSONString){
-	
-		WordpressImporter.postCt++;
-			
+				
 		try {	
 		
 			//var post = eval('(' + postJSONString + ')');
 			var post = $.parseJSON( postJSONString );
 			var comments = $.parseJSON( commentsJSONString );
 
+			// Add post.....
+
+			// Mon, 24 Jan 2005 16:26:00 +0000
+			//var pubdate = post.date_gmt;
+						
 			var paras = {cmd: 'importPost', 
 						site_id: DataStore.m_siteID, 
-						title: post.title, 
+						title: unescape(post.title), 
 						content: unescape(post.content), 
 						status: post.status, 
-						can_comment: post.can_comment, 
-						created_date: post.date_gmt, 
+						comment: post.can_comment ? 1 : 0, 
+						pubdate: post.date_gmt, 
+						csvtags: post.tags,
+						csvcats: post.categories,
 						import_source:'wordpress'
 						};
-			
-			if (WordpressImporter.postCt == 10){
-			/*
-				$.ajax({
-					url: MediaAPI.m_url,
-					dataType: "json",
-					data: paras,
-					success: function(ret){WordpressImporter.onPostAdded(ret)}
-				});	
-			*/
-			}				
+									
+			$.ajax({
+				url: MediaAPI.m_url,
+				type: 'post',
+				dataType: "json",
+				success: function(ret){WordpressImporter.onPostAdded(ret)},
+				data: paras
+			});	
 	
 			
 			for (var i=0; i<comments.length; i++){
@@ -109,24 +111,33 @@ var WordpressImporter = {
 			Logger.error(err.toString());
 		}
 
-		// Update progress
-		var prog = Math.ceil(100 * WordpressImporter.postCt / WordpressImporter.noPosts);		
-		$("#status").html("Processed post " + WordpressImporter.postCt + " of " + WordpressImporter.noPosts);						
-		$("#progressBar").progressbar({ value: prog });	
 							
 	},
 
 
 	onPostAdded : function(ret){
-											
-		if (ret.result == "ok"){		
-			callback(ret.data.post);			
-		}					
-		else {
-			AthenaDialog.showAjaxError(ret);
-		}		
+		// Update progress
+		WordpressImporter.postCt++;
+		var prog = Math.ceil(100 * WordpressImporter.postCt / WordpressImporter.noPosts);		
+		$("#status").html("Processed post " + WordpressImporter.postCt + " of " + WordpressImporter.noPosts);						
+		$("#progressBar").progressbar({ value: prog });	
+
+		// Get the next post, but give a small pause!		
+		//setTimeout('WordpressImporter.getNextPost()', 50);
+		WordpressImporter.getNextPost();
 	},
 	
+	// ////////////////////////////////////////////////////////////////////////
+
+	getNextPost : function(){
+		if(navigator.appName.indexOf('Microsoft') != -1) {
+			window.WordpressImporter.getNextPost();
+		}
+		else {
+			window.document.WordpressImporter.getNextPost();
+		}
+	},
+
 	// ////////////////////////////////////////////////////////////////////////
 
 	noPosts : 0,
@@ -138,10 +149,16 @@ var WordpressImporter = {
 
 		WordpressImporter.noPosts = noPosts;		
 
-		//alert('TBD: add tags/categories');
-		WordpressImporter.onMessage("Number Posts: " + noPosts);
-		WordpressImporter.onMessage("Tags: " + tags);
-		WordpressImporter.onMessage("Categories: " + categories);
+		// Add tags
+		var paras = {cmd: 'addTags', site_id: DataStore.m_siteID, csvtags: tags};		
+		$.ajax({ url: MediaAPI.m_url, dataType: "json", data: paras });	
+
+		// Add categories
+		var paras = {cmd: 'addCategories', site_id: DataStore.m_siteID, csvcats: categories};		
+		$.ajax({ url: MediaAPI.m_url, dataType: "json", data: paras });	
+				
+		// Start getting posts
+		WordpressImporter.getNextPost();		
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////
@@ -154,14 +171,26 @@ var WordpressImporter = {
 
 		// Update progress
 		var prog = Math.ceil(100 * bytes / total);
-		$("#status").html("Reading file...");						
-		$("#progressBar").progressbar({ value: prog });						
+		if (bytes < total){
+			$("#status").html("Reading file...");						
+		}
+		else {
+			$("#status").html("Starting processing...");						
+		}
+		
+		//$("#progressBar").progressbar({ value: prog });						
 	},
 
 	onLoaded : function(content){
 		$('#fileContents').html(content);
 	},
-	
+
+	// ////////////////////////////////////////////////////////////////////////
+
+	onComplete : function(){
+		alert('done');
+	},
+		
 	// ////////////////////////////////////////////////////////////////////////
 
 	onMessage : function(msg){

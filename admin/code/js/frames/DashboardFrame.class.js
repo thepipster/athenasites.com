@@ -20,7 +20,7 @@ var DashboardFrame = {
 
 		txt += "<tr valign='top' style='height:100%'>";
 		
-		txt += "	<td class='frameContents' style='height:100%; width:250px; padding:5px'>";
+		txt += "	<td class='frameContents' style='height:100%; padding:5px'>";
 		txt += "        <div id='apollo_site_settings_content'></div>";
 		txt += "	</td>";		
 
@@ -63,9 +63,9 @@ var DashboardFrame = {
 		txt += "    <span class='title'>Tools</span>";
 		txt += "    <fieldset>";
 		txt += "    <legend>Import Blog Posts</legend>";
-		txt += "    <button class='basic_button' onclick='WordpressImporter.show()'>Import from Wordpress</button>";		
-		txt += "    <button class='basic_button' onclick=''>Import from Blogger</button>";		
-		txt += "    <button class='basic_button' onclick=''>Import from Livejournal</button>";		
+		txt += "    <button class='basic_button' onclick='WordpressImporter.show()'>Wordpress</button><br/>";		
+		txt += "    <button class='basic_button' onclick=''>Blogger</button><br/>";		
+		txt += "    <button class='basic_button' onclick=''>Livejournal</button><br/>";		
 		txt += "    </fieldset>";
 		txt += "</div>"					
 		

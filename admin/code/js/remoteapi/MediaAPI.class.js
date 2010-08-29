@@ -149,6 +149,7 @@ var MediaAPI = {
 				
 		$.ajax({
 			url: MediaAPI.m_url,
+			type: 'post',
 			dataType: "json",
 			data: paras,
 			success: function(ret){MediaAPI.onPostAdded(ret, callback)}
@@ -164,6 +165,7 @@ var MediaAPI = {
 						
 		$.ajax({
 			url: MediaAPI.m_url,
+			type: 'post',
 			dataType: "json",
 			data: paras,
 			success: function(ret){MediaAPI.onPostAdded(ret, callback)}
@@ -337,6 +339,7 @@ var MediaAPI = {
 				
 		$.ajax({
 			url: MediaAPI.m_url,
+			type: 'post',
 			dataType: "json",
 			data: paras,
 			success: function(ret){MediaAPI.onPageAdded(ret, callback)}
@@ -352,6 +355,7 @@ var MediaAPI = {
 				
 		$.ajax({
 			url: MediaAPI.m_url,
+			type: 'post',
 			dataType: "json",
 			data: paras,
 			success: function(ret){MediaAPI.onPageAdded(ret, callback)}
