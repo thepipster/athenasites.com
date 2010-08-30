@@ -74,7 +74,24 @@ switch($cmd){
 		$csv_categories = CommandHelper::getPara('csvcats', true, CommandHelper::$PARA_TYPE_STRING);
 		importPost($site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, $import_source);
 		break;				
+		
+ 	// comment: id, author, author_email, author_url, author_ip, date, date_gmt, content, approved, parent_id
 
+	case "addComment":
+		$author_name = CommandHelper::getPara('arn', true, CommandHelper::$PARA_TYPE_STRING);
+		$author_email = CommandHelper::getPara('aem', true, CommandHelper::$PARA_TYPE_STRING);
+		$author_ip = CommandHelper::getPara('aip', true, CommandHelper::$PARA_TYPE_STRING);
+		$content = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
+		$parent_id = CommandHelper::getPara('pid', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$post_id = CommandHelper::getPara('pid', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$created_date = CommandHelper::getPara('pubdate', false, CommandHelper::$PARA_TYPE_STRING);
+		$import_source = CommandHelper::getPara('import_source', false, CommandHelper::$PARA_TYPE_STRING);
+		addComment($site_id, $post_id, $author_name, $author_email, $author_ip, $content, $parent_id, $created_date, $import_source);
+		break;
+						
+	case "approveComment":
+		break;
+				
 	case "addTag":
 		$tag = CommandHelper::getPara('tag', true, CommandHelper::$PARA_TYPE_STRING);
 		$post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
@@ -441,6 +458,18 @@ function importPost($site_id, $content, $status, $title, $created_date, $can_com
 	$msg['result'] = $post_id > 0 ? 'ok' : 'fail';
 
 	CommandHelper::sendMessage($msg);	
+	
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function addComment($site_id, $post_id, $author_name, $author_email, $author_ip, $content, $parent_id, $created_date, $import_source){
+
+	// Create the blog follower 
+	$author_id = // new blog follower id
+	
+	// Create the comment
+	CommentsTable::create($site_id, $post_id, $parent_comment_id, $content, $status, $author_ip, $author_id);
 	
 }
 

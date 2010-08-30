@@ -114,8 +114,10 @@ var WordpressImporter = {
 							
 	},
 
+	// ////////////////////////////////////////////////////////////////////////
 
 	onPostAdded : function(ret){
+	
 		// Update progress
 		WordpressImporter.postCt++;
 		var prog = Math.ceil(100 * WordpressImporter.postCt / WordpressImporter.noPosts);		

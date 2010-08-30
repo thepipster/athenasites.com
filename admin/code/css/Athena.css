@@ -186,6 +186,10 @@ html, body {
 	height: 100%;
 	overflow: hidden;
 	margin-right: 5px;
+
+	-moz-border-radius: 3px;
+	border-radius: 3px;	
+
 /*
 	position: relative;
 	float: right;
@@ -289,7 +293,7 @@ html, body {
 	color: white;
 	background-color: #032f5d;
 	font-size: 12px;
-	cursor: pointer;
+	cursor: pointer;	
 }
 .cancel_button:hover { color: white; background-color: #0358b1 }
 
