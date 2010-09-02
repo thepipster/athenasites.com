@@ -77,16 +77,18 @@ switch($cmd){
 		
  	// comment: id, author, author_email, author_url, author_ip, date, date_gmt, content, approved, parent_id
 
-	case "addComment":
+	case "importComment":
 		$author_name = CommandHelper::getPara('arn', true, CommandHelper::$PARA_TYPE_STRING);
 		$author_email = CommandHelper::getPara('aem', true, CommandHelper::$PARA_TYPE_STRING);
 		$author_ip = CommandHelper::getPara('aip', true, CommandHelper::$PARA_TYPE_STRING);
 		$content = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
-		$parent_id = CommandHelper::getPara('pid', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$comment_id = CommandHelper::getPara('cid', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$parent_comment_id = CommandHelper::getPara('pcid', true, CommandHelper::$PARA_TYPE_NUMERIC);
 		$post_id = CommandHelper::getPara('pid', true, CommandHelper::$PARA_TYPE_NUMERIC);
-		$created_date = CommandHelper::getPara('pubdate', false, CommandHelper::$PARA_TYPE_STRING);
-		$import_source = CommandHelper::getPara('import_source', false, CommandHelper::$PARA_TYPE_STRING);
-		addComment($site_id, $post_id, $author_name, $author_email, $author_ip, $content, $parent_id, $created_date, $import_source);
+		$created_date = CommandHelper::getPara('pubdate', true, CommandHelper::$PARA_TYPE_STRING);
+		$approved = CommandHelper::getPara('apr', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$import_source = CommandHelper::getPara('import_source', true, CommandHelper::$PARA_TYPE_STRING);
+		importComment($site_id, $post_id, $author_name, $author_email, $author_ip, $content, $comment_id, $parent_comment_id, $created_date, $approved, $import_source);
 		break;
 						
 	case "approveComment":
@@ -456,6 +458,7 @@ function importPost($site_id, $content, $status, $title, $created_date, $can_com
 
 	$msg['cmd'] = "importPost";
 	$msg['result'] = $post_id > 0 ? 'ok' : 'fail';
+	$msg['data'] = array('post_id' => $post_id);
 
 	CommandHelper::sendMessage($msg);	
 	
@@ -463,13 +466,56 @@ function importPost($site_id, $content, $status, $title, $created_date, $can_com
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function addComment($site_id, $post_id, $author_name, $author_email, $author_ip, $content, $parent_id, $created_date, $import_source){
+function importComment($site_id, $post_id, $author_name, $author_email, $author_ip, $content, $comment_id, 
+		$parent_comment_id, $created_date, $approved, $import_source){
 
-	// Create the blog follower 
-	$author_id = // new blog follower id
+//	Logger::debug("importComment($site_id, $post_id, $author_name, $author_email, $author_ip, $content, $comment_id, $parent_comment_id, $created_date, $approved, $import_source)");
+//	Logger::debug("Name = $author_name Email = $author_email IP = $author_ip");
+
+	// Convert put date to php date
+    $date_str = date('Y-m-d H:i:s', strtotime($created_date));
+
+	// Create/Update the blog follower....
+	if ($autor_email != ''){
+		$follower_id = SiteFollowersTable::getFollowerIDFromEmail($author_email);		
+	}
+	else {
+		// If they have no email, search by name - which is not ideal as name may not be unique
+		$follower_id = SiteFollowersTable::getFollowerIDFromName($author_name);
+	}	
 	
+	if (!isset($follower_id)){
+		$follower_id = SiteFollowersTable::addFollower($author_name, $author_email, $author_ip);
+	}
+	else {
+		SiteFollowersTable::updateFollower($follower_id, $author_ip);
+	}
+	
+	// Add follower to site
+	SiteFollowersTable::addFollowerToSite($follower_id, $site_id);
+		
 	// Create the comment
-	CommentsTable::create($site_id, $post_id, $parent_comment_id, $content, $status, $author_ip, $author_id);
+	$status = 'Pending';
+	if ($approved == 1){ $status = 'Approved';}
+		
+	// Check to see if this comment already exists, if so then we over-write it
+	$temp_id = CommentsTable::getCommentIDFromDate($site_id, $date_str);
+	if (isset($temp_id)){
+		CommentsTable::update($site_id, $post_id, $temp_id, $parent_comment_id, $content, $status, $author_ip, $follower_id);
+	}
+	else {
+		$comment_id = CommentsTable::createForceID($site_id, $post_id, $comment_id, $parent_comment_id, $content, $status, $author_ip, $follower_id);
+	}	
+	
+	$day = date("d", strtotime($created_date));
+	$month = date("n",strtotime($created_date));
+	$year = date("Y", strtotime($created_date));
+	
+	CommentsTable::updateCreatedDate($comment_id, $site_id, $date_str);
+	
+	
+	$msg['cmd'] = "importComment";
+	$msg['result'] = $comment_id > 0 ? 'ok' : 'fail';
 	
 }
 

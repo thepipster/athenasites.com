@@ -60,7 +60,8 @@ var WordpressImporter = {
 
 	// ////////////////////////////////////////////////////////////////////////
 
-	postCt : 0,
+	postCt : 0,	
+	comments : '',
 	
 	/**
 	* Respond to the flash player extracting a post
@@ -100,11 +101,8 @@ var WordpressImporter = {
 				data: paras
 			});	
 	
-			
-			for (var i=0; i<comments.length; i++){
-				var id = comments[i].id;
-				WordpressImporter.onMessage("    >> Comment: id= " + id+"");
-			}
+			// Store comments until we have the post id
+			WordpressImporter.comments = comments;			
 				
 		}	
 		catch(err){
@@ -116,13 +114,45 @@ var WordpressImporter = {
 
 	// ////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Called when the post has been added on the backed
+	*/
 	onPostAdded : function(ret){
 	
+		if (ret.result != 'ok'){			
+			return;
+		}
+		
+		var post_id = ret.data.post_id;
+				
 		// Update progress
 		WordpressImporter.postCt++;
 		var prog = Math.ceil(100 * WordpressImporter.postCt / WordpressImporter.noPosts);		
 		$("#status").html("Processed post " + WordpressImporter.postCt + " of " + WordpressImporter.noPosts);						
 		$("#progressBar").progressbar({ value: prog });	
+
+		// Add comments....	
+		
+		var comments = WordpressImporter.comments;
+		
+		for (var i=0; i<comments.length; i++){
+															
+			var paras = {cmd: 'importComment', 
+						site_id: DataStore.m_siteID, 
+						arn: unescape(comments[i].author), 
+						aem: unescape(comments[i].author_email), 
+						aip: comments[i].author_ip, 
+						content: unescape(comments[i].content), 
+						cid: comments[i].id, 
+						pcid: comments[i].parent_id, 
+						pid: post_id, 
+						pubdate: comments[i].date_gmt, 
+						apr: comments[i].approved ? 1 : 0, 
+						import_source: 'wordpress'
+						};
+				
+			$.ajax({url: MediaAPI.m_url, type: 'post', dataType: "json", data: paras});	
+		}
 
 		// Get the next post, but give a small pause!		
 		//setTimeout('WordpressImporter.getNextPost()', 50);
