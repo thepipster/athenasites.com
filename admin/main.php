@@ -102,6 +102,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 <link rel="stylesheet" href="code/css/ImagePickerDialog.css" type="text/css" />
 <link rel="stylesheet" href="code/css/ImageEditFrame.css" type="text/css" />
 <link rel="stylesheet" href="code/css/GalleryFrame.css" type="text/css" />
+<link rel="stylesheet" href="code/css/Dashboard.css" type="text/css" />
 <link rel="stylesheet" href="code/css/datePicker.css" type="text/css" />
 
 <link rel="stylesheet" href="code/colorpicker/css/colorpicker.css" type="text/css" />
@@ -119,7 +120,9 @@ Logger::debug("$domain has site_id = $current_site_id");
 <script type="text/javascript" src="code/js/3rdparty/jquery.json-1.3.min.js"></script>
 <script type="text/javascript" src="code/js/3rdparty/flot/jquery.flot.min.js"></script>
 <script type="text/javascript" src="code/js/3rdparty/flot/jquery.flot.crosshair.js"></script>
-
+<!--
+<script type="text/javascript" src="code/js/3rdparty/jquery.progressbar/js/jquery.progressbar.min.js"></script>
+-->
 <script type="text/javascript" src="code/js/3rdparty/date.js"></script>
 <script type="text/javascript" src="code/js/3rdparty/jquery.datePicker.js"></script>
 
@@ -160,9 +163,9 @@ Logger::debug("$domain has site_id = $current_site_id");
 <!-- Dialog Displays -->
 <script src="code/js/dialogs/ImageEditDialog.class.js" type="text/javascript"></script>
 <script src="code/js/dialogs/ImagePickerDialog.class.js" type="text/javascript"></script>
-<script src="code/colorpicker/js/colorpicker.js" type="text/javascript"></script>
 <script src="code/js/dialogs/ColorPickerDialog.class.js" type="text/javascript"></script>
-
+<script src="code/js/dialogs/WordpressImporter.class.js" type="text/javascript"></script>
+<script src="code/colorpicker/js/colorpicker.js" type="text/javascript"></script>
 
 <!-- Sub-Frame Displays -->
 <script src="code/js/subframes/FolderSidebarFrame.class.js" type="text/javascript"></script>

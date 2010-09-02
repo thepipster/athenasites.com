@@ -69,20 +69,51 @@ switch($cmd){
 		$status = CommandHelper::getPara('status', true, CommandHelper::$PARA_TYPE_STRING);
 		$can_comment = CommandHelper::getPara('comment', true, CommandHelper::$PARA_TYPE_NUMERIC);
 		$created_date = CommandHelper::getPara('pubdate', true, CommandHelper::$PARA_TYPE_STRING);
-		$import_source = CommandHelper::getPara('source', true, CommandHelper::$PARA_TYPE_STRING);
-		importPost($site_id, $content, $status, $title, $created_date, $can_comment, $import_source);
+		$import_source = CommandHelper::getPara('import_source', true, CommandHelper::$PARA_TYPE_STRING);
+		$csv_tags = CommandHelper::getPara('csvtags', true, CommandHelper::$PARA_TYPE_STRING);
+		$csv_categories = CommandHelper::getPara('csvcats', true, CommandHelper::$PARA_TYPE_STRING);
+		importPost($site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, $import_source);
 		break;				
+		
+ 	// comment: id, author, author_email, author_url, author_ip, date, date_gmt, content, approved, parent_id
 
+	case "importComment":
+		$author_name = CommandHelper::getPara('arn', true, CommandHelper::$PARA_TYPE_STRING);
+		$author_email = CommandHelper::getPara('aem', true, CommandHelper::$PARA_TYPE_STRING);
+		$author_ip = CommandHelper::getPara('aip', true, CommandHelper::$PARA_TYPE_STRING);
+		$content = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
+		$comment_id = CommandHelper::getPara('cid', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$parent_comment_id = CommandHelper::getPara('pcid', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$post_id = CommandHelper::getPara('pid', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$created_date = CommandHelper::getPara('pubdate', true, CommandHelper::$PARA_TYPE_STRING);
+		$approved = CommandHelper::getPara('apr', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$import_source = CommandHelper::getPara('import_source', true, CommandHelper::$PARA_TYPE_STRING);
+		importComment($site_id, $post_id, $author_name, $author_email, $author_ip, $content, $comment_id, $parent_comment_id, $created_date, $approved, $import_source);
+		break;
+						
+	case "approveComment":
+		break;
+				
 	case "addTag":
 		$tag = CommandHelper::getPara('tag', true, CommandHelper::$PARA_TYPE_STRING);
 		$post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
 		addTag($site_id, $post_id, $tag);
 		break;
 
+	case "addTags":
+		$csv_tags = CommandHelper::getPara('csvtags', true, CommandHelper::$PARA_TYPE_STRING);
+		addTags($site_id, $csv_tags);
+		break;
+
 	case "addCategory":
 		$category = CommandHelper::getPara('category', true, CommandHelper::$PARA_TYPE_STRING);
 		$post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
 		addCategory($site_id, $post_id, $category);
+		break;
+
+	case "addCategories":
+		$csv_categories = CommandHelper::getPara('csvcats', true, CommandHelper::$PARA_TYPE_STRING);
+		addCategories($site_id, $csv_categories);
 		break;
 
 	case "removeTag":
@@ -277,7 +308,7 @@ function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_c
 	
 	$user_id = SecurityUtils::getCurrentUserID();
 			
-	PostsTable::update($site_id, $post_id, StringUtils::makeHtmlSafe($content), $status, $title, $can_comment, StringUtils::encodeSlug($title));
+	PostsTable::update($site_id, $post_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, StringUtils::encodeSlug($title));
 			
 	$post = PostsTable::getPost($site_id, $post_id);
 
@@ -310,7 +341,7 @@ function addPost($site_id, $title, $content, $status, $slug, $can_comment){
 	//$path = getPath($site_id, $page_id);
 	$path = '';
 	
-	$post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, $title, $can_comment, StringUtils::encodeSlug($title));
+	$post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, StringUtils::encodeSlug($title));
 		
 	$post = PostsTable::getPost($site_id, $post_id);
 		
@@ -338,8 +369,154 @@ function addPost($site_id, $title, $content, $status, $slug, $can_comment){
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function importPost($site_id, $user_id, $content, $status, $title, $created_date, $can_comment, $import_source){
-	addPost($site_id, $title, $content, $status, $slug, $can_comment);	
+function importPost($site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, $import_source){
+
+//	Logger::debug("importPost(site_id=$site_id, content=$content, status=$status, title=$title, creted_date=$created_date, can_comment=$can_comment, import_source=$import_source)");
+//	Logger::debug("importPost(site_id=$site_id, status=$status, title=$title, creted_date=$created_date, can_comment=$can_comment, import_source=$import_source)");
+
+	$user_id = SecurityUtils::getCurrentUserID();
+		
+	// Convert put date to php date
+    $date_str = date('Y-m-d H:i:s', strtotime($created_date));
+
+	// Convert content based on source
+	switch($import_source){
+		case 'wordpress': $content = WordPressImporter::convert($content); break;
+	}
+	
+	if ($title == ""){
+		$slug = "post";
+	}
+	else {
+		$slug = StringUtils::encodeSlug($title);
+	}
+	
+	// Check to see if this post already exists, if so then we over-write it
+	$post_id = PostsTable::getPostIDFromDate($site_id, $date_str);
+	if (isset($post_id)){
+		PostsTable::update($site_id, $post_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, $slug);
+	}
+	else {
+		$post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, $slug);
+	}
+	
+	// Get path
+		
+	$day = date("d", strtotime($created_date));
+	$month = date("n",strtotime($created_date));
+	$year = date("Y", strtotime($created_date));
+		
+	$path = "/$year/$month/$day/";
+	
+	PostsTable::updatePath($post_id, $site_id, $path);
+	PostsTable::updateCreatedDate($post_id, $site_id, $date_str);
+	Logger::debug("Post ID = $post_id");
+	
+	
+	// Add tags..........
+	
+	$tag_list = explode(",", $csv_tags);
+	
+	foreach($tag_list as $tag){
+		$tag = trim($tag);
+		if ($tag != ""){
+			$safetag = StringUtils::makeTextSafe($tag);	
+			PostsTable::addTagToPost($site_id, $post_id, $safetag);
+		}
+	}
+
+	
+	// Add categories....
+	$cat_list = explode(",", $csv_categories);
+	
+	foreach($cat_list as $cat){
+		$cat = trim($cat);
+		if ($cat != ""){
+			$safecat = StringUtils::makeTextSafe($cat);			
+			PostsTable::addCategoryToPost($site_id, $post_id, $safecat);
+		}
+	}
+	
+	
+	/*		
+	$post = PostsTable::getPost($site_id, $post_id);
+
+	// Update pub date to match imported post
+	PostsTable::updateCreatedDate($post_id, $site_id, $date_str);
+			
+	if (isset($post)){
+		$post['last_edit'] = date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
+		$post['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
+		$post['tags'] = PostsTable::getPostTags($site_id, $post['id']);
+		$post['categories'] = PostsTable::getPostCategories($site_id, $post['id']);
+	}
+			
+	$msg['cmd'] = "importPost";
+	$msg['result'] = $post_id > 0 ? 'ok' : 'fail';
+	$msg['data'] = array('post' => $post);
+	*/
+
+	$msg['cmd'] = "importPost";
+	$msg['result'] = $post_id > 0 ? 'ok' : 'fail';
+	$msg['data'] = array('post_id' => $post_id);
+
+	CommandHelper::sendMessage($msg);	
+	
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function importComment($site_id, $post_id, $author_name, $author_email, $author_ip, $content, $comment_id, 
+		$parent_comment_id, $created_date, $approved, $import_source){
+
+//	Logger::debug("importComment($site_id, $post_id, $author_name, $author_email, $author_ip, $content, $comment_id, $parent_comment_id, $created_date, $approved, $import_source)");
+//	Logger::debug("Name = $author_name Email = $author_email IP = $author_ip");
+
+	// Convert put date to php date
+    $date_str = date('Y-m-d H:i:s', strtotime($created_date));
+
+	// Create/Update the blog follower....
+	if ($autor_email != ''){
+		$follower_id = SiteFollowersTable::getFollowerIDFromEmail($author_email);		
+	}
+	else {
+		// If they have no email, search by name - which is not ideal as name may not be unique
+		$follower_id = SiteFollowersTable::getFollowerIDFromName($author_name);
+	}	
+	
+	if (!isset($follower_id)){
+		$follower_id = SiteFollowersTable::addFollower($author_name, $author_email, $author_ip);
+	}
+	else {
+		SiteFollowersTable::updateFollower($follower_id, $author_ip);
+	}
+	
+	// Add follower to site
+	SiteFollowersTable::addFollowerToSite($follower_id, $site_id);
+		
+	// Create the comment
+	$status = 'Pending';
+	if ($approved == 1){ $status = 'Approved';}
+		
+	// Check to see if this comment already exists, if so then we over-write it
+	$temp_id = CommentsTable::getCommentIDFromDate($site_id, $date_str);
+	if (isset($temp_id)){
+		CommentsTable::update($site_id, $post_id, $temp_id, $parent_comment_id, $content, $status, $author_ip, $follower_id);
+	}
+	else {
+		$comment_id = CommentsTable::createForceID($site_id, $post_id, $comment_id, $parent_comment_id, $content, $status, $author_ip, $follower_id);
+	}	
+	
+	$day = date("d", strtotime($created_date));
+	$month = date("n",strtotime($created_date));
+	$year = date("Y", strtotime($created_date));
+	
+	CommentsTable::updateCreatedDate($comment_id, $site_id, $date_str);
+	
+	
+	$msg['cmd'] = "importComment";
+	$msg['result'] = $comment_id > 0 ? 'ok' : 'fail';
+	
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////
@@ -348,7 +525,7 @@ function addCategory($site_id, $post_id, $category){
 
 	$safecat = StringUtils::makeTextSafe($category);
 	
-	$category_id = PostsTable::addCategory($site_id, $post_id, $safecat);
+	$category_id = PostsTable::addCategoryToPost($site_id, $post_id, $safecat);
 					
 	$msg['cmd'] = "addCategory";
 	$msg['result'] = $category_id > 0 ? 'ok' : 'fail';
@@ -363,11 +540,59 @@ function addTag($site_id, $post_id, $tag){
 
 	$safetag = StringUtils::makeTextSafe($tag);
 	
-	$tag_id = PostsTable::addTag($site_id, $post_id, $safetag);
+	$tag_id = PostsTable::addTagToPost($site_id, $post_id, $safetag);
 
 	$msg['cmd'] = "addTag";
 	$msg['result'] = $tag_id > 0 ? 'ok' : 'fail';
 	$msg['data'] = array('tag' => $safetag, 'post_id' => $post_id);
+	
+	CommandHelper::sendMessage($msg);	
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+* Add mutliple categories at once, in the form of a csv list of them
+*/
+function addCategories($site_id, $csv_categories){
+
+	Logger::debug($csv_categories);
+	
+	$cat_list = explode(",", $csv_categories);
+	
+	foreach($cat_list as $cat){
+		$cat = trim($cat);
+		if ($cat != ""){
+			$safecat = StringUtils::makeTextSafe($cat);			
+			$category_id = PostsTable::addCategory($site_id, $safecat);
+		}
+	}
+						
+	$msg['cmd'] = "addCategories";
+	$msg['result'] = 'ok';
+	
+	CommandHelper::sendMessage($msg);	
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+* Add mutliple tags at once, in the form of a csv list of them
+*/
+function addTags($site_id, $csv_tags){
+
+	$tag_list = explode(",", $csv_tags);
+	
+	foreach($tag_list as $tag){
+		$tag = trim($tag);
+		if ($tag != ""){
+			$safetag = StringUtils::makeTextSafe($tag);	
+			$tag_id = PostsTable::addTag($site_id, $safetag);
+		}
+	}
+						
+	$msg['cmd'] = "addTags";
+	$msg['result'] = 'ok';
 	
 	CommandHelper::sendMessage($msg);	
 }

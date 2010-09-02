@@ -62,18 +62,32 @@ var WordpressImporter = {
 	* {title:postTitle, date:postDate, date_gmt:postDateGMT, can_comment:canComment, password: postPassword, author: postCreator, tags: postTags, categories: postCategories, content: postContent, excerpt: postExcerpt}
 	* comment: id, author, author_email, author_url, author_ip, date, date_gmt, content, approved, parent_id
 	*/
-	onPost : function(postJSONString){
+	onPost : function(postJSONString, commentsJSONString){
 	
 		WordpressImporter.ct++;
-			
-		var postObj = eval('(' + postJSONString + ')');
-		
-		//alert(postObj);
-		WordpressImporter.onMessage("Post Title: " + postObj.title + " Tags: " + postObj.tags + " No Comments: " + postObj.comments.length);
-		for (var i=0; i<postObj.comments.length; i++){
-			var id = postObj.comments[i].id;
-			WordpressImporter.onMessage("    >> Comment: id= " + id+"");
+		if (WordpressImporter.ct == 14){
+	//		alert(postJSONString);
 		}
+		
+		try {
+			//var postObj = $.parseJSON( WordpressImporter.stripslashes(postJSONString) );
+			var postObj = $.parseJSON( postJSONString );
+			var commentsObj = $.parseJSON( commentsJSONString );
+			//var postObj = eval('(' + postJSONString + ')');
+
+			//alert(postObj);
+			WordpressImporter.onMessage("Post Title: " + postObj.title + " Tags: " + postObj.tags + " No Comments: " + commentsObj.length);
+			//for (var i=0; i<postObj.comments.length; i++){
+			//	var id = postObj.comments[i].id;
+			//	WordpressImporter.onMessage("    >> Comment: id= " + id+"");
+			//}
+
+		}	
+		catch(err){
+//			alert(WordpressImporter.ct);
+			WordpressImporter.onError(err.toString());
+		}
+		
 	},
 
 	// ////////////////////////////////////////////////////////////////////////
@@ -109,8 +123,22 @@ var WordpressImporter = {
 
 	onError : function(msg){
 		$('#msg').append("<span style='color:red'>"+msg + "</span><br>");
-	}
+	},
 	
 	// ////////////////////////////////////////////////////////////////////////
 	
+	stripslashes : function(str) {
+	    return (str+'').replace(/\\(.?)/g, function (s, n1) {
+	        switch (n1) {
+	            case '\\':
+	                return '\\';
+	            case '0':
+	                return '\u0000';
+	            case '':
+	                return '';
+	            default:
+	                return n1;
+	        }
+   		 });   	 
+	}	
 }

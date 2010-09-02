@@ -8,4 +8,15 @@
 *
 * For reading files in flash see: http://www.mikechambers.com/blog/2008/08/20/reading-and-writing-local-files-in-flash-player-10/
 */
+class WordPressImporter {
+
+	public static function convert($content){
+		
+		// Convert the more tag
+		// <!--more-->
+		
+		return $content;
+	}
+}
+
 ?>
