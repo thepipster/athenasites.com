@@ -21,6 +21,7 @@
 *
 * @author Mike Pritchard (mike@adastrasystems.com)
 * @since July 6th, 2006
+* @version 2.1
 */
 class DatabaseManager {
 
@@ -39,9 +40,18 @@ class DatabaseManager {
 	/** verbose flag, if true debug data is dumped */
 	private static $verbose = false;
 
-	/** Database connection */
-	private static $connection = NULL;
-
+	/** 
+	* Array of connections, we only store a connections to the master DB and 
+	* and a single random slave to use for this session
+	*/
+	private static $connections = null;
+			
+	/** Maximum number of slaves */
+	public static $MAX_NO_SLAVES = 10;
+	
+	/** Store the currently used connection */
+	private static $currentCon = null;
+	
 	// //////////////////////////////////////////////////////////////////////////////////////
 	
 	public static function setUsername($newVal) {self::$username = $newVal;}
@@ -61,14 +71,22 @@ class DatabaseManager {
 	*/
 	public static function connect(){
 
+		$slaveDBs = array();
+		$noSlaves = 0;
+
 		if (self::$username == ""){
+			
 			if (defined('database_user')){
 				//Logger::debug("DB Username is not set, but found credentials stored in Session");
 				self::$username = database_user;
 				self::$password = database_pass;
 				self::$databaseName = database_name;
 				self::$verbose = database_verbose;	
-				self::$databaseURL = database_host;	
+				self::$databaseURL = database_host;
+				for ($i=0; $i<self::$MAX_NO_SLAVES; $i++){
+					if (defined('slave_host_'.$i)) eval('$slaveDBs[] = slave_host_'.$i.';');
+				}
+				$noSlaves = count($slaveDBs);
 			}
 			else {
 				Logger::fatal("DB Username is not set, and could not find credentials in Session!!!");
@@ -76,66 +94,112 @@ class DatabaseManager {
 			
 		}
 		
-		// Attempt to connect to MySQL engine on target server (at specified IP)....
-		self::$connection = mysql_connect(self::$databaseURL, self::$username, self::$password);
+		self::$connections = array();
+		$hosts = array();
+		
+		// Attempt to connect to master DB....
+		self::$connections['master'] = mysql_connect(self::$databaseURL, self::$username, self::$password);
+		$hosts['master'] = self::$databaseURL;
+				
+		// Connect to a single random slave, to use for this session
+		if ($noSlaves > 0){
+			$host = $slaveDBs[mt_rand(0, $noSlaves-1)];
+			self::$connections['slave'] = mysql_connect($host, self::$username, self::$password);		
+			$hosts['slave'] = $host;
+		}		
+								
 
-		if (self::$connection != FALSE){
-
-			// Link established with database......
-			//self::$debug("connect() - Connection to MySQL server OK!");
-
-			// Select the relevant database.........
-			if (mysql_select_db(self::$databaseName, self::$connection)) {
-				//Logger::debug("Connection to MySQL database '" . self::$databaseName . "' OK!");
+		// Connect to database
+		//for($i=0; $i<count(self::$connection); $i++)
+		foreach(self::$connections as $host=>$cx){		
+		
+			//$cx = self::$connection[$i];
+			//$host = ($i == 0) ? $databaseURL . "(Master)" : $slaveDBs[$i-1];
+			
+			if ($cx != FALSE){
+	
+				// Select the relevant database.........
+				if (mysql_select_db(self::$databaseName, $cx)) {
+					Logger::debug("Connected to MySQL database '".self::$databaseName."' OK for " . $hosts[$host] . " ($host)");
+				}	
+				else {
+					Logger::fatal("Connection to MySQL database '".self::$databaseName."' FAILED for " . $hosts[$host] . " ($host)");
+				}			
+	
 			}
 			else {
-				Logger::fatal("Failed to connect to MySQL database '" . self::$databaseName . "'");
+				Logger::fatal("Connection to MySQL database '$host' failed with username " . self::$username . "!");
 			}
-
+			
 		}
-		else {
-			//if (self::$verbose)
-			$msg = "connect() - Connection to MySQL database '" . self::$databaseName . "' Failed!"
-				. " Username = " . self::$username . " Password = " . self::$password . " Host = " . self::$databaseURL;
-			Logger::fatal($msg);
-			//print($msg);
-			//exit();
-		}
-		
-		//Logger::debug("Connection to database initialized ok!");
+				
 	}
-
+	
 	// //////////////////////////////////////////////////////////////////////////////////////
 
 	/**
 	* Close the connection to the database
 	*/
 	public static function close(){
-		// Close the link with the MySql engine on the server
-		//Logger::debug("close() - Closing connection...");
-        if (self::$connection) @mysql_close(self::$connection);
+		// Close the connections
+		foreach(self::$connections as $cx){		
+	        if ($cx) @mysql_close($cx);
+		}
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////
 
+	/** 
+	* Use the slave connection, if not available or set use the master DB instead
+	*/
+	private static function useSlave(){	
+		if (isset(self::$connections['slave'])){
+			self::$currentCon = self::$connections['slave'];
+		}
+		else {
+			self::useMaster();
+		}
+	}
+
+	/** Use the master connections */
+	private static function useMaster(){self::$currentCon = self::$connections['master'];}
+
+	// //////////////////////////////////////////////////////////////////////////////////////
+
 	public static function insert($query){	
-		$result = self::submitQuery($query);				
-		return mysql_insert_id();
+		self::useMaster();
+		$result = self::internalQuery($query);				
+		return mysql_insert_id(self::$currentCon);
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////
 
 	public static function update($query){	
-		$result = self::submitQuery($query);				
+		self::useMaster();
+		$result = self::internalQuery($query);				
 		return $result;
 	}
 	
 	// //////////////////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Perform a basic query, this will use the master connection is it can not know what kind
+	* of query the user is attempting
+	*/
 	public static function submitQuery($query){
+		self::useMaster();
+		return self::internalQuery($query);
+	}
+	
+	// //////////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Perform a basic query using the current connection
+	*/
+	private static function internalQuery($query){
 
 		// Check to see if connection has been opened, if not connect to database
-		if (self::$connection == NULL)
+		if (self::$currentCon == NULL)
 			self::connect();
 
 		if (self::$verbose == true){
@@ -143,11 +207,11 @@ class DatabaseManager {
 		}
 			
 		// Submit query....
-		$result = mysql_query($query, self::$connection);
+		$result = mysql_query($query, self::$currentCon);
 
 		// Handle result.....
 		if (!$result){
-			Logger::fatal("Database query error = " . mysql_error() . " Query = [$query] ");
+			Logger::fatal("Database query error = " . mysql_error(self::$currentCon) . " Query = [$query] ");
 		}
 		//else
 		//	Logger::debug("Database Query = [$query] ");	
@@ -162,7 +226,7 @@ class DatabaseManager {
 		if ($query_result != false || $query_result != NULL)
 			//mysql_free_result($query_result, self::$connection);
 			try {
-				@mysql_free_result($query_result);
+				@mysql_free_result($query_result, self::$currentCon);
 			}
 			catch (Exception $e) {
     			Logger::error('Caught exception: ',  $e->getMessage());
@@ -172,8 +236,8 @@ class DatabaseManager {
     // //////////////////////////////////////////////////////////////////////////////////////
 
     public static function make_sql_safe($string){
-		if (self::$connection == NULL) self::connect();
-        return mysql_real_escape_string($string);
+		if (self::$currentCon == NULL) self::connect();
+        return mysql_real_escape_string($string, self::$currentCon);
     }
 
     // //////////////////////////////////////////////////////////////////////////////////////
@@ -214,7 +278,7 @@ class DatabaseManager {
 		$query = str_replace('%s', "'%s'", $query); // quote the strings
 		
 		for($i=0; $i<count($args); $i++){
-			$args[$i] = mysql_real_escape_string($args[$i]);
+			$args[$i] = mysql_real_escape_string($args[$i], self::$currentCon);
 		}
 		
 		//array_walk($args, array(&$this, 'mysql_real_escape_string'));
@@ -232,7 +296,9 @@ class DatabaseManager {
 	 */
 	public static function getVar($sql) {
 	
-		$results = DatabaseManager::submitQuery($sql);
+		self::useSlave();
+
+		$results = DatabaseManager::internalQuery($sql);
 
 		// Return null if there are no results
 		if (!$results) {
@@ -257,7 +323,9 @@ class DatabaseManager {
 	*/
 	public static function getColumn($sql){
 		
-		$results = DatabaseManager::submitQuery($sql);
+		self::useSlave();
+		
+		$results = DatabaseManager::internalQuery($sql);
 
 		if (!$results || mysql_num_rows($results) == 0) {
 			return null;
@@ -282,7 +350,9 @@ class DatabaseManager {
 	*/
 	public static function getRow($sql){
 
-		$results = DatabaseManager::submitQuery($sql);
+		self::useSlave();
+
+		$results = DatabaseManager::internalQuery($sql);
 
 		if (!$results || mysql_num_rows($results) == 0) {
 			return null;
@@ -302,7 +372,9 @@ class DatabaseManager {
 	*/
 	public static function getResults($sql){
 		
-		$results = DatabaseManager::submitQuery($sql);
+		self::useSlave();
+		
+		$results = DatabaseManager::internalQuery($sql);
 
 		if (!$results || mysql_num_rows($results) == 0) {
 			return null;
@@ -328,7 +400,9 @@ class DatabaseManager {
 	*/
 	public static function getSingleResult($sql){
 		
-		$results = DatabaseManager::submitQuery($sql);
+		self::useSlave();
+		
+		$results = DatabaseManager::internalQuery($sql);
 
 		if (!$results || mysql_num_rows($results) == 0) {
 			return null;
