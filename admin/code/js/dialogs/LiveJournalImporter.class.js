@@ -41,7 +41,7 @@ var LiveJournalImporter = {
 				width:385, 
 				height:260, 
 				resizable:false, 
-				title: 'Import a WordPress blog' });
+				title: 'Import your LiveJournal blog' });
 		
 		// Progress bar.....
 		

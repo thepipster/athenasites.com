@@ -25,6 +25,7 @@ class CommentsTable {
 		  `author_ip` bigint(20) default NULL,
 		  `source` varchar(20) default NULL,
 		  `source_id` int(11) default NULL,
+		  `source_post_id` int(11) default NULL,
 		  `site_follower_id` int(11) NOT NULL,
 		  PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;";
@@ -97,7 +98,12 @@ class CommentsTable {
     }    
 
     public static function updatePostID($comment_id, $site_id, $post_id){
-		$sql = DatabaseManager::prepare("UPDATE athena_%d_Comments SET post_id=%d WHERE id = %d", $site_id, $created_date, $post_id);
+		$sql = DatabaseManager::prepare("UPDATE athena_%d_Comments SET post_id=%d WHERE id = %d", $site_id, $post_id, $comment_id);
+		return DatabaseManager::update($sql);
+    }    
+
+    public static function updateSourcePostID($comment_id, $site_id, $source_post_id){
+		$sql = DatabaseManager::prepare("UPDATE athena_%d_Comments SET source_post_id=%d WHERE id = %d", $site_id, $source_post_id, $comment_id);
 		return DatabaseManager::update($sql);
     }    
     
@@ -107,14 +113,20 @@ class CommentsTable {
     }    
 
     public static function updateSource($comment_id, $site_id, $source){
-		$sql = DatabaseManager::prepare("UPDATE athena_%d_Comments SET source=%s WHERE id = %s", $site_id, $source, $comment_id);
+		$sql = DatabaseManager::prepare("UPDATE athena_%d_Comments SET source=%s WHERE id = %s", $site_id, strtolower($source), $comment_id);
 		return DatabaseManager::update($sql);
     }    
     
 	// /////////////////////////////////////////////////////////////////////////////////
 
-	public static function getLastCommentSourceID($site_id){
-		$sql = DatabaseManager::prepare("SELECT max(source_id) FROM athena_%d_Comments", $site_id);			
+	public static function getLastCommentSourceID($site_id, $source){
+		$sql = DatabaseManager::prepare("SELECT max(source_id) FROM athena_%d_Comments WHERE source=%s", $site_id, strtolower($source));			
+		Logger::debug($sql);
+		return DatabaseManager::getVar($sql);				
+	}
+
+	public static function getCommentIDFromSourceID($site_id, $source_id, $source){
+		$sql = DatabaseManager::prepare("SELECT id FROM athena_%d_Comments WHERE source_id=%d AND source=%s", $site_id, $source_id, strtolower($source));			
 		return DatabaseManager::getVar($sql);				
 	}
 	

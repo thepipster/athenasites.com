@@ -7,7 +7,7 @@
 * @since 6th Septmeber, 2010
 * @author Mike Pritchard, mike@apollosites.com
 */
-class LiveJournalHelper {
+class LiveJournalImporter {
 
 	private static $username = 'charlottegeary';
 	private static $password = 'r00bies';
@@ -19,8 +19,8 @@ class LiveJournalHelper {
 
 	private static $ljCookie = '';
 	
-	private static $comment_meta = null;
-	private static $comments = null;
+	//private static $comment_meta = null;
+	//private static $comments = null;
 	private static $user_list = null;
 	private static $max_comment_id = -1;
 		
@@ -37,44 +37,14 @@ class LiveJournalHelper {
 		Logger::debug("User = $lj_user Pass = $lj_pass");
 		
 		// Get the posts since the last sync
-		//self::getEvents($user_id, $site_id);
+		self::getSyncItems($site_id);
+		self::getEvents($user_id, $site_id);
 				
 		// Get the comments since the last sync		
 		
 		self::getCommentMeta($site_id);
 		self::getComments($site_id);
-	
-		// Import the comments
-		foreach(self::$comments as $comment){
-
-			$author_name 		= self::getPosterName($comment['poster_id']);
-			$author_email 		= "";
-			$author_ip 			= "";
-			$author_url 		= "";
-			$content 			= urldecode($comment['content']);
-			$import_source_id	= $comment['id'];
-			$parent_comment_id 	= 0;
-			$created_date 		= $comment['pub_date'];
-			$approved 			= 1;
 					
-			$comment_id = ImportHelper::importComment($site_id, $post_id, $author_name, $author_email, $author_ip, $author_url, $content, $parent_comment_id, 
-					$created_date, $approved, $import_source, $import_source_id);
-			
-		}				
-	}
-
-	// /////////////////////////////////////////////////////////////////////////////////
-	
-
-	
-	// /////////////////////////////////////////////////////////////////////////////////
-
-	private static function getPosterName($poster_id){
-		$name = "";
-		if (array_key_exists($poster_id, self::$user_list)){
-			$name = self::$user_list[$poster_id];
-		}
-		return $name;
 	}
 				
 	// /////////////////////////////////////////////////////////////////////////////////
@@ -155,21 +125,22 @@ class LiveJournalHelper {
 	*/
 	private static function getCommentMeta($site_id){
 
-		$next_id = CommentsTable::getLastCommentSourceID($site_id);
+		$next_id = CommentsTable::getLastCommentSourceID($site_id, 'LiveJournal');
 		if (!isset($next_id)) $next_id = 0;
+		
 		$numitems = 10000;			
 		$isMore = true;
 
-		self::$comment_meta = array();
+		$comment_meta = array();
 		self::$user_list = array();
+		
+		Logger::debug(">>> Getting comment meta with next_id = $next_id");
 		
 		// Loop until we have all the comments			
 	    while ($isMore) {
 	        
 	        $content = self::doFetchComments('comment_meta', $next_id, $numitems);
-	        
-	        //Logger::dump($content);
-	        
+	        	        
 	        // now we want to XML parse this
 			//$root = new SimpleXMLElement($content);		        
 			
@@ -208,19 +179,21 @@ class LiveJournalHelper {
 				if ($id > self::$max_comment_id) self::$max_comment_id = $id;
 				
 				// Store the comment meta data
-				self::$comment_meta[] = array('id' => $id, 'poster_id' => $poster_id);
+				//self::$comment_meta[] = array('id' => $id, 'poster_id' => $poster_id);
 			}
 
 			$user_list = $doc->getElementsByTagName("usermap");
+
 			foreach($user_list as $user){				
+				
 				$user_id = $user->getAttribute('id');
 				$username = $user->getAttribute('user');				
-
+				
 				// Store the user data
 				//self::$user_list[] = array('id' => $id, 'username' => $username);
-				self::$user_list[$id] = $username;
+				self::$user_list[$user_id] = $username;
 			}
-
+			
 	    }
 
 		Logger::debug("Finished fetching comment meta!!");
@@ -254,13 +227,11 @@ class LiveJournalHelper {
 	*/
 	private static function getComments($site_id){
 
-		$next_id = CommentsTable::getLastCommentSourceID($site_id);
+		$next_id = CommentsTable::getLastCommentSourceID($site_id, 'LiveJournal');
 		if (!isset($next_id)) $next_id = 0;
 		
 		$numitems = 1000;			
 		$isMore = true;
-
-		self::$comments = array();
 
 		// Loop until we have all the comments			
 	    while ($isMore) {
@@ -273,10 +244,14 @@ class LiveJournalHelper {
 			$doc->loadXML($content);
 	        
 			$comment_list = $doc->getElementsByTagName("comment");
+			$comments = array();
+			
 			foreach($comment_list as $comment){
 				
 				$id = $comment->getAttribute('id');
+				$post_id = $comment->getAttribute('jitemid');
 				$poster_id = 0;
+				$parent_id = 0;
 								
 				foreach($comment->childNodes as $child){
 					if ($child->nodeName == 'body') $body = $child->textContent;
@@ -287,8 +262,13 @@ class LiveJournalHelper {
 				if ($comment->hasAttribute('posterid')){
 					$poster_id = $comment->getAttribute('posterid');
 				}
+				
+				if ($comment->hasAttribute('parentid')){
+					$parent_id = $comment->getAttribute('parentid');
+				}
+								
 		        				
-				self::$comments[] = array('id' => $id, 'poster_id' => $poster_id, 'content' => $body, 'pub_date' => $date_str);
+				$comments[] = array('id' => $id, 'poster_id' => $poster_id, 'content' => $body, 'pub_date' => $date_str, 'post_id' => $post_id, 'parent_id' => $parent_id);
 			}
 
 	        if ($next_id >= self::$max_comment_id){
@@ -296,6 +276,26 @@ class LiveJournalHelper {
 	        }
 
 	        $next_id += $numitems;
+	        
+	        // Import into apollo.....
+	        
+			foreach($comments as $comment){
+	
+				$author_name 		= self::getPosterName($comment['poster_id']);
+				$author_email 		= "";
+				$author_ip 			= "";
+				$author_url 		= "";
+				$content 			= urldecode($comment['content']);
+				$import_source_id	= $comment['id'];
+				$parent_comment_id 	= $comment['parent_id'];
+				$created_date 		= $comment['pub_date'];
+				$approved 			= 1;
+				$post_id			= $comment['post_id'];
+						
+				$comment_id = ImportHelper::importCommentUsingSourcePostID($site_id, $post_id, $author_name, $author_email, $author_ip, $author_url, $content, $parent_comment_id, 
+						$created_date, $approved, 'LiveJournal', $import_source_id);
+				
+			}	        
 			
 	    }
 
@@ -308,8 +308,10 @@ class LiveJournalHelper {
 	/**
 	* Returns a list of all the items that have been created or updated for a user. 
 	*/
-	private static function getSyncItems(){
+	private static function getSyncItems($site_id){
 		
+		self::setLastSyncTime($site_id);
+
 		$client = new IXR_Client('www.livejournal.com', '/interface/xmlrpc', self::$useragent);
 
 		$args = array(
@@ -421,5 +423,47 @@ class LiveJournalHelper {
 		$post_id = ImportHelper::importPost($user_id, $site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, 'LiveJournal');
 		PostsTable::updateSourceID($post_id, $site_id, $item_id);
 	}
+	
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	private static function getPosterName($poster_id){
+		
+		$name = "";
+/*
+		if (isset($poster_id) && $poster_id > 0){
+			if (array_key_exists($poster_id, self::$user_list)){
+				$name = self::$user_list[$poster_id];
+			}
+			else {
+				Logger::dump(self::$user_list);
+				Logger::error("Could not find user with id = $poster_id");
+				die();
+			}
+		}		
+		*/
+		
+		if (!isset($poster_id) || $poster_id == 0){
+			return "";
+		}
+		/*
+		foreach(self::$user_list as $user){
+			if ($user['id'] == $poster_id){
+				return $user['username'];
+			}
+		}
+		
+		Logger::dump(self::$user_list);
+		Logger::debug(">>>> Poster ID $poster_id");
+		die();
+		*/
+		$name = "";
+		
+		if (array_key_exists($poster_id, self::$user_list)){
+			$name = self::$user_list[$poster_id];
+		}
+					
+		return $name;
+	}
+	
 }
 ?>

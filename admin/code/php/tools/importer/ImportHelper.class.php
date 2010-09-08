@@ -75,13 +75,47 @@ class ImportHelper {
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	* Import a comment, and assign to the given post. However, if we don't know what the post id for apollo is, but we do know the import source post id (e.g. we know the live journal post id, but not our own) then
 	* set $import_post_id to the source's post id.
 	*
 	* @param $site_id
-	* @param $post_id
+	* @param $source_post_id - The post id for this comment given by the source (e.g. Wordpress)
+	* @param $author_name
+	* @param $author_email
+	* @param $author_ip
+	* @param $author_url
+	* @param $content
+	* @param $parent_comment_id
+	* @param $created_date
+	* @param $approved - 1 or 0
+	* @param $import_source - Source of the blog
+	*/
+	public static function importCommentUsingSourcePostID($site_id, $source_post_id, $author_name, $author_email, $author_ip, $author_url, $content, $parent_comment_id, 
+													$created_date, $approved, $import_source, $import_source_id){
+		
+		$apollo_post_id = PostsTable::getPostFromSourceID($site_id, $source_post_id);
+		if (!isset($apollo_post_id)){
+			$apollo_post_id = 0;
+		}
+													
+		$comment_id = self::importComment($site_id, $apollo_post_id, $author_name, $author_email, $author_ip, $author_url, $content, $parent_comment_id, 
+													$created_date, $approved, $import_source, $import_source_id);											
+
+		CommentsTable::updatePostID($comment_id, $site_id, $apollo_post_id);
+		CommentsTable::updateSourcePostID($comment_id, $site_id, $source_post_id);
+		
+		return $comment_id;
+	}
+	
+	// /////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	* Import a comment, and assign to the given post. 
+	*
+	* @param $site_id
+	* @param $apollo_post_id - The (apollo) post id for this comment
 	* @param $author_name
 	* @param $author_email
 	* @param $author_ip
@@ -92,10 +126,9 @@ class ImportHelper {
 	* @param $approved - 1 or 0
 	* @param $import_source - Source of the blog
 	* @param $import_source_id - (optional) Source id for the comment (e.g. this would be the comment id given by wordpress etc)
-	* @param $import_post_id - (optional) The post id from the source, e.g. if importing from wordpress, this is the post id used by wordpress. This is used to match comments to their correct post
 	*/
-	public static function importComment($site_id, $post_id, $author_name, $author_email, $author_ip, $author_url, $content, $parent_comment_id, 
-													$created_date, $approved, $import_source, $import_source_id=null, $import_post_id=null){
+	public static function importComment($site_id, $apollo_post_id, $author_name, $author_email, $author_ip, $author_url, $content, $parent_comment_id, 
+													$created_date, $approved, $import_source, $import_source_id=null){
 
 		// Convert put date to php date
 	    $date_str = date('Y-m-d H:i:s', strtotime($created_date));
@@ -112,12 +145,7 @@ class ImportHelper {
 			// If they have no email or URL, search by name - which is not ideal as name may not be unique
 			$follower_id = SiteFollowersTable::getFollowerIDFromName($author_name);
 		}	
-		
-		CommentsTable::updateSource($post_id, $site_id, $import_source);
-		if (isset($import_source_id)){
-			CommentsTable::updateSourceID($post_id, $site_id, $import_source_id);
-		}
-		
+							
 		if (!isset($follower_id)){
 			$follower_id = SiteFollowersTable::addFollower($author_name, $author_email, $author_ip, $author_url);
 			SiteFollowersTable::updateCreatedDate($follower_id, $date_str); // Force the imported comment date as the create date for this follower
@@ -135,21 +163,22 @@ class ImportHelper {
 		if ($approved == 1){ $status = 'Approved';}
 			
 		// Check to see if this comment already exists, if so then we over-write it
-		$temp_id = CommentsTable::getCommentIDFromDate($site_id, $date_str);
-		if (isset($temp_id)){
-			CommentsTable::update($site_id, $post_id, $temp_id, $parent_comment_id, $content, $status, $author_ip, $follower_id);
+		$comment_id = CommentsTable::getCommentIDFromDate($site_id, $date_str);
+		if (!isset($comment_id)){
+			//$comment_id = CommentsTable::createForceID($site_id, $apollo_post_id, $comment_id, $parent_comment_id, $content, $status, $author_ip, $follower_id);
+			$comment_id = CommentsTable::create($site_id, $apollo_post_id, $parent_comment_id, $content, $status, $author_ip, $follower_id);
 		}
-		else {
-			$comment_id = CommentsTable::createForceID($site_id, $post_id, $comment_id, $parent_comment_id, $content, $status, $author_ip, $follower_id);
-		}	
+//		else {
+//			Logger::debug("This comment already exists");
+//			CommentsTable::update($site_id, $apollo_post_id, $comment_id, $parent_comment_id, $content, $status, $author_ip, $follower_id);
+//		}	
 
-		
-		if ($import_post_id != null){
-			$post_id = PostsTable::getPostFromSourceID($site_id, $import_post_id);
-			CommentsTable::updatePostID($comment_id, $site_id, $post_id);
-		}
-			
+					
 		CommentsTable::updateCreatedDate($comment_id, $site_id, $date_str);
+		CommentsTable::updateSource($comment_id, $site_id, $import_source);
+		if (isset($import_source_id)){
+			CommentsTable::updateSourceID($comment_id, $site_id, $import_source_id);
+		}
 		
 		return $comment_id;
 	}	

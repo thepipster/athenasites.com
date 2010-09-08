@@ -408,7 +408,7 @@ function importLiveJournal($site_id, $lj_user, $lj_password){
 	$user_id = SecurityUtils::getCurrentUserID();
 
 	// Do the import
-	LiveJournalHelper::import($user_id, $site_id, $lj_user, $lj_password);
+	LiveJournalImporter::import($user_id, $site_id, $lj_user, $lj_password);
 	
 	$msg['cmd'] = "importLiveJournal";
 	$msg['result'] = 'ok';	
@@ -435,7 +435,10 @@ function importComments($site_id, $post_id, $comment_obj, $import_source){
 		$created_date 		= $comment->date_gmt;
 		$approved 			= $comment->approved;
 
-		$comment_id = ImportHelper::importComment($site_id, $post_id, $author_name, $author_email, $author_ip, $author_url, $content, $parent_comment_id, $created_date, $approved, $import_source, $import_source_id);
+		// Find the comment id that matches the given parent comment id, based on the import source
+		$real_parent_id = getCommentIDFromSourceID($site_id, $parent_comment_id, $import_source);
+		
+		$comment_id = ImportHelper::importComment($site_id, $post_id, $author_name, $author_email, $author_ip, $author_url, $content, $real_parent_id, $created_date, $approved, $import_source, $import_source_id);
 	}
 		
 	$msg['cmd'] = "importComments";
