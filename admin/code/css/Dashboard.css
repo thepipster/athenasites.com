@@ -2,3 +2,17 @@
 	color: blue;
 	padding-bottom: 5px;
 }
+
+#apolloBlogImporter .label {
+	color: black;
+	padding-bottom: 5px;
+	padding-right: 10px;
+}
+
+#apolloBlogImporter input {
+	border-color: #3b3b3b;
+	border-width: 1px;
+	background-color: #989898;
+	color: #f2f9ff;
+	padding-left: 3px;
+}

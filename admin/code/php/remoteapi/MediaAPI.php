@@ -75,12 +75,12 @@ switch($cmd){
 		importPost($site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, $import_source);
 		break;				
 		
- 	// comment: id, author, author_email, author_url, author_ip, date, date_gmt, content, approved, parent_id
-
+/*		
 	case "importComment":
 		$author_name = CommandHelper::getPara('arn', true, CommandHelper::$PARA_TYPE_STRING);
 		$author_email = CommandHelper::getPara('aem', true, CommandHelper::$PARA_TYPE_STRING);
 		$author_ip = CommandHelper::getPara('aip', true, CommandHelper::$PARA_TYPE_STRING);
+		$author_url = CommandHelper::getPara('aurl', true, CommandHelper::$PARA_TYPE_STRING);
 		$content = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
 		$comment_id = CommandHelper::getPara('cid', true, CommandHelper::$PARA_TYPE_NUMERIC);
 		$parent_comment_id = CommandHelper::getPara('pcid', true, CommandHelper::$PARA_TYPE_NUMERIC);
@@ -88,9 +88,23 @@ switch($cmd){
 		$created_date = CommandHelper::getPara('pubdate', true, CommandHelper::$PARA_TYPE_STRING);
 		$approved = CommandHelper::getPara('apr', true, CommandHelper::$PARA_TYPE_NUMERIC);
 		$import_source = CommandHelper::getPara('import_source', true, CommandHelper::$PARA_TYPE_STRING);
-		importComment($site_id, $post_id, $author_name, $author_email, $author_ip, $content, $comment_id, $parent_comment_id, $created_date, $approved, $import_source);
+		importComment($site_id, $post_id, $author_name, $author_email, $author_ip, $author_url, $content, $comment_id, $parent_comment_id, $created_date, $approved, $import_source);
 		break;
+*/
+		
+	case "importLJ":
+		$lj_user = CommandHelper::getPara('us', true, CommandHelper::$PARA_TYPE_STRING);
+		$lj_password = CommandHelper::getPara('ps', true, CommandHelper::$PARA_TYPE_STRING);
+		importLiveJournal($site_id, $lj_user, $lj_password);
+		break;	
 						
+	case "importComments":
+		$comment_obj = CommandHelper::getPara('com', true, CommandHelper::$PARA_TYPE_JSON);
+		$post_id = CommandHelper::getPara('pid', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$import_source = CommandHelper::getPara('ims', true, CommandHelper::$PARA_TYPE_STRING);
+		importComments($site_id, $post_id, $comment_obj, $import_source);
+		break;				
+								
 	case "approveComment":
 		break;
 				
@@ -371,91 +385,10 @@ function addPost($site_id, $title, $content, $status, $slug, $can_comment){
 
 function importPost($site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, $import_source){
 
-//	Logger::debug("importPost(site_id=$site_id, content=$content, status=$status, title=$title, creted_date=$created_date, can_comment=$can_comment, import_source=$import_source)");
-//	Logger::debug("importPost(site_id=$site_id, status=$status, title=$title, creted_date=$created_date, can_comment=$can_comment, import_source=$import_source)");
-
 	$user_id = SecurityUtils::getCurrentUserID();
-		
-	// Convert put date to php date
-    $date_str = date('Y-m-d H:i:s', strtotime($created_date));
-
-	// Convert content based on source
-	switch($import_source){
-		case 'wordpress': $content = WordPressImporter::convert($content); break;
-	}
 	
-	if ($title == ""){
-		$slug = "post";
-	}
-	else {
-		$slug = StringUtils::encodeSlug($title);
-	}
+	$post_id = ImportHelper::importPost($user_id, $site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, $import_source);
 	
-	// Check to see if this post already exists, if so then we over-write it
-	$post_id = PostsTable::getPostIDFromDate($site_id, $date_str);
-	if (isset($post_id)){
-		PostsTable::update($site_id, $post_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, $slug);
-	}
-	else {
-		$post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, $slug);
-	}
-	
-	// Get path
-		
-	$day = date("d", strtotime($created_date));
-	$month = date("n",strtotime($created_date));
-	$year = date("Y", strtotime($created_date));
-		
-	$path = "/$year/$month/$day/";
-	
-	PostsTable::updatePath($post_id, $site_id, $path);
-	PostsTable::updateCreatedDate($post_id, $site_id, $date_str);
-	Logger::debug("Post ID = $post_id");
-	
-	
-	// Add tags..........
-	
-	$tag_list = explode(",", $csv_tags);
-	
-	foreach($tag_list as $tag){
-		$tag = trim($tag);
-		if ($tag != ""){
-			$safetag = StringUtils::makeTextSafe($tag);	
-			PostsTable::addTagToPost($site_id, $post_id, $safetag);
-		}
-	}
-
-	
-	// Add categories....
-	$cat_list = explode(",", $csv_categories);
-	
-	foreach($cat_list as $cat){
-		$cat = trim($cat);
-		if ($cat != ""){
-			$safecat = StringUtils::makeTextSafe($cat);			
-			PostsTable::addCategoryToPost($site_id, $post_id, $safecat);
-		}
-	}
-	
-	
-	/*		
-	$post = PostsTable::getPost($site_id, $post_id);
-
-	// Update pub date to match imported post
-	PostsTable::updateCreatedDate($post_id, $site_id, $date_str);
-			
-	if (isset($post)){
-		$post['last_edit'] = date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
-		$post['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
-		$post['tags'] = PostsTable::getPostTags($site_id, $post['id']);
-		$post['categories'] = PostsTable::getPostCategories($site_id, $post['id']);
-	}
-			
-	$msg['cmd'] = "importPost";
-	$msg['result'] = $post_id > 0 ? 'ok' : 'fail';
-	$msg['data'] = array('post' => $post);
-	*/
-
 	$msg['cmd'] = "importPost";
 	$msg['result'] = $post_id > 0 ? 'ok' : 'fail';
 	$msg['data'] = array('post_id' => $post_id);
@@ -465,60 +398,55 @@ function importPost($site_id, $content, $status, $title, $created_date, $can_com
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////////////
 
-function importComment($site_id, $post_id, $author_name, $author_email, $author_ip, $content, $comment_id, 
-		$parent_comment_id, $created_date, $approved, $import_source){
+/**
+* Imports posts and comments from livejournal
+*/
+function importLiveJournal($site_id, $lj_user, $lj_password){
 
-//	Logger::debug("importComment($site_id, $post_id, $author_name, $author_email, $author_ip, $content, $comment_id, $parent_comment_id, $created_date, $approved, $import_source)");
-//	Logger::debug("Name = $author_name Email = $author_email IP = $author_ip");
+	$user_id = SecurityUtils::getCurrentUserID();
 
-	// Convert put date to php date
-    $date_str = date('Y-m-d H:i:s', strtotime($created_date));
-
-	// Create/Update the blog follower....
-	if ($autor_email != ''){
-		$follower_id = SiteFollowersTable::getFollowerIDFromEmail($author_email);		
-	}
-	else {
-		// If they have no email, search by name - which is not ideal as name may not be unique
-		$follower_id = SiteFollowersTable::getFollowerIDFromName($author_name);
-	}	
+	// Do the import
+	LiveJournalHelper::import($user_id, $site_id, $lj_user, $lj_password);
 	
-	if (!isset($follower_id)){
-		$follower_id = SiteFollowersTable::addFollower($author_name, $author_email, $author_ip);
-	}
-	else {
-		SiteFollowersTable::updateFollower($follower_id, $author_ip);
-	}
+	$msg['cmd'] = "importLiveJournal";
+	$msg['result'] = 'ok';	
 	
-	// Add follower to site
-	SiteFollowersTable::addFollowerToSite($follower_id, $site_id);
-		
-	// Create the comment
-	$status = 'Pending';
-	if ($approved == 1){ $status = 'Approved';}
-		
-	// Check to see if this comment already exists, if so then we over-write it
-	$temp_id = CommentsTable::getCommentIDFromDate($site_id, $date_str);
-	if (isset($temp_id)){
-		CommentsTable::update($site_id, $post_id, $temp_id, $parent_comment_id, $content, $status, $author_ip, $follower_id);
-	}
-	else {
-		$comment_id = CommentsTable::createForceID($site_id, $post_id, $comment_id, $parent_comment_id, $content, $status, $author_ip, $follower_id);
-	}	
-	
-	$day = date("d", strtotime($created_date));
-	$month = date("n",strtotime($created_date));
-	$year = date("Y", strtotime($created_date));
-	
-	CommentsTable::updateCreatedDate($comment_id, $site_id, $date_str);
-	
-	
-	$msg['cmd'] = "importComment";
-	$msg['result'] = $comment_id > 0 ? 'ok' : 'fail';
+	CommandHelper::sendMessage($msg);	
 	
 }
 
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function importComments($site_id, $post_id, $comment_obj, $import_source){
+
+	$comment_list = json_decode($comment_obj);		
+	
+	foreach($comment_list as $comment){
+	
+		$author_name 		= $comment->author;
+		$author_email 		= $comment->author_email;
+		$author_ip 			= $comment->author_ip;
+		$author_url 		= $comment->author_url;
+		$content 			= urldecode($comment->content);
+		$import_source_id	= $comment->id;
+		$parent_comment_id 	= $comment->parent_id;
+		$created_date 		= $comment->date_gmt;
+		$approved 			= $comment->approved;
+
+		$comment_id = ImportHelper::importComment($site_id, $post_id, $author_name, $author_email, $author_ip, $author_url, $content, $parent_comment_id, $created_date, $approved, $import_source, $import_source_id);
+	}
+		
+	$msg['cmd'] = "importComments";
+	$msg['result'] = 'ok';
+	
+	CommandHelper::sendMessage($msg);	
+
+}
+
+
+// ///////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////
 
 function addCategory($site_id, $post_id, $category){

@@ -118,7 +118,7 @@ class CommandHelper {
 	        }
 	        
 			if ($required){
-				self::sendValidateFailMessage("Validation failed, expecting '$paraName' to be of type $typestr");
+				self::sendValidateFailMessage("Validation failed, expecting '$paraName' to be of type $typestr. Value = $val");
 				die();
 			}
 	        
@@ -126,7 +126,7 @@ class CommandHelper {
 
 		// If we get here, then could not find para in $GET or $POST	        
 		if ($required){
-			self::sendValidateFailMessage("Parameter not set, expecting '$paraName'");
+			self::sendValidateFailMessage("Parameter not set, expecting '$paraName' to be of type $typestr. Value = $val");
 			die();
 		}
 				

@@ -165,6 +165,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 <script src="code/js/dialogs/ImagePickerDialog.class.js" type="text/javascript"></script>
 <script src="code/js/dialogs/ColorPickerDialog.class.js" type="text/javascript"></script>
 <script src="code/js/dialogs/WordpressImporter.class.js" type="text/javascript"></script>
+<script src="code/js/dialogs/LiveJournalImporter.class.js" type="text/javascript"></script>
 <script src="code/colorpicker/js/colorpicker.js" type="text/javascript"></script>
 
 <!-- Sub-Frame Displays -->

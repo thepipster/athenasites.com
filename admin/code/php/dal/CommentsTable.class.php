@@ -23,6 +23,8 @@ class CommentsTable {
 		  `status` enum('Pending','Approved', 'Trash', 'Spam', 'PossibleSpam') default 'Pending',
 		  `created` datetime default NULL,
 		  `author_ip` bigint(20) default NULL,
+		  `source` varchar(20) default NULL,
+		  `source_id` int(11) default NULL,
 		  `site_follower_id` int(11) NOT NULL,
 		  PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;";
@@ -93,7 +95,29 @@ class CommentsTable {
 		$sql = DatabaseManager::prepare("UPDATE athena_%d_Comments SET created=%s WHERE id = %d", $site_id, $created_date, $comment_id);
 		return DatabaseManager::update($sql);
     }    
+
+    public static function updatePostID($comment_id, $site_id, $post_id){
+		$sql = DatabaseManager::prepare("UPDATE athena_%d_Comments SET post_id=%d WHERE id = %d", $site_id, $created_date, $post_id);
+		return DatabaseManager::update($sql);
+    }    
     
+    public static function updateSourceID($comment_id, $site_id, $source_id){
+		$sql = DatabaseManager::prepare("UPDATE athena_%d_Comments SET source_id=%d WHERE id = %d", $site_id, $source_id, $comment_id);
+		return DatabaseManager::update($sql);
+    }    
+
+    public static function updateSource($comment_id, $site_id, $source){
+		$sql = DatabaseManager::prepare("UPDATE athena_%d_Comments SET source=%s WHERE id = %s", $site_id, $source, $comment_id);
+		return DatabaseManager::update($sql);
+    }    
+    
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	public static function getLastCommentSourceID($site_id){
+		$sql = DatabaseManager::prepare("SELECT max(source_id) FROM athena_%d_Comments", $site_id);			
+		return DatabaseManager::getVar($sql);				
+	}
+	
 	// /////////////////////////////////////////////////////////////////////////////////
 
 	public static function getPosts($site_id){

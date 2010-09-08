@@ -1,11 +1,11 @@
 /**
-* Javascript interface to the Flash WordpressImporter.swf that allows the Javascript to read the contents of 
+* Javascript interface to the Flash LiveJournalImporter.swf that allows the Javascript to read the contents of 
 * a file from the users local file system
 *
 * @author Mike Pritchard (mike@apollosites.com)
-* @since 22nd August, 2010
+* @since 3rd September, 2010
 */
-var WordpressImporter = {
+var LiveJournalImporter = {
 	
 	// ////////////////////////////////////////////////////////////////////////
 	
@@ -19,10 +19,18 @@ var WordpressImporter = {
 		txt += "        <div id='progressBar'></div>";
 		txt += "    </fieldset>";
 		txt += "    <fieldset>";
-		txt += "        <legend>Select File</legend>";
-		//txt += "        <div class='importText'>To export your old Wordpress blog, log in to your old Wordpress blog and select tools->export to download you WordPress eXtended RSS (WXR) file</div>";
-		txt += "        <div class='importText'>Import your WordPress eXtended RSS (WXR) file</div><br/>";
-		txt += "        <div id='flashImporter'></div>";
+		txt += "        <legend>Controls</legend>";
+		txt += "        <table border='0' width='100%'>";
+		txt += "            <tr>";
+		txt += "                <td><span class='label' id=''>Livejournal Username</span></td>";
+		txt += "                <td><input type='text' id='ljuser' name='ljuser' value='charlottegeary'></td>";
+		txt += "            </tr>";
+		txt += "            <tr>";
+		txt += "                <td><span class='label' id=''>Livejournal Password</span></td>";
+		txt += "                <td><input type='password' id='ljpass' name='ljpass' value='r00bies'></td>";
+		txt += "            </tr>";
+		txt += "        </table>";
+		txt += "        <button onclick='LiveJournalImporter.startImport()'>Start Import</button>";
 		txt += "    </fieldset>";
 		txt += "</div>";
 		
@@ -31,7 +39,7 @@ var WordpressImporter = {
 		$('#apollo_dialog').dialog({
 				modal: true, 
 				width:385, 
-				height:220, 
+				height:260, 
 				resizable:false, 
 				title: 'Import a WordPress blog' });
 		
@@ -39,25 +47,27 @@ var WordpressImporter = {
 		
 		$("#progressBar").progressbar({ value: 0 });
 		
-		// Paint flash object....
-			
-		var flash_url = defines.code_url + "flash/wordpressimporter/WordpressImporter.swf";
-
-		var flashvars = {};
-		var params = {
-		  bgcolor: "#ffffff",
-		  quality: "high",
-		  menu: "false",
-		  allowScriptAccess: "sameDomain"
-		};
-		var attributes = {
-		  id: "WordpressImporter",
-		  name: "WordpressImporter"
-		};
-		
-		swfobject.embedSWF(flash_url, 'flashImporter', "80", "22", "10.0.0","expressInstall.swf", flashvars, params, attributes);		
 	},
 
+	// ////////////////////////////////////////////////////////////////////////
+
+	startImport : function(){
+		
+		var paras = {cmd: 'importLJ', 
+					site_id: DataStore.m_siteID, 
+					us: $('#ljuser').val(), 
+					ps: $('#ljpass').val()};
+								
+		$.ajax({
+			url: MediaAPI.m_url,
+			type: 'post',
+			dataType: "json",
+			success: function(ret){LiveJournalImporter.onPostAdded(ret)},
+			data: paras
+		});	
+				
+	},
+	
 	// ////////////////////////////////////////////////////////////////////////
 
 	postCt : 0,	
@@ -97,12 +107,12 @@ var WordpressImporter = {
 				url: MediaAPI.m_url,
 				type: 'post',
 				dataType: "json",
-				success: function(ret){WordpressImporter.onPostAdded(ret)},
+				success: function(ret){LiveJournalImporter.onPostAdded(ret)},
 				data: paras
 			});	
 	
 			// Store comments until we have the post id
-			WordpressImporter.comments = comments;			
+			LiveJournalImporter.comments = comments;			
 				
 		}	
 		catch(err){
@@ -126,65 +136,38 @@ var WordpressImporter = {
 		var post_id = ret.data.post_id;
 				
 		// Update progress
-		WordpressImporter.postCt++;
-		var prog = Math.ceil(100 * WordpressImporter.postCt / WordpressImporter.noPosts);		
-		$("#status").html("Processed post " + WordpressImporter.postCt + " of " + WordpressImporter.noPosts);						
+		LiveJournalImporter.postCt++;
+		var prog = Math.ceil(100 * LiveJournalImporter.postCt / LiveJournalImporter.noPosts);		
+		$("#status").html("Processed post " + LiveJournalImporter.postCt + " of " + LiveJournalImporter.noPosts);						
 		$("#progressBar").progressbar({ value: prog });	
 
 		// Add comments....	
 		
-		if (WordpressImporter.comments.length > 0){
+		if (LiveJournalImporter.comments.length > 0){
 		
 			var paras = {cmd: 'importComments', 
 						site_id: DataStore.m_siteID, 
 						pid: post_id, 
-						com: $.toJSON(WordpressImporter.comments),
+						com: $.toJSON(LiveJournalImporter.comments),
 						ims: 'wordpress'
 						};
 						
 			$.ajax({url: MediaAPI.m_url, type: 'post', dataType: "json", data: paras});	
 						
 		}
-		
-/*		
-		var comments = WordpressImporter.comments;
-		
-		for (var i=0; i<comments.length; i++){
-															
-			var paras = {cmd: 'importComment', 
-						site_id: DataStore.m_siteID, 
-						arn: unescape(comments[i].author), 
-						aem: unescape(comments[i].author_email), 
-						aip: comments[i].author_ip, 
-						aurl: comments[i].author_url, 
-						content: unescape(comments[i].content), 
-						cid: comments[i].id, 
-						pcid: comments[i].parent_id, 
-						pid: post_id, 
-						pubdate: comments[i].date_gmt, 
-						apr: comments[i].approved ? 1 : 0, 
-						ims: 'wordpress'
-						};
-			if (!WordpressImporter.test){
-				$.ajax({url: MediaAPI.m_url, type: 'post', dataType: "json", data: paras});	
-				WordpressImporter.test = true;
-			}
-		}
-*/				
-
+	
 		// Get the next post, but give a small pause!		
-		//setTimeout('WordpressImporter.getNextPost()', 50);
-		WordpressImporter.getNextPost();
+		LiveJournalImporter.getNextPost();
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////
 
 	getNextPost : function(){
 		if(navigator.appName.indexOf('Microsoft') != -1) {
-			window.WordpressImporter.getNextPost();
+			window.LiveJournalImporter.getNextPost();
 		}
 		else {
-			window.document.WordpressImporter.getNextPost();
+			window.document.LiveJournalImporter.getNextPost();
 		}
 	},
 
@@ -197,7 +180,7 @@ var WordpressImporter = {
 	*/
 	onMeta : function(noPosts, tags, categories){
 
-		WordpressImporter.noPosts = noPosts;		
+		LiveJournalImporter.noPosts = noPosts;		
 
 		// Add tags
 		var paras = {cmd: 'addTags', site_id: DataStore.m_siteID, csvtags: tags};		
@@ -208,13 +191,13 @@ var WordpressImporter = {
 		$.ajax({ url: MediaAPI.m_url, dataType: "json", data: paras });	
 				
 		// Start getting posts
-		WordpressImporter.getNextPost();		
+		LiveJournalImporter.getNextPost();		
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////
 
 	onFileSelected : function(name, size, type){
-		WordpressImporter.onMessage(name + " " + size + "kb " + type);	
+		LiveJournalImporter.onMessage(name + " " + size + "kb " + type);	
 	},
 
 	onProgress : function(bytes, total){

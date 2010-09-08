@@ -65,7 +65,7 @@ var DashboardFrame = {
 		txt += "    <legend>Import Blog Posts</legend>";
 		txt += "    <button class='basic_button' onclick='WordpressImporter.show()'>Wordpress</button><br/>";		
 		txt += "    <button class='basic_button' onclick=''>Blogger</button><br/>";		
-		txt += "    <button class='basic_button' onclick=''>Livejournal</button><br/>";		
+		txt += "    <button class='basic_button' onclick='LiveJournalImporter.show()'>Livejournal</button><br/>";		
 		txt += "    </fieldset>";
 		txt += "</div>"					
 		

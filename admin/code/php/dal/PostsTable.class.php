@@ -23,6 +23,8 @@ class PostsTable {
 		  `title` varchar(255) default NULL,
 		  `slug` varchar(255) default NULL,
 		  `path` varchar(255) default NULL,
+		  `source` varchar(20) default NULL,
+		  `source_id` int(11) default NULL,
 		  `canComment` tinyint(1) default '1',
 		  PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;";
@@ -103,7 +105,14 @@ class PostsTable {
 		$sql = DatabaseManager::prepare("DELETE FROM athena_%d_Posts WHERE id = %d", $site_id, $post_id);
 		return DatabaseManager::submitQuery($sql);
 	}
-	
+
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	public static function getLastPostDate($site_id){
+		$sql = DatabaseManager::prepare("SELECT max(created) FROM athena_%d_Posts", $site_id);		
+		return DatabaseManager::getVar($sql);				
+	}
+		
 	// /////////////////////////////////////////////////////////////////////////////////
 
 	public static function getPostFromDate($site_id, $datestr){
@@ -113,6 +122,11 @@ class PostsTable {
 
 	public static function getPostIDFromDate($site_id, $datestr){
 		$sql = DatabaseManager::prepare("SELECT id FROM athena_%d_Posts WHERE created = %s", $site_id, $datestr);		
+		return DatabaseManager::getVar($sql);				
+	}
+	
+	public static function getPostFromSourceID($site_id, $source_id){
+		$sql = DatabaseManager::prepare("SELECT id FROM athena_%d_Posts WHERE source_id = %d", $site_id, $source_id);		
 		return DatabaseManager::getVar($sql);				
 	}
 
@@ -155,6 +169,16 @@ class PostsTable {
 
     public static function updateCreatedDate($post_id, $site_id, $created_date){
 		$sql = DatabaseManager::prepare("UPDATE athena_%d_Posts SET created=%s WHERE id = %d", $site_id, $created_date, $post_id);
+		return DatabaseManager::update($sql);
+    }    
+
+    public static function updateSourceID($post_id, $site_id, $source_id){
+		$sql = DatabaseManager::prepare("UPDATE athena_%d_Posts SET source_id=%d WHERE id = %d", $site_id, $source_id, $post_id);
+		return DatabaseManager::update($sql);
+    }    
+
+    public static function updateSource($post_id, $site_id, $source){
+		$sql = DatabaseManager::prepare("UPDATE athena_%d_Posts SET source=%s WHERE id = %s", $site_id, $source, $post_id);
 		return DatabaseManager::update($sql);
     }    
 

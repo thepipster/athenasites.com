@@ -7,6 +7,20 @@
 class SiteFollowersTable {
 	
 	// ///////////////////////////////////////////////////////////////////////////////////////
+
+	public static function getFollower($id){
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_SiteFollowers WHERE id = %d", $id);			
+		return DatabaseManager::getSingleResult($sql);		
+	}
+		
+	// ///////////////////////////////////////////////////////////////////////////////////////
+
+	public static function getFollowers($site_id){
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_SiteFollowers WHERE site_id = %d ", $site_id);			
+		return DatabaseManager::getResults($sql);				
+	}
+	
+	// ///////////////////////////////////////////////////////////////////////////////////////
 	
 	public static function getFollowerIDFromEmail($email){
 		$sql = DatabaseManager::prepare("SELECT id FROM athena_SiteFollowers WHERE email = %s", $email);			
@@ -17,6 +31,11 @@ class SiteFollowersTable {
 		$sql = DatabaseManager::prepare("SELECT id FROM athena_SiteFollowers WHERE name = %s", $name);			
 		return DatabaseManager::getVar($sql);		
 	}
+
+	public static function getFollowerIDFromURL($url){
+		$sql = DatabaseManager::prepare("SELECT id FROM athena_SiteFollowers WHERE url = %s", $url);			
+		return DatabaseManager::getVar($sql);		
+	}
 	
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -25,13 +44,7 @@ class SiteFollowersTable {
 		return DatabaseManager::getSingleResult($sql);		
 	}
 
-	// ///////////////////////////////////////////////////////////////////////////////////////
 
-	public static function getFollower($id){
-		$sql = DatabaseManager::prepare("SELECT * FROM athena_SiteFollowers WHERE id = %d", $id);			
-		return DatabaseManager::getSingleResult($sql);		
-	}
-	
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
 	public static function addFollowerToSite($follower_id, $site_id){		
@@ -45,50 +58,43 @@ class SiteFollowersTable {
 
 	// ///////////////////////////////////////////////////////////////////////////////////////
 	
-	public static function addFollower($name, $email, $ip){		
+	public static function addFollower($name, $email, $ip, $author_url){		
 	
         // Get data in correct locale (SQL's NOW() doesn't do that)
         $target_date  = mktime(date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
         $date_str = date('Y-m-d H:i:s', $target_date);
 
-		$sql = DatabaseManager::prepare("INSERT INTO athena_SiteFollowers (name, email, ip_long, created, last_activity) VALUES (%s, %s, %d, '$date_str', '$date_str')", $name, $email, ip2long($ip));			
+		$sql = DatabaseManager::prepare("INSERT INTO athena_SiteFollowers (name, email, ip_long, created, last_activity, url) VALUES (%s, %s, %d, '$date_str', '$date_str', %s)", $name, $email, ip2long($ip), $author_url);			
 		return DatabaseManager::insert($sql);
 	}
 	
 	// ///////////////////////////////////////////////////////////////////////////////////////
 	
-	public static function updateFollower($follower_id, $ip){		
+	public static function updateFollower($follower_id, $ip, $author_url){		
 	
         // Get data in correct locale (SQL's NOW() doesn't do that)
         $target_date  = mktime(date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
         $date_str = date('Y-m-d H:i:s', $target_date);
 
-		$sql = DatabaseManager::prepare("UPDATE athena_SiteFollowers SET ip_long = %d, last_activity = %s WHERE id = %d", ip2long($ip), $date_str, $follower_id);			
+		if ($author_url != ''){
+			$sql = DatabaseManager::prepare("UPDATE athena_SiteFollowers SET ip_long = %d, last_activity = %s, url = %s WHERE id = %d", ip2long($ip), $date_str, $follower_id, $author_url);			
+		}
+		else {
+			$sql = DatabaseManager::prepare("UPDATE athena_SiteFollowers SET ip_long = %d, last_activity = %s WHERE id = %d", ip2long($ip), $date_str, $follower_id);			
+		}
 		return DatabaseManager::insert($sql);
 	}
-		
+
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
-    /**
-     * Create a new site
-     */
-     /*
-	public static function create($site_id, $name, $email, $isFollowing){	
-		
-        // Get data in correct locale (SQL's NOW() doesn't do that)
-        $target_date  = mktime(date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
-        $date_str = date('Y-m-d H:i:s', $target_date);
-		
-		$sql = DatabaseManager::prepare("INSERT INTO athena_%d_SiteFollowers (name, email, isFollowing, last_edit, created) VALUES (%s, %s, %d, '$date_str', '$date_str')", $site_id, $name, $email, $isFollowing);			
-		return DatabaseManager::insert($sql);
-    }
-	*/
-	// ///////////////////////////////////////////////////////////////////////////////////////
+    public static function updateCreatedDate($follower_id, $created_date){
+		$sql = DatabaseManager::prepare("UPDATE athena_SiteFollowers SET created=%s WHERE id = %d", $created_date, $follower_id);
+		return DatabaseManager::update($sql);
+    }   
 
-	public static function getFollowers($site_id){
-		$sql = DatabaseManager::prepare("SELECT * FROM athena_SiteFollowers WHERE site_id = %d ", $site_id);			
-		return DatabaseManager::getResults($sql);				
-	}
-
+    public static function updateLastActivityDate($follower_id, $created_date){
+		$sql = DatabaseManager::prepare("UPDATE athena_SiteFollowers SET last_activity = %s WHERE id = %d", $created_date, $follower_id);
+		return DatabaseManager::update($sql);
+    }   
 }
 ?>
