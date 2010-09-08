@@ -9,8 +9,8 @@
 */
 class LiveJournalImporter {
 
-	private static $username = 'charlottegeary';
-	private static $password = 'r00bies';
+	private static $username = '';
+	private static $password = '';
 
 	/** Need to give LJ our info, if we get blocked contact LJ at <webmaster@livejournal.com> */ 
 	private static $useragent = "ApolloBot/1.0 (http://apollosites.com/support.html; <support@apollosites.com>; en-US)";
@@ -420,8 +420,7 @@ class LiveJournalImporter {
 
 		
 		// importPost($user_id, $site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, $import_source)
-		$post_id = ImportHelper::importPost($user_id, $site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, 'LiveJournal');
-		PostsTable::updateSourceID($post_id, $site_id, $item_id);
+		$post_id = ImportHelper::importPost($user_id, $site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, 'LiveJournal', $item_id);
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////////////

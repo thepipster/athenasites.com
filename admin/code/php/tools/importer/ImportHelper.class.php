@@ -7,7 +7,7 @@
 */
 class ImportHelper {
 
-	public static function importPost($user_id, $site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, $import_source){
+	public static function importPost($user_id, $site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, $import_source, $source_id=null){
 		
 		// Convert put date to php date
 	    $date_str = date('Y-m-d H:i:s', strtotime($created_date));
@@ -45,6 +45,9 @@ class ImportHelper {
 		PostsTable::updatePath($post_id, $site_id, $path);
 		PostsTable::updateCreatedDate($post_id, $site_id, $date_str);
 		PostsTable::updateSource($post_id, $site_id, $import_source);
+		if (isset($source_id)){
+			PostsTable::updateSourceID($post_id, $site_id, $source_id);
+		}
 		
 		// Add tags..........
 		
@@ -163,7 +166,7 @@ class ImportHelper {
 		if ($approved == 1){ $status = 'Approved';}
 			
 		// Check to see if this comment already exists, if so then we over-write it
-		$comment_id = CommentsTable::getCommentIDFromDate($site_id, $date_str);
+		$comment_id = CommentsTable::getCommentIDFromDateAndFollower($site_id, $date_str, $follower_id);
 		if (!isset($comment_id)){
 			//$comment_id = CommentsTable::createForceID($site_id, $apollo_post_id, $comment_id, $parent_comment_id, $content, $status, $author_ip, $follower_id);
 			$comment_id = CommentsTable::create($site_id, $apollo_post_id, $parent_comment_id, $content, $status, $author_ip, $follower_id);
@@ -172,10 +175,9 @@ class ImportHelper {
 //			Logger::debug("This comment already exists");
 //			CommentsTable::update($site_id, $apollo_post_id, $comment_id, $parent_comment_id, $content, $status, $author_ip, $follower_id);
 //		}	
-
-					
+						
 		CommentsTable::updateCreatedDate($comment_id, $site_id, $date_str);
-		CommentsTable::updateSource($comment_id, $site_id, $import_source);
+		CommentsTable::updateSource($comment_id, $site_id, $import_source);				
 		if (isset($import_source_id)){
 			CommentsTable::updateSourceID($comment_id, $site_id, $import_source_id);
 		}

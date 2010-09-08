@@ -121,7 +121,6 @@ class CommentsTable {
 
 	public static function getLastCommentSourceID($site_id, $source){
 		$sql = DatabaseManager::prepare("SELECT max(source_id) FROM athena_%d_Comments WHERE source=%s", $site_id, strtolower($source));			
-		Logger::debug($sql);
 		return DatabaseManager::getVar($sql);				
 	}
 
@@ -148,6 +147,13 @@ class CommentsTable {
 	
 	public static function getCommentIDFromDate($site_id, $datestr){
 		$sql = DatabaseManager::prepare("SELECT id FROM athena_%d_Comments WHERE created = %s", $site_id, $datestr);		
+		return DatabaseManager::getVar($sql);				
+	}
+
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	public static function getCommentIDFromDateAndFollower($site_id, $datestr, $follower_id){
+		$sql = DatabaseManager::prepare("SELECT id FROM athena_%d_Comments WHERE created = %s AND site_follower_id = %d", $site_id, $datestr, $follower_id);		
 		return DatabaseManager::getVar($sql);				
 	}
 	

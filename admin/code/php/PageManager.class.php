@@ -308,7 +308,7 @@ class PageManager {
 				break;		
 
 			case self::$BLOGMODE_ALL :
-				$temp_list = PostsTable::getPosts(self::$site_id);
+				$temp_list = PostsTable::getNPosts(self::$site_id, 5);
 				break;		
 
 			case self::$BLOGMODE_CATEGORY :

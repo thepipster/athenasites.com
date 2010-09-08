@@ -401,6 +401,13 @@ class PostsTable {
 		return DatabaseManager::getResults($sql);				
 	}
 
+	public static function getNPosts($site_id, $n){
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts ORDER BY created DESC LIMIT %d", $site_id, $n);			
+		return DatabaseManager::getResults($sql);				
+	}
+	
+	
+
 	// /////////////////////////////////////////////////////////////////////////////////
 
 	public static function getPost($site_id, $post_id){

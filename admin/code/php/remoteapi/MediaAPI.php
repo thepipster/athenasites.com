@@ -70,9 +70,10 @@ switch($cmd){
 		$can_comment = CommandHelper::getPara('comment', true, CommandHelper::$PARA_TYPE_NUMERIC);
 		$created_date = CommandHelper::getPara('pubdate', true, CommandHelper::$PARA_TYPE_STRING);
 		$import_source = CommandHelper::getPara('import_source', true, CommandHelper::$PARA_TYPE_STRING);
+		$import_source_id = CommandHelper::getPara('source_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
 		$csv_tags = CommandHelper::getPara('csvtags', true, CommandHelper::$PARA_TYPE_STRING);
 		$csv_categories = CommandHelper::getPara('csvcats', true, CommandHelper::$PARA_TYPE_STRING);
-		importPost($site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, $import_source);
+		importPost($site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, $import_source, $import_source_id);
 		break;				
 		
 /*		
@@ -383,11 +384,11 @@ function addPost($site_id, $title, $content, $status, $slug, $can_comment){
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function importPost($site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, $import_source){
+function importPost($site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, $import_source, $import_source_id){
 
 	$user_id = SecurityUtils::getCurrentUserID();
 	
-	$post_id = ImportHelper::importPost($user_id, $site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, $import_source);
+	$post_id = ImportHelper::importPost($user_id, $site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, $import_source, $import_source_id);
 	
 	$msg['cmd'] = "importPost";
 	$msg['result'] = $post_id > 0 ? 'ok' : 'fail';
@@ -424,7 +425,7 @@ function importComments($site_id, $post_id, $comment_obj, $import_source){
 	$comment_list = json_decode($comment_obj);		
 	
 	foreach($comment_list as $comment){
-	
+			
 		$author_name 		= $comment->author;
 		$author_email 		= $comment->author_email;
 		$author_ip 			= $comment->author_ip;
@@ -434,11 +435,13 @@ function importComments($site_id, $post_id, $comment_obj, $import_source){
 		$parent_comment_id 	= $comment->parent_id;
 		$created_date 		= $comment->date_gmt;
 		$approved 			= $comment->approved;
+		$source_post_id		= $comment->post_id;
 
 		// Find the comment id that matches the given parent comment id, based on the import source
-		$real_parent_id = getCommentIDFromSourceID($site_id, $parent_comment_id, $import_source);
+		$real_parent_id = CommentsTable::getCommentIDFromSourceID($site_id, $parent_comment_id, $import_source);
 		
 		$comment_id = ImportHelper::importComment($site_id, $post_id, $author_name, $author_email, $author_ip, $author_url, $content, $real_parent_id, $created_date, $approved, $import_source, $import_source_id);
+		CommentsTable::updateSourcePostID($comment_id, $site_id, $source_post_id);
 	}
 		
 	$msg['cmd'] = "importComments";

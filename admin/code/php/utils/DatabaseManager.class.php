@@ -119,12 +119,12 @@ class DatabaseManager {
 			if ($cx != FALSE){
 	
 				// Select the relevant database.........
-				if (mysql_select_db(self::$databaseName, $cx)) {
-					Logger::debug("Connected to MySQL database '".self::$databaseName."' OK for " . $hosts[$host] . " ($host)");
-				}	
-				else {
+				if (!mysql_select_db(self::$databaseName, $cx)) {
 					Logger::fatal("Connection to MySQL database '".self::$databaseName."' FAILED for " . $hosts[$host] . " ($host)");
-				}			
+				}	
+				//else {
+				//	Logger::debug("Connected to MySQL database '".self::$databaseName."' OK for " . $hosts[$host] . " ($host)");
+				//}			
 	
 			}
 			else {

@@ -90,7 +90,8 @@ var WordpressImporter = {
 						pubdate: post.date_gmt, 
 						csvtags: post.tags,
 						csvcats: post.categories,
-						import_source:'wordpress'
+						import_source:'wordpress',
+						source_id: post.id
 						};
 									
 			$.ajax({
@@ -238,7 +239,7 @@ var WordpressImporter = {
 	// ////////////////////////////////////////////////////////////////////////
 
 	onComplete : function(){
-		alert('done');
+		$('#apollo_dialog').dialog('destroy');
 	},
 		
 	// ////////////////////////////////////////////////////////////////////////
