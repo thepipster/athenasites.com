@@ -353,6 +353,9 @@ class PageManager {
 	public static function getBlogContent($post){
 		
 		$content = stripslashes($post['content']);
+		$content = ImportHelper::convertContent($content, $post['source']);
+		return $content;
+
 				
 		$s_pos = strpos($content, '<div class="apolloPageBreak"');
 		$i_pos = strpos($content, ">", $s_pos);

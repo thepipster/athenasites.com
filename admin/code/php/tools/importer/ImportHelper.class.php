@@ -13,11 +13,8 @@ class ImportHelper {
 	    $date_str = date('Y-m-d H:i:s', strtotime($created_date));
 	
 		// Convert content based on source
-		switch( strtolower($import_source) ){
-			case 'wordpress': $content = self::convertWordpressBreak($content); break;
-			case 'livejournal': $content = self::convertLiveJournalBreak($content); break;
-		}
-		
+		//$content = self::convertContent($content, $import_source);
+				
 		if ($title == ""){
 			$slug = "post";
 		}
@@ -188,9 +185,35 @@ class ImportHelper {
 	// /////////////////////////////////////////////////////////////////////////////////
 
 	/**
+	* Convert content, based on source (e.g. remove LiveJournal tags and page breaks and replace
+	* with Apollo equivalents)
+	*/
+	public static function convertContent($content, $import_source){
+
+		switch( strtolower($import_source) ){
+			case 'wordpress': $content = self::convertWordpressContent($content); break;
+			case 'livejournal': $content = self::convertLiveJournalContent($content); break;
+		}
+
+		return $content;
+	}
+	
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	/**
 	* Replace the WP more tag with the apollo one
 	*/
-	public static function convertWordpressBreak($content){
+	private static function convertWordpressContent($content){
+		
+		Logger::debug("Converting WP content");
+		
+		// Convert line ends to <br>
+		
+		$tags = array("\\n", "\\r");
+		$replace = 'FISHFISHFISH';
+		$content = str_ireplace($tags, $replace, $content);
+		
+		//$content = nl2br($content);
 		
 		// <!--more-->
 		// <!--more But wait, there's more! -->
@@ -228,7 +251,7 @@ class ImportHelper {
 	*		The end lj-cut tag is optional.  You use it if you want to show more text on the main page.	
 	*
 	*/
-	public static function convertLiveJournalBreak($content){
+	private static function convertLiveJournalContent($content){
 		
 		$more_text = "More...";
 		

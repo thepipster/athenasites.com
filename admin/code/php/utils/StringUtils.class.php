@@ -41,11 +41,10 @@ class StringUtils {
 	//	$replace = "\\";
 	//	$safe_content = str_ireplace($tags, $replace, $content);
 	
-		$tags = array("\\n", "\\r");
-		$replace = '';
-		$safe_content = str_ireplace($tags, $replace, $content);
-	
-	
+		//$tags = array("\\n", "\\r");
+		//$replace = '<br\>';
+		//$safe_content = str_ireplace($tags, $replace, $content);
+		$safe_content = nl2br($content);	
 		$safe_content = stripslashes($safe_content);
 	
 	
