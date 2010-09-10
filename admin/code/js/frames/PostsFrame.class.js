@@ -153,7 +153,10 @@ var PostsFrame = {
         txt += "        <div style='margin-top:5px; margin-left:5px' align='left'>";
         //txt += "<iframe>";
         //txt += "<link type='text/css' rel='Stylesheet' href='http://cgp.athena.local/admin/themes/cgp4/code/blog.css' />";
-        txt += "		    <textarea id='postContentEditor' name='postContentEditor' style='width:100%; height:100%;'>"+postObj.content+"</textarea>";
+        //txt += "<form method='post' action='default_toolbar2.php' id='Form1'>";
+        txt += "    <textarea id='postContentEditor' name='postContentEditor' class='innovaeditor' style='width:100%; height:100%;'>"+postObj.content+"</textarea>";
+        //txt += "    <script> var oEdit1 = new InnovaEditor(\"oEdit1\"); oEdit1.REPLACE(\"postContentEditor\"); </script>";
+        //txt += "</form>";
         //txt += "</iframe>";
         txt += "	    </div>";
         txt += "	</td>";
@@ -168,7 +171,8 @@ var PostsFrame = {
         }
 				
         // Good article on customization of CKEditor - http://www.voofie.com/content/2/ckeditor-plugin-development/
-        PostsFrame.paintCKEditor();
+        //PostsFrame.paintCKEditor();
+        PostsFrame.paintOpenWYSIWYG();
 		
         PostsFrame.updatePostLink(postObj);
         PostsFrame.updateTagsAndCategoris();
@@ -178,7 +182,7 @@ var PostsFrame = {
 
     repaintData : function(postObj){
 				
-        CKEDITOR.instances.postContentEditor.setData(postObj.content);
+        //CKEDITOR.instances.postContentEditor.setData(postObj.content);
 		
         $('#postTitle').val(postObj.title);
         $('#postSlug').html(postObj.slug);
@@ -408,7 +412,22 @@ var PostsFrame = {
     },
 
     // ////////////////////////////////////////////////////////////////////////////
-	
+
+    paintOpenWYSIWYG : function(){
+        //WYSIWYG.attach('#postContentEditor');
+        //alert('sdgsdg');
+        //var oEdit1 = new InnovaEditor("oEdit1");
+        //oEdit1.REPLACE("postContentEditor");
+
+        var ht = $('#PostsFrame').innerHeight() - 150;
+
+        oUtil.initializeEditor("innovaeditor", {width:"100%", height:ht+"px", css:"http://cgp.athena.local/admin/themes/cgp4/code/css/blog.css"});
+//        oUtil.initializeEditor("innovaeditor", {width:"100%", height:ht+"px", css:"http://cgp.athena.local/admin/themes/cgp4/style.css"});
+
+    },
+
+    // ////////////////////////////////////////////////////////////////////////////
+
     paintCKEditor : function(){
 		
         PostsFrame.ckEditor = CKEDITOR.replace( 'postContentEditor',

@@ -131,7 +131,12 @@ Logger::debug("$domain has site_id = $current_site_id");
         <!--
         <script type="text/javascript" src="code/ckeditor/ckeditor.js"></script>
         -->
-        <script type="text/javascript" src="code/ckeditor/ckeditor_source.js"></script>
+        <script type="text/javascript" src="code/3rdparty/ckeditor/ckeditor_source.js"></script>
+<!--
+        <script type="text/javascript" src="code/3rdparty/openwysiwyg/scripts/wysiwyg.js"></script>
+        <script type="text/javascript" src="code/3rdparty/openwysiwyg/scripts/wysiwyg-settings.js"></script>
+-->
+        <script type="text/javascript" src="code/3rdparty/InnovaStudio/scripts/innovaeditor.js"></script>
 
         <!-- Utils -->
         <script src="code/js/defines.js" type="text/javascript"></script>
