@@ -280,21 +280,27 @@ class PageManager {
 	// ///////////////////////////////////////////////////////////////////////////////////////
 		
 	public static function getPingBackURL(){
-		//Logger::debug("TBD");
-		// TBD
+		//Logger::debug("TODO");
+		// TODO
 	}
 		
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
 	public static function getLanguageAttributes(){
-		//Logger::debug("TBD");
-		// TBD
+		//Logger::debug("TODO");
+		// TODO
 	}
 	
 	// ///////////////////////////////////////////////////////////////////////////////////////
 	//
 	// Blog functions
 	//
+	// ///////////////////////////////////////////////////////////////////////////////////////
+	
+	public static function getSidebar(){
+		// TODO
+	}
+
 	// ///////////////////////////////////////////////////////////////////////////////////////
 	
 	public static function getPosts(){
@@ -354,9 +360,47 @@ class PageManager {
 		
 		$content = stripslashes($post['content']);
 		$content = ImportHelper::convertContent($content, $post['source']);
-		return $content;
 
+
+//		$result = preg_match("/<!--more (.*?)-->/i", $content, $match);
+
+// <div class='apolloPageBreak'>More photos from their wedding</div>
+
+		// Get the more text
+
+		if (self::$blog_mode == self::$BLOGMODE_SINGLEPOST){
+
+			// Remove more tag
+			$post_content = preg_replace("/<div class='apolloPageBreak'>(.*?)<\/div>/i", "", $content);
+		}
+		else {
+		
+			$result = preg_match("/<div class='apolloPageBreak'>(.*?)<\/div>/i", $content, $match);
+	
+			if ($result){
 				
+				if (isset($match) && isset($match[1])){
+					$more_text = $match[1];
+				}
+				
+				$tag = "<div class='apolloPageBreak'>$more_text</div>";
+				$post_link = self::getPostLink($post);
+				$link_tag .= "<p><a href='$post_link' class='apolloPageBreak'>$more_text</a></p>";
+				
+				$s_pos = strpos($content, $tag);
+
+				$post_content = substr($content, 0, $s_pos) . $link_tag;
+				
+			}
+			else {
+				$post_content = $content; 
+			}
+			
+		}	
+		
+		return $post_content;	
+
+			/*	
 		$s_pos = strpos($content, '<div class="apolloPageBreak"');
 		$i_pos = strpos($content, ">", $s_pos);
 		$e_pos = strpos($content, "</div>", $i_pos);
@@ -370,8 +414,8 @@ class PageManager {
 		else {
 			
 			$more_text = substr($content, $i_pos+1, ($e_pos-$i_pos-1));
-			//Logger::debug(">>> Pos $i_pos - $e_pos");
-			//Logger::debug(">>> More content = " . $more_text);
+			Logger::debug(">>> Pos $i_pos - $e_pos");
+			Logger::debug(">>> More content = " . $more_text);
 			
 			$content = substr($content, 0, $s_pos);
 			
@@ -380,7 +424,7 @@ class PageManager {
 			// Add the more link back in
 			$content .= "<p><a href='$post_link' class='apolloPageBreak'>$more_text</a></p>";
 		}
-		
+		*/
 		return $content;
 	}
 

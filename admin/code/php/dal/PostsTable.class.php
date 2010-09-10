@@ -17,7 +17,7 @@ class PostsTable {
 		  `id` int(11) NOT NULL auto_increment,
 		  `user_id` int(11) default NULL,
 		  `content` text,
-		  `status` enum('Published','Draft','Private','Revision') default 'Draft',
+		  `status` enum('Published','Draft','Private','Revision','Trash') default 'Draft',
 		  `last_edit` datetime default NULL,
 		  `created` datetime default NULL,
 		  `title` varchar(255) default NULL,
@@ -135,7 +135,7 @@ class PostsTable {
 	public static function getPostsFromTag($site_id, $tag){
 		//Logger::debug("getPostsFromTag($site_id, $tag)");
 		$tag_id = self::getTagID($site_id, $tag);
-		$sql = DatabaseManager::prepare("SELECT p.* FROM athena_%d_Posts p INNER JOIN athena_%d_PostToTags pt WHERE pt.tag_id = %d AND pt.post_id = p.id", $site_id, $site_id, $tag_id);		
+		$sql = DatabaseManager::prepare("SELECT p.* FROM athena_%d_Posts p INNER JOIN athena_%d_PostToTags pt WHERE pt.tag_id = %d AND pt.post_id = p.id ORDER BY created DESC", $site_id, $site_id, $tag_id);		
 		return DatabaseManager::getResults($sql);				
 	}
 
@@ -143,7 +143,7 @@ class PostsTable {
 
 	public static function getPostsFromCategory($site_id, $category){
 		$cat_id = self::getCategoryID($site_id, $category);
-		$sql = DatabaseManager::prepare("SELECT p.* FROM athena_%d_Posts p INNER JOIN athena_%d_PostToCategories pc WHERE pc.category_id = %d AND pc.post_id = p.id", $site_id, $site_id, $cat_id);		
+		$sql = DatabaseManager::prepare("SELECT p.* FROM athena_%d_Posts p INNER JOIN athena_%d_PostToCategories pc WHERE pc.category_id = %d AND pc.post_id = p.id ORDER BY created DESC", $site_id, $site_id, $cat_id);		
 		return DatabaseManager::getResults($sql);				
 	}
 		
@@ -395,19 +395,26 @@ class PostsTable {
 	}
 		    
 	// /////////////////////////////////////////////////////////////////////////////////
+
+	public static function getPostSummaries($site_id){
+		$sql = DatabaseManager::prepare("SELECT id, user_id, title, status FROM athena_%d_Posts ORDER BY created DESC", $site_id);			
+		return DatabaseManager::getResults($sql);				
+	}
+
+	// /////////////////////////////////////////////////////////////////////////////////
 		
 	public static function getPosts($site_id){
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts ORDER BY created DESC", $site_id);			
 		return DatabaseManager::getResults($sql);				
 	}
 
+	// /////////////////////////////////////////////////////////////////////////////////
+
 	public static function getNPosts($site_id, $n){
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts ORDER BY created DESC LIMIT %d", $site_id, $n);			
 		return DatabaseManager::getResults($sql);				
 	}
 	
-	
-
 	// /////////////////////////////////////////////////////////////////////////////////
 
 	public static function getPost($site_id, $post_id){

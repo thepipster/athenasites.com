@@ -34,17 +34,16 @@ class StringUtils {
 	* Make content that is supposed to be HTML safe (for posts and pages for example)
 	*/
 	public static function makeHtmlSafe($content){
-	
-		// Json converts single slashes to quadruple slashes
-	//	$tags = array("\\\\\\\\");
-	//	$tags = array("\\\\");
-	//	$replace = "\\";
-	//	$safe_content = str_ireplace($tags, $replace, $content);
-	
+		
+		$tags = array("\\r\\n");
+		$replace = '<br/>';
+		$safe_content = str_ireplace($tags, $replace, $content);
+
+
 		//$tags = array("\\n", "\\r");
-		//$replace = '<br\>';
-		//$safe_content = str_ireplace($tags, $replace, $content);
-		$safe_content = nl2br($content);	
+		//$replace = '<br/>';
+		//$safe_content = str_ireplace($tags, $replace, $safe_content);
+		
 		$safe_content = stripslashes($safe_content);
 	
 	

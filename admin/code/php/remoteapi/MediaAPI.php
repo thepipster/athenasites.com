@@ -44,6 +44,11 @@ switch($cmd){
 		deletePost($site_id, $post_id);
 		break;
 		
+	case "getPostDetails":
+		$post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		getPostDetails($site_id, $post_id);
+		break;
+		
 	case "updatePost":
 		$post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
 		$title = CommandHelper::getPara('title', true, CommandHelper::$PARA_TYPE_STRING);
@@ -300,6 +305,30 @@ function buildPagePath($page_id, $site_id, $path_array){
 //
 // Posts....
 //
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+
+function getPostDetails($site_id, $post_id){
+
+	$post = PostsTable::getPost($site_id, $post_id);
+
+	if (isset($post)){
+		$post['last_edit'] = date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
+		$post['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
+		$post['tags'] = PostsTable::getPostTags($site_id, $post['id']);
+		$post['categories'] = PostsTable::getPostCategories($site_id, $post['id']);
+		
+		//$content = stripslashes($post['content']);
+		$post['content'] = ImportHelper::convertContent($content, $post['source']);
+	}
+
+	$msg['cmd'] = "getPostDetails";
+	$msg['result'] = 'ok';
+	$msg['data'] = array('post' => $post);
+
+	CommandHelper::sendMessage($msg);		
+}
+
 // ///////////////////////////////////////////////////////////////////////////////////////
 
 function deletePost($site_id, $post_id){
@@ -726,8 +755,8 @@ function getAll($site_id){
 	$media_list = FolderTable::getMediaForSite($site_id);
 
 	// Get the page list
-	$page_list = PagesTable::getPages($site_id);
-				
+	$page_list = PagesTable::getPageSummaries($site_id);
+	/*			
 	$page_data = array();
 	foreach ($page_list as $page){
 		$temp = $page;
@@ -735,10 +764,10 @@ function getAll($site_id){
 		$temp['created'] = date("m/d/Y H:i", strtotime($page['created'])); // Convert to JS compatible date
 		$page_data[] = $temp;
 	}	
-	
+	*/
 	// Get the post list
-	$post_list = PostsTable::getPosts($site_id);
-
+	$post_list = PostsTable::getPostSummaries($site_id);
+/*
 	$post_data = array();
 	foreach ($post_list as $post){
 		$temp = $post;
@@ -748,7 +777,7 @@ function getAll($site_id){
 		$temp['categories'] = PostsTable::getPostCategories($site_id, $post['id']);
 		$post_data[] = $temp;
 	}	
-			
+*/			
 	$media_data = array();
 	foreach ($media_list as $media){
 		$temp = $media;
@@ -774,8 +803,8 @@ function getAll($site_id){
 	$msg = array();	
 	$msg['cmd'] = 'getAll';
 	$msg['result'] = 'ok';			
-	$msg['data'] = array('folders' => $folder_list, 'media' => $media_data, 'pages' => $page_data, 'theme' => $theme, 'page_templates' => $page_templates, 
-				'theme_paras' => $site_theme_paras, 'page_paras' => $page_paras,  'posts' => $post_data, 'tags' => $tag_list, 'categories' => $cat_list);
+	$msg['data'] = array('folders' => $folder_list, 'media' => $media_data, 'pages' => $page_list, 'theme' => $theme, 'page_templates' => $page_templates, 
+				'theme_paras' => $site_theme_paras, 'page_paras' => $page_paras,  'posts' => $post_list, 'tags' => $tag_list, 'categories' => $cat_list);
 				
 	CommandHelper::sendMessage($msg);		
 

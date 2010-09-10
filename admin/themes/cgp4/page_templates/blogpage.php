@@ -26,7 +26,7 @@
 		
 		<div align="left" class='post_spacer_outer'><div class='post_spacer'></div></div>
 		
-		<div id="post-<?= $post['id']; ?>">
+		<div id="post-<?= $post['id']; ?>" class='post'>
 		
 			<h2 class="storytitle">
 			<a href="<?= $post_link ?>" rel="bookmark"><?= $post_title ?></a>

@@ -102,6 +102,13 @@ class PagesTable {
 
 	// /////////////////////////////////////////////////////////////////////////////////
 
+	public static function getPageSummaries($site_id){
+		$sql = DatabaseManager::prepare("SELECT id, user_id, title, status FROM athena_%d_Pages ORDER BY created DESC", $site_id);			
+		return DatabaseManager::getResults($sql);				
+	}
+
+	// /////////////////////////////////////////////////////////////////////////////////
+
 	public static function getPages($site_id){
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages ORDER BY page_order", $site_id);			
 		return DatabaseManager::getResults($sql);				

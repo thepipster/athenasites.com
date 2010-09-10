@@ -10,8 +10,6 @@ DatabaseManager::submitQuery("TRUNCATE TABLE athena_UserToSite");
 DatabaseManager::submitQuery("TRUNCATE TABLE athena_Sites");
 
 for ($i=1; $i<=5; $i++){
-	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_BlogFollowers");
-	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_Comments");
 	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_Folders");
 	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_GalleryMeta");
 	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_GalleryTable");
@@ -21,10 +19,12 @@ for ($i=1; $i<=5; $i++){
 	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_Pages");
 	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_PageViews");
 	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_Posts");
-	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_RollupBrowser");
-	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_RollupCrawler");
-	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_RollupOS");
-	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_RollupPageViews");
+	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_Comments");
+	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_PostTags");
+	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_PostCategories");
+	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_PostCategories");
+	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_PostToTags");
+	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_PostToCategories");
 }
 
 Logger::debug("Creating user");
@@ -68,4 +68,9 @@ $site_theme = 2;
 
 SecurityUtils::createSite($user_id, $site_domain, $site_path, $site_theme);
 
+$site_domain = 'adastra.athena.local';
+$site_path = '';
+$site_theme = 6;
+
+SecurityUtils::createSite($user_id, $site_domain, $site_path, $site_theme);
 ?>

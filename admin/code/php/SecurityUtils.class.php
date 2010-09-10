@@ -137,8 +137,6 @@ class SecurityUtils {
 		mkdir(self::getSitesFolder($site_id));				
 		
 		// Create site's tables
-		PageViewsTable::createTableForSite($site_id);
-		StatsRollupTables::createTableForSite($site_id);
 		PageParasTable::createTableForSite($site_id);
 		GlobalParasTable::createTableForSite($site_id);
 		GalleryTable::createTableForSite($site_id);
@@ -146,6 +144,9 @@ class SecurityUtils {
 		PagesTable::createTableForSite($site_id);
 		PostsTable::createTableForSite($site_id);
 		CommentsTable::createTableForSite($site_id);
+
+		//PageViewsTable::createTableForSite($site_id);
+		//StatsRollupTables::createTableForSite($site_id);
 		//BlogFollowersTable::createTableForSite($site_id);
 	}
 

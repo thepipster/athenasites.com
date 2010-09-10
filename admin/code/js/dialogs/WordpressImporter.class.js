@@ -60,6 +60,14 @@ var WordpressImporter = {
 
 	// ////////////////////////////////////////////////////////////////////////
 
+	updateProgress : function(){
+		// Update progress
+		WordpressImporter.postCt++;
+		var prog = Math.ceil(100 * WordpressImporter.postCt / WordpressImporter.noPosts);		
+		$("#status").html("Processed item " + WordpressImporter.postCt + " of " + WordpressImporter.noPosts);						
+		$("#progressBar").progressbar({ value: prog });	
+	},
+	
 	postCt : 0,	
 	comments : '',
 	
@@ -70,11 +78,21 @@ var WordpressImporter = {
 	*/
 	onPost : function(postJSONString, commentsJSONString){
 				
+		if (postJSONString == ""){
+			WordpressImporter.updateProgress();
+			//setTimeout('WordpressImporter.getNextPost()', 2000);
+			WordpressImporter.getNextPost();
+			return;
+		}
+				
 		try {	
-		
+					
 			//var post = eval('(' + postJSONString + ')');
 			var post = $.parseJSON( postJSONString );
-			var comments = $.parseJSON( commentsJSONString );
+			var comments = false;
+			if (commentsJSONString != ""){
+				comments = $.parseJSON( commentsJSONString );
+			}
 
 			// Add post.....
 
@@ -125,26 +143,23 @@ var WordpressImporter = {
 		}
 		
 		var post_id = ret.data.post_id;
+		WordpressImporter.updateProgress();
 				
-		// Update progress
-		WordpressImporter.postCt++;
-		var prog = Math.ceil(100 * WordpressImporter.postCt / WordpressImporter.noPosts);		
-		$("#status").html("Processed post " + WordpressImporter.postCt + " of " + WordpressImporter.noPosts);						
-		$("#progressBar").progressbar({ value: prog });	
-
 		// Add comments....	
 		
-		if (WordpressImporter.comments.length > 0){
-		
-			var paras = {cmd: 'importComments', 
-						site_id: DataStore.m_siteID, 
-						pid: post_id, 
-						com: $.toJSON(WordpressImporter.comments),
-						ims: 'wordpress'
-						};
-						
-			$.ajax({url: MediaAPI.m_url, type: 'post', dataType: "json", data: paras});	
-						
+		if (WordpressImporter.comments){
+			if (WordpressImporter.comments.length > 0){
+			
+				var paras = {cmd: 'importComments', 
+							site_id: DataStore.m_siteID, 
+							pid: post_id, 
+							com: $.toJSON(WordpressImporter.comments),
+							ims: 'wordpress'
+							};
+							
+				$.ajax({url: MediaAPI.m_url, type: 'post', dataType: "json", data: paras});	
+							
+			}
 		}
 		
 /*		
@@ -174,13 +189,14 @@ var WordpressImporter = {
 */				
 
 		// Get the next post, but give a small pause!		
-		//setTimeout('WordpressImporter.getNextPost()', 50);
+		//setTimeout('WordpressImporter.getNextPost()', 2000);
 		WordpressImporter.getNextPost();
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////
 
 	getNextPost : function(){
+
 		if(navigator.appName.indexOf('Microsoft') != -1) {
 			window.WordpressImporter.getNextPost();
 		}
@@ -195,10 +211,12 @@ var WordpressImporter = {
 	
 	/**
 	* Respond to the flash object decoding global level stuff
+	* @param noItems - total number of items (posts, pages, etc.)
+	* @param noPosts - just the number of posts
 	*/
-	onMeta : function(noPosts, tags, categories){
+	onMeta : function(noItems, noPosts, tags, categories){
 
-		WordpressImporter.noPosts = noPosts;		
+		WordpressImporter.noPosts = noItems;		
 
 		// Add tags
 		var paras = {cmd: 'addTags', site_id: DataStore.m_siteID, csvtags: tags};		
@@ -239,7 +257,8 @@ var WordpressImporter = {
 	// ////////////////////////////////////////////////////////////////////////
 
 	onComplete : function(){
-		$('#apollo_dialog').dialog('destroy');
+		//$('#apollo_dialog').dialog('destroy');
+		$('#status').html("<span style='color:green'>Complete!</span>");
 	},
 		
 	// ////////////////////////////////////////////////////////////////////////

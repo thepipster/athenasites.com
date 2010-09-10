@@ -24,11 +24,12 @@ class ImportHelper {
 		
 		// Check to see if this post already exists, if so then we over-write it
 		$post_id = PostsTable::getPostIDFromDate($site_id, $date_str);
-		if (isset($post_id)){
-			PostsTable::update($site_id, $post_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, $slug);
+		if (!isset($post_id)){
+			$post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, $slug);
+//			$post_id = PostsTable::create($site_id, $user_id, $content, $status, $title, $can_comment, $slug);
 		}
 		else {
-			$post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, $slug);
+			PostsTable::update($site_id, $post_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, $slug);
 		}
 		
 		// Get path
@@ -206,15 +207,7 @@ class ImportHelper {
 	private static function convertWordpressContent($content){
 		
 		Logger::debug("Converting WP content");
-		
-		// Convert line ends to <br>
-		
-		$tags = array("\\n", "\\r");
-		$replace = 'FISHFISHFISH';
-		$content = str_ireplace($tags, $replace, $content);
-		
-		//$content = nl2br($content);
-		
+				
 		// <!--more-->
 		// <!--more But wait, there's more! -->
 		

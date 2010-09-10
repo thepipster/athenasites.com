@@ -17,28 +17,31 @@ This is the blog theme for the integrated blog on Charlotte Geary Photography v3
 	color: #404040;
 	width: 90%;
 	height: 100%;
-	padding-top: 35px;
 	margin-right: 50px;
+	margin-left: 50px;
 }
 
 #blogPage .post {
+	/*margin-left: 15px;*/
 }
 
 #blogPage .blogDate{
 	font-size: 13px !important;
 	display: block;
 	padding-top: 0px;
-	padding-left: 15px;
+	padding-left: 0px;
 	margin: 20px;
 	margin-top: 0px;
+	margin-left: 0px;
 }
 
 #blogPage .meta{
 	display: block;
 	padding-top: 0px;
-	padding-left: 15px;
+	padding-left: 0px;
 	margin: 20px;
 	margin-top: 0px;
+	margin-left: 0px;
 }
 
 #blogPage .storycontent{
@@ -47,14 +50,17 @@ This is the blog theme for the integrated blog on Charlotte Geary Photography v3
 	padding: 0px;
 }
 
+#blogPage h1 {
+	padding-left: 0px;
+	margin-left: 0px;
+}
 
 #blogPage h2 {
 	font-family: century gothic, optima, Lucida Sans Unicode, Verdana, Tahoma, Trebuchet MS, Helvetica, Arial;
 	font-size: 16px !important;
 	color: #404040;
 	display: block;
-	padding-top: 0px;
-	padding-left: 35px;
+	padding: 0px;
 	padding-top: 20px;
 	margin: 0px;
 	margin-top: 0px;
@@ -66,10 +72,13 @@ This is the blog theme for the integrated blog on Charlotte Geary Photography v3
 	font-size: 11.5px !important;
 	line-height: 15px;
 	color: #404040;
-	display: block;
-	margin: 10px 20px 20px 20px;
-	padding-left: 15px;
+	display: block;	
+	margin: 0px;
+	margin-top: 10px;
+	margin-right: 20px;
+	padding-left: 0px;
 	padding-right: 15px;
+	padding-bottom: 15px;
 	text-align: left;
 }
 
@@ -79,7 +88,7 @@ This is the blog theme for the integrated blog on Charlotte Geary Photography v3
 	color: #404040;
 	display: block;
 	margin: 10px 20px 20px 20px;
-	padding-left: 15px;
+	padding-left: 0px;
 	padding-right: 15px;
 	text-align: left;
 }
@@ -100,7 +109,7 @@ This is the blog theme for the integrated blog on Charlotte Geary Photography v3
 /* Spacer between blog posts (horizontal dotted line) */
 #blogPage .post_spacer_outer {
 	width: auto;
-	padding-left: 35px;
+	padding-left: 0px;
 	padding-right: 35px;
 }
 
@@ -128,7 +137,7 @@ This is the blog theme for the integrated blog on Charlotte Geary Photography v3
 
 $blogPage .comment_wrapper {
 	width: auto;
-	padding-left: 35px;
+	padding-left: 0px;
 	padding-right: 35px;
 	height: 50px;
 	background-color: green;

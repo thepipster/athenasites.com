@@ -139,7 +139,22 @@ var MediaAPI = {
 	// Posts.....
 	//
 	// ////////////////////////////////////////////////////////////////////////
-			
+
+	getPostDetails : function(siteID, postID, callback){
+		
+		AthenaDialog.showLoading("Getting post details");
+		
+		var paras = {cmd: 'getPostDetails', site_id: siteID, post_id: postID};
+				
+		$.ajax({
+			url: MediaAPI.m_url,
+			type: 'post',
+			dataType: "json",
+			data: paras,
+			success: function(ret){MediaAPI.onGotPost(ret, callback)}
+		});	
+	},
+				
 	updatePost : function(siteID, postID, postTitle, postContent, postStatus, postCanComment, postSlug, callback){
 		
 		AthenaDialog.showLoading("Updating post");
@@ -152,7 +167,7 @@ var MediaAPI = {
 			type: 'post',
 			dataType: "json",
 			data: paras,
-			success: function(ret){MediaAPI.onPostAdded(ret, callback)}
+			success: function(ret){MediaAPI.onGotPost(ret, callback)}
 		});	
 	},
 
@@ -168,11 +183,11 @@ var MediaAPI = {
 			type: 'post',
 			dataType: "json",
 			data: paras,
-			success: function(ret){MediaAPI.onPostAdded(ret, callback)}
+			success: function(ret){MediaAPI.onGotPost(ret, callback)}
 		});	
 	},
 	
-	onPostAdded : function(ret, callback){
+	onGotPost : function(ret, callback){
 			
 		AthenaDialog.clearLoading();
 								
