@@ -49,27 +49,23 @@ function getTopParentPageTitle($post){
 	
 	<!-- Style sheets ///////////////////////////////////////////////////// -->
 
-	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>/style.css" type="text/css" media="screen" />
-	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>/code/css/main.css" type="text/css" id="" media="print, projection, screen" />
-	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>/code/css/blog.css" type="text/css" id="" media="print, projection, screen" />
-	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>/code/css/contact.css" type="text/css" id="" media="print, projection, screen" />
-	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>/code/css/datePicker.css" type="text/css" id="" media="print, projection, screen" />
+	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>style.css" type="text/css" media="screen" />
 	
 	<!-- JS Includes ///////////////////////////////////////////////////// -->
 
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/code/js/3rdparty/AC_OETags.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/AC_OETags.js"></script>
 	
 	<script type="text/javascript" src="http://www.google-analytics.com/ga.js"></script>
 
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/code/js/3rdparty/jquery-1.3.1.min.js"></script>
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/code/js/3rdparty/jquery_plugins/jquery.dimensions.min.js"></script>
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/code/js/3rdparty/jquery_plugins/jquery.accordion.js"></script>
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/code/js/3rdparty/jquery_plugins/jquery.corners.min.js"></script>
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/code/js/3rdparty/jquery_plugins/date.js"></script>
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/code/js/3rdparty/jquery_plugins/jquery.datePicker.min-2.1.2.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/jquery-1.3.1.min.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/jquery_plugins/jquery.dimensions.min.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/jquery_plugins/jquery.accordion.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/jquery_plugins/jquery.corners.min.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/jquery_plugins/date.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/jquery_plugins/jquery.datePicker.min-2.1.2.js"></script>
 
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/code/js/Logger-min.class.js"></script>
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/code/js/cgpCommon.class.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/Logger-min.class.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/cgpCommon.class.js"></script>
 
 	<!-- Page Styles  //////////////////////////////////////////////////// -->
 

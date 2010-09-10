@@ -78,8 +78,8 @@ CKEDITOR.plugins.pagebreakCmd =
 	exec : function( editor )
 	{		
 		// Create the element that represents a print break.
-		//var breakObject = CKEDITOR.dom.element.createFromHtml( '<div style="page-break-after: always;"><span style="display: none;">&nbsp;</span></div>' );
-		var breakObject = CKEDITOR.dom.element.createFromHtml( "<div class='apolloPageBreak' style='border: 1px solid blue'>More...</div> ");
+		//var breakObject = CKEDITOR.dom.element.createFromHtml( "<div class='apolloPageBreak' style='border: 1px solid blue'>More...</div> ");
+		var breakObject = CKEDITOR.dom.element.createFromHtml( "<div class='apolloPageBreak'>More...</div> ");
 
 		// Creates the fake image used for this element.
 		//breakObject = editor.createFakeElement( breakObject, 'cke_pagebreak', 'div' );

@@ -39,7 +39,6 @@ class StringUtils {
 		$replace = '<br/>';
 		$safe_content = str_ireplace($tags, $replace, $content);
 
-
 		//$tags = array("\\n", "\\r");
 		//$replace = '<br/>';
 		//$safe_content = str_ireplace($tags, $replace, $safe_content);

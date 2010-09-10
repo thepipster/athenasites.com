@@ -72,14 +72,14 @@ class PostsTable {
     /**
      * Create a new site
      */
-	public static function create($site_id, $user_id, $content, $status, $title, $canComment, $slug){	
+	public static function create($site_id, $user_id, $content, $status, $title, $canComment, $slug, $source){
 		
         // Get data in correct locale (SQL's NOW() doesn't do that)
         $target_date  = mktime(date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
         $date_str = date('Y-m-d H:i:s', $target_date);
 		
-		$sql = DatabaseManager::prepare("INSERT INTO athena_%d_Posts (user_id, content, status, title, last_edit, created, canComment, slug) 
-			VALUES (%d, %s, %s, %s, '$date_str', '$date_str', %d, %s)", $site_id, $user_id, $content, $status, $title, $canComment, $slug);			
+		$sql = DatabaseManager::prepare("INSERT INTO athena_%d_Posts (user_id, content, status, title, last_edit, created, canComment, slug, source)
+			VALUES (%d, %s, %s, %s, '$date_str', '$date_str', %d, %s, %s)", $site_id, $user_id, $content, $status, $title, $canComment, $slug, $source);
 		return DatabaseManager::insert($sql);
     }
 
@@ -88,14 +88,14 @@ class PostsTable {
     /**
      * Update a post
      */
-    public static function update($site_id, $post_id, $content, $status, $title, $canComment, $slug){
+    public static function update($site_id, $post_id, $content, $status, $title, $canComment, $slug, $source){
 
         // Get data in correct locale (SQL's NOW() doesn't do that)
         $target_date  = mktime(date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
         $date_str = date('Y-m-d H:i:s', $target_date);
 
-		$sql = DatabaseManager::prepare("UPDATE athena_%d_Posts SET content = %s, status = %s, title = %s, canComment = %s, slug = %s, last_edit='$date_str' WHERE id = %d", 
-			$site_id, $content, $status, $title, $canComment, $slug, $post_id);
+		$sql = DatabaseManager::prepare("UPDATE athena_%d_Posts SET content = %s, status = %s, title = %s, canComment = %s, slug = %s, last_edit='$date_str', source=%s WHERE id = %d",
+			$site_id, $content, $status, $title, $canComment, $slug, $source, $post_id);
 		return DatabaseManager::update($sql);
     }
 
