@@ -117,6 +117,13 @@ html, body {
 
 /* Main Frame Styles //////////////////////////////////////// */
 
+.ui-widget-overlay {
+    background-color: black;
+    filter: alpha(opacity=30);
+    -moz-opacity:.30;
+    opacity:.30;
+}
+
 .frameControlsBar {
 	/*margin: 3px;*/
 	border: none;
