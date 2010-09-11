@@ -423,7 +423,7 @@ Logger::debug("$domain has site_id = $current_site_id");
         onResizeComplete : function(){
             //ssMain.init();
             //ssMain.isResizing = false;
-            window.location = "main.php?site_id=" + DataStore.m_siteID;
+            //window.location = "main.php?site_id=" + DataStore.m_siteID;
         },
 	
         onResize : function(){

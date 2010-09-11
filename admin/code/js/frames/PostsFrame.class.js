@@ -7,7 +7,9 @@ var PostsFrame = {
 
     ckEditor : '',
     ckEditorInstance : '',
-	
+
+    oEdit : '',
+
     painted : false,
 		
     // ////////////////////////////////////////////////////////////////////////////
@@ -150,7 +152,7 @@ var PostsFrame = {
 
         txt += "<tr valign='top'>";
         txt += "	<td>";
-        txt += "        <div style='margin-top:5px; margin-left:5px' align='left'>";
+        txt += "        <div id='postContentEditorWrapper' style='margin-top:5px; margin-left:5px' align='left'>";
         //txt += "<iframe>";
         //txt += "<link type='text/css' rel='Stylesheet' href='http://cgp.athena.local/admin/themes/cgp4/code/blog.css' />";
         //txt += "<form method='post' action='default_toolbar2.php' id='Form1'>";
@@ -183,7 +185,17 @@ var PostsFrame = {
     repaintData : function(postObj){
 				
         //CKEDITOR.instances.postContentEditor.setData(postObj.content);
-		
+        /*
+        $('#postContentEditorWrapper').html("");
+        var txt = "<textarea id='postContentEditor' name='postContentEditor' class='innovaeditor' style='width:100%; height:100%;'>"+postObj.content+"</textarea>";
+        $('#postContentEditor').html(txt);        
+        PostsFrame.paintOpenWYSIWYG();
+        */
+
+        oUtil.obj.loadHTML(postObj.content);
+        
+	//PostsFrame.oEdit.loadHTML(postObj.content);
+	
         $('#postTitle').val(postObj.title);
         $('#postSlug').html(postObj.slug);
         $('#postLastEdit').html(postObj.last_edit);
@@ -286,7 +298,9 @@ var PostsFrame = {
 	*/
     onSavePost : function(){
 						
-        var content = CKEDITOR.instances.postContentEditor.getData();
+        //var content = CKEDITOR.instances.postContentEditor.getData();
+        var content = oUtil.obj.getHTML();
+
         var title = $('#postTitle').val();
         var status = $('#postStatusSelector').val();
         var canComment = $('#postCanCommentSelector').val();
@@ -414,6 +428,7 @@ var PostsFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 
     paintOpenWYSIWYG : function(){
+        
         //WYSIWYG.attach('#postContentEditor');
         //alert('sdgsdg');
         //var oEdit1 = new InnovaEditor("oEdit1");
@@ -421,78 +436,136 @@ var PostsFrame = {
 
         var ht = $('#PostsFrame').innerHeight() - 150;
 
-        oUtil.initializeEditor("innovaeditor", {width:"100%", height:ht+"px", css:"http://cgp.athena.local/admin/themes/cgp4/code/css/blog.css"});
-//        oUtil.initializeEditor("innovaeditor", {width:"100%", height:ht+"px", css:"http://cgp.athena.local/admin/themes/cgp4/style.css"});
+        var featuresObj = ["FullScreen","Preview","Print","Search",
+"Cut","Copy","Paste","PasteWord","PasteText","|","Undo","Redo","|",
+"ForeColor","BackColor","|","Bookmark","Hyperlink","XHTMLSource","BRK",
+"Numbering","Bullets","|","Indent","Outdent","LTR","RTL","|",
+"Image","Flash","Media","|","Table","Guidelines","Absolute","|",
+"Characters","Line","Form","RemoveFormat","ClearAll","BRK",
+"StyleAndFormatting","TextFormatting","ListFormatting","BoxFormatting",
+"ParagraphFormatting","CssText","Styles","|",
+"Paragraph","FontName","FontSize","|",
+"Bold","Italic","Underline","Strikethrough","|",
+"JustifyLeft","JustifyCenter","JustifyRight","JustifyFull"];
 
+        var groupsObj = [
+            ["grpEdit", "Edit",
+                ["Undo", "Redo", "SpellCheck", "RemoveFormat"]
+            ],
+            ["grpFont", "Font",
+                ["FontName", "FontSize", "BRK", "Bold", "Italic", "Underline",
+                 "Strikethrough","Superscript", "Subscript", "ForeColor", "BackColor"
+                ]
+            ],
+            ["grpPara", "Paragraph",
+                ["Paragraph", "Indent", "Outdent", "LTR", "RTL", "BRK", "JustifyLeft",
+                 "JustifyCenter", "JustifyRight","JustifyFull", "Numbering", "Bullets"
+                ]
+            ],
+            ["grpPage", "Page & View", ["Save", "Print", "Preview", "BRK", "FullScreen", "XHTMLSource"]],
+            ["grpObjects", "Objects",
+                ["Image", "Flash","Media", "CustomObject", "BRK","CustomTag", "Characters", "Line", "Form"]
+            ],
+            ["grpLinks", "Links", ["Hyperlink","InternalLink", "BRK", "Bookmark"]],
+            ["grpTables", "Tables", ["Table", "BRK", "Guidelines"]],
+            ["grpStyles", "Styles", ["StyleAndFormatting", "Styles", "BRK", "Absolute"]],
+            ["grpCustom", "Custom", ["CustomName1","CustomName2", "BRK","CustomName3"]]
+        ];
+
+        oUtil.initializeEditor("#postContentEditor", {
+            width:"100%",
+            height:ht+"px",
+            btnSpellCheck:true,
+            useTagSelector:false,
+            toolbarMode: 2,
+            //arrCustomButtons: ["ButtonName1","alert('Command 1 here')","Caption 1","btnCustom.gif"],
+            //features:featuresObj,
+            //groups: groupsObj,
+            css:"/admin/themes/cgp4/code/css/cms_blog.css"
+        });
+/*
+oUtil.obj.features=["FullScreen","Preview","Print","Search",
+"Cut","Copy","Paste","PasteWord","PasteText","|","Undo","Redo","|",
+"ForeColor","BackColor","|","Bookmark","Hyperlink","XHTMLSource","BRK",
+"Numbering","Bullets","|","Indent","Outdent","LTR","RTL","|",
+"Image","Flash","Media","|","Table","Guidelines","Absolute","|",
+"Characters","Line","Form","RemoveFormat","ClearAll","BRK",
+"StyleAndFormatting","TextFormatting","ListFormatting","BoxFormatting",
+"ParagraphFormatting","CssText","Styles","|",
+"Paragraph","FontName","FontSize","|",
+"Bold","Italic","Underline","Strikethrough","|",
+"JustifyLeft","JustifyCenter","JustifyRight","JustifyFull"];
+*/
     },
 
     // ////////////////////////////////////////////////////////////////////////////
-
-    paintCKEditor : function(){
-		
-        PostsFrame.ckEditor = CKEDITOR.replace( 'postContentEditor',
-        {
-            height: $('#PostsFrame').innerHeight() - 150,
-				
-            on :
-            {
-                instanceReady : function( ev )
-                {
-                    this.dataProcessor.writer.setRules( 'p',
-                    {
-                        indent : false,
-                        breakBeforeOpen : true,
-                        breakAfterOpen : false,
-                        breakBeforeClose : false,
-                        breakAfterClose : true
-                    });
-                }
-            },
-			
-            // Note that we have added out "MyButton" button here.
-            //toolbar : [ [ 'Source', '-', 'Bold', 'Italic', 'Underline', 'Strike','-','Link', '-', 'MyButton' ] ]
-            toolbar : [
-            //		    ['Source','-','Save','NewPage','Preview','-','Templates'],
-            ['Source'],
-            ['Cut','Copy','Paste','PasteText','PasteFromWord','-','Print', 'SpellChecker', 'Scayt'],
-            ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-            //		    ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'],
-            '/',
-            ['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],
-            ['NumberedList','BulletedList','-','Outdent','Indent','Blockquote','CreateDiv'],
-            ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
-            ['Link','Unlink','Anchor'],
-            //		    ['Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak'],
-            ['MyButton', 'Image', 'Table','HorizontalRule','Smiley','SpecialChar','PageBreak'],
-            '/',
-            //		    ['Styles','Format','Font','FontSize'],
-            ['Format','Font','FontSize'],
-            ['TextColor','BGColor'],
-            ['Maximize', 'ShowBlocks','-','About']
-            ]
-				
-				
-        });
-
-//        PostsFrame.ckEditor.contentsCss = 'http://cgp.athena.local/admin/themes/cgp4/style.css';
-        //PostsFrame.ckEditor.contentsCss = 'http://cgp.athena.local/admin/themes/cgp4/code/blog.css';
-
-        //config.contentsCss = 'some/path/contents.css';
-    /*
-		var ret = PostsFrame.ckEditor.ui.addButton( 'MyButton', {
-								label : 'My Dialog', 
-								click : function(){ImagePickerDialog.show('#PostsFrameImagePicker', PostsFrame.onImageSelected)}, 
-								icon: defines.root_url + 'images/insert_media_button.png' 
-		});
-*/		
-    },
-		
+//
+//    paintCKEditor : function(){
+//
+//        PostsFrame.ckEditor = CKEDITOR.replace( 'postContentEditor',
+//        {
+//            height: $('#PostsFrame').innerHeight() - 150,
+//
+//            on :
+//            {
+//                instanceReady : function( ev )
+//                {
+//                    this.dataProcessor.writer.setRules( 'p',
+//                    {
+//                        indent : false,
+//                        breakBeforeOpen : true,
+//                        breakAfterOpen : false,
+//                        breakBeforeClose : false,
+//                        breakAfterClose : true
+//                    });
+//                }
+//            },
+//
+//            // Note that we have added out "MyButton" button here.
+//            //toolbar : [ [ 'Source', '-', 'Bold', 'Italic', 'Underline', 'Strike','-','Link', '-', 'MyButton' ] ]
+//            toolbar : [
+//            //		    ['Source','-','Save','NewPage','Preview','-','Templates'],
+//            ['Source'],
+//            ['Cut','Copy','Paste','PasteText','PasteFromWord','-','Print', 'SpellChecker', 'Scayt'],
+//            ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+//            //		    ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'],
+//            '/',
+//            ['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],
+//            ['NumberedList','BulletedList','-','Outdent','Indent','Blockquote','CreateDiv'],
+//            ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
+//            ['Link','Unlink','Anchor'],
+//            //		    ['Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak'],
+//            ['MyButton', 'Image', 'Table','HorizontalRule','Smiley','SpecialChar','PageBreak'],
+//            '/',
+//            //		    ['Styles','Format','Font','FontSize'],
+//            ['Format','Font','FontSize'],
+//            ['TextColor','BGColor'],
+//            ['Maximize', 'ShowBlocks','-','About']
+//            ]
+//
+//
+//        });
+//
+////        PostsFrame.ckEditor.contentsCss = 'http://cgp.athena.local/admin/themes/cgp4/style.css';
+//        //PostsFrame.ckEditor.contentsCss = 'http://cgp.athena.local/admin/themes/cgp4/code/blog.css';
+//
+//        //config.contentsCss = 'some/path/contents.css';
+//    /*
+//		var ret = PostsFrame.ckEditor.ui.addButton( 'MyButton', {
+//								label : 'My Dialog',
+//								click : function(){ImagePickerDialog.show('#PostsFrameImagePicker', PostsFrame.onImageSelected)},
+//								icon: defines.root_url + 'images/insert_media_button.png'
+//		});
+//*/
+//    },
+//
     // ////////////////////////////////////////////////////////////////////////////
 	
     onImageSelected : function(imageID){
         var img = DataStore.getImage(imageID);
         var txt = "<img src='"+img.file_url+"' alt='"+img.description+"' width='"+img.width+"px' height='"+img.height+"px'/>";
-        CKEDITOR.instances.postContentEditor.insertHtml(txt);
+        //CKEDITOR.instances.postContentEditor.insertHtml(txt);
+        oUtil.obj.insertHTML(txt);
     }
 
 }
