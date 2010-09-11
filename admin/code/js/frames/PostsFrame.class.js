@@ -5,9 +5,6 @@
 */
 var PostsFrame = {
 
-    ckEditor : '',
-    ckEditorInstance : '',
-
     oEdit : '',
 
     painted : false,
@@ -44,18 +41,7 @@ var PostsFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 
     fullRepaint : function(postObj){
-		
-        if (PostsFrame.ckEditor != ''){
-            try {
-                PostsFrame.ckEditor.destroy();
-            //CKEDITOR.instances.postContentEditor.destroy();
-            }
-            catch(error){
-                alert('could not destroy the CKEditor instance!' + error);
-            }
-            PostsFrame.ckEditor = '';
-        }
-				
+						
         var post_id = DataStore.m_currentPostID;
 				
         var txt = "";
@@ -70,7 +56,7 @@ var PostsFrame = {
         txt += "        <div class='frameControlsBar'>";
         txt += "            <span class='label'>Title:</span>";
         txt += "            <input id='postTitle' type='text' value='"+postObj.title+"'/>";
-        txt += "            <button class='basic_button' style='' onclick=\"ImagePickerDialog.show('#PagesFrameImagePicker', PostsFrame.onImageSelected);\">Insert Image</button>";
+        //txt += "            <button class='basic_button' style='' onclick=\"ImagePickerDialog.show('#PostsFrameImagePicker', PostsFrame.onImageSelected);\">Insert Image</button>";
         txt += "            <a id='postLink' href='' style='font-size:10px'></a>";
         txt += "        </div>";
         txt += "    </td>";
@@ -88,13 +74,14 @@ var PostsFrame = {
         txt += "                <span class='postData' id='postSlug'>"+postObj.slug+"</span>";
         txt += "	    </div>";
 
+
         txt += "	    <div class='postInfoLine'>";
         txt += "                <span class='postLabel'>Status:</span>";
         txt += "                <span class='postData'>";
         txt += "                <select id='postStatusSelector'>";
-        txt += "                    <option value='Published'>Published</selected>";
-        txt += "                    <option value='Draft'>Draft</selected>";
-        txt += "                    <option value='Private'>Private</selected>";
+        txt += "                    <option value='Published' class=''>Published</selected>";
+        txt += "                    <option value='Draft' class=''>Draft</selected>";
+        txt += "                    <option value='Private' class=''>Private</selected>";
         txt += "                </select>";
         txt += "                </span>";
         txt += "	    </div>";
@@ -114,17 +101,24 @@ var PostsFrame = {
         txt += "            <span class='postData' id='postLastEdit'>"+postObj.last_edit+"</span>";
         txt += "	    </div>";
 
-        txt += "			<div class='postInfoLine'>";
-        txt += "            <span class='postLabel'>Created:</span>";
-        txt += "            <span class='postData' id='postCreated'>"+postObj.created+"</span>";
-        txt += "			</div>";
+        txt += "            <div class='postInfoLine'>";
+        txt += "                <span class='postLabel'>Created:</span>";
+        txt += "                <span class='postData' id='postCreated'>"+postObj.created+"</span>";
+        txt += "            </div>";
 				
-        txt += "            </fieldset>";
+        txt += "            <div class='postInfoLine'>";
+        txt += "                <span class='postLabel'>Controls:</span>";
+        txt += "                    <button class='save_button' onclick=\"PostsFrame.onSavePost()\">Save</button>";
+        txt += "                    <button class='delete_button' onclick=\"PostsFrame.onDeletePost()\">Delete</button>";
+        txt += "            </div>";
 
-        txt += "			<div align='right' style='padding-right:10px'>";
-        txt += "			<button class='delete_button' onclick=\"PostsFrame.onDeletePost()\">Delete Post</button>";
-        txt += "			<button class='save_button' onclick=\"PostsFrame.onSavePost()\">Save Changes</button>";
-        txt += "			</div>";
+        txt += "            <div class='postInfoLine'>";
+        txt += "                <span class='postLabel'>Tools:</span>";
+        txt += "                    <button class='basic_button' onclick=\"PostsFrame.paintTools()\">Import Posts</button>";
+        txt += "            </div>";
+
+
+        txt += "            </fieldset>";
 
         txt += "            <fieldset>";
 		
@@ -171,9 +165,8 @@ var PostsFrame = {
         if (postObj.status != ''){
             $('#postStatusSelector').val(postObj.status);
         }
+        //PostsFrame.refreshStatusSelectBox();
 				
-        // Good article on customization of CKEditor - http://www.voofie.com/content/2/ckeditor-plugin-development/
-        //PostsFrame.paintCKEditor();
         PostsFrame.paintOpenWYSIWYG();
 		
         PostsFrame.updatePostLink(postObj);
@@ -184,17 +177,10 @@ var PostsFrame = {
 
     repaintData : function(postObj){
 				
-        //CKEDITOR.instances.postContentEditor.setData(postObj.content);
-        /*
-        $('#postContentEditorWrapper').html("");
-        var txt = "<textarea id='postContentEditor' name='postContentEditor' class='innovaeditor' style='width:100%; height:100%;'>"+postObj.content+"</textarea>";
-        $('#postContentEditor').html(txt);        
-        PostsFrame.paintOpenWYSIWYG();
-        */
-
+        //CKEDITOR.instances.postContentEditor.setData(postObj.content);  
         oUtil.obj.loadHTML(postObj.content);
         
-	//PostsFrame.oEdit.loadHTML(postObj.content);
+        //PostsFrame.oEdit.loadHTML(postObj.content);
 	
         $('#postTitle').val(postObj.title);
         $('#postSlug').html(postObj.slug);
@@ -202,17 +188,38 @@ var PostsFrame = {
         $('#postCreated').html(postObj.created);
 		
         $('#postStatusSelector').val(postObj.status);
+        //PostsFrame.refreshStatusSelectBox();
 				
         PostsFrame.updatePostLink(postObj);
         PostsFrame.updateTagsAndCategoris();
     },
-		
+
+    // ////////////////////////////////////////////////////////////////////////////
+
+
+    paintTools : function(){
+
+        var txt = "";
+
+        //txt += "<div class='subframebox'>";
+        //txt += "    <span class='title'>Tools</span>";
+        //txt += "    <fieldset>";
+        //txt += "    <legend>Import Blog Posts</legend>";
+        txt += "    <button class='basic_button' onclick='WordpressImporter.show()'>Wordpress</button><br/>";
+        txt += "    <button class='basic_button' onclick=''>Blogger</button><br/>";
+        txt += "    <button class='basic_button' onclick='LiveJournalImporter.show()'>Livejournal</button><br/>";
+        //txt += "    </fieldset>";
+        //txt += "</div>"
+
+        //$('#apollo_site_tools_content').html(txt);
+        AthenaDialog.alert(txt, "Import Posts");
+    },
+
     // ////////////////////////////////////////////////////////////////////////////
 
     updatePostLink : function(postObj){
 
         var blogPage = DataStore.getBlogPage();
-        //alert(blogPage.title + " " + blogPage.status);
 				
         if (!blogPage || blogPage == undefined){
             AthenaDialog.alert("You do not have a blog page for your site yet. You can add one using the pages tab. You can continue to create blog posts, but they will not be visible to users", "No Blog Page!");
@@ -232,6 +239,23 @@ var PostsFrame = {
     },
 	
     // ////////////////////////////////////////////////////////////////////////////
+
+    refreshStatusSelectBox : function(){
+        $('#postStatusSelector').removeClass('select_option_public select_option_draft select_option_private');
+        switch($('#postStatusSelector').val()){
+            case 'Published':
+                $('#postStatusSelector').addClass('select_option_public');
+                break;
+            case 'Draft':
+                $('#postStatusSelector').addClass('select_option_draft');
+                break;
+            case 'Private':
+                $('#postStatusSelector').addClass('select_option_private');
+                break;
+        }
+    },
+    
+    // ////////////////////////////////////////////////////////////////////////////
 	
     /**
 	* Get the complete list of tags and categories for the entire site, and populate an auto-complete field with this data
@@ -240,10 +264,10 @@ var PostsFrame = {
 
         $("#postTag").autocomplete({
             source: DataStore.m_tags
-            });
+        });
         $("#postCategory").autocomplete({
             source: DataStore.m_categories
-            });
+        });
 		
         var post = DataStore.getPost(DataStore.m_currentPostID);
 			
@@ -299,7 +323,7 @@ var PostsFrame = {
     onSavePost : function(){
 						
         //var content = CKEDITOR.instances.postContentEditor.getData();
-        var content = oUtil.obj.getHTML();
+        var content = oUtil.obj.getXHTMLBody();
 
         var title = $('#postTitle').val();
         var status = $('#postStatusSelector').val();
@@ -434,42 +458,34 @@ var PostsFrame = {
         //var oEdit1 = new InnovaEditor("oEdit1");
         //oEdit1.REPLACE("postContentEditor");
 
-        var ht = $('#PostsFrame').innerHeight() - 150;
+        var ht = $('#PostsFrame').innerHeight();
 
-        var featuresObj = ["FullScreen","Preview","Print","Search",
-"Cut","Copy","Paste","PasteWord","PasteText","|","Undo","Redo","|",
-"ForeColor","BackColor","|","Bookmark","Hyperlink","XHTMLSource","BRK",
-"Numbering","Bullets","|","Indent","Outdent","LTR","RTL","|",
-"Image","Flash","Media","|","Table","Guidelines","Absolute","|",
-"Characters","Line","Form","RemoveFormat","ClearAll","BRK",
-"StyleAndFormatting","TextFormatting","ListFormatting","BoxFormatting",
-"ParagraphFormatting","CssText","Styles","|",
-"Paragraph","FontName","FontSize","|",
-"Bold","Italic","Underline","Strikethrough","|",
-"JustifyLeft","JustifyCenter","JustifyRight","JustifyFull"];
-
+        //        var featuresObj = ["FullScreen","Preview","Print","Search",
+        //"Cut","Copy","Paste","PasteWord","PasteText","|","Undo","Redo","|",
+        //"ForeColor","BackColor","|","Bookmark","Hyperlink","XHTMLSource","BRK",
+        //"Numbering","Bullets","|","Indent","Outdent","LTR","RTL","|",
+        //"Image","Flash","Media","|","Table","Guidelines","Absolute","|",
+        //"Characters","Line","Form","RemoveFormat","ClearAll","BRK",
+        //"StyleAndFormatting","TextFormatting","ListFormatting","BoxFormatting",
+        //"ParagraphFormatting","CssText","Styles","|",
+        //"Paragraph","FontName","FontSize","|",
+        //"Bold","Italic","Underline","Strikethrough","|",
+        //"JustifyLeft","JustifyCenter","JustifyRight","JustifyFull"];
+        //
         var groupsObj = [
-            ["grpEdit", "Edit",
-                ["Undo", "Redo", "SpellCheck", "RemoveFormat"]
-            ],
-            ["grpFont", "Font",
-                ["FontName", "FontSize", "BRK", "Bold", "Italic", "Underline",
-                 "Strikethrough","Superscript", "Subscript", "ForeColor", "BackColor"
-                ]
-            ],
-            ["grpPara", "Paragraph",
-                ["Paragraph", "Indent", "Outdent", "LTR", "RTL", "BRK", "JustifyLeft",
-                 "JustifyCenter", "JustifyRight","JustifyFull", "Numbering", "Bullets"
-                ]
-            ],
-            ["grpPage", "Page & View", ["Save", "Print", "Preview", "BRK", "FullScreen", "XHTMLSource"]],
-            ["grpObjects", "Objects",
-                ["Image", "Flash","Media", "CustomObject", "BRK","CustomTag", "Characters", "Line", "Form"]
-            ],
-            ["grpLinks", "Links", ["Hyperlink","InternalLink", "BRK", "Bookmark"]],
-            ["grpTables", "Tables", ["Table", "BRK", "Guidelines"]],
-            ["grpStyles", "Styles", ["StyleAndFormatting", "Styles", "BRK", "Absolute"]],
-            ["grpCustom", "Custom", ["CustomName1","CustomName2", "BRK","CustomName3"]]
+        ["grpPage", "Page & View", ["FullScreen", "XHTMLSource", "Search", "BRK", "Undo", "Redo", "SpellCheck", "RemoveFormat"]],
+        ["grpFont", "Font",
+        ["FontName", "FontSize", "Strikethrough", "Superscript", "Subscript", "BRK",
+        "Bold", "Italic", "Underline", "ForeColor", "BackColor"
+        ]
+        ],
+        ["grpStyles", "Styles", ["Table", "Guidelines", "BRK",  "StyleAndFormatting", "Styles"]], //"Absolute"
+        ["grpPara", "Paragraph",
+        ["Paragraph", "Indent", "Outdent", "LTR", "RTL", "BRK", "JustifyLeft",
+        "JustifyCenter", "JustifyRight","JustifyFull", "Numbering", "Bullets"
+        ]
+        ],
+        ["grpObjects", "Objects", ["Image", "InsertInternalImage", "Flash", "Media", "BRK", "Hyperlink", "Characters", "Line",  "ApolloPageBreak"]]
         ];
 
         oUtil.initializeEditor("#postContentEditor", {
@@ -478,12 +494,15 @@ var PostsFrame = {
             btnSpellCheck:true,
             useTagSelector:false,
             toolbarMode: 2,
-            //arrCustomButtons: ["ButtonName1","alert('Command 1 here')","Caption 1","btnCustom.gif"],
+            useBR:true, // Force to use <br> for line breaks by default
+            arrCustomButtons: [
+            ["InsertInternalImage","ImagePickerDialog.show('#PostsFrameImagePicker', PostsFrame.onImageSelected)","Insert an image from your media library", "btnInternalImage.gif"],
+            ["ApolloPageBreak","PostsFrame.onInsertPageBreak()","Insert a more link into your blog post", "btnApolloPageBreak.png"]],
             //features:featuresObj,
-            //groups: groupsObj,
-            css:"/admin/themes/cgp4/code/css/cms_blog.css"
+            groups: groupsObj,
+            css: DataStore.m_theme.cms_blog_css
         });
-/*
+    /*
 oUtil.obj.features=["FullScreen","Preview","Print","Search",
 "Cut","Copy","Paste","PasteWord","PasteText","|","Undo","Redo","|",
 "ForeColor","BackColor","|","Bookmark","Hyperlink","XHTMLSource","BRK",
@@ -499,72 +518,31 @@ oUtil.obj.features=["FullScreen","Preview","Print","Search",
     },
 
     // ////////////////////////////////////////////////////////////////////////////
-//
-//    paintCKEditor : function(){
-//
-//        PostsFrame.ckEditor = CKEDITOR.replace( 'postContentEditor',
-//        {
-//            height: $('#PostsFrame').innerHeight() - 150,
-//
-//            on :
-//            {
-//                instanceReady : function( ev )
-//                {
-//                    this.dataProcessor.writer.setRules( 'p',
-//                    {
-//                        indent : false,
-//                        breakBeforeOpen : true,
-//                        breakAfterOpen : false,
-//                        breakBeforeClose : false,
-//                        breakAfterClose : true
-//                    });
-//                }
-//            },
-//
-//            // Note that we have added out "MyButton" button here.
-//            //toolbar : [ [ 'Source', '-', 'Bold', 'Italic', 'Underline', 'Strike','-','Link', '-', 'MyButton' ] ]
-//            toolbar : [
-//            //		    ['Source','-','Save','NewPage','Preview','-','Templates'],
-//            ['Source'],
-//            ['Cut','Copy','Paste','PasteText','PasteFromWord','-','Print', 'SpellChecker', 'Scayt'],
-//            ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-//            //		    ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'],
-//            '/',
-//            ['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],
-//            ['NumberedList','BulletedList','-','Outdent','Indent','Blockquote','CreateDiv'],
-//            ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
-//            ['Link','Unlink','Anchor'],
-//            //		    ['Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak'],
-//            ['MyButton', 'Image', 'Table','HorizontalRule','Smiley','SpecialChar','PageBreak'],
-//            '/',
-//            //		    ['Styles','Format','Font','FontSize'],
-//            ['Format','Font','FontSize'],
-//            ['TextColor','BGColor'],
-//            ['Maximize', 'ShowBlocks','-','About']
-//            ]
-//
-//
-//        });
-//
-////        PostsFrame.ckEditor.contentsCss = 'http://cgp.athena.local/admin/themes/cgp4/style.css';
-//        //PostsFrame.ckEditor.contentsCss = 'http://cgp.athena.local/admin/themes/cgp4/code/blog.css';
-//
-//        //config.contentsCss = 'some/path/contents.css';
-//    /*
-//		var ret = PostsFrame.ckEditor.ui.addButton( 'MyButton', {
-//								label : 'My Dialog',
-//								click : function(){ImagePickerDialog.show('#PostsFrameImagePicker', PostsFrame.onImageSelected)},
-//								icon: defines.root_url + 'images/insert_media_button.png'
-//		});
-//*/
-//    },
-//
+
+    /**
+     * Insert a custom apollo page break
+     */
+    onInsertPageBreak : function(){
+
+        // Has the user already got a apollo page break in this page?
+        var content = oUtil.obj.getXHTMLBody();
+        var myRegExp = /apolloPageBreak/;
+        var pos = content.search(myRegExp);
+
+        if (pos > 0){
+            AthenaDialog.alert("Sorry, you already have a break in this post and you can only have one, you'll need to delete the old one before you can add one here!", "Can't add more than 1 break");
+            return;
+        }
+        
+        var txt = "<div class='apolloPageBreak'>More...</div> ";
+        oUtil.obj.insertHTML(txt);
+    },
+
     // ////////////////////////////////////////////////////////////////////////////
-	
+
     onImageSelected : function(imageID){
         var img = DataStore.getImage(imageID);
         var txt = "<img src='"+img.file_url+"' alt='"+img.description+"' width='"+img.width+"px' height='"+img.height+"px'/>";
-        //CKEDITOR.instances.postContentEditor.insertHtml(txt);
         oUtil.obj.insertHTML(txt);
     }
 

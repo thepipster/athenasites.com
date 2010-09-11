@@ -347,6 +347,7 @@ function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_c
     $tags = array("\\n", "\\r");
     $replace = '';
     $safe_content = str_ireplace($tags, $replace, $content);
+    $safe_content = stripslashes($safe_content);
     $safe_title = str_ireplace($tags, $replace, $title);
 
     PostsTable::update($site_id, $post_id, $safe_content, $status, $safe_title, $can_comment, StringUtils::encodeSlug($title), 'Apollo');

@@ -1,26 +1,36 @@
 
 #SideBar {
-	width: 100%;
-	height: 100%;
-	float: left;
-	padding: 0px;
-	margin: 0px;
-	padding-top: 30px;
+    width: 100%;
+    height: 100%;
+    float: left;
+    padding: 0px;
+    margin: 0px;
+    padding-top: 30px;
 }
 
 #SideBar p {
-	padding-left: 10px;
-	font-size: 14px;
+    padding-left: 10px;
+    font-size: 14px;
 }
 
 #SideBar .add_new_project {
-	font-size: 10px;
-	color: #990000;
-	cursor: pointer;
+    font-size: 10px;
+    color: #990000;
+    cursor: pointer;
 }
 
 #SideBar .add_new_project:hover {
-	color: white;
+    color: white;
+}
+
+#SideBar .more_posts_link {
+    font-size: 10px;
+    color: #00315f;
+    cursor: pointer;
+}
+
+#SideBar .more_posts_link:hover {
+    color: #006fdc;
 }
 
 /* SideBar Projects /////////////////////////////// */
@@ -31,17 +41,21 @@
 /* SideBar Users /////////////////////////////// */
 
 #SideBar .page {
-	padding-top: 3px;
+    padding-top: 3px;
+    /* To stop line wrap */
+    white-space: nowrap;
+    overflow:hidden;
+    width:160px;
 }
 
 #SideBar .page:hover {
-	color: white;
-	cursor: pointer;
+    color: white;
+    cursor: pointer;
 }
 
-.status_draft { color: #990000 !important;}
-.status_private { color: #ffcc66 !important;}
-.status_public { color: #b9ff79 !important;}
+.status_draft { color: #2c6c11 !important;}
+.status_private { color: #990000 !important;}
+.status_public { color: #233c57 !important;}
 
 #SideBar .page_depth_0 { padding-left: 10px;}
 #SideBar .page_depth_1 { padding-left: 25px; }
@@ -49,26 +63,26 @@
 #SideBar .page_depth_3 { padding-left: 55px; }
 
 #SideBar .page_name {
-	position: relative;
-	padding-left: 5px;
-	top: -4px;
-	font-size: 12px;
-	cursor: pointer;
-	height: 20px;
+    position: relative;
+    padding-left: 5px;
+    top: -6px;
+    font-size: 12px;
+    cursor: pointer;
+    height: 20px;
 }
 
 #SideBar .page_icon{
-	height: 22px;
+    height: 22px;
 }
 
 #SideBar .folder_filter {
-	padding-left: 10px;
-	padding-top: 3px;
+    padding-left: 10px;
+    padding-top: 3px;
 }
 
 #SideBar .folder_filter:hover {
-	color: white;
-	cursor: pointer;
+    color: white;
+    cursor: pointer;
 }
 
 /*
@@ -81,33 +95,33 @@
 
 
 #SideBar .selected {
-	color: #f3f2f1;
+    color: #f3f2f1 !important;
 }
 
 #SideBar .folder_filter_name {
-	position: relative;
-	padding-left: 5px;
-	top: -2px;
+    position: relative;
+    padding-left: 5px;
+    top: -2px;
 }
 
 
 #SideBar .folder_name:hover {
-	color: white;
-	cursor: pointer;
+    color: white;
+    cursor: pointer;
 }
 
 #SideBar .folder_name_hover {
-	color: black;
-	background-color: #c3d3df;
+    color: black;
+    background-color: #c3d3df;
 }
 
 
 #SideBar .folder_name {
-	position: relative;
-	padding-left: 5px;
-	top: -8px;
-	font-size: 12px;
-	cursor: pointer;
+    position: relative;
+    padding-left: 5px;
+    top: -8px;
+    font-size: 12px;
+    cursor: pointer;
 }
 
 
@@ -115,63 +129,63 @@
 }
 
 #SideBar .folder {
-	margin-left: 5px;
-	padding-top: 3px;
+    margin-left: 5px;
+    padding-top: 3px;
 }
 
 /* Folder Pop-up context menu /////////////////////////// */
 
 #SideBar .rightClickMenu {
-	position: absolute;
-	width: 120px;
-	z-index: 99999;
-	border: solid 1px #CCC;
-	background: #EEE;
-	padding: 0px;
-	margin: 0px;
-	display: none; 
+    position: absolute;
+    width: 120px;
+    z-index: 99999;
+    border: solid 1px #CCC;
+    background: #EEE;
+    padding: 0px;
+    margin: 0px;
+    display: none;
 }
 
 #SideBar .rightClickMenu LI {
-	list-style: none;
-	padding: 0px;
-	margin: 0px;
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
 }
 
 #SideBar .rightClickMenu A {
-	color: #333;
-	text-decoration: none;
-	display: block;
-	line-height: 20px;
-	height: 20px;
-	background-position: 6px center;
-	background-repeat: no-repeat;
-	outline: none;
-	padding: 1px 5px;
-	padding-left: 28px;
+    color: #333;
+    text-decoration: none;
+    display: block;
+    line-height: 20px;
+    height: 20px;
+    background-position: 6px center;
+    background-repeat: no-repeat;
+    outline: none;
+    padding: 1px 5px;
+    padding-left: 28px;
 }
 
 #SideBar .rightClickMenu LI:hover A {
-	color: #FFF;
-	background-color: #3399FF;
+    color: #FFF;
+    background-color: #3399FF;
 }
 
 #SideBar .rightClickMenu LI.disabled A {
-	color: #AAA;
-	cursor: default;
+    color: #AAA;
+    cursor: default;
 }
 
 #SideBar .rightClickMenu LI.hover.disabled A {
-	background-color: transparent;
+    background-color: transparent;
 }
 
 #SideBar .rightClickMenu LI.separator {
-	border-top: solid 1px #CCC;
+    border-top: solid 1px #CCC;
 }
 
 /*
 	Adding Icons
-	
+
 	You can add icons to the context menu by adding
 	classes to the respective LI element(s)
 */

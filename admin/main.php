@@ -235,13 +235,13 @@ Logger::debug("$domain has site_id = $current_site_id");
 
                         <div id='menu_container'>
                             <!--
-						<div id='settings_menu' class='menu_item' onclick='ssMain.onShowSettings()'>Settings</div>
-					-->
+                            <div id='settings_menu' class='menu_item' onclick='ssMain.onShowSettings()'>Settings</div>
                             <div id='dashboard_menu' class='menu_item' onclick='ssMain.onShowDashboard()'>Dashboard</div>
+                            -->
+                            <div id='posts_menu' class='menu_item' onclick='ssMain.onShowPosts()'>Blog</div>
                             <div id='pages_menu' class='menu_item' onclick='ssMain.onShowPages()'>Pages</div>
                             <div id='files_menu' class='menu_item' onclick='ssMain.onShowFiles()'>Files</div>
                             <div id='gallery_menu' class='menu_item' onclick='ssMain.onShowGalleries()'>Galleries</div>
-                            <div id='posts_menu' class='menu_item' onclick='ssMain.onShowPosts()'>Blog</div>
                             <div id='stats_menu' class='menu_item' onclick='ssMain.onShowStats()'>Stats</div>
 
                             <?php 
@@ -351,7 +351,7 @@ Logger::debug("$domain has site_id = $current_site_id");
         VIEW_ACCOUNT : 8,
         VIEW_EDITFILES : 9,
 	
-        view : 1,
+        view : 4,
 		
         pageTracker : '',
 	

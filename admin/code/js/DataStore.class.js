@@ -10,16 +10,16 @@ var DataStore = {
     m_currentPageID : 0,
     m_currentGalleryNo : 1, // For multi-galleries
     m_currentPostID : 0,
-		
+
     /** Currently selected site id (if the user has more than 1 site!) */
     m_siteID : 0,
-	
+
     /** List of folders for the site with fields; id, site_id, name */
     m_folderList : '',
 
     /** List of media for the site */
     m_mediaList : '',
-	
+
     /** List of posts */
     m_postList : '',
 
@@ -28,29 +28,29 @@ var DataStore = {
 
     /** Page template list */
     m_templateList : '',
-	
+
     /** Theme parameter list */
     m_themeParaList : '',
-	
+
     /** List of parameters set for this site */
     m_siteParaList : '',
-	
+
     /** Gallery image list */
     m_galleryImageList : '',
-	
+
     /** Gallery meta information */
     m_galleryMetaList : '',
 
     /** List of post categories */
     m_categories : '',
-	
+
     /** List of post tags */
     m_tags : '',
-		
+
     // //////////////////////////////////////////////////////////////////////////////////
-	
+
     init : function(){
-		
+
     },
 
     // //////////////////////////////////////////////////////////////////////////////////
@@ -60,7 +60,7 @@ var DataStore = {
         DataStore.m_mediaList = '';
         DataStore.m_pageList = '';
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     getSiteParaValue : function(page_id, theme_para_id){
@@ -71,10 +71,10 @@ var DataStore = {
                 return DataStore.m_siteParaList[i].para_value;
             }
         }
-		
+
         return false;
     },
-		
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     getPageThemeParas : function(template_name){
@@ -86,11 +86,11 @@ var DataStore = {
         }
         return list;
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     getImage : function(image_id){
-	
+
         for(var i=0; i<DataStore.m_mediaList.length; i++){
             if (DataStore.m_mediaList[i].id == image_id){
                 return DataStore.m_mediaList[i];
@@ -98,35 +98,35 @@ var DataStore = {
         }
         return false;
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
-	
+
     /**
 	* Add a new image to a gallery. If the slot is currently full, then insert the image by moving all the laters image
-	* by one slot. 
-	*/ 
+	* by one slot.
+	*/
     /*
 	addGalleryImage : function(media_id, slot_no, theme_para_id){
 
-			
+
 		var slotContents = DataStore.getGallerySlotImage(slot_no, gallery_no);
 		var currentImage = false;
 		var newImage = DataStore.getImage(media_id);
-		
+
 		if (slotContents){
 			image = DataStore.getImage(slotContents.image_id);
 		}
 
-		// If the slot is not open, then increment the slot counter for all images 
-		// with slot numbers equal to or greater than this one	
+		// If the slot is not open, then increment the slot counter for all images
+		// with slot numbers equal to or greater than this one
 		if (!DataStore.isSlotFree(slot_no)){
 			for (var i=0; i<DataStore.m_galleryImageList.length; i++){
 				if (DataStore.m_galleryImageList[i].slot_number >= slot_no){
 					DataStore.m_galleryImageList[i].slot_number++;
 				}
-			}		
+			}
 		}
-	
+
 		// Add the new image.....
 		var galImg = new Array();
 		galImg.image_id = media_id;
@@ -134,27 +134,27 @@ var DataStore = {
 		galImg.theme_para_id = theme_para_id;
 		galImg.gallery_number = DataStore.m_currentGalleryNo;
 		galImg.page_id = DataStore.m_currentPageID;
-					
-		DataStore.m_galleryImageList.push(img);					
+
+		DataStore.m_galleryImageList.push(img);
 	},
 	*/
-	
+
     removeGalleryImage : function(slot_no){
-		
+
         var tempList = new Array();
-		
+
         for (var i=0; i<DataStore.m_galleryImageList.length; i++){
-		
+
             if (!(DataStore.m_galleryImageList[i].slot_number == slot_no &&
                 DataStore.m_galleryImageList[i].gallery_number == DataStore.m_currentGalleryNo)){
                 tempList.push(DataStore.m_galleryImageList[i]);
             }
         }
-		
+
         DataStore.m_galleryImageList = tempList;
-		
+
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     isSlotFree : function(slot_no){
@@ -162,17 +162,17 @@ var DataStore = {
         if (slotContents == undefined || !slotContents) return false;
         return true;
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     /**
 	* Check to see if a page can have a gallery, based on its template
 	*/
     isGalleryPage : function(page_id){
-	
+
         var page = DataStore.getPage(page_id);
         var pageParas = DataStore.getPageThemeParas(page.template);
-		
+
         for (var i=0; i<pageParas.length; i++){
             if (pageParas[i].para_type == 'gallery'){
                 return true;
@@ -180,7 +180,7 @@ var DataStore = {
         }
         return false;
     },
-		
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     getGallerySlotImage : function(slot_no, gallery_no){
@@ -192,7 +192,7 @@ var DataStore = {
         }
         return false;
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     getPage : function(page_id){
@@ -204,7 +204,7 @@ var DataStore = {
         }
         return false;
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     getHomePage : function(){
@@ -228,27 +228,27 @@ var DataStore = {
         }
         return false;
     },
-		
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     getCurrentPage : function(){
         return DataStore.getPage(DataStore.m_currentPageID);
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
-	
+
     getFolderName : function(folder_id){
-	
+
         if (folder_id == FolderSidebarFrame.ID_UNASSIGNED){
             return "Unassigned";
         }
-		
+
         for (var i=0; i<DataStore.m_folderList.length; i++){
             if (DataStore.m_folderList[i].id == folder_id){
                 return DataStore.m_folderList[i].name;
             }
         }
-		
+
         return "? ("+folder_id+")";
     },
 
@@ -258,18 +258,18 @@ var DataStore = {
 	* For a given page, traverse up the branch to find the root page
 	*/
     getRootPage : function(page_id){
-	
+
         var page = DataStore.getPage(page_id);
-		
+
         //alert(page_id + ' ' + page.title + ' ' + page.parent_page_id);
-		
+
         if (page.parent_page_id == 0){
             return page;
         }
-		
+
         return DataStore.getRootPage(page.parent_page_id);
     },
-			
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -282,7 +282,7 @@ var DataStore = {
         if (testPage.parent_page_id == 0){
             return false;
         }
-		
+
         if (testPage.parent_page_id == page_id){
             return true;
         }
@@ -291,32 +291,32 @@ var DataStore = {
         }
 
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     /**
 	* Get the deepest page depth
 	*/
     getMaxDepth : function(){
-	
+
         var max_depth = 0;
         for (var i=0; i<DataStore.m_pageList.length; i++){
             var depth = DataStore.getPageDepth(DataStore.m_pageList[i].id);
-			
+
             //alert(DataStore.m_pageList[i].title + " " + depth);
-			
+
             if (depth > max_depth){
                 max_depth = depth;
             }
         }
-		
+
         return max_depth;
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
-	
+
     getPageDepth : function(page_id){
-		
+
         var page = DataStore.getPage(page_id);
         if (page.parent_page_id == 0){
             return 1;
@@ -325,31 +325,31 @@ var DataStore = {
             return 1 + DataStore.getPageDepth(page.parent_page_id);
         }
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     updateSitePara : function(theme_para_id, page_id, new_para_val){
 
         for (var i=0; i<DataStore.m_siteParaList.length; i++){
-		
+
             if ((DataStore.m_siteParaList[i].theme_para_id == theme_para_id) && (DataStore.m_siteParaList[i].page_id == page_id)){
                 DataStore.m_siteParaList[i].para_value = new_para_val;
                 return;
             }
-					
+
         }
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     /**
 	* Update an existing page
 	*/
     updatePage : function(pageObj){
-		
+
         for (var i=0; i<DataStore.m_pageList.length; i++){
             if (DataStore.m_pageList[i].id == pageObj.id){
-			
+
                 DataStore.m_pageList[i].id = pageObj.id;
                 DataStore.m_pageList[i].title = AthenaUtils.encodeTitle(pageObj.title);
                 DataStore.m_pageList[i].user_id = pageObj.user_id;
@@ -364,24 +364,25 @@ var DataStore = {
                 DataStore.m_pageList[i].is_homepage = pageObj.is_homepage;
                 DataStore.m_pageList[i].is_blogpage = pageObj.is_blogpage;
                 DataStore.m_pageList[i].order = pageObj.page_order;
-								
+
                 return;
             }
         }
     },
-		
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     deletePage : function(page_id){
-	
+
+        // TODO: replace with array.splice, it will be faster - see http://www.elated.com/articles/manipulating-javascript-arrays/
         var tempList = new Array();
-		
+
         for(var i=0; i<DataStore.m_pageList.length; i++){
             if (DataStore.m_pageList[i].id != page_id){
                 tempList.push(DataStore.m_pageList[i]);
             }
         }
-		
+
         DataStore.m_pageList = tempList;
 
         // update any pages that had this page as their parent page id
@@ -390,16 +391,16 @@ var DataStore = {
                 DataStore.m_pageList[i].parent_page_id = 0;
             }
         }
-			
+
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     /**
 	* Add a page from a returned page object from the MediaAPI
 	*/
     addPage : function(pageObj){
-	
+
         var temp = new Object();
         temp.id = pageObj.id;
         temp.title = AthenaUtils.encodeTitle(pageObj.title);
@@ -415,17 +416,21 @@ var DataStore = {
         temp.is_homepage = pageObj.is_homepage;
         temp.is_blogpage = pageObj.is_blogpage;
         temp.order = pageObj.page_order;
-						
+
         DataStore.m_pageList.push(temp);
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     /**
-	* Add a post from a returned page object from the MediaAPI
-	*/
-    addPost : function(postObj){
-	
+     * Add a post from a returned page object from the MediaAPI
+     * @param object postObj the post object to add
+     * @param boolean toStart (optional) if set to true, this post will be added to the start of the list
+     * useful for new posts, as they have the latest creation date so we want them to be at the start of the list
+     * and don't want to have to sort the list based on date
+     */
+    addPost : function(postObj, toStart){
+
         var temp = new Object();
         temp.id = postObj.id;
         temp.title = AthenaUtils.encodeTitle(postObj.title);
@@ -439,27 +444,32 @@ var DataStore = {
         temp.canComment = postObj.canComment;
         temp.tags = postObj.tags;
         temp.categories = postObj.categories;
-						
+
         if (temp.tags == undefined){
             temp.tags = new Array();
         }
         if (temp.categories == undefined){
             temp.categories = new Array();
         }
-												
-        DataStore.m_postList.push(temp);
+
+        if (!toStart){
+            DataStore.m_postList.push(temp);
+        }
+        else {
+            DataStore.m_postList.unshift(temp);
+        }
     },
-		
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     /**
 	* Update an existing page
 	*/
     updatePost : function(postObj){
-		
+
         for (var i=0; i<DataStore.m_postList.length; i++){
             if (DataStore.m_postList[i].id == postObj.id){
-							
+
                 DataStore.m_postList[i].id = postObj.id;
                 DataStore.m_postList[i].title = AthenaUtils.encodeTitle(postObj.title);
                 DataStore.m_postList[i].user_id = postObj.user_id;
@@ -472,35 +482,37 @@ var DataStore = {
                 DataStore.m_postList[i].canComment = postObj.canComment;
                 DataStore.m_postList[i].tags = postObj.tags;
                 DataStore.m_postList[i].categories = postObj.categories;
-					
+
                 if (DataStore.m_postList[i].tags == undefined){
                     DataStore.m_postList[i].tags = new Array();
                 }
                 if (DataStore.m_postList[i].categories == undefined){
                     DataStore.m_postList[i].categories = new Array();
                 }
-				
+
                 return;
             }
         }
     },
-		
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     deletePost : function(post_id){
-	
+
+        // TODO: replace with array.splice, it will be faster - see http://www.elated.com/articles/manipulating-javascript-arrays/
+
         var tempList = new Array();
-		
+
         for(var i=0; i<DataStore.m_postList.length; i++){
             if (DataStore.m_postList[i].id != post_id){
                 tempList.push(DataStore.m_postList[i]);
             }
         }
-		
+
         DataStore.m_postList = tempList;
-			
+
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     getPost : function(post_id){
@@ -512,51 +524,51 @@ var DataStore = {
         }
         return false;
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     save : function(){
     },
-				
+
     // //////////////////////////////////////////////////////////////////////////////////
-	
+
     load : function(callback){
-	
+
         GalleryAPI.getAll(DataStore.m_siteID, function(gallery_images, gallery_meta){
             DataStore.onGotGalleryData(gallery_images, gallery_meta);
         });
-		
+
         MediaAPI.getAll(DataStore.m_siteID,
             function(folders, media, pages, theme, page_templates, theme_paras, page_paras, posts, tags, categories){
                 DataStore.onGotData(folders, media, pages, theme, page_templates, theme_paras, page_paras, posts, tags, categories, callback);
             });
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
-	
+
     onGotGalleryData : function(gallery_images, gallery_meta){
-		
+
         DataStore.onGotGalleryImages(gallery_images);
         //DataStore.m_galleryImageList = gallery_images;
         DataStore.m_galleryMetaList = gallery_meta;
-		
+
         if (DataStore.m_galleryImageList == undefined) DataStore.DataStore.m_galleryImageList = new Array();
         if (DataStore.m_galleryMetaList == undefined) DataStore.m_galleryMetaList = new Array();
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     onGotGalleryImages : function(gallery_images){
-		
+
         if (!gallery_images || gallery_images == undefined){
             DataStore.m_galleryImageList = new Array();
             return;
         }
-		
+
         DataStore.m_galleryImageList = new Array(gallery_images.length);
-				
+
         for(var i=0; i<gallery_images.length; i++){
-			
+
             var temp = new Object();
 
             temp.id = gallery_images[i].id;
@@ -565,14 +577,14 @@ var DataStore = {
             temp.gallery_number = gallery_images[i].gallery_number;
             temp.theme_para_id = gallery_images[i].theme_para_id;
             temp.page_id = gallery_images[i].page_id;
-			
+
             DataStore.m_galleryImageList[i] = temp;
         }
-		
+
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
-	
+
     onGotData : function(folder_list, media_list, page_list, theme, page_templates, theme_paras, paga_paras, post_list, tag_list, categories_list, callback){
 
         DataStore.onGotFolders(folder_list);
@@ -592,7 +604,7 @@ var DataStore = {
         if (DataStore.m_siteParaList == undefined) DataStore.m_siteParaList = new Array();
         if (DataStore.m_categories == undefined) DataStore.m_categories = new Array();
         if (DataStore.m_tags == undefined) DataStore.m_tags = new Array();
-				
+
         callback();
     },
 
@@ -601,25 +613,25 @@ var DataStore = {
 	onGotThemeParas : function(theme_paras){
 
 		if (!theme_paras || theme_paras == undefined){
-			DataStore.m_themeParaList = new Array();			
+			DataStore.m_themeParaList = new Array();
 			return;
 		}
-		
+
 		DataStore.m_themeParaList = new Array();
-				
-		for(var i=0; i<theme_paras.length; i++){			
-			
+
+		for(var i=0; i<theme_paras.length; i++){
+
 			var temp = new Object();
 			temp.template_name = page_templates[i].template_name;
 			temp.template_description = page_templates[i].template_description;
 			temp.template_file = page_templates[i].template_file;
-			
-			DataStore.m_themeParaList[i] = temp;			
 
-		}	
-		
+			DataStore.m_themeParaList[i] = temp;
+
+		}
+
 	},
-	*/			
+	*/
     // //////////////////////////////////////////////////////////////////////////////////
 
     onGotPageTemplates : function(page_templates){
@@ -628,109 +640,109 @@ var DataStore = {
             DataStore.m_templateList = new Array();
             return;
         }
-		
+
         DataStore.m_templateList = new Array();
-				
+
         for(var i=0; i<page_templates.length; i++){
-			
+
             var temp = new Object();
             temp.template_name = page_templates[i].template_name;
             temp.template_description = page_templates[i].template_description;
             temp.template_file = page_templates[i].template_file;
-			
+
             DataStore.m_templateList[i] = temp;
 
         }
-		
+
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
-	
+
     onGotPosts : function(post_list){
 
         if (!post_list || post_list == undefined){
             DataStore.m_postList = new Array();
             return;
         }
-		
+
         DataStore.m_postList = new Array();
-				
+
         for(var i=0; i<post_list.length; i++){
-			
+
             DataStore.addPost(post_list[i]);
 
         }
-		
+
         if (post_list.length > 0 && DataStore.m_currentPostID == 0){
             DataStore.m_currentPostID = post_list[0].id;
         }
-		
+
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
-	
+
     onGotPages : function(page_list){
 
         if (!page_list || page_list == undefined){
             DataStore.m_pageList = new Array();
             return;
         }
-		
+
         DataStore.m_pageList = new Array();
-				
+
         for(var i=0; i<page_list.length; i++){
-			
+
             DataStore.addPage(page_list[i]);
 
         }
-		
+
         if (page_list.length > 0 && DataStore.m_currentPageID == 0){
             DataStore.m_currentPageID = page_list[0].id;
         }
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
 
     onGotFolders : function(folder_list){
-		
+
         if (!folder_list || folder_list == undefined){
             DataStore.m_folderList = new Array();
             return;
         }
-		
+
         DataStore.m_folderList = new Array(folder_list.length);
-				
+
         for(var i=0; i<folder_list.length; i++){
-			
+
             var temp = new Object();
             temp.id = folder_list[i].id;
             temp.name = folder_list[i].name;
-			
+
             if (i == 0){
             //alert(temp.id + " " + temp.name);
             }
-			
+
             DataStore.m_folderList[i] = temp;
         }
-		
+
     },
-	
+
     // //////////////////////////////////////////////////////////////////////////////////
-	
+
     onGotMedia : function(media_list){
-		
+
         if (!media_list || media_list == undefined){
             DataStore.m_mediaList = new Array();
             return;
         }
-		
+
         DataStore.m_mediaList = new Array(media_list.length);
-				
+
         for(var i=0; i<media_list.length; i++){
-			
+
             var files_root = defines.user_files_root_url + DataStore.m_siteID + "/";
             var temp = new Object();
-			
+
             temp.thumb_url = files_root + media_list[i].thumb_filename;
             temp.file_url = files_root + media_list[i].filename;
             temp.mime_type = media_list[i].mime_type;
@@ -744,14 +756,14 @@ var DataStore = {
             temp.id = media_list[i].id;
             temp.date_added = media_list[i].created;
             temp.folder_id = media_list[i].folder_id;
-			
+
             if (i == 0){
             //alert(temp.thumb_url);
             }
-			
+
             DataStore.m_mediaList[i] = temp;
         }
-		
+
     }
-		
+
 }

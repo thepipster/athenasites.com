@@ -115,15 +115,23 @@ html, body {
 	background-color: transparent;
 }
 
-/* Main Frame Styles //////////////////////////////////////// */
+.select_option_public { background-color: #233c57 !important; color: white !important}
+.select_option_private { background-color: #990000 !important; color: white !important}
+.select_option_draft { background-color: #2c6c11 !important; color: white !important}
 
+.select_option_public:hover { background-color: #233c57 !important;}
+.select_option_private:hover { background-color: #990000 !important;}
+.select_option_draft:hover { background-color: #2c6c11 !important;}
+
+/* Main Frame Styles //////////////////////////////////////// */
+/*
 .ui-widget-overlay {
     background-color: black;
     filter: alpha(opacity=30);
     -moz-opacity:.30;
     opacity:.30;
 }
-
+*/
 .frameControlsBar {
 	/*margin: 3px;*/
 	border: none;

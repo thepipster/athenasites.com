@@ -67,7 +67,25 @@ var AthenaDialog = {
 	* Display a info message to the user
 	*/
     message : function(msg){
-    //alert(msg);
+        if (msgTitle == undefined){
+            msgTitle = "Message";
+        }
+
+        $('#apollo_dialog').dialog("destroy");
+
+        $('#apollo_dialog').html(msg);
+
+        $('#apollo_dialog').dialog({
+            resizable: false,
+            //			height:140,
+            modal: true,
+            title: msgTitle,
+            buttons: {
+                Ok: function() {
+                    $(this).dialog('close');
+                }
+            }
+        });
     },
 	
     // ////////////////////////////////////////////////////////////////////////
@@ -88,14 +106,14 @@ var AthenaDialog = {
         $('#apollo_dialog').dialog({
             resizable: false,
             //			height:140,
-            modal: true,
+            modal: false,
             title: msgTitle,
             buttons: {
                 Ok: function() {
                     $(this).dialog('close');
                 }
             }
-        })
+        });
     },
 	
     // ////////////////////////////////////////////////////////////////////////
