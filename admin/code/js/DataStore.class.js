@@ -202,6 +202,7 @@ var DataStore = {
                 return DataStore.m_pageList[i];
             }
         }
+        AthenaDialog.error('coiuld not find page with id = ' + page_id);
         return false;
     },
 
@@ -699,6 +700,7 @@ var DataStore = {
         if (page_list.length > 0 && DataStore.m_currentPageID == 0){
             DataStore.m_currentPageID = page_list[0].id;
         }
+
     },
 
     // //////////////////////////////////////////////////////////////////////////////////

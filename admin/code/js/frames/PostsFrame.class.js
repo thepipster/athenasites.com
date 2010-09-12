@@ -5,10 +5,12 @@
 */
 var PostsFrame = {
 
-    oEdit : '',
-
-    painted : false,
-		
+    /**
+     * Store a reference to the current post, this is more detailed than what is
+     * store in the DataStore
+     */
+    postObj : false,
+    
     // ////////////////////////////////////////////////////////////////////////////
 
     init : function(){
@@ -24,160 +26,21 @@ var PostsFrame = {
             return;
         }
 
-        //var postObj = DataStore.getCurrentPost();
-        								
-        if (!PostsFrame.painted){
-            //(postObj);
-            PostsFrame.painted = true;
-            MediaAPI.getPostDetails(DataStore.m_siteID, DataStore.m_currentPostID, PostsFrame.fullRepaint);
-        }
-        else {
-            //PostsFrame.repaintData(postObj);
-            MediaAPI.getPostDetails(DataStore.m_siteID, DataStore.m_currentPostID, PostsFrame.repaintData);
-        }
+        MediaAPI.getPostDetails(DataStore.m_siteID, DataStore.m_currentPostID, PostsFrame.repaintData);
 								
-    },
-
-    // ////////////////////////////////////////////////////////////////////////////
-
-    fullRepaint : function(postObj){
-						
-        var post_id = DataStore.m_currentPostID;
-				
-        var txt = "";
-	
-        txt += "<div id='PostsFrameImagePicker'></div>";
-		
-        txt += "<table border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>";
-
-        txt += "<tr valign='top'>";
-		
-        txt += "    <td height='30px'>";
-        txt += "        <div class='frameControlsBar'>";
-        txt += "            <span class='label'>Title:</span>";
-        txt += "            <input id='postTitle' type='text' value='"+postObj.title+"'/>";
-        //txt += "            <button class='basic_button' style='' onclick=\"ImagePickerDialog.show('#PostsFrameImagePicker', PostsFrame.onImageSelected);\">Insert Image</button>";
-        txt += "            <a id='postLink' href='' style='font-size:10px'></a>";
-        txt += "        </div>";
-        txt += "    </td>";
-											
-        txt += "    <td rowspan='2' width='250px' style='height:100%; padding:5px'>";
-																
-        txt += "	<div class='subframebox' style='height:100%;width:250px'>"
-				
-        txt += "	    <span class='title'>Post Settings</span>";
-
-        txt += "            <fieldset>";
-
-        txt += "	    <div class='postInfoLine'>";
-        txt += "                <span class='postLabel'>Slug:</span>";
-        txt += "                <span class='postData' id='postSlug'>"+postObj.slug+"</span>";
-        txt += "	    </div>";
-
-
-        txt += "	    <div class='postInfoLine'>";
-        txt += "                <span class='postLabel'>Status:</span>";
-        txt += "                <span class='postData'>";
-        txt += "                <select id='postStatusSelector'>";
-        txt += "                    <option value='Published' class=''>Published</selected>";
-        txt += "                    <option value='Draft' class=''>Draft</selected>";
-        txt += "                    <option value='Private' class=''>Private</selected>";
-        txt += "                </select>";
-        txt += "                </span>";
-        txt += "	    </div>";
-
-        txt += "	   <div class='postInfoLine'>";
-        txt += "            <span class='postLabel'>Allow Comments:</span>";
-        txt += "            <span class='postData'>";
-        txt += "            <select id='postCanCommentSelector'>";
-        txt += "                <option value='1' selected>Yes</selected>";
-        txt += "                <option value='0'>No</selected>";
-        txt += "            </select>";
-        txt += "            </span>";
-        txt += "	    </div>";
-		
-        txt += "	    <div class='postInfoLine'>";
-        txt += "            <span class='postLabel'>Last Edit:</span>";
-        txt += "            <span class='postData' id='postLastEdit'>"+postObj.last_edit+"</span>";
-        txt += "	    </div>";
-
-        txt += "            <div class='postInfoLine'>";
-        txt += "                <span class='postLabel'>Created:</span>";
-        txt += "                <span class='postData' id='postCreated'>"+postObj.created+"</span>";
-        txt += "            </div>";
-				
-        txt += "            <div class='postInfoLine'>";
-        txt += "                <span class='postLabel'>Controls:</span>";
-        txt += "                    <button class='save_button' onclick=\"PostsFrame.onSavePost()\">Save</button>";
-        txt += "                    <button class='delete_button' onclick=\"PostsFrame.onDeletePost()\">Delete</button>";
-        txt += "            </div>";
-
-        txt += "            <div class='postInfoLine'>";
-        txt += "                <span class='postLabel'>Tools:</span>";
-        txt += "                    <button class='basic_button' onclick=\"PostsFrame.paintTools()\">Import Posts</button>";
-        txt += "            </div>";
-
-
-        txt += "            </fieldset>";
-
-        txt += "            <fieldset>";
-		
-        txt += "                <p><strong>Tags</strong></p>";
-        txt += "			    <div class='postInfoLine'>";
-        txt += "                    <span class='postData' id='postTags'><input id='postTag' type='text' value=''/></span>";
-        txt += "                    <span class='postLabel'><button class='basic_button' onclick='PostsFrame.addTag();'>Add</button></span>";
-        txt += "			    </div>";
-        txt += "                <div id='apollo_post_tags'></div>";
-
-        txt += "                <p><strong>Categories</strong></p>";
-        txt += "			    <div class='postInfoLine'>";
-        txt += "                    <span class='postData' id='postCategories'><input id='postCategory' type='text' value=''/></span>";
-        txt += "                    <span class='postLabel'><button class='basic_button' onclick='PostsFrame.addCategory()';>Add</button></span>";
-        txt += "			    </div>";
-        txt += "                <div id='apollo_post_categories'></div>"
-		
-        txt += "            </fieldset>";
-
-        txt += "		</div>";
-			
-        txt += "	</td>";
-        txt += "</tr>";
-
-
-        txt += "<tr valign='top'>";
-        txt += "	<td>";
-        txt += "        <div id='postContentEditorWrapper' style='margin-top:5px; margin-left:5px' align='left'>";
-        //txt += "<iframe>";
-        //txt += "<link type='text/css' rel='Stylesheet' href='http://cgp.athena.local/admin/themes/cgp4/code/blog.css' />";
-        //txt += "<form method='post' action='default_toolbar2.php' id='Form1'>";
-        txt += "    <textarea id='postContentEditor' name='postContentEditor' class='innovaeditor' style='width:100%; height:100%;'>"+postObj.content+"</textarea>";
-        //txt += "    <script> var oEdit1 = new InnovaEditor(\"oEdit1\"); oEdit1.REPLACE(\"postContentEditor\"); </script>";
-        //txt += "</form>";
-        //txt += "</iframe>";
-        txt += "	    </div>";
-        txt += "	</td>";
-        txt += "</tr>";
-
-        txt += "</table>";
-					
-        $('#PostsFrame').html(txt);
-
-        if (postObj.status != ''){
-            $('#postStatusSelector').val(postObj.status);
-        }
-        //PostsFrame.refreshStatusSelectBox();
-				
-        PostsFrame.paintOpenWYSIWYG();
-		
-        PostsFrame.updatePostLink(postObj);
-        PostsFrame.updateTagsAndCategoris();
     },
 	
     // ////////////////////////////////////////////////////////////////////////////
 
     repaintData : function(postObj){
-				
-        //CKEDITOR.instances.postContentEditor.setData(postObj.content);  
+
+        PostsFrame.postObj = '';
+        PostsFrame.postObj = postObj;
+
+        $('#postSettings').show();
+        $('#pageSettings').hide();
+
+        oUtil.obj.css = DataStore.m_theme.cms_blog_css;
         oUtil.obj.loadHTML(postObj.content);
         
         //PostsFrame.oEdit.loadHTML(postObj.content);
@@ -192,6 +55,7 @@ var PostsFrame = {
 				
         PostsFrame.updatePostLink(postObj);
         PostsFrame.updateTagsAndCategoris();
+
     },
 
     // ////////////////////////////////////////////////////////////////////////////
@@ -201,18 +65,37 @@ var PostsFrame = {
 
         var txt = "";
 
-        //txt += "<div class='subframebox'>";
-        //txt += "    <span class='title'>Tools</span>";
-        //txt += "    <fieldset>";
-        //txt += "    <legend>Import Blog Posts</legend>";
-        txt += "    <button class='basic_button' onclick='WordpressImporter.show()'>Wordpress</button><br/>";
-        txt += "    <button class='basic_button' onclick=''>Blogger</button><br/>";
-        txt += "    <button class='basic_button' onclick='LiveJournalImporter.show()'>Livejournal</button><br/>";
-        //txt += "    </fieldset>";
-        //txt += "</div>"
+        txt += "<p>This tool allows you to import blog posts, comments and followers from other blogging engines.</p>";
+        txt += "<p>To get started, click on the button below that corresponds to the blog you want to import from.</p>";
+        txt += "<br/>";
+        txt += "<div align='center'>";
+        txt += "    <button class='basic_button' onclick='WordpressImporter.show()'>Wordpress</button>";
+        txt += "    <button class='basic_button' onclick=''>Blogger</button>";
+        txt += "    <button class='basic_button' onclick='LiveJournalImporter.show()'>LiveJournal</button>";
+        txt += "</div>"
+        txt += "<br/>";
+        txt += "<p>If you need to import from a blog engine not listed above, email us at <a href='mailto:support@apollosites.com?subject=Feature request: New blog import&body=It would be really awesome if you supported imports from my old blog, which is at xxxxx'>support@apollosites.com</a> and we'll try to add that blogging engine to the list as soon as we can!</p>";
 
-        //$('#apollo_site_tools_content').html(txt);
-        AthenaDialog.alert(txt, "Import Posts");
+        //AthenaDialog.alert(txt, "Import Posts");
+
+
+        $('#apollo_dialog').dialog("destroy");
+
+        $('#apollo_dialog').html(txt);
+
+        $('#apollo_dialog').dialog({
+            resizable: false,
+            width: 400,
+            //	height:140,
+            modal: true,
+            title: "Import Posts",
+            buttons: {
+                Cancel: function() {
+                    $(this).dialog('close');
+                }
+            }
+        });
+
     },
 
     // ////////////////////////////////////////////////////////////////////////////
@@ -269,22 +152,35 @@ var PostsFrame = {
             source: DataStore.m_categories
         });
 		
-        var post = DataStore.getPost(DataStore.m_currentPostID);
-			
+        var post = PostsFrame.postObj;
+
         var txt = "";
         var onclick = "";
-        for (var i=0; i<post.tags.length; i++){
-            onclick = "PostsFrame.deleteTag(\""+post.tags[i]+"\")";
-            txt += "<div class='postTagCatLine'><span class='postTagCat'>"+post.tags[i]+"</span><span class='postRemoveTagCat' onclick='"+onclick+"'></span></div>";
-        }
-        $('#apollo_post_tags').html(txt);
 
-        txt = "";
-        for (var i=0; i<post.categories.length; i++){
-            onclick = "PostsFrame.deleteCategory(\""+post.categories[i]+"\")";
-            txt += "<div class='postTagCatLine'><span class='postTagCat'>"+post.categories[i]+"</span><span class='postRemoveTagCat' onclick='"+onclick+"'></span></div>";
+        if (post.tags){
+            for (var i=0; i<post.tags.length; i++){
+                onclick = "PostsFrame.deleteTag(\""+post.tags[i]+"\")";
+                txt += "<div class='postTagCatLine'><span class='postTagCat'>"+post.tags[i]+"</span><span class='postRemoveTagCat' onclick='"+onclick+"'></span></div>";
+            }
+            $('#apollo_post_tags').html(txt);
         }
-        $('#apollo_post_categories').html(txt);
+        else {
+            $('#apollo_post_tags').html("");
+        }
+
+
+        if (post.categories){
+            txt = "";
+            for (var i=0; i<post.categories.length; i++){
+                onclick = "PostsFrame.deleteCategory(\""+post.categories[i]+"\")";
+                txt += "<div class='postTagCatLine'><span class='postTagCat'>"+post.categories[i]+"</span><span class='postRemoveTagCat' onclick='"+onclick+"'></span></div>";
+            }
+            $('#apollo_post_categories').html(txt);
+        }
+        else {
+            $('#apollo_post_categories').html("");
+        }
+
 
     },
 		
@@ -323,7 +219,7 @@ var PostsFrame = {
     onSavePost : function(){
 						
         //var content = CKEDITOR.instances.postContentEditor.getData();
-        var content = oUtil.obj.getXHTMLBody();
+        var content = PostsFrame.m_editor.getXHTMLBody();
 
         var title = $('#postTitle').val();
         var status = $('#postStatusSelector').val();
@@ -450,100 +346,102 @@ var PostsFrame = {
     },
 
     // ////////////////////////////////////////////////////////////////////////////
-
-    paintOpenWYSIWYG : function(){
-        
-        //WYSIWYG.attach('#postContentEditor');
-        //alert('sdgsdg');
-        //var oEdit1 = new InnovaEditor("oEdit1");
-        //oEdit1.REPLACE("postContentEditor");
-
-        var ht = $('#PostsFrame').innerHeight();
-
-        //        var featuresObj = ["FullScreen","Preview","Print","Search",
-        //"Cut","Copy","Paste","PasteWord","PasteText","|","Undo","Redo","|",
-        //"ForeColor","BackColor","|","Bookmark","Hyperlink","XHTMLSource","BRK",
-        //"Numbering","Bullets","|","Indent","Outdent","LTR","RTL","|",
-        //"Image","Flash","Media","|","Table","Guidelines","Absolute","|",
-        //"Characters","Line","Form","RemoveFormat","ClearAll","BRK",
-        //"StyleAndFormatting","TextFormatting","ListFormatting","BoxFormatting",
-        //"ParagraphFormatting","CssText","Styles","|",
-        //"Paragraph","FontName","FontSize","|",
-        //"Bold","Italic","Underline","Strikethrough","|",
-        //"JustifyLeft","JustifyCenter","JustifyRight","JustifyFull"];
-        //
-        var groupsObj = [
-        ["grpPage", "Page & View", ["FullScreen", "XHTMLSource", "Search", "BRK", "Undo", "Redo", "SpellCheck", "RemoveFormat"]],
-        ["grpFont", "Font",
-        ["FontName", "FontSize", "Strikethrough", "Superscript", "Subscript", "BRK",
-        "Bold", "Italic", "Underline", "ForeColor", "BackColor"
-        ]
-        ],
-        ["grpStyles", "Styles", ["Table", "Guidelines", "BRK",  "StyleAndFormatting", "Styles"]], //"Absolute"
-        ["grpPara", "Paragraph",
-        ["Paragraph", "Indent", "Outdent", "LTR", "RTL", "BRK", "JustifyLeft",
-        "JustifyCenter", "JustifyRight","JustifyFull", "Numbering", "Bullets"
-        ]
-        ],
-        ["grpObjects", "Objects", ["Image", "InsertInternalImage", "Flash", "Media", "BRK", "Hyperlink", "Characters", "Line",  "ApolloPageBreak"]]
-        ];
-
-        oUtil.initializeEditor("#postContentEditor", {
-            width:"100%",
-            height:ht+"px",
-            btnSpellCheck:true,
-            useTagSelector:false,
-            toolbarMode: 2,
-            useBR:true, // Force to use <br> for line breaks by default
-            arrCustomButtons: [
-            ["InsertInternalImage","ImagePickerDialog.show('#PostsFrameImagePicker', PostsFrame.onImageSelected)","Insert an image from your media library", "btnInternalImage.gif"],
-            ["ApolloPageBreak","PostsFrame.onInsertPageBreak()","Insert a more link into your blog post", "btnApolloPageBreak.png"]],
-            //features:featuresObj,
-            groups: groupsObj,
-            css: DataStore.m_theme.cms_blog_css
-        });
-    /*
-oUtil.obj.features=["FullScreen","Preview","Print","Search",
-"Cut","Copy","Paste","PasteWord","PasteText","|","Undo","Redo","|",
-"ForeColor","BackColor","|","Bookmark","Hyperlink","XHTMLSource","BRK",
-"Numbering","Bullets","|","Indent","Outdent","LTR","RTL","|",
-"Image","Flash","Media","|","Table","Guidelines","Absolute","|",
-"Characters","Line","Form","RemoveFormat","ClearAll","BRK",
-"StyleAndFormatting","TextFormatting","ListFormatting","BoxFormatting",
-"ParagraphFormatting","CssText","Styles","|",
-"Paragraph","FontName","FontSize","|",
-"Bold","Italic","Underline","Strikethrough","|",
-"JustifyLeft","JustifyCenter","JustifyRight","JustifyFull"];
-*/
-    },
+//
+//    paintOpenWYSIWYG : function(readyCallback){
+//
+//
+//        var ht = $('#PostsFrame').innerHeight();
+//
+//        var groupsObj = [
+//        ["grpPage", "Page & View", ["FullScreen", "XHTMLSource", "Search", "BRK", "Undo", "Redo", "SpellCheck", "RemoveFormat"]],
+//        ["grpFont", "Font",
+//        ["FontName", "FontSize", "Strikethrough", "Superscript", "Subscript", "BRK",
+//        "Bold", "Italic", "Underline", "ForeColor", "BackColor"
+//        ]
+//        ],
+//        ["grpStyles", "Styles", ["Table", "Guidelines", "BRK",  "StyleAndFormatting", "Styles"]], //"Absolute"
+//        ["grpPara", "Paragraph",
+//        ["Paragraph", "Indent", "Outdent", "LTR", "RTL", "BRK", "JustifyLeft",
+//        "JustifyCenter", "JustifyRight","JustifyFull", "Numbering", "Bullets"
+//        ]
+//        ],
+//        ["grpObjects", "Objects", ["Image", "InsertInternalImage", "Flash", "Media", "BRK", "Hyperlink", "Characters", "Line",  "ApolloPageBreak"]]
+//        ];
+//
+//        oUtil.initializeEditor("#postContentEditor", {
+//            id: 1,
+//            width:"100%",
+//            height:ht+"px",
+//            btnSpellCheck:true,
+//            useTagSelector:false,
+//            toolbarMode: 2,
+//            mode:"XHTML",
+//            useBR:true, // Force to use <br> for line breaks by default
+//            arrCustomButtons: [
+//            ["InsertInternalImage","ImagePickerDialog.show('#PostsFrameImagePicker', PostsFrame.onImageSelected)","Insert an image from your media library", "btnInternalImage.gif"],
+//            ["ApolloPageBreak","PostsFrame.onInsertPageBreak()","Insert a more link into your blog post", "btnApolloPageBreak.png"]],
+//            //features:featuresObj,
+//            groups: groupsObj,
+//            css: DataStore.m_theme.cms_blog_css
+//        });
+//
+//        //PostsFrame.getEditorObj(readyCallback);
+//           //  PostsFrame.m_editor = new InnovaEditor("PostsFrame.m_editor");
+//        //setTimeout(PostsFrame.test, 1000);
+//    },
 
     // ////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Insert a custom apollo page break
-     */
-    onInsertPageBreak : function(){
-
-        // Has the user already got a apollo page break in this page?
-        var content = oUtil.obj.getXHTMLBody();
-        var myRegExp = /apolloPageBreak/;
-        var pos = content.search(myRegExp);
-
-        if (pos > 0){
-            AthenaDialog.alert("Sorry, you already have a break in this post and you can only have one, you'll need to delete the old one before you can add one here!", "Can't add more than 1 break");
-            return;
-        }
-        
-        var txt = "<div class='apolloPageBreak'>More...</div> ";
-        oUtil.obj.insertHTML(txt);
-    },
-
-    // ////////////////////////////////////////////////////////////////////////////
-
-    onImageSelected : function(imageID){
-        var img = DataStore.getImage(imageID);
-        var txt = "<img src='"+img.file_url+"' alt='"+img.description+"' width='"+img.width+"px' height='"+img.height+"px'/>";
-        oUtil.obj.insertHTML(txt);
-    }
+//
+//    test : function(){
+//             PostsFrame.m_editor.REPLACE("postContentEditor");
+//    },
+//
+//    m_editor : false,
+//
+//    /**
+//     * Get a handle to the embedded wyswig editor, and when we have it execute the callback
+//     */
+//    getEditorObj : function(callback){
+//        if (oUtil.obj == undefined || !oUtil.obj){
+//            setTimeout(function(){PostsFrame.getEditorObj(callback);}, 100);
+//        }
+//        else {
+//            alert(oUtil.oName);
+//            PostsFrame.m_editor = oUtil.obj;
+//            if (callback != undefined){
+//                callback();
+//            }
+//        }
+//    },
+//
+//
+//    // ////////////////////////////////////////////////////////////////////////////
+//
+//    /**
+//     * Insert a custom apollo page break
+//     */
+//    onInsertPageBreak : function(){
+//
+//        // Has the user already got a apollo page break in this page?
+//        var content = oUtil.obj.getXHTMLBody();
+//        var myRegExp = /apolloPageBreak/;
+//        var pos = content.search(myRegExp);
+//
+//        if (pos > 0){
+//            AthenaDialog.alert("Sorry, you already have a break in this post and you can only have one, you'll need to delete the old one before you can add one here!", "Can't add more than 1 break");
+//            return;
+//        }
+//
+//        var txt = "<div class='apolloPageBreak'>More...</div> ";
+//        oUtil.obj.insertHTML(txt);
+//    },
+//
+//    // ////////////////////////////////////////////////////////////////////////////
+//
+//    onImageSelected : function(imageID){
+//        var img = DataStore.getImage(imageID);
+//        var txt = "<img src='"+img.file_url+"' alt='"+img.description+"' width='"+img.width+"px' height='"+img.height+"px'/>";
+//        oUtil.obj.insertHTML(txt);
+//    }
 
 }

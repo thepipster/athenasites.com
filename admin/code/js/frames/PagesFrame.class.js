@@ -5,9 +5,6 @@
 */
 var PagesFrame = {
 
-    ckEditor : '',
-    ckEditorInstance : '',
-	
     painted : false,
 		
     // ////////////////////////////////////////////////////////////////////////////
@@ -26,180 +23,21 @@ var PagesFrame = {
         }
 
         var pageObj = DataStore.getCurrentPage();
-					
-        if (!PagesFrame.painted){
-            PagesFrame.fullRepaint(pageObj);
-            PagesFrame.painted = true;
-        }
-        else {
-            PagesFrame.repaintData(pageObj);
-        }
+        PagesFrame.repaintData(pageObj);
 								
     },
 
     // ////////////////////////////////////////////////////////////////////////////
 
-    fullRepaint : function(pageObj){
-		
-        if (PagesFrame.ckEditor != ''){
-            try {
-                PagesFrame.ckEditor.destroy();
-            //CKEDITOR.instances.pageContentEditor.destroy();
-            }
-            catch(error){
-                alert('could not destroy the CKEditor instance!' + error);
-            }
-            PagesFrame.ckEditor = '';
-        }
-				
-        var page_id = DataStore.m_currentPageID;
-	
-        var txt = "";
-	
-        txt += "<div id='PagesFrameImagePicker'></div>";
-		
-        txt += "<table border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>";
-
-        txt += "<tr valign='top'>";
-		
-        txt += "	<td height='30px'>";
-        txt += "        <div class='frameControlsBar'>";
-        txt += "            <span class='label'>Title:</span>";
-        txt += "            <input id='pageTitle' type='text' value='"+pageObj.title+"'/>";
-        txt += "            <button class='basic_button' style='' onclick=\"ImagePickerDialog.show('#PagesFrameImagePicker', PagesFrame.onImageSelected);\">Insert Image</button>";
-        txt += "            <a id='pageLink' href='' style='font-size:10px'>View Page</a>";
-        txt += "        </div>";
-        txt += "	</td>";
-							
-        txt += "	<td rowspan='2' width='250px' style='height:100%; padding:5px'>";
-																
-        txt += "		<div class='subframebox' style='height:100%;width:250px'>"
-				
-        txt += "			<span class='title'>Page Settings</span>";
-
-        txt += "            <fieldset>";
-        /*
-		txt += "			<div class='pageInfoLine'>";
-		txt += "            <span class='pageLabel'>Title:</span>";
-		txt += "            <span class='pageData'><input id='pageTitle' type=text value='"+pageObj.title+"'/></span>";
-		txt += "			</div>";
-*/
-        /*
-		txt += "			<div class='pageInfoLine'>";
-		txt += "            <span class='pageLabel'>Slug:</span>";
-		txt += "            <span class='pageData' id='pageSlug'>"+pageObj.slug+"</span>";
-		txt += "			</div>";
-*/
-        txt += "			<div class='pageInfoLine'>";
-        txt += "            <span class='pageLabel'>Status:</span>";
-        txt += "            <span class='pageData'>";
-																
-        txt += "            <select id='pageStatusSelector'>";
-        txt += "                <option value='Published'>Published</selected>";
-        txt += "                <option value='Draft'>Draft</selected>";
-        txt += "                <option value='Private'>Private</selected>";
-        txt += "            </select>";
-        txt += "            </span>";
-        txt += "			</div>";
-
-        txt += "			<div class='pageInfoLine'>";
-        txt += "            <span class='pageLabel'>Last Edit:</span>";
-        txt += "            <span class='pageData' id='pageLastEdit'>"+pageObj.last_edit+"</span>";
-        txt += "			</div>";
-
-        txt += "			<div class='pageInfoLine'>";
-        txt += "            <span class='pageLabel'>Created:</span>";
-        txt += "            <span class='pageData' id='pageCreated'>"+pageObj.created+"</span>";
-        txt += "			</div>";
-
-        txt += "			<div class='pageInfoLine'>";
-        txt += "            <span class='pageLabel'>Parent Page:</span>";
-        txt += "            <span class='pageData' id='parentPageContents'></span>";
-        txt += "			</div>";
-
-        txt += "			<div class='pageInfoLine'>";
-        txt += "            <span class='pageLabel'>Template:</span>";
-        txt += "            <span class='pageData'>";
-        txt += "            <select id='pageTemplate' onchange=\"PagesFrame.paintThemeParas()\">";
-        txt += "                <option value=''>(none)</selected>";
-
-        for (var i=0; i<DataStore.m_templateList.length; i++){
-            if (DataStore.m_templateList[i].template_file == pageObj.template){
-                txt += "                <option value='"+DataStore.m_templateList[i].template_file+"' selected>"+DataStore.m_templateList[i].template_name+"</selected>";
-            }
-            else {
-                txt += "                <option value='"+DataStore.m_templateList[i].template_file+"'>"+DataStore.m_templateList[i].template_name+"</selected>";
-            }
-        }
-
-        txt += "            </select>";
-        txt += "            </span>";
-        txt += "			</div>";
-
-        txt += "			<div class='pageInfoLine'>";
-        txt += "            <span class='pageLabel'>Menu Order:</span>";
-        //		txt += "            <span class='pageData'><input id='pageOrder' type=text size=5 value='"+pageObj.order+"'/></span>";
-        txt += "                                <span class='pageData'>";
-        txt += "            <select id='pageOrder'>";
-        for (var i=0; i<50; i++){
-            txt += "            <option value='"+i+"'>"+i+"</selected>";
-        }
-        txt += "                        </select>";
-        txt += "                        </span>";
-		
-        txt += "			</div>";
-		
-        txt += "            </fieldset>";
-
-        txt += "			<div align='right' style='padding-right:10px'>";
-        txt += "			<button class='delete_button' onclick=\"PagesFrame.onDeletePage()\">Delete Page</button>";
-        txt += "			<button class='save_button' onclick=\"PagesFrame.onSavePage()\">Save Changes</button>";
-        txt += "			</div>";
-
-        txt += "            <fieldset>";
-        txt += "                <div id='apollo_page_theme_paras'></div>"
-        txt += "            </fieldset>";
-
-        txt += "		</div>";
-			
-        txt += "	</td>";
-		
-        txt += "<tr valign='top'>";
-        txt += "	<td>";
-        txt += "        <div style='margin-top:5px; margin-left:5px;'>";
-        txt += "		    <textarea id='pageContentEditor' name='pageContentEditor' style='width:100%; height:100%;'>"+pageObj.content+"</textarea>";
-        txt += "	    </div>";
-        txt += "	</td>";
-        txt += "</tr>";
-		
-        txt += "</tr>";
-
-        txt += "</table>";
-					
-        $('#PagesFrame').html(txt);
-
-        if (pageObj.status != ''){
-            $('#pageStatusSelector').val(pageObj.status);
-        }
-		
-        //PagesFrame.updateStatusColor();
-		
-        // Paint the parent pages...
-        PagesFrame.paintParentPages(pageObj);
-		
-        // Good article on customization of CKEditor - http://www.voofie.com/content/2/ckeditor-plugin-development/
-        PagesFrame.paintCKEditor();
-		
-        PagesFrame.paintThemeParas();
-        PagesFrame.updatePageLink(pageObj);
-    },
-	
-    // ////////////////////////////////////////////////////////////////////////////
-
     repaintData : function(pageObj){
-				
-        CKEDITOR.instances.pageContentEditor.setData(pageObj.content);
-		
+
+         $('#postSettings').hide();
+         $('#pageSettings').show();
+
+        oUtil.obj.css = DataStore.m_theme.cms_page_css;
+        oUtil.obj.loadHTML(pageObj.content);
+
+        //$('#pageContentEditor').html(pageObj.content);
         $('#pageTitle').val(pageObj.title);
         $('#pageSlug').html(pageObj.slug);
         $('#pageLastEdit').html(pageObj.last_edit);
@@ -209,7 +47,20 @@ var PagesFrame = {
         $('#pageParent').val(pageObj.parent_page_id);
         $('#pageTemplate').val(pageObj.template);
         $('#pageOrder').val(pageObj.order);
-		
+
+        var txt = "<select id='pageTemplate' onchange=\"PagesFrame.paintThemeParas()\">";
+        for (var i=0; i<DataStore.m_templateList.length; i++){
+            if (DataStore.m_templateList[i].template_file == pageObj.template){
+                txt += "<option value='"+DataStore.m_templateList[i].template_file+"' selected>"+DataStore.m_templateList[i].template_name+"</option>";
+            }
+            else {
+                txt += "<option value='"+DataStore.m_templateList[i].template_file+"'>"+DataStore.m_templateList[i].template_name+"</option>";
+            }
+        }
+        txt += "</select>";
+        
+        $('#pageTemplateWrapper').html(txt);
+
         //PagesFrame.updateStatusColor();
 				
         // Paint the parent pages...
@@ -454,8 +305,7 @@ var PagesFrame = {
 			
         var originalPage = DataStore.getPage(page_id);
 		
-        //var content = $('#pageContentEditor').html();
-        var content = CKEDITOR.instances.pageContentEditor.getData();
+        var content = PagesFrame.m_editor.getXHTMLBody();
 		
         var title = $('#pageTitle').val();
         var status = $('#pageStatusSelector').val();
@@ -507,68 +357,75 @@ var PagesFrame = {
     saveChildPages : function(){
     },
 				
+   // ////////////////////////////////////////////////////////////////////////////
+
+//    paintOpenWYSIWYG : function(readyCallback){
+//
+//        var ht = $('#PagesFrame').innerHeight();
+//
+//        var groupsObj = [
+//        ["grpPage", "Page & View", ["FullScreen", "XHTMLSource", "Search", "BRK", "Undo", "Redo", "SpellCheck", "RemoveFormat"]],
+//        ["grpFont", "Font",
+//        ["FontName", "FontSize", "Strikethrough", "Superscript", "Subscript", "BRK",
+//        "Bold", "Italic", "Underline", "ForeColor", "BackColor"
+//        ]
+//        ],
+//        ["grpStyles", "Styles", ["Table", "Guidelines", "BRK",  "StyleAndFormatting", "Styles"]], //"Absolute"
+//        ["grpPara", "Paragraph",
+//        ["Paragraph", "Indent", "Outdent", "LTR", "RTL", "BRK", "JustifyLeft",
+//        "JustifyCenter", "JustifyRight","JustifyFull", "Numbering", "Bullets"
+//        ]
+//        ],
+//        ["grpObjects", "Objects", ["Image", "InsertInternalImage", "Flash", "Media", "BRK", "Hyperlink", "Characters", "Line",  "ApolloPageBreak"]]
+//        ];
+//
+//        oUtil.initializeEditor("#pageContentEditor", {
+//            id: 2,
+//            width:"100%",
+//            height:ht+"px",
+//            btnSpellCheck:true,
+//            useTagSelector:false,
+//            toolbarMode: 2,
+//            mode:"XHTML",
+//            useBR:true, // Force to use <br> for line breaks by default
+//            arrCustomButtons: [
+//            ["InsertInternalImage","ImagePickerDialog.show('#PagesFrameImagePicker', PagesFrame.onImageSelected)","Insert an image from your media library", "btnInternalImage.gif"],
+//            ["ApolloPageBreak","PagesFrame.onInsertPageBreak()","Insert a more link into your blog post", "btnApolloPageBreak.png"]],
+//            //features:featuresObj,
+//            groups: groupsObj,
+//            css: DataStore.m_theme.cms_page_css
+//        });
+//
+//        PagesFrame.getEditorObj(readyCallback);
+//
+//    },
+//
+//    // ////////////////////////////////////////////////////////////////////////////
+//
+//    m_editor : false,
+//
+//    /**
+//     * Get a handle to the embedded wyswig editor, and when we have it execute the callback
+//     */
+//    getEditorObj : function(callback){
+//        if (oUtil.obj == undefined || !oUtil.obj){
+//            setTimeout(function(){PagesFrame.getEditorObj(callback);}, 100);
+//        }
+//        else {
+//            alert(oUtil.oName);
+//            PagesFrame.m_editor = oUtil.obj;
+//            if (callback != undefined){
+//                callback();
+//            }
+//        }
+//    },
+    
     // ////////////////////////////////////////////////////////////////////////////
-	
-    paintCKEditor : function(){
-		
-        PagesFrame.ckEditor = CKEDITOR.replace( 'pageContentEditor',
-        {
-            height: $('#PagesFrame').innerHeight() - 150,
-				
-            on :
-            {
-                instanceReady : function( ev )
-                {
-                    this.dataProcessor.writer.setRules( 'p',
-                    {
-                        indent : false,
-                        breakBeforeOpen : true,
-                        breakAfterOpen : false,
-                        breakBeforeClose : false,
-                        breakAfterClose : true
-                    });
-                }
-            },
-			
-            // Note that we have added out "MyButton" button here.
-            //toolbar : [ [ 'Source', '-', 'Bold', 'Italic', 'Underline', 'Strike','-','Link', '-', 'MyButton' ] ]
-            toolbar : [
-            //		    ['Source','-','Save','NewPage','Preview','-','Templates'],
-            ['Source'],
-            ['Cut','Copy','Paste','PasteText','PasteFromWord','-','Print', 'SpellChecker', 'Scayt'],
-            ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-            //		    ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'],
-            '/',
-            ['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],
-            ['NumberedList','BulletedList','-','Outdent','Indent','Blockquote','CreateDiv'],
-            ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
-            ['Link','Unlink','Anchor'],
-            //		    ['Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak'],
-            ['MyButton', 'Image', 'Table','HorizontalRule','Smiley','SpecialChar','PageBreak'],
-            '/',
-            //		    ['Styles','Format','Font','FontSize'],
-            ['Format','Font','FontSize'],
-            ['TextColor','BGColor'],
-            ['Maximize', 'ShowBlocks','-','About']
-            ]
-				
-				
-        });
-    /*
-		var ret = PagesFrame.ckEditor.ui.addButton( 'MyButton', {
-								label : 'My Dialog', 
-								click : function(){ImagePickerDialog.show('#PagesFrameImagePicker', PagesFrame.onImageSelected)}, 
-								icon: defines.root_url + 'images/insert_media_button.png' 
-		});
-		*/
-    },
-		
-    // ////////////////////////////////////////////////////////////////////////////
-	
+
     onImageSelected : function(imageID){
         var img = DataStore.getImage(imageID);
         var txt = "<img src='"+img.file_url+"' alt='"+img.description+"' width='"+img.width+"px' height='"+img.height+"px'/>";
-        CKEDITOR.instances.pageContentEditor.insertHtml(txt);
+        oUtil.obj.insertHTML(txt);
     }
 
 }

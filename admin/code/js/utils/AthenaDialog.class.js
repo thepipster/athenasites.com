@@ -55,7 +55,7 @@ var AthenaDialog = {
 		
         $('#apollo_dialog').dialog({
             resizable: false,
-            height:140,
+            //height:140,
             modal: true,
             title: "Error"
         });

@@ -89,7 +89,7 @@ Logger::debug("$domain has site_id = $current_site_id");
         <link rel="stylesheet" href="code/css/SideBar.css" type="text/css" />
         <link rel="stylesheet" href="code/css/FilesFrame.css" type="text/css" />
         <link rel="stylesheet" href="code/css/PagesFrame.css" type="text/css" />
-        <link rel="stylesheet" href="code/css/PostsFrame.css" type="text/css" />
+        <!--<link rel="stylesheet" href="code/css/PostsFrame.css" type="text/css" /> Merged posts and pages, so no need of this style sheet -->
         <link rel="stylesheet" href="code/css/ImageEditDialog.css" type="text/css" />
         <link rel="stylesheet" href="code/css/ImagePickerDialog.css" type="text/css" />
         <link rel="stylesheet" href="code/css/ImageEditFrame.css" type="text/css" />
@@ -130,12 +130,12 @@ Logger::debug("$domain has site_id = $current_site_id");
         <!-- CKEditor -->
         <!--
         <script type="text/javascript" src="code/ckeditor/ckeditor.js"></script>
-        -->
         <script type="text/javascript" src="code/3rdparty/ckeditor/ckeditor_source.js"></script>
-<!--
-        <script type="text/javascript" src="code/3rdparty/openwysiwyg/scripts/wysiwyg.js"></script>
-        <script type="text/javascript" src="code/3rdparty/openwysiwyg/scripts/wysiwyg-settings.js"></script>
--->
+        -->
+        <!--
+                <script type="text/javascript" src="code/3rdparty/openwysiwyg/scripts/wysiwyg.js"></script>
+                <script type="text/javascript" src="code/3rdparty/openwysiwyg/scripts/wysiwyg-settings.js"></script>
+        -->
         <script type="text/javascript" src="code/3rdparty/InnovaStudio/scripts/innovaeditor.js"></script>
 
         <!-- Utils -->
@@ -143,12 +143,10 @@ Logger::debug("$domain has site_id = $current_site_id");
         <script src="code/js/utils/Message.class.js" type="text/javascript"></script>
         <script src="code/js/utils/AthenaDialog.class.js" type="text/javascript"></script>
         <script src="code/js/flashuploader/FileProgress.class.js" type="text/javascript"></script>
-        <!--
-        <script src="code/js/flashuploader/flashUploaderHandler.js" type="text/javascript"></script>
-        -->
         <script src="code/js/flashuploader/FlashUploader.class.js" type="text/javascript"></script>
 
         <!-- Core -->
+        <script src="code/js/ssMain.class.js" type="text/javascript"></script>
         <script src="code/js/utils/AthenaUtils.class.js" type="text/javascript"></script>
         <script src="code/js/DataStore.class.js" type="text/javascript"></script>
 
@@ -163,6 +161,7 @@ Logger::debug("$domain has site_id = $current_site_id");
         <script src="code/js/dialogs/ColorPickerDialog.class.js" type="text/javascript"></script>
         <script src="code/js/dialogs/WordpressImporter.class.js" type="text/javascript"></script>
         <script src="code/js/dialogs/LiveJournalImporter.class.js" type="text/javascript"></script>
+        <script src="code/js/dialogs/CommentsEditDialog.class.js" type="text/javascript"></script>
         <script src="code/colorpicker/js/colorpicker.js" type="text/javascript"></script>
 
         <!-- Sub-Frame Displays -->
@@ -244,8 +243,8 @@ Logger::debug("$domain has site_id = $current_site_id");
                             <div id='gallery_menu' class='menu_item' onclick='ssMain.onShowGalleries()'>Galleries</div>
                             <div id='stats_menu' class='menu_item' onclick='ssMain.onShowStats()'>Stats</div>
 
-                            <?php 
-                                if ($user['service_client_gallery'] == 1) {
+                            <?php
+                            if ($user['service_client_gallery'] == 1) {
                             ?>
                                 <div id='' class='menu_item client_gallery_title' onclick=''>Client Gallery</div>
                                 <div id='' class='menu_item' onclick=''>eStore</div>
@@ -286,27 +285,294 @@ Logger::debug("$domain has site_id = $current_site_id");
                         <!-- Files Page Content ///////////////////////////////////////////////////////////// -->
 
                         <div id='FilesFrame' class='ViewFrame'>
-                        </div> <!-- content -->
+                        </div> 
 
                         <!-- Edit Images/Files Page Content ///////////////////////////////////////////////////////////// -->
 
                         <div id='EditFilesFrame' class='ViewFrame'>
-                        </div> <!-- content -->
+                        </div>
 
-                        <!-- Pages Page Content ///////////////////////////////////////////////////////////// -->
+                        <!-- Pages/Posts Content /////////////////////////////////////////////////////////////////// -->
 
                         <div id='PagesFrame' class='ViewFrame'>
-                        </div> <!-- content -->
 
-                        <!-- Posts Page Content ///////////////////////////////////////////////////////////// -->
+                            <div id='PagesFrameImagePicker'></div>
 
-                        <div id='PostsFrame' class='ViewFrame'>
-                        </div> <!-- content -->
+                            <table border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>
+
+                                <tr valign='top'>
+
+                                    <td height='30px'>
+                                        <div class='frameControlsBar'>
+                                            <span class='label'>Title:</span>
+                                            <input id='pageTitle' type='text' value=''/>
+                                            <!--
+                                            <button class='basic_button' style='' onclick="ImagePickerDialog.show('#PagesFrameImagePicker', PagesFrame.onImageSelected);">Insert Image</button>
+                                            -->
+                                            <a id='pageLink' href='' style='font-size:10px'>View Page</a>
+                                        </div>
+                                    </td>
+
+                                    <td rowspan='2' width='250px' style='height:100%; padding:5px'>
+
+                                        <!-- Post settings sub-frame ////////////////////////////////////////////// -->
+
+                                        <div class='subframebox' id="postSettings" style="height:100%;width:250px;display:none">
+
+                                            <span class='title'>Post Settings</span>
+
+                                            <fieldset>
+                                                <legend></legend>
+                                                <!--
+                                                <div class='postInfoLine'>
+                                                                        <span class='postLabel'>Slug:</span>
+                                                                        <span class='postData' id='postSlug'></span>
+                                                </div>
+                                                -->
+
+                                                <div class='pageInfoLine'>
+                                                    <span class='pageLabel'>Status:</span>
+                                                    <span class='pageData'>
+                                                        <select id='postStatusSelector'>
+                                                            <option value='Published' class=''>Published</option>
+                                                            <option value='Draft' class=''>Draft</option>
+                                                            <option value='Private' class=''>Private</option>
+                                                        </select>
+                                                    </span>
+                                                </div>
+
+                                                <div class='pageInfoLine'>
+                                                    <span class='pageLabel'>Last Edit:</span>
+                                                    <span class='pageData' id='postLastEdit'></span>
+                                                </div>
+
+                                                <div class='pageInfoLine'>
+                                                    <span class='pageLabel'>Created:</span>
+                                                    <span class='pageData' id='postCreated'></span>
+                                                </div>
+
+                                                <div class='pageInfoLine'>
+                                                    <span class='pageLabel'>Allow Comments:</span>
+                                                    <span class='pageData'>
+                                                        <select id='postCanCommentSelector'>
+                                                            <option value='1' selected>Yes</option>
+                                                            <option value='0'>No</option>
+                                                        </select>
+                                                    </span>
+                                                </div>
+
+                                                <div class='pageInfoLine'>
+                                                    <span class='pageLabel'>Tools:</span>
+                                                    <!-- <button class='basic_button' onclick="PostsFrame.paintTools()">Import Posts</button> -->
+                                                    <a href='#' onclick="PostsFrame.paintTools()">Import Posts</a>
+                                                </div>
+
+                                                <div class='pageInfoLine'>
+                                                    <span class='pageLabel'>Comments:</span>
+                                                    <!-- <button class='basic_button' onclick="PostsFrame.paintTools()">Import Posts</button> -->
+                                                    <a href='#' onclick="CommentsEditDialog.show()">Edit Comments</a>
+                                                </div>
+
+                                                
+                                                <div class='pageInfoLine'>
+                                                    <span class='pageLabel'>Controls:</span>
+                                                    <button class='save_button' onclick="PostsFrame.onSavePost()">Save</button>
+                                                    <button class='delete_button' onclick="PostsFrame.onDeletePost()">Delete Post</button>
+                                                </div>
+
+
+                                            </fieldset>
+
+                                            <fieldset>
+                                                <legend></legend>
+
+                                                <p><strong>Tags</strong></p>
+                                                <div class='pageInfoLine'>
+                                                    <span class='pageData' id='postTags'><input id='postTag' type='text' value=''/></span>
+                                                    <span class='pageLabel'><button class='basic_button' onclick='PostsFrame.addTag();'>Add</button></span>
+                                                </div>
+                                                <div id='apollo_post_tags'></div>
+
+                                                <p><strong>Categories</strong></p>
+                                                <div class='pageInfoLine'>
+                                                    <span class='pageData' id='postCategories'><input id='postCategory' type='text' value=''/></span>
+                                                    <span class='pageLabel'><button class='basic_button' onclick='PostsFrame.addCategory()';>Add</button></span>
+                                                </div>
+                                                <div id='apollo_post_categories'></div>
+
+                                            </fieldset>
+
+                                        </div>
+
+                                        <!-- Page settings sub-frame ////////////////////////////////////////////// -->
+
+                                        <div class='subframebox' id="pageSettings" style="height:100%;width:250px;display:none">
+
+                                            <span class='title'>Page Settings</span>
+
+                                            <fieldset>
+                                                <legend></legend>
+
+                                                <!--
+                                                <div class='pageInfoLine'>
+                                                    <span class='pageLabel'>Title:</span>
+                                                    <span class='pageData'><input id='pageTitle' type=text value=''/></span>
+                                                </div>
+
+                                                <div class='pageInfoLine'>
+                                                    <span class='pageLabel'>Slug:</span>
+                                                    <span class='pageData' id='pageSlug'></span>
+                                                </div>
+                                                -->
+
+                                                <div class='pageInfoLine'>
+                                                    <span class='pageLabel'>Status:</span>
+                                                    <span class='pageData'>
+
+                                                        <select id='pageStatusSelector'>
+                                                            <option value='Published'>Published</option>
+                                                            <option value='Draft'>Draft</option>
+                                                            <option value='Private'>Private</option>
+                                                        </select>
+                                                    </span>
+                                                </div>
+
+                                                <div class='pageInfoLine'>
+                                                    <span class='pageLabel'>Last Edit:</span>
+                                                    <span class='pageData' id='pageLastEdit'></span>
+                                                </div>
+
+                                                <div class='pageInfoLine'>
+                                                    <span class='pageLabel'>Created:</span>
+                                                    <span class='pageData' id='pageCreated'></span>
+                                                </div>
+
+                                                <div class='pageInfoLine'>
+                                                    <span class='pageLabel'>Parent Page:</span>
+                                                    <span class='pageData' id='parentPageContents'></span>
+                                                </div>
+
+                                                <div class='pageInfoLine'>
+                                                    <span class='pageLabel'>Template:</span>
+                                                    <span class='pageData' id="pageTemplateWrapper">
+                                                        <select id='pageTemplate' onchange="PagesFrame.paintThemeParas()">
+                                                            <option value=''>(none)</option>
+                                                        </select>
+                                                    </span>
+                                                </div>
+
+                                                <div class='pageInfoLine'>
+                                                    <span class='pageLabel'>Menu Order:</span>
+                                                    <!--<span class='pageData'><input id='pageOrder' type=text size=5 value=''/></span>-->
+                                                    <span class='pageData'>
+                                                        <select id='pageOrder'>
+                                                            <option value='1' selected>1</option>
+                                                            <option value='2'>2</option>
+                                                            <option value='3'>3</option>
+                                                            <option value='4'>4</option>
+                                                            <option value='5'>5</option>
+                                                            <option value='6'>6</option>
+                                                            <option value='7'>7</option>
+                                                            <option value='8'>8</option>
+                                                            <option value='9'>9</option>
+                                                            <option value='10'>10</option>
+                                                            <option value='11'>11</option>
+                                                            <option value='12'>12</option>
+                                                            <option value='13'>13</option>
+                                                            <option value='14'>14</option>
+                                                            <option value='15'>15</option>
+                                                            <option value='16'>16</option>
+                                                            <option value='17'>17</option>
+                                                            <option value='18'>18</option>
+                                                            <option value='19'>19</option>
+                                                            <option value='20'>20</option>
+                                                            <option value='21'>21</option>
+                                                            <option value='22'>22</option>
+                                                            <option value='23'>23</option>
+                                                            <option value='24'>24</option>
+                                                            <option value='25'>25</option>
+                                                            <option value='26'>26</option>
+                                                            <option value='27'>27</option>
+                                                            <option value='28'>28</option>
+                                                            <option value='29'>29</option>
+                                                            <option value='30'>30</option>
+                                                        </select>
+                                                    </span>
+                                                </div>
+
+
+                                                <div class='pageInfoLine'>
+                                                    <span class='pageLabel'>Controls:</span>
+                                                    <button class='save_button' onclick="PagesFrame.onSavePage()">Save</button>
+                                                    <button class='delete_button' onclick="PagesFrame.onDeletePage()">Delete Page</button>
+                                                </div>
+
+
+                                            </fieldset>
+
+                                            <fieldset>
+                                                <legend></legend>
+                                                <div id='apollo_page_theme_paras'></div>
+                                            </fieldset>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                                <tr valign='top'>
+                                    <td>
+                                        <div style='margin-top:5px; margin-left:5px;'>
+                                            <textarea id='pageContentEditor' class="apolloContentEditor" name='pageContentEditor' style='width:100%; height:100%;'></textarea>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
 
                         <!-- Galleries Page Content ///////////////////////////////////////////////////////////// -->
 
                         <div id='GalleriesFrame' class='ViewFrame'>
-                        </div> <!-- content -->
+
+                            <div id='GalleryFrameContent' align='left'>
+
+                                <table border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>
+
+                                    <tr valign='top' height='250px' width='100%' id='galleryRow'>
+
+                                        <td class='frameContents frame_controls_bar'>
+                                            <span class='frameTitle'>Gallery Contents</span>
+                                            <div align='left' id='apollo_gallery_contents'></div>
+                                        </td>
+
+                                        <!-- Gallery settings frame (for multi-gal)........... -->
+
+                                        <td rowspan='2' width='250px' id='gallerySettings' style='height:100%; padding:5px; display:none'>
+                                            <div class='subframebox' style='height:100%; width:100%;'>
+                                                <span class='title'>Gallery Settings</span>
+                                                <div id='gallerySettingsContent'>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+
+                                    <tr valign='top' width='100%'>
+
+                                        <td class='frameContents'>
+                                            <span class='frameTitle'>Images</span>
+                                            <div id='apollo_image_contents'></div>
+                                        </td>
+
+                                    </tr>
+
+                                </table>
+
+                            </div>
+
+                        </div> 
 
                         <!-- Stats Page Content ///////////////////////////////////////////////////////////// -->
 
@@ -339,215 +605,6 @@ Logger::debug("$domain has site_id = $current_site_id");
     defines.session_id = '<?php echo session_id(); ?>';
     defines.domain = '<?php echo $domain; ?>';
 
-    var ssMain = {
-
-        VIEW_DASHBOARD : 1,
-        VIEW_PAGES : 3,
-        VIEW_FILES : 2,
-        VIEW_POSTS : 4,
-        VIEW_GALLERIES : 5,
-        VIEW_STATS : 6,
-        VIEW_SETTINGS : 7,
-        VIEW_ACCOUNT : 8,
-        VIEW_EDITFILES : 9,
-	
-        view : 4,
-		
-        pageTracker : '',
-	
-		
-        // ////////////////////////////////////////////////////////////////////////
-
-        init : function(){
-
-            // Initialize the remote API's
-            SystemAPI.init();
-            MediaAPI.init();
-            GalleryAPI.init();
-
-            // Setup the JS logger
-            Message.init('#debug_txt');
-            Message.showOnError();
-		
-            // Setup the data store for the site
-            DataStore.m_siteID = <?= $current_site_id ?>;
-            DataStore.init();
-				
-            // Start auto-save timer....
-            //setInterval ( "ssMain.onAutoSave()", 5000 );
-	
-            // Save when browser quits
-            $(window).unload( function () { DataStore.save(); } );
-	
-            $(window).resize( function(){ ssMain.onResize() });
-
-            // Setup date picker...
-            Date.firstDayOfWeek = 0;
-            Date.format = 'yyyy-mm-dd';
-            //		Date.format = 'mm/dd/yyyy';
-
-            //$('.datepicker').datePicker({clickInput:true, startDate:'1996-01-01'});
-						
-            // Start loading data
-            DataStore.load(ssMain.onDataLoaded);
-        
-            // Setup classes...
-            DashboardFrame.init();
-            FilesFrame.init();
-            GalleriesFrame.init();
-            PagesFrame.init();
-            PostsFrame.init();
-            SettingsFrame.init();
-            EditImageFrame.init();
-        },
-
-        // ////////////////////////////////////////////////////////////////////////
-
-        /**
-         * Refresh after data has changed on the server
-         */
-        refresh : function(){
-            DataStore.load(ssMain.onDataLoaded);
-        },
-	
-        // ////////////////////////////////////////////////////////////////////////
-
-        onDataLoaded : function(){
-            ssMain.repaint();
-        },
-	
-        // ////////////////////////////////////////////////////////////////////////
-
-        isResizing : false,
-	
-        onResizeComplete : function(){
-            //ssMain.init();
-            //ssMain.isResizing = false;
-            //window.location = "main.php?site_id=" + DataStore.m_siteID;
-        },
-	
-        onResize : function(){
-            if (!ssMain.isResizing){
-                ssMain.isResizing = true;
-                setTimeout("ssMain.onResizeComplete()", 1000);
-            }
-        },
-	
-        // ////////////////////////////////////////////////////////////////////////
-
-        onAutoSave : function(){
-
-            // Show that autosave is happening!
-            var tm = new Date();
-
-            $("#saveButton").attr('value', 'Saved ' + tm.getHours() + ":" + tm.getMinutes() + "." + tm.getSeconds());
-
-            // Do the save
-            //DataStore.save();
-        },
-
-        // ////////////////////////////////////////////////////////////////////////
-
-        onLogout : function(){
-            AthenaDialog.confirm("Are you sure you want to log out?", ssMain.startLogout);
-        },
-	
-        startLogout : function(){
-            SystemAPI.logOut(ssMain.doLogout);
-        },
-	
-        doLogout : function(){
-            window.location = "index.html";
-        },
-
-        // ////////////////////////////////////////////////////////////////////////
-	
-        onDataLoaded : function(){
-	
-            if (DataStore.m_currentFolderID > 0){
-                FolderSidebarFrame.onSelectFolder(DataStore.m_currentFolderID);
-            }
-            else {
-                if (DataStore.m_currentFolderID == -1 && DataStore.m_folderList.length > 0){
-                    FolderSidebarFrame.onSelectFolder(DataStore.m_folderList[0].id);
-                }
-                else {
-                    FolderSidebarFrame.onSelectFolder(1); // unassigned folders
-                }
-            }
-		
-            ssMain.repaint();
-        },
-
-        // ////////////////////////////////////////////////////////////////////////
-
-        onSelectSite : function(site_id){
-
-            window.location = "main.php?site_id=" + site_id;
-		
-            /*
-                // Reset frames
-                DashboardFrame.init();
-        FilesFrame.init();
-        GalleriesFrame.init();
-        PagesFrame.init();
-        PostsFrame.init();
-        SettingsFrame.init();	
-        EditImageFrame.init();	
-		
-                DataStore.m_siteID = site_id;
-                SidebarFrame.m_mode = ''; // Clear the mode to force the side bar to refresh
-                DataStore.clear();
-                DataStore.load(ssMain.onDataLoaded);
-             */
-        },
-	
-        // ////////////////////////////////////////////////////////////////////////
-	
-        onShowDashboard : function(){ ssMain.view = ssMain.VIEW_DASHBOARD; ssMain.repaint(); },
-        onShowPages : function(){ ssMain.view = ssMain.VIEW_PAGES; ssMain.repaint(); },
-        onShowFiles : function(){ ssMain.view = ssMain.VIEW_FILES; ssMain.repaint(); },
-        onShowPosts : function(){ ssMain.view = ssMain.VIEW_POSTS; ssMain.repaint(); },
-        onShowGalleries : function(){ ssMain.view = ssMain.VIEW_GALLERIES; ssMain.repaint(); },
-        onShowSettings : function(){ ssMain.view = ssMain.VIEW_SETTINGS; ssMain.repaint(); },
-        onShowStats : function(){ ssMain.view = ssMain.VIEW_STATS; ssMain.repaint(); },
-        onShowAccount : function(){ ssMain.view = ssMain.VIEW_ACCOUNT; ssMain.repaint(); },
-        onShowEditImages : function(){ ssMain.view = ssMain.VIEW_EDITFILES; ssMain.repaint(); },
-	
-	
-        // ////////////////////////////////////////////////////////////////////////
-						
-        repaint : function(){
-
-            // Do the save
-            DataStore.save();
-
-            // Hide all the frames
-            $('.ViewFrame').hide();
-
-            // Update menu
-            $('.menu_item').removeClass('selected');
-            $('.menu_link').removeClass('selected');
-		
-            switch(ssMain.view){
-                case ssMain.VIEW_DASHBOARD : $('#DashboardFrame').show(); $('#dashboard_menu').addClass('selected'); DashboardFrame.repaint(); break;
-                case ssMain.VIEW_PAGES : $('#PagesFrame').show(); $('#pages_menu').addClass('selected'); PagesFrame.repaint(); break;
-                case ssMain.VIEW_FILES : $('#FilesFrame').show(); $('#files_menu').addClass('selected'); FilesFrame.repaint(); break;
-                case ssMain.VIEW_POSTS : $('#PostsFrame').show(); $('#posts_menu').addClass('selected'); PostsFrame.repaint(); break;
-                case ssMain.VIEW_GALLERIES : $('#GalleriesFrame').show(); $('#gallery_menu').addClass('selected'); GalleriesFrame.repaint(); break;
-                case ssMain.VIEW_SETTINGS : $('#SettingsFrame').show(); $('#settings_menu').addClass('selected'); SettingsFrame.repaint(); break;
-                case ssMain.VIEW_STATS : $('#StatsFrame').show(); $('#stats_menu').addClass('selected'); SettingsFrame.repaint(); break;
-                case ssMain.VIEW_ACCOUNT : $('#AccountFrame').show(); $('#account_menu').addClass('selected'); AccountFrame.repaint(); break;
-                case ssMain.VIEW_EDITFILES : $('#EditFilesFrame').show(); $('#edit_files_menu').addClass('selected'); EditImageFrame.repaint(); break;
-            }
-		
-            //window.location.hash = ssMain.view;
-
-            SidebarFrame.repaint();
-        }
-    }
-
-    $(document).ready(function(){ssMain.init();});
-
+    $(document).ready(function(){ssMain.init(<?= $current_site_id ?>);});
 
 </script>

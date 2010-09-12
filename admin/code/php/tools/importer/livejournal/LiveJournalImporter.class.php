@@ -89,7 +89,7 @@ class LiveJournalImporter {
 			'username' => self::$username,
 			'hpassword' => md5(self::$password),
 			'ver' => 1,
-//			'ipfixed' => 1,
+			'ipfixed' => 1,
 			'expiration' => 'short'
 		);
 		

@@ -1,6 +1,6 @@
 /***********************************************************
 InnovaStudio WYSIWYG Editor 5.1
-© 2010, InnovaStudio (www.innovastudio.com). All rights reserved.
+ï¿½ 2010, InnovaStudio (www.innovastudio.com). All rights reserved.
 ************************************************************/
 
 var editor = new Array();

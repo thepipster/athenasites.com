@@ -59,3 +59,31 @@
 	display: block;
 	padding-bottom: 3px;
 }
+
+/** For post settings */
+
+#PagesFrame .postRemoveTagCat {
+	background-image: url('../../images/delete.png');
+	background-repeat: no-repeat;
+	display: inline-block;
+	cursor: pointer;
+	width: 15px;
+	height: 15px;
+	float: left;
+}
+
+#PagesFrame .postTagCat {
+	float: left;
+}
+
+#PagesFrame .postTagCatLine {
+	color: #00204b;
+	display: inline-block;
+	margin-right: 6px;
+	padding: 3px;
+	padding-left: 5px;
+	padding-right: 5px;
+	background-color: #afb9c9;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+}

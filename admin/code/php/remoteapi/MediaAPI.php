@@ -313,6 +313,8 @@ function getPostDetails($site_id, $post_id) {
         $post['content'] = ImportHelper::convertContent($post['content'], $post['source']);
     }
 
+    //Logger::dump($post);
+    
     $msg['cmd'] = "getPostDetails";
     $msg['result'] = 'ok';
     $msg['data'] = array('post' => $post);
