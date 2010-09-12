@@ -106,7 +106,7 @@ var PostsFrame = {
 				
         if (!blogPage || blogPage == undefined){
             AthenaDialog.alert("You do not have a blog page for your site yet. You can add one using the pages tab. You can continue to create blog posts, but they will not be visible to users", "No Blog Page!");
-            $('#postLink').html("");
+            $('#pageLink').html("");
         }
         else {
             if (blogPage.status != 'Published'){
@@ -115,8 +115,8 @@ var PostsFrame = {
 		
             var blogslug = blogPage.path + blogPage.slug;
             blogslug = blogslug.substring(0, blogslug.length-5); // Strip .html
-            $('#postLink').html("View Post");
-            $('#postLink').attr('href', 'http://' + defines.domain + blogslug + postObj.path + postObj.slug);
+            $('#pageLink').html("View Post");
+            $('#pageLink').attr('href', 'http://' + defines.domain + blogslug + postObj.path + postObj.slug);
         }
 			
     },

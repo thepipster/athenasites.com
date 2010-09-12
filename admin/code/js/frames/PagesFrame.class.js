@@ -5,12 +5,11 @@
 */
 var PagesFrame = {
 
-    painted : false,
-		
+    pageObj : false,
+
     // ////////////////////////////////////////////////////////////////////////////
 
     init : function(){
-    //PagesFrame.painted = false;
     },
 	
     // ////////////////////////////////////////////////////////////////////////////
@@ -74,6 +73,7 @@ var PagesFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 
     updatePageLink : function(pageObj){
+        $('#pageLink').html("View Page");
         $('#pageLink').attr('href', 'http://' + defines.domain + pageObj.path + pageObj.slug);
     },
 	
