@@ -422,7 +422,43 @@ var MediaAPI = {
             AthenaDialog.showAjaxError(ret);
         }
     },
-			
+
+    // ////////////////////////////////////////////////////////////////////////
+
+    updateCommentStatus : function(siteID, commentID, newStatus, callback){
+
+        AthenaDialog.showLoading("Updating comment");
+
+        var paras = {
+            cmd: 'updateCommentStatus',
+            site_id: siteID,
+            cid: commentID,
+            sts: newStatus
+        };
+
+        $.ajax({
+            url: MediaAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: function(ret){
+                MediaAPI.onCommentStatusUpdated(ret, callback)
+                }
+        });
+    },
+
+    onCommentStatusUpdated : function(ret, callback){
+
+        AthenaDialog.clearLoading();
+
+        if (ret.result == "ok"){
+            callback(ret.data.comment_id, ret.data.status);
+        }
+        else {
+            AthenaDialog.showAjaxError(ret);
+        }
+    },
+
+
     // ////////////////////////////////////////////////////////////////////////
     //
     // Pages.....

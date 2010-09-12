@@ -45,7 +45,7 @@ var PostsFrame = {
         
         //PostsFrame.oEdit.loadHTML(postObj.content);
 	
-        $('#postTitle').val(postObj.title);
+        $('#pageTitle').val(postObj.title);
         $('#postSlug').html(postObj.slug);
         $('#postLastEdit').html(postObj.last_edit);
         $('#postCreated').html(postObj.created);

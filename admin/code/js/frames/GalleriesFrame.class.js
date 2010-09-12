@@ -81,7 +81,7 @@ var GalleriesFrame = {
         txt += "</div>";
 					
         $('#apollo_gallery_contents').html(txt);
-																	
+			
         $('.gallery_slot').droppable({
             drop: GalleriesFrame.onDrop,
             over: function(ev, ui) {

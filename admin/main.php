@@ -92,6 +92,7 @@ Logger::debug("$domain has site_id = $current_site_id");
         <!--<link rel="stylesheet" href="code/css/PostsFrame.css" type="text/css" /> Merged posts and pages, so no need of this style sheet -->
         <link rel="stylesheet" href="code/css/ImageEditDialog.css" type="text/css" />
         <link rel="stylesheet" href="code/css/ImagePickerDialog.css" type="text/css" />
+        <link rel="stylesheet" href="code/css/CommentDialog.css" type="text/css" />
         <link rel="stylesheet" href="code/css/ImageEditFrame.css" type="text/css" />
         <link rel="stylesheet" href="code/css/GalleryFrame.css" type="text/css" />
         <link rel="stylesheet" href="code/css/Dashboard.css" type="text/css" />
@@ -154,6 +155,7 @@ Logger::debug("$domain has site_id = $current_site_id");
         <script src="code/js/remoteapi/SystemAPI.class.js" type="text/javascript"></script>
         <script src="code/js/remoteapi/MediaAPI.class.js" type="text/javascript"></script>
         <script src="code/js/remoteapi/GalleryAPI.class.js" type="text/javascript"></script>
+        <script src="code/js/remoteapi/BlogAPI.class.js" type="text/javascript"></script>
 
         <!-- Dialog Displays -->
         <script src="code/js/dialogs/ImageEditDialog.class.js" type="text/javascript"></script>
@@ -216,6 +218,7 @@ Logger::debug("$domain has site_id = $current_site_id");
     <div id='apollo_loading_display' class='transparent_50' align="center"></div>
 
     <div id='apollo_dialog'></div>
+    <div id='apollo_loading_dialog'></div>
 
     <div id='Content' align='center'>
 
@@ -235,8 +238,8 @@ Logger::debug("$domain has site_id = $current_site_id");
                         <div id='menu_container'>
                             <!--
                             <div id='settings_menu' class='menu_item' onclick='ssMain.onShowSettings()'>Settings</div>
-                            <div id='dashboard_menu' class='menu_item' onclick='ssMain.onShowDashboard()'>Dashboard</div>
                             -->
+                            <div id='dashboard_menu' class='menu_item' onclick='ssMain.onShowDashboard()'>Dashboard</div>
                             <div id='posts_menu' class='menu_item' onclick='ssMain.onShowPosts()'>Blog</div>
                             <div id='pages_menu' class='menu_item' onclick='ssMain.onShowPages()'>Pages</div>
                             <div id='files_menu' class='menu_item' onclick='ssMain.onShowFiles()'>Files</div>
@@ -278,9 +281,72 @@ Logger::debug("$domain has site_id = $current_site_id");
 
                         <!-- Dashboard Page Content ///////////////////////////////////////////////////////////// -->
 
-                        <div id='DashboardFrame' class='ViewFrame'>
-						DASHBOARD
-                        </div> <!-- content -->
+                     <div id='DashboardFrame' class='ViewFrame' style='height:100%; width:100%;'>
+
+                            <div id='DashboardFrameContent' align='left' style='height:100%; width:100%;'>
+
+                                <table border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>
+
+                                    <tr valign='top' height='50%' width='100%'>
+
+                                        <td width="50%" style='padding:5px;'>
+                                            <div class='subframebox' style='height:100%; width:100%;'>
+                                                <span class='title'>Summary</span>
+                                                <div id='apollo_site_sumary'>
+
+                                                    Published Posts <span id="no_posts_published"></span><br/>
+                                                    Draft Posts <span id="no_posts_draft"></span><br/>
+                                                    Private Posts<span id="no_posts_private"></span><br/>
+
+                                                    Approved Comments<span id="no_comments_approved"></span><br/>
+                                                    Pending Comments<span id="no_comments_pending"></span><br/>
+                                                    Spam Comments<span id="no_comments_spam"></span><br/>
+                                                    Trash Comments<span id="no_comments_trash"></span><br/>
+
+                                                    Categories<span id="no_catgeories"></span><br/>
+                                                    Tags<span id="no_tags"></span><br/>
+
+                                                    Followers<span id="no_followers"></span><br/>
+                                                    
+                                                </div>
+                                            </div>
+                                        </td>
+
+
+                                        <td width="50%" style='padding:5px;'>
+                                            <div class='subframebox' style='height:100%; width:100%;'>
+                                                <span class='title'>Comments Needing Approval</span>
+                                                <div id='apollo_site_comments' style="overflow:auto"></div>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+
+                                    <tr valign='top' height='50%' width='100%'>
+
+                                        <td width="50%" style='padding:5px;'>
+                                            <div class='subframebox' style='height:100%; width:100%;'>
+                                                <span class='title'>Traffic Summary</span>
+                                                <div id='apollo_stats_sumary'>
+                                                </div>
+                                            </div>
+                                        </td>
+
+
+                                        <td width="50%" style='padding:5px;'>
+                                            <div class='subframebox' style='height:100%; width:100%;'>
+                                                <span class='title'>Your Top Followers</span>
+                                                <div id='apollo_followers_sumary' style="overflow:auto"></div>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+
+                                </table>
+
+                            </div>
+
+                        </div> 
 
                         <!-- Files Page Content ///////////////////////////////////////////////////////////// -->
 

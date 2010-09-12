@@ -111,7 +111,10 @@ switch ($cmd) {
         importComments($site_id, $post_id, $comment_obj, $import_source);
         break;
 
-    case "approveComment":
+    case "updateCommentStatus":
+        $comment_id = CommandHelper::getPara('cid', true, CommandHelper::$PARA_TYPE_NUMERIC);
+        $status = CommandHelper::getPara('sts', true, CommandHelper::$PARA_TYPE_STRING);
+        updateCommentStatus($site_id, $comment_id, $status);
         break;
 
     case "addTag":
@@ -474,6 +477,20 @@ function importComments($site_id, $post_id, $comment_obj, $import_source) {
     $msg['result'] = 'ok';
 
     CommandHelper::sendMessage($msg);
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function updateCommentStatus($site_id, $comment_id, $status){
+
+    CommentsTable::updateStatus($comment_id, $site_id, $status);
+
+    $msg['cmd'] = "importComments";
+    $msg['result'] = 'ok';
+    $msg['data'] = array('comment_id' => $comment_id, 'status' => $status);
+
+    CommandHelper::sendMessage($msg);
+
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////

@@ -21,11 +21,11 @@ var AthenaDialog = {
 */
 
 
-        $('#apollo_dialog').dialog("destroy");
+        $('#apollo_loading_dialog').dialog("destroy");
 				
-        $('#apollo_dialog').html("<div align='center'><img src='"+defines.root_url+"images/spinner.gif'/></div>");
+        $('#apollo_loading_dialog').html("<div align='center'><img src='"+defines.root_url+"images/spinner.gif'/></div>");
 		
-        $('#apollo_dialog').dialog({
+        $('#apollo_loading_dialog').dialog({
             resizable: true,
             height:70,
             width: 250,
@@ -42,7 +42,7 @@ var AthenaDialog = {
     clearLoading : function(){
         //$('#apollo_loading_display').html("");
         //$('#apollo_loading_display').hide();
-        $('#apollo_dialog').dialog("destroy");
+        $('#apollo_loading_dialog').dialog("destroy");
     },
 
     // ////////////////////////////////////////////////////////////////////
