@@ -180,7 +180,7 @@ class CommentsTable {
 
     public static function getComment($site_id, $comment_id) {
         $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Comments WHERE id = %d", $site_id, $comment_id);
-        return DatabaseManager::getResults($sql);
+        return DatabaseManager::getSingleResult($sql);
     }
 
     // /////////////////////////////////////////////////////////////////////////////////

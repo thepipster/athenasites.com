@@ -41,7 +41,6 @@ switch ($cmd) {
         getStats($site_id);
         break;
 
-
     // POSTS /////////////////////////////////////////////////////////////////////////
 
     case "deletePost":
@@ -488,6 +487,24 @@ function importComments($site_id, $post_id, $comment_obj, $import_source) {
 
 function updateCommentStatus($site_id, $comment_id, $status){
 
+    // Get the current status, and determine if we need to
+    // flag or unflag the author as a spammer
+    $comment = CommentsTable::getComment($site_id, $comment_id);
+    Logger::dump($comment);
+
+    $prev_status = $comment['status'];
+    $follower_id = $comment['site_follower_id'];
+
+    if ($prev_status != $status && $prev_status == 'Spam'){
+        // Mark the author as not a spammer
+        SiteFollowersTable::unflagSpammer($follower_id);
+    }
+
+    if ($prev_status != $status && $status == 'Spam'){
+        // Mark the author as a spammer
+        SiteFollowersTable::flagSpammer($follower_id);
+    }
+
     CommentsTable::updateStatus($comment_id, $site_id, $status);
 
     $msg['cmd'] = "importComments";
@@ -764,17 +781,30 @@ function addFolder($site_id, $folder_name) {
 // ///////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Get the stats for the given site
+ * Get the stats summary for the given site
  * @param <type> $site_id
  */
 function getStats($site_id){
 
     $disc_usage = du(SecurityUtils::getMediaFolder($site_id)) + du(SecurityUtils::getSitesFolder($site_id));
     Logger::debug($disc_usage);
+
+    $page_views = StatsRollupTables::getAllPageViewsRollup($site_id, 30);
+    $views = array();
+
+    foreach($page_views as $view){
+        if ($view['page_title'] == 'all'){
+            $temp = array();
+            $temp['dt'] = $view['rollup_date'];
+            $temp['uv'] = $view['unique_visitors'];
+            $temp['pv'] = $view['page_views'];
+            $views[] = $temp;
+        }
+    }
     
-    $msg['getStats'] = "deleteFolder";
+    $msg['getStats'] = "getStats";
     $msg['result'] = 'ok';
-    $msg['data'] = array('disc_usage' => $disc_usage);
+    $msg['data'] = array('disc_usage' => $disc_usage."", 'page_views' => $views);
     CommandHelper::sendMessage($msg);
 
 }
@@ -786,8 +816,11 @@ function du( $dir )
 {
     $res = `du -sk $dir`;             // Unix command
     preg_match( '/\d+/', $res, $KB ); // Parse result
-    $MB = round( $KB[0] / 1024, 2 );  // From kilobytes to megabytes
-    return $MB;
+    if (isset($KB[0])){
+        $MB = round( $KB[0] / 1024, 2 );  // From kilobytes to megabytes
+        return $MB;
+    }
+    return 0;
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////

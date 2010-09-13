@@ -335,7 +335,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                                 <tr valign='top' height='50%' width='100%'>
 
                                     <td width="50%" style='padding:5px;'>
-                                        <div class='subframebox' style='height:100%; width:100%;'>
+                                        <div class='subframebox' style='height: 300px; width:100%;'>
                                             <span class='title'>Your Top Followers</span>
                                             <div id='apollo_followers_sumary' align="center">
                                                 <table id="followerTable" border="0" cellspacing="2" cellpadding="3">

@@ -66,7 +66,7 @@ function getSummary($site_id){
         'posts_draft' => DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_%d_Posts WHERE status = 'Draft'", $site_id)),
         'categories' => DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_%d_PostCategories", $site_id)),
         'tags' => DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_%d_PostTags", $site_id)),
-        'no_followers' => DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_FollowerToSite where site_id = %d", $site_id)),
+        'no_followers' => SiteFollowersTable::getNoFollowers($site_id),
         'followers' => SiteFollowersTable::getTopNFollowers($site_id, 10)
     );
 

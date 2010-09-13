@@ -21,6 +21,11 @@ class SiteFollowersTable {
         return DatabaseManager::getResults($sql);
     }
 
+    public static function getNoFollowers($site_id){
+        $sql = DatabaseManager::prepare("SELECT count(fs.id) FROM athena_FollowerToSite fs INNER JOIN athena_SiteFollowers f WHERE fs.site_id = %d AND f.id = fs.follower_id AND f.is_spammer = 0", $site_id);
+        return DatabaseManager::getVar($sql);
+    }
+
     // ///////////////////////////////////////////////////////////////////////////////////////
 
     public static function getFollowerIDFromEmail($email) {

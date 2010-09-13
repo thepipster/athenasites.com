@@ -156,6 +156,9 @@ var DashboardFrame = {
         if (commentObj.status != 'Spam'){
             txt += "    <a href='#' class='commentEdit' onclick=\"DashboardFrame.spamComment("+id+")\">spam</a>";
         }
+        else {
+            txt += "    <a href='#' class='commentEdit' onclick=\"DashboardFrame.unspamComment("+id+")\">not spam</a>";
+        }
 
         if (commentObj.status != 'Spam'){
             if (commentObj.status == 'Trash'){
@@ -181,6 +184,10 @@ var DashboardFrame = {
     },
 
     // ////////////////////////////////////////////////////////////////////////////
+
+    unspamComment : function(comment_id){
+        MediaAPI.updateCommentStatus(DataStore.m_siteID, comment_id, 'Approved', DashboardFrame.onCommentUpdate);
+    },
 
     spamComment : function(comment_id){
         MediaAPI.updateCommentStatus(DataStore.m_siteID, comment_id, 'Spam', DashboardFrame.onCommentUpdate);
