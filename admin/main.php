@@ -222,56 +222,57 @@ Logger::debug("$domain has site_id = $current_site_id");
 
     <div id='Content' align='center'>
 
-        <table border="0" width='100%' height='100%' style='width:100%; height:100%'>
+        <table id="mainContentTable" border="0" cellspacing="0" cellpadding="0" width='100%' height='100%' style='width:100%; height:100%'>
 
-            <tr valign="top" style='width:100%; height:100%'>
+            <tr valign="top" style='width:100%;height:100%'>
 
-                <td width="180px">
+                <td width="180px" style='width:180px'>
                     <div id='SideBar' align="left">
-                    </div>
+
+                    </div><!-- SideBar -->
                 </td>
 
                 <td>
 
-                    <div id='MainContent'>
+                    <div id='menu_container'>
+                        <!--
+                        <div id='settings_menu' class='menu_item' onclick='ssMain.onShowSettings()'>Settings</div>
+                        -->
+                        <div id='dashboard_menu' class='menu_item' onclick='ssMain.onShowDashboard()'>Dashboard</div>
+                        <div id='posts_menu' class='menu_item' onclick='ssMain.onShowPosts()'>Blog</div>
+                        <div id='pages_menu' class='menu_item' onclick='ssMain.onShowPages()'>Pages</div>
+                        <div id='files_menu' class='menu_item' onclick='ssMain.onShowFiles()'>Files</div>
+                        <div id='gallery_menu' class='menu_item' onclick='ssMain.onShowGalleries()'>Galleries</div>
+                        <div id='stats_menu' class='menu_item' onclick='ssMain.onShowStats()'>Stats</div>
 
-                        <div id='menu_container'>
-                            <!--
-                            <div id='settings_menu' class='menu_item' onclick='ssMain.onShowSettings()'>Settings</div>
-                            -->
-                            <div id='dashboard_menu' class='menu_item' onclick='ssMain.onShowDashboard()'>Dashboard</div>
-                            <div id='posts_menu' class='menu_item' onclick='ssMain.onShowPosts()'>Blog</div>
-                            <div id='pages_menu' class='menu_item' onclick='ssMain.onShowPages()'>Pages</div>
-                            <div id='files_menu' class='menu_item' onclick='ssMain.onShowFiles()'>Files</div>
-                            <div id='gallery_menu' class='menu_item' onclick='ssMain.onShowGalleries()'>Galleries</div>
-                            <div id='stats_menu' class='menu_item' onclick='ssMain.onShowStats()'>Stats</div>
+                        <?php
+                        if ($user['service_client_gallery'] == 1) {
+                        ?>
+                            <div id='' class='menu_item client_gallery_title' onclick=''>Client Gallery</div>
+                            <div id='' class='menu_item' onclick=''>eStore</div>
+                        <?php } ?>
 
-                            <?php
-                            if ($user['service_client_gallery'] == 1) {
-                            ?>
-                                <div id='' class='menu_item client_gallery_title' onclick=''>Client Gallery</div>
-                                <div id='' class='menu_item' onclick=''>eStore</div>
-                            <?php } ?>
+                        <div class='menu_link' onclick='ssMain.onLogout()'>Logout</div>
+                        <div id='account_menu' class='menu_link' onclick='ssMain.onShowAccount()'>Account</div>
 
-                            <div class='menu_link' onclick='ssMain.onLogout()'>Logout</div>
-                            <div id='account_menu' class='menu_link' onclick='ssMain.onShowAccount()'>Account</div>
+                        <?php
+                        if (count($site_list) > 1) {
+                            echo '<select class="menu_site_selector" onchange=\'ssMain.onSelectSite($(this).val())\'>';
+                            foreach ($site_list as $site) {
 
-                            <?php
-                            if (count($site_list) > 1) {
-                                echo '<select class="menu_site_selector" onchange=\'ssMain.onSelectSite($(this).val())\'>';
-                                foreach ($site_list as $site) {
-
-                                    $selected = '';
-                                    if ($site['id'] == $current_site_id) {
-                                        $selected = 'selected';
-                                    }
-
-                                    echo "<option $selected value='" . $site['id'] . "'>" . $site['domain'] . "</option>";
+                                $selected = '';
+                                if ($site['id'] == $current_site_id) {
+                                    $selected = 'selected';
                                 }
-                                echo '</select>';
+
+                                echo "<option $selected value='" . $site['id'] . "'>" . $site['domain'] . "</option>";
                             }
-                            ?>
-                        </div>
+                            echo '</select>';
+                        }
+                        ?>
+                    </div><!-- menu_container -->
+
+                    <div id='MainContent'>
 
                         <!-- Settings Frame ///////////////////////////////////////////////////////////// -->
 
@@ -281,70 +282,87 @@ Logger::debug("$domain has site_id = $current_site_id");
 
                         <!-- Dashboard Page Content ///////////////////////////////////////////////////////////// -->
 
-                     <div id='DashboardFrame' class='ViewFrame' style='height:100%; width:100%;'>
+                        <div id='DashboardFrame' class='ViewFrame'>
 
-                            <div id='DashboardFrameContent' align='left' style='height:100%; width:100%;'>
 
-                                <table border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>
+                            <table border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>
 
-                                    <tr valign='top' height='50%' width='100%'>
+                                <tr valign='top' width='100%'>
 
-                                        <td width="50%" style='padding:5px;'>
-                                            <div class='subframebox' style='height:100%; width:100%;'>
-                                                <span class='title'>Summary</span>
-                                                <div id='apollo_site_sumary'>
+                                    <td width="50%" height="70%" style='padding:5px;'>
+                                        <div class='subframebox' style='height:100%; width:100%;'>
+                                            <span class='title'>Snapshot</span>
+                                            
+                                            <div id='apollo_site_sumary'>
 
-                                                    Published Posts <span id="no_posts_published"></span><br/>
-                                                    Draft Posts <span id="no_posts_draft"></span><br/>
-                                                    Private Posts<span id="no_posts_private"></span><br/>
+                                                <p>
+                                                Posts, 
+                                                <span class="status_public"><span id="no_posts_published"></span> published </span>,
+                                                <span class="status_draft"><span id="no_posts_draft"></span> draft </span>,
+                                                <span class="status_private"><span id="no_posts_private"></span> private </span>
+                                                </p>
 
-                                                    Approved Comments<span id="no_comments_approved"></span><br/>
-                                                    Pending Comments<span id="no_comments_pending"></span><br/>
-                                                    Spam Comments<span id="no_comments_spam"></span><br/>
-                                                    Trash Comments<span id="no_comments_trash"></span><br/>
+                                                <p>
+                                                Comments,
+                                                <span class="status_public"><span id="no_comments_approved"></span> published </span>,
+                                                <span class="status_draft"><span id="no_comments_pending"></span> draft </span>,
+                                                <span class="status_spam"><span id="no_comments_spam"></span> spam </span>
+                                                </p>
 
-                                                    Categories<span id="no_catgeories"></span><br/>
-                                                    Tags<span id="no_tags"></span><br/>
+                                                <p>
+                                                You have <span id="no_catgeories"></span> Categories, <span id="no_tags"></span> tags and <span id="no_followers"></span> followers
+                                                </p>
 
-                                                    Followers<span id="no_followers"></span><br/>
-                                                    
-                                                </div>
                                             </div>
-                                        </td>
+                                        </div>
+                                    </td>
 
+                                    <td width="50%" height="100%" style='padding:5px;' rowspan="2">
+                                        <div class='subframebox' id="apollo_site_comments_wrapper">
+                                            <span class='title'>Recent Comments
+                                                <!--<a href='#' id="showCommentsAll" class="subFrameCommand" onclick="DashboardFrame.showComments('All')">All</a>-->
+                                                <a href='#' id="showCommentsPending" class="subFrameCommand selected" onclick="DashboardFrame.showComments('Pending')">Unapproved</a>
+                                                <a href='#' id="showCommentsApproved" class="subFrameCommand" onclick="DashboardFrame.showComments('Approved')">Approved</a>
+                                                <a href='#' id="showCommentsTrash" class="subFrameCommand" onclick="DashboardFrame.showComments('Trash')" title="Comments marked as trash will be automatically removed after 30 days">Trash</a>
+                                                <a href='#' id="showCommentsSpam" class="subFrameCommand" onclick="DashboardFrame.showComments('Spam')" title="Comments marked as spam will be automatically removed after 30 days">Spam</a>
+                                            </span>
+                                            <div id='apollo_site_comments' style="overflow:auto;"></div>
+                                        </div>
+                                    </td>
 
-                                        <td width="50%" style='padding:5px;'>
-                                            <div class='subframebox' style='height:100%; width:100%;'>
-                                                <span class='title'>Comments Needing Approval</span>
-                                                <div id='apollo_site_comments' style="overflow:auto"></div>
+                                </tr>
+
+                                <tr valign='top' height='50%' width='100%'>
+
+                                    <td width="50%" style='padding:5px;'>
+                                        <div class='subframebox' style='height:100%; width:100%;'>
+                                            <span class='title'>Your Top Followers</span>
+                                            <div id='apollo_followers_sumary' align="center">
+                                                <table id="followerTable" border="0" cellspacing="2" cellpadding="3">
+                                                    <thead class="head" align="left">
+                                                        <th>Follower</th>
+                                                        <th>Email</th>
+                                                        <th>Last Activity</th>
+                                                        <th>No Comments</th>                                                        
+                                                    </thead>
+                                                    <tr align="left" class="even"><td class="commentName" id="follower0name"></td><td id="follower0email"></td><td id="follower0activity"></td><td id="follower0comments"></td></tr>
+                                                    <tr align="left" class="odd"><td class="commentName" id="follower1name"></td><td id="follower1email"></td><td id="follower1activity"></td><td id="follower1comments"></td></tr>
+                                                    <tr align="left" class="even"><td class="commentName" id="follower2name"></td><td id="follower2email"></td><td id="follower2activity"></td><td id="follower2comments"></td></tr>
+                                                    <tr align="left" class="odd"><td class="commentName" id="follower3name"></td><td id="follower3email"></td><td id="follower3activity"></td><td id="follower3comments"></td></tr>
+                                                    <tr align="left" class="even"><td class="commentName" id="follower4name"></td><td id="follower4email"></td><td id="follower4activity"></td><td id="follower4comments"></td></tr>
+                                                    <tr align="left" class="odd"><td class="commentName" id="follower5name"></td><td id="follower5email"></td><td id="follower5activity"></td><td id="follower5comments"></td></tr>
+                                                    <tr align="left" class="even"><td class="commentName" id="follower6name"></td><td id="follower6email"></td><td id="follower6activity"></td><td id="follower6comments"></td></tr>
+                                                    <tr align="left" class="odd"><td class="commentName" id="follower7name"></td><td id="follower7email"></td><td id="follower7activity"></td><td id="follower7comments"></td></tr>
+                                                    <tr align="left" class="even"><td class="commentName" id="follower8name"></td><td id="follower8email"></td><td id="follower8activity"></td><td id="follower8comments"></td></tr>
+                                                    <tr align="left" class="odd"><td class="commentName" id="follower9name"></td><td id="follower9email"></td><td id="follower9activity"></td><td id="follower9comments"></td></tr>
+                                                </table>
                                             </div>
-                                        </td>
+                                        </div>
+                                    </td>
 
-                                    </tr>
+                                </tr>
 
-                                    <tr valign='top' height='50%' width='100%'>
-
-                                        <td width="50%" style='padding:5px;'>
-                                            <div class='subframebox' style='height:100%; width:100%;'>
-                                                <span class='title'>Traffic Summary</span>
-                                                <div id='apollo_stats_sumary'>
-                                                </div>
-                                            </div>
-                                        </td>
-
-
-                                        <td width="50%" style='padding:5px;'>
-                                            <div class='subframebox' style='height:100%; width:100%;'>
-                                                <span class='title'>Your Top Followers</span>
-                                                <div id='apollo_followers_sumary' style="overflow:auto"></div>
-                                            </div>
-                                        </td>
-
-                                    </tr>
-
-                                </table>
-
-                            </div>
+                            </table>
 
                         </div> 
 
@@ -439,7 +457,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                     <a href='#' onclick="CommentsEditDialog.show()">Edit Comments</a>
                                                 </div>
 
-                                                
+
                                                 <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Controls:</span>
                                                     <button class='save_button' onclick="PostsFrame.onSavePost()">Save</button>
@@ -596,7 +614,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                                 </tr>
 
                             </table>
-                        </div>
+                        </div><!-- PagesFrame -->
 
                         <!-- Galleries Page Content ///////////////////////////////////////////////////////////// -->
 
@@ -638,12 +656,15 @@ Logger::debug("$domain has site_id = $current_site_id");
 
                             </div>
 
-                        </div> 
+                        </div> <!-- GalleriesFrame -->
 
                         <!-- Stats Page Content ///////////////////////////////////////////////////////////// -->
 
                         <div id='StatsFrame' class='ViewFrame'>
-						STATS
+                            <div class="frameContents">
+                            <h3>This awesome feature will be here soon, wish we could have it not - but we're working on is as fast as we can!</h3>
+                            <p>This page will allow you to look at your total stats, and also look at stats for each page</p>
+                            </div>
                         </div> <!-- content -->
 
                         <!-- Account Frame ///////////////////////////////////////////////////////////// -->
@@ -653,8 +674,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                         </div> <!-- content -->
 
                     </div> <!-- MainContent -->
-
-
+                    
                 </td>
             </tr>
         </table>

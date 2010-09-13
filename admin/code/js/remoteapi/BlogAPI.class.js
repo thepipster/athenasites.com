@@ -96,13 +96,13 @@ var BlogAPI = {
             data.comments_pending = ret.data.comments_pending;
             data.comments_trash = ret.data.comments_trash;
             data.comments_spam = ret.data.comments_spam;
-            data.comments_possible_spam = ret.data.comments_possible_spam;
             data.posts_published = ret.data.posts_published;
             data.posts_private = ret.data.posts_private;
             data.posts_draft = ret.data.posts_draft;            
             data.categories = ret.data.categories;
             data.tags = ret.data.tags;
-            data.no_followers = ret.data.followers;
+            data.no_followers = ret.data.no_followers;
+            data.top_followers = ret.data.followers;
 
             callback(data);
         }

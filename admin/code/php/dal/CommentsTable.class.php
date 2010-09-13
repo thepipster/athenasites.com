@@ -20,7 +20,7 @@ class CommentsTable {
 		  `post_id` int(11) NOT NULL,
 		  `parent_id` int(11) NOT NULL,
 		  `content` text,
-		  `status` enum('Pending','Approved', 'Trash', 'Spam', 'PossibleSpam') default 'Pending',
+		  `status` enum('Pending','Approved', 'Trash', 'Spam') default 'Pending',
 		  `created` datetime default NULL,
 		  `author_ip` bigint(20) default NULL,
 		  `source` varchar(20) default NULL,
@@ -137,6 +137,35 @@ class CommentsTable {
 
     public static function getAllPendingComments($site_id){
         $sql = DatabaseManager::prepare("SELECT c.*, f.name FROM athena_%d_Comments c INNER JOIN athena_SiteFollowers f WHERE c.site_follower_id = f.id AND status = 'Pending' ORDER BY c.created DESC", $site_id);
+        return DatabaseManager::getResults($sql);
+    }
+
+    // /////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Get a list of the rcent comments (comments made in the last N days), but include ALL unapproved comments
+     * @param int $site_id
+     * @param int $site_id
+     * @return array
+     */
+    public static function getRecentComments($site_id, $no_days){
+
+        $date_before = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m")  , date("d")-$no_days, date("Y")));
+        $date_end = date("Y-m-d 23:59:59", mktime(date("H"), date("i"), date("s"), date("m") , date("d"), date("Y")));
+
+        $sql = "SELECT c.*, f.name FROM athena_%d_Comments c
+        INNER JOIN athena_SiteFollowers f
+        WHERE c.site_follower_id = f.id
+        AND status = 'Pending'
+        UNION
+        SELECT c.*, f.name FROM athena_%d_Comments c
+        INNER JOIN athena_SiteFollowers f
+        WHERE c.site_follower_id = f.id
+        AND status != 'Pending'
+        AND c.created > '%s' AND c.created <= '%s'
+        ORDER BY created DESC";
+
+        $sql = DatabaseManager::prepare($sql, $site_id, $site_id, $date_before, $date_end);
         return DatabaseManager::getResults($sql);
     }
 

@@ -18,9 +18,6 @@ Logger::debug("Command = " . $cmd);
 // Get the command type, and process
 switch ($cmd) {
 
-
-    // No security...
-
     case "getSummary":
         getSummary($site_id);
         break;
@@ -35,20 +32,13 @@ switch ($cmd) {
         break;
 
     case "addComment":
-        //$post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        //addComment($post_id, $site_id);
-        break;
-
-    case "addComment":
+        $post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
         $author_name = CommandHelper::getPara('arn', true, CommandHelper::$PARA_TYPE_STRING);
         $author_email = CommandHelper::getPara('aem', true, CommandHelper::$PARA_TYPE_STRING);
-        $author_ip = CommandHelper::getPara('aip', true, CommandHelper::$PARA_TYPE_STRING);
-        $content = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
-        $parent_id = CommandHelper::getPara('pid', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        $post_id = CommandHelper::getPara('pid', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        $created_date = CommandHelper::getPara('pubdate', false, CommandHelper::$PARA_TYPE_STRING);
-        $import_source = CommandHelper::getPara('import_source', false, CommandHelper::$PARA_TYPE_STRING);
-        addComment($site_id, $post_id, $author_name, $author_email, $author_ip, $content, $parent_id, $created_date, $import_source);
+        $post_url = CommandHelper::getPara('purl', true, CommandHelper::$PARA_TYPE_STRING);
+        $comment = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
+        $parent_comment_id = CommandHelper::getPara('pid', true, CommandHelper::$PARA_TYPE_NUMERIC);
+        addComment($site_id, $post_id, $parent_comment_id, $comment, $author_name, $author_email, $post_url);
         break;
 
     default :
@@ -57,8 +47,122 @@ switch ($cmd) {
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 //
+// Secure getters
+//
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function getSummary($site_id){
+
+    $msg['cmd'] = 'getSummary';
+    $msg['result'] = 'ok';
+
+    $msg['data'] = array(
+        'comments_approved' => DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_%d_Comments WHERE status = 'Approved'", $site_id)),
+        'comments_pending' => DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_%d_Comments WHERE status = 'Pending'", $site_id)),
+        'comments_trash' => DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_%d_Comments WHERE status = 'Trash'", $site_id)),
+        'comments_spam' => DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_%d_Comments WHERE status = 'Spam'", $site_id)),
+        'posts_published' => DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_%d_Posts WHERE status = 'Published'", $site_id)),
+        'posts_private' => DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_%d_Posts WHERE status = 'Private'", $site_id)),
+        'posts_draft' => DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_%d_Posts WHERE status = 'Draft'", $site_id)),
+        'categories' => DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_%d_PostCategories", $site_id)),
+        'tags' => DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_%d_PostTags", $site_id)),
+        'no_followers' => DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_FollowerToSite where site_id = %d", $site_id)),
+        'followers' => SiteFollowersTable::getTopNFollowers($site_id, 10)
+    );
+
+    CommandHelper::sendMessage($msg);
+}
+
+function getStats($site_id){
+
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+//
 // No-security getters
 //
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function addComment($site_id, $post_id, $parent_comment_id, $comment, $author_name, $author_email, $post_url){
+
+    //$site = SitesTable::getSite($site_id);
+    $page = PagesTable::getBlogpage($site_id);
+    
+    // Check if this is spam from AkisMet
+    $apiKey = "07d55b1f2e1b";
+    $user = "apollosites";
+    $pass = "k9G18ReR";    
+    //$blogURL = 'http://www.apollosites.com/blog/';
+    $blogURL = PageManager::getPageLink($page['id']);
+
+    $author_ip = PageViewsTable::getRealIPAddr();
+    $author_url = '';
+    
+    $akismet = new Akismet($blogURL ,$apiKey);
+    $akismet->setCommentAuthor($author_name);
+    $akismet->setCommentAuthorEmail($author_email);
+    $akismet->setCommentAuthorURL($author_url);
+    $akismet->setCommentContent($comment);
+    $akismet->setPermalink($post_url);
+
+    //
+    // Check to see if this is possible spam or not?
+    //
+
+    // Innocent until proven guilty...
+    $status = 'Pending';
+    $isSpam = false;
+
+    // Check from akismet..
+    if($akismet->isCommentSpam()){
+        $status = 'Spam';
+        $isSpam = true;
+    }
+
+    
+    //
+    // Add follower, unless they are already registered. We
+    //
+    
+    // Create/Update the blog follower....
+    if ($author_email != '') {
+        $follower_id = SiteFollowersTable::getFollowerIDFromEmail($author_email);
+    } else if ($author_url != '') {
+        // If they have no email, search by url
+        $follower_id = SiteFollowersTable::getFollowerIDFromURL($author_url);
+    } else {
+        // If they have no email or URL, search by name - which is not ideal as name may not be unique
+        $follower_id = SiteFollowersTable::getFollowerIDFromName($author_name);
+    }
+
+    if (!isset($follower_id)) {
+        $follower_id = SiteFollowersTable::addFollower($author_name, $author_email, $author_ip, $author_url);
+        SiteFollowersTable::updateCreatedDate($follower_id, $date_str); // Force the imported comment date as the create date for this follower
+    } else {
+        SiteFollowersTable::updateFollower($follower_id, $author_ip, $author_url);
+        SiteFollowersTable::updateLastActivityDate($follower_id, $date_str); // Force the imported comment date as the last activity date for this follower
+    }
+
+    // Add follower to site
+    SiteFollowersTable::addFollowerToSite($follower_id, $site_id);
+
+    // If this is spam, flag this follower as a spammer
+    if ($isSpam){
+        SiteFollowersTable::flagSpammer($follower_id);
+    }
+
+
+    //
+    // Create the comment....
+    //
+    $comment_id = CommentsTable::create($site_id, $post_id, $parent_comment_id, $content, $status, $author_ip, $follower_id);
+
+    $msg['cmd'] = 'addComment';
+    $msg['result'] = 'ok';
+    
+    CommandHelper::sendMessage($msg);
+}
+
 // ///////////////////////////////////////////////////////////////////////////////////////
 
 function getPosts($site_id) {
@@ -79,7 +183,7 @@ function getComments($post_id, $site_id) {
     $msg['result'] = 'ok';
 
     if ($post_id == 0){
-        $comment_list = CommentsTable::getAllPendingComments($site_id);
+        $comment_list = CommentsTable::getRecentComments($site_id, 30);
     }
     else {
         $comment_list = CommentsTable::getCommentsForPost($site_id, $post_id);
@@ -97,25 +201,6 @@ function getComments($post_id, $site_id) {
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function getSummary($site_id){
 
-    $msg['cmd'] = 'getSummary';
-    $msg['result'] = 'ok';
-
-    $msg['data'] = array(
-        'comments_approved' => DatabaseManager::getVar("SELECT count(id) FROM athena_{$site_id}_Comments WHERE status = 'Approved'"),
-        'comments_pending' => DatabaseManager::getVar("SELECT count(id) FROM athena_{$site_id}_Comments WHERE status = 'Pending'"),
-        'comments_trash' => DatabaseManager::getVar("SELECT count(id) FROM athena_{$site_id}_Comments WHERE status = 'Trash'"),
-        'comments_spam' => DatabaseManager::getVar("SELECT count(id) FROM athena_{$site_id}_Comments WHERE status = 'Spam'"),
-        'comments_possible_spam' => DatabaseManager::getVar("SELECT count(id) FROM athena_{$site_id}_Comments WHERE status = 'PossibleSpam'"),
-        'posts_published' => DatabaseManager::getVar("SELECT count(id) FROM athena_{$site_id}_Posts WHERE status = 'Published'"),
-        'posts_private' => DatabaseManager::getVar("SELECT count(id) FROM athena_{$site_id}_Posts WHERE status = 'Private'"),
-        'posts_draft' => DatabaseManager::getVar("SELECT count(id) FROM athena_{$site_id}_Posts WHERE status = 'Draft'"),
-        'categories' => DatabaseManager::getVar("SELECT count(id) FROM athena_{$site_id}_PostCategories"),
-        'tags' => DatabaseManager::getVar("SELECT count(id) FROM athena_{$site_id}_PostTags"),
-        'followers' => DatabaseManager::getVar("SELECT count(id) FROM athena_FollowerToSite where site_id = $site_id"),
-        'site_id' => $site_id);
-    CommandHelper::sendMessage($msg);
-}
 
 ?>

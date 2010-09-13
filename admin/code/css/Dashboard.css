@@ -76,3 +76,25 @@
 
 #DashboardFrame .spam_comment {}
 #DashboardFrame .approved_comment {}
+
+/** Followers table .......................... */
+
+#followerTable {
+	width: 95%;
+	padding-top: 10px;
+}
+
+#followerTable .head {
+	background-color: white;
+	height: 20px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+#followerTable .even {
+	background-color: #d0d6e6;
+}
+
+#followerTable .odd {
+	background-color: #bec7d6;
+}

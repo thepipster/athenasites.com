@@ -5,7 +5,12 @@
     float: left;
     padding: 0px;
     margin: 0px;
-    padding-top: 30px;
+}
+
+#SideBar .spacer {
+	height: 30px;
+	width:10px;
+	display: block;
 }
 
 #SideBar p {
@@ -52,10 +57,6 @@
     color: white;
     cursor: pointer;
 }
-
-.status_draft { color: #2c6c11 !important;}
-.status_private { color: #990000 !important;}
-.status_public { color: #233c57 !important;}
 
 #SideBar .page_depth_0 { padding-left: 10px;}
 #SideBar .page_depth_1 { padding-left: 25px; }

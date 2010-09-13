@@ -72,8 +72,15 @@ var SidebarFrame = {
 
     // ////////////////////////////////////////////////////////////////////////////
 
+    getHeader : function(){
+        return "<span class='spacer'></span>";
+    },
+    
+    // ////////////////////////////////////////////////////////////////////////////
+
     paintPosts : function(){
-        var txt = "";
+        
+        var txt = SidebarFrame.getHeader();
         txt += "<p>Blog Posts<span class='add_new_project' onclick='PostsSidebarFrame.addPost()' title='Add a new blank post to you blog.'>&nbsp;(add)</span></p>";
         txt += "<div id='SideBar_Posts'></div>";
 		
@@ -85,8 +92,8 @@ var SidebarFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 
     paintGalleries : function(){
-        var txt = "";
-		
+        
+        var txt = SidebarFrame.getHeader();
         txt += "<p>Pages with Galleries</p>";
         txt += "<div id='SideBar_Pages'></div>";
 		
@@ -100,8 +107,7 @@ var SidebarFrame = {
 
     paintPages : function(){
 
-        var txt = "";
-		
+        var txt = SidebarFrame.getHeader();
         txt += "<p>Pages<span class='add_new_project' onclick='PagesSidebarFrame.addPage()' title='Add a new blank page to you site.'>&nbsp;(add)</span></p>";
         txt += "<div id='SideBar_Pages'></div>";
 		
@@ -115,7 +121,7 @@ var SidebarFrame = {
 	
     paintFolders : function(){
 		
-        var txt = "";
+        var txt = SidebarFrame.getHeader();
         txt += "<p>Folders<span class='add_new_project' onclick='FolderSidebarFrame.addFolder()' title='Add a new folder to help organize your images and other media files'>&nbsp;(add)</span></p>";
         txt += "<div id='SideBar_Folders'></div>";
 		

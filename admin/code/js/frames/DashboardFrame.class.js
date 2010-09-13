@@ -12,7 +12,7 @@ var DashboardFrame = {
 	
     repaint : function(){
 
-        BlogAPI.getComments(DataStore.m_siteID, 0, DashboardFrame.paintPendingComments);
+        BlogAPI.getComments(DataStore.m_siteID, 0, DashboardFrame.gotComments);
         BlogAPI.getSummary(DataStore.m_siteID, DashboardFrame.paintSummary);
 
         //DashboardFrame.paintTools();
@@ -37,7 +37,21 @@ var DashboardFrame = {
         $('#no_tags').html( data.tags);
         $('#no_followers').html( data.no_followers);
 
+        if (!data.top_followers || data.top_followers == undefined){
+            return;
+        }
         
+        for (var i=0; i<data.top_followers.length; i++){
+            $('#follower'+i+'name').html(data.top_followers[i].name);
+            if (data.top_followers[i].email == ""){
+                $('#follower'+i+'email').html("(unknown)");
+            }
+            else {
+                $('#follower'+i+'email').html(data.top_followers[i].email);
+            }
+            $('#follower'+i+'activity').html(data.top_followers[i].last_activity);
+            $('#follower'+i+'comments').html(data.top_followers[i].no);
+        }
     },
 
     // ////////////////////////////////////////////////////////////////////////////
@@ -55,30 +69,52 @@ var DashboardFrame = {
 
     // ////////////////////////////////////////////////////////////////////////////
 
-    //    paintComments : function(postID, comments){
-    //
-    //        var txt = "";
-    //
-    //        txt += "<div class='subframebox'>";
-    //        txt += "    <span class='title'>Settings</span>";
-    //        txt += "</div>"
-    //
-    //        $('#apollo_site_settings_content').html(txt);
-    //    },
+    m_comments : '',
 
-    paintPendingComments : function(postID, comments){
-        
+    gotComments : function(postID, comments){
+
+        // Force the size, so it scrolls properly - but do this  only once
+        var h = $('#apollo_site_comments_wrapper').height() - $('#apollo_site_comments_wrapper .title').height() - 4;
+        $('#apollo_site_comments').innerHeight(h);
+
+        DashboardFrame.m_comments = comments;
+        DashboardFrame.paintComments(comments);
+    },
+
+    // ////////////////////////////////////////////////////////////////////////////
+
+    /** What typs of comments to display, 'Pending','Approved','Trash','Spam' */
+    m_commentsMode : 'Pending',
+
+    /**
+     * Update what comments we should display
+     */
+    showComments : function(status){
+        $('.subFrameCommand').removeClass('selected');
+        $('#showComments'+status).addClass('selected');
+        DashboardFrame.m_commentsMode = status;
+        DashboardFrame.paintComments();
+    },
+    
+    // ////////////////////////////////////////////////////////////////////////
+
+    paintComments : function(){
+
         var txt = "";
-
+        if (!DashboardFrame.m_comments || DashboardFrame.m_comments == undefined){
+            return;
+        }
+        
+        var comments = DashboardFrame.m_comments;
+        
         for (var i=0; i<comments.length; i++){
-            if (comments[i].status == 'Pending'){
+            if (DashboardFrame.m_commentsMode == 'All' || comments[i].status == DashboardFrame.m_commentsMode){
                 txt += DashboardFrame.getCommentHTML(comments[i]);
             }
         }
 
         $('#apollo_site_comments').html(txt);
-        //$('#apollo_site_comments').height($('#MainContent').height()/2);
-        $('#apollo_site_comments').height( ($(window).height()-$('#menu_container').height())/2);
+        
     },
 
     // ////////////////////////////////////////////////////////////////////////
@@ -91,20 +127,20 @@ var DashboardFrame = {
         // For formats, see http://www.opengroup.org/onlinepubs/007908799/xsh/strftime.html
         var dateStr = dt.toLocaleFormat("%I:%M%p, %a, %b %e, %Y");
 
-        var classStr = "";
+        var classStr = "pending_comment";
         switch (commentObj.status){
-            case 'Pending':
-                classStr = "pending_comment";
-                break;
+//            case 'Pending':
+//                classStr = "pending_comment";
+//                break;
+            case 'Spam':
             case 'Trash':
                 classStr = "trashed_comment";
                 break;
-            case 'Spam':
-                classStr = "spam_comment";
-                break;
-            case 'Approved':
-                classStr = "approved_comment";
-                break;
+//                classStr = "spam_comment";
+//                break;
+//            case 'Approved':
+//                classStr = "approved_comment";
+//                break;
         }
 
         var post = DataStore.getPost(commentObj.post_id);
@@ -117,15 +153,17 @@ var DashboardFrame = {
         txt += "    <div class='commentTitle'>";
         txt += "        By <span class='commentName'>" + commentObj.name + "</span> on <span class='commentDate'>" + dateStr + "</span>";
 
-//        if (commentObj.status != 'Spam' && commentObj.status != 'PossibleSpam'){
+        if (commentObj.status != 'Spam'){
             txt += "    <a href='#' class='commentEdit' onclick=\"DashboardFrame.spamComment("+id+")\">spam</a>";
-//        }
-        
-        if (commentObj.status == 'Trash'){
-            txt += "    <a href='#' class='commentEdit' onclick=\"DashboardFrame.undeleteComment("+id+")\">undelete</a>";
         }
-        else {
-            txt += "    <a href='#' class='commentEdit' onclick=\"DashboardFrame.deleteComment("+id+")\">delete</a>";
+
+        if (commentObj.status != 'Spam'){
+            if (commentObj.status == 'Trash'){
+                txt += "    <a href='#' class='commentEdit' onclick=\"DashboardFrame.undeleteComment("+id+")\">undelete</a>";
+            }
+            else {
+                txt += "    <a href='#' class='commentEdit' onclick=\"DashboardFrame.deleteComment("+id+")\">delete</a>";
+            }
         }
 
         if (commentObj.status == 'Pending'){
@@ -141,6 +179,8 @@ var DashboardFrame = {
 
         return txt;
     },
+
+    // ////////////////////////////////////////////////////////////////////////////
 
     spamComment : function(comment_id){
         MediaAPI.updateCommentStatus(DataStore.m_siteID, comment_id, 'Spam', DashboardFrame.onCommentUpdate);

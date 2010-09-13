@@ -84,7 +84,7 @@ var CommentsEditDialog = {
 
         comments = CommentsEditDialog.m_comments;
 
-        // 'Pending','Approved','Trash','Spam','PossibleSpam'
+        // 'Pending','Approved','Trash','Spam'
 
         var noPending = 0;
         var noTrashed = 0;

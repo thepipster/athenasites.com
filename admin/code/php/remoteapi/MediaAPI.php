@@ -37,6 +37,11 @@ switch ($cmd) {
         getImages($site_id);
         break;
 
+    case "getStats":
+        getStats($site_id);
+        break;
+
+
     // POSTS /////////////////////////////////////////////////////////////////////////
 
     case "deletePost":
@@ -754,6 +759,35 @@ function addFolder($site_id, $folder_name) {
     }
 
     CommandHelper::sendMessage($msg);
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Get the stats for the given site
+ * @param <type> $site_id
+ */
+function getStats($site_id){
+
+    $disc_usage = du(SecurityUtils::getMediaFolder($site_id)) + du(SecurityUtils::getSitesFolder($site_id));
+    Logger::debug($disc_usage);
+    
+    $msg['getStats'] = "deleteFolder";
+    $msg['result'] = 'ok';
+    $msg['data'] = array('disc_usage' => $disc_usage);
+    CommandHelper::sendMessage($msg);
+
+}
+
+/**
+* Call the 'du' command and parse its response
+*/
+function du( $dir )
+{
+    $res = `du -sk $dir`;             // Unix command
+    preg_match( '/\d+/', $res, $KB ); // Parse result
+    $MB = round( $KB[0] / 1024, 2 );  // From kilobytes to megabytes
+    return $MB;
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////

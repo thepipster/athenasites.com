@@ -26,6 +26,9 @@ var ssMain = {
         // Paint the custom wyswig editors
         ssMain.paintOpenWYSIWYG();
 
+        // Set the sizes correctly...
+        //ssMain.onResizeComplete();
+
         // Initialize the remote API's
         SystemAPI.init();
         MediaAPI.init();
@@ -88,6 +91,14 @@ var ssMain = {
     isResizing : false,
 
     onResizeComplete : function(){
+
+//        var h = $(window).height() - $('#menu_container').height()-35;
+//        var w = $(window).width() - $('#SideBar').width() - 20;
+//        //var ht = $('#mainContentTable').height() - 40;
+//
+//        $('.ViewFrame').height(h);
+//        $('.ViewFrame').width(w);
+        
         //ssMain.init();
         //ssMain.isResizing = false;
         //window.location = "main.php?site_id=" + DataStore.m_siteID;
@@ -220,7 +231,8 @@ var ssMain = {
     paintOpenWYSIWYG : function(){
 
         //var ht = $('#PostsFrame').innerHeight();
-        var ht = $(window).height()-80;
+        //var ht = $(window).height()-100;
+        var ht = $('.ViewFrame').height() - 40;
 
         var groupsObj = [
             ["grpPage", "Page & View", ["FullScreen", "XHTMLSource", "Search", "BRK", "Undo", "Redo", "SpellCheck", "RemoveFormat"]],
@@ -241,6 +253,7 @@ var ssMain = {
         oUtil.initializeEditor("apolloContentEditor", {
             width:"100%",
             height:ht+"px",
+//            height:"100%",
             btnSpellCheck:true,
             useTagSelector:false,
             toolbarMode: 2,
