@@ -23,7 +23,7 @@
 #DashboardFrame .commentWrapper {
     margin: 10px;
     background-color: #97a8c8;
-    border: 1px solid #74829b;
+    border: 1px solid #74829b; 
 }
 
 #DashboardFrame .commentSummary {
@@ -79,24 +79,24 @@
 
 /** Followers table .......................... */
 
-#followerTable {
+.statsTable {
     width: 95%;
     padding-top: 10px;
 }
 
-#followerTable .head {
+.statsTable .head {
     background-color: white;
     height: 20px;
     padding-top: 3px;
     padding-bottom: 3px;
 }
 
-#followerTable .even {
+.statsTable .even {
     background-color: #d0d6e6;
     height: 20px;
 }
 
-#followerTable .odd {
+.statsTable .odd {
     background-color: #bec7d6;
     height: 20px;
 }

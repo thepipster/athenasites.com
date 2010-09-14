@@ -31,52 +31,6 @@ var FilesFrame = {
 
 	fullRepaint : function(){
 
-		var txt = "";
-			
-		txt += "<div id='FilesFrameContent' align='left'>";
-
-		txt += "<table border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>";
-
-		txt += "<tr valign='top'>";
-
-		
-		txt += "	<td class='frameContents'>";
-		txt += "        <span class='frameTitle'>Images</span>";
-		txt += "        <div id='apollo_folder_contents'></div>";
-		txt += "	</td>";
-		
-		// Edit images frame...........
-							
-		txt += "	<td id='imageEditContent' style='height:100%; padding:5px'>";																
-		txt += "		<div class='subframebox' style='height:100%; width:500px;'>";								
-		txt += "			<span class='title'>Edit Image</span>";																		
-		txt += "			<div id='imageInfoContent'>";
-		txt += "			</div>";					
-		txt += "		</div>";														
-		txt += "	</td>";
-
-		// File uploader frame...........
-
-		txt += "	<td id='flashUploderContent' style='height:100%; padding:5px'>";																
-		txt += "		<div class='subframebox' style='height:100%;'>";								
-		txt += "			<span class='title'>Upload Files</span>";													
-		txt += "			<div class='uploadControls'>";
-		txt += "				<span id='flashUploadButton'></span>";
-		txt += "				<button id='flashUploadCancelButton' onclick='swfu.cancelQueue();' disabled='disabled'>Cancel</button>";
-		txt += "			</div>";									
-		txt += "			<div class='uploadProgress' id='flashUploaderProgress'>";
-		txt += "			</div>";					
-		txt += "		</div>";														
-		txt += "	</td>";
-
-		txt += "</tr>";
-
-		txt += "</table>";
-	
-		txt += "</div>"					
-							
-		$('#FilesFrame').html(txt);
-
 		FilesFrame.paintUploader();		
 		FilesFrame.paintImages('#apollo_folder_contents');
 		FilesFrame.onShowUploader();

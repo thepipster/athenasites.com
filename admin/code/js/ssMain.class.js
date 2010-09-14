@@ -22,12 +22,12 @@ var ssMain = {
     // ////////////////////////////////////////////////////////////////////////
 
     init : function(currentSiteID){
-        
+                
+        // Set the sizes correctly...
+        ssMain.onResizeComplete();
+
         // Paint the custom wyswig editors
         ssMain.paintOpenWYSIWYG();
-
-        // Set the sizes correctly...
-        //ssMain.onResizeComplete();
 
         // Initialize the remote API's
         SystemAPI.init();
@@ -91,6 +91,9 @@ var ssMain = {
     isResizing : false,
 
     onResizeComplete : function(){
+
+        $('.ViewFrame').height($(window).height()- $('#menu_container').height()-30);
+        $('.subframebox').height( $('.ViewFrame').height() - 30);
 
 //        var h = $(window).height() - $('#menu_container').height()-35;
 //        var w = $(window).width() - $('#SideBar').width() - 20;
@@ -230,8 +233,6 @@ var ssMain = {
 
     paintOpenWYSIWYG : function(){
 
-        //var ht = $('#PostsFrame').innerHeight();
-        //var ht = $(window).height()-100;
         var ht = $('.ViewFrame').height() - 40;
 
         var groupsObj = [

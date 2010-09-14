@@ -782,7 +782,7 @@ function addFolder($site_id, $folder_name) {
 
 /**
  * Get the stats summary for the given site
- * @param <type> $site_id
+ * @param int $site_id
  */
 function getStats($site_id){
 

@@ -59,6 +59,46 @@ var MediaAPI = {
     },
 
     // ////////////////////////////////////////////////////////////////////////
+
+    /**
+    * Get the list of folders and media for this site
+    */
+    getStats : function(siteID, callback){
+
+        AthenaDialog.showLoading("Loading stats data");
+
+        var paras = {
+            cmd : 'getStats',
+            site_id: siteID
+        };
+
+        $.ajax({
+            url: MediaAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: function(ret){
+                MediaAPI.onGotStats(ret, callback);
+            }
+        });
+
+    },
+
+    /**
+    * Check the response from the server, and load data if login is good
+    */
+    onGotStats : function(ret, callback){
+
+        AthenaDialog.clearLoading();
+
+        if (ret.result == 'ok'){
+            callback(ret.data.disc_usage, ret.data.page_views, ret.data.crawler_views);
+        }
+        else {
+            AthenaDialog.showAjaxError(ret);
+        }
+    },
+
+    // ////////////////////////////////////////////////////////////////////////
 	
     /**
     * Get the list of folders for this site

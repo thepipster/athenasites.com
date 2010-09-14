@@ -5,27 +5,97 @@
 */
 var DashboardFrame = {
 
+	/** What we're showing in the snap shot tab */
+    m_snapshotMode : 'traffic',
+
+    /** What typs of comments to display, 'Pending','Approved','Trash','Spam' */
+    m_commentsMode : 'Pending',
+
+	/** Comments data */
+    m_comments : '',
+
+	/** Summary data */
+    m_summaryData : '',
+
+	/** Stats data */
+    m_crawlerViews : '',
+    m_pageViews : '',
+    m_discUsage : '',
+    
+    m_painted : false,
+
+    // ////////////////////////////////////////////////////////////////////////////
+
     init : function(){
     },
 	
     // ////////////////////////////////////////////////////////////////////////////
 	
     repaint : function(){
-
-        BlogAPI.getComments(DataStore.m_siteID, 0, DashboardFrame.gotComments);
-        BlogAPI.getSummary(DataStore.m_siteID, DashboardFrame.paintSummary);
-
-        //DashboardFrame.paintTools();
-        DashboardFrame.paintSettings();
+    	if (DashboardFrame.m_painted){
+    		DashboardFrame.paintSnapshotTab();
+    	}
+    	else {
+			$('#apollo_followers_summary').hide();
+			$('#apollo_site_stats_summary').hide();
+	        BlogAPI.getComments(DataStore.m_siteID, 0, DashboardFrame.gotComments);
+	        BlogAPI.getSummary(DataStore.m_siteID, DashboardFrame.gotSummary);
+	        DashboardFrame.m_painted = true;
+    	}
     },
 
     // ////////////////////////////////////////////////////////////////////////////
 
-    /**
-     * Paint the blog summary information
-     */
-    paintSummary : function(data){
+    gotSummary : function(data){
+    	DashboardFrame.m_summaryData = data;
+        MediaAPI.getStats(DataStore.m_siteID, DashboardFrame.gotStats);
+    },
+    
+    // ////////////////////////////////////////////////////////////////////////////
 
+    gotStats : function(disc_usage, page_views, crawler_views){
+    	DashboardFrame.m_discUsage = disc_usage;
+    	DashboardFrame.m_pageViews = page_views;
+    	DashboardFrame.m_crawlerViews = crawler_views;
+		DashboardFrame.paintSnapshotTab();
+    },
+
+    // ////////////////////////////////////////////////////////////////////////////
+
+	paintSnapshotTab : function(){
+		
+    	if (DashboardFrame.m_snapshotMode == 'traffic'){
+			$('#apollo_followers_summary').hide();
+			$('#apollo_site_stats_summary').show();
+    		DashboardFrame.paintStats();
+    	}
+    	else {
+			$('#apollo_followers_summary').show();
+			$('#apollo_site_stats_summary').hide();
+    		DashboardFrame.paintFollowers();
+    	}
+	},
+
+    // ////////////////////////////////////////////////////////////////////////////
+
+	showTraffic : function(){
+		DashboardFrame.m_snapshotMode = 'traffic';
+		DashboardFrame.paintSnapshotTab();
+	},
+	
+	showFollowers : function(){
+		DashboardFrame.m_snapshotMode = 'followers';
+		DashboardFrame.paintSnapshotTab();
+	},
+		
+    // ////////////////////////////////////////////////////////////////////////////
+
+	m_discUsePC : 0,
+	
+    paintStats : function(){        
+
+		var data = DashboardFrame.m_summaryData;
+		
         $('#no_comments_approved').html( data.comments_approved);
         $('#no_comments_pending').html( data.comments_pending);
         $('#no_comments_spam').html( data.comments_spam);
@@ -36,55 +106,93 @@ var DashboardFrame = {
         $('#no_catgeories').html( data.categories);
         $('#no_tags').html( data.tags);
         $('#no_followers').html( data.no_followers);
+            
+        $('#disc_usage').html(DashboardFrame.m_discUsage + "MB");
+            
+        var maxDisc = defines.max_hdd;
+        DashboardFrame.m_discUsePC = 100 * DashboardFrame.m_discUsage / maxDisc  
+        $("#disc_usage_bar").height(15);
+        $("#disc_usage_bar").progressbar({ value: 0 });	
+		AthenaDialog.setProgressBarColorMap("#disc_usage_bar", 0, 100, 'heat');
+		
+		DashboardFrame.animateDU();	            
+            
+        StatViewer.paintCrawlerGraph("#apollo_crawler_graph_small", DashboardFrame.m_crawlerViews);
+        StatViewer.paintStatGraph("#apollo_stats_graph_small", DashboardFrame.m_pageViews);        
+    },
+    
 
-        if (!data.top_followers || data.top_followers == undefined){
+	tempVal : 0,
+	animateDU : function(){
+		DashboardFrame.tempVal += 1;
+		$("#disc_usage_bar").progressbar({ value: DashboardFrame.tempVal});
+		if (DashboardFrame.tempVal < DashboardFrame.m_discUsePC){
+			setTimeout("DashboardFrame.animateDU()", 10);
+		}
+		else {
+			$("#disc_usage_bar").progressbar({ value: DashboardFrame.m_discUsePC});
+		}
+	},
+		    
+    // ////////////////////////////////////////////////////////////////////////////
+                
+    /**
+     * Paint the blog summary information
+     */
+    paintFollowers : function(){
+
+		var data = DashboardFrame.m_summaryData;
+
+        if (!data.top_followers || data.top_followers == undefined || data.top_followers.length == 0){
             return;
         }
+                
+        // Paint the top followers...
         
-        for (var i=0; i<data.top_followers.length; i++){
-            $('#follower'+i+'name').html(data.top_followers[i].name);
-            if (data.top_followers[i].email == ""){
-                $('#follower'+i+'email').html("(unknown)");
-            }
-            else {
-                $('#follower'+i+'email').html(data.top_followers[i].email);
-            }
-            $('#follower'+i+'activity').html(data.top_followers[i].last_activity);
-            $('#follower'+i+'comments').html(data.top_followers[i].no);
-        }
-    },
-
-    // ////////////////////////////////////////////////////////////////////////////
-
-    paintSettings : function(){
-		
         var txt = "";
-		
-        txt += "<div class='subframebox'>";
-        txt += "    <span class='title'>Settings</span>";
-        txt += "</div>"
-		
-        $('#apollo_site_settings_content').html(txt);
+        txt += '<table class="statsTable"  border="0" cellspacing="2" cellpadding="3">';
+        txt += '<thead class="head" align="left">';
+        txt += '<th>#</th><th>Commentator</th><th>Last Activity</th><th>No Comments</th>';
+        txt += '</thead>';
+
+        for (var i=0; i<data.top_followers.length; i++){
+
+            var dt = new Date(data.top_followers[i].last_activity);
+            var dateStr = dateFormat(dt, "ddd, mmm dS yyyy");
+
+            var namelink = data.top_followers[i].name;
+            if (data.top_followers[i].url != undefined){
+                namelink = "<a href='"+data.top_followers[i].url+"'>"+data.top_followers[i].name+"</a>";
+            }
+            
+            var className = 'odd';
+            if (i % 2) className = 'even';
+            
+            txt += '<tr align="left" class="'+className+'">';
+            txt += '    <td>'+(i+1)+'</td>';
+            txt += '    <td class="commentName" id="follower0name">'+namelink+'</td>';
+            txt += '    <td class="commentDate" >'+dateStr+'</td>';
+            txt += '    <td>'+data.top_followers[i].no+'</td>';
+            txt += '</tr>';
+        }
+
+
+        txt += '</table>';
+        $('#apollo_followers_summary').html(txt);
+//        $('#apollo_followers_sumary').removeClass("scroll-pane");
+//        $('#apollo_followers_sumary').addClass("scroll-pane");
+//        $('#apollo_followers_sumary').jScrollPane();
+
     },
 
     // ////////////////////////////////////////////////////////////////////////////
-
-    m_comments : '',
 
     gotComments : function(postID, comments){
-
-        // Force the size, so it scrolls properly - but do this  only once
-        var h = $('#apollo_site_comments_wrapper').height() - $('#apollo_site_comments_wrapper .title').height() - 4;
-        $('#apollo_site_comments').innerHeight(h);
-
         DashboardFrame.m_comments = comments;
         DashboardFrame.paintComments(comments);
     },
 
     // ////////////////////////////////////////////////////////////////////////////
-
-    /** What typs of comments to display, 'Pending','Approved','Trash','Spam' */
-    m_commentsMode : 'Pending',
 
     /**
      * Update what comments we should display
@@ -101,7 +209,8 @@ var DashboardFrame = {
     paintComments : function(){
 
         var txt = "";
-        if (!DashboardFrame.m_comments || DashboardFrame.m_comments == undefined){
+        if (!DashboardFrame.m_comments || DashboardFrame.m_comments == undefined || DashboardFrame.m_comments.length == 0){
+        	$('#apollo_site_comments').html("<div align='center'><p>I'm sorry, you don't have any comments yet</p></div>");
             return;
         }
         
@@ -114,6 +223,11 @@ var DashboardFrame = {
         }
 
         $('#apollo_site_comments').html(txt);
+//        $('#apollo_site_comments').removeClass("scroll-pane");
+//        $('#apollo_site_comments').addClass("scroll-pane");
+//        $('#apollo_site_comments').jScrollPane();
+//        $('#apollo_site_comments_wrapper').css('margin-right', 0);
+//        $('#apollo_site_comments_wrapper').css('padding-right', 0);
         
     },
 
@@ -124,8 +238,7 @@ var DashboardFrame = {
         var txt = "";
         var id = commentObj.id;
         var dt = new Date(commentObj.created);
-        // For formats, see http://www.opengroup.org/onlinepubs/007908799/xsh/strftime.html
-        var dateStr = dt.toLocaleFormat("%I:%M%p, %a, %b %e, %Y");
+        var dateStr = dateFormat(dt, "ddd, mmm dS yyyy, h:MM:ss TT");
 
         var classStr = "pending_comment";
         switch (commentObj.status){
@@ -211,25 +324,6 @@ var DashboardFrame = {
 
     onCommentUpdate : function(commentID, newStatus){
         DashboardFrame.repaint();
-    },
-
-    // ////////////////////////////////////////////////////////////////////////////
-	
-    paintTools : function(){
-		
-        var txt = "";
-		
-        txt += "<div class='subframebox'>";
-        txt += "    <span class='title'>Tools</span>";
-        txt += "    <fieldset>";
-        txt += "    <legend>Import Blog Posts</legend>";
-        txt += "    <button class='basic_button' onclick='WordpressImporter.show()'>Wordpress</button><br/>";
-        txt += "    <button class='basic_button' onclick=''>Blogger</button><br/>";
-        txt += "    <button class='basic_button' onclick='LiveJournalImporter.show()'>Livejournal</button><br/>";
-        txt += "    </fieldset>";
-        txt += "</div>"
-		
-        $('#apollo_site_tools_content').html(txt);
     }
 
 }

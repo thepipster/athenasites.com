@@ -56,6 +56,13 @@ function getSummary($site_id){
     $msg['cmd'] = 'getSummary';
     $msg['result'] = 'ok';
 
+    $followers = SiteFollowersTable::getTopNFollowers($site_id, 25);
+    $folower_list = array();
+    foreach($followers as $follower){
+        $follower['last_activity'] = date("m/d/Y H:i", strtotime($follower['last_activity'])); // Convert to JS compatible date
+        $folower_list[] = $follower;
+    }
+
     $msg['data'] = array(
         'comments_approved' => DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_%d_Comments WHERE status = 'Approved'", $site_id)),
         'comments_pending' => DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_%d_Comments WHERE status = 'Pending'", $site_id)),
@@ -67,7 +74,7 @@ function getSummary($site_id){
         'categories' => DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_%d_PostCategories", $site_id)),
         'tags' => DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_%d_PostTags", $site_id)),
         'no_followers' => SiteFollowersTable::getNoFollowers($site_id),
-        'followers' => SiteFollowersTable::getTopNFollowers($site_id, 10)
+        'followers' => $folower_list
     );
 
     CommandHelper::sendMessage($msg);

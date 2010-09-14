@@ -1,0 +1,12 @@
+/* Stats Graphs ///////////////////////////////////////////// */
+
+.apolloStatsGraphWrapper {
+	border-color: #d0d6e6;
+	border-width: 2px;
+	border-style: solid;
+	background-color: #e8eded;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}

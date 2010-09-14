@@ -22,5 +22,6 @@ var defines = {
 	root_url: 				admin_base_url,
 	code_url: 				code_url,
 	user_files_root_url: 	base_url + "user_files/",
-	domain:                 "athenasites.com"
+	domain:                 "athenasites.com",
+	max_hdd:				1000 // 1 GB
 };

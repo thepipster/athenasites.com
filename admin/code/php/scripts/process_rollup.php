@@ -111,9 +111,8 @@ foreach ($site_list AS $site) {
                 // Get keywords
                 $key_str = getKeywordString($site_id, $date_from, $date_end);
 
-                DatabaseManager::insert("INSERT INTO stats_{$site_id}_RollupPageViews
-                    (rollup_date, page_views, unique_visitors, page_title, keywords)
-                VALUES ('$day_date', $page_views, $unique_views, '$page_title', '$key_str')");
+                DatabaseManager::insert("INSERT INTO stats_{$site_id}_RollupPageViews (rollup_date, page_views, unique_visitors, page_title, keywords)
+                		VALUES ('$day_date', $page_views, $unique_views, '$page_title', '$key_str')");
             }
 
         }
