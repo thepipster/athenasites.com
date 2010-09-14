@@ -178,7 +178,8 @@ switch ($cmd) {
         $template = CommandHelper::getPara('template_id', true, CommandHelper::$PARA_TYPE_STRING);
         $order = CommandHelper::getPara('order', true, CommandHelper::$PARA_TYPE_NUMERIC);
         $ishome = CommandHelper::getPara('ishome', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $template, $slug, $order, $ishome);
+        $description = CommandHelper::getPara('desc', true, CommandHelper::$PARA_TYPE_STRING);        
+        updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $template, $slug, $order, $ishome, $description);
         break;
 
     case "addPage":
@@ -190,7 +191,7 @@ switch ($cmd) {
         $template = CommandHelper::getPara('template_id', true, CommandHelper::$PARA_TYPE_STRING);
         $order = CommandHelper::getPara('order', true, CommandHelper::$PARA_TYPE_NUMERIC);
         $ishome = CommandHelper::getPara('ishome', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        addPage($site_id, $title, $parent_page_id, $content, $status, $template, $slug, $order, $ishome);
+        addPage($site_id, $title, $parent_page_id, $content, $status, $template, $slug, $order, $ishome, $desc);
         break;
 
     case "addFolder":
@@ -653,7 +654,7 @@ function deletePage($site_id, $page_id) {
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $tamplate_name, $slug, $order, $ishome) {
+function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $tamplate_name, $slug, $order, $ishome, $description) {
 
     //Logger::debug("updatePage(page_id=$page_id, site_id=$site_id, title=$title, parent_page_id=$parent_page_id, content=$content, status=$status, tamplate_name=$tamplate_name, slug=$slug, path=$path)");
 
@@ -665,7 +666,7 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
     $safe_content = str_ireplace($tags, $replace, $content);
     $safe_title = str_ireplace($tags, $replace, $title);
 
-    PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $safe_title, $tamplate_name, StringUtils::encodeSlug($title), $path, $order, $ishome);
+    PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $safe_title, $tamplate_name, StringUtils::encodeSlug($title), $path, $order, $ishome, $description);
 
     $page = PagesTable::getPage($site_id, $page_id);
     if (isset($page)) {

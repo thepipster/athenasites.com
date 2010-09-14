@@ -16,6 +16,7 @@ class PageManager {
     public static $page_id;
     public static $page_parent_id;
     public static $page_title;
+    public static $page_desc;
     public static $theme_id;
     public static $theme_file_root;
     public static $template_filename;
@@ -123,6 +124,7 @@ class PageManager {
         self::$page_id = $page['id'];
         self::$page_parent_id = $page['parent_page_id'];
         self::$page_title = $page['title'];
+        self::$page_desc = $page['description'];
         self::$media_root_url = self::$url_root . "/user_files/" . self::$site_id . "/";
         self::$template_filename = $page['template'];
 
@@ -249,6 +251,17 @@ class PageManager {
             return FolderTable::getMedia(self::$site_id, $media_id);
         }
         return null;
+    }
+
+    // ///////////////////////////////////////////////////////////////////////////////////////
+
+    public static function getPageTitle() {
+	
+		if (isset(self::$page_desc) && self::$page_desc != ""){
+			return self::$page_desc;
+		}
+		
+		return self::$page_title;
     }
 
     // ///////////////////////////////////////////////////////////////////////////////////////

@@ -499,7 +499,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                         </select>
                                                     </span>
                                                 </div>
-
+                                                
                                                 <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Last Edit:</span>
                                                     <span class='pageData' id='postLastEdit'></span>
@@ -596,6 +596,11 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                     </span>
                                                 </div>
 
+                                                <div class='pageInfoLine'>
+                                                    <span class='pageLabel'>Description:</span>
+                                                    <span class='pageData'><input id='pageDesc' type='text' value=''/></span>
+                                                </div>
+                                                
                                                 <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Last Edit:</span>
                                                     <span class='pageData' id='pageLastEdit'></span>

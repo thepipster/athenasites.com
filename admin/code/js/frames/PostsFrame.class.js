@@ -218,7 +218,7 @@ var PostsFrame = {
     onSavePost : function(){
 						
         //var content = CKEDITOR.instances.postContentEditor.getData();
-        var content = PostsFrame.m_editor.getXHTMLBody();
+        var content = oUtil.obj.getXHTMLBody();
 
         var title = $('#postTitle').val();
         var status = $('#postStatusSelector').val();

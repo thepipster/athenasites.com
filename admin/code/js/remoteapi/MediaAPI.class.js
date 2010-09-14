@@ -505,7 +505,7 @@ var MediaAPI = {
     //
     // ////////////////////////////////////////////////////////////////////////
 
-    updatePage : function(siteID, pageID, pageTitle, pageContent, pageStatus, templateName, parentPageID, pageSlug, pageOrder, isHome, callback){
+    updatePage : function(siteID, pageID, pageTitle, pageContent, pageStatus, templateName, parentPageID, pageSlug, pageOrder, isHome, description, callback){
 		
         AthenaDialog.showLoading("Updating page");
 		
@@ -520,7 +520,8 @@ var MediaAPI = {
             parent_page_id: parentPageID,
             slug: pageSlug,
             ishome: isHome,
-            order: pageOrder
+            order: pageOrder,
+            desc: description
         };
 				
         $.ajax({
