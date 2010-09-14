@@ -66,7 +66,8 @@ var AthenaDialog = {
     /**
 	* Display a info message to the user
 	*/
-    message : function(msg){
+    message : function(msg, msgTitle){
+    
         if (msgTitle == undefined){
             msgTitle = "Message";
         }

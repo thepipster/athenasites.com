@@ -34,7 +34,7 @@ var WordpressImporter = {
 //            height:280,
             resizable:false,
             buttons: {
-                Cancel: function() {
+                "Done": function() {
                     $(this).dialog('close');
                 }
             },
@@ -43,6 +43,7 @@ var WordpressImporter = {
         // Progress bar.....
 		
         $("#progressBar").progressbar({ value: 0 });
+		AthenaDialog.setProgressBarColorMap("#progressBar", 0, 100, 'roygbiv');
 		
         // Paint flash object....
 			
@@ -263,7 +264,7 @@ var WordpressImporter = {
 
     onComplete : function(){
         //$('#apollo_dialog').dialog('destroy');
-        $('#status').html("<span style='color:green'>Complete!</span>");
+        $('#status').html("<span style='color:green'>Complete! Refresh the browser to see the changes.</span>");
     },
 		
     // ////////////////////////////////////////////////////////////////////////
@@ -274,6 +275,7 @@ var WordpressImporter = {
 
     onError : function(msg){
         $('#status').html("<span style='color:red'>"+msg+"</span>");
+        Message.error(msg);
     }
 	
     // ////////////////////////////////////////////////////////////////////////

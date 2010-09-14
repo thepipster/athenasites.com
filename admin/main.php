@@ -317,7 +317,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                 <a href='#' id="showFollowers" class="subFrameCommand" onclick="DashboardFrame.showFollowers()">Top Commenters</a>
                                             </span>
                                             
-                                            <div id='apollo_site_stats_summary' class='frameContents' style='display:none'>
+                                            <div id='apollo_site_stats_summary' class='frameContents' style='display:none' align='center'>
                                             
 												<table class="statsTable" border="0" cellspacing="2" cellpadding="3">
 													

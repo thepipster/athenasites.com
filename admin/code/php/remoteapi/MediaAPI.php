@@ -41,6 +41,12 @@ switch ($cmd) {
         getStats($site_id);
         break;
 
+    case "getDetailedStats":
+        $no_days = CommandHelper::getPara('dys', false, CommandHelper::$PARA_TYPE_NUMERIC);
+        if (!isset($no_days)) $no_days = 30;
+        getDetailedStats($site_id, $no_days);
+        break;
+
     // POSTS /////////////////////////////////////////////////////////////////////////
 
     case "deletePost":
@@ -446,7 +452,14 @@ function importLiveJournal($site_id, $lj_user, $lj_password) {
     LiveJournalImporter::import($user_id, $site_id, $lj_user, $lj_password);
 
     $msg['cmd'] = "importLiveJournal";
-    $msg['result'] = 'ok';
+    
+    if (LiveJournalImporter::$errorCode != 0){
+	    $msg['result'] = 'false';
+	    $msg['data'] = LiveJournalImporter::$errorMessage;
+    }
+    else {
+	    $msg['result'] = 'ok';
+    }
 
     CommandHelper::sendMessage($msg);
 }
@@ -490,7 +503,6 @@ function updateCommentStatus($site_id, $comment_id, $status){
     // Get the current status, and determine if we need to
     // flag or unflag the author as a spammer
     $comment = CommentsTable::getComment($site_id, $comment_id);
-    Logger::dump($comment);
 
     $prev_status = $comment['status'];
     $follower_id = $comment['site_follower_id'];
@@ -826,6 +838,53 @@ function getStats($site_id){
     CommandHelper::sendMessage($msg);
 
 }
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Get the detailed stats for the given site
+ * @param int $site_id
+ */
+function getDetailedStats($site_id, $no_days){
+
+    // Get page views for the whole site for each day
+    $page_views = StatsRollupTables::getPageViewsRollup($site_id, $no_days);
+    $views = array();
+
+    if (isset($page_views)){
+        foreach($page_views as $view){
+            if ($view['page_title'] == 'all'){
+                $temp = array();
+                $temp['dt'] = $view['rollup_date'];
+                $temp['uv'] = $view['unique_visitors'];
+                $temp['pv'] = $view['page_views'];
+                $views[] = $temp;
+            }
+        }
+    }
+    
+    // Get the hits from search engines...
+    $page_views = StatsRollupTables::getCrawlerViewsLastNDays($site_id, $no_days);
+    $crawler_views = array();
+
+    if (isset($page_views)){
+        foreach($page_views as $view){
+            $temp = array();
+            $temp['dt'] = $view['rollup_date'];
+            $temp['crw'] = $view['crawler'];
+            $temp['pv'] = $view['hits'];
+            $crawler_views[] = $temp;
+        }
+    }
+
+    $msg['getStats'] = "getDetailedStats";
+    $msg['result'] = 'ok';
+    $msg['data'] = array('page_views' => $views, 'crawler_views' => $crawler_views);
+    CommandHelper::sendMessage($msg);
+
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
 
 /**
 * Call the 'du' command and parse its response

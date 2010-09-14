@@ -74,8 +74,8 @@ foreach ($site_list AS $site) {
 
         $all_unique_views = DatabaseManager::getVar("SELECT count(distinct(ip_long)) FROM stats_PageViews WHERE site_id = $site_id AND view_date > '$date_from' AND view_date <= '$date_end'");
 
-        DatabaseManager::insert("INSERT INTO stats_{$site_id}_RollupPageViews (rollup_date, page_views, unique_visitors, page_title, keywords)
-                            VALUES ('$day_date', $all_page_views, $all_unique_views, 'all', '')",
+        DatabaseManager::insert("INSERT INTO stats_{$site_id}_RollupPageViews (rollup_date, page_views, unique_visitors, page_title, keywords, page_id)
+                            VALUES ('$day_date', $all_page_views, $all_unique_views, 'all', '', 0)",
 
         //
         // Now get the stats per page
@@ -83,7 +83,7 @@ foreach ($site_list AS $site) {
         
         // Get the page views
 
-        $sql = "SELECT pages.title as title, count(distinct(ip_long)) as unique_views, count(site_id) as page_views, server_ip
+        $sql = "SELECT pages.title as title, views.page_id as page_id, count(distinct(ip_long)) as unique_views, count(site_id) as page_views, server_ip
             FROM stats_PageViews views
             INNER JOIN athena_{$site_id}_Pages pages
             WHERE views.site_id = $site_id
@@ -99,6 +99,7 @@ foreach ($site_list AS $site) {
             foreach ($data_list as $data) {
 
                 $page_title = $data['title'];
+                $page_id = $data['page_id'];
                 $unique_views = $data['unique_views'];
                 $page_views = $data['page_views'];
                 $server_ip = $data['server_ip'];
@@ -111,8 +112,8 @@ foreach ($site_list AS $site) {
                 // Get keywords
                 $key_str = getKeywordString($site_id, $date_from, $date_end);
 
-                DatabaseManager::insert("INSERT INTO stats_{$site_id}_RollupPageViews (rollup_date, page_views, unique_visitors, page_title, keywords)
-                		VALUES ('$day_date', $page_views, $unique_views, '$page_title', '$key_str')");
+                DatabaseManager::insert("INSERT INTO stats_{$site_id}_RollupPageViews (rollup_date, page_views, unique_visitors, page_title, keywords, page_id)
+                		VALUES ('$day_date', $page_views, $unique_views, '$page_title', '$key_str', $page_id)");
             }
 
         }

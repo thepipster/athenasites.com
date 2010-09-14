@@ -79,11 +79,19 @@ var DashboardFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 
 	showTraffic : function(){
+	
+        $('.subFrameCommand').removeClass('selected');
+        $('#showTraffic').addClass('selected');
+	
 		DashboardFrame.m_snapshotMode = 'traffic';
 		DashboardFrame.paintSnapshotTab();
 	},
 	
 	showFollowers : function(){
+	
+        $('.subFrameCommand').removeClass('selected');
+        $('#showFollowers').addClass('selected');
+        
 		DashboardFrame.m_snapshotMode = 'followers';
 		DashboardFrame.paintSnapshotTab();
 	},
@@ -123,6 +131,7 @@ var DashboardFrame = {
     
 
 	tempVal : 0,
+	
 	animateDU : function(){
 		DashboardFrame.tempVal += 1;
 		$("#disc_usage_bar").progressbar({ value: DashboardFrame.tempVal});
@@ -323,7 +332,14 @@ var DashboardFrame = {
     },
 
     onCommentUpdate : function(commentID, newStatus){
-        DashboardFrame.repaint();
+    	
+    	for (var i=0; i<DashboardFrame.m_comments.length; i++){
+    		if (DashboardFrame.m_comments[i].id == commentID){
+    			DashboardFrame.m_comments[i].status = newStatus;
+		        DashboardFrame.paintComments();
+    		}
+    	}
+    	
     }
 
 }
