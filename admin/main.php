@@ -598,7 +598,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 
                                                 <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Description:</span>
-                                                    <span class='pageData'><input id='pageDesc' type='text' value=''/></span>
+                                                    <span class='pageData'><input id='pageDesc' title='If set, this will be used as the title in the browser' type='text' value=''/></span>
                                                 </div>
                                                 
                                                 <div class='pageInfoLine'>

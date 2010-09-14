@@ -365,6 +365,7 @@ var DataStore = {
                 DataStore.m_pageList[i].is_homepage = pageObj.is_homepage;
                 DataStore.m_pageList[i].is_blogpage = pageObj.is_blogpage;
                 DataStore.m_pageList[i].order = pageObj.page_order;
+                DataStore.m_pageList[i].description = pageObj.description;
 
                 return;
             }
@@ -417,6 +418,7 @@ var DataStore = {
         temp.is_homepage = pageObj.is_homepage;
         temp.is_blogpage = pageObj.is_blogpage;
         temp.order = pageObj.page_order;
+        temp.description = pageObj.description;
 
         DataStore.m_pageList.push(temp);
     },
