@@ -30,7 +30,7 @@ for ($i=1; $i<=5; $i++){
 Logger::debug("Creating user");
 
 $email = "mike@apollosites.com";
-$pass = "pants";
+$pass = "Ally.Dog!";
 $user_group = 1;
 $name = "Mike Pritchard";
 
@@ -73,4 +73,15 @@ $site_path = '';
 $site_theme = 6;
 
 SecurityUtils::createSite($user_id, $site_domain, $site_path, $site_theme);
+
+// Create Char
+
+Logger::debug("Creating user");
+
+$email = "charlotte@charlottegeary.com";
+$pass = "r00bies";
+$user_group = 2;
+$name = "Charlote Geary";
+
+$user_id = SecurityUtils::createUser($email, $pass, $user_group, $name);
 ?>

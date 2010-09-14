@@ -152,7 +152,7 @@ var DashboardFrame = {
         var txt = "";
         txt += '<table class="statsTable"  border="0" cellspacing="2" cellpadding="3">';
         txt += '<thead class="head" align="left">';
-        txt += '<th>#</th><th>Commentator</th><th>Last Activity</th><th>No Comments</th>';
+        txt += '<th>#</th><th>Commenter</th><th>Last Activity</th><th>No Comments</th>';
         txt += '</thead>';
 
         for (var i=0; i<data.top_followers.length; i++){
