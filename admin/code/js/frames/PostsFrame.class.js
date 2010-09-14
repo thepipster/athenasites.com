@@ -40,20 +40,25 @@ var PostsFrame = {
         $('#pageSettings').hide();
 
         oUtil.obj.css = DataStore.m_theme.cms_blog_css;
-        oUtil.obj.loadHTML(postObj.content);
         
-        //PostsFrame.oEdit.loadHTML(postObj.content);
-	
-        $('#pageTitle').val(postObj.title);
-        $('#postSlug').html(postObj.slug);
-        $('#postLastEdit').html(postObj.last_edit);
-        $('#postCreated').html(postObj.created);
+        if (postObj != undefined){
+        
+	        oUtil.obj.loadHTML(postObj.content);
+	        
+	        //PostsFrame.oEdit.loadHTML(postObj.content);
 		
-        $('#postStatusSelector').val(postObj.status);
-        //PostsFrame.refreshStatusSelectBox();
-				
-        PostsFrame.updatePostLink(postObj);
-        PostsFrame.updateTagsAndCategoris();
+	        $('#pageTitle').val(postObj.title);
+	        $('#postSlug').html(postObj.slug);
+	        $('#postLastEdit').html(postObj.last_edit);
+	        $('#postCreated').html(postObj.created);
+			
+	        $('#postStatusSelector').val(postObj.status);
+	        //PostsFrame.refreshStatusSelectBox();
+					
+	        PostsFrame.updatePostLink(postObj);
+	        
+	        PostsFrame.updateTagsAndCategoris();
+        }
 
     },
 
@@ -220,7 +225,7 @@ var PostsFrame = {
         //var content = CKEDITOR.instances.postContentEditor.getData();
         var content = oUtil.obj.getXHTMLBody();
 
-        var title = $('#postTitle').val();
+        var title = $('#pageTitle').val();
         var status = $('#postStatusSelector').val();
         var canComment = $('#postCanCommentSelector').val();
         var slug = AthenaUtils.encodeSlug(title);

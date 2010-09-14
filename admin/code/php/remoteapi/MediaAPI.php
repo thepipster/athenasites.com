@@ -43,7 +43,8 @@ switch ($cmd) {
 
     case "getDetailedStats":
         $no_days = CommandHelper::getPara('dys', false, CommandHelper::$PARA_TYPE_NUMERIC);
-        if (!isset($no_days)) $no_days = 30;
+        if (!isset($no_days))
+            $no_days = 30;
         getDetailedStats($site_id, $no_days);
         break;
 
@@ -178,7 +179,7 @@ switch ($cmd) {
         $template = CommandHelper::getPara('template_id', true, CommandHelper::$PARA_TYPE_STRING);
         $order = CommandHelper::getPara('order', true, CommandHelper::$PARA_TYPE_NUMERIC);
         $ishome = CommandHelper::getPara('ishome', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        $description = CommandHelper::getPara('desc', true, CommandHelper::$PARA_TYPE_STRING);        
+        $description = CommandHelper::getPara('desc', true, CommandHelper::$PARA_TYPE_STRING);
         updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $template, $slug, $order, $ishome, $description);
         break;
 
@@ -220,7 +221,13 @@ switch ($cmd) {
         $title = CommandHelper::getPara('title', true, CommandHelper::$PARA_TYPE_STRING);
         $desc = CommandHelper::getPara('desc', true, CommandHelper::$PARA_TYPE_STRING);
         $tags = CommandHelper::getPara('tags', true, CommandHelper::$PARA_TYPE_STRING);
-        saveMediaInfo($site_id, $title, $desc, $tags);
+        $media_id = CommandHelper::getPara('media_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+        updateMediaInfo($site_id, $media_id, $title, $desc, $tags);
+        break;
+
+    case "deleteMedia":
+        $media_id = CommandHelper::getPara('media_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+        deleteMedia($site_id, $media_id);
         break;
 
     // Para management..............
@@ -328,7 +335,7 @@ function getPostDetails($site_id, $post_id) {
     }
 
     //Logger::dump($post);
-    
+
     $msg['cmd'] = "getPostDetails";
     $msg['result'] = 'ok';
     $msg['data'] = array('post' => $post);
@@ -453,13 +460,12 @@ function importLiveJournal($site_id, $lj_user, $lj_password) {
     LiveJournalImporter::import($user_id, $site_id, $lj_user, $lj_password);
 
     $msg['cmd'] = "importLiveJournal";
-    
-    if (LiveJournalImporter::$errorCode != 0){
-	    $msg['result'] = 'false';
-	    $msg['data'] = LiveJournalImporter::$errorMessage;
-    }
-    else {
-	    $msg['result'] = 'ok';
+
+    if (LiveJournalImporter::$errorCode != 0) {
+        $msg['result'] = 'false';
+        $msg['data'] = LiveJournalImporter::$errorMessage;
+    } else {
+        $msg['result'] = 'ok';
     }
 
     CommandHelper::sendMessage($msg);
@@ -499,7 +505,7 @@ function importComments($site_id, $post_id, $comment_obj, $import_source) {
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function updateCommentStatus($site_id, $comment_id, $status){
+function updateCommentStatus($site_id, $comment_id, $status) {
 
     // Get the current status, and determine if we need to
     // flag or unflag the author as a spammer
@@ -508,12 +514,12 @@ function updateCommentStatus($site_id, $comment_id, $status){
     $prev_status = $comment['status'];
     $follower_id = $comment['site_follower_id'];
 
-    if ($prev_status != $status && $prev_status == 'Spam'){
+    if ($prev_status != $status && $prev_status == 'Spam') {
         // Mark the author as not a spammer
         SiteFollowersTable::unflagSpammer($follower_id);
     }
 
-    if ($prev_status != $status && $status == 'Spam'){
+    if ($prev_status != $status && $status == 'Spam') {
         // Mark the author as a spammer
         SiteFollowersTable::flagSpammer($follower_id);
     }
@@ -525,7 +531,6 @@ function updateCommentStatus($site_id, $comment_id, $status){
     $msg['data'] = array('comment_id' => $comment_id, 'status' => $status);
 
     CommandHelper::sendMessage($msg);
-
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////
@@ -797,7 +802,7 @@ function addFolder($site_id, $folder_name) {
  * Get the stats summary for the given site
  * @param int $site_id
  */
-function getStats($site_id){
+function getStats($site_id) {
 
     $disc_usage = du(SecurityUtils::getMediaFolder($site_id)) + du(SecurityUtils::getSitesFolder($site_id));
     Logger::debug($disc_usage);
@@ -806,9 +811,9 @@ function getStats($site_id){
     $page_views = StatsRollupTables::getAllPageViewsRollup($site_id, 30);
     $views = array();
 
-    if (isset($page_views)){
-        foreach($page_views as $view){
-            if ($view['page_title'] == 'all'){
+    if (isset($page_views)) {
+        foreach ($page_views as $view) {
+            if ($view['page_title'] == 'all') {
                 $temp = array();
                 $temp['dt'] = $view['rollup_date'];
                 $temp['uv'] = $view['unique_visitors'];
@@ -817,13 +822,13 @@ function getStats($site_id){
             }
         }
     }
-    
+
     // Get the hits from search engines
     $page_views = StatsRollupTables::getCrawlerViewsLastNDays($site_id, 30);
     $crawler_views = array();
 
-    if (isset($page_views)){
-        foreach($page_views as $view){
+    if (isset($page_views)) {
+        foreach ($page_views as $view) {
             $temp = array();
             $temp['dt'] = $view['rollup_date'];
             $temp['crw'] = $view['crawler'];
@@ -835,9 +840,8 @@ function getStats($site_id){
 
     $msg['getStats'] = "getStats";
     $msg['result'] = 'ok';
-    $msg['data'] = array('disc_usage' => $disc_usage."", 'page_views' => $views, 'crawler_views' => $crawler_views);
+    $msg['data'] = array('disc_usage' => $disc_usage . "", 'page_views' => $views, 'crawler_views' => $crawler_views);
     CommandHelper::sendMessage($msg);
-
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////
@@ -846,15 +850,15 @@ function getStats($site_id){
  * Get the detailed stats for the given site
  * @param int $site_id
  */
-function getDetailedStats($site_id, $no_days){
+function getDetailedStats($site_id, $no_days) {
 
     // Get page views for the whole site for each day
     $page_views = StatsRollupTables::getPageViewsRollup($site_id, $no_days);
     $views = array();
 
-    if (isset($page_views)){
-        foreach($page_views as $view){
-            if ($view['page_title'] == 'all'){
+    if (isset($page_views)) {
+        foreach ($page_views as $view) {
+            if ($view['page_title'] == 'all') {
                 $temp = array();
                 $temp['dt'] = $view['rollup_date'];
                 $temp['uv'] = $view['unique_visitors'];
@@ -863,13 +867,13 @@ function getDetailedStats($site_id, $no_days){
             }
         }
     }
-    
+
     // Get the hits from search engines...
     $page_views = StatsRollupTables::getCrawlerViewsLastNDays($site_id, $no_days);
     $crawler_views = array();
 
-    if (isset($page_views)){
-        foreach($page_views as $view){
+    if (isset($page_views)) {
+        foreach ($page_views as $view) {
             $temp = array();
             $temp['dt'] = $view['rollup_date'];
             $temp['crw'] = $view['crawler'];
@@ -882,20 +886,18 @@ function getDetailedStats($site_id, $no_days){
     $msg['result'] = 'ok';
     $msg['data'] = array('page_views' => $views, 'crawler_views' => $crawler_views);
     CommandHelper::sendMessage($msg);
-
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 
 /**
-* Call the 'du' command and parse its response
-*/
-function du( $dir )
-{
+ * Call the 'du' command and parse its response
+ */
+function du($dir) {
     $res = `du -sk $dir`;             // Unix command
-    preg_match( '/\d+/', $res, $KB ); // Parse result
-    if (isset($KB[0])){
-        $MB = round( $KB[0] / 1024, 2 );  // From kilobytes to megabytes
+    preg_match('/\d+/', $res, $KB); // Parse result
+    if (isset($KB[0])) {
+        $MB = round($KB[0] / 1024, 2);  // From kilobytes to megabytes
         return $MB;
     }
     return 0;
@@ -1007,13 +1009,42 @@ function getImages($site_id) {
 
 // //// ///////////////////////////////////////////////////////////////////////////////////////
 
-function saveMediaInfo($site_id, $title, $desc, $tags) {
+function updateMediaInfo($site_id, $media_id, $title, $desc, $csv_tags) {
 
     $msg = array();
     $msg['cmd'] = 'saveMediaInfo';
     $msg['result'] = 'ok';
-    $msg['data'] = '';
 
+    FolderTable::updateMedia($site_id, $media_id, $title, $desc, $csv_tags);
+
+    $media = FolderTable::getMedia($site_id, $media_id);
+    
+    $msg['data'] = $media;
+    CommandHelper::sendMessage($msg);
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function deleteMedia($site_id, $media_id) {
+
+    $msg = array();
+    $msg['cmd'] = 'deleteMedia';
+    $msg['result'] = 'ok';
+
+    $media = FolderTable::getMedia($site_id, $media_id);
+
+    // Phyiscally delete the file, and thumbnail if applicable
+    $path = SecurityUtils::getMediaFolder($site_id) . $media['filepath'] . $media['filename'];
+    unlink($path);
+
+    $path = SecurityUtils::getMediaFolder($site_id) . $media['filepath'] . $media['thumb_filename'];
+    unlink($path);
+
+    // Now remove from the database
+    FolderTable::removeMedia($media_id, $site_id);
+
+    $msg['data'] = array('media_id'=>$media_id);
+    
     CommandHelper::sendMessage($msg);
 }
 

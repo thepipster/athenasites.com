@@ -32,14 +32,14 @@ switch($cmd){
 		break;			
 
 	case "getStats":
-		getStats(); 
+		getSystemStats(); 
 		break;			
 		
 	// Check username and password	
 	case "checkUser":
 		$email = CommandHelper::getPara('em', true, CommandHelper::$PARA_TYPE_STRING);
 		$pass = CommandHelper::getPara('ps', true, CommandHelper::$PARA_TYPE_STRING);
-		checkUser($email, $pass); 
+		login($email, $pass); 
 		break;			
 
 	// Create username and password	
@@ -60,7 +60,7 @@ switch($cmd){
 // ///////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function getStats(){
+function getSystemStats(){
 	
 //	$query = "SELECT COUNT(id) AS no FROM athena_Sites UNION SELECT COUNT(id) FROM athena_Users UNION SELECT COUNT(id) FROM athena_Pages UNION SELECT COUNT(id) FROM athena_Posts";					
 
@@ -95,7 +95,7 @@ function logOut(){
 /**
 * Check a users credentials, log them in if they are correct
 */
-function checkUser($email, $plain_password){
+function login($email, $plain_password){
 
 
 	$msg['cmd'] = 'checkUser';

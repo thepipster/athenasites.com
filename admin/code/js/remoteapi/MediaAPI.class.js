@@ -90,6 +90,11 @@ var MediaAPI = {
 
         AthenaDialog.clearLoading();
 
+		if (!ret || ret == undefined){
+            callback(0);
+            return;
+		}
+		
         if (ret.result == 'ok'){
             callback(ret.data.disc_usage, ret.data.page_views, ret.data.crawler_views);
         }
@@ -786,15 +791,16 @@ var MediaAPI = {
     // ////////////////////////////////////////////////////////////////////////
 	
     /**
-	* Get the list of media for this site
-	*/	
-    saveMediaInfo : function(siteID, mediaTitle, mediaDesc, mediaTags, callback){
+     * Get the list of media for this site
+     */
+    updateMediaInfo : function(siteID, mediaID, mediaTitle, mediaDesc, mediaTags, callback){
 		
-        AthenaDialog.showLoading();
+        AthenaDialog.showLoading("Updating file");
 		
         var paras = {
             cmd : 'saveMediaInfo',
             site_id: siteID,
+            media_id: mediaID,
             title: mediaTitle,
             desc: mediaDesc,
             tags: mediaTags
@@ -804,28 +810,48 @@ var MediaAPI = {
             url: MediaAPI.m_url,
             dataType: "json",
             success: function(ret){
-                MediaAPI.onMediaInfoSaved(ret, callback);
+                MediaAPI.onGotMedia(ret, callback);
             },
             data: paras
         });
     },
-			
-    onMediaInfoSaved : function(ret, callback){
+
+    // ////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Delete the given media id
+     */
+    deleteMedia : function(siteID, mediaID, callback){
+
+        AthenaDialog.showLoading("Deleting file");
+
+        var paras = {
+            cmd : 'deleteMedia',
+            site_id: siteID,
+            media_id: mediaID
+        };
+
+        $.ajax({
+            url: MediaAPI.m_url,
+            dataType: "json",
+            success: function(ret){
+                MediaAPI.onMediaDeleted(ret, callback);
+            },
+            data: paras
+        });
+    },
+
+    onMediaDeleted : function(ret, callback){
 
         AthenaDialog.clearLoading();
-		
+
         if (ret.result == 'ok'){
-            if (ret.data == 'true'){
-                callback(ret.data);
-            }
-            else {
-                callback(ret.data);
-            }
+            callback(ret.data.media_id);
         }
         else {
             AthenaDialog.showAjaxError(ret);
         }
-        
+
     }
 }
     

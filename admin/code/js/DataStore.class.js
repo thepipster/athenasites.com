@@ -99,6 +99,7 @@ var DataStore = {
         return false;
     },
 
+ 
     // //////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -747,8 +748,8 @@ var DataStore = {
             var files_root = defines.user_files_root_url + DataStore.m_siteID + "/";
             var temp = new Object();
 
-            temp.thumb_url = files_root + media_list[i].thumb_filename;
-            temp.file_url = files_root + media_list[i].filename;
+            temp.thumb_url = files_root + media_list[i].filepath + media_list[i].thumb_filename;
+            temp.file_url = files_root + media_list[i].filepath + media_list[i].filename;
             temp.mime_type = media_list[i].mime_type;
             temp.title = media_list[i].title;
             temp.description = media_list[i].description;
@@ -767,6 +768,56 @@ var DataStore = {
 
             DataStore.m_mediaList[i] = temp;
         }
+
+    },
+
+    // //////////////////////////////////////////////////////////////////////////////////
+
+    /**
+    * Update an existing page
+    */
+    updateMedia : function(mediaObj){
+
+        for (var i=0; i<DataStore.m_mediaList.length; i++){
+            if (DataStore.m_mediaList[i].id == mediaObj.id){
+
+                var files_root = defines.user_files_root_url + DataStore.m_siteID + "/";
+
+                DataStore.m_mediaList[i].id = mediaObj.id;
+                DataStore.m_mediaList[i].thumb_url = files_root + mediaObj.filepath + mediaObj.thumb_filename;
+                DataStore.m_mediaList[i].file_url = files_root + mediaObj.filepath + mediaObj.filename;
+                DataStore.m_mediaList[i].mime_type = mediaObj.mime_type;
+                DataStore.m_mediaList[i].title = mediaObj.title;
+                DataStore.m_mediaList[i].description = mediaObj.description;
+                DataStore.m_mediaList[i].tags = mediaObj.tags;
+                DataStore.m_mediaList[i].width = mediaObj.width;
+                DataStore.m_mediaList[i].height = mediaObj.height;
+                DataStore.m_mediaList[i].thumb_width = mediaObj.thumb_width;
+                DataStore.m_mediaList[i].thumb_height = mediaObj.thumb_height;
+                DataStore.m_mediaList[i].date_added = mediaObj.date_added;
+                DataStore.m_mediaList[i].folder_id = mediaObj.folder_id;
+
+                return;
+            }
+        }
+    },
+
+    // //////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Remove a media file from the list
+     */
+    deleteMedia : function(media_id){
+
+        var tempList = new Array();
+
+        for(var i=0; i<DataStore.m_mediaList.length; i++){
+            if (DataStore.m_mediaList[i].id != media_id){
+                tempList.push(DataStore.m_mediaList[i]);
+            }
+        }
+
+        DataStore.m_mediaList = tempList;
 
     }
 

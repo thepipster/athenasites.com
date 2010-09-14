@@ -84,12 +84,12 @@ Logger::debug("$domain has site_id = $current_site_id");
         <!-- Load styles //////////////////////////////////////////////////////////////////// -->
 
         <!--
-        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/cupertino/jquery-ui.css" type="text/css"/>
         <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/smoothness/jquery-ui.css" type="text/css"/>
         <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/redmond/jquery-ui.css" type="text/css"/>
         <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/overcast/jquery-ui.css" type="text/css"/>
-        -->
         <link rel="stylesheet" href="code/js/3rdparty/jquery-ui/overcast/jquery-ui-1.8.4.custom.css" type="text/css"/>
+        -->
+        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/cupertino/jquery-ui.css" type="text/css"/>
 
 
         <link rel="stylesheet" href="code/css/Athena.css" type="text/css" />
@@ -118,17 +118,17 @@ Logger::debug("$domain has site_id = $current_site_id");
 
 
         <!-- jQuery and plugins -->
-<!--
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js"></script>
--->
+        <!--
+                <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+                <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js"></script>
+        -->
 
         <script type="text/javascript" src="code/js/3rdparty/jquery-1.4.2.min.js"></script>
         <script type="text/javascript" src="code/js/3rdparty/jquery-ui/jquery-ui-1.8.4.custom.min.js"></script>
         <script type="text/javascript" src="code/js/3rdparty/jquery.validate.min.js"></script>
         <!--<script type="text/javascript" src="code/js/3rdparty/jquery.json-1.3.min.js"></script>-->
         <script type="text/javascript" src="code/js/3rdparty/jquery.json-2.2.js"></script>
-        
+
         <script type="text/javascript" src="code/js/3rdparty/flot/jquery.flot.min.js"></script>
         <script type="text/javascript" src="code/js/3rdparty/flot/jquery.flot.crosshair.js"></script>
         <script type="text/javascript" src="code/js/3rdparty/jScrollPane-1.2.3.min.js"></script>
@@ -308,7 +308,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                                 <tr valign='top' width='100%'>
 
                                     <td width="50%" height="70%" style='height:100%; padding:5px;'>
-                                    
+
                                         <div class='subframebox' style='height:100%; width:100%;'>
 
                                             <span class='title'>Snap Shot
@@ -316,69 +316,69 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                 <a href='#' id="showTraffic" class="subFrameCommand selected" onclick="DashboardFrame.showTraffic()">Traffic</a>
                                                 <a href='#' id="showFollowers" class="subFrameCommand" onclick="DashboardFrame.showFollowers()">Top Commenters</a>
                                             </span>
-                                            
+
                                             <div id='apollo_site_stats_summary' class='frameContents' style='display:none' align='center'>
-                                            
-												<table class="statsTable" border="0" cellspacing="2" cellpadding="3">
-													
-													<tr align="left" class="odd">
-														<td>Disc Usage</td>														
-														<td valign="middle">
-															<div id="disc_usage" style='width:15%; float:left'></div>
-															<div id="disc_usage_bar" style='width:83%; float:left'></div>
-														</td>
-													</tr>
 
-													<tr align="left" class="even">
-														<td width='90px'>Blog Posts</td>
-														<td >
-															<span class="status_public"><span id="no_posts_published"></span> published </span>,
-															<span class="status_draft"><span id="no_posts_draft"></span> draft</span>,
-															<span class="status_private"><span id="no_posts_private"></span> private </span>
-														</td>
-													</tr>
+                                                <table class="statsTable" border="0" cellspacing="2" cellpadding="3">
 
-													<tr align="left" class="odd">
-														<td>Comments</td>
-														<td>
-			                                                <span class="status_public"><span id="no_comments_approved"></span> approved </span>,
-			                                                <span class="status_draft"><span id="no_comments_pending"></span> pending approval</span>,
-			                                                <span class="status_spam"><span id="no_comments_spam"></span> spam </span>
-														</td>
-													</tr>
-													
-													<tr align="left" class="even">
-														<td>Misc</td>
-														<td>You have <span id="no_catgeories"></span> categories, <span id="no_tags"></span> tags and <span id="no_followers"></span> commenters</td>
-													</tr>
+                                                    <tr align="left" class="odd">
+                                                        <td>Disc Usage</td>
+                                                        <td valign="middle">
+                                                            <div id="disc_usage" style='width:15%; float:left'></div>
+                                                            <div id="disc_usage_bar" style='width:83%; float:left'></div>
+                                                        </td>
+                                                    </tr>
 
-													
-                                            	</table>
-                                                
+                                                    <tr align="left" class="even">
+                                                        <td width='90px'>Blog Posts</td>
+                                                        <td >
+                                                            <span class="status_public"><span id="no_posts_published"></span> published </span>,
+                                                            <span class="status_draft"><span id="no_posts_draft"></span> draft</span>,
+                                                            <span class="status_private"><span id="no_posts_private"></span> private </span>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr align="left" class="odd">
+                                                        <td>Comments</td>
+                                                        <td>
+                                                            <span class="status_public"><span id="no_comments_approved"></span> approved </span>,
+                                                            <span class="status_draft"><span id="no_comments_pending"></span> pending approval</span>,
+                                                            <span class="status_spam"><span id="no_comments_spam"></span> spam </span>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr align="left" class="even">
+                                                        <td>Misc</td>
+                                                        <td>You have <span id="no_catgeories"></span> categories, <span id="no_tags"></span> tags and <span id="no_followers"></span> commenters</td>
+                                                    </tr>
+
+
+                                                </table>
+
                                                 <div align="center">
-                                                                                                                                                 
+
                                                     <div class="apolloStatsGraphWrapper" style='height:200px; width:90%; margin-top:10px'>
-	                                                    <div id="apollo_stats_graph_small" class="" style='height:100%; width:100%;'></div>
+                                                        <div id="apollo_stats_graph_small" class="" style='height:100%; width:100%;'></div>
                                                     </div>
                                                     <p>Site traffic for last 30 days</p>                                                   
-                                                    
+
                                                     <div class="apolloStatsGraphWrapper" style='height:200px; width:90%; margin-top:10px'>
-	                                                    <div id="apollo_crawler_graph_small" class="" style='height:100%; width:100%;'></div>
+                                                        <div id="apollo_crawler_graph_small" class="" style='height:100%; width:100%;'></div>
                                                     </div>
                                                     <p>Search engine activity for last 30 days</p>                                                   
-                                                    
+
                                                 </div>
-                                                                                                
+
                                             </div><!-- apollo_site_sumary -->
-                                            
+
                                             <div id='apollo_followers_summary_wrapper' class='frameContents'>
-	                                            <div id='apollo_followers_summary' align="center" style="height:100%; width:100%;">
-	 												<p>I'm sorry, you don't have any commentators yet</p3>
-	                                            </div>                                                                                            
+                                                <div id='apollo_followers_summary' align="center" style="height:100%; width:100%;">
+                                                    <p>I'm sorry, you don't have any commentators yet</p3>
+                                                </div>
                                             </div>
-                                            
+
                                         </div><!-- subframebox -->
-                                        
+
                                     </td>
 
                                     <td width="50%" height="100%" style='height:100%; padding:5px;' rowspan="2">
@@ -403,47 +403,47 @@ Logger::debug("$domain has site_id = $current_site_id");
                         <!-- Files Page Content ///////////////////////////////////////////////////////////// -->
 
                         <div id='FilesFrame' class='ViewFrame'>
-                        
-							<div id='FilesFrameContent' align='left'>
-							
-							<table border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>
-							
-							<tr valign='top'>
-																
-								<td class='frameContents'>
-							        <span class='frameTitle'>Images</span>
-							        <div id='apollo_folder_contents'></div>
-								</td>
-									
-								<!-- Edit images frame........... -->
-														
-								<td id='imageEditContent' style='height:100%; padding:5px'>																
-									<div class='subframebox' style='height:100%; width:500px;'>								
-										<span class='title'>Edit Image</span>																		
-										<div id='imageInfoContent'>
-										</div>					
-									</div>														
-								</td>
-							
-								<!-- File uploader frame........... -->
-							
-								<td id='flashUploderContent' style='height:100%; padding:5px'>																
-									<div class='subframebox' >								
-										<span class='title'>Upload Files</span>													
-										<div class='uploadControls'>
-											<span id='flashUploadButton'></span>
-											<button id='flashUploadCancelButton' onclick='swfu.cancelQueue();' disabled='disabled'>Cancel</button>
-										</div>									
-										<div class='uploadProgress' id='flashUploaderProgress'>
-										</div>					
-									</div>														
-								</td>
-							
-							</tr>
-							
-							</table>
-								
-							</div>                        
+
+                            <div id='FilesFrameContent' align='left'>
+
+                                <table border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>
+
+                                    <tr valign='top'>
+
+                                        <td class='frameContents'>
+                                            <span class='frameTitle'>Images</span>
+                                            <div id='apollo_folder_contents'></div>
+                                        </td>
+
+                                        <!-- Edit images frame........... -->
+
+                                        <td id='imageEditContent' style='height:100%; padding:5px'>
+                                            <div class='subframebox' style='height:100%; width:500px;'>
+                                                <span class='title'>Edit Image</span>
+                                                <div id='imageInfoContent'>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <!-- File uploader frame........... -->
+
+                                        <td id='flashUploderContent' style='height:100%; padding:5px'>
+                                            <div class='subframebox' >
+                                                <span class='title'>Upload Files</span>
+                                                <div class='uploadControls'>
+                                                    <span id='flashUploadButton'></span>
+                                                    <button id='flashUploadCancelButton' onclick='swfu.cancelQueue();' disabled='disabled'>Cancel</button>
+                                                </div>
+                                                <div class='uploadProgress' id='flashUploaderProgress'>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+
+                                </table>
+
+                            </div>
                         </div> 
 
                         <!-- Edit Images/Files Page Content ///////////////////////////////////////////////////////////// -->
@@ -499,7 +499,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                         </select>
                                                     </span>
                                                 </div>
-                                                
+
                                                 <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Last Edit:</span>
                                                     <span class='pageData' id='postLastEdit'></span>
@@ -600,7 +600,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                     <span class='pageLabel'>Description:</span>
                                                     <span class='pageData'><input id='pageDesc' title='If set, this will be used as the title in the browser' type='text' value=''/></span>
                                                 </div>
-                                                
+
                                                 <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Last Edit:</span>
                                                     <span class='pageData' id='pageLastEdit'></span>
@@ -742,8 +742,8 @@ Logger::debug("$domain has site_id = $current_site_id");
 
                         <div id='StatsFrame' class='ViewFrame'>
                             <div class="frameContents">
-                            <h3>This awesome feature will be here soon, wish we could have it now - but we're working on is as fast as we can!</h3>
-                            <p>This page will allow you to look at your total stats, and also allow you to drill down and look at stats for each page.</p>
+                                <h3>This awesome feature will be here soon, wish we could have it now - but we're working on is as fast as we can!</h3>
+                                <p>This page will allow you to look at your total stats, and also allow you to drill down and look at stats for each page.</p>
                             </div>
                         </div> <!-- content -->
 
@@ -754,7 +754,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                         </div> <!-- content -->
 
                     </div> <!-- MainContent -->
-                    
+
                 </td>
             </tr>
         </table>

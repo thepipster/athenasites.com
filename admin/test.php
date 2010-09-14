@@ -3,8 +3,9 @@
 require_once("code/php/setup.php");
 
 Logger::echoLog();
-/*
+
 Logger::debug("Clearing tables");
+/*
 DatabaseManager::submitQuery("TRUNCATE TABLE athena_Users");
 DatabaseManager::submitQuery("TRUNCATE TABLE athena_UserToSite");
 DatabaseManager::submitQuery("TRUNCATE TABLE athena_Sites");
@@ -26,70 +27,25 @@ for ($i=1; $i<=5; $i++){
 	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_PostToTags");
 	DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$i}_PostToCategories");
 }
-
-Logger::debug("Creating user");
-
-$email = "mike@apollosites.com";
-$pass = "Ally.Dog!";
-$user_group = 1;
-$name = "Mike Pritchard";
-
-$user_id = SecurityUtils::createUser($email, $pass, $user_group, $name);
-
-Logger::debug("Creating sites");
-
-$site_domain = 'athena.local';
-$site_path = '';
-$site_theme = 1;
-
-SecurityUtils::createSite($user_id, $site_domain, $site_path, $site_theme);
-
-$site_domain = 'callisto.athena.local';
-$site_path = '';
-$site_theme = 4;
-
-SecurityUtils::createSite($user_id, $site_domain, $site_path, $site_theme);
-
-$site_domain = 'pandora.athena.local';
-$site_path = '';
-$site_theme = 5;
-
-SecurityUtils::createSite($user_id, $site_domain, $site_path, $site_theme);
-
-$site_domain = 'cgp.athena.local';
-$site_path = '';
-$site_theme = 3;
-
-SecurityUtils::createSite($user_id, $site_domain, $site_path, $site_theme);
-
-$site_domain = 'holly.athena.local';
-$site_path = '';
-$site_theme = 2;
-
-SecurityUtils::createSite($user_id, $site_domain, $site_path, $site_theme);
-
-$site_domain = 'adastra.athena.local';
-$site_path = '';
-$site_theme = 6;
-
-SecurityUtils::createSite($user_id, $site_domain, $site_path, $site_theme);
-
-// Create Char
-Logger::debug("Creating user");
-
-$email = "charlotte@charlottegeary.com";
-$pass = "r00bies";
-$user_group = 2;
-$name = "Charlote Geary";
-
-$user_id = SecurityUtils::createUser($email, $pass, $user_group, $name);
 */
 
-$email = "mike@apollosites2.com";
-$pass = "Ally.Dog!";
-$user_group = 1;
-$name = "Mike Pritchard";
+$users = array(
+	array( "email" => "mike@apollosites.com", "name" => "Mike Pritchard", "pass" => "Ally.Dog!", "user_group" => 1, "site_domain" => "athenasites.com", "site_theme" => 1 ),
+	array( "email" => "mike@apollosites.com", "name" => "Mike Pritchard", "pass" => "Ally.Dog!", "user_group" => 1, "site_domain" => "pandora.athenasites.com", "site_theme" => 5 ),
+	array( "email" => "mike@apollosites.com", "name" => "Mike Pritchard", "pass" => "Ally.Dog!", "user_group" => 1, "site_domain" => "callisto.athenasites.com", "site_theme" => 4 ),
+	array( "email" => "charlotte@charlottegeary.com", "name" => "Mike Pritchard", "pass" => "r00bies", "user_group" => 2, "site_domain" => "cgp.athenasites.com", "site_theme" => 3 ),
+	array( "email" => "hollypacionephotography@gmail.com", "name" => "Holly Pacione", "pass" => "h8lly!", "user_group" => 2, "site_domain" => "holly.athenasites.com", "site_theme" => 2 ),
+	array( "email" => "mike@adastrasystems.com", "name" => "Mike Pritchard", "pass" => "Ally.Dog!", "user_group" => 2, "site_domain" => "adastra.athenasites.com", "site_theme" => 6 )
+);
 
-$user_id = SecurityUtils::createUser($email, $pass, $user_group, $name);
+
+foreach($users as $user){
+	
+	Logger::debug("Creating user " . $user['name']);
+	$user_id = SecurityUtils::createUser($user['email'], $user['pass'], $user['user_group'], $user['name']);
+	
+	Logger::debug("Creating site " . $user['site_domain']);
+	$site_id = SecurityUtils::createSite($user_id, $user['site_domain'], '', $user['site_theme']);
+}
 
 ?>
