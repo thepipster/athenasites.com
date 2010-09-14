@@ -19,6 +19,9 @@ class LiveJournalImporter {
 
 	private static $ljCookie = '';
 	
+	public static $errorCode = 0;
+	public static $errorMessage = '';
+	
 	//private static $comment_meta = null;
 	//private static $comments = null;
 	private static $user_list = null;
@@ -27,21 +30,22 @@ class LiveJournalImporter {
 	// /////////////////////////////////////////////////////////////////////////////////
 
 	public static function import($user_id, $site_id, $lj_user, $lj_pass){
-	
-		// Get auth cookie
-		self::$ljCookie = self::getCookie();
-			
+
 		self::$password = $lj_pass;
 		self::$username = $lj_user;
 		
-		Logger::debug("User = $lj_user Pass = $lj_pass");
-		
+		// Get auth cookie
+		self::$ljCookie = self::getCookie();
+
+		if (self::$errorCode != 0) return;
+			
 		// Get the posts since the last sync
 		self::getSyncItems($site_id);
 		self::getEvents($user_id, $site_id);
 				
 		// Get the comments since the last sync		
-		
+		if (self::$errorCode != 0) return;
+
 		self::getCommentMeta($site_id);
 		self::getComments($site_id);
 					
@@ -70,7 +74,9 @@ class LiveJournalImporter {
 		
 		if (!$client->query('LJ.XMLRPC.login', $args)) {
 			Logger::error('Something went wrong - '.$client->getErrorCode().' : '.$client->getErrorMessage());
-			die();
+			self::$errorMessage = $client->getErrorMessage();
+			self::$errorCode = $client->getErrorCode();
+			return;
 		}		
 		
 		$response = $client->getResponse();
@@ -92,10 +98,12 @@ class LiveJournalImporter {
 			'ipfixed' => 1,
 			'expiration' => 'short'
 		);
-		
+				
 		if (!$client->query('LJ.XMLRPC.sessiongenerate', $args)) {
 			Logger::error('Something went wrong - '.$client->getErrorCode().' : '.$client->getErrorMessage());
-			die();
+			self::$errorMessage = $client->getErrorMessage();
+			self::$errorCode = $client->getErrorCode();
+			return;
 		}
 		
 		$response = $client->getResponse();
@@ -323,7 +331,9 @@ class LiveJournalImporter {
 		
 		if (!$client->query('LJ.XMLRPC.syncitems', $args)) {
 			Logger::error('Something went wrong - '.$client->getErrorCode().' : '.$client->getErrorMessage());
-			die();
+			self::$errorMessage = $client->getErrorMessage();
+			self::$errorCode = $client->getErrorCode();
+			return;
 		}
 		
 		$response = $client->getResponse();
@@ -364,6 +374,8 @@ class LiveJournalImporter {
 			if (!$client->query('LJ.XMLRPC.getevents', $args)) {
 				Logger::error('Something went wrong - '.$client->getErrorCode().' : '.$client->getErrorMessage());
 				$isMore = false;
+				self::$errorMessage = $client->getErrorMessage();
+				self::$errorCode = $client->getErrorCode();
 				return;
 			}
 			

@@ -182,14 +182,15 @@ var FolderSidebarFrame = {
 	},
 	
 	onAddedToFolder : function(folderID, mediaID){
-			
+		
+		/*	
 		if (folderID == 0){
 			AthenaDialog.message("Image removed from folder");			
 		}
 		else {
 			AthenaDialog.message("Image added to folder <i>" + DataStore.getFolderName(folderID) + "</i>");			
 		}	
-		
+		*/
 		
 		for (var i=0; i<DataStore.m_mediaList.length; i++){
 			

@@ -42,7 +42,7 @@ var LiveJournalImporter = {
             //height:260,
             resizable:false,
             buttons: {
-                Cancel: function() {
+                "Done": function() {
                     $(this).dialog('close');
                 }
             },
@@ -91,8 +91,15 @@ var LiveJournalImporter = {
     // ////////////////////////////////////////////////////////////////////////
 
     onComplete : function(ret){
-        $('#status').html("<span style='color:green'>Import completed!</span>");
+        
         $('#progressBar').html("");
+        
+    	if (ret.result == 'ok'){
+	        $('#status').html("<span style='color:green'>Import completed! Refresh the browser to see the changes.</span>");
+    	}
+    	else {
+	        $('#status').html("<span style='color:red'>"+ret.data+"</span>");
+    	}
     },
 		
     // ////////////////////////////////////////////////////////////////////////

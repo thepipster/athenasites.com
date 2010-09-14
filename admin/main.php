@@ -317,7 +317,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                 <a href='#' id="showFollowers" class="subFrameCommand" onclick="DashboardFrame.showFollowers()">Top Commenters</a>
                                             </span>
                                             
-                                            <div id='apollo_site_stats_summary' class='frameContents' style='display:none'>
+                                            <div id='apollo_site_stats_summary' class='frameContents' style='display:none' align='center'>
                                             
 												<table class="statsTable" border="0" cellspacing="2" cellpadding="3">
 													
@@ -499,7 +499,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                         </select>
                                                     </span>
                                                 </div>
-
+                                                
                                                 <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Last Edit:</span>
                                                     <span class='pageData' id='postLastEdit'></span>
@@ -596,6 +596,11 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                     </span>
                                                 </div>
 
+                                                <div class='pageInfoLine'>
+                                                    <span class='pageLabel'>Description:</span>
+                                                    <span class='pageData'><input id='pageDesc' title='If set, this will be used as the title in the browser' type='text' value=''/></span>
+                                                </div>
+                                                
                                                 <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Last Edit:</span>
                                                     <span class='pageData' id='pageLastEdit'></span>

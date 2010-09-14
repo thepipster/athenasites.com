@@ -23,7 +23,6 @@ var PostsFrame = {
 			
         if (DataStore.m_postList.length == 0){
             AthenaDialog.alert("<div class='noContent'>You currently have no posts, you can add a post using the side-bar</div>");
-            return;
         }
 
         MediaAPI.getPostDetails(DataStore.m_siteID, DataStore.m_currentPostID, PostsFrame.repaintData);
@@ -219,7 +218,7 @@ var PostsFrame = {
     onSavePost : function(){
 						
         //var content = CKEDITOR.instances.postContentEditor.getData();
-        var content = PostsFrame.m_editor.getXHTMLBody();
+        var content = oUtil.obj.getXHTMLBody();
 
         var title = $('#postTitle').val();
         var status = $('#postStatusSelector').val();

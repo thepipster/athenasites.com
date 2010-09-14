@@ -46,6 +46,7 @@ var PagesFrame = {
         $('#pageParent').val(pageObj.parent_page_id);
         $('#pageTemplate').val(pageObj.template);
         $('#pageOrder').val(pageObj.order);
+        $('#pageDesc').val(pageObj.description);
 
         var txt = "<select id='pageTemplate' onchange=\"PagesFrame.paintThemeParas()\">";
         for (var i=0; i<DataStore.m_templateList.length; i++){
@@ -305,13 +306,15 @@ var PagesFrame = {
 			
         var originalPage = DataStore.getPage(page_id);
 		
-        var content = PagesFrame.m_editor.getXHTMLBody();
+        var content = oUtil.obj.getXHTMLBody();
 		
         var title = $('#pageTitle').val();
         var status = $('#pageStatusSelector').val();
         var parent_id = $('#pageParent').val();
         var template = $('#pageTemplate').val();
         var order = $('#pageOrder').val();
+        var desc = $('#pageDesc').val();
+        
         var pageDepth = DataStore.getPageDepth(DataStore.m_currentPageID);
         var slug = AthenaUtils.encodeSlug(title);
         //var path = DataStore.getPagePath();
@@ -342,7 +345,7 @@ var PagesFrame = {
             return;
         }
 						
-        MediaAPI.updatePage(DataStore.m_siteID, DataStore.m_currentPageID, title, content, status, template, parent_id, slug, order, ishome, PagesFrame.onPageSaved)
+        MediaAPI.updatePage(DataStore.m_siteID, DataStore.m_currentPageID, title, content, status, template, parent_id, slug, order, ishome, desc, PagesFrame.onPageSaved)
 				
     },
 	

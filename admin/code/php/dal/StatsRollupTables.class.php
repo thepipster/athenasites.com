@@ -50,6 +50,7 @@ class StatsRollupTables {
 		  `page_views` int(11) default NULL,
 		  `unique_visitors` int(11) default NULL,
 		  `keywords` text,
+		  `page_id` int(11) default NULL,
 		  `page_title` varchar(125) default NULL,
 		  PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
@@ -103,6 +104,8 @@ class StatsRollupTables {
         return DatabaseManager::getResults($sql);
     }
 
+    // //////////////////////////////////////////////////////////////////////////////////////
+
     public static function getAllPageViewsRollup($site_id, $no_days) {
 
         date_default_timezone_set('UTC');
@@ -132,7 +135,7 @@ class StatsRollupTables {
     }
 
     // //////////////////////////////////////////////////////////////////////////////////////
-
+		    	
     /**
      * Return an array of page_views and unique_visits for the whole blog for the last n days
      */

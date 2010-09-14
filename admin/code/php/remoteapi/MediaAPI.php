@@ -41,6 +41,12 @@ switch ($cmd) {
         getStats($site_id);
         break;
 
+    case "getDetailedStats":
+        $no_days = CommandHelper::getPara('dys', false, CommandHelper::$PARA_TYPE_NUMERIC);
+        if (!isset($no_days)) $no_days = 30;
+        getDetailedStats($site_id, $no_days);
+        break;
+
     // POSTS /////////////////////////////////////////////////////////////////////////
 
     case "deletePost":
@@ -172,7 +178,8 @@ switch ($cmd) {
         $template = CommandHelper::getPara('template_id', true, CommandHelper::$PARA_TYPE_STRING);
         $order = CommandHelper::getPara('order', true, CommandHelper::$PARA_TYPE_NUMERIC);
         $ishome = CommandHelper::getPara('ishome', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $template, $slug, $order, $ishome);
+        $description = CommandHelper::getPara('desc', true, CommandHelper::$PARA_TYPE_STRING);        
+        updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $template, $slug, $order, $ishome, $description);
         break;
 
     case "addPage":
@@ -184,7 +191,7 @@ switch ($cmd) {
         $template = CommandHelper::getPara('template_id', true, CommandHelper::$PARA_TYPE_STRING);
         $order = CommandHelper::getPara('order', true, CommandHelper::$PARA_TYPE_NUMERIC);
         $ishome = CommandHelper::getPara('ishome', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        addPage($site_id, $title, $parent_page_id, $content, $status, $template, $slug, $order, $ishome);
+        addPage($site_id, $title, $parent_page_id, $content, $status, $template, $slug, $order, $ishome, $desc);
         break;
 
     case "addFolder":
@@ -446,7 +453,14 @@ function importLiveJournal($site_id, $lj_user, $lj_password) {
     LiveJournalImporter::import($user_id, $site_id, $lj_user, $lj_password);
 
     $msg['cmd'] = "importLiveJournal";
-    $msg['result'] = 'ok';
+    
+    if (LiveJournalImporter::$errorCode != 0){
+	    $msg['result'] = 'false';
+	    $msg['data'] = LiveJournalImporter::$errorMessage;
+    }
+    else {
+	    $msg['result'] = 'ok';
+    }
 
     CommandHelper::sendMessage($msg);
 }
@@ -490,7 +504,6 @@ function updateCommentStatus($site_id, $comment_id, $status){
     // Get the current status, and determine if we need to
     // flag or unflag the author as a spammer
     $comment = CommentsTable::getComment($site_id, $comment_id);
-    Logger::dump($comment);
 
     $prev_status = $comment['status'];
     $follower_id = $comment['site_follower_id'];
@@ -641,7 +654,7 @@ function deletePage($site_id, $page_id) {
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $tamplate_name, $slug, $order, $ishome) {
+function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $tamplate_name, $slug, $order, $ishome, $description) {
 
     //Logger::debug("updatePage(page_id=$page_id, site_id=$site_id, title=$title, parent_page_id=$parent_page_id, content=$content, status=$status, tamplate_name=$tamplate_name, slug=$slug, path=$path)");
 
@@ -653,7 +666,7 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
     $safe_content = str_ireplace($tags, $replace, $content);
     $safe_title = str_ireplace($tags, $replace, $title);
 
-    PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $safe_title, $tamplate_name, StringUtils::encodeSlug($title), $path, $order, $ishome);
+    PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $safe_title, $tamplate_name, StringUtils::encodeSlug($title), $path, $order, $ishome, $description);
 
     $page = PagesTable::getPage($site_id, $page_id);
     if (isset($page)) {
@@ -826,6 +839,53 @@ function getStats($site_id){
     CommandHelper::sendMessage($msg);
 
 }
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Get the detailed stats for the given site
+ * @param int $site_id
+ */
+function getDetailedStats($site_id, $no_days){
+
+    // Get page views for the whole site for each day
+    $page_views = StatsRollupTables::getPageViewsRollup($site_id, $no_days);
+    $views = array();
+
+    if (isset($page_views)){
+        foreach($page_views as $view){
+            if ($view['page_title'] == 'all'){
+                $temp = array();
+                $temp['dt'] = $view['rollup_date'];
+                $temp['uv'] = $view['unique_visitors'];
+                $temp['pv'] = $view['page_views'];
+                $views[] = $temp;
+            }
+        }
+    }
+    
+    // Get the hits from search engines...
+    $page_views = StatsRollupTables::getCrawlerViewsLastNDays($site_id, $no_days);
+    $crawler_views = array();
+
+    if (isset($page_views)){
+        foreach($page_views as $view){
+            $temp = array();
+            $temp['dt'] = $view['rollup_date'];
+            $temp['crw'] = $view['crawler'];
+            $temp['pv'] = $view['hits'];
+            $crawler_views[] = $temp;
+        }
+    }
+
+    $msg['getStats'] = "getDetailedStats";
+    $msg['result'] = 'ok';
+    $msg['data'] = array('page_views' => $views, 'crawler_views' => $crawler_views);
+    CommandHelper::sendMessage($msg);
+
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
 
 /**
 * Call the 'du' command and parse its response

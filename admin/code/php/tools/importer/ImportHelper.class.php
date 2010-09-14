@@ -25,10 +25,10 @@ class ImportHelper {
         // Check to see if this post already exists, if so then we over-write it
         $post_id = PostsTable::getPostIDFromDate($site_id, $date_str);
         if (!isset($post_id)) {
-            $post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, $slug);
+            $post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, $slug, $import_source);
 //			$post_id = PostsTable::create($site_id, $user_id, $content, $status, $title, $can_comment, $slug);
         } else {
-            PostsTable::update($site_id, $post_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, $slug);
+            PostsTable::update($site_id, $post_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, $slug, $import_source);
         }
 
         // Get path
@@ -159,7 +159,9 @@ class ImportHelper {
         }
 
         // Check to see if this comment already exists, if so then we over-write it
-        $comment_id = CommentsTable::getCommentIDFromDateAndFollower($site_id, $date_str, $follower_id);
+        //$comment_id = CommentsTable::getCommentIDFromDateAndFollower($site_id, $date_str, $follower_id);
+        $comment_id = CommentsTable::getCommentIDFromDate($site_id, $date_str);
+        
         if (!isset($comment_id)) {
             //$comment_id = CommentsTable::createForceID($site_id, $apollo_post_id, $comment_id, $parent_comment_id, $content, $status, $author_ip, $follower_id);
             $comment_id = CommentsTable::create($site_id, $apollo_post_id, $parent_comment_id, $content, $status, $author_ip, $follower_id);
@@ -174,7 +176,7 @@ class ImportHelper {
         if (isset($import_source_id)) {
             CommentsTable::updateSourceID($comment_id, $site_id, $import_source_id);
         }
-
+        
         return $comment_id;
     }
 
