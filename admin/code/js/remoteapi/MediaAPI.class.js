@@ -145,12 +145,12 @@ var MediaAPI = {
 	
     // ////////////////////////////////////////////////////////////////////////
 	
-    setPagePara : function(themeParaID, paraValue, callback){
+    setPagePara : function(themeParaID, paraValue, pageID, callback){
 			
         var paras = {
             cmd: 'setPagePara',
             site_id: DataStore.m_siteID,
-            page_id: DataStore.m_currentPageID,
+            page_id: pageID,
             theme_para_id: themeParaID,
             para_value: paraValue
         };
@@ -397,7 +397,57 @@ var MediaAPI = {
             AthenaDialog.showAjaxError(ret);
         }
     },
-	
+
+    // ////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Delete a tag from the entire blog and every post
+     */
+    deleteTag : function(siteID, globalTag, callback){
+        var paras = {cmd: 'deleteTag', site_id: siteID, tag: globalTag};
+
+        $.ajax({
+            url: MediaAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: function(ret){ MediaAPI.onTagDeleted(ret, callback)}
+        });
+    },
+
+    onTagDeleted : function(ret, callback){
+        if (ret.result == "ok"){
+            callback(ret.data.tag);
+        }
+        else {
+            AthenaDialog.showAjaxError(ret);
+        }
+    },
+
+    // ////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Delete a category from the entire blog and every post
+     */
+    deleteCategory : function(siteID, globalCategory, callback){
+        var paras = {cmd: 'deleteCategory', site_id: siteID, category: globalCategory};
+
+        $.ajax({
+            url: MediaAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: function(ret){ MediaAPI.onCategoryDeleted(ret, callback)}
+        });
+    },
+
+    onCategoryDeleted : function(ret, callback){
+        if (ret.result == "ok"){
+            callback(ret.data.category);
+        }
+        else {
+            AthenaDialog.showAjaxError(ret);
+        }
+    },
+
     // ////////////////////////////////////////////////////////////////////////
 
     removeTag : function(siteID, postID, postTag, callback){

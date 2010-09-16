@@ -48,21 +48,9 @@
 	width: 100%;
 }
 
-#PagesFrame .paraTitle {
-	color: #386b93;
-	display: block;
-	padding-bottom: 3px;
-}
-
-#PagesFrame .paraDesc {
-	color: #3f4040;
-	display: block;
-	padding-bottom: 3px;
-}
-
 /** For post settings */
 
-#PagesFrame .postRemoveTagCat {
+.postRemoveTagCat {
 	background-image: url('../../images/delete.png');
 	background-repeat: no-repeat;
 	display: inline-block;
@@ -72,11 +60,11 @@
 	float: left;
 }
 
-#PagesFrame .postTagCat {
+.postTagCat {
 	float: left;
 }
 
-#PagesFrame .postTagCatLine {
+.postTagCatLine {
 	color: #00204b;
 	display: inline-block;
 	margin-right: 6px;

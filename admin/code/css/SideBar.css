@@ -22,6 +22,7 @@
     font-size: 10px;
     color: #990000;
     cursor: pointer;
+    text-decoration: none;
 }
 
 #SideBar .add_new_project:hover {

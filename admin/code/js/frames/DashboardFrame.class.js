@@ -5,19 +5,19 @@
 */
 var DashboardFrame = {
 
-	/** What we're showing in the snap shot tab */
+    /** What we're showing in the snap shot tab */
     m_snapshotMode : 'traffic',
 
     /** What typs of comments to display, 'Pending','Approved','Trash','Spam' */
     m_commentsMode : 'Pending',
 
-	/** Comments data */
+    /** Comments data */
     m_comments : '',
 
-	/** Summary data */
+    /** Summary data */
     m_summaryData : '',
 
-	/** Stats data */
+    /** Stats data */
     m_crawlerViews : '',
     m_pageViews : '',
     m_discUsage : '',
@@ -32,77 +32,77 @@ var DashboardFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 	
     repaint : function(){
-    	if (DashboardFrame.m_painted){
-    		DashboardFrame.paintSnapshotTab();
-    	}
-    	else {
-			$('#apollo_followers_summary').hide();
-			$('#apollo_site_stats_summary').hide();
-	        BlogAPI.getComments(DataStore.m_siteID, 0, DashboardFrame.gotComments);
-	        BlogAPI.getSummary(DataStore.m_siteID, DashboardFrame.gotSummary);
-	        DashboardFrame.m_painted = true;
-    	}
+        if (DashboardFrame.m_painted){
+            DashboardFrame.paintSnapshotTab();
+        }
+        else {
+            $('#apollo_followers_summary').hide();
+            $('#apollo_site_stats_summary').hide();
+            BlogAPI.getComments(DataStore.m_siteID, 0, DashboardFrame.gotComments);
+            BlogAPI.getSummary(DataStore.m_siteID, DashboardFrame.gotSummary);
+            DashboardFrame.m_painted = true;
+        }
     },
 
     // ////////////////////////////////////////////////////////////////////////////
 
     gotSummary : function(data){
-    	DashboardFrame.m_summaryData = data;
+        DashboardFrame.m_summaryData = data;
         MediaAPI.getStats(DataStore.m_siteID, DashboardFrame.gotStats);
     },
     
     // ////////////////////////////////////////////////////////////////////////////
 
     gotStats : function(disc_usage, page_views, crawler_views){
-    	DashboardFrame.m_discUsage = disc_usage;
-    	DashboardFrame.m_pageViews = page_views;
-    	DashboardFrame.m_crawlerViews = crawler_views;
-		DashboardFrame.paintSnapshotTab();
+        DashboardFrame.m_discUsage = disc_usage;
+        DashboardFrame.m_pageViews = page_views;
+        DashboardFrame.m_crawlerViews = crawler_views;
+        DashboardFrame.paintSnapshotTab();
     },
 
     // ////////////////////////////////////////////////////////////////////////////
 
-	paintSnapshotTab : function(){
+    paintSnapshotTab : function(){
 		
-    	if (DashboardFrame.m_snapshotMode == 'traffic'){
-			$('#apollo_followers_summary').hide();
-			$('#apollo_site_stats_summary').show();
-    		DashboardFrame.paintStats();
-    	}
-    	else {
-			$('#apollo_followers_summary').show();
-			$('#apollo_site_stats_summary').hide();
-    		DashboardFrame.paintFollowers();
-    	}
-	},
+        if (DashboardFrame.m_snapshotMode == 'traffic'){
+            $('#apollo_followers_summary').hide();
+            $('#apollo_site_stats_summary').show();
+            DashboardFrame.paintStats();
+        }
+        else {
+            $('#apollo_followers_summary').show();
+            $('#apollo_site_stats_summary').hide();
+            DashboardFrame.paintFollowers();
+        }
+    },
 
     // ////////////////////////////////////////////////////////////////////////////
 
-	showTraffic : function(){
+    showTraffic : function(){
 	
         $('.subFrameCommand').removeClass('selected');
         $('#showTraffic').addClass('selected');
 	
-		DashboardFrame.m_snapshotMode = 'traffic';
-		DashboardFrame.paintSnapshotTab();
-	},
+        DashboardFrame.m_snapshotMode = 'traffic';
+        DashboardFrame.paintSnapshotTab();
+    },
 	
-	showFollowers : function(){
+    showFollowers : function(){
 	
         $('.subFrameCommand').removeClass('selected');
         $('#showFollowers').addClass('selected');
         
-		DashboardFrame.m_snapshotMode = 'followers';
-		DashboardFrame.paintSnapshotTab();
-	},
+        DashboardFrame.m_snapshotMode = 'followers';
+        DashboardFrame.paintSnapshotTab();
+    },
 		
     // ////////////////////////////////////////////////////////////////////////////
 
-	m_discUsePC : 0,
+    m_discUsePC : 0,
 	
     paintStats : function(){        
 
-		var data = DashboardFrame.m_summaryData;
+        var data = DashboardFrame.m_summaryData;
 		
         $('#no_comments_approved').html( data.comments_approved);
         $('#no_comments_pending').html( data.comments_pending);
@@ -120,28 +120,34 @@ var DashboardFrame = {
         var maxDisc = defines.max_hdd;
         DashboardFrame.m_discUsePC = 100 * DashboardFrame.m_discUsage / maxDisc  
         $("#disc_usage_bar").height(15);
-        $("#disc_usage_bar").progressbar({ value: 0 });	
-		AthenaDialog.setProgressBarColorMap("#disc_usage_bar", 0, 100, 'heat');
+        $("#disc_usage_bar").progressbar({
+            value: 0
+        });
+        AthenaDialog.setProgressBarColorMap("#disc_usage_bar", 0, 100, 'heat');
 		
-		DashboardFrame.animateDU();	            
+        DashboardFrame.animateDU();
             
         StatViewer.paintCrawlerGraph("#apollo_crawler_graph_small", DashboardFrame.m_crawlerViews);
         StatViewer.paintStatGraph("#apollo_stats_graph_small", DashboardFrame.m_pageViews);        
     },
     
 
-	tempVal : 0,
+    tempVal : 0,
 	
-	animateDU : function(){
-		DashboardFrame.tempVal += 1;
-		$("#disc_usage_bar").progressbar({ value: DashboardFrame.tempVal});
-		if (DashboardFrame.tempVal < DashboardFrame.m_discUsePC){
-			setTimeout("DashboardFrame.animateDU()", 10);
-		}
-		else {
-			$("#disc_usage_bar").progressbar({ value: DashboardFrame.m_discUsePC});
-		}
-	},
+    animateDU : function(){
+        DashboardFrame.tempVal += 1;
+        $("#disc_usage_bar").progressbar({
+            value: DashboardFrame.tempVal
+            });
+        if (DashboardFrame.tempVal < DashboardFrame.m_discUsePC){
+            setTimeout("DashboardFrame.animateDU()", 10);
+        }
+        else {
+            $("#disc_usage_bar").progressbar({
+                value: DashboardFrame.m_discUsePC
+                });
+        }
+    },
 		    
     // ////////////////////////////////////////////////////////////////////////////
                 
@@ -150,7 +156,7 @@ var DashboardFrame = {
      */
     paintFollowers : function(){
 
-		var data = DashboardFrame.m_summaryData;
+        var data = DashboardFrame.m_summaryData;
 
         if (!data.top_followers || data.top_followers == undefined || data.top_followers.length == 0){
             return;
@@ -188,9 +194,9 @@ var DashboardFrame = {
 
         txt += '</table>';
         $('#apollo_followers_summary').html(txt);
-//        $('#apollo_followers_sumary').removeClass("scroll-pane");
-//        $('#apollo_followers_sumary').addClass("scroll-pane");
-//        $('#apollo_followers_sumary').jScrollPane();
+    //        $('#apollo_followers_sumary').removeClass("scroll-pane");
+    //        $('#apollo_followers_sumary').addClass("scroll-pane");
+    //        $('#apollo_followers_sumary').jScrollPane();
 
     },
 
@@ -219,7 +225,7 @@ var DashboardFrame = {
 
         var txt = "";
         if (!DashboardFrame.m_comments || DashboardFrame.m_comments == undefined || DashboardFrame.m_comments.length == 0){
-        	$('#apollo_site_comments').html("<div align='center'><p>I'm sorry, you don't have any comments yet</p></div>");
+            $('#apollo_site_comments').html("<div align='center'><p>I'm sorry, you don't have any comments yet</p></div>");
             return;
         }
         
@@ -232,11 +238,11 @@ var DashboardFrame = {
         }
 
         $('#apollo_site_comments').html(txt);
-//        $('#apollo_site_comments').removeClass("scroll-pane");
-//        $('#apollo_site_comments').addClass("scroll-pane");
-//        $('#apollo_site_comments').jScrollPane();
-//        $('#apollo_site_comments_wrapper').css('margin-right', 0);
-//        $('#apollo_site_comments_wrapper').css('padding-right', 0);
+    //        $('#apollo_site_comments').removeClass("scroll-pane");
+    //        $('#apollo_site_comments').addClass("scroll-pane");
+    //        $('#apollo_site_comments').jScrollPane();
+    //        $('#apollo_site_comments_wrapper').css('margin-right', 0);
+    //        $('#apollo_site_comments_wrapper').css('padding-right', 0);
         
     },
 
@@ -251,18 +257,18 @@ var DashboardFrame = {
 
         var classStr = "pending_comment";
         switch (commentObj.status){
-//            case 'Pending':
-//                classStr = "pending_comment";
-//                break;
+            //            case 'Pending':
+            //                classStr = "pending_comment";
+            //                break;
             case 'Spam':
             case 'Trash':
                 classStr = "trashed_comment";
                 break;
-//                classStr = "spam_comment";
-//                break;
-//            case 'Approved':
-//                classStr = "approved_comment";
-//                break;
+        //                classStr = "spam_comment";
+        //                break;
+        //            case 'Approved':
+        //                classStr = "approved_comment";
+        //                break;
         }
 
         var post = DataStore.getPost(commentObj.post_id);
@@ -333,12 +339,12 @@ var DashboardFrame = {
 
     onCommentUpdate : function(commentID, newStatus){
     	
-    	for (var i=0; i<DashboardFrame.m_comments.length; i++){
-    		if (DashboardFrame.m_comments[i].id == commentID){
-    			DashboardFrame.m_comments[i].status = newStatus;
-		        DashboardFrame.paintComments();
-    		}
-    	}
+        for (var i=0; i<DashboardFrame.m_comments.length; i++){
+            if (DashboardFrame.m_comments[i].id == commentID){
+                DashboardFrame.m_comments[i].status = newStatus;
+                DashboardFrame.paintComments();
+            }
+        }
     	
     }
 

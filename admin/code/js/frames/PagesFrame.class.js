@@ -104,35 +104,50 @@ var PagesFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 
     /**
-	* Paint any special theme paras associated with the chosen template
-	*/
-    paintThemeParas : function(){
-	
-        var template_name = $('#pageTemplate').val();
-        var theme_para_list = DataStore.getPageThemeParas(template_name);
-				
+    * Paint any special theme paras associated with the chosen template
+    */
+    paintThemeParas : function(){	
+        var templateName = $('#pageTemplate').val();
+        var txt = PagesFrame.getThemeParasHTML(templateName);
+        $('#apollo_page_theme_paras').html(txt);
+    },
+
+    // ////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Get the html for editing the theme paras for the given template name.
+     * If you set the template name to 'All' it will return the global paras
+     * @param string templateName
+     */
+    getThemeParasHTML : function(templateName){
+        
+        var theme_para_list = DataStore.getPageThemeParas(templateName);
+
         var txt = "";
 
         if (theme_para_list.length > 0){
             txt += "<p><strong>Custom Parameters</strong></p>";
             txt += "<table border='0' width='100%'>";
         }
-	
+
         var noParas = 0;
-			
+
         for (var i=0; i<theme_para_list.length; i++){
-			
-            var paraVal = DataStore.getSiteParaValue(DataStore.m_currentPageID, theme_para_list[i].id);
-            var para_html = '';
-				
-										
+
+            var pageID = DataStore.m_currentPageID;
+            if (templateName == 'all'){
+                pageID = 0;
+            }
+            var paraVal = DataStore.getSiteParaValue(pageID, theme_para_list[i].id);
+
             // 'email','image','gallery','font-family','favicon','font-size','color','text','small-int','multi-gallery'
             switch(theme_para_list[i].para_type){
-			
+
+                case 'favicon':
                 case 'image':
 
                     onclick = "PagesFrame.selectImagePara("+theme_para_list[i].id+")";
-										
+
                     txt += "<table border='0'>";
                     txt += "<tr valign='top'>";
                     txt += "    <td width='40px'>";
@@ -145,7 +160,7 @@ var PagesFrame = {
                     }
                     txt += "<img src='"+image_url+"' class='thumbBox' width='30px' height='30px' onclick=\""+onclick+"\" >";
                     txt += "    </td>";
-					
+
                     txt += "    <td>";
                     txt += "        <span class='paraTitle'>"+theme_para_list[i].description+"</span>";
                     txt += "        <span class='paraDesc'>"+theme_para_list[i].help_text+"</span>";
@@ -153,21 +168,21 @@ var PagesFrame = {
                     txt += "    </td>";
                     txt += "</tr>";
                     txt += "</table>";
-					
+
                     noParas++;
-					
+
                     break;
 
                 case 'color':
-				
+
                     onclick = "PagesFrame.selectColorPara("+theme_para_list[i].id+", '"+paraVal+"')";
-									
+
                     txt += "<table border='0'>";
                     txt += "<tr valign='top'>";
                     txt += "    <td width='40px'>";
                     txt += "        <div class='colorBox' style='background-color:#"+paraVal+";' onclick=\""+onclick+"\"></div>";
                     txt += "    </td>";
-					
+
                     txt += "    <td>";
                     txt += "        <span class='paraTitle'>"+theme_para_list[i].description+"</span>";
                     txt += "        <span class='paraDesc'>"+theme_para_list[i].help_text+"</span>";
@@ -176,21 +191,24 @@ var PagesFrame = {
                     txt += "</table>";
 
                     noParas++;
-									
+
                     break;
-				
+
                 case 'email':
                     break;
+
                 case 'text':
                     break;
+
                 case 'small-int':
                     break;
+
                 case 'font-family':
                     break;
+
                 case 'font-size':
                     break;
-				
-                case 'favicon':
+
                 case 'multi-gallery':
                 case 'gallery':
                     break;
@@ -198,22 +216,22 @@ var PagesFrame = {
 
 
         }
-		
+
         if (theme_para_list.length > 0){
             txt += "</table><br/>";
         }
-		
-        if (noParas > 0)
-            $('#apollo_page_theme_paras').html(txt);
+
+        return txt;
+
     },
-	
+
     // ////////////////////////////////////////////////////////////////////////////
 
     m_themeParaID : 0,
 	
     selectColorPara : function(themeParaID, paraVal){
         PagesFrame.m_themeParaID = themeParaID;
-        ColorPickerDialog.show('#PagesFrameImagePicker', paraVal, PagesFrame.onParaSelected)
+        ColorPickerDialog.show('#PagesFrameColorPicker', paraVal, PagesFrame.onParaSelected)
     },
 	
     selectImagePara : function(themeParaID){
@@ -224,15 +242,48 @@ var PagesFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 
     onParaSelected : function(newParaVal){
-        MediaAPI.setPagePara(PagesFrame.m_themeParaID, newParaVal, PagesFrame.onPagesParaChanged);
+
+        var page_id = DataStore.m_currentPageID;
+        if (PagesFrame.m_editingGlobalSettings){
+            page_id = 0;
+        }
+        
+        MediaAPI.setPagePara(PagesFrame.m_themeParaID, newParaVal, page_id, PagesFrame.onPagesParaChanged);
     },
 	
     // ////////////////////////////////////////////////////////////////////////////
 
     onPagesParaChanged : function(theme_para_id, new_value, page_id){
+        
         //location.href = location.href;
         DataStore.updateSitePara(theme_para_id, page_id, new_value);
-        PagesFrame.repaint();
+
+        // Update para in data store
+        var paraFound = false;
+        for (var i=0; i<DataStore.m_siteParaList.length; i++){
+            if (DataStore.m_siteParaList[i].theme_para_id == theme_para_id){
+                DataStore.m_siteParaList[i].para_value = new_value;
+                paraFound = true;
+            }
+        }
+
+        // If we didn't find the para, it must be a new para (that wasn't set before)
+        if (!paraFound){
+            var temp = new Object();
+            temp.theme_para_id = theme_para_id;
+            temp.para_value = new_value;
+            temp.page_id = page_id;
+            DataStore.m_siteParaList.push(temp);
+        }
+
+        // Now repaint...
+        
+        if (PagesFrame.m_editingGlobalSettings){
+            PagesFrame.editGlobalSettings();
+        }
+        else {
+            PagesFrame.repaint();
+        }
     },
 	
     // ////////////////////////////////////////////////////////////////////////////
@@ -359,76 +410,35 @@ var PagesFrame = {
 
     saveChildPages : function(){
     },
-				
-   // ////////////////////////////////////////////////////////////////////////////
-
-//    paintOpenWYSIWYG : function(readyCallback){
-//
-//        var ht = $('#PagesFrame').innerHeight();
-//
-//        var groupsObj = [
-//        ["grpPage", "Page & View", ["FullScreen", "XHTMLSource", "Search", "BRK", "Undo", "Redo", "SpellCheck", "RemoveFormat"]],
-//        ["grpFont", "Font",
-//        ["FontName", "FontSize", "Strikethrough", "Superscript", "Subscript", "BRK",
-//        "Bold", "Italic", "Underline", "ForeColor", "BackColor"
-//        ]
-//        ],
-//        ["grpStyles", "Styles", ["Table", "Guidelines", "BRK",  "StyleAndFormatting", "Styles"]], //"Absolute"
-//        ["grpPara", "Paragraph",
-//        ["Paragraph", "Indent", "Outdent", "LTR", "RTL", "BRK", "JustifyLeft",
-//        "JustifyCenter", "JustifyRight","JustifyFull", "Numbering", "Bullets"
-//        ]
-//        ],
-//        ["grpObjects", "Objects", ["Image", "InsertInternalImage", "Flash", "Media", "BRK", "Hyperlink", "Characters", "Line",  "ApolloPageBreak"]]
-//        ];
-//
-//        oUtil.initializeEditor("#pageContentEditor", {
-//            id: 2,
-//            width:"100%",
-//            height:ht+"px",
-//            btnSpellCheck:true,
-//            useTagSelector:false,
-//            toolbarMode: 2,
-//            mode:"XHTML",
-//            useBR:true, // Force to use <br> for line breaks by default
-//            arrCustomButtons: [
-//            ["InsertInternalImage","ImagePickerDialog.show('#PagesFrameImagePicker', PagesFrame.onImageSelected)","Insert an image from your media library", "btnInternalImage.gif"],
-//            ["ApolloPageBreak","PagesFrame.onInsertPageBreak()","Insert a more link into your blog post", "btnApolloPageBreak.png"]],
-//            //features:featuresObj,
-//            groups: groupsObj,
-//            css: DataStore.m_theme.cms_page_css
-//        });
-//
-//        PagesFrame.getEditorObj(readyCallback);
-//
-//    },
-//
-//    // ////////////////////////////////////////////////////////////////////////////
-//
-//    m_editor : false,
-//
-//    /**
-//     * Get a handle to the embedded wyswig editor, and when we have it execute the callback
-//     */
-//    getEditorObj : function(callback){
-//        if (oUtil.obj == undefined || !oUtil.obj){
-//            setTimeout(function(){PagesFrame.getEditorObj(callback);}, 100);
-//        }
-//        else {
-//            alert(oUtil.oName);
-//            PagesFrame.m_editor = oUtil.obj;
-//            if (callback != undefined){
-//                callback();
-//            }
-//        }
-//    },
-    
+			
     // ////////////////////////////////////////////////////////////////////////////
 
-    onImageSelected : function(imageID){
-        var img = DataStore.getImage(imageID);
-        var txt = "<img src='"+img.file_url+"' alt='"+img.description+"' width='"+img.width+"px' height='"+img.height+"px'/>";
-        oUtil.obj.insertHTML(txt);
-    }
+    m_editingGlobalSettings : false,
+    
+    /**
+     * Launch dialog that allows a user to edit their global page settings
+     */
+    editGlobalSettings : function(){
 
+        PagesFrame.m_editingGlobalSettings = true;
+
+        var txt = PagesFrame.getThemeParasHTML('all');
+
+        $('#apollo_dialog').dialog("destroy");
+        $('#apollo_dialog').html(txt);
+        $('#apollo_dialog').dialog({
+            resizable: false,
+            width: $(window).width()*2/3,
+            //	height:140,
+            modal: true,
+            title: "Your Global Page Settings",
+            buttons: {
+                Done: function() {
+                    PagesFrame.m_editingGlobalSettings = false;
+                    $(this).dialog('close');
+                }
+            }
+        });
+
+    }
 }

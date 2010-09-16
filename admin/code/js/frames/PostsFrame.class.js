@@ -187,7 +187,7 @@ var PostsFrame = {
 
 
     },
-		
+    
     // ////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -350,102 +350,120 @@ var PostsFrame = {
     },
 
     // ////////////////////////////////////////////////////////////////////////////
-//
-//    paintOpenWYSIWYG : function(readyCallback){
-//
-//
-//        var ht = $('#PostsFrame').innerHeight();
-//
-//        var groupsObj = [
-//        ["grpPage", "Page & View", ["FullScreen", "XHTMLSource", "Search", "BRK", "Undo", "Redo", "SpellCheck", "RemoveFormat"]],
-//        ["grpFont", "Font",
-//        ["FontName", "FontSize", "Strikethrough", "Superscript", "Subscript", "BRK",
-//        "Bold", "Italic", "Underline", "ForeColor", "BackColor"
-//        ]
-//        ],
-//        ["grpStyles", "Styles", ["Table", "Guidelines", "BRK",  "StyleAndFormatting", "Styles"]], //"Absolute"
-//        ["grpPara", "Paragraph",
-//        ["Paragraph", "Indent", "Outdent", "LTR", "RTL", "BRK", "JustifyLeft",
-//        "JustifyCenter", "JustifyRight","JustifyFull", "Numbering", "Bullets"
-//        ]
-//        ],
-//        ["grpObjects", "Objects", ["Image", "InsertInternalImage", "Flash", "Media", "BRK", "Hyperlink", "Characters", "Line",  "ApolloPageBreak"]]
-//        ];
-//
-//        oUtil.initializeEditor("#postContentEditor", {
-//            id: 1,
-//            width:"100%",
-//            height:ht+"px",
-//            btnSpellCheck:true,
-//            useTagSelector:false,
-//            toolbarMode: 2,
-//            mode:"XHTML",
-//            useBR:true, // Force to use <br> for line breaks by default
-//            arrCustomButtons: [
-//            ["InsertInternalImage","ImagePickerDialog.show('#PostsFrameImagePicker', PostsFrame.onImageSelected)","Insert an image from your media library", "btnInternalImage.gif"],
-//            ["ApolloPageBreak","PostsFrame.onInsertPageBreak()","Insert a more link into your blog post", "btnApolloPageBreak.png"]],
-//            //features:featuresObj,
-//            groups: groupsObj,
-//            css: DataStore.m_theme.cms_blog_css
-//        });
-//
-//        //PostsFrame.getEditorObj(readyCallback);
-//           //  PostsFrame.m_editor = new InnovaEditor("PostsFrame.m_editor");
-//        //setTimeout(PostsFrame.test, 1000);
-//    },
+
+    /**
+     * Launch a dialog that lists all a users tags and allows them to delete them
+     */
+    viewTags : function(){
+
+        var txt = "";
+
+        for (var i=0; i<DataStore.m_tags.length; i++){
+            onclick = "PostsFrame.onDeleteGlobalTag("+i+")";
+            txt += "<div class='postTagCatLine'><span class='postTagCat'>"+DataStore.m_tags[i]+"</span><span class='postRemoveTagCat' onclick='"+onclick+"'></span></div>";
+        }
+
+        $('#apollo_dialog').dialog("destroy");
+        $('#apollo_dialog').html(txt);
+        $('#apollo_dialog').dialog({
+            resizable: false,
+            width: $(window).width()*2/3,
+            //	height:140,
+            modal: true,
+            title: "Your Tags",
+            buttons: {
+                Cancel: function() {
+                    $(this).dialog('close');
+                }
+            }
+        });
+    },
 
     // ////////////////////////////////////////////////////////////////////////////
-//
-//    test : function(){
-//             PostsFrame.m_editor.REPLACE("postContentEditor");
-//    },
-//
-//    m_editor : false,
-//
-//    /**
-//     * Get a handle to the embedded wyswig editor, and when we have it execute the callback
-//     */
-//    getEditorObj : function(callback){
-//        if (oUtil.obj == undefined || !oUtil.obj){
-//            setTimeout(function(){PostsFrame.getEditorObj(callback);}, 100);
-//        }
-//        else {
-//            alert(oUtil.oName);
-//            PostsFrame.m_editor = oUtil.obj;
-//            if (callback != undefined){
-//                callback();
-//            }
-//        }
-//    },
-//
-//
-//    // ////////////////////////////////////////////////////////////////////////////
-//
-//    /**
-//     * Insert a custom apollo page break
-//     */
-//    onInsertPageBreak : function(){
-//
-//        // Has the user already got a apollo page break in this page?
-//        var content = oUtil.obj.getXHTMLBody();
-//        var myRegExp = /apolloPageBreak/;
-//        var pos = content.search(myRegExp);
-//
-//        if (pos > 0){
-//            AthenaDialog.alert("Sorry, you already have a break in this post and you can only have one, you'll need to delete the old one before you can add one here!", "Can't add more than 1 break");
-//            return;
-//        }
-//
-//        var txt = "<div class='apolloPageBreak'>More...</div> ";
-//        oUtil.obj.insertHTML(txt);
-//    },
-//
-//    // ////////////////////////////////////////////////////////////////////////////
-//
-//    onImageSelected : function(imageID){
-//        var img = DataStore.getImage(imageID);
-//        var txt = "<img src='"+img.file_url+"' alt='"+img.description+"' width='"+img.width+"px' height='"+img.height+"px'/>";
-//        oUtil.obj.insertHTML(txt);
-//    }
+
+    onDeleteGlobalTag : function(tagIndex){
+        AthenaDialog.confirm("Are you sure you want to delete the tag '"+DataStore.m_tags[i]+"' for all your posts? This can not be undone!", function(){
+            PostsFrame.onDoDeleteGlobalTag(tagIndex);
+        });
+    },
+
+    onDoDeleteGlobalTag : function(tagIndex){
+        MediaAPI.deleteTag(DataStore.m_siteID, DataStore.m_tags[tagIndex], PostsFrame.onGlobalTagDeleted);
+    },
+
+    onGlobalTagDeleted : function(tag){
+
+        // Remove category from cat list
+        var new_list = new Array();
+        for (var i=0; i<DataStore.m_tags.length; i++){
+            if (DataStore.m_tags[i] != tag){
+                new_list.push(DataStore.m_tags[i]);
+            }
+        }
+        DataStore.m_tags = new_list;
+
+        // Repaint frame
+        PostsFrame.repaint();
+    },
+
+    // ////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Launch a dialog that lists all a users categories and allows them to delete them
+     */
+    viewCategories : function(){
+
+        var txt = "";
+
+        for (var i=0; i<DataStore.m_categories.length; i++){
+            onclick = "PostsFrame.onDeleteGlobalCategory("+i+")";
+            txt += "<div class='postTagCatLine'><span class='postTagCat'>"+DataStore.m_categories[i]+"</span><span class='postRemoveTagCat' onclick='"+onclick+"'></span></div>";
+        }
+
+        $('#apollo_dialog').dialog("destroy");
+        $('#apollo_dialog').html(txt);
+        $('#apollo_dialog').dialog({
+            resizable: false,
+            width: $(window).width()*2/3,
+            //	height:140,
+            modal: true,
+            title: "Your Categories",
+            buttons: {
+                Cancel: function() {
+                    $(this).dialog('close');
+                }
+            }
+        });
+
+    },
+
+    // ////////////////////////////////////////////////////////////////////////////
+
+    onDeleteGlobalCategory : function(catIndex){
+        AthenaDialog.confirm("Are you sure you want to delete the category '"+DataStore.m_categories[catIndex]+"' for all your posts? This can not be undone!", function(){
+            PostsFrame.onDoDeleteGlobalCategory(catIndex);
+        });
+    },
+
+    onDoDeleteGlobalCategory : function(catIndex){
+        MediaAPI.deleteCategory(DataStore.m_siteID, DataStore.m_categories[catIndex], PostsFrame.onGlobalCategoryDeleted);
+    },
+
+    onGlobalCategoryDeleted : function(category){
+        
+        // Remove category from cat list
+        var new_list = new Array();
+        for (var i=0; i<DataStore.m_categories.length; i++){
+            if (DataStore.m_categories[i] != category){
+                new_list.push(DataStore.m_categories[i]);
+            }
+        }
+        DataStore.m_categories = new_list;
+
+        // Repaint frame
+        PostsFrame.repaint();
+    }
+
+    // ////////////////////////////////////////////////////////////////////////////
 
 }

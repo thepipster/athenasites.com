@@ -162,6 +162,18 @@ switch ($cmd) {
         removeCategory($site_id, $post_id, $category);
         break;
 
+
+    case "deleteTag":
+        $tag = CommandHelper::getPara('tag', true, CommandHelper::$PARA_TYPE_STRING);
+        deleteTag($site_id,  $tag);
+        break;
+
+    case "deleteCategory":
+        $category = CommandHelper::getPara('category', true, CommandHelper::$PARA_TYPE_STRING);
+        deleteCategory($site_id, $category);
+        break;
+
+
     // PAGES /////////////////////////////////////////////////////////////////////////
 
     case "deletePage":
@@ -231,12 +243,6 @@ switch ($cmd) {
         break;
 
     // Para management..............
-
-    case "setGlobalPara" :
-        $theme_para_id = CommandHelper::getPara('theme_para_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        $new_value = CommandHelper::getPara('para_value', true, CommandHelper::$PARA_TYPE_STRING);
-        assignGlobalPara($site_id, $theme_para_id, $new_value);
-        break;
 
     case "setPagePara" :
         $page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
@@ -639,6 +645,43 @@ function removeTag($site_id, $post_id, $tag) {
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Delete a category from the entire blog, and remove from any posts
+ * @param int $site_id
+ * @param string $category
+ */
+function deleteCategory($site_id, $category) {
+    
+    PostsTable::globalRemoveCategory($site_id, $category);
+
+    $msg['cmd'] = "deleteCategory";
+    $msg['result'] = 'ok';
+    $msg['data'] = array('category' => $category);
+
+    CommandHelper::sendMessage($msg);
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Delete a tag from the entire blog, and remove from any posts
+ * @param int $site_id
+ * @param string $category
+ */
+
+function deleteTag($site_id, $tag) {
+
+    PostsTable::globalRemoveTag($site_id, $tag);
+
+    $msg['cmd'] = "deleteTag";
+    $msg['result'] = 'ok';
+    $msg['data'] = array('tag' => $tag);
+
+    CommandHelper::sendMessage($msg);
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
 //
 // Pages....
 //
@@ -907,6 +950,7 @@ function du($dir) {
 
 function getAll($site_id) {
 
+    Logger::debug("Loading all data for site $site_id");
     // Get the folder list.........
     $folder_list = FolderTable::getFoldersForSite($site_id);
 
@@ -927,17 +971,8 @@ function getAll($site_id) {
 
     // Get the post list
     $post_list = PostsTable::getPostSummaries($site_id);
-    /*
-      $post_data = array();
-      foreach ($post_list as $post){
-      $temp = $post;
-      $temp['last_edit'] = date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
-      $temp['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
-      $temp['tags'] = PostsTable::getPostTags($site_id, $post['id']);
-      $temp['categories'] = PostsTable::getPostCategories($site_id, $post['id']);
-      $post_data[] = $temp;
-      }
-     */
+
+    // Get the media file list
     $media_data = array();
     foreach ($media_list as $media) {
         $temp = $media;
@@ -963,8 +998,17 @@ function getAll($site_id) {
     $msg = array();
     $msg['cmd'] = 'getAll';
     $msg['result'] = 'ok';
-    $msg['data'] = array('folders' => $folder_list, 'media' => $media_data, 'pages' => $page_data, 'theme' => $theme, 'page_templates' => $page_templates,
-        'theme_paras' => $site_theme_paras, 'page_paras' => $page_paras, 'posts' => $post_list, 'tags' => $tag_list, 'categories' => $cat_list);
+    $msg['data'] = array(
+        'folders' => $folder_list,
+        'media' => $media_data,
+        'pages' => $page_data,
+        'theme' => $theme,
+        'page_templates' => $page_templates,
+        'theme_paras' => $site_theme_paras, 
+        'page_paras' => $page_paras,
+        'posts' => $post_list,
+        'tags' => $tag_list,
+        'categories' => $cat_list);
 
     CommandHelper::sendMessage($msg);
 }
@@ -1052,30 +1096,9 @@ function deleteMedia($site_id, $media_id) {
 // ///////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function assignGlobalPara($site_id, $theme_para_id, $new_value) {
-
-    //Logger::debug("assignGlobalPara($site_id, $theme_para_id, $new_value)");
-
-    $result = GlobalParasTable::setGlobalParaValue($site_id, $theme_para_id, $new_value);
-
-    Logger::debug("Result: $result");
-
-    $msg = array();
-
-    $msg['cmd'] = 5;
-    $msg['result'] = $result > 0 ? 'ok' : 'fail';
-    $msg['data'] = array('theme_para_id' => $theme_para_id, 'new_value' => $new_value);
-
-    CommandHelper::sendMessage($msg);
-}
-
-// ///////////////////////////////////////////////////////////////////////////////////////
-
-
 function assignPagePara($site_id, $page_id, $theme_para_id, $new_value) {
 
     //Logger::debug("assignPagePara($site_id, $page_post_id, $theme_para_id, $new_value)");
-
 
     $id = PageParasTable::setParaValue($site_id, $page_id, $theme_para_id, $new_value);
 

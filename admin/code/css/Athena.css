@@ -172,12 +172,25 @@ html, body {
 	display: block;
 }
 
+/* Parameter editing //////////////////////////////////////// */
+
+.paraTitle {
+	color: #386b93;
+	display: block;
+	padding-bottom: 3px;
+}
+
+.paraDesc {
+	color: #3f4040;
+	display: block;
+	padding-bottom: 3px;
+}
 .colorBox {
 	width: 30px;
 	height: 30px;
 	border-width: 2px;
 	border-style: solid;
-	border-color: #cccccc;			
+	border-color: #e7e7e7;	
 	cursor:pointer
 }
 
@@ -186,7 +199,7 @@ html, body {
 	height: 30px;
 	border-width: 2px;
 	border-style: solid;
-	border-color: #cccccc;	
+	border-color: #e7e7e7;	
 	cursor:pointer;
 	display: block;		
 }
@@ -217,7 +230,7 @@ html, body {
 }
 
 .subframebox .subFrameCommand {
-    font-size: 9px;
+    font-size: 9px !important;
     color: #890101;
     cursor: pointer;
     margin-bottom: 2px;

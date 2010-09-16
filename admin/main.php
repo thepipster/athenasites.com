@@ -87,9 +87,9 @@ Logger::debug("$domain has site_id = $current_site_id");
         <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/smoothness/jquery-ui.css" type="text/css"/>
         <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/redmond/jquery-ui.css" type="text/css"/>
         <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/overcast/jquery-ui.css" type="text/css"/>
-        <link rel="stylesheet" href="code/js/3rdparty/jquery-ui/overcast/jquery-ui-1.8.4.custom.css" type="text/css"/>
-        -->
         <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/cupertino/jquery-ui.css" type="text/css"/>
+        -->
+        <link rel="stylesheet" href="code/js/3rdparty/jquery-ui/overcast/jquery-ui-1.8.4.custom.css" type="text/css"/>
 
 
         <link rel="stylesheet" href="code/css/Athena.css" type="text/css" />
@@ -398,7 +398,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 
                             </table>
 
-                        </div> 
+                        </div> <!-- DashboardFrame -->
 
                         <!-- Files Page Content ///////////////////////////////////////////////////////////// -->
 
@@ -444,7 +444,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                                 </table>
 
                             </div>
-                        </div> 
+                        </div> <!-- FilesFrame -->
 
                         <!-- Edit Images/Files Page Content ///////////////////////////////////////////////////////////// -->
 
@@ -456,6 +456,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                         <div id='PagesFrame' class='ViewFrame'>
 
                             <div id='PagesFrameImagePicker'></div>
+                            <div id='PagesFrameColorPicker'></div>
 
                             <table border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>
 
@@ -521,8 +522,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                 </div>
 
                                                 <div class='pageInfoLine'>
-                                                    <span class='pageLabel'>Tools:</span>
-                                                    <!-- <button class='basic_button' onclick="PostsFrame.paintTools()">Import Posts</button> -->
+                                                    <span class='pageLabel'>Import:</span>
                                                     <a href='#' onclick="PostsFrame.paintTools()">Import Posts</a>
                                                 </div>
 
@@ -545,14 +545,15 @@ Logger::debug("$domain has site_id = $current_site_id");
                                             <fieldset>
                                                 <legend></legend>
 
-                                                <p><strong>Tags</strong></p>
+                                                <p><strong>Tags</strong><span class='subFrameCommand' onclick='PostsFrame.viewTags()' title='View and edit your tags'>&nbsp;(view all)</span></p>
                                                 <div class='pageInfoLine'>
                                                     <span class='pageData' id='postTags'><input id='postTag' type='text' value=''/></span>
                                                     <span class='pageLabel'><button class='basic_button' onclick='PostsFrame.addTag();'>Add</button></span>
                                                 </div>
                                                 <div id='apollo_post_tags'></div>
 
-                                                <p><strong>Categories</strong></p>
+                                                <p><strong>Categories</strong>
+                                                    <span class='subFrameCommand' onclick='PostsFrame.viewCategories()' title='View and edit your categories'>&nbsp;(view all)</span></p>
                                                 <div class='pageInfoLine'>
                                                     <span class='pageData' id='postCategories'><input id='postCategory' type='text' value=''/></span>
                                                     <span class='pageLabel'><button class='basic_button' onclick='PostsFrame.addCategory()';>Add</button></span>
@@ -609,6 +610,11 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                 <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Created:</span>
                                                     <span class='pageData' id='pageCreated'></span>
+                                                </div>
+
+                                                <div class='pageInfoLine'>
+                                                    <span class='pageLabel'>Global:</span>
+                                                    <a href='#' onclick="PagesFrame.editGlobalSettings()" title="Edit your global page settings">Edit Settings</a>
                                                 </div>
 
                                                 <div class='pageInfoLine'>

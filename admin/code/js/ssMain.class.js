@@ -15,7 +15,7 @@ var ssMain = {
     VIEW_ACCOUNT : 8,
     VIEW_EDITFILES : 9,
 
-    view : 1,
+    view : 3,
 
     pageTracker : '',
 
