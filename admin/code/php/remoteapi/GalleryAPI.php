@@ -279,7 +279,7 @@ function moveImage($site_id, $old_slot_no, $new_slot_no, $page_id, $old_gal_no, 
 
 function removeImage($site_id, $image_id, $page_id, $gal_no, $theme_para_id, $slot_no){
 			
-	GalleryTable::removeImage($image_id, $page_id, $slot_no, $theme_para_id, $gal_no, $site_id);
+	GalleryTable::removeImageFromSlot($image_id, $page_id, $slot_no, $theme_para_id, $gal_no, $site_id);
 
 	$msg['cmd'] = 'removeImage';
 	$msg['result'] = 'ok';

@@ -152,7 +152,7 @@ class GalleryTable {
 	
 	// //////////////////////////////////////////////////////////////////////////////////////
 
-	public static function removeImage($image_id, $page_id, $slot_no, $theme_para_id, $gallery_number, $site_id){				
+	public static function removeImageFromSlot($image_id, $page_id, $slot_no, $theme_para_id, $gallery_number, $site_id){				
 		return DatabaseManager::submitQuery(DatabaseManager::prepare("DELETE FROM athena_%d_GalleryTable WHERE slot_number = %d AND image_id = %d AND page_id = %d AND theme_para_id = %d AND gallery_number = %d",  $site_id, $slot_no, $image_id, $page_id, $theme_para_id, $gallery_number));		
 	}
 	
@@ -160,6 +160,13 @@ class GalleryTable {
 
 	public static function delete($site_id, $id){				
 		return DatabaseManager::submitQuery(DatabaseManager::prepare("DELETE FROM athena_%d_GalleryTable WHERE id = %d",  $site_id, $id));
+	}
+
+	// //////////////////////////////////////////////////////////////////////////////////////
+
+	public static function removeImageFromAll($image_id, $site_id){				
+		$sql = DatabaseManager::prepare("DELETE FROM athena_%d_GalleryTable WHERE image_id = %d",  $site_id, $image_id);
+		return DatabaseManager::submitQuery($sql);		
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////

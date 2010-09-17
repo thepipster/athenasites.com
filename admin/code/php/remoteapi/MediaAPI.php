@@ -1075,6 +1075,9 @@ function deleteMedia($site_id, $media_id) {
     $msg['cmd'] = 'deleteMedia';
     $msg['result'] = 'ok';
 
+	// Remove from any galleries
+	GalleryTable::removeImageFromAll($media_id, $site_id);
+	
     $media = FolderTable::getMedia($site_id, $media_id);
 
     // Phyiscally delete the file, and thumbnail if applicable

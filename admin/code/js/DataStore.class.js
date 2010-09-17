@@ -819,6 +819,17 @@ var DataStore = {
 
         DataStore.m_mediaList = tempList;
 
+		// Remove from any galleries
+
+        var tempList = new Array();
+        for(var i=0; i<DataStore.m_galleryImageList.length; i++){
+            if (DataStore.m_galleryImageList[i].image_id != media_id){
+                tempList.push(DataStore.m_galleryImageList[i]);
+            }
+        }
+
+        DataStore.m_galleryImageList = tempList;
+				
     }
 
 }
