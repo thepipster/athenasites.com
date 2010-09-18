@@ -26,10 +26,11 @@ class ImportHelper {
         $post_id = PostsTable::getPostIDFromDate($site_id, $date_str);
         if (!isset($post_id)) {
             $post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, $slug, $import_source);
-//			$post_id = PostsTable::create($site_id, $user_id, $content, $status, $title, $can_comment, $slug);
-        } else {
-            PostsTable::update($site_id, $post_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, $slug, $import_source);
+//      	$post_id = PostsTable::create($site_id, $user_id, $content, $status, $title, $can_comment, $slug);
         }
+//        else {
+//            PostsTable::update($site_id, $post_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, $slug, $import_source);
+//        }
 
         // Get path
 

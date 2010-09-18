@@ -38,12 +38,14 @@ var WordpressImporter = {
                     $(this).dialog('close');
                 }
             },
-            title: 'Import a WordPress blog' });
+            title: 'Import a WordPress blog'});
 		
         // Progress bar.....
 		
-        $("#progressBar").progressbar({ value: 0 });
-		AthenaDialog.setProgressBarColorMap("#progressBar", 0, 100, 'roygbiv');
+        $("#progressBar").progressbar({
+            value: 0
+        });
+        AthenaDialog.setProgressBarColorMap("#progressBar", 0, 100, 'roygbiv');
 		
         // Paint flash object....
 			
@@ -71,7 +73,7 @@ var WordpressImporter = {
         WordpressImporter.postCt++;
         var prog = Math.ceil(100 * WordpressImporter.postCt / WordpressImporter.noPosts);
         $("#status").html("Processed item " + WordpressImporter.postCt + " of " + WordpressImporter.noPosts);
-        $("#progressBar").progressbar({ value: prog });
+        $("#progressBar").progressbar({value: prog});
     },
 	
     postCt : 0,
@@ -226,11 +228,11 @@ var WordpressImporter = {
 
         // Add tags
         var paras = {cmd: 'addTags', site_id: DataStore.m_siteID, csvtags: tags};
-        $.ajax({ url: MediaAPI.m_url, dataType: "json", data: paras });
+        $.ajax({url: MediaAPI.m_url, dataType: "json", data: paras});
 
         // Add categories
         var paras = {cmd: 'addCategories', site_id: DataStore.m_siteID, csvcats: categories};
-        $.ajax({ url: MediaAPI.m_url, dataType: "json", data: paras });
+        $.ajax({url: MediaAPI.m_url, dataType: "json", data: paras});
 				
         // Start getting posts
         WordpressImporter.getNextPost();

@@ -15,7 +15,7 @@ var LiveJournalImporter = {
         txt += "<div id='apolloBlogImporter'>";
         txt += "    <fieldset>";
         txt += "        <legend>Progress</legend>";
-        txt += "        <div class='importProgress' id='status' align='center'>Status</div>";
+        txt += "        <div class='importProgress' id='status' align='center'>Enter your username/password and hit start to begin</div>";
         txt += "        <div id='progressBar'></div>";
         txt += "    </fieldset>";
         txt += "    <fieldset>";
@@ -30,7 +30,6 @@ var LiveJournalImporter = {
         txt += "                <td><input type='password' id='ljpass' name='ljpass' value=''></td>";
         txt += "            </tr>";
         txt += "        </table>";
-        txt += "        <br/><button class='basic_button' onclick='LiveJournalImporter.startImport()'>Start Import</button>";
         txt += "    </fieldset>";
         txt += "</div>";
 		
@@ -42,6 +41,7 @@ var LiveJournalImporter = {
             //height:260,
             resizable:false,
             buttons: {
+                "Start": LiveJournalImporter.startImport,
                 "Done": function() {
                     $(this).dialog('close');
                 }

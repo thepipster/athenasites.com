@@ -74,7 +74,7 @@ var PostsFrame = {
         txt += "<br/>";
         txt += "<div align='center'>";
         txt += "    <button class='basic_button' onclick='WordpressImporter.show()'>Wordpress</button>";
-        txt += "    <button class='basic_button' onclick=''>Blogger</button>";
+        txt += "    <button class='basic_button' onclick='BloggerImporter.show()'>Blogger</button>";
         txt += "    <button class='basic_button' onclick='LiveJournalImporter.show()'>LiveJournal</button>";
         txt += "</div>"
         txt += "<br/>";

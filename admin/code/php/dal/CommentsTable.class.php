@@ -44,6 +44,15 @@ class CommentsTable {
         $target_date = mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y"));
         $date_str = date('Y-m-d H:i:s', $target_date);
 
+        // Is there a comment for this date/time from a different author?
+        $comment_id = CommentsTable::getCommentIDFromDate($site_id, $date_str);
+
+        // If there is a comment for this time slot, wait a random time and then try again
+        if (isset($comment_id)){
+            sleep(mt_rand(1,5));
+            return self::create($site_id, $post_id, $parent_comment_id, $content, $status, $author_ip, $author_id);
+        }
+
         $sql = DatabaseManager::prepare("INSERT INTO athena_%d_Comments (post_id, parent_id, content, status, created, author_ip, site_follower_id)
 			VALUES (%d, %d, %s, %s, '$date_str', %d, %d)",
                         $site_id, $post_id, $parent_comment_id, $content, $status, ip2long($author_ip), $author_id);
