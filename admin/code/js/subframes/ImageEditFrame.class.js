@@ -142,6 +142,7 @@ var ImageEditFrame = {
     },
 
     onDeleted : function(media_id){
+        // Update data store
         DataStore.deleteMedia(media_id);
         FilesFrame.repaint();
     }
