@@ -24,7 +24,7 @@ class PostsTable {
 		  `slug` varchar(255) default NULL,
 		  `path` varchar(255) default NULL,
 		  `source` varchar(20) default NULL,
-		  `source_id` int(11) default NULL,
+		  `source_id` varchar(30) default NULL,
 		  `canComment` tinyint(1) default '1',
 		  PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;";
@@ -125,7 +125,7 @@ class PostsTable {
     }
 
     public static function getPostFromSourceID($site_id, $source_id) {
-        $sql = DatabaseManager::prepare("SELECT id FROM athena_%d_Posts WHERE source_id = %d", $site_id, $source_id);
+        $sql = DatabaseManager::prepare("SELECT id FROM athena_%d_Posts WHERE source_id = %s", $site_id, $source_id);
         return DatabaseManager::getVar($sql);
     }
 

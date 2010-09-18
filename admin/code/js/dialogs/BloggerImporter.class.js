@@ -2,22 +2,23 @@
 * Javascript interface to allow importing of posts and comments from Google's
 * Blogger service
 *
+* @see http://code.google.com/apis/blogger/docs/2.0/developers_guide_protocol.html
+*
 * @author Mike Pritchard (mike@apollosites.com)
 * @since 17th September, 2010
 */
 var BloggerImporter = {
 
+	/** Blogger username */
+	m_username : '',
+	
+	m_noPosts : 0,
+	
+    m_postCt : 0,
+	
     // ////////////////////////////////////////////////////////////////////////
 
     show : function(){
-        /*
-Each blog you create has its own unique ID number. Usually, you won't need to worry about this, but occasionally it can be useful to know this number.
-For instance, several third-party services you may want to install require a blog ID number. So if you ever need to figure this out, here's how:
-
-First, e
-
-At the end of the address, you can see that it says blogID=XXXXXX where the X's represent your blog's ID. In the example above, this is 5910562.
-*/
 
         var txt = "";
         txt += "<div id='apolloBlogImporter'>";
@@ -30,11 +31,18 @@ At the end of the address, you can see that it says blogID=XXXXXX where the X's 
         txt += "        <legend>Controls</legend>";
         txt += "        <table border='0' width='100%'>";
         txt += "            <tr>";
-        txt += "                <td><span class='label' id=''>Blog ID</span></td>";
-        txt += "                <td><input type='text' id='bloggerID' name='bloggerID' value=''></td>";
+        txt += "                <td><span class='label' id=''>Username</span></td>";
+        txt += "                <td><input type='text' id='bloggerUser' name='bloggerUser' value=''></td>";
         txt += "            </tr>";
         txt += "        </table>";
         txt += "    </fieldset>";
+        txt += "    <fieldset>";
+        txt += "        <legend>Help</legend>";
+        txt += "            <h3>What is my blogger username?</h3>";
+        txt += "            <p>Your blogger username is the sub-domain of your blog, so for example if your blog is";
+        txt += "               <b>apollosites.blogspot.com</b> then your username is <b><i>apollosites</i></b></p>"
+        txt += "    </fieldset>";
+        /*
         txt += "    <fieldset>";
         txt += "        <legend>Help</legend>";
         txt += "            <h3>What is my blog ID number?</h3>";
@@ -42,6 +50,7 @@ At the end of the address, you can see that it says blogID=XXXXXX where the X's 
         txt += "               just like you do when you want to post to it, or change the settings. </p><p>From any of the posting, settings, or template pages, you can find ";
         txt += "               your blog's ID number. Just look in your browser's address bar, at the end of the address you can something like blogID=XXXXXX</p>"
         txt += "    </fieldset>";
+        */
         txt += "</div>";
 
         $('#apollo_dialog').html(txt);
@@ -62,9 +71,7 @@ At the end of the address, you can see that it says blogID=XXXXXX where the X's 
 
         // Progress bar.....
 
-        $("#progressBar").progressbar({
-            value: 0
-        });
+        $("#progressBar").progressbar({value: 0});
         AthenaDialog.setProgressBarColorMap("#progressBar", 0, 100, 'roygbiv');
 
     },
@@ -73,44 +80,200 @@ At the end of the address, you can see that it says blogID=XXXXXX where the X's 
 
     startImport : function(){
 
-        if ($('#ljuser').val() == "" || $('#ljpass').val() == "") {
-            BloggerImporter.onError("You must enter a valid username and password!");
+        if ($('#bloggerUser').val() == "") {
+            BloggerImporter.onError("You must enter a valid username!");
             return;
         }
+        
+        BloggerImporter.m_username = $('#bloggerUser').val();
+        //BloggerImporter.m_username = "hollypacione";
 
         BloggerImporter.onMessage("Importing....");
         //$('#progressBar').html("<div align='center'><img src='"+defines.root_url+"images/spinner.gif'/></div>");
 
-        BloggerImporter.getComments();
-
+        BloggerImporter.getPosts();
 
     },
 
     // ////////////////////////////////////////////////////////////////////////
 
+	checkCredentials : function(){
+/*
+      	var feedURL = "http://"+BloggerImporter.m_username+".blogspot.com/accounts/ClientLogin";
+
+        var paras = {
+            alt : 'json-in-script'
+        };
+
+        $.ajax({
+            url: feedURL,
+            type: 'post',
+            dataType: "jsonp",
+            success: BloggerImporter.onCredentialsChecked,
+            data: paras
+        });
+        */
+	},
+	
+	onCredentialsChecked : function(data){
+		alert(data);
+	},
+	
+    // ////////////////////////////////////////////////////////////////////////
+
     getPosts : function(){
     
-    // http://code.google.com/apis/gdata/docs/json.html
-    	
-    // GET http://www.blogger.com/feeds/blogID/posts/default
-    // GET http://www.blogger.com/feeds/blogID/posts/default?published-min=2008-03-16T00:00:00&published-max=2008-03-24T23:59:59
+        // GET http://www.blogger.com/feeds/blogID/posts/default?published-min=2008-03-16T00:00:00&published-max=2008-03-24T23:59:59
 
-    // http://hollypacione.blogspot.com/feeds/posts/default
-    // http://stackoverflow.com/questions/2052512/obtain-a-blogger-blog-id-from-its-friendly-url-without-screen-scraping
+      	var feedURL = "http://"+BloggerImporter.m_username+".blogspot.com/feeds/posts/default";
+
+        var paras = {
+            alt : 'json-in-script'
+        };
+
+        $.ajax({
+            url: feedURL,
+            type: 'get',
+            dataType: "jsonp",
+            success: BloggerImporter.onGotPosts,
+            data: paras
+        });
+        
+    },
+    
+    // ////////////////////////////////////////////////////////////////////////
+
+	/** List of posts */
+	m_posts : false,
+	
+    /**
+     * Parse the JSON comment data returned by the Google Blogger API
+     * @see http://code.google.com/apis/gdata/docs/json.html
+     */
+    onGotPosts : function(data){
+    	
+        var feed = data.feed;
+        var entries = feed.entry || [];
+
+		BloggerImporter.m_posts = new Array();
+		BloggerImporter.m_noPosts = entries.length;
+		
+        for (var i = 0; i < entries.length; ++i) {
+                      
+            var post = new Object();
+            
+            var pubDate = new Date(entries[i].published.$t); // 2010-05-06T14:31:11.746-06:00
+            var updateDate = new Date(entries[i].updated.$t); // 2010-05-06T14:31:11.746-06:00
+            var post_id = 0;
+            
+			// Get the id string, which contains the post id and blog id
+            // tag:blogger.com,1999:blog-6545474407612624437.post-6821849969711838358
+            var idString = entries[i].id.$t;
+			var m = idString.match(/blog-([0-9]+).*post-([0-9]+)/);
+			blog_id = m[1];
+			post.id = m[2];
+			
+            post.title = entries[i].title.$t;
+            post.content = entries[i].content.$t;
+            post.date_gmt = pubDate.toString();
+			post.can_comment = 1;
+            post.tags = '';
+            post.categories = '';
+            post.status = 'Published';
+
+            // <category scheme='http://www.blogger.com/atom/ns#' term='high school seniors'/>
+        
+        	if (post.category != undefined){
+        		for (var cat=0; cat<post.category.length; cat++){
+        			if (post.categories != ""){
+        				post.categories += ",";
+        			}
+        			post.categories += post.category[cat].term;
+        		}
+        	}    
+        	
+        	BloggerImporter.m_posts.push(post);
+           
+            
+        }    	
+            
+    	// Now we have all the posts, start importing them into Apollo
+    	BloggerImporter.processNextPost();	
     },
 
-    getComments : function(){
+    // ////////////////////////////////////////////////////////////////////////
 
-        var username = "hollypacione";
-        var feedURL = "http://"+username+".blogspot.com/feeds/comments/default";
-
-        //        $.getJSON(feedURL+"?alt=json-in-script&callback=BloggerImporter.onGotCommentData()");
-
-
-        // blog-6545474407612624437.post-2636905987669815419
+	/**
+	* Process the posts one at a time
+	*/
+	processNextPost : function(){
+	
+        if (BloggerImporter.m_postCt >= BloggerImporter.m_noPosts){
+			$('#status').html("<span style='color:green'>Import completed! Refresh the browser to see the changes.</span>");
+			$("#progressBar").progressbar({value: 100});
+			return;
+        }
+        	
+		var post = BloggerImporter.m_posts[BloggerImporter.m_postCt];		
+        BloggerImporter.m_postCt++;
+	        
+        // Import the post into Apollo....
+                    
+        var paras = {cmd: 'importPost',
+            site_id: DataStore.m_siteID,
+            title: unescape(post.title),
+            content: unescape(post.content),
+            status: post.status,
+            comment: post.can_comment,
+            pubdate: post.date_gmt,
+            csvtags: post.tags,
+            csvcats: post.categories,
+            import_source:'blogger',
+            source_id: post.id
+        };
+								
+        $.ajax({
+            url: MediaAPI.m_url,
+            type: 'post',
+            dataType: "json",
+            success: function(ret){BloggerImporter.onPostAdded(ret)},
+            data: paras
+        });
         
-        //$.getJSON(feedURL, BloggerImporter.onGotCommentData);
-        
+             	
+	},
+	
+    // ////////////////////////////////////////////////////////////////////////
+
+	m_bloggerPostID : 0,
+	m_apolloPostID : 0,
+	
+	/**
+	* Respond to a post being added by the apollo server
+	*/ 
+	onPostAdded : function(ret){
+
+        if (ret.result != 'ok'){
+            return;
+        }
+		
+        BloggerImporter.m_apolloPostID = ret.data.post_id;
+        BloggerImporter.m_bloggerPostID = ret.data.source_post_id;
+				
+		// Get comments for this post
+		BloggerImporter.getComments(BloggerImporter.m_bloggerPostID);
+				
+	},
+			
+    // ////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Get the comments for this post
+	*/
+    getComments : function(bloggerPostID){
+
+        var feedURL = "http://"+BloggerImporter.m_username+".blogspot.com/feeds/"+bloggerPostID+"/comments/default";
+
         var paras = {
             alt : 'json-in-script'
         };
@@ -123,49 +286,107 @@ At the end of the address, you can see that it says blogID=XXXXXX where the X's 
             data: paras
         });
         
-    // Get comment feed in JSON
-    // http://hollypacione.blogspot.com/feeds/comments/default?alt=json
-    //
-    // Need the blog id to get comments
-    // OR
-    // http://hollypacione.blogspot.com/feeds/comments/default
-    // http://hollypacione.blogspot.com/feeds/postID/comments/default
-
     },
-
+		
+    // ////////////////////////////////////////////////////////////////////////
+		
     /**
      * Parse the JSON comment data returned by the Google Blogger API
+     * @see http://code.google.com/apis/gdata/docs/json.html
      */
     onGotCommentData : function(data){
 
         var feed = data.feed;
         var entries = feed.entry || [];
-        var txt = "";
 
+		var commentList = new Array();
+								
         for (var i = 0; i < entries.length; ++i) {
-            var entry = entries[i];
-            var title = entry.title.$t;
-            //var start = (entry['gd$when']) ? entry['gd$when'][0].startTime : "";
-            txt += title;
-        }
+                      
+            var entryObj = new Object();
+            
+            var pubDate = new Date(entries[i].published.$t);
+            var updateDate = new Date(entries[i].updated.$t);
+            
+            /*
+            var comment_url = "";
+            for (var k=0; k < entries[i].link.length; k++){
+            	if (entries[i].link.type == "application/atom+xml" && entries[i].link.rel == "self"){
+            		comment_url = entries[i].link.href;
+            	}
+            }
+            */
 
-        alert(txt);
+			// Get the id string, which contains the post id and blog id
+            // tag:blogger.com,1999:blog-blogID.post-commentID
+            var idString = entries[i].id.$t;
+
+			var m = idString.match(/blog-([0-9]+).*post-([0-9]+)/);
+			blog_id = m[1];
+			var comment_id = m[2];
+
+            entryObj.id = comment_id;
+            entryObj.post_id = BloggerImporter.m_bloggerPostID;
+            entryObj.parent_id = 0;
+
+			alert(entries[i].author[0].name.$t);
+			
+            entryObj.title = unescape(entries[i].title.$t);
+            entryObj.content = unescape(entries[i].content.$t);
+            entryObj.author = entries[i].author[0].name.$t;
+            entryObj.author_email = entries[i].author[0].email.$t;
+            if (entries[i].author[0].uri.$t != undefined){
+	            entryObj.author_url = entries[i].author[0].uri.$t;
+            }
+            else {
+	            entryObj.author_url = "";
+            }
+            entryObj.author_ip = '';
+            entryObj.date_gmt = pubDate.toString();
+            entryObj.approved = 1;
+            
+            commentList.push(entryObj);
+            
+        }
+        
+        if (commentList.length > 0){
+
+			//alert(commentList.length + " comments, source post id = " + bloggerPostID + ", apollo post id = " + apolloPostID);
+			
+	        // Import comments into Apollo
+	        var paras = {cmd: 'importComments',
+	            site_id: DataStore.m_siteID,
+	            pid: BloggerImporter.m_apolloPostID,
+	            com: $.toJSON(commentList),
+	            ims: 'blogger'
+	        };
+						
+	        $.ajax({url: MediaAPI.m_url, type: 'post', dataType: "json", data: paras});
+        }
+                
+		// Update progress bar
+		BloggerImporter.updateProgress();
+        
+        // Get the next post
+		BloggerImporter.processNextPost();
+        
     },
     
+	
     // ////////////////////////////////////////////////////////////////////////
-
-    onComplete : function(ret){
-
-        $('#progressBar').html("");
-
-        if (ret.result == 'ok'){
-            $('#status').html("<span style='color:green'>Import completed! Refresh the browser to see the changes.</span>");
-        }
-        else {
-            $('#status').html("<span style='color:red'>"+ret.data+"</span>");
-        }
+	
+	/**
+	* Update progress bar
+	*/
+    updateProgress : function(){
+        // Update progress
+    
+        var prog = Math.ceil(100 * BloggerImporter.m_postCt / BloggerImporter.m_noPosts);
+        $("#status").html("Processed item " + BloggerImporter.m_postCt + " of " + BloggerImporter.m_noPosts);
+        $("#progressBar").progressbar({value: prog});
+        
     },
-
+        
     // ////////////////////////////////////////////////////////////////////////
 
     onMessage : function(msg){
@@ -176,6 +397,6 @@ At the end of the address, you can see that it says blogID=XXXXXX where the X's 
         $('#status').html("<span style='color:red'>"+msg+"</span>");
     }
 
-// ////////////////////////////////////////////////////////////////////////
+	// ////////////////////////////////////////////////////////////////////////
 
 }

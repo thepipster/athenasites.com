@@ -24,8 +24,8 @@ class CommentsTable {
 		  `created` datetime default NULL,
 		  `author_ip` bigint(20) default NULL,
 		  `source` varchar(20) default NULL,
-		  `source_id` int(11) default NULL,
-		  `source_post_id` int(11) default NULL,
+		  `source_id` varchar(30) default NULL,
+		  `source_post_id` varchar(30) default NULL,
 		  `site_follower_id` int(11) NOT NULL,
 		  PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;";
@@ -116,12 +116,12 @@ class CommentsTable {
     }
 
     public static function updateSourcePostID($comment_id, $site_id, $source_post_id) {
-        $sql = DatabaseManager::prepare("UPDATE athena_%d_Comments SET source_post_id=%d WHERE id = %d", $site_id, $source_post_id, $comment_id);
+        $sql = DatabaseManager::prepare("UPDATE athena_%d_Comments SET source_post_id=%s WHERE id = %d", $site_id, $source_post_id, $comment_id);
         return DatabaseManager::update($sql);
     }
 
     public static function updateSourceID($comment_id, $site_id, $source_id) {
-        $sql = DatabaseManager::prepare("UPDATE athena_%d_Comments SET source_id=%d WHERE id = %d", $site_id, $source_id, $comment_id);
+        $sql = DatabaseManager::prepare("UPDATE athena_%d_Comments SET source_id=%s WHERE id = %d", $site_id, $source_id, $comment_id);
         return DatabaseManager::update($sql);
     }
 

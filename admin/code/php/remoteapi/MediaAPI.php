@@ -447,7 +447,7 @@ function importPost($site_id, $content, $status, $title, $created_date, $can_com
 
     $msg['cmd'] = "importPost";
     $msg['result'] = $post_id > 0 ? 'ok' : 'fail';
-    $msg['data'] = array('post_id' => $post_id);
+    $msg['data'] = array('post_id' => $post_id, 'source_post_id' => $import_source_id);
 
     CommandHelper::sendMessage($msg);
 }
@@ -481,8 +481,12 @@ function importLiveJournal($site_id, $lj_user, $lj_password) {
 
 function importComments($site_id, $post_id, $comment_obj, $import_source) {
 
+	Logger::debug("importComments($site_id, $post_id, $comment_obj, $import_source)");
+	
     $comment_list = json_decode($comment_obj);
 
+	Logger::dump($comment_list);
+	
     foreach ($comment_list as $comment) {
 
         $author_name = $comment->author;
