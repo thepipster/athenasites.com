@@ -7,6 +7,7 @@
 */
 
 $image = PageManager::getMediaFromThemePara(203); 
+
 if (isset($image)){
 	$background_image = PageManager::getMediaURL($image['id']);
 	$width = $image['width'];
@@ -34,13 +35,7 @@ else {
 			
 			<div class='leftCol' align="left">
 				<div class='contentText'>
-					<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-														
-						<div class="storycontent">
-							<?php the_content(__('(more...)')); ?>
-						</div>
-						
-					<?php endwhile; endif; ?>
+					<?php echo PageManager::getCurrentPageContent(); ?>
 				</div>
 			</div>
 			

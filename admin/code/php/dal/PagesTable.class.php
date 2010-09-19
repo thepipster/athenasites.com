@@ -144,12 +144,15 @@ class PagesTable {
 	public static function getBlogpage($site_id){
 		//Logger::debug("getPage(site_id = $site_id, page_id = $page_id");	
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages WHERE is_blogpage = 1", $site_id);		
-		$data = DatabaseManager::getResults($sql);				
-		if (isset($data[0])){
-			return $data[0];
-		}
-		return null;
+		return DatabaseManager::getSingleResult($sql);				
 	}
+	
+	public static function getBlogpageSlug($site_id){
+		//Logger::debug("getPage(site_id = $site_id, page_id = $page_id");	
+		$sql = DatabaseManager::prepare("SELECT slug FROM athena_%d_Pages WHERE is_blogpage = 1", $site_id);		
+		return DatabaseManager::getVar($sql);				
+	}
+	
 	
 	// /////////////////////////////////////////////////////////////////////////////////
 

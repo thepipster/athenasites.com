@@ -75,7 +75,7 @@ function stripImages($postContent){
                             </div>
 
                             <div class="post_author">
-				by <?= $post['author'] ?>
+								by <?= $post['author'] ?>
                             </div>
 
                             <p>
@@ -93,7 +93,7 @@ function stripImages($postContent){
 
                         <?php } ?>
 
-                        <div style='padding-bottom:30px;'>
+                        <div style='padding-bottom:30px;' id='blogSidebar'>
                             <span style='float:left; padding-left:35px;'><?= PageManager::getOlderPostsLink('&laquo; Older posts'); ?></span>
                             <span style='float:right; padding-right:35px;'><?=  PageManager::getNewerPostsLink('Newer posts &raquo;'); ?></span>
                         </div>
@@ -107,13 +107,13 @@ function stripImages($postContent){
             <td width="200px">
                 <div class='blogSidebarWrapper'>
 
-                    <h3>Tag Cloud</h3>
-                    <?= SideBarManager::getTagCloud(PageManager::$site_id); ?>
+                    <h2>Tags</h2>
+                    <?= SideBarManager::getTags(PageManager::$site_id); ?>
 
-                    <h3>Categories</h3>
+                    <h2>Categories</h2>
                     <?= SideBarManager::getCategories(PageManager::$site_id); ?>
 
-                    <h3>Archives</h3>
+                    <h2>Archives</h2>
                     <?= SideBarManager::getArchive(PageManager::$site_id); ?>
                     
                 </div>

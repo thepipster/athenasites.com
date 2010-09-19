@@ -5,7 +5,7 @@
 * @Description: Contact Page
 */
 
-$background_image = PageParasTable::getMediaURLFromThemePara(205);
+$background_image = PageManager::getMediaURLFromThemePara(205); 
 // Email = 206 
 ?>
 
@@ -18,13 +18,7 @@ $background_image = PageParasTable::getMediaURLFromThemePara(205);
 			<div class='rightCol' align="left">
 			
 				<div class='contentText'>
-					<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-														
-						<div class="storycontent">
-							<?php the_content(__('(more...)')); ?>
-						</div>
-						
-					<?php endwhile; endif; ?>
+					<?php echo PageManager::getCurrentPageContent(); ?>
 					
 					<form id='contactForm' method='post' action='' onsubmit="return hpContact.onSubmit();">
 						<input type="text" class='inputText required_name' id='name' name='name' value="Your Name" onfocus="if (this.value == 'Your Name'){this.value = '';}" onblur='hpContact.onChange()'>

@@ -132,6 +132,20 @@ class PostsTable {
 
     // /////////////////////////////////////////////////////////////////////////////////
 
+    public static function getPostsFromYear($site_id, $year) {    
+        $date_from = date("Y-01-01 00:00:00", strtotime("01/01/$year 00:00:00"));
+        $date_end = date("Y-12-31 23:59:59", strtotime("12/31/$year 23:59:59"));    
+        $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts WHERE created >= %s AND created <= %s", $site_id, $date_from, $date_end);
+        return DatabaseManager::getResults($sql);
+    }
+	
+    public static function getPostsFromMonthAndYear($site_id, $month, $year) {
+        $date_from = date("Y-m-01 00:00:00", strtotime("$month/01/$year 00:00:00"));
+        $date_end = date("Y-m-d 23:59:59", strtotime('-1 day',strtotime('+1 month',strtotime($date_from))));
+        $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts WHERE created >= %s AND created <= %s", $site_id, $date_from, $date_end);
+        return DatabaseManager::getResults($sql);
+    }
+				
     public static function getPostFromDate($site_id, $datestr) {
         $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts WHERE created = %s", $site_id, $datestr);
         return DatabaseManager::getSingleResult($sql);
@@ -186,6 +200,14 @@ class PostsTable {
      */
     public static function getNoPostsForTimeSpan($site_id, $date_from, $date_end){
         $sql = DatabaseManager::prepare("SELECT count(id) FROM athena_%d_Posts WHERE created >= %s AND created <= %s", $site_id, $date_from, $date_end);
+        return DatabaseManager::getVar($sql);
+    }
+
+	/**
+	* Get the total number of posts for this blog
+	*/
+    public static function getNoPosts($site_id){
+        $sql = DatabaseManager::prepare("SELECT count(id) FROM athena_%d_Posts", $site_id);
         return DatabaseManager::getVar($sql);
     }
 
@@ -483,8 +505,16 @@ class PostsTable {
 
     // /////////////////////////////////////////////////////////////////////////////////
 
-    public static function getNPosts($site_id, $n) {
-        $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts ORDER BY created DESC LIMIT %d", $site_id, $n);
+    /**
+     * Get a list of posts, the posts are ordered by data and this will return posts starting from post start_n ending at end_n
+     * @param int $site_id
+     * @param int $start_n - the starting post number
+     * @param int $end_n - the ending post number
+     * @return <type>
+     */
+     public static function getNPosts($site_id, $start_n, $end_n) {
+     	Logger::debug("getNPosts($site_id, $start_n, $end_n)");
+        $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts ORDER BY created DESC LIMIT %d, %d", $site_id, $start_n, ($end_n-$start_n));
         return DatabaseManager::getResults($sql);
     }
 

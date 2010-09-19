@@ -279,12 +279,23 @@ a {
 #content .postTitle a {
 	/*color: red !important;*/
 }
+	
+#content .archiveMonth {
+	text-decoration: none;
+	list-style: none;	
+}
 		
-		
+#content .archiveList {
+	list-style: none;	
+	padding-left: 0;
+}
+				
 #content a {
 	padding: 0;
 	margin: 0;	
 }
+
+#content a:hover { color: #d8d8d8 }
 
 #sidebar {
 	padding: 0;

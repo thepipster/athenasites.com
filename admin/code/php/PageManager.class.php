@@ -44,26 +44,39 @@ class PageManager {
     public static $blog_url;
     /** The blog base path, e.g.  blog */
     public static $blog_base_url;
+    /** The total number of posts for this blog */
+    public static $no_posts = 0;
+    
     public static $current_post = null;
+    
     public static $blog_tag = '';
     public static $blog_category = '';
+    public static $blog_year = '';
+    public static $blog_month = '';
+    public static $blog_page_no = 1;
+    
     public static $page_list;
 
     /** The blog mode */
     public static $blog_mode = '';
 
-    public static $BLOGMODE_SINGLEPOST = 1;
-    public static $BLOGMODE_ALL = 2;
-    public static $BLOGMODE_CATEGORY = 3;
-    public static $BLOGMODE_TAG = 4;
-    public static $MAX_POSTS_PER_PAGE = 1;
+    public static $BLOGMODE_SINGLEPOST 	= 1;
+    public static $BLOGMODE_ALL 	 	= 2;
+    public static $BLOGMODE_CATEGORY 	= 3;
+    public static $BLOGMODE_TAG 	 	= 4;
+    public static $BLOGMODE_YEAR 	 	= 5;
+    public static $BLOGMODE_MONTH 	 	= 6;
+    
+    public static $MAX_POSTS_PER_PAGE 	= 5;
+    
 
 
     // ///////////////////////////////////////////////////////////////////////////////////////
 
-    public static function init($page_name, $page_path, $tag, $category) {
+    public static function init($page_name, $page_path, $tag = '', $category = '', $blog_month = '', $blog_year = '', $blog_page_no = '') {
 
-        Logger::debug(">>>>>>>>>>");
+        Logger::debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        //Logger::debug("init($page_name, $page_path, $tag, $category, $blog_year, $blog_month)");
 
         self::$url_root = 'http://' . $_SERVER['HTTP_HOST'];
 
@@ -81,22 +94,48 @@ class PageManager {
         self::$page_list = PagesTable::getPages(self::$site_id);
 
         //self::$user_id = SecurityUtils::getCurrentUserID();
+        
         // Get blog info....
         $blogPage = PagesTable::getBlogpage(self::$site_id);
         self::$blog_url = $blogPage['path'] . $blogPage['slug'];
         self::$blog_base_url = substr(self::$blog_url, 0, (strlen(self::$blog_url) - strlen('.html')));
+		self::$no_posts = PostsTable::getNoPosts(self::$site_id);
+		
+		// Store the requested blog page, if set (this is for older/previous links
+		if ($blog_page_no != ''){
+	        self::$blog_page_no = $blog_page_no;
+		}
+		else {
+	        self::$blog_page_no = 1;
+		}
 
-        if (isset($tag) && $tag != '') {
+        if ($tag != '') {
             self::$blog_mode = self::$BLOGMODE_TAG;
             self::$blog_tag = $tag;
             $page = $blogPage;
             Logger::debug(">>> BLOG TAG MODE!");
-        } else if (isset($category) && $category != '') {
+        } 
+        else if ($category != '') {
             self::$blog_mode = self::$BLOGMODE_CATEGORY;
             self::$blog_category = $category;
             $page = $blogPage;
             Logger::debug(">>> BLOG CATEGORY MODE!");
-        } else {
+        } 
+        else if ($blog_year != '' && $blog_month != '') {
+            self::$blog_mode = self::$BLOGMODE_MONTH;
+            self::$blog_year = $blog_year;
+            self::$blog_month = $blog_month;
+            $page = $blogPage;
+            Logger::debug(">>> BLOG YEAR & MONTH MODE!");
+        } 
+        else if ($blog_year != '') {
+            self::$blog_mode = self::$BLOGMODE_YEAR;
+            self::$blog_year = $blog_year;
+            $page = $blogPage;
+            Logger::debug(">>> BLOG YEAR MODE!");
+        } 
+        else {
+        
             $post_path = self::$blog_url . $page_path . "/";
 
             // Remove the blog url from the path, e.g.
@@ -123,7 +162,8 @@ class PageManager {
                   $day = $parts[3];
                  */
                 $page = $blogPage;
-            } else {
+            } 
+            else {
                 // Get the current page id
                 self::$blog_mode = self::$BLOGMODE_ALL;
                 $page = PagesTable::getPageFromSlug(self::$site_id, self::$page_slug);
@@ -243,7 +283,7 @@ class PageManager {
         $image = FolderTable::getMedia(PageManager::$site_id, $media_id);
 
         if (isset($image)) {
-            return self::$media_root_url . $image['filename'];
+            return self::$media_root_url . $image['filepath'] . $image['filename'];
         }
 
         return '';
@@ -346,7 +386,10 @@ class PageManager {
                 break;
 
             case self::$BLOGMODE_ALL :
-                $temp_list = PostsTable::getNPosts(self::$site_id, 5);
+            	Logger::debug("Current Blog page = " . self::$blog_page_no);
+            	$start_n = (self::$blog_page_no-1) * self::$MAX_POSTS_PER_PAGE;
+            	$end_n = self::$blog_page_no * self::$MAX_POSTS_PER_PAGE;            	
+                $temp_list = PostsTable::getNPosts(self::$site_id, $start_n, $end_n);
                 break;
 
             case self::$BLOGMODE_CATEGORY :
@@ -356,6 +399,15 @@ class PageManager {
             case self::$BLOGMODE_TAG :
                 $temp_list = PostsTable::getPostsFromTag(self::$site_id, self::$blog_tag);
                 break;
+                
+            case self::$BLOGMODE_YEAR :
+                $temp_list = PostsTable::getPostsFromYear(self::$site_id, self::$blog_year);
+                break;
+
+            case self::$BLOGMODE_MONTH :
+                $temp_list = PostsTable::getPostsFromMonthAndYear(self::$site_id, self::$blog_month, self::$blog_year);
+                break;
+                
         }
 
         $post_list = array();
@@ -532,10 +584,17 @@ class PageManager {
      * @return string the link
      */
     public static function getOlderPostsLink($text) {
-        if (self::$blog_mode == self::$BLOGMODE_ALL) {
-            $link = '';
-            return "<a href='$link'>$text</a>";
-        }
+    	
+    	$no_pages = ceil(self::$no_posts / self::$MAX_POSTS_PER_PAGE);
+    	$prev_page = self::$blog_page_no+1;
+    	
+    	if ($prev_page <= $no_pages){
+	        if (self::$blog_mode == self::$BLOGMODE_ALL) {
+	            $link = self::$blog_url . "?page_no=" . $prev_page;
+	            return "<a href='$link'>$text</a>";
+	        }
+    	}
+    	
         return "";
     }
 
@@ -547,10 +606,20 @@ class PageManager {
      * @return string the link
      */
     public static function getNewerPostsLink($text) {
-        if (self::$blog_mode == self::$BLOGMODE_ALL) {
-            $link = '';
+    
+    	$next_page = self::$blog_page_no-1;
+    
+    	if ($next_page > 1){
+	        if (self::$blog_mode == self::$BLOGMODE_ALL) {
+	            $link = self::$blog_url . "?page_no=" . $next_page;
+	            return "<a href='$link'>$text</a>";
+	        }
+    	}
+    	else if ($next_page == 1){
+            $link = self::$blog_url;
             return "<a href='$link'>$text</a>";
-        }
+    	}
+    	
         return "";
     }
 

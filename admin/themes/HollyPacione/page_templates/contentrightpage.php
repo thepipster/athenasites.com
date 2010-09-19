@@ -6,6 +6,8 @@
 */
 
 $image = PageManager::getMediaFromThemePara(204); 
+Logger::dump($image);
+
 if (isset($image)){
 	$background_image = PageManager::getMediaURL($image['id']);
 	$width = $image['width'];
