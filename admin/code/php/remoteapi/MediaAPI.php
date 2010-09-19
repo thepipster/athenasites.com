@@ -441,6 +441,8 @@ function addPost($site_id, $title, $content, $status, $slug, $can_comment) {
 
 function importPost($site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, $import_source, $import_source_id) {
 
+    //Logger::debug(">>> importPost(site_id=$site_id, status=$status, title=$title, created_date=$created_date, can_comment=$can_comment, csv_tags=$csv_tags, csv_categories=$csv_categories, import_source=$import_source, import_source_id=$import_source_id");
+    
     $user_id = SecurityUtils::getCurrentUserID();
 
     $post_id = ImportHelper::importPost($user_id, $site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, $import_source, $import_source_id);

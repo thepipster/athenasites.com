@@ -158,7 +158,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 
         <!-- Utils -->
         <script src="code/js/defines.js" type="text/javascript"></script>
-        <script src="code/js/utils/Message.class.js" type="text/javascript"></script>
+        <script src="code/js/utils/Logger.class.js" type="text/javascript"></script>
         <script src="code/js/utils/AthenaDialog.class.js" type="text/javascript"></script>
         <script src="code/js/utils/StatViewer.class.js" type="text/javascript"></script>
         <script src="code/js/flashuploader/FileProgress.class.js" type="text/javascript"></script>
@@ -183,6 +183,7 @@ Logger::debug("$domain has site_id = $current_site_id");
         <script src="code/js/dialogs/LiveJournalImporter.class.js" type="text/javascript"></script>
         <script src="code/js/dialogs/BloggerImporter.class.js" type="text/javascript"></script>
         <script src="code/js/dialogs/CommentsEditDialog.class.js" type="text/javascript"></script>
+        <script src="code/js/dialogs/AccountDialog.class.js" type="text/javascript"></script>
         <script src="code/colorpicker/js/colorpicker.js" type="text/javascript"></script>
 
         <!-- Sub-Frame Displays -->
@@ -199,8 +200,6 @@ Logger::debug("$domain has site_id = $current_site_id");
         <script src="code/js/frames/GalleriesFrame.class.js" type="text/javascript"></script>
         <script src="code/js/frames/PagesFrame.class.js" type="text/javascript"></script>
         <script src="code/js/frames/PostsFrame.class.js" type="text/javascript"></script>
-        <script src="code/js/frames/SettingsFrame.class.js" type="text/javascript"></script>
-        <script src="code/js/frames/AccountFrame.class.js" type="text/javascript"></script>
         <script src="code/js/frames/EditImageFrame.class.js" type="text/javascript"></script>
         <script src="code/js/frames/SidebarFrame.class.js" type="text/javascript"></script>
 
@@ -254,9 +253,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                 <td>
 
                     <div id='menu_container'>
-                        <!--
-                        <div id='settings_menu' class='menu_item' onclick='ssMain.onShowSettings()'>Settings</div>
-                        -->
+                        
                         <div id='dashboard_menu' class='menu_item' onclick='ssMain.onShowDashboard()'>Dashboard</div>
                         <div id='posts_menu' class='menu_item' onclick='ssMain.onShowPosts()'>Blog</div>
                         <div id='pages_menu' class='menu_item' onclick='ssMain.onShowPages()'>Pages</div>
@@ -272,7 +269,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                         <?php } ?>
 
                         <div class='menu_link' onclick='ssMain.onLogout()'>Logout</div>
-                        <div id='account_menu' class='menu_link' onclick='ssMain.onShowAccount()'>Account</div>
+                        <div id='account_menu' class='menu_link' onclick='AccountDialog.show()'>Account</div>
 
                         <?php
                         if (count($site_list) > 1) {

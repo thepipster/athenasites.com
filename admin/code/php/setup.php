@@ -36,7 +36,8 @@ define("THUMB_HEIGHT", 50);
 Session::init();
 
 // Set default time zone
-date_default_timezone_set('UTC');
+//date_default_timezone_set('UTC');
+date_default_timezone_set('America/New_York'); // EST
 
 // Any shutdown events....
 register_shutdown_function("onShutdown");

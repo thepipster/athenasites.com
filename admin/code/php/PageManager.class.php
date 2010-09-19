@@ -6,35 +6,58 @@
  */
 class PageManager {
 
+    /** The site url root, e.g. http://cgp.apollosites.com/ */
     public static $url_root;
+    /** The them url root, e.g. http://cgp.apollosites.com/admin/themes/cgp4/ */
     public static $theme_url_root;
+    /** The root url for the site's media directory,  e.g. http://cgp.apollosites.com/user_files/1/ */
     public static $media_root_url;
+    /** The domain for the site's media directory,  e.g. cgp */
     public static $domain;
+    /** The current page slug,  e.g. some-page-name */
     public static $page_slug;
+    /** The current site id */
     public static $site_id;
+    /** The current user id */
     public static $user_id;
+    /** The current page id */
     public static $page_id;
+    /** The current parent page id */
     public static $page_parent_id;
+    /** The current parent title */
     public static $page_title;
+    /** The current page descrition, which if set is used the the html page title */
     public static $page_desc;
+    /** The current theme id */
     public static $theme_id;
+    /** The current theme file root */
     public static $theme_file_root;
+    /** The current page template filename */
     public static $template_filename;
+    /** Flag to determine if this is the home page */
     public static $is_homepage;
+    /** Flag to determine if this is the blog page */
     public static $is_blogpage;
-    public static $blog_url;
-    public static $blog_base_url;
-    public static $blog_mode = '';
+    /** Flag to determine if the current page is a blog post */
     public static $is_post = false;
+    /** The blog base url, e.g.  /blog.html */
+    public static $blog_url;
+    /** The blog base path, e.g.  blog */
+    public static $blog_base_url;
     public static $current_post = null;
     public static $blog_tag = '';
     public static $blog_category = '';
     public static $page_list;
+
+    /** The blog mode */
+    public static $blog_mode = '';
+
     public static $BLOGMODE_SINGLEPOST = 1;
     public static $BLOGMODE_ALL = 2;
     public static $BLOGMODE_CATEGORY = 3;
     public static $BLOGMODE_TAG = 4;
     public static $MAX_POSTS_PER_PAGE = 1;
+
 
     // ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -135,18 +158,7 @@ class PageManager {
         self::$theme_url_root = self::$url_root . '/admin/themes/' . $theme['theme_name'] . "/";
         self::$theme_file_root = FILE_ROOT . 'admin/themes/' . $theme['theme_name'] . "/";
 
-        /*
-          Logger::debug(">>>>>>>>>>");
-          Logger::debug("Request URI: " . $_SERVER['REQUEST_URI']);
-          Logger::debug("Host: " . $_SERVER['HTTP_HOST']);
-          Logger::debug("Domain: " . self::$domain);
-          Logger::debug("Page Slug: " . self::$page_slug);
-          Logger::debug("Blog base path: " . self::$blog_base_url);
-          Logger::debug("Theme URL root: " . self::$theme_url_root);
-          Logger::debug("Theme file root: " . self::$theme_file_root);
-          Logger::debug("Templeta File: " . self::$template_filename);
-          Logger::debug("Medi Root URL: " . self::$media_root_url);
-         */
+
     }
 
     // ///////////////////////////////////////////////////////////////////////////////////////
@@ -256,12 +268,12 @@ class PageManager {
     // ///////////////////////////////////////////////////////////////////////////////////////
 
     public static function getPageTitle() {
-	
-		if (isset(self::$page_desc) && self::$page_desc != ""){
-			return self::$page_desc;
-		}
-		
-		return self::$page_title;
+
+        if (isset(self::$page_desc) && self::$page_desc != "") {
+            return self::$page_desc;
+        }
+
+        return self::$page_title;
     }
 
     // ///////////////////////////////////////////////////////////////////////////////////////
@@ -305,12 +317,24 @@ class PageManager {
     //
     // ///////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Return the html for the side bar for the current blog, based on the blog preferences
+     */
     public static function getSidebar() {
         // TODO
     }
 
     // ///////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Get the posts for the current page. Depending upon the current mode, this will return a single post
+     * or several posts.
+     *
+     * The mode is set automatically based on the currently requested page (such as a list of posts for a category,
+     * the enitre blog etc.)
+     * 
+     * @return array list of posts
+     */
     public static function getPosts() {
 
         $temp_list = array();
@@ -341,6 +365,9 @@ class PageManager {
             $post['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
             $post['tags'] = PostsTable::getPostTags(self::$site_id, $post['id']);
             $post['categories'] = PostsTable::getPostCategories(self::$site_id, $post['id']);
+            
+            $user = UserTable::getUser($post['user_id']);
+            $post['author'] = $user['name'];
             $post_list[] = $post;
         }
 
@@ -349,12 +376,37 @@ class PageManager {
 
     // ///////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Return the link to comment on this post
+     * @param array $post post object
+     * @param string $label (optional) specify the text label to use, default is 'Comments' 
+     * @param string $cssClass (optional) specify the css class to use for the link (default is 'commentLink')
+     * @return string the link to the post, but as a comment link
+     */
+    public static function getCommentsLink($post, $label='Comments', $cssClass="commentLink"){
+        $noComments = CommentsTable::getNoCommentsForPost(self::$site_id, $post['id']);
+        $link = "http://" . $_SERVER['HTTP_HOST'] . self::$blog_base_url . $post['path'] . $post['slug'];
+        return "<a href='$link' class='$cssClass'>$label ($noComments)</a>";
+    }
+
+    // ///////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Return the link to this post
+     * @param array $post post object
+     * @return string the link
+     */
     public static function getPostLink($post) {
         return "http://" . $_SERVER['HTTP_HOST'] . self::$blog_base_url . $post['path'] . $post['slug'];
     }
 
     // ///////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Return the formatted date for the give post
+     * @param array $post the post object
+     * @return string the date
+     */
     public static function getPostDate($post) {
         //August 19, 2010
         return date("F j, Y", strtotime($post['created']));
@@ -362,6 +414,13 @@ class PageManager {
 
     // ///////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Get the content of the given post, the class is used to translate the content of the post to
+     * text that can be rendered, by doing things such as replacing the custom apollo page break
+     * with the actual content
+     * @param array $post the post object
+     * @return string the translated content
+     */
     public static function getBlogContent($post) {
 
         $content = stripslashes($post['content']);
@@ -399,14 +458,14 @@ class PageManager {
         }
 
         return $post_content;
-
     }
 
     // ///////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Get a list of categories for this post, which are links seperated by the specified
-     * seperator (default = ',')
+     * Get a list of hyperlinked categories for the entir blog
+     * @param string $seperator (optional) seperator to use, default ','
+     * @return string
      */
     public static function getAllCategories($seperator=",") {
         $cats = PostsTable::getCategories(self::$site_id);
@@ -421,9 +480,13 @@ class PageManager {
         return $cat_str;
     }
 
+    // ///////////////////////////////////////////////////////////////////////////////////////
+
     /**
-     * Get a list of categories for this post, which are links seperated by the specified
-     * seperator (default = ',')
+     * Return a list of hyperlinked categories for the give post
+     * @param array $post
+     * @param string $seperator (optional) seperator to use, default ','
+     * @return string
      */
     public static function getCategories($post, $seperator=",") {
         $cats = $post['categories'];
@@ -440,6 +503,12 @@ class PageManager {
 
     // ///////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Return a list of hyperlinked tags for the give post
+     * @param array $post
+     * @param string $seperator (optional) seperator to use, default ','
+     * @return string
+     */
     public static function getTags($post, $seperator=",") {
 
         $tags = $post['tags'];
@@ -457,6 +526,11 @@ class PageManager {
 
     // ///////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Get the link to display older posts
+     * @param strin $text the test to user for the link
+     * @return string the link
+     */
     public static function getOlderPostsLink($text) {
         if (self::$blog_mode == self::$BLOGMODE_ALL) {
             $link = '';
@@ -465,6 +539,13 @@ class PageManager {
         return "";
     }
 
+    // ///////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Get the link to display newer posts
+     * @param strin $text the test to user for the link
+     * @return string the link
+     */
     public static function getNewerPostsLink($text) {
         if (self::$blog_mode == self::$BLOGMODE_ALL) {
             $link = '';
@@ -473,6 +554,31 @@ class PageManager {
         return "";
     }
 
+    // ///////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Dump the page info to the logger, for debug!
+     */
+    public static function dump(){
+
+      Logger::debug("\n".
+              "Request URI: " . $_SERVER['REQUEST_URI'] . "\n" .
+              "Host: " . $_SERVER['HTTP_HOST'] . "\n" .
+              "Site ID: " . self::$site_id . "\n" .
+              "Page ID: " . self::$page_id . "\n" .
+              "Page Parent ID: " . self::$page_parent_id . "\n" .
+              "User ID: " . self::$user_id . "\n" .
+              "URL Root: " . self::$url_root . "\n" .
+              "Page Slug: " . self::$page_slug . "\n" .
+              "Blog base path: " . self::$blog_base_url . "\n" .
+              "Blog URL: " . self::$blog_url . "\n" .
+              "Theme URL root: " . self::$theme_url_root . "\n" .
+              "Theme file root: " . self::$theme_file_root . "\n" .
+              "Templeta File: " . self::$template_filename . "\n" .
+              "Medi Root URL: " . self::$media_root_url . "\n\n"
+              );
+
+    }
 }
 
 ?>

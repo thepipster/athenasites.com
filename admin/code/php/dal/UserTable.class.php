@@ -16,8 +16,8 @@ class UserTable {
         $date_str = date('Y-m-d H:i:s', $target_date);
         	
 		$sql = DatabaseManager::prepare(
-			"INSERT INTO athena_Users (email, name, password_hash, account_created, last_login, user_level) VALUES (%s, %s, %s, %s, %s, %d)", 
-			$email, $name, $password_hash, $date_str, $date_str, $user_level);
+			"INSERT INTO athena_Users (email, name, nice_name, password_hash, account_created, last_login, user_level) VALUES (%s, %s, %s, %s, %s, %s, %d)",
+			$email, $name, $name, $password_hash, $date_str, $date_str, $user_level);
 			
 		DatabaseManager::submitQuery($sql);
 		

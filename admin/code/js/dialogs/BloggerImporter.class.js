@@ -9,10 +9,13 @@
 */
 var BloggerImporter = {
 
-	/** Blogger username */
-	m_username : '',
-	
-	m_noPosts : 0,
+    /** Blogger username */
+    m_username : '',
+
+    /** Blogger URL */
+    m_blogURL : '',
+    
+    m_noPosts : 0,
 	
     m_postCt : 0,
 	
@@ -31,16 +34,16 @@ var BloggerImporter = {
         txt += "        <legend>Controls</legend>";
         txt += "        <table border='0' width='100%'>";
         txt += "            <tr>";
-        txt += "                <td><span class='label' id=''>Username</span></td>";
+        txt += "                <td><span class='label' id=''>Blog Name</span></td>";
         txt += "                <td><input type='text' id='bloggerUser' name='bloggerUser' value=''></td>";
         txt += "            </tr>";
         txt += "        </table>";
         txt += "    </fieldset>";
         txt += "    <fieldset>";
         txt += "        <legend>Help</legend>";
-        txt += "            <h3>What is my blogger username?</h3>";
-        txt += "            <p>Your blogger username is the sub-domain of your blog, so for example if your blog is";
-        txt += "               <b>apollosites.blogspot.com</b> then your username is <b><i>apollosites</i></b></p>"
+        txt += "            <h3>What is my blog name?</h3>";
+        txt += "            <p>Your blog name is the sub-domain of your blog, so for example if your blog is";
+        txt += "               <b>apollosites.blogspot.com</b> then your blog name would be <b><i>apollosites</i></b></p>"
         txt += "    </fieldset>";
         /*
         txt += "    <fieldset>";
@@ -71,7 +74,9 @@ var BloggerImporter = {
 
         // Progress bar.....
 
-        $("#progressBar").progressbar({value: 0});
+        $("#progressBar").progressbar({
+            value: 0
+        });
         AthenaDialog.setProgressBarColorMap("#progressBar", 0, 100, 'roygbiv');
 
     },
@@ -80,44 +85,58 @@ var BloggerImporter = {
 
     startImport : function(){
 
-        if ($('#bloggerUser').val() == "") {
+        BloggerImporter.m_postCt = 0;
+        $("#progressBar").progressbar({
+            value: 0
+        });
+        
+        BloggerImporter.m_username = $('#bloggerUser').val();
+        
+        if (BloggerImporter.m_username == "") {
             BloggerImporter.onError("You must enter a valid username!");
             return;
         }
-        
-        BloggerImporter.m_username = $('#bloggerUser').val();
-        //BloggerImporter.m_username = "hollypacione";
 
         BloggerImporter.onMessage("Importing....");
-        //$('#progressBar').html("<div align='center'><img src='"+defines.root_url+"images/spinner.gif'/></div>");
-
         BloggerImporter.getPosts();
 
     },
 
     // ////////////////////////////////////////////////////////////////////////
 
-	checkCredentials : function(){
-/*
-      	var feedURL = "http://"+BloggerImporter.m_username+".blogspot.com/accounts/ClientLogin";
-
-        var paras = {
-            alt : 'json-in-script'
-        };
-
-        $.ajax({
-            url: feedURL,
-            type: 'post',
-            dataType: "jsonp",
-            success: BloggerImporter.onCredentialsChecked,
-            data: paras
-        });
-        */
-	},
-	
-	onCredentialsChecked : function(data){
-		alert(data);
-	},
+//    m_email : '',
+//    m_password : '',
+//
+//    checkCredentials : function(){
+//
+//      	var feedURL = "http://www.google.com/accounts/ClientLogin";
+//
+//        var username = "apollosites";
+//
+//        var paras = {
+//            alt : 'json-in-script',
+//            Email: BloggerImporter.m_email,
+//            Passwd: BloggerImporter.m_password,
+//            services: 'blogger',
+//            accountType: 'GOOGLE',
+//            source: 'apollosites-bloggerimporter-1'
+//        };
+//
+//        $.ajax({
+//            url: feedURL,
+//            type: 'post',
+//            dataType: "jsonp",
+//            cache: false,
+//            success: BloggerImporter.onCredentialsChecked,
+//            error: BloggerImporter.onCredentialsChecked,
+//            data: paras
+//        });
+//
+//    },
+//
+//    onCredentialsChecked : function(data){
+//        alert(data);
+//    },
 	
     // ////////////////////////////////////////////////////////////////////////
 
@@ -125,7 +144,7 @@ var BloggerImporter = {
     
         // GET http://www.blogger.com/feeds/blogID/posts/default?published-min=2008-03-16T00:00:00&published-max=2008-03-24T23:59:59
 
-      	var feedURL = "http://"+BloggerImporter.m_username+".blogspot.com/feeds/posts/default";
+        var feedURL = "http://"+BloggerImporter.m_username+".blogspot.com/feeds/posts/default";
 
         var paras = {
             alt : 'json-in-script'
@@ -143,8 +162,8 @@ var BloggerImporter = {
     
     // ////////////////////////////////////////////////////////////////////////
 
-	/** List of posts */
-	m_posts : false,
+    /** List of posts */
+    m_posts : false,
 	
     /**
      * Parse the JSON comment data returned by the Google Blogger API
@@ -155,8 +174,8 @@ var BloggerImporter = {
         var feed = data.feed;
         var entries = feed.entry || [];
 
-		BloggerImporter.m_posts = new Array();
-		BloggerImporter.m_noPosts = entries.length;
+        BloggerImporter.m_posts = new Array();
+        BloggerImporter.m_noPosts = entries.length;
 		
         for (var i = 0; i < entries.length; ++i) {
                       
@@ -166,60 +185,63 @@ var BloggerImporter = {
             var updateDate = new Date(entries[i].updated.$t); // 2010-05-06T14:31:11.746-06:00
             var post_id = 0;
             
-			// Get the id string, which contains the post id and blog id
+            // Get the id string, which contains the post id and blog id
             // tag:blogger.com,1999:blog-6545474407612624437.post-6821849969711838358
             var idString = entries[i].id.$t;
-			var m = idString.match(/blog-([0-9]+).*post-([0-9]+)/);
-			blog_id = m[1];
-			post.id = m[2];
+            var m = idString.match(/blog-([0-9]+).*post-([0-9]+)/);
+            blog_id = m[1];
+            post.id = m[2];
 			
             post.title = entries[i].title.$t;
             post.content = entries[i].content.$t;
             post.date_gmt = pubDate.toString();
-			post.can_comment = 1;
+            post.can_comment = 1;
             post.tags = '';
             post.categories = '';
             post.status = 'Published';
 
             // <category scheme='http://www.blogger.com/atom/ns#' term='high school seniors'/>
         
-        	if (post.category != undefined){
-        		for (var cat=0; cat<post.category.length; cat++){
-        			if (post.categories != ""){
-        				post.categories += ",";
-        			}
-        			post.categories += post.category[cat].term;
-        		}
-        	}    
+            if (post.category != undefined){
+                for (var cat=0; cat<post.category.length; cat++){
+                    if (post.categories != ""){
+                        post.categories += ",";
+                    }
+                    post.categories += post.category[cat].term;
+                }
+            }
         	
-        	BloggerImporter.m_posts.push(post);
+            BloggerImporter.m_posts.push(post);
            
             
         }    	
             
-    	// Now we have all the posts, start importing them into Apollo
-    	BloggerImporter.processNextPost();	
+        // Now we have all the posts, start importing them into Apollo
+        BloggerImporter.processNextPost();
     },
 
     // ////////////////////////////////////////////////////////////////////////
 
-	/**
+    /**
 	* Process the posts one at a time
 	*/
-	processNextPost : function(){
+    processNextPost : function(){
 	
         if (BloggerImporter.m_postCt >= BloggerImporter.m_noPosts){
-			$('#status').html("<span style='color:green'>Import completed! Refresh the browser to see the changes.</span>");
-			$("#progressBar").progressbar({value: 100});
-			return;
+            $('#status').html("<span style='color:green'>Import completed! Refresh the browser to see the changes.</span>");
+            $("#progressBar").progressbar({
+                value: 100
+            });
+            return;
         }
         	
-		var post = BloggerImporter.m_posts[BloggerImporter.m_postCt];		
+        var post = BloggerImporter.m_posts[BloggerImporter.m_postCt];
         BloggerImporter.m_postCt++;
 	        
         // Import the post into Apollo....
                     
-        var paras = {cmd: 'importPost',
+        var paras = {
+            cmd: 'importPost',
             site_id: DataStore.m_siteID,
             title: unescape(post.title),
             content: unescape(post.content),
@@ -236,22 +258,24 @@ var BloggerImporter = {
             url: MediaAPI.m_url,
             type: 'post',
             dataType: "json",
-            success: function(ret){BloggerImporter.onPostAdded(ret)},
+            success: function(ret){
+                BloggerImporter.onPostAdded(ret)
+                },
             data: paras
         });
         
              	
-	},
+    },
 	
     // ////////////////////////////////////////////////////////////////////////
 
-	m_bloggerPostID : 0,
-	m_apolloPostID : 0,
+    m_bloggerPostID : 0,
+    m_apolloPostID : 0,
 	
-	/**
+    /**
 	* Respond to a post being added by the apollo server
 	*/ 
-	onPostAdded : function(ret){
+    onPostAdded : function(ret){
 
         if (ret.result != 'ok'){
             return;
@@ -260,19 +284,20 @@ var BloggerImporter = {
         BloggerImporter.m_apolloPostID = ret.data.post_id;
         BloggerImporter.m_bloggerPostID = ret.data.source_post_id;
 				
-		// Get comments for this post
-		BloggerImporter.getComments(BloggerImporter.m_bloggerPostID);
+        // Get comments for this post
+        BloggerImporter.getComments(BloggerImporter.m_bloggerPostID);
 				
-	},
+    },
 			
     // ////////////////////////////////////////////////////////////////////////
 
-	/**
+    /**
 	* Get the comments for this post
 	*/
     getComments : function(bloggerPostID){
 
         var feedURL = "http://"+BloggerImporter.m_username+".blogspot.com/feeds/"+bloggerPostID+"/comments/default";
+        Logger.debug(feedURL);
 
         var paras = {
             alt : 'json-in-script'
@@ -299,7 +324,7 @@ var BloggerImporter = {
         var feed = data.feed;
         var entries = feed.entry || [];
 
-		var commentList = new Array();
+        var commentList = new Array();
 								
         for (var i = 0; i < entries.length; ++i) {
                       
@@ -317,29 +342,27 @@ var BloggerImporter = {
             }
             */
 
-			// Get the id string, which contains the post id and blog id
+            // Get the id string, which contains the post id and blog id
             // tag:blogger.com,1999:blog-blogID.post-commentID
             var idString = entries[i].id.$t;
 
-			var m = idString.match(/blog-([0-9]+).*post-([0-9]+)/);
-			blog_id = m[1];
-			var comment_id = m[2];
+            var m = idString.match(/blog-([0-9]+).*post-([0-9]+)/);
+            blog_id = m[1];
+            var comment_id = m[2];
 
             entryObj.id = comment_id;
             entryObj.post_id = BloggerImporter.m_bloggerPostID;
             entryObj.parent_id = 0;
 
-			alert(entries[i].author[0].name.$t);
-			
             entryObj.title = unescape(entries[i].title.$t);
             entryObj.content = unescape(entries[i].content.$t);
             entryObj.author = entries[i].author[0].name.$t;
             entryObj.author_email = entries[i].author[0].email.$t;
             if (entries[i].author[0].uri.$t != undefined){
-	            entryObj.author_url = entries[i].author[0].uri.$t;
+                entryObj.author_url = entries[i].author[0].uri.$t;
             }
             else {
-	            entryObj.author_url = "";
+                entryObj.author_url = "";
             }
             entryObj.author_ip = '';
             entryObj.date_gmt = pubDate.toString();
@@ -351,31 +374,37 @@ var BloggerImporter = {
         
         if (commentList.length > 0){
 
-			//alert(commentList.length + " comments, source post id = " + bloggerPostID + ", apollo post id = " + apolloPostID);
+            //alert(commentList.length + " comments, source post id = " + bloggerPostID + ", apollo post id = " + apolloPostID);
 			
-	        // Import comments into Apollo
-	        var paras = {cmd: 'importComments',
-	            site_id: DataStore.m_siteID,
-	            pid: BloggerImporter.m_apolloPostID,
-	            com: $.toJSON(commentList),
-	            ims: 'blogger'
-	        };
+            // Import comments into Apollo
+            var paras = {
+                cmd: 'importComments',
+                site_id: DataStore.m_siteID,
+                pid: BloggerImporter.m_apolloPostID,
+                com: $.toJSON(commentList),
+                ims: 'blogger'
+            };
 						
-	        $.ajax({url: MediaAPI.m_url, type: 'post', dataType: "json", data: paras});
+            $.ajax({
+                url: MediaAPI.m_url,
+                type: 'post',
+                dataType: "json",
+                data: paras
+            });
         }
                 
-		// Update progress bar
-		BloggerImporter.updateProgress();
+        // Update progress bar
+        BloggerImporter.updateProgress();
         
         // Get the next post
-		BloggerImporter.processNextPost();
+        BloggerImporter.processNextPost();
         
     },
     
 	
     // ////////////////////////////////////////////////////////////////////////
 	
-	/**
+    /**
 	* Update progress bar
 	*/
     updateProgress : function(){
@@ -383,7 +412,9 @@ var BloggerImporter = {
     
         var prog = Math.ceil(100 * BloggerImporter.m_postCt / BloggerImporter.m_noPosts);
         $("#status").html("Processed item " + BloggerImporter.m_postCt + " of " + BloggerImporter.m_noPosts);
-        $("#progressBar").progressbar({value: prog});
+        $("#progressBar").progressbar({
+            value: prog
+        });
         
     },
         
@@ -397,6 +428,6 @@ var BloggerImporter = {
         $('#status').html("<span style='color:red'>"+msg+"</span>");
     }
 
-	// ////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////
 
 }

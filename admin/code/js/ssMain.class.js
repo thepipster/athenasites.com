@@ -11,8 +11,6 @@ var ssMain = {
     VIEW_POSTS : 4,
     VIEW_GALLERIES : 5,
     VIEW_STATS : 6,
-    VIEW_SETTINGS : 7,
-    VIEW_ACCOUNT : 8,
     VIEW_EDITFILES : 9,
 
     view : 4,
@@ -36,8 +34,8 @@ var ssMain = {
         BlogAPI.init();
 
         // Setup the JS logger
-        Message.init('#debug_txt');
-        Message.showOnError();
+        Logger.init('#debug_txt');
+        Logger.showOnError();
 
         // Setup the data store for the site
         DataStore.m_siteID = currentSiteID;;
@@ -67,7 +65,6 @@ var ssMain = {
         GalleriesFrame.init();
         PagesFrame.init();
         PostsFrame.init();
-        SettingsFrame.init();
         EditImageFrame.init();
     },
 
@@ -163,24 +160,7 @@ var ssMain = {
     // ////////////////////////////////////////////////////////////////////////
 
     onSelectSite : function(site_id){
-
         window.location = "main.php?site_id=" + site_id;
-
-        /*
-                // Reset frames
-                DashboardFrame.init();
-        FilesFrame.init();
-        GalleriesFrame.init();
-        PagesFrame.init();
-        PostsFrame.init();
-        SettingsFrame.init();
-        EditImageFrame.init();
-
-                DataStore.m_siteID = site_id;
-                SidebarFrame.m_mode = ''; // Clear the mode to force the side bar to refresh
-                DataStore.clear();
-                DataStore.load(ssMain.onDataLoaded);
-         */
     },
 
     // ////////////////////////////////////////////////////////////////////////
@@ -190,9 +170,7 @@ var ssMain = {
     onShowFiles : function(){ssMain.view = ssMain.VIEW_FILES;ssMain.repaint();},
     onShowPosts : function(){ssMain.view = ssMain.VIEW_POSTS;ssMain.repaint();},
     onShowGalleries : function(){ssMain.view = ssMain.VIEW_GALLERIES;ssMain.repaint();},
-    onShowSettings : function(){ssMain.view = ssMain.VIEW_SETTINGS;ssMain.repaint();},
     onShowStats : function(){ssMain.view = ssMain.VIEW_STATS;ssMain.repaint();},
-    onShowAccount : function(){ssMain.view = ssMain.VIEW_ACCOUNT;ssMain.repaint();},
     onShowEditImages : function(){ssMain.view = ssMain.VIEW_EDITFILES;ssMain.repaint();},
 
 
@@ -215,13 +193,11 @@ var ssMain = {
             case ssMain.VIEW_PAGES :$('#PagesFrame').show();$('#pages_menu').addClass('selected');PagesFrame.repaint();break;
             case ssMain.VIEW_POSTS :$('#PagesFrame').show();$('#posts_menu').addClass('selected');PostsFrame.repaint();break;
 
-            case ssMain.VIEW_DASHBOARD: $('#DashboardFrame').show();$('#dashboard_menu').addClass('selected');DashboardFrame.repaint();break;
-            case ssMain.VIEW_FILES: $('#FilesFrame').show();$('#files_menu').addClass('selected');FilesFrame.repaint();break;
-            case ssMain.VIEW_GALLERIES: $('#GalleriesFrame').show();$('#gallery_menu').addClass('selected');GalleriesFrame.repaint();break;
-            case ssMain.VIEW_SETTINGS: $('#SettingsFrame').show();$('#settings_menu').addClass('selected');SettingsFrame.repaint();break;
-            case ssMain.VIEW_STATS: $('#StatsFrame').show();$('#stats_menu').addClass('selected');SettingsFrame.repaint();break;
-            case ssMain.VIEW_ACCOUNT: $('#AccountFrame').show();$('#account_menu').addClass('selected');AccountFrame.repaint();break;
-            case ssMain.VIEW_EDITFILES: $('#EditFilesFrame').show();$('#edit_files_menu').addClass('selected');EditImageFrame.repaint();break;
+            case ssMain.VIEW_DASHBOARD:$('#DashboardFrame').show();$('#dashboard_menu').addClass('selected');DashboardFrame.repaint();break;
+            case ssMain.VIEW_FILES:$('#FilesFrame').show();$('#files_menu').addClass('selected');FilesFrame.repaint();break;
+            case ssMain.VIEW_GALLERIES:$('#GalleriesFrame').show();$('#gallery_menu').addClass('selected');GalleriesFrame.repaint();break;
+            case ssMain.VIEW_STATS:$('#StatsFrame').show();$('#stats_menu').addClass('selected');SettingsFrame.repaint();break;
+            case ssMain.VIEW_EDITFILES:$('#EditFilesFrame').show();$('#edit_files_menu').addClass('selected');EditImageFrame.repaint();break;
         }
 
         //window.location.hash = ssMain.view;

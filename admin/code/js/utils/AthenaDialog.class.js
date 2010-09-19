@@ -60,7 +60,7 @@ var AthenaDialog = {
             title: "Error"
         });
         */
-        //Message.error(msg);
+        //Logger.error(msg);
     },
 	
     // ////////////////////////////////////////////////////////////////////////
@@ -150,10 +150,10 @@ var AthenaDialog = {
     showAjaxError : function(ret){
 		
         if (ret.data != undefined){
-            Message.error(ret.result + '\n' + ret.data);
+            Logger.error(ret.result + '\n' + ret.data);
         }
         else {
-            Message.error(ret.data);
+            Logger.error(ret.data);
         }
 		
     },

@@ -107,8 +107,26 @@ class PostsTable {
 
     // /////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Get the date of the last (most recent) post in the system
+     * @param int $site_id
+     * @return <type>
+     */
     public static function getLastPostDate($site_id) {
         $sql = DatabaseManager::prepare("SELECT max(created) FROM athena_%d_Posts", $site_id);
+        return DatabaseManager::getVar($sql);
+    }
+
+    // /////////////////////////////////////////////////////////////////////////////////
+
+
+    /**
+     * Get the oldest date of all the posts in the system
+     * @param int $site_id
+     * @return <type>
+     */
+    public static function getOldestPostDate($site_id) {
+        $sql = DatabaseManager::prepare("SELECT min(created) FROM athena_%d_Posts", $site_id);
         return DatabaseManager::getVar($sql);
     }
 
@@ -160,6 +178,19 @@ class PostsTable {
 
     // /////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Get the number of posts between 2 dates
+     * @param int $site_id
+     * @param string $date_from
+     * @param string $date_end
+     */
+    public static function getNoPostsForTimeSpan($site_id, $date_from, $date_end){
+        $sql = DatabaseManager::prepare("SELECT count(id) FROM athena_%d_Posts WHERE created >= %s AND created <= %s", $site_id, $date_from, $date_end);
+        return DatabaseManager::getVar($sql);
+    }
+
+    // /////////////////////////////////////////////////////////////////////////////////
+
     public static function updatePath($post_id, $site_id, $path) {
         $sql = DatabaseManager::prepare("UPDATE athena_%d_Posts SET path=%s WHERE id = %d", $site_id, $path, $post_id);
         return DatabaseManager::update($sql);
@@ -171,7 +202,7 @@ class PostsTable {
     }
 
     public static function updateSourceID($post_id, $site_id, $source_id) {
-        $sql = DatabaseManager::prepare("UPDATE athena_%d_Posts SET source_id=%d WHERE id = %d", $site_id, $source_id, $post_id);
+        $sql = DatabaseManager::prepare("UPDATE athena_%d_Posts SET source_id=%s WHERE id = %d", $site_id, $source_id, $post_id);
         return DatabaseManager::update($sql);
     }
 
@@ -415,6 +446,18 @@ class PostsTable {
     public static function getTags($site_id) {
         $sql = DatabaseManager::prepare("SELECT tag FROM athena_%d_PostTags ORDER BY tag", $site_id);
         return DatabaseManager::getColumn($sql);
+    }
+
+    // /////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Get a list of tags and their frequency
+     * @param <type> $site_id
+     * @return <type>
+     */
+    public static function getTagCounts($site_id){
+        $sql = DatabaseManager::prepare(" SELECT count(p2t.tag_id) as ct, pt.tag FROM athena_%d_PostToTags p2t INNER JOIN athena_%d_PostTags pt WHERE p2t.tag_id = pt.id GROUP BY tag_id ORDER BY ct DESC", $site_id, $site_id);
+        return DatabaseManager::getResults($sql);
     }
 
     // /////////////////////////////////////////////////////////////////////////////////

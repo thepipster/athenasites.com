@@ -180,6 +180,23 @@ class CommentsTable {
 
     // /////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Return the number of comments for the specified post
+     * @param int $site_id
+     * @param int $post_id
+     * @return int number of comments
+     */
+    public static function getNoCommentsForPost($site_id, $post_id) {
+        $sql = DatabaseManager::prepare("SELECT count(id) FROM athena_%d_Comments WHERE post_id = %d ", $site_id, $post_id);
+        return DatabaseManager::getVar($sql);
+    }
+
+    /**
+     * Get a list of comments for this post, and also get the follower name for the post from the follower table
+     * @param int $site_id
+     * @param int $post_id
+     * @return array list of comments
+     */
     public static function getCommentsForPost($site_id, $post_id) {
         $sql = DatabaseManager::prepare("SELECT c.*, f.name FROM athena_%d_Comments c INNER JOIN athena_SiteFollowers f WHERE c.post_id = %d AND c.site_follower_id = f.id ORDER BY c.created DESC", $site_id, $post_id);
         return DatabaseManager::getResults($sql);

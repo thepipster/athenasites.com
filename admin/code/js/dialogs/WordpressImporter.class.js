@@ -277,7 +277,7 @@ var WordpressImporter = {
 
     onError : function(msg){
         $('#status').html("<span style='color:red'>"+msg+"</span>");
-        Message.error(msg);
+        Logger.error(msg);
     }
 	
     // ////////////////////////////////////////////////////////////////////////

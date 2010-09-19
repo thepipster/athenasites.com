@@ -38,7 +38,7 @@ class ThemeTable {
 	*/
 	public static function getFavicon($site_id){		
 		//get_user_option('template');		
-		$sql = DatabaseManager::prepare("SELECT para_value FROM athena_%d_GlobalParas gp INNER JOIN apollo_ThemeParas tp WHERE gp.theme_para_id = tp.id AND tp.para_type = 'favicon'", $site_id);
+		$sql = DatabaseManager::prepare("SELECT para_value FROM athena_%d_PageParas gp INNER JOIN apollo_ThemeParas tp WHERE gp.theme_para_id = tp.id AND gp.page_id = 0 AND tp.para_type = 'favicon'", $site_id);
 		return DatabaseManager::getVar($sql);
 	}
 	
@@ -49,7 +49,7 @@ class ThemeTable {
 	*/
 	public static function getGlobalParaValue($site_id, $theme_para_id){
 
-		$val = DatabaseManager::getVar(DatabaseManager::prepare("SELECT para_value FROM athena_%d_GlobalParas WHERE theme_para_id = %d",  $site_id, $theme_para_id));
+		$val = DatabaseManager::getVar(DatabaseManager::prepare("SELECT para_value FROM athena_%d_PageParas WHERE theme_para_id = %d AND page_id = 0 ",  $site_id, $theme_para_id));
 		
 		// If the value isn't set, get the default (if there is one)
 		if (!isset($val)){
@@ -66,7 +66,7 @@ class ThemeTable {
 	*/
 	public static function getGlobalImageParaValue($site_id, $theme_para_id){
 	
-		$post_id = DatabaseManager::getVar(DatabaseManager::prepare("SELECT para_value FROM athena_%d_GlobalParas WHERE theme_para_id = %d",  $site_id, $theme_para_id));
+		$post_id = DatabaseManager::getVar(DatabaseManager::prepare("SELECT para_value FROM athena_%d_PageParas WHERE theme_para_id = %d AND page_id = 0 ",  $site_id, $theme_para_id));
 		
 		// If the value isn't set, get the default (if there is one)
 		if (isset($post_id)){

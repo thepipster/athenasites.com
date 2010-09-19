@@ -244,7 +244,7 @@ var StatViewer = {
 		
         //for (var i=1; i<31; i++){
 		//	var d = new Date(googleStats[i][0]);
-		//	Message.error(d.toString() + " - " + googleStats[i][1]);
+		//	Logger.error(d.toString() + " - " + googleStats[i][1]);
 		//}
 		
         now = new Date();
@@ -253,7 +253,7 @@ var StatViewer = {
         var startTime = now.getTime();
         var endTime = maxTime.getTime();
         
-        //Message.debug(now.toString() + " " + maxTime.toString());
+        //Logger.debug(now.toString() + " " + maxTime.toString());
 
         var plot = jQuery.plot(jQuery(div), [
         {
