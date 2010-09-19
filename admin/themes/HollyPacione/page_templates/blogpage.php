@@ -113,7 +113,7 @@ function stripImages($postContent){
                     <h2>Categories</h2>
                     <?= SideBarManager::getCategories(PageManager::$site_id); ?>
 
-                    <h2>Archives</h2>
+                    <h2>Archive</h2>
                     <?= SideBarManager::getArchive(PageManager::$site_id); ?>
                     
                 </div>

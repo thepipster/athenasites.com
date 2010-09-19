@@ -37,6 +37,7 @@ var hollyInfoPage = {
 	// /////////////////////////////////////////////////////////////////////////////////
 	
 	onResize : function(){
+return;
 
 		var minH = parseInt($("#content").css("min-height"));
 		var maxH = parseInt($("#content").css("max-height"));
@@ -75,7 +76,7 @@ var hollyInfoPage = {
 									
 		if ($('#back_image').width() < $('#back_image').height()){
 			if (hollyInfoPage.pageType == 'left'){
-				//alert("galW = " + galW + " imgW = " + imgW);
+				alert("galW = " + galW + " imgW = " + imgW);
 				$('.leftCol').width(galW - imgW);
 			}
 			else if (hollyInfoPage.pageType == 'right'){
@@ -96,8 +97,10 @@ var hollyInfoPage = {
 				}
 			}		
 				
-			$("#content").height(imgH);
-			$("#content").width(imgW);								
+//			alert(imgW + ", " + imgH);
+				
+//			$("#content").height(imgH);
+//			$("#content").width(imgW);								
 
 			if (hollyInfoPage.pageType == 'left'){
 				$('.leftCol').width(0.5 * imgW);
