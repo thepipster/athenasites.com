@@ -161,8 +161,21 @@ PageManager::doHeader();
 								$title = $page['title'];								
 								$page_slug = $page['slug'];
 								$link = PageManager::getPageLink($id);
-																
-								print("<li onmouseover=\"hpNav.mouseOver(1, $id, $id)\" onmouseout=\"hpNav.mouseOut(1, $id, $id)\" ><a id='$id' class='level1' href='$link'>$title</a>");								
+															
+								// Get number children
+								$no_kids = 0;
+								foreach(PageManager::$page_list as $child){
+									if ($child['parent_page_id'] == $id){
+										$no_kids++;
+									}
+								}
+								
+								if ($no_kids > 0){
+									print("<li onmouseover=\"hpNav.mouseOver(1, $id, $id)\" onmouseout=\"hpNav.mouseOut(1, $id, $id)\" ><a id='$id' class='level1' href='#'>$title</a>");								
+								}
+								else {
+									print("<li onmouseover=\"hpNav.mouseOver(1, $id, $id)\" onmouseout=\"hpNav.mouseOut(1, $id, $id)\" ><a id='$id' class='level1' href='$link'>$title</a>");								
+								}								
 								print("    <ul>");
 								
 								// Get child pages 
