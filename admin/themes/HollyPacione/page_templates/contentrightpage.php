@@ -18,28 +18,32 @@ else {
 	$width = 0;
 	$height = 0;
 }
+
+$styleStr = "";
+if ($width > $height){ 
+	$styleStr = "width:{$width}px"; 
+}
 ?>
 
-		<div id='content'><div id='scroller'>
+	<div id="content" style="border:none; <?=$styleStr?>">
+		
+		<table border="0" cellpadding="0" cellspacing="0" id='contentTable' width="100%" height="100%" style="width:100%; height:100%;background-image: url('<?=$background_image?>')">
+			
+			<tr valign="top" height="100%">
 
-			<div class='backgroundImage'>
-			<?php
-				if ($width > $height){
-					echo "<img id='back_image' src='$background_image' width='100%'/>";
-				}
-				else {
-					echo "<img id='back_image' style='float:left' src='$background_image' height='100%'/>";
-				}
-			?>
-			</div>
-
-			<div class='rightCol' align="left">
-				<div class='contentText'>
-					<?php echo PageManager::getCurrentPageContent(); ?>
-				</div>
-			</div>
-
-		</div></div>
+				<td width="45%" height="100%"> 
+					<!-- Empty -->
+				</td>
+							
+				<td width="55%" height="100%" class='rightCol'>
+						<?php echo PageManager::getCurrentPageContent(); ?>
+				</td>
+				
+			</tr>
+			
+		</table>
+		
+	</div>
 
 		
 <script type="text/javascript">

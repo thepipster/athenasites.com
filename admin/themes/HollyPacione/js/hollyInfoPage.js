@@ -37,8 +37,7 @@ var hollyInfoPage = {
 	// /////////////////////////////////////////////////////////////////////////////////
 	
 	onResize : function(){
-return;
-
+	
 		var minH = parseInt($("#content").css("min-height"));
 		var maxH = parseInt($("#content").css("max-height"));
 		var minW = parseInt($("#content").css("min-width"));

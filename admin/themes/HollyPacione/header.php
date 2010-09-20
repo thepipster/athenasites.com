@@ -1,4 +1,7 @@
 <?php
+
+require_once("php/ft-nonce-lib.php");
+
 PageManager::doHeader();
 
 ?>

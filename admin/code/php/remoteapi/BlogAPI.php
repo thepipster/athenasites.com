@@ -80,6 +80,8 @@ function getSummary($site_id){
     CommandHelper::sendMessage($msg);
 }
 
+// ///////////////////////////////////////////////////////////////////////////////////////
+
 function getStats($site_id){
 
 }
@@ -94,18 +96,17 @@ function addComment($site_id, $post_id, $parent_comment_id, $comment, $author_na
 
     //$site = SitesTable::getSite($site_id);
     $page = PagesTable::getBlogpage($site_id);
-    
+
     // Check if this is spam from AkisMet
-    $apiKey = "07d55b1f2e1b";
-    $user = "apollosites";
-    $pass = "k9G18ReR";    
+    $user = AKISMET_USER;
+    $pass = AKISMET_PASS;
     //$blogURL = 'http://www.apollosites.com/blog/';
     $blogURL = PageManager::getPageLink($page['id']);
 
     $author_ip = PageViewsTable::getRealIPAddr();
     $author_url = '';
     
-    $akismet = new Akismet($blogURL ,$apiKey);
+    $akismet = new Akismet($blogURL , AKISMET_API_KEY);
     $akismet->setCommentAuthor($author_name);
     $akismet->setCommentAuthorEmail($author_email);
     $akismet->setCommentAuthorURL($author_url);

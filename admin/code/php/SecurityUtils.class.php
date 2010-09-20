@@ -4,6 +4,54 @@ class SecurityUtils {
 
     private static $salt_length = 12;
 
+    /**
+     * The nonce (number used once) duration (in seconds)
+     */
+    private static $nonce_duration = 600; 
+
+    // //////////////////////////////////////////////////////////////
+
+    /**
+     * Check to see if the given nonce is still valid
+     * @param string $nonce
+     * @param string $action An action name: ie: ‘delete-post’
+     * @param string $user A user ID (optional – makes the NONCE only work with a specific user)
+     * @return <type>
+     */
+    public static function checkNonce($nonce, $action = '', $user=''){
+	// Nonce generated 0-12 hours ago
+        $nonceCheck = substr(self::generateNonceHash( $action . $user ), -self::$salt_length, 10);
+	if ( $nonceCheck == trim($nonce) ){
+            return true;
+	}
+	return false;
+    }
+    
+    // //////////////////////////////////////////////////////////////
+
+    /**
+     * Create a brand new nonce (number used once)
+     * @param string $action
+     * @param string $user
+     * @return <type>
+     */
+    public static function createNonce($action = '', $user=''){
+	return substr( self::generateNonceHash( $action . $user ), -self::$salt_length, 10);
+    }
+    
+    // //////////////////////////////////////////////////////////////
+
+    /**
+     * This method generates the nonce timestamp
+     * @param string $action An action name: ie: ‘delete-post’
+     * @param string $user A user ID (optional – makes the NONCE only work with a specific user)
+     * @return <type>
+     */
+    private static function generateNonceHash($action='', $user=''){
+	$i = ceil( time() / ( self::$nonce_duration / 2 ) );
+	return md5( $i . $action . $user . $action );
+    }
+
     // //////////////////////////////////////////////////////////////
 
     /**

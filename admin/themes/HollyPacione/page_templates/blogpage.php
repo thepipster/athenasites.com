@@ -37,9 +37,7 @@ function stripImages($postContent){
 
 ?>
 
-
-
-<div id='content' align="left" style='max-height: none; max-width: none'>
+<div id='content' align="left" style='max-height: none; max-width: none; height: auto'>
 
     <table id='blogTable' border="0" width="100%" height="100%">
 

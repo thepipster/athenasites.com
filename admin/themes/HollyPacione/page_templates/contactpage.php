@@ -9,18 +9,21 @@ $background_image = PageManager::getMediaURLFromThemePara(205);
 // Email = 206 
 ?>
 
-		<div id='content'><div id='scroller'>
 
-			<div class='backgroundImage'>
-				<img src="<?=$background_image?>" width='100%' height='100%'/>
-			</div>
+	<div id="content" style="border:none;">
+		
+		<table border="0" cellpadding="0" cellspacing="0" id='contentTable' width="100%" height="100%" style="width:100%; height:100%;background-image: url('<?=$background_image?>')">
 			
-			<div class='rightCol' align="left">
-			
-				<div class='contentText'>
+			<tr valign="top" height="100%">
+
+				<td width="55%" height="100%"> 
+					<!-- Empty -->
+				</td>
+							
+				<td width="45%" height="100%" class='rightCol'>
 					<?php echo PageManager::getCurrentPageContent(); ?>
 					
-					<form id='contactForm' method='post' action='' onsubmit="return hpContact.onSubmit();">
+					<form id='contactForm' method='post' action='' onsubmit="hpContact.onSubmit(); return false;">
 						<input type="text" class='inputText required_name' id='name' name='name' value="Your Name" onfocus="if (this.value == 'Your Name'){this.value = '';}" onblur='hpContact.onChange()'>
 						<input type="text" class='inputText required_email' id='email' name='email' value="Your E-mail Address" onfocus="if (this.value == 'Your E-mail Address'){this.value = '';}" onblur='hpContact.onChange()'>
 						<input type="text" class='inputText required_phone' id='phone' name='phone' value="Your Phone" onfocus="if (this.value == 'Your Phone'){this.value = '';}" onblur='hpContact.onChange()'>
@@ -30,14 +33,15 @@ $background_image = PageManager::getMediaURLFromThemePara(205);
 						<input type="submit" value="Submit" onclick=""><span class='formMessage'></span>
 						<!-- <button onclick="hpContact.onSubmit()">Submit</button> -->
 					</form>
-					
-					
-				</div>
+				</td>
 				
-			</div>
-
-		</div></div>
-
+			</tr>
+			
+		</table>
+		
+	</div>
+	
+	
 		
 <script type="text/javascript">
 
@@ -66,11 +70,13 @@ var hpContact = {
 	/** Minimum allowed width */
 	minWidth : 800,
 	
-	commandURL : '<?=PageManager::$theme_url_root?>/php/SendEmail.php',
+	commandURL : "<?= PageManager::$theme_url_root?>php/SendEmail.php",
 	
 	page_id : <?=PageManager::$page_id?>,
 	
-	nonce : '<?=wp_create_nonce( 'contact_page' )?>',
+	site_id : <?=PageManager::$site_id?>,
+        
+        nonce : '<?= SecurityUtils::createNonce('email-link') ?>',
 	
 	sentMessage : 'Message sent, thankyou!',
 	
@@ -155,7 +161,7 @@ var hpContact = {
 	},
 	
 	onSubmit : function(){
-								
+		
 		if ($("#contactForm").valid()){
 			
 			var aName = $("#name").val();
@@ -167,15 +173,25 @@ var hpContact = {
 			
 			//alert(aName + " " + aEmail + " " + aPhone + " " + aLocation + " " + aDatetime + " " + aComments); 
 			
-			var paras = {page_id: hpContact.page_id, nonce: hpContact.nonce, name: aName, email: aEmail, phone: aPhone, location: aLocation, comments: aComments, datetime: aDatetime};
-					
-			jQuery.ajax({
+			var paras = {
+					page_id: hpContact.page_id, 
+					site_id: hpContact.site_id, 
+					nonce: hpContact.nonce, 
+					name: aName, 
+					email: aEmail, 
+					phone: aPhone, 
+					location: aLocation, 
+					comments: aComments, 
+					datetime: aDatetime
+			};
+										
+			$.ajax({
 				url: hpContact.commandURL,
 				dataType: "text",
 				data: paras,
 				success: function(ret){hpContact.onSentForm(ret);}
 			});	
-		}		
+		}	
 		
 		return false;
 	},
@@ -187,6 +203,9 @@ var hpContact = {
 		}
 		else if (ret == "FALSE"){
 			$('.formMessage').html(hpContact.sentErrorMessage);
+		}
+		else if (ret == "SPAM"){
+			$('.formMessage').html("Sorry, this comment looks like spam?");
 		}
 		else if (ret == "NA"){
 			$('.formMessage').html("Not authorized error!");

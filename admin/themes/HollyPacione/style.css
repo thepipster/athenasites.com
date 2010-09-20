@@ -118,6 +118,7 @@ a {
 	-webkit-background-size: 100% 100%;
 	-khtml-background-size : 100% 100%;
 	-moz-background-size: 100% 100%;
+	background-size: 100% 100%;
 	background-position: center center;
 }
 /*	
@@ -147,7 +148,6 @@ a {
 	background-position: center center; 
 	width: 100%;
 	height: 100%;
-	background-color: red;
 }
 
 #scroller {position:relative; width:100%; height:100%; top:0; left:0; overflow:hidden; z-index:2;} 
@@ -160,29 +160,12 @@ a {
 	border-top-width: 0px !important;
 	border-style: solid !important;
 	border-color: black !important;
-	width: 45%;
-	height: 100%;
 	background-image: url('php/DynamicPNG.php?r=246&g=246&b=253&a=10&f=.png');
 	background-repeat: repeat;
-	/* filter:alpha(opacity=90);-moz-opacity:.90;opacity:.90 */
-	float: right;
-	overflow: auto;
-	position: relative;
-	top: -100%;
-	left: 0px;
 	z-index: 2;
-}	
-
-#content .singleCol {
-	width: 100%;
-	height: 100%;
-	background-image: url('php/DynamicPNG.php?r=246&g=246&b=253&a=10&f=.png');
-	background-repeat: repeat;
-	overflow: auto;
-	position: relative;
-	top: -100%;
-	left: 0px;
-	z-index: 2;
+	padding: 5px;
+	padding-left: 20px;
+	padding-right: 20px;
 }	
 
 #content .leftCol {
@@ -194,16 +177,25 @@ a {
 	border-color: black !important;
 	background-image: url('php/DynamicPNG.php?r=246&g=246&b=253&a=10&f=.png');
 	background-repeat: repeat;
-	/*
-	width: 45%;
+	z-index: 2;
+	padding: 5px;
+	padding-left: 20px;
+	padding-right: 20px;	
+}
+
+#content .singleCol {
+	width: 100%;
 	height: 100%;
-	float: left;
 	background-image: url('php/DynamicPNG.php?r=246&g=246&b=253&a=10&f=.png');
 	background-repeat: repeat;
 	overflow: auto;
+	position: relative;
+	top: -100%;
+	left: 0px;
 	z-index: 2;
-	*/
+	padding: 5px;
 }	
+
 
 #content .contentText {
 	padding-left: 40px;

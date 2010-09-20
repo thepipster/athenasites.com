@@ -17,6 +17,10 @@ $url_root = 'http://' . $_SERVER['HTTP_HOST'] . substr($_SERVER['PHP_SELF'], 0, 
 define("FILE_ROOT", $file_root); // The root for the code tree 
 define("CODE_ROOT", $code_root); // The root for the code tree 
 
+define("AKISMET_API_KEY", "07d55b1f2e1b");
+define("AKISMET_USER", "apollosites");
+define("AKISMET_PASS", "k9G18ReR");
+    
 // Server-specific passwords kept in sticky file
 // see setup.php.sticky_example
 require_once($code_root . "setup.php.sticky");
