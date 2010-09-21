@@ -17,7 +17,49 @@ var BlogAPI = {
     init : function(){
         BlogAPI.m_url = defines.root_url + BlogAPI.m_url;
     },
+
+    // ////////////////////////////////////////////////////////////////////////
+		
+    /**
+    * Get the list of folders and media for this site
+    */
+    addComment : function(siteID, postID, authorName, authorEmail, postURL, parentCommentID, commentContent, callback){
 			
+        var paras = {
+            cmd : 'addComment',
+            site_id: siteID,
+            post_id: postID,
+            arn: authorName,
+            aem: authorEmail,
+            purl: postURL,
+            content: commentContent,
+            pid: parentCommentID
+        };
+
+        $.ajax({
+            url: BlogAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: function(ret){
+                BlogAPI.onCommentAdded(ret, callback);
+            }
+        });
+		
+    },
+			
+    /**
+    * Check the response from the server, and load data if login is good
+    */
+    onCommentAdded : function(ret, callback){
+				
+        if (ret.result == 'ok'){
+            callback();
+        }
+        else {
+            AthenaDialog.showAjaxError(ret);
+        }
+    },
+    			
     // ////////////////////////////////////////////////////////////////////////
 
     /**

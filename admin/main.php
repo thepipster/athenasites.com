@@ -125,8 +125,8 @@ Logger::debug("$domain has site_id = $current_site_id");
         <script type="text/javascript" src="code/js/3rdparty/jquery-ui/jquery-ui-1.8.4.custom.min.js"></script>
         -->
 
-                <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
-                <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
                 
         <script type="text/javascript" src="code/js/3rdparty/jquery.validate.min.js"></script>
         <!--<script type="text/javascript" src="code/js/3rdparty/jquery.json-1.3.min.js"></script>-->
@@ -142,6 +142,9 @@ Logger::debug("$domain has site_id = $current_site_id");
         <script type="text/javascript" src="code/js/3rdparty/jquery.datePicker.js"></script>
         <script type="text/javascript" src="code/js/3rdparty/jquery.advancedClick.js"></script>
 
+<!--
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
+-->
         <script type="text/javascript" src="code/js/3rdparty/swfobject.js"></script>
         <script type="text/javascript" src="code/js/3rdparty/SWFUpload/swfupload.js"></script>
         <script type="text/javascript" src="code/js/3rdparty/SWFUpload/plugins/swfupload.queue.js"></script>

@@ -249,6 +249,22 @@ a {
 	font-size: 12px;
 }
 
+#commentForm label.error { 
+	color: red; 
+	padding: 0px;
+	padding-right: 5px;
+	padding-left: 5px;
+	margin: 0;
+	left: -999em;
+	display: none;
+}
+
+#commentForm input.error {
+	border: 1px solid red;
+	/* background-color: #ffdacf; */
+	background-color: white; 	
+}
+
 #content .blogSidebarWrapper {
 	padding: 0px;
 	margin: 0px;

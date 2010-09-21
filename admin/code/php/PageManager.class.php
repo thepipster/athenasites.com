@@ -8,42 +8,61 @@ class PageManager {
 
     /** The site url root, e.g. http://cgp.apollosites.com/ */
     public static $url_root;
+    
     /** The them url root, e.g. http://cgp.apollosites.com/admin/themes/cgp4/ */
     public static $theme_url_root;
+    
     /** The root url for the site's media directory,  e.g. http://cgp.apollosites.com/user_files/1/ */
     public static $media_root_url;
+    
     /** The domain for the site's media directory,  e.g. cgp */
     public static $domain;
+    
     /** The current page slug,  e.g. some-page-name */
     public static $page_slug;
+    
     /** The current site id */
-    public static $site_id;
+    public static $site_id = 0;
+    
     /** The current user id */
     public static $user_id;
+    
     /** The current page id */
     public static $page_id;
+    
     /** The current parent page id */
     public static $page_parent_id;
+    
     /** The current parent title */
     public static $page_title;
+    
     /** The current page descrition, which if set is used the the html page title */
     public static $page_desc;
+    
     /** The current theme id */
     public static $theme_id;
+    
     /** The current theme file root */
     public static $theme_file_root;
+    
     /** The current page template filename */
     public static $template_filename;
+    
     /** Flag to determine if this is the home page */
     public static $is_homepage;
+    
     /** Flag to determine if this is the blog page */
     public static $is_blogpage;
+    
     /** Flag to determine if the current page is a blog post */
     public static $is_post = false;
+    
     /** The blog base url, e.g.  /blog.html */
     public static $blog_url;
+    
     /** The blog base path, e.g.  blog */
     public static $blog_base_url;
+    
     /** The total number of posts for this blog */
     public static $no_posts = 0;
     
@@ -69,45 +88,75 @@ class PageManager {
     
     public static $MAX_POSTS_PER_PAGE 	= 5;
     
-
-
     // ///////////////////////////////////////////////////////////////////////////////////////
 
-    public static function init($page_name, $page_path, $tag = '', $category = '', $blog_month = '', $blog_year = '', $blog_page_no = '') {
-
-        Logger::debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        //Logger::debug("init($page_name, $page_path, $tag, $category, $blog_year, $blog_month)");
+    /**
+     * Initialize, this uses the domain to get the site id
+     */
+    public static function init() {
 
         self::$url_root = 'http://' . $_SERVER['HTTP_HOST'];
 
+        // Get the domaing, and strip www if it has it
         self::$domain = $_SERVER['HTTP_HOST'];
-        //self::$page_slug = $_SERVER['REQUEST_URI'];
-        self::$page_slug = $page_name;
-
-        // Strip www..
         self::$domain = str_replace('www.', '', self::$domain);
 
+        // Get the site id
         $site = SitesTable::getSiteFromDomain(self::$domain);
         self::$site_id = $site['id'];
 
         // Get the list of pages
         self::$page_list = PagesTable::getPages(self::$site_id);
 
+        // Get the theme info
+        self::$theme_id = $site['theme_id'];
+        $theme = ThemeTable::getTheme(self::$theme_id);
+
+        self::$media_root_url = self::$url_root . "/user_files/" . self::$site_id . "/";
+        self::$theme_url_root = self::$url_root . '/admin/themes/' . $theme['theme_name'] . "/";
+        self::$theme_file_root = FILE_ROOT . 'admin/themes/' . $theme['theme_name'] . "/";
+
+    }
+    
+    // ///////////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Load the data for this site
+     * @param string $page_name The page name, e.g. my-page.html
+     * @param string $page_path The page path, e.g. /parent/sub-parent/
+     * @param string $tag Any tags from the query string (if ?tag=<tagname> was set)
+     * @param string $category Any categories from the query string (if ?category=<catname> was set)
+     * @param string $blog_month Any month set in query string ?year=xxxxx&month=xxxxxx - displays all blog posts for this year and month
+     * @param string $blog_year Any year set in the query string ?year=xxxxx - displays all blog posts for this year
+     * @param string $blog_page_no ?page=xxxxx - Any page set in the query string, displays a specific blog page, used for older/newer link
+     */
+    public static function load($page_name, $page_path, $tag = '', $category = '', $blog_month = '', $blog_year = '', $blog_page_no = '') {
+
+		Logger::debug(">>>>>>>>>>>> PageManager - Loading.... <<<<<<<<<<<<<<<<<<<<");
+		Logger::debug("load(page_name=$page_name, page_path=$page_path, tag=$tag, category=$category, blog_month=$blog_month, blog_year=$blog_year, blog_page_no=$blog_page_no)");
+		
+        // If we don't have the site id yet, get it
+        if (self::$site_id == 0){
+            self::init();
+        }
+
+		self::$page_slug = $page_name;
+		
         //self::$user_id = SecurityUtils::getCurrentUserID();
         
         // Get blog info....
         $blogPage = PagesTable::getBlogpage(self::$site_id);
         self::$blog_url = $blogPage['path'] . $blogPage['slug'];
         self::$blog_base_url = substr(self::$blog_url, 0, (strlen(self::$blog_url) - strlen('.html')));
-		self::$no_posts = PostsTable::getNoPosts(self::$site_id);
-		
-		// Store the requested blog page, if set (this is for older/previous links
-		if ($blog_page_no != ''){
-	        self::$blog_page_no = $blog_page_no;
-		}
-		else {
-	        self::$blog_page_no = 1;
-		}
+        self::$no_posts = PostsTable::getNoPosts(self::$site_id);
+
+        // Store the requested blog page, if set (this is for older/previous links
+        if ($blog_page_no != ''){
+            self::$blog_page_no = $blog_page_no;
+        }
+        else {
+            self::$blog_page_no = 1;
+        }
 
         if ($tag != '') {
             self::$blog_mode = self::$BLOGMODE_TAG;
@@ -153,8 +202,8 @@ class PageManager {
                 self::$blog_mode = self::$BLOGMODE_SINGLEPOST;
                 self::$current_post = $post;
                 Logger::debug(">>> BLOG SINGLE POST MODE!");
-                $parts = explode("/", $post_path);
-                Logger::dump($parts);
+                //$parts = explode("/", $post_path);
+                //Logger::dump($parts);
                 /*
                   $parts = explode("/", $post_path);
                   $year = $parts[1];
@@ -166,6 +215,7 @@ class PageManager {
             else {
                 // Get the current page id
                 self::$blog_mode = self::$BLOGMODE_ALL;
+                Logger::debug("Slug = " . self::$page_slug);
                 $page = PagesTable::getPageFromSlug(self::$site_id, self::$page_slug);
                 Logger::debug(">>> PAGE/BLOG!");
             }
@@ -181,22 +231,15 @@ class PageManager {
             $page = self::$page_list[0];
         }
 
-
+		Logger::dump($page);
+		
         self::$is_homepage = $page['is_homepage'];
         self::$is_blogpage = $page['is_blogpage'];
         self::$page_id = $page['id'];
         self::$page_parent_id = $page['parent_page_id'];
         self::$page_title = $page['title'];
         self::$page_desc = $page['description'];
-        self::$media_root_url = self::$url_root . "/user_files/" . self::$site_id . "/";
         self::$template_filename = $page['template'];
-
-        // Get the theme info
-        $theme_id = $site['theme_id'];
-        $theme = ThemeTable::getTheme($theme_id);
-
-        self::$theme_url_root = self::$url_root . '/admin/themes/' . $theme['theme_name'] . "/";
-        self::$theme_file_root = FILE_ROOT . 'admin/themes/' . $theme['theme_name'] . "/";
 
 
     }

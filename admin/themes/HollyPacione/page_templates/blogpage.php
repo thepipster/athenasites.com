@@ -91,6 +91,57 @@ function stripImages($postContent){
 
                         <?php } ?>
 
+
+						<!-- Comments wrapper -->
+						<div id='commentsWrapper'>
+						
+						
+							<h2 id="comments">No Comments<a href="#postcomment" title="Leave a comment">&raquo;</a></h2>
+							
+							<p>No comments yet.</p>
+							
+							
+							<p>
+								<a href='http://hollypacionephotography.com/2010/09/16/nate-and-christys-wedding-at-forestgate-presbyterian-church/feed/'>
+									<abbr title="Really Simple Syndication">RSS</abbr> feed for comments on this post.
+								</a>			
+								
+								<a href="http://hollypacionephotography.com/2010/09/16/nate-and-christys-wedding-at-forestgate-presbyterian-church/trackback/" rel="trackback">
+									TrackBack <abbr title="Universal Resource Locator">URL</abbr>
+								</a>
+							</p>
+							
+							<h2 id="postcomment">Leave a comment</h2>
+							
+							
+							<form id='commentForm' method='post' action='' onsubmit="hpBlog.onPostComment(); return false;">
+														
+								<p><input type="text" name="author" id="author" value="" size="22" tabindex="1" class="required_name"  />
+							
+								<label for="author"><small>Name (required)</small></label></p>
+							
+								<p>
+									<input type="text" name="email" id="email" value="" size="22" tabindex="2" class="required_email" />
+									<label for="email"><small>Email (will not be published) (required)</small></label>
+								</p>
+								
+								<p>
+									<input type="text" name="url" id="url" value="" size="22" tabindex="3" />
+									<label for="url"><small>Website</small></label>
+								</p>
+														
+								<p><textarea name="comment" id="comment" cols="70%" rows="10" tabindex="4"></textarea></p>
+														
+								<p>
+									<input name="submit" type="submit" id="submit" tabindex="5" value="Submit Comment" />							
+								</p>
+							
+							</form>
+																		
+						</div><!-- commentsWrapper-->			
+									
+									
+						<!-- Next/Prev links (will only show up if the blog is showing all posts! -->
                         <div style='padding-bottom:30px;' id='blogSidebar'>
                             <span style='float:left; padding-left:35px;'><?= PageManager::getOlderPostsLink('&laquo; Older posts'); ?></span>
                             <span style='float:right; padding-right:35px;'><?=  PageManager::getNewerPostsLink('Newer posts &raquo;'); ?></span>
@@ -129,50 +180,137 @@ function stripImages($postContent){
 
         /** Minimum allowed width */
         minWidth : 800,
+        /** Ajax url */
+        m_commandURL : '',
 
+		// ////////////////////////////////////////////////////////////////
+		
         init : function(){
-
+        
+			// Validation
+			$("#commentForm").validate();
+				
+				
+			$.validator.addMethod(
+				"required_email", function(value, element) { 
+				
+			  		if (value == 'Your E-mail Address') return false; 
+			  		if (value == '') return false; 
+			  		
+			  		// Check to see if this group is complete
+			  		return hpBlog.checkEmail(value);
+				}, 
+				"Enter a valid email");
+	
+			$.validator.addMethod(
+				"required_name", function(value, element) { 
+				
+			  		if (value == 'Your Name') return false; 
+			  		if (value == '') return false; 
+			  		
+			  		return true;
+				}, 
+				"Please enter your name");
+			        
+	        hpBlog.m_commandURL = 'http//' + location.host + '/admin/code/php/remoteapi/BlogAPI.php';
+        	
             hpBlog.onResize();
-
             setTimeout("hpBlog.onResize()", 200);
-
         },
+
+		// ////////////////////////////////////////////////////////////////
+
+		checkEmail : function(email) {
+			var filter = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/;
+			if (!filter.test(email)) {
+				return false;
+			}
+			return true;
+		},
+	
+		// ////////////////////////////////////////////////////////////////
 
         onResize : function(){
 
             var postWidth = $('#content').width() - 340;
-
-            //$('img').addClass('blogImage');
-
-            /*
-                $('img').each(function(){
-
-                        var width = $(this).width();
-                        var height = $(this).height()
-
-                        if (width > postWidth){
-
-                                if (width > height){
-                                        $(this).css('height', 'auto');
-                                        $(this).width(postWidth);
-                                }
-                                else {
-                                        $(this).width(postWidth*0.7);
-                                        $(this).css('height', 'auto');
-                                }
-                        }
-
-
-                });
-             */
-            //$('img').addClass('blogImage');
-
             var blogW = $("#blogTable").width();
 
             $("#nav_container").width(blogW);
             $("#container").width(blogW);
             $("#content").width(blogW);
 
+        },
+        
+		// ////////////////////////////////////////////////////////////////
+
+        getComments : function(){
+
+	        var paras = {
+	            cmd : 'getComments',
+	            site_id: <?=PageManager::$site_id?>,
+	            post_id: <?=PageManager::$current_post['id']?>
+	        };
+	
+	        $.ajax({
+	            url: hpBlog.m_commandURL,
+	            dataType: "json",
+	            data: paras,
+	            success: function(ret){
+	                hpBlog.onGotComments(ret, callback);
+	            }
+	        });
+               
+        },
+        
+		// //////////////////////////////////////////////////////
+
+        onGotComments : function(postID, commentList){
+        },
+        
+		// ////////////////////////////////////////////////////////////////
+
+        onPostComment : function(){
+
+			if ($("#commentForm").valid()){
+
+	        	var authorName = $('#author').val();
+	        	var authorEmail = $('#email').val();
+	        	var commentContent = $('#comment').val();
+	        	var postURL = window.location;
+	        	var parentCommentID = 0;
+	        	
+	        	alert("Name: " + authorName + " Email: " + authorEmail + " Comment: " + commentContent + " Post URL: " + postURL);
+	        	
+		        var paras = {
+		            cmd : 'addComment',
+		            site_id: <?=PageManager::$site_id?>,
+		            post_id: <?=PageManager::$current_post['id']?>,
+		            arn: authorName,
+		            aem: authorEmail,
+		            purl: postURL,
+		            content: commentContent,
+		            pid: parentCommentID
+		        };
+		
+		alert('2 ' + hpBlog.m_commandURL);
+		
+		        $.ajax({
+		            url: hpBlog.m_commandURL,
+		            dataType: "json",
+		            data: paras,
+		            success: function(ret){
+		                hpBlog.onCommentPosted(ret, callback);
+		            }
+		        });
+		        
+	        }
+                	
+            alert('done!');    	
+        },
+        
+		// ////////////////////////////////////////////////////////////////
+
+        onCommentPosted : function(){
         }
 
     }

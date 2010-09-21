@@ -30,10 +30,8 @@ PageManager::doHeader();
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/date.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/jquery.datePicker.js"></script>
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/jquery.ez-bg-resize.js"></script>	
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/hollyGallery.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/hollyInfoPage.js"></script>
-
 
 <!--
 	<script type="text/javascript" src="http://www.google-analytics.com/ga.js"></script>

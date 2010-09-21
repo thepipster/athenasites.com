@@ -1,7 +1,7 @@
 <?php
 /**
 * 
-* Usage;  http://zip.local.com/test1/wp-content/themes/HollyPacione/php/DynamicPNG.php?r=40&g=144&b=85&a=55
+* Usage;  http://zip.local.com/DynamicPNG.php?r=40&g=144&b=85&a=55
 * 
 * Where
 * r = red (0-255)
