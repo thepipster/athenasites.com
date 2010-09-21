@@ -29,7 +29,7 @@ $background_image = PageManager::getMediaURLFromThemePara(205);
 						<input type="text" class='inputText required_phone' id='phone' name='phone' value="Your Phone" onfocus="if (this.value == 'Your Phone'){this.value = '';}" onblur='hpContact.onChange()'>
 						<input type="text" class='inputText' id='location' name='location' value="Event Location" onfocus="if (this.value == 'Event Location'){this.value = '';}" onblur='hpContact.onChange()'>
 						<input type="text" class='inputText datepicker' id='datetime' name='datetime' value="Requested Date">
-						<textarea class='inputTextArea' id='comments' name='comments' onfocus="if (this.value == 'How did you find out about us?'){this.value = '';}">How did you find out about us?</textarea>
+						<textarea class='inputTextArea' id='comments' name='comments' onfocus="if (this.value == 'How did you find out about us?'){this.value = '';}" rows="5">How did you find out about us?</textarea>
 						<input type="submit" value="Submit" onclick=""><span class='formMessage'></span>
 						<!-- <button onclick="hpContact.onSubmit()">Submit</button> -->
 					</form>

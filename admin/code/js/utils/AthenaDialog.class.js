@@ -5,7 +5,11 @@ var AthenaDialog = {
 
     // ////////////////////////////////////////////////////////////////////////
 
-    showLoading : function(msg){
+    showLoading : function(msg, isModal){
+
+        if (isModal == undefined){
+            isModal = true;
+        }
 
         /*
 		var txt = "";
@@ -30,7 +34,7 @@ var AthenaDialog = {
             height:70,
             width: 250,
             closeOnEscape: false,
-            modal: true,
+            modal: isModal,
             //overlay: {opacity: 0.1, background: "black"},
             title: msg
         })

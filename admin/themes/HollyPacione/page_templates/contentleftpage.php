@@ -32,11 +32,11 @@ if ($width > $height){
 			
 			<tr valign="top" height="100%">
 			
-				<td width="55%" height="100%" class='leftCol'>
-						<?php echo PageManager::getCurrentPageContent(); ?>
+				<td width="55%" height="100%" class='leftCol' align="left" >
+                                        <?php echo PageManager::getCurrentPageContent(); ?>
 				</td>
 				
-				<td width="45%" height="100%"> 
+				<td width="45%" height="100%" >
 					<!-- Empty -->
 				</td>
 				

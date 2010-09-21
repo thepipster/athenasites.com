@@ -52,9 +52,14 @@ var GalleriesFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 	
     paintGallerySlots : function(){
-	
+
+        //$('#apollo_gallery_contents').remove();
+        //$('#apollo_gallery_contents_wrapper').html("<div align='left' id='apollo_gallery_contents'></div>");
+
+        $('.gallery_slot').droppable('destroy');
         $(".gallery_thumb").draggable('destroy');
-	
+        $('#apollo_gallery_contents').html("");
+
         var txt = "";
 
         var noSlots = 23;
@@ -77,23 +82,13 @@ var GalleriesFrame = {
 
         // Add special delete slot
         txt += "<div class='gallery_slot' id='delete_slot' align='center'>";
-        txt += "    <div class='delete_slot_text' align='center'>remove</div>";
+        txt += "    <div class='delete_slot_text' align='center'>remove</div>";        
         txt += "</div>";
 					
         $('#apollo_gallery_contents').html(txt);
-			
-        $('.gallery_slot').droppable({
-            drop: GalleriesFrame.onDrop,
-            over: function(ev, ui) {
-                $(this).addClass( 'gallery_slot_hover' );
-            },
-            out: function(ev, ui) {
-                $(this).removeClass( 'gallery_slot_hover' );
-            }
-        });
-										
 						
         for (var i=0; i<DataStore.m_galleryImageList.length; i++){
+            
             if ((DataStore.m_galleryImageList[i].page_id == DataStore.m_currentPageID) &&
                 (DataStore.m_galleryImageList[i].theme_para_id == GalleriesFrame.m_themeParaID) &&
                 (DataStore.m_galleryImageList[i].gallery_number == DataStore.m_currentGalleryNo)){
@@ -104,18 +99,31 @@ var GalleriesFrame = {
                 var slot_no = DataStore.m_galleryImageList[i].slot_number;
 												
                 $("#slot_"+slot_no).html("<img class='gallery_slot_image gallery_thumb' slot='"+slot_no+"' id='galimg_"+img_id+"' src='"+url+"'/>");
-				
+		//$(".gallery_thumb").draggable({	revert: false, zIndex: 300 });
             }
         }
 
+
         // Make the images draggable
         $(".gallery_thumb").draggable({
-            revert: true,
+            revert: false,
             zIndex: 300
         });
+
+
+        $('.gallery_slot').droppable({
+            drop: GalleriesFrame.onDrop,
+            over: function(ev, ui) {
+                $(this).addClass( 'gallery_slot_hover' );
+            },
+            out: function(ev, ui) {
+                $(this).removeClass( 'gallery_slot_hover' );
+            }
+        });
+
 				
     },
-		
+    
     // ////////////////////////////////////////////////////////////////////////////
 		
     /**
@@ -130,8 +138,7 @@ var GalleriesFrame = {
         var url = '';
         var image_moved = true;
         var prev_slot_id = -1;
-				
-			
+				        
         if ($(ui.draggable).attr('id').substring(0,3) == 'gal'){
 
             if ($(this).attr('id') == 'delete_slot'){
@@ -183,6 +190,7 @@ var GalleriesFrame = {
             }
 			
         }
+
     /*
 		if (img_id == -1){
 			alert('bad image id');
@@ -196,7 +204,8 @@ var GalleriesFrame = {
     onImageMoved : function(gallery_images, gallery_meta){
         // Add the new image to the data store
         DataStore.onGotGalleryData(gallery_images, gallery_meta);
-        GalleriesFrame.paintGallerySlots();
+        setTimeout("GalleriesFrame.paintGallerySlots()", 50);
+//        GalleriesFrame.paintGallerySlots();
     },
 	
     // ////////////////////////////////////////////////////////////////////////////
@@ -204,16 +213,15 @@ var GalleriesFrame = {
     onImageAdded : function(gallery_images, gallery_meta){
         // Add the new image to the data store
         DataStore.onGotGalleryData(gallery_images, gallery_meta);
-        GalleriesFrame.paintGallerySlots();
+        setTimeout("GalleriesFrame.paintGallerySlots()", 50);
+//        GalleriesFrame.paintGallerySlots();
     },
 	
     // ////////////////////////////////////////////////////////////////////////////
 
     onImageRemoved : function(slot_number){
-        //alert('image removed from slot ' + slot_number);
         DataStore.removeGalleryImage(slot_number);
-        GalleriesFrame.paintGallerySlots();
-    // Add the new image to the data store
-    //DataStore.onGotGalleryData(gallery_images, gallery_meta);
+        setTimeout("GalleriesFrame.paintGallerySlots()", 50);        
+        //GalleriesFrame.paintGallerySlots();
     }
 }

@@ -133,7 +133,7 @@ a {
 	display: none;
 	z-index: -999;
 }
-	
+
 #content .backgroundImage {
 	position: relative;
 	width: 100%;
@@ -154,33 +154,31 @@ a {
 	
 #content .rightCol {
 	/* background-color: #f6f6fd; 246 246 253 */
+	border-style: solid !important;
+	border-color: black !important;
 	border-left-width: 4px !important;
 	border-bottom-width: 0px !important;
 	border-right-width: 0px !important;
 	border-top-width: 0px !important;
-	border-style: solid !important;
-	border-color: black !important;
 	background-image: url('php/DynamicPNG.php?r=246&g=246&b=253&a=10&f=.png');
 	background-repeat: repeat;
 	z-index: 2;
-	padding: 5px;
 	padding-left: 20px;
 	padding-right: 20px;
 }	
 
 #content .leftCol {
+	border-style: solid !important;
+	border-color: black !important;
 	border-left-width: 0px !important;
 	border-bottom-width: 0px !important;
 	border-right-width: 4px !important;
 	border-top-width: 0px !important;
-	border-style: solid !important;
-	border-color: black !important;
 	background-image: url('php/DynamicPNG.php?r=246&g=246&b=253&a=10&f=.png');
 	background-repeat: repeat;
 	z-index: 2;
-	padding: 5px;
 	padding-left: 20px;
-	padding-right: 20px;	
+	padding-right: 20px;
 }
 
 #content .singleCol {

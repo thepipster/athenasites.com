@@ -118,13 +118,16 @@ Logger::debug("$domain has site_id = $current_site_id");
 
 
         <!-- jQuery and plugins -->
-        <!--
-                <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-                <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js"></script>
-        -->
 
+        <!--
+        Apollo Sites Google API Key: 
         <script type="text/javascript" src="code/js/3rdparty/jquery-1.4.2.min.js"></script>
         <script type="text/javascript" src="code/js/3rdparty/jquery-ui/jquery-ui-1.8.4.custom.min.js"></script>
+        -->
+
+                <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
+                <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
+                
         <script type="text/javascript" src="code/js/3rdparty/jquery.validate.min.js"></script>
         <!--<script type="text/javascript" src="code/js/3rdparty/jquery.json-1.3.min.js"></script>-->
         <script type="text/javascript" src="code/js/3rdparty/jquery.json-2.2.js"></script>
@@ -712,7 +715,9 @@ Logger::debug("$domain has site_id = $current_site_id");
 
                                         <td class='frameContents frame_controls_bar'>
                                             <span class='frameTitle'>Gallery Contents</span>
-                                            <div align='left' id='apollo_gallery_contents'></div>
+                                            <div id="apollo_gallery_contents_wrapper">
+                                                <div align='left' id='apollo_gallery_contents'></div>
+                                            </div>
                                         </td>
 
                                         <!-- Gallery settings frame (for multi-gal)........... -->

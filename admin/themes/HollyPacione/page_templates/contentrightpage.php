@@ -36,7 +36,7 @@ if ($width > $height){
 				</td>
 							
 				<td width="55%" height="100%" class='rightCol'>
-						<?php echo PageManager::getCurrentPageContent(); ?>
+                                    <?php echo PageManager::getCurrentPageContent(); ?>
 				</td>
 				
 			</tr>
@@ -53,5 +53,5 @@ hollyInfoPage.init({
 	height: 800,
 	pageType: 'right'
 });
-				
+
 </script>
