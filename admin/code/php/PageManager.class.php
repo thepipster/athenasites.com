@@ -57,16 +57,19 @@ class PageManager {
     /** Flag to determine if the current page is a blog post */
     public static $is_post = false;
     
-    /** The blog base url, e.g.  /blog.html */
+    /** The full url, including pate e.g.  /parentpage/blog */
     public static $blog_url;
     
-    /** The blog base path, e.g.  blog */
+    /** The blog base path, e.g.  blog - NOTE blogs by convention just use the page slug 'blog' rather than 'blog.html' */
     public static $blog_base_url;
     
     /** The total number of posts for this blog */
     public static $no_posts = 0;
     
     public static $current_post = null;
+    
+    /** Reference to the blog page, if set */
+    public static $blogPage = '';
     
     public static $blog_tag = '';
     public static $blog_category = '';
@@ -97,7 +100,7 @@ class PageManager {
 
         self::$url_root = 'http://' . $_SERVER['HTTP_HOST'];
 
-        // Get the domaing, and strip www if it has it
+        // Get the domain, and strip www if it has it
         self::$domain = $_SERVER['HTTP_HOST'];
         self::$domain = str_replace('www.', '', self::$domain);
 
@@ -112,11 +115,32 @@ class PageManager {
         self::$theme_id = $site['theme_id'];
         $theme = ThemeTable::getTheme(self::$theme_id);
 
+        // Get blog info....
+        $blogPage = PagesTable::getBlogpage(self::$site_id);
+
+		self::$blogPage = $blogPage;
+        self::$blog_url = $blogPage['path'] . $blogPage['slug'];
+        self::$blog_base_url = $blogPage['slug'];
+        self::$no_posts = PostsTable::getNoPosts(self::$site_id);
+
         self::$media_root_url = self::$url_root . "/user_files/" . self::$site_id . "/";
         self::$theme_url_root = self::$url_root . '/admin/themes/' . $theme['theme_name'] . "/";
         self::$theme_file_root = FILE_ROOT . 'admin/themes/' . $theme['theme_name'] . "/";
 
+	
+      	Logger::debug("\n".
+              "Request URI: " . $_SERVER['REQUEST_URI'] . "\n" .
+              "Host: " . $_SERVER['HTTP_HOST'] . "\n" .
+              "Site ID: " . self::$site_id . "\n" .
+              "Blog base path: " . self::$blog_base_url . "\n" .
+              "Blog URL: " . self::$blog_url . "\n" .
+              "Theme URL root: " . self::$theme_url_root . "\n" .
+              "Theme file root: " . self::$theme_file_root . "\n" .
+              "Medi Root URL: " . self::$media_root_url . "\n\n"
+              );
+         
     }
+    
     
     // ///////////////////////////////////////////////////////////////////////////////////////
     
@@ -145,11 +169,8 @@ class PageManager {
         //self::$user_id = SecurityUtils::getCurrentUserID();
         
         // Get blog info....
-        $blogPage = PagesTable::getBlogpage(self::$site_id);
-        self::$blog_url = $blogPage['path'] . $blogPage['slug'];
-        self::$blog_base_url = substr(self::$blog_url, 0, (strlen(self::$blog_url) - strlen('.html')));
-        self::$no_posts = PostsTable::getNoPosts(self::$site_id);
-
+        $blogPage = self::$blogPage;
+        
         // Store the requested blog page, if set (this is for older/previous links
         if ($blog_page_no != ''){
             self::$blog_page_no = $blog_page_no;
@@ -191,31 +212,23 @@ class PageManager {
             // /blog/2010/8/19/danielle-and-jeff-wild-basin-lodge-wedding.html
             // becomes
             // /2010/8/19/danielle-and-jeff-wild-basin-lodge-wedding.html
-            $post_path = substr($page_path, (strlen(self::$blog_url) - strlen('.html')));
+            //$post_path = substr($page_path, (strlen(self::$blog_url) - strlen('.html')));
+            $post_path = substr($page_path, (strlen(self::$blog_url)));
 
             // Match the page against all posts, to see if this is a request for a blog post page
             $post = PostsTable::getPostFromSlug(self::$site_id, $post_path, self::$page_slug);
-
+			
             // If the post is set then we're hitting a single post. Otherwise, we see if we're hitting
             // either the blog or a regular page
             if (isset($post)) {
                 self::$blog_mode = self::$BLOGMODE_SINGLEPOST;
                 self::$current_post = $post;
                 Logger::debug(">>> BLOG SINGLE POST MODE!");
-                //$parts = explode("/", $post_path);
-                //Logger::dump($parts);
-                /*
-                  $parts = explode("/", $post_path);
-                  $year = $parts[1];
-                  $month = $parts[2];
-                  $day = $parts[3];
-                 */
                 $page = $blogPage;
             } 
             else {
                 // Get the current page id
                 self::$blog_mode = self::$BLOGMODE_ALL;
-                Logger::debug("Slug = " . self::$page_slug);
                 $page = PagesTable::getPageFromSlug(self::$site_id, self::$page_slug);
                 Logger::debug(">>> PAGE/BLOG!");
             }
@@ -230,8 +243,6 @@ class PageManager {
         if (!isset($page)) {
             $page = self::$page_list[0];
         }
-
-		Logger::dump($page);
 		
         self::$is_homepage = $page['is_homepage'];
         self::$is_blogpage = $page['is_blogpage'];
@@ -480,7 +491,7 @@ class PageManager {
      */
     public static function getCommentsLink($post, $label='Comments', $cssClass="commentLink"){
         $noComments = CommentsTable::getNoCommentsForPost(self::$site_id, $post['id']);
-        $link = "http://" . $_SERVER['HTTP_HOST'] . self::$blog_base_url . $post['path'] . $post['slug'];
+        $link = "http://" . $_SERVER['HTTP_HOST'] . "/" . self::$blog_base_url . $post['path'] . $post['slug'];
         return "<a href='$link' class='$cssClass'>$label ($noComments)</a>";
     }
 
@@ -492,7 +503,7 @@ class PageManager {
      * @return string the link
      */
     public static function getPostLink($post) {
-        return "http://" . $_SERVER['HTTP_HOST'] . self::$blog_base_url . $post['path'] . $post['slug'];
+        return "http://" . $_SERVER['HTTP_HOST'] . "/". self::$blog_base_url . $post['path'] . $post['slug'];
     }
 
     // ///////////////////////////////////////////////////////////////////////////////////////

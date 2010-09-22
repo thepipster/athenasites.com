@@ -5,6 +5,19 @@
  * @Description: Blog Page
  */
 
+$name = "";
+$email = "";
+$url = "";
+
+if (SecurityUtils::isLoggedIn()){
+	$user_id = SecurityUtils::getCurrentUserID();
+	$user = UserTable::getUser($user_id);
+	$sites = SitesTable::getSitesForUser($user_id);
+	$name = $user['nicename'];
+	$email = $user['email'];
+	$url = $sites[0]['domain'];
+}
+
 /**
 * Strip out any hard coded style attributes
 */
@@ -113,20 +126,19 @@ function stripImages($postContent){
 							
 							<h2 id="postcomment">Leave a comment</h2>
 							
-							
 							<form id='commentForm' method='post' action='' onsubmit="hpBlog.onPostComment(); return false;">
 														
-								<p><input type="text" name="author" id="author" value="" size="22" tabindex="1" class="required_name"  />
+								<p><input type="text" name="author" id="author" size="22" tabindex="1" class="required_name" value="<?=$name?>"/>
 							
 								<label for="author"><small>Name (required)</small></label></p>
 							
 								<p>
-									<input type="text" name="email" id="email" value="" size="22" tabindex="2" class="required_email" />
+									<input type="text" name="email" id="email" size="22" tabindex="2" class="required_email" value="<?=$email?>" />
 									<label for="email"><small>Email (will not be published) (required)</small></label>
 								</p>
 								
 								<p>
-									<input type="text" name="url" id="url" value="" size="22" tabindex="3" />
+									<input type="text" name="url" id="url" size="22" tabindex="3" value="<?=$url?>" />
 									<label for="url"><small>Website</small></label>
 								</p>
 														
@@ -173,16 +185,20 @@ function stripImages($postContent){
 
 </div><!-- content -->
 
-
 <script type="text/javascript">
 
     var hpBlog = {
 
         /** Minimum allowed width */
         minWidth : 800,
+        
         /** Ajax url */
         m_commandURL : '',
 
+		m_postID : <?=PageManager::$current_post['id']?>,
+		
+		m_siteID : <?=PageManager::$site_id?>,
+		
 		// ////////////////////////////////////////////////////////////////
 		
         init : function(){
@@ -212,7 +228,7 @@ function stripImages($postContent){
 				}, 
 				"Please enter your name");
 			        
-	        hpBlog.m_commandURL = 'http//' + location.host + '/admin/code/php/remoteapi/BlogAPI.php';
+	        hpBlog.m_commandURL = 'http://' + location.host + '/admin/code/php/remoteapi/BlogAPI.php';
         	
             hpBlog.onResize();
             setTimeout("hpBlog.onResize()", 200);
@@ -247,17 +263,15 @@ function stripImages($postContent){
 
 	        var paras = {
 	            cmd : 'getComments',
-	            site_id: <?=PageManager::$site_id?>,
-	            post_id: <?=PageManager::$current_post['id']?>
+	            site_id: hpBlog.m_siteID,
+	            post_id: hpBlog.m_postID
 	        };
 	
 	        $.ajax({
 	            url: hpBlog.m_commandURL,
 	            dataType: "json",
 	            data: paras,
-	            success: function(ret){
-	                hpBlog.onGotComments(ret, callback);
-	            }
+	            success: hpBlog.onGotComments
 	        });
                
         },
@@ -278,39 +292,37 @@ function stripImages($postContent){
 	        	var commentContent = $('#comment').val();
 	        	var postURL = window.location;
 	        	var parentCommentID = 0;
-	        	
-	        	alert("Name: " + authorName + " Email: " + authorEmail + " Comment: " + commentContent + " Post URL: " + postURL);
-	        	
+	        		        	
 		        var paras = {
 		            cmd : 'addComment',
-		            site_id: <?=PageManager::$site_id?>,
-		            post_id: <?=PageManager::$current_post['id']?>,
-		            arn: authorName,
-		            aem: authorEmail,
-		            purl: postURL,
+		            site_id: hpBlog.m_siteID,
+		            post_id: hpBlog.m_postID,
+		            name: authorName, 
+		            email: authorEmail,
+		            post_url: escape(postURL),
 		            content: commentContent,
 		            pid: parentCommentID
 		        };
-		
-		alert('2 ' + hpBlog.m_commandURL);
-		
+				     					     	
+				alert(escape(postURL));
+				
 		        $.ajax({
+//		            url:"/admin/code/php/remoteapi/BlogAPI.php",
 		            url: hpBlog.m_commandURL,
 		            dataType: "json",
 		            data: paras,
-		            success: function(ret){
-		                hpBlog.onCommentPosted(ret, callback);
-		            }
+		            success:  hpBlog.onCommentPosted,
+		            error: function(ret){alert(ret);}
 		        });
-		        
-	        }
-                	
-            alert('done!');    	
+		     
+	        }                	
         },
         
 		// ////////////////////////////////////////////////////////////////
 
-        onCommentPosted : function(){
+        onCommentPosted : function(ret){
+        	alert('comment posted!');
+        	alert(ret);
         }
 
     }

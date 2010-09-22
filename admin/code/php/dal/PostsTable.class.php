@@ -181,13 +181,8 @@ class PostsTable {
     // /////////////////////////////////////////////////////////////////////////////////
 
     public static function getPostFromSlug($site_id, $path, $slug) {
-        //Logger::debug("getPageFromSlug(site_id = $site_id, page_slug = $page_slug");
         $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts WHERE slug = %s AND path = %s", $site_id, $slug, $path);
-        $data = DatabaseManager::getSingleResult($sql);
-        if (isset($data)) {
-            return $data;
-        }
-        return null;
+        return DatabaseManager::getSingleResult($sql);
     }
 
     // /////////////////////////////////////////////////////////////////////////////////

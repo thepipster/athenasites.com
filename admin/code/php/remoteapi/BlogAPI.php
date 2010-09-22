@@ -33,9 +33,9 @@ switch ($cmd) {
 
     case "addComment":
         $post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        $author_name = CommandHelper::getPara('arn', true, CommandHelper::$PARA_TYPE_STRING);
-        $author_email = CommandHelper::getPara('aem', true, CommandHelper::$PARA_TYPE_STRING);
-        $post_url = CommandHelper::getPara('purl', true, CommandHelper::$PARA_TYPE_STRING);
+        $author_name = CommandHelper::getPara('name', true, CommandHelper::$PARA_TYPE_STRING);
+        $author_email = CommandHelper::getPara('email', true, CommandHelper::$PARA_TYPE_STRING);
+        $post_url = CommandHelper::getPara('post_url', true, CommandHelper::$PARA_TYPE_STRING);
         $comment = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
         $parent_comment_id = CommandHelper::getPara('pid', true, CommandHelper::$PARA_TYPE_NUMERIC);
         addComment($site_id, $post_id, $parent_comment_id, $comment, $author_name, $author_email, $post_url);
@@ -92,10 +92,16 @@ function getStats($site_id){
 //
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function addComment($site_id, $post_id, $parent_comment_id, $comment, $author_name, $author_email, $post_url){
+function addComment($site_id, $post_id, $parent_comment_id, $content, $author_name, $author_email, $author_url){
 
     //$site = SitesTable::getSite($site_id);
     $page = PagesTable::getBlogpage($site_id);
+
+    // Get the current date and time
+    $date_str = date('Y-m-d H:i:s');
+    Logger::debug(">>> $date_str");
+
+    $author_ip = PageViewsTable::getRealIPAddr();
 
     // Check if this is spam from AkisMet
     $user = AKISMET_USER;
@@ -103,30 +109,34 @@ function addComment($site_id, $post_id, $parent_comment_id, $comment, $author_na
     //$blogURL = 'http://www.apollosites.com/blog/';
     $blogURL = PageManager::getPageLink($page['id']);
 
-    $author_ip = PageViewsTable::getRealIPAddr();
     $author_url = '';
     
-    $akismet = new Akismet($blogURL , AKISMET_API_KEY);
-    $akismet->setCommentAuthor($author_name);
-    $akismet->setCommentAuthorEmail($author_email);
-    $akismet->setCommentAuthorURL($author_url);
-    $akismet->setCommentContent($comment);
-    $akismet->setPermalink($post_url);
-
-    //
-    // Check to see if this is possible spam or not?
-    //
-
     // Innocent until proven guilty...
     $status = 'Pending';
     $isSpam = false;
-
+    
     // Check from akismet..
-    if($akismet->isCommentSpam()){
-        $status = 'Spam';
-        $isSpam = true;
-    }
+    try {
+    
+	    $akismet = new Akismet($blogURL , AKISMET_API_KEY);
+	    $akismet->setCommentAuthor($author_name);
+	    $akismet->setCommentAuthorEmail($author_email);
+	    $akismet->setCommentAuthorURL($author_url);
+	    $akismet->setCommentContent($content);
+	    $akismet->setPermalink($post_url);
+	
+	    //
+	    // Check to see if this is possible spam or not?
+	    //
 
+	    if($akismet->isCommentSpam()){
+	        $status = 'Spam';
+	        $isSpam = true;
+	    }
+    }
+    catch(Exception $e){
+    	Logger::error("Could not reach Akismet!");
+    }
     
     //
     // Add follower, unless they are already registered. We
@@ -135,10 +145,12 @@ function addComment($site_id, $post_id, $parent_comment_id, $comment, $author_na
     // Create/Update the blog follower....
     if ($author_email != '') {
         $follower_id = SiteFollowersTable::getFollowerIDFromEmail($author_email);
-    } else if ($author_url != '') {
+    } 
+    else if ($author_url != '') {
         // If they have no email, search by url
         $follower_id = SiteFollowersTable::getFollowerIDFromURL($author_url);
-    } else {
+    } 
+    else {
         // If they have no email or URL, search by name - which is not ideal as name may not be unique
         $follower_id = SiteFollowersTable::getFollowerIDFromName($author_name);
     }

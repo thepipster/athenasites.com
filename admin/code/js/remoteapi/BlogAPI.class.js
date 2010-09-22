@@ -29,9 +29,9 @@ var BlogAPI = {
             cmd : 'addComment',
             site_id: siteID,
             post_id: postID,
-            arn: authorName,
-            aem: authorEmail,
-            purl: postURL,
+            name: authorName,
+            email: authorEmail,
+            post_url: postURL,
             content: commentContent,
             pid: parentCommentID
         };
