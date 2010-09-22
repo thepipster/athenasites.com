@@ -41,6 +41,11 @@ $ext = substr(strrchr($page, '.'), 1);
 
 PageManager::init();
 
+// The blog is a special case, as convention is to use just 'blog' rather than a real page like 'blog.html'
+if ($page == PageManager::$blog_base_url || ($page."/") == PageManager::$blog_base_url){
+	$ext = "html";
+}
+
 if ($page == '' || (($ext == 'html') || ($ext == 'htm') || ($ext == 'php'))) {
 
     PageManager::load($page, $path, $tag, $category, $month, $year, $page_no);
