@@ -1,7 +1,5 @@
 <?php
 
-require_once("php/ft-nonce-lib.php");
-
 PageManager::doHeader();
 
 ?>
@@ -25,11 +23,14 @@ PageManager::doHeader();
 	
 	<!-- JS Includes ///////////////////////////////////////////////////// -->
 
+	ProductionBuilder
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/jquery-1.4.2.min.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/AC_OETags.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/date.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/jquery.datePicker.js"></script>
+
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/hpBlog.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/hollyGallery.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/hollyInfoPage.js"></script>
 

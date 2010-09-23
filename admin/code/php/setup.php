@@ -7,6 +7,9 @@
 * @since March 14th, 2009
 */
 
+// Set cookie options
+setcookie ("ApolloCookie", "", time()+3600, "/", ".athena.local");
+
 // Figure out the location of this file
 $discRoot = realpath(dirname(__FILE__)) . "/";
 

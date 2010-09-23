@@ -108,8 +108,6 @@ function addComment($site_id, $post_id, $parent_comment_id, $content, $author_na
     $pass = AKISMET_PASS;
     //$blogURL = 'http://www.apollosites.com/blog/';
     $blogURL = PageManager::getPageLink($page['id']);
-
-    $author_url = '';
     
     // Innocent until proven guilty...
     $status = 'Pending';
@@ -123,7 +121,7 @@ function addComment($site_id, $post_id, $parent_comment_id, $content, $author_na
 	    $akismet->setCommentAuthorEmail($author_email);
 	    $akismet->setCommentAuthorURL($author_url);
 	    $akismet->setCommentContent($content);
-	    $akismet->setPermalink($post_url);
+	    $akismet->setPermalink($author_url);
 	
 	    //
 	    // Check to see if this is possible spam or not?
