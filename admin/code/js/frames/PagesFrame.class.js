@@ -406,7 +406,7 @@ var PagesFrame = {
         originalPage.is_homepage = 0;
         
 	    DataStore.updatePage(originalPage);
-        
+        PagesSidebarFrame.repaint();        
         	
 	},
 	

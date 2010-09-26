@@ -236,6 +236,7 @@ var PostsFrame = {
         postObj.slug = AthenaUtils.encodeSlug(postObj.title);
 
         DataStore.updatePost(postObj);
+        PostsSidebarFrame.repaint();
 	
 	},
 	
