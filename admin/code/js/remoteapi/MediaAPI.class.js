@@ -233,7 +233,7 @@ var MediaAPI = {
 				
     updatePost : function(siteID, postID, postTitle, postContent, postStatus, postCanComment, postSlug, callback){
 		
-        AthenaDialog.showLoading("Updating post");
+        //AthenaDialog.showLoading("Updating post");
 		
         var paras = {
             cmd: 'updatePost',
@@ -562,7 +562,7 @@ var MediaAPI = {
 
     updatePage : function(siteID, pageID, pageTitle, pageContent, pageStatus, templateName, parentPageID, pageSlug, pageOrder, isHome, description, callback){
 		
-        AthenaDialog.showLoading("Updating page");
+        //AthenaDialog.showLoading("Updating page");
 		
         var paras = {
             cmd: 'updatePage',

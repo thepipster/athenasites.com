@@ -42,7 +42,7 @@ var ssMain = {
         DataStore.init();
 
         // Start auto-save timer....
-        //setInterval ( "ssMain.onAutoSave()", 5000 );
+        setInterval ( "ssMain.onAutoSave()", 5000 );
 
         // Save when browser quits
         $(window).unload( function () {DataStore.save();} );
@@ -114,14 +114,14 @@ var ssMain = {
     // ////////////////////////////////////////////////////////////////////////
 
     onAutoSave : function(){
-
+		
         // Show that autosave is happening!
-        var tm = new Date();
-
-        $("#saveButton").attr('value', 'Saved ' + tm.getHours() + ":" + tm.getMinutes() + "." + tm.getSeconds());
+        
+        //var tm = new Date();
+        //$("#saveButton").attr('value', 'Saved ' + tm.getHours() + ":" + tm.getMinutes() + "." + tm.getSeconds());
 
         // Do the save
-        //DataStore.save();
+        DataStore.save();
     },
 
     // ////////////////////////////////////////////////////////////////////////

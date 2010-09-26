@@ -21,6 +21,9 @@ var PagesFrame = {
             return;
         }
 
+		// Change listeners
+		$('.apolloDataInput').change(PagesFrame.onChange);
+
         var pageObj = DataStore.getCurrentPage();
         PagesFrame.repaintData(pageObj);
 								
@@ -40,15 +43,14 @@ var PagesFrame = {
         $('#pageTitle').val(pageObj.title);
         $('#pageSlug').html(pageObj.slug);
         $('#pageLastEdit').html(pageObj.last_edit);
-        $('#pageCreated').html(pageObj.created);
-		
+        $('#pageCreated').html(pageObj.created);		
         $('#pageStatusSelector').val(pageObj.status);
         $('#pageParent').val(pageObj.parent_page_id);
         $('#pageTemplate').val(pageObj.template);
         $('#pageOrder').val(pageObj.order);
         $('#pageDesc').val(pageObj.description);
 
-        var txt = "<select id='pageTemplate' onchange=\"PagesFrame.paintThemeParas()\">";
+        var txt = "<select id='pageTemplate' onchange=\"PagesFrame.onChange(); PagesFrame.paintThemeParas();\">";
         for (var i=0; i<DataStore.m_templateList.length; i++){
             if (DataStore.m_templateList[i].template_file == pageObj.template){
                 txt += "<option value='"+DataStore.m_templateList[i].template_file+"' selected>"+DataStore.m_templateList[i].template_name+"</option>";
@@ -297,7 +299,7 @@ var PagesFrame = {
         var page_id = DataStore.m_currentPageID;
 		
         var txt = '';
-        txt += "<select id='pageParent' >";
+        txt += "<select id='pageParent' onchange=\"PagesFrame.onChange()\">";
         txt += "    <option value='0'>(none)</selected>";
 		
         for (var i=0; i<DataStore.m_pageList.length; i++){
@@ -348,14 +350,70 @@ var PagesFrame = {
 		
     // ////////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Called whenever any page information is changed
+	*/	
+	onChange : function(){
+
+        var page_id = DataStore.m_currentPageID;			
+        var originalPage = DataStore.getPage(page_id);
+        var parent_id = $('#pageParent').val();
+		        
+        var pageDepth = DataStore.getPageDepth(DataStore.m_currentPageID);
+			
+        // Check what the new max depth would be.....
+		
+        // Need to get the root page for this branch
+		
+        var old_parent_id = originalPage.parent_page_id;
+        originalPage.parent_page_id = parent_id;
+        DataStore.updatePage(originalPage);
+		
+        try {
+            //var newDepth = DataStore.getPageDepth(rootPage.id);
+            var newDepth = DataStore.getMaxDepth();
+        }
+        catch (e){
+            var newDepth = 99;
+        }
+		
+        // Revert the original back
+        originalPage.parent_page_id = old_parent_id;
+        DataStore.updatePage(originalPage);
+				
+        if ((originalPage.parent_page_id != parent_id) && (newDepth > DataStore.m_theme.max_page_depth)){
+            AthenaDialog.alert("Sorry, your theme does not support page depths of more than 3, please choose another parent page!");
+            return;
+        }
+        
+        // Update the page
+
+        originalPage.content = oUtil.obj.getXHTMLBody();		
+        originalPage.title = $('#pageTitle').val();
+        originalPage.status = $('#pageStatusSelector').val();
+        originalPage.parent_page_id = $('#pageParent').val();
+        originalPage.template = $('#pageTemplate').val();
+        originalPage.page_order = $('#pageOrder').val();
+        originalPage.description = $('#pageDesc').val();
+        originalPage.slug = AthenaUtils.encodeSlug(originalPage.title);
+        originalPage.is_homepage = 0;
+        
+	    DataStore.updatePage(originalPage);
+        
+        	
+	},
+	
+    // ////////////////////////////////////////////////////////////////////////////
+
     /**
 	* Save all the users changes to the site
 	*/
+	/*
     onSavePage : function(){
 			
         var page_id = DataStore.m_currentPageID;
 			
-        var originalPage = DataStore.getPage(page_id);
+        originalPage = DataStore.getPage(page_id);
 		
         var content = oUtil.obj.getXHTMLBody();
 		
@@ -405,7 +463,7 @@ var PagesFrame = {
         PagesFrame.repaint();
         PagesSidebarFrame.repaint();
     },
-
+*/
     // ////////////////////////////////////////////////////////////////////////////
 
     saveChildPages : function(){

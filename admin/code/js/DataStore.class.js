@@ -365,8 +365,11 @@ var DataStore = {
                 DataStore.m_pageList[i].path = pageObj.path;
                 DataStore.m_pageList[i].is_homepage = pageObj.is_homepage;
                 DataStore.m_pageList[i].is_blogpage = pageObj.is_blogpage;
-                DataStore.m_pageList[i].order = pageObj.page_order;
+                DataStore.m_pageList[i].page_order = pageObj.page_order;
                 DataStore.m_pageList[i].description = pageObj.description;
+
+				// Flag as changed 
+                DataStore.m_pageList[i].isChanged = 1;
 
                 return;
             }
@@ -418,7 +421,7 @@ var DataStore = {
         temp.path = pageObj.path;
         temp.is_homepage = pageObj.is_homepage;
         temp.is_blogpage = pageObj.is_blogpage;
-        temp.order = pageObj.page_order;
+        temp.page_order = pageObj.page_order;
         temp.description = pageObj.description;
 
         DataStore.m_pageList.push(temp);
@@ -494,6 +497,9 @@ var DataStore = {
                     DataStore.m_postList[i].categories = new Array();
                 }
 
+				// Flag as changed
+                DataStore.m_postList[i].isChanged = 1;
+
                 return;
             }
         }
@@ -530,10 +536,106 @@ var DataStore = {
     },
 
     // //////////////////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Save any items that have been marked as changed
+	*/
     save : function(){
+        
+    	for (var i=0; i<DataStore.m_postList.length; i++){
+    		if (DataStore.m_postList[i].isChanged != undefined && DataStore.m_postList[i].isChanged == 1){    	
+    			DataStore.savePost(DataStore.m_postList[i]);   			
+    		}
+    	}
+
+    	for (var i=0; i<DataStore.m_pageList.length; i++){
+    		if (DataStore.m_pageList[i].isChanged != undefined && DataStore.m_pageList[i].isChanged == 1){  
+    			DataStore.savePage(DataStore.m_pageList[i]);   			
+    		}
+    	}    	
+    	
     },
 
+    // //////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Save a page to the server
+	*/ 
+	savePage : function(pageObj){
+			
+        MediaAPI.updatePage(DataStore.m_siteID, 
+        					pageObj.id, 
+        					pageObj.title, 
+        					pageObj.content, 
+        					pageObj.status, 
+        					pageObj.template, 
+        					pageObj.parent_page_id, 
+        					pageObj.slug, 
+        					pageObj.page_order, 
+        					pageObj.is_homepage, 
+        					pageObj.description, 
+        					DataStore.onPageSaved);
+	},
+	
+	onPageSaved : function(pageObj){
+		
+		DataStore.updatePage(pageObj);
+				
+		// Mark as saved...
+    	for (var i=0; i<DataStore.m_pageList.length; i++){
+    		if (DataStore.m_pageList[i].id == pageObj.id){
+    			DataStore.m_pageList[i].isChanged = 0;
+    		}
+		}		
+		
+		// Is this page being displayed? If so, update the last edit display
+		if (pageObj.id == DataStore.m_currentPageID && ssMain.view == ssMain.VIEW_PAGES){
+			$('#pageLastEdit').html(pageObj.last_edit);
+			//$('#pageLastEdit').effect("highlight", {color: 'white'}, 2000);
+			$('#pageLastEdit').effect("pulsate", { times:2 }, 2000);
+		}
+	},
+	
+    // //////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	* Save a post to the server
+	*/
+	savePost : function(postObj, callback){
+	
+        MediaAPI.updatePost(DataStore.m_siteID, 
+        					postObj.id, 
+        					postObj.title, 
+        					postObj.content, 
+        					postObj.status, 
+        					postObj.canComment, 
+        					postObj.slug, 
+        					DataStore.onPostSaved)
+	},
+	
+	onPostSaved : function(postObj){
+
+		DataStore.updatePost(postObj);
+
+		// Mark as saved...
+    	for (var i=0; i<DataStore.m_postList.length; i++){
+    		if (DataStore.m_postList[i].id == postObj.id){
+    			DataStore.m_postList[i].isChanged = 0;
+    		}
+		}	
+		
+		// Is this page being displayed? If so, update the last edit display
+		if (postObj.id == DataStore.m_currentPostID && ssMain.view == ssMain.VIEW_POSTS){
+			$('#postLastEdit').html(postObj.last_edit);
+			$('#postLastEdit').effect("pulsate", { times:2 }, 2000);
+		}
+			
+	},
+	
+    // //////////////////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////////////////////
     // //////////////////////////////////////////////////////////////////////////////////
 
     load : function(callback){

@@ -25,6 +25,9 @@ var PostsFrame = {
             AthenaDialog.alert("<div class='noContent'>You currently have no posts, you can add a post using the side-bar</div>");
         }
 
+		// Change listeners
+		$('.apolloDataInput').change(PostsFrame.onChange);
+
         MediaAPI.getPostDetails(DataStore.m_siteID, DataStore.m_currentPostID, PostsFrame.repaintData);
 								
     },
@@ -217,19 +220,42 @@ var PostsFrame = {
 		
     // ////////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Called whenever any post information is changed
+	*/	
+	onChange : function(){
+	
+        var postObj = DataStore.getPost(DataStore.m_currentPostID);
+						
+        //var content = CKEDITOR.instances.postContentEditor.getData();
+        postObj.content = oUtil.obj.getXHTMLBody();
+        postObj.title = $('#pageTitle').val();
+        postObj.status = $('#postStatusSelector').val();
+        postObj.canComment = $('#postCanCommentSelector').val();
+        postObj.slug = AthenaUtils.encodeSlug(postObj.title);
+
+        DataStore.updatePost(postObj);
+	
+	},
+	
     /**
 	* Save all the users changes to the site
 	*/
+	/*
     onSavePost : function(){
+
+        var postObj = DataStore.getPost(DataStore.m_currentPostID);
 						
         //var content = CKEDITOR.instances.postContentEditor.getData();
-        var content = oUtil.obj.getXHTMLBody();
+        postObj.content = oUtil.obj.getXHTMLBody();
+        postObj.title = $('#pageTitle').val();
+        postObj.status = $('#postStatusSelector').val();
+        postObj.canComment = $('#postCanCommentSelector').val();
+        postObj.slug = AthenaUtils.encodeSlug(title);
 
-        var title = $('#pageTitle').val();
-        var status = $('#postStatusSelector').val();
-        var canComment = $('#postCanCommentSelector').val();
-        var slug = AthenaUtils.encodeSlug(title);
-        MediaAPI.updatePost(DataStore.m_siteID, DataStore.m_currentPostID, title, content, status, canComment, slug, PostsFrame.onPostSaved)
+        DataStore.updatePost(postObj);
+        
+        //MediaAPI.updatePost(DataStore.m_siteID, DataStore.m_currentPostID, title, content, status, canComment, slug, PostsFrame.onPostSaved)
 				
     },
 	
@@ -238,7 +264,7 @@ var PostsFrame = {
         PostsFrame.repaint();
         PostsSidebarFrame.repaint();
     },
-
+*/
     // ////////////////////////////////////////////////////////////////////////////
 
     addTag : function(){

@@ -8,7 +8,8 @@
 */
 
 // Set cookie options
-setcookie ("ApolloCookie", "", time()+3600, "/", ".athena.local");
+//setcookie ("ApolloCookie", "", time()+3600, "/", ".athena.local");
+setcookie ("ApolloCookie", "", time()+3600, "/", getRealIPAddr());
 
 // Figure out the location of this file
 $discRoot = realpath(dirname(__FILE__)) . "/";
@@ -49,6 +50,21 @@ date_default_timezone_set('America/New_York'); // EST
 // Any shutdown events....
 register_shutdown_function("onShutdown");
 
+// /////////////////////////////////////////////////////////////////////////	
+
+function getRealIPAddr() {
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {   //check ip from share internet
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+    } 
+    elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {   //to check ip is pass from proxy
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } 
+    else {
+        $ip = $_SERVER['REMOTE_ADDR'];
+    }
+    return $ip;
+}
+    
 // /////////////////////////////////////////////////////////////////////////	
 
 /**

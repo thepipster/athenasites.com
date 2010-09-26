@@ -63,7 +63,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
     <head>
-        <title>ApolloSites | Athena 0.1 </title>
+        <title>ApolloSites | Athena 1.0 </title>
 
         <meta name="Description" content="" />
         <meta name="Keywords" content="" />
@@ -469,7 +469,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                                     <td height='30px'>
                                         <div class='frameControlsBar'>
                                             <span class='label'>Title:</span>
-                                            <input id='pageTitle' type='text' value=''/>
+                                            <input id='pageTitle' type='text' value='' class='apolloDataInput'/>
                                             <!--
                                             <button class='basic_button' style='' onclick="ImagePickerDialog.show('#PagesFrameImagePicker', PagesFrame.onImageSelected);">Insert Image</button>
                                             -->
@@ -496,8 +496,8 @@ Logger::debug("$domain has site_id = $current_site_id");
 
                                                 <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Status:</span>
-                                                    <span class='pageData'>
-                                                        <select id='postStatusSelector'>
+                                                    <span class='pageData' class='apolloDataInput'>
+                                                        <select id='postStatusSelector' class='apolloDataInput'>
                                                             <option value='Published' class=''>Published</option>
                                                             <option value='Draft' class=''>Draft</option>
                                                             <option value='Private' class=''>Private</option>
@@ -518,7 +518,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                 <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Allow Comments:</span>
                                                     <span class='pageData'>
-                                                        <select id='postCanCommentSelector'>
+                                                        <select id='postCanCommentSelector' class='apolloDataInput'>
                                                             <option value='1' selected>Yes</option>
                                                             <option value='0'>No</option>
                                                         </select>
@@ -539,7 +539,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 
                                                 <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Controls:</span>
-                                                    <button class='save_button' onclick="PostsFrame.onSavePost()">Save</button>
+                                                    <!--<button class='save_button' onclick="PostsFrame.onSavePost()">Save</button>-->
                                                     <button class='delete_button' onclick="PostsFrame.onDeletePost()">Delete Post</button>
                                                 </div>
 
@@ -593,7 +593,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                     <span class='pageLabel'>Status:</span>
                                                     <span class='pageData'>
 
-                                                        <select id='pageStatusSelector'>
+                                                        <select id='pageStatusSelector' class='apolloDataInput'>
                                                             <option value='Published'>Published</option>
                                                             <option value='Draft'>Draft</option>
                                                             <option value='Private'>Private</option>
@@ -603,7 +603,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 
                                                 <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Description:</span>
-                                                    <span class='pageData'><input id='pageDesc' title='If set, this will be used as the title in the browser' type='text' value=''/></span>
+                                                    <span class='pageData'><input id='pageDesc' title='If set, this will be used as the title in the browser' type='text' value='' class='apolloDataInput'/></span>
                                                 </div>
 
                                                 <div class='pageInfoLine'>
@@ -629,7 +629,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                 <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Template:</span>
                                                     <span class='pageData' id="pageTemplateWrapper">
-                                                        <select id='pageTemplate' onchange="PagesFrame.paintThemeParas()">
+                                                        <select id='pageTemplate' onchange="PagesFrame.paintThemeParas()" class='apolloDataInput'>
                                                             <option value=''>(none)</option>
                                                         </select>
                                                     </span>
@@ -639,7 +639,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                     <span class='pageLabel'>Menu Order:</span>
                                                     <!--<span class='pageData'><input id='pageOrder' type=text size=5 value=''/></span>-->
                                                     <span class='pageData'>
-                                                        <select id='pageOrder'>
+                                                        <select id='pageOrder' class='apolloDataInput'>
                                                             <option value='1' selected>1</option>
                                                             <option value='2'>2</option>
                                                             <option value='3'>3</option>
@@ -677,7 +677,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 
                                                 <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Controls:</span>
-                                                    <button class='save_button' onclick="PagesFrame.onSavePage()">Save</button>
+                                                    <!--<button class='save_button' onclick="PagesFrame.onSavePage()">Save</button>-->
                                                     <button class='delete_button' onclick="PagesFrame.onDeletePage()">Delete Page</button>
                                                 </div>
 

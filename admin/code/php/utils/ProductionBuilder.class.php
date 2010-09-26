@@ -42,10 +42,10 @@ class ProductionBuilder {
 	 	$new_size = round($new_size / 1024);
 	 	$pc = 100 * $new_size / $size;
 	 	
-	 	Logger::info("Merged $no_files files with a total size of $size kb to 1 file of size $new_size kb (".number_format($pc,2)."% compression)");
-	
+	 	Logger::info("Merged $no_files files with a total size of $size kb to 1 file of size $new_size kb (".number_format($pc,2)."% compression)");	
+	 	
 	}
+	
 }
-
 
 ?>
