@@ -354,6 +354,7 @@ var DataStore = {
 
                 DataStore.m_pageList[i].id = pageObj.id;
                 DataStore.m_pageList[i].title = AthenaUtils.encodeTitle(pageObj.title);
+                DataStore.m_pageList[i].browser_title = AthenaUtils.encodeTitle(pageObj.browser_title);                
                 DataStore.m_pageList[i].user_id = pageObj.user_id;
                 DataStore.m_pageList[i].content = pageObj.content;
                 DataStore.m_pageList[i].status = pageObj.status;
@@ -423,6 +424,7 @@ var DataStore = {
         temp.is_blogpage = pageObj.is_blogpage;
         temp.page_order = pageObj.page_order;
         temp.description = pageObj.description;
+        temp.browser_title = pageObj.browser_title;
 
         DataStore.m_pageList.push(temp);
     },
@@ -576,6 +578,7 @@ var DataStore = {
         					pageObj.page_order, 
         					pageObj.is_homepage, 
         					pageObj.description, 
+        					pageObj.browser_title, 
         					DataStore.onPageSaved);
 	},
 	
@@ -594,7 +597,7 @@ var DataStore = {
 		if (pageObj.id == DataStore.m_currentPageID && ssMain.view == ssMain.VIEW_PAGES){
 			$('#pageLastEdit').html(pageObj.last_edit);
 			//$('#pageLastEdit').effect("highlight", {color: 'white'}, 2000);
-			$('#pageLastEdit').effect("pulsate", { times:2 }, 2000);
+			$('#pageLastEdit').effect("pulsate", { times:1 }, 2000);
 		}
 	},
 	
@@ -629,7 +632,7 @@ var DataStore = {
 		// Is this page being displayed? If so, update the last edit display
 		if (postObj.id == DataStore.m_currentPostID && ssMain.view == ssMain.VIEW_POSTS){
 			$('#postLastEdit').html(postObj.last_edit);
-			$('#postLastEdit').effect("pulsate", { times:2 }, 2000);
+			$('#postLastEdit').effect("pulsate", { times:1 }, 2000);
 		}
 			
 	},

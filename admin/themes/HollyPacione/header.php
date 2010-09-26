@@ -23,7 +23,9 @@ PageManager::doHeader();
 	
 	<!-- JS Includes ///////////////////////////////////////////////////// -->
 
-	ProductionBuilder
+	<?php
+		ProductionBuilder
+	?>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/jquery-1.4.2.min.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/AC_OETags.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/jquery.validate.min.js"></script>

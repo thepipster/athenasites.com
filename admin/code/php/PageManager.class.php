@@ -33,8 +33,11 @@ class PageManager {
     /** The current parent page id */
     public static $page_parent_id;
     
-    /** The current parent title */
+    /** The current page title */
     public static $page_title;
+    
+    /** The browser title for the current page */
+    public static $page_browser_title;
     
     /** The current page descrition, which if set is used the the html page title */
     public static $page_desc;
@@ -250,6 +253,7 @@ class PageManager {
         self::$page_parent_id = $page['parent_page_id'];
         self::$page_title = $page['title'];
         self::$page_desc = $page['description'];
+        self::$page_browser_title = $page['browser_title'];
         self::$template_filename = $page['template'];
 
 
@@ -363,8 +367,8 @@ class PageManager {
 
     public static function getPageTitle() {
 
-        if (isset(self::$page_desc) && self::$page_desc != "") {
-            return self::$page_desc;
+        if (isset(self::$page_browser_title) && self::$page_browser_title != "") {
+            return self::$page_browser_title;
         }
 
         return self::$page_title;

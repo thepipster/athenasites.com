@@ -296,12 +296,6 @@ Logger::debug("$domain has site_id = $current_site_id");
 
                     <div id='MainContent'>
 
-                        <!-- Settings Frame ///////////////////////////////////////////////////////////// -->
-
-                        <div id='SettingsFrame' class='ViewFrame'>
-						SETTINGS
-                        </div> <!-- content -->
-
                         <!-- Dashboard Page Content ///////////////////////////////////////////////////////////// -->
 
                         <div id='DashboardFrame' class='ViewFrame'>
@@ -481,7 +475,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 
                                         <!-- Post settings sub-frame ////////////////////////////////////////////// -->
 
-                                        <div class='subframebox' id="postSettings" style="height:100%;width:250px;display:none">
+                                        <div class='subframebox' id="postSettings" style="height:100%;width:255px;display:none">
 
                                             <span class='title'>Post Settings</span>
 
@@ -570,7 +564,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 
                                         <!-- Page settings sub-frame ////////////////////////////////////////////// -->
 
-                                        <div class='subframebox' id="pageSettings" style="height:100%;width:250px;display:none">
+                                        <div class='subframebox' id="pageSettings" style="height:100%;width:255px;display:none">
 
                                             <span class='title'>Page Settings</span>
 
@@ -602,8 +596,13 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                 </div>
 
                                                 <div class='pageInfoLine'>
+                                                    <span class='pageLabel'>Browser Title:</span>
+                                                    <span class='pageData'><input id='pageBrowserTitle' title='If set, this will be used as the title in the browser. If its not set, we use the title. This allows you to have a different title in the browser window than the title used in your menu.' type='text' value='' class='apolloDataInput'/></span>
+                                                </div>
+
+                                                <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Description:</span>
-                                                    <span class='pageData'><input id='pageDesc' title='If set, this will be used as the title in the browser' type='text' value='' class='apolloDataInput'/></span>
+                                                    <span class='pageData'><input id='pageDesc' title='Enter a description of this page so we can feed that to search engines!' type='text' value='' class='apolloDataInput'/></span>
                                                 </div>
 
                                                 <div class='pageInfoLine'>

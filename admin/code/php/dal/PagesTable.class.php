@@ -18,7 +18,8 @@ class PagesTable {
 		  `status` enum('Published','Draft','Private','Revision') default 'Draft',
 		  `last_edit` datetime default NULL,
 		  `parent_page_id` int(11) default '0',
-		  `title` varchar(255) default NULL,
+		  `title` varchar(60) default NULL,
+		  `browser_title` varchar(60) default NULL,
 		  `description` varchar(255) default NULL,
 		  `slug` varchar(255) default NULL,
 		  `path` varchar(255) default NULL,
@@ -72,7 +73,7 @@ class PagesTable {
 	
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
-    public static function update($page_id, $user_id, $site_id, $parent_page_id, $content, $status, $title, $template_name, $slug, $path, $order, $ishome, $description){
+    public static function update($page_id, $user_id, $site_id, $parent_page_id, $content, $status, $title, $template_name, $slug, $path, $order, $ishome, $description, $browser_title){
 
         $target_date  = mktime(date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
         $date_str = date('Y-m-d H:i:s', $target_date);
@@ -82,8 +83,8 @@ class PagesTable {
 			$is_blogpage = 1;			
 		}
 
-		$sql = DatabaseManager::prepare("UPDATE athena_%d_Pages SET parent_page_id=%d, content=%s, title=%s, slug=%s, status=%s, path=%s, user_id=%d, page_order=%d, is_homepage=%d, template=%s, last_edit='$date_str', is_blogpage = $is_blogpage, description = %s WHERE id = %d", 
-			$site_id, $parent_page_id, $content, $title, $slug, $status, $path, $user_id, $order, $ishome, $template_name, $description, $page_id);
+		$sql = DatabaseManager::prepare("UPDATE athena_%d_Pages SET parent_page_id=%d, content=%s, title=%s, slug=%s, status=%s, path=%s, user_id=%d, page_order=%d, is_homepage=%d, template=%s, last_edit='$date_str', is_blogpage = $is_blogpage, description = %s, browser_title = %s WHERE id = %d", 
+			$site_id, $parent_page_id, $content, $title, $slug, $status, $path, $user_id, $order, $ishome, $template_name, $description, $browser_title, $page_id);
 		return DatabaseManager::update($sql);
     }
 

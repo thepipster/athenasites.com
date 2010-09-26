@@ -27,6 +27,7 @@ var PostsFrame = {
 
 		// Change listeners
 		$('.apolloDataInput').change(PostsFrame.onChange);
+		oUtil.obj.onKeyPress = PostsFrame.onContentKeyPress;
 
         MediaAPI.getPostDetails(DataStore.m_siteID, DataStore.m_currentPostID, PostsFrame.repaintData);
 								
@@ -237,6 +238,22 @@ var PostsFrame = {
         DataStore.updatePost(postObj);
 	
 	},
+	
+	m_contentChangedTO : '',
+	
+	/**
+	* Called whenever is key is pressed in the content editor. We want to wait until the user has stopped
+	* typing before we submit changes
+	*/
+	onContentKeyPress : function(){
+				
+		if (PostsFrame.m_contentChangedTO != ''){
+			// Still typing, so clear timeout and reset
+			clearTimeout(PostsFrame.m_contentChangedTO);
+		}
+		
+		PostsFrame.m_contentChangedTO = setTimeout(PostsFrame.onChange, 500);
+	},	
 	
     /**
 	* Save all the users changes to the site

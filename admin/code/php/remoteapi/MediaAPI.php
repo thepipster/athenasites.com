@@ -184,6 +184,7 @@ switch ($cmd) {
     case "updatePage":
         $page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
         $title = CommandHelper::getPara('title', true, CommandHelper::$PARA_TYPE_STRING);
+        $browser_title = CommandHelper::getPara('browser_title', true, CommandHelper::$PARA_TYPE_STRING);
         $slug = CommandHelper::getPara('slug', true, CommandHelper::$PARA_TYPE_STRING);
         $parent_page_id = CommandHelper::getPara('parent_page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
         $content = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
@@ -192,7 +193,7 @@ switch ($cmd) {
         $order = CommandHelper::getPara('order', true, CommandHelper::$PARA_TYPE_NUMERIC);
         $ishome = CommandHelper::getPara('ishome', true, CommandHelper::$PARA_TYPE_NUMERIC);
         $description = CommandHelper::getPara('desc', true, CommandHelper::$PARA_TYPE_STRING);
-        updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $template, $slug, $order, $ishome, $description);
+        updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $template, $slug, $order, $ishome, $description, $browser_title);
         break;
 
     case "addPage":
@@ -368,7 +369,7 @@ function deletePost($site_id, $post_id) {
 
 function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_comment) {
 
-    Logger::debug($content);
+    //Logger::debug($content);
 
 
     $user_id = SecurityUtils::getCurrentUserID();
@@ -483,11 +484,11 @@ function importLiveJournal($site_id, $lj_user, $lj_password) {
 
 function importComments($site_id, $post_id, $comment_obj, $import_source) {
 
-	Logger::debug("importComments($site_id, $post_id, $comment_obj, $import_source)");
+	//Logger::debug("importComments($site_id, $post_id, $comment_obj, $import_source)");
 	
     $comment_list = json_decode($comment_obj);
 
-	Logger::dump($comment_list);
+	//Logger::dump($comment_list);
 	
     foreach ($comment_list as $comment) {
 
@@ -583,7 +584,7 @@ function addTag($site_id, $post_id, $tag) {
  */
 function addCategories($site_id, $csv_categories) {
 
-    Logger::debug($csv_categories);
+    //Logger::debug($csv_categories);
 
     $cat_list = explode(",", $csv_categories);
 
@@ -708,7 +709,7 @@ function deletePage($site_id, $page_id) {
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $tamplate_name, $slug, $order, $ishome, $description) {
+function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $tamplate_name, $slug, $order, $ishome, $description, $browser_title) {
 
     //Logger::debug("updatePage(page_id=$page_id, site_id=$site_id, title=$title, parent_page_id=$parent_page_id, content=$content, status=$status, tamplate_name=$tamplate_name, slug=$slug, path=$path)");
 
@@ -720,7 +721,7 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
     $safe_content = str_ireplace($tags, $replace, $content);
     $safe_title = str_ireplace($tags, $replace, $title);
 
-    PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $safe_title, $tamplate_name, StringUtils::encodeSlug($title), $path, $order, $ishome, $description);
+    PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $safe_title, $tamplate_name, StringUtils::encodeSlug($title), $path, $order, $ishome, $description, $browser_title);
 
     $page = PagesTable::getPage($site_id, $page_id);
     if (isset($page)) {

@@ -22,8 +22,11 @@ var PagesFrame = {
         }
 
 		// Change listeners
+		//oUtil.obj.change(PagesFrame.onChange);		
 		$('.apolloDataInput').change(PagesFrame.onChange);
-
+				
+		oUtil.obj.onKeyPress = PagesFrame.onContentKeyPress;
+		
         var pageObj = DataStore.getCurrentPage();
         PagesFrame.repaintData(pageObj);
 								
@@ -32,7 +35,7 @@ var PagesFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 
     repaintData : function(pageObj){
-
+		
          $('#postSettings').hide();
          $('#pageSettings').show();
 
@@ -41,6 +44,7 @@ var PagesFrame = {
 
         //$('#pageContentEditor').html(pageObj.content);
         $('#pageTitle').val(pageObj.title);
+        $('#pageBrowserTitle').val(pageObj.browser_title)
         $('#pageSlug').html(pageObj.slug);
         $('#pageLastEdit').html(pageObj.last_edit);
         $('#pageCreated').html(pageObj.created);		
@@ -355,6 +359,8 @@ var PagesFrame = {
 	*/	
 	onChange : function(){
 
+		//Logger.error('onchange!');
+
         var page_id = DataStore.m_currentPageID;			
         var originalPage = DataStore.getPage(page_id);
         var parent_id = $('#pageParent').val();
@@ -390,6 +396,7 @@ var PagesFrame = {
 
         originalPage.content = oUtil.obj.getXHTMLBody();		
         originalPage.title = $('#pageTitle').val();
+        originalPage.browser_title = $('#pageBrowserTitle').val();        
         originalPage.status = $('#pageStatusSelector').val();
         originalPage.parent_page_id = $('#pageParent').val();
         originalPage.template = $('#pageTemplate').val();
@@ -401,6 +408,22 @@ var PagesFrame = {
 	    DataStore.updatePage(originalPage);
         
         	
+	},
+	
+	m_contentChangedTO : '',
+	
+	/**
+	* Called whenever is key is pressed in the content editor. We want to wait until the user has stopped
+	* typing before we submit changes
+	*/
+	onContentKeyPress : function(){
+				
+		if (PagesFrame.m_contentChangedTO != ''){
+			// Still typing, so clear timeout and reset
+			clearTimeout(PagesFrame.m_contentChangedTO);
+		}
+		
+		PagesFrame.m_contentChangedTO = setTimeout(PagesFrame.onChange, 500);
 	},
 	
     // ////////////////////////////////////////////////////////////////////////////

@@ -13,7 +13,7 @@ var ssMain = {
     VIEW_STATS : 6,
     VIEW_EDITFILES : 9,
 
-    view : 4,
+    view : 1,
 
     pageTracker : '',
 
@@ -196,7 +196,7 @@ var ssMain = {
             case ssMain.VIEW_DASHBOARD:$('#DashboardFrame').show();$('#dashboard_menu').addClass('selected');DashboardFrame.repaint();break;
             case ssMain.VIEW_FILES:$('#FilesFrame').show();$('#files_menu').addClass('selected');FilesFrame.repaint();break;
             case ssMain.VIEW_GALLERIES:$('#GalleriesFrame').show();$('#gallery_menu').addClass('selected');GalleriesFrame.repaint();break;
-            case ssMain.VIEW_STATS:$('#StatsFrame').show();$('#stats_menu').addClass('selected');SettingsFrame.repaint();break;
+            case ssMain.VIEW_STATS:$('#StatsFrame').show();$('#stats_menu').addClass('selected');StatsFrame.repaint();break;
             case ssMain.VIEW_EDITFILES:$('#EditFilesFrame').show();$('#edit_files_menu').addClass('selected');EditImageFrame.repaint();break;
         }
 
@@ -209,6 +209,8 @@ var ssMain = {
 
     paintOpenWYSIWYG : function(){
 
+		// Paint the InnovaStudio editor...
+		
         var ht = $('.ViewFrame').height() - 40;
 
         var groupsObj = [

@@ -560,7 +560,7 @@ var MediaAPI = {
     //
     // ////////////////////////////////////////////////////////////////////////
 
-    updatePage : function(siteID, pageID, pageTitle, pageContent, pageStatus, templateName, parentPageID, pageSlug, pageOrder, isHome, description, callback){
+    updatePage : function(siteID, pageID, pageTitle, pageContent, pageStatus, templateName, parentPageID, pageSlug, pageOrder, isHome, description, browserTitle ,callback){
 		
         //AthenaDialog.showLoading("Updating page");
 		
@@ -569,6 +569,7 @@ var MediaAPI = {
             site_id: siteID,
             page_id: pageID,
             title: pageTitle,
+            browser_title: browserTitle,
             content: pageContent,
             status: pageStatus,
             template_id: templateName,
