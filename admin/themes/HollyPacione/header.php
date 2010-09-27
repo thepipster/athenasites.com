@@ -32,7 +32,7 @@ PageManager::doHeader();
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/date.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/jquery.datePicker.js"></script>
 
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/hpBlog.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/hpBlog.class.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/hollyGallery.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/hollyInfoPage.js"></script>
 

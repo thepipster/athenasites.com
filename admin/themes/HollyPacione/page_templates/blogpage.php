@@ -187,11 +187,12 @@ function stripImages($postContent){
 
 <script type="text/javascript">
 
-	hpBlog.m_postID = <?=PageManager::$current_post['id']?>;
+	<?php if (isset(PageManager::$current_post)) { ?>
+	hpBlog.m_postID = <?= PageManager::$current_post['id'] ?>;	
+	<?php } ?>
 	
-	m_siteID : 0, <?=PageManager::$site_id?>,
+	hpBlog.m_siteID = <?= PageManager::$site_id  ?>;
 	
-
     hpBlog.init();
 
     //$(document).ready(hpBlog.init);

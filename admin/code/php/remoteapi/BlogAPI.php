@@ -94,6 +94,10 @@ function getStats($site_id){
 
 function addComment($site_id, $post_id, $parent_comment_id, $content, $author_name, $author_email, $author_url){
 
+	//Logger::debug("addComment($site_id, $post_id, $parent_comment_id, $content, $author_name, $author_email, $author_url)");	
+	Logger::debug("Adding comment - site id = $site_id post id = $post_id");
+	
+
     //$site = SitesTable::getSite($site_id);
     $page = PagesTable::getBlogpage($site_id);
 
