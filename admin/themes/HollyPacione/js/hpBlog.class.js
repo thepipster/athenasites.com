@@ -79,7 +79,7 @@ var hpBlog = {
     getComments : function(){
 
         var paras = {
-            cmd : 'getComments',
+            cmd : 'getApprovedComments',
             site_id: hpBlog.m_siteID,
             post_id: hpBlog.m_postID
         };

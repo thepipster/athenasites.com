@@ -202,6 +202,10 @@ class CommentsTable {
         return DatabaseManager::getResults($sql);
     }
 
+    public static function getCommentsForPostForStatus($site_id, $post_id, $status) {
+        $sql = DatabaseManager::prepare("SELECT c.*, f.name FROM athena_%d_Comments c INNER JOIN athena_SiteFollowers f WHERE c.post_id = %d AND c.site_follower_id = f.id AND status=%s ORDER BY c.created DESC", $site_id, $post_id, $status);
+        return DatabaseManager::getResults($sql);
+    }
     // /////////////////////////////////////////////////////////////////////////////////
 
     public static function getComment($site_id, $comment_id) {

@@ -31,6 +31,11 @@ switch ($cmd) {
         getComments($post_id, $site_id);
         break;
 
+    case "getApprovedComments":
+        $post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+        getApprovedComments($post_id, $site_id);
+        break;
+
     case "addComment":
         $post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
         $author_name = CommandHelper::getPara('name', true, CommandHelper::$PARA_TYPE_STRING);
@@ -210,6 +215,28 @@ function getComments($post_id, $site_id) {
     else {
         $comment_list = CommentsTable::getCommentsForPost($site_id, $post_id);
     }
+    $comments = array();
+    foreach($comment_list as $comment){
+        $comment['created'] = date("m/d/Y H:i", strtotime($comment['created'])); // Convert to JS compatible date
+        $comments[] = $comment;
+    }
+
+    $msg['data'] = array('post_id' => $post_id, 'comments' => $comments);
+
+    CommandHelper::sendMessage($msg);
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+* Get the approved comments for this post
+*/
+function getApprovedComments($post_id, $site_id) {
+
+    $msg['cmd'] = 'getComments';
+    $msg['result'] = 'ok';
+
+       $comment_list = CommentsTable::getCommentsForPostForStatus($site_id, $post_id, 'Approved');
     $comments = array();
     foreach($comment_list as $comment){
         $comment['created'] = date("m/d/Y H:i", strtotime($comment['created'])); // Convert to JS compatible date
