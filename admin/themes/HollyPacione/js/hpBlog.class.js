@@ -17,10 +17,14 @@ var hpBlog = {
 	
     init : function(){
     
+        hpBlog.m_commandURL = 'http://' + location.host + '/admin/code/php/remoteapi/BlogAPI.php';
+    
+        // Get the comments
+        hpBlog.getComments();
+    
 		// Validation
 		$("#commentForm").validate();
-			
-			
+						
 		$.validator.addMethod(
 			"required_email", function(value, element) { 
 			
@@ -41,11 +45,10 @@ var hpBlog = {
 		  		return true;
 			}, 
 			"Please enter your name");
-		        
-        hpBlog.m_commandURL = 'http://' + location.host + '/admin/code/php/remoteapi/BlogAPI.php';
-    	
+		            	
         hpBlog.onResize();
         setTimeout("hpBlog.onResize()", 200);
+        
     },
 
 	// ////////////////////////////////////////////////////////////////
@@ -92,7 +95,33 @@ var hpBlog = {
     
 	// //////////////////////////////////////////////////////
 
-    onGotComments : function(postID, commentList){
+    onGotComments : function(ret){
+    
+    	if (ret.result != 'ok') return;
+    	
+    	var commentList = ret.data.comments;
+    	var postID = ret.data.post_id;
+    	
+    	var txt = "<h2>Comments</h2>";
+    	
+    	for (var i=0; i<commentList.length; i++){
+
+	        var dt = new Date(commentList[i].created);
+    	    var dateStr = dateFormat(dt, "ddd, mmm dS yyyy");
+    	    var timeStr = dateFormat(dt, "h:MM:ss TT");
+    	    var author = commentList[i].name;
+
+			var commentClass = "odd";
+			if (i%2 == 0) commentClass = "even";
+			
+    		txt += "<div align='left' class='comment "+commentClass+"'>";
+    		txt += "    <span class='comment_time'>On " + dateStr + " at " + timeStr + "</span>";
+    		txt += "    <span class='comment_author'>"+author+"</span> says <br/>";
+    		txt += "    <p>"+commentList[i].content+"</p>";
+    		txt += "</div>"
+    	}
+    	  
+    	$('#comments').html(txt);  
     },
     
 	// ////////////////////////////////////////////////////////////////
@@ -132,8 +161,12 @@ var hpBlog = {
 	// ////////////////////////////////////////////////////////////////
 
     onCommentPosted : function(ret){
-    	alert('comment posted!');
-    	alert(ret);
+    	$('.commentStatus').hide();
+    	$('.commentStatus').html("Thank you for your comment. It will be displayed once approved.");
+    	$('.commentStatus').fadeIn();
+        $('#author').val('');
+        $('#email').val('');
+        $('#comment').val('');    	
     }
 
 }

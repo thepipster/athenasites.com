@@ -275,6 +275,10 @@ a {
 	padding-top: 0px;
 }
 
+#content .storycontent {
+	padding-top: 10px;
+}
+
 #content .blogImageWrapper {
 	width: 100%;
 	padding-top: 20px;
@@ -422,42 +426,40 @@ a {
 #commentsWrapper {
 	width: 100%;
 	padding-left: 30px;
+	font-size: 12px;
 }
 
-#commentsWrapper .comment_author {
+#commentsWrapper .commentStatus {
+	color: green;
+}
+
+#comments {
+	font-size: 12px;
+}
+
+#comments .comment_author {
 	font-weight: bold;
 }
 
-#commentsWrapper .comment_time {
+#comments .comment_time {
 }
 
-#commentsWrapper .comment_wrapper {
-	width: auto;
-	padding-left: 35px;
-	padding-right: 35px;
-	height: 50px;
+#comments .comment p {
 }
 
-#commentsWrapper .comment p {
-	padding-left: 10px;
-}
-
-#commentsWrapper .comment {
-	width: 100%;
+#comments .comment {
+	width: 95%;
 	margin: 0px;
 	margin-top: 5px;
-	margin-bottom: 7px;
-	padding: 0px;
-	padding-top: 2px;
-	padding-bottom: 2px;
+	margin-bottom: 10px;
+	padding: 5px;
 }
 
-
-#commentsWrapper .odd {
+#comments .odd {
 	background-color: #efeef5;
 }
 
-#commentsWrapper .even {
+#comments .even {
 	background-color: #ebf0f6;
 }
 

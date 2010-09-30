@@ -104,15 +104,12 @@ function stripImages($postContent){
 
                         <?php } ?>
 
-
+						
+						<?php if (PageManager::$blog_mode == PageManager::$BLOGMODE_SINGLEPOST){ ?>
 						<!-- Comments wrapper -->
-						<div id='commentsWrapper'>
+						<div id='commentsWrapper'>						
 						
-						
-							<h2 id="comments">No Comments<a href="#postcomment" title="Leave a comment">&raquo;</a></h2>
-							
-							<p>No comments yet.</p>
-							
+							<div id="comments"><h2>No comments yet.</h2></div>																					
 							
 							<p>
 								<a href='http://hollypacionephotography.com/2010/09/16/nate-and-christys-wedding-at-forestgate-presbyterian-church/feed/'>
@@ -125,6 +122,8 @@ function stripImages($postContent){
 							</p>
 							
 							<h2 id="postcomment">Leave a comment</h2>
+							
+							<div class='commentStatus'></div>
 							
 							<form id='commentForm' method='post' action='' onsubmit="hpBlog.onPostComment(); return false;">
 														
@@ -142,7 +141,7 @@ function stripImages($postContent){
 									<label for="url"><small>Website</small></label>
 								</p>
 														
-								<p><textarea name="comment" id="comment" cols="70%" rows="10" tabindex="4"></textarea></p>
+								<p><textarea name="comment" id="comment" cols="70%" rows="10" tabindex="4" class='required'></textarea></p>
 														
 								<p>
 									<input name="submit" type="submit" id="submit" tabindex="5" value="Submit Comment" />							
@@ -152,12 +151,15 @@ function stripImages($postContent){
 																		
 						</div><!-- commentsWrapper-->			
 									
+						<?php } else { ?>
 									
 						<!-- Next/Prev links (will only show up if the blog is showing all posts! -->
                         <div style='padding-bottom:30px;' id='blogSidebar'>
                             <span style='float:left; padding-left:35px;'><?= PageManager::getOlderPostsLink('&laquo; Older posts'); ?></span>
                             <span style='float:right; padding-right:35px;'><?=  PageManager::getNewerPostsLink('Newer posts &raquo;'); ?></span>
                         </div>
+                        
+						<?php } ?>
 
                     </div>
 
@@ -187,13 +189,15 @@ function stripImages($postContent){
 
 <script type="text/javascript">
 
-	<?php if (isset(PageManager::$current_post)) { ?>
+	<?php if (PageManager::$blog_mode == PageManager::$BLOGMODE_SINGLEPOST){ ?>
+
 	hpBlog.m_postID = <?= PageManager::$current_post['id'] ?>;	
-	<?php } ?>
 	
 	hpBlog.m_siteID = <?= PageManager::$site_id  ?>;
 	
     hpBlog.init();
+    
+	<?php } ?>
 
     //$(document).ready(hpBlog.init);
     $(window).resize(hpBlog.onResize);

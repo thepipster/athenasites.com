@@ -9,8 +9,11 @@ class PageManager {
     /** The site url root, e.g. http://cgp.apollosites.com/ */
     public static $url_root;
     
-    /** The them url root, e.g. http://cgp.apollosites.com/admin/themes/cgp4/ */
+    /** The theme url root, e.g. http://cgp.apollosites.com/admin/themes/cgp4/ */
     public static $theme_url_root;
+
+    /** The theme common code url root, e.g. http://cgp.apollosites.com/admin/themes/common/ */
+    public static $common_url_root;
     
     /** The root url for the site's media directory,  e.g. http://cgp.apollosites.com/user_files/1/ */
     public static $media_root_url;
@@ -127,6 +130,7 @@ class PageManager {
 
         self::$media_root_url = self::$url_root . "/user_files/" . self::$site_id . "/";
         self::$theme_url_root = self::$url_root . '/admin/themes/' . $theme['theme_name'] . "/";
+        self::$common_url_root = self::$url_root . "/admin/themes/common/";
         self::$theme_file_root = FILE_ROOT . 'admin/themes/' . $theme['theme_name'] . "/";
 
 	
