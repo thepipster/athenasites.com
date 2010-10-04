@@ -83,6 +83,15 @@
 	border-top: solid 1px #CCC;
 }
 
+
+#FilesFrameContent .more_link {
+    font-size: 10px;
+    color: #00315f;
+    cursor: pointer;
+}
+
+#FilesFrameContent .more_link:hover { color: #006fdc;}
+
 /*
 	Adding Icons
 	

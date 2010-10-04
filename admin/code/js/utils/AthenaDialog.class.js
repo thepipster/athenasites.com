@@ -5,6 +5,18 @@ var AthenaDialog = {
 
     // ////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Locak the background by painting a full screen transparent div
+	*/
+	lockBackground : function(){
+			// TODO: background lock out
+	},
+	
+	unlockBackground : function(){
+	},
+	
+    // ////////////////////////////////////////////////////////////////////////
+
     showLoading : function(msg, isModal){
 
         if (isModal == undefined){
@@ -23,7 +35,9 @@ var AthenaDialog = {
 		$('#apollo_loading_display').height($(window).height());
 		$('#apollo_loading_display').show();
 */
-
+		if (isModal){
+			AthenaDialog.lockBackground();
+		}
 
         $('#apollo_loading_dialog').dialog("destroy");
 				
@@ -34,7 +48,7 @@ var AthenaDialog = {
             height:70,
             width: 250,
             closeOnEscape: false,
-            modal: isModal,
+            modal: false,
             //overlay: {opacity: 0.1, background: "black"},
             title: msg
         })
@@ -47,6 +61,7 @@ var AthenaDialog = {
         //$('#apollo_loading_display').html("");
         //$('#apollo_loading_display').hide();
         $('#apollo_loading_dialog').dialog("destroy");
+		AthenaDialog.unlockBackground();
     },
 
     // ////////////////////////////////////////////////////////////////////
@@ -85,7 +100,7 @@ var AthenaDialog = {
         $('#apollo_dialog').dialog({
             resizable: false,
             //			height:140,
-            modal: true,
+            modal: false,
             title: msgTitle,
             buttons: {
                 Ok: function() {
@@ -133,7 +148,7 @@ var AthenaDialog = {
 		
         $('#apollo_dialog').dialog({
             resizable: false,
-            modal: true,
+            modal: false,
             title: "Confirm",
             buttons: {
                 Cancel: function() {

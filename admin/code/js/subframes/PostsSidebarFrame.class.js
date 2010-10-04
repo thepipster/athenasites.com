@@ -8,10 +8,14 @@
 var PostsSidebarFrame = {
 	
     m_targetDiv : '',
+    
+    /** Number of posts per 'page' */
     m_postsPerPage : 25,
+    
     m_currentPostPage : 0,
+    
     m_numberPages : 0,
-	
+		
     // ////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -20,8 +24,6 @@ var PostsSidebarFrame = {
     paint : function(targetDiv){
 		
         PostsSidebarFrame.m_targetDiv = targetDiv;
-
-        PostsSidebarFrame.m_numberPages = Math.ceil(DataStore.m_postList.length / PostsSidebarFrame.m_postsPerPage);
 
         var txt = "";
 
@@ -33,6 +35,10 @@ var PostsSidebarFrame = {
         txt += "<div id='apollo_post_list'></div>";
 		
         $(targetDiv).html(txt);
+		
+    	var h = $(window).height() - 80;		
+		PostsSidebarFrame.m_postsPerPage = Math.floor(h / 30);
+        PostsSidebarFrame.m_numberPages = Math.ceil(DataStore.m_postList.length / PostsSidebarFrame.m_postsPerPage);
 		
         PostsSidebarFrame.paintPosts();
 		
@@ -63,7 +69,7 @@ var PostsSidebarFrame = {
 
         var start_i = PostsSidebarFrame.m_currentPostPage * PostsSidebarFrame.m_postsPerPage;
         var end_i = Math.min(postList.length, start_i+PostsSidebarFrame.m_postsPerPage);
-        
+                
         for (var i=start_i; i< end_i; i++){
             txt += PostsSidebarFrame.getPostHtml(postList[i].id, postList[i].title, postList[i].status);
         }

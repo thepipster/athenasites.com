@@ -256,7 +256,7 @@ var FolderSidebarFrame = {
 
 		switch(ssMain.view){			
 			case ssMain.VIEW_GALLERIES : GalleriesFrame.repaint(); break;
-			case ssMain.VIEW_FILES : FilesFrame.repaint(); break;
+			case ssMain.VIEW_FILES : FilesFrame.onSelectFolder(); break;
 		}
 		
 	},

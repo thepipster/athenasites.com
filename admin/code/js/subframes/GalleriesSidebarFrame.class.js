@@ -94,25 +94,45 @@ var GalleriesSidebarFrame = {
 	getPageHtml : function(page_id, page_title, page_status, page_depth){
 
 		var txt = '';
+        var icon = "images/post.png";
 		
-		var status = "";
-		if (page_status == 'Draft'){
-			icon = "images/webpage_draft.png";
-		}
-		else if (page_status == 'Private'){
-			icon = "images/webpage_private.png";
-		}
-		else if (page_status == 'Published'){
-			icon = "images/webpage_published.png";
-		}
+        var status_class = "";
+        var icon = "images/post.png";
+
+        if (page_status == 'Draft'){
+            status_class = 'status_draft';
+            //icon = "images/webpage_draft.png";
+        }
+        else if (page_status == 'Private'){
+            //icon = "images/webpage_private.png";
+            status_class = 'status_private';
+        }
+        else if (page_status == 'Published'){
+            //icon = "images/webpage_published.png";
+            status_class = 'status_public';
+        }
 				
+        var selected = '';
+        if (page_id == DataStore.m_currentPageID){
+            selected = 'selected';
+        }
+        
+		page_depth = 0;
+		
+        txt += "<div onclick=\"GalleriesSidebarFrame.onSelectPage('"+page_id+"')\" class='page page_depth_"+page_depth+"' id='page_"+page_id+"' title=''>";
+        //txt += "    <img class='node_icon' src='"+nodeIcon+"'>";
+        txt += "    <img class='page_icon' src='"+icon+"'>";
+        txt += "    <span class='page_name "+status_class+" "+selected+"'>"+page_title+"</span>";
+        txt += "</div>";
+        				
+/*												
 		if (page_id == DataStore.m_currentPageID){			
 			txt += "<div onclick=\"GalleriesSidebarFrame.onSelectPage('"+page_id+"')\" class='page page_depth_"+page_depth+"' id='page_"+page_id+"' title=''><img class='page_icon' src='"+icon+"'><span class='page_name selected'>"+page_title+"</span></div>";
 		}
 		else {
 			txt += "<div onclick=\"GalleriesSidebarFrame.onSelectPage('"+page_id+"')\" class='page page_depth_"+page_depth+"' id='page_"+page_id+"' title=''><img class='page_icon' src='"+icon+"'><span class='page_name'>"+page_title+"</span></div>";
 		}
-				
+*/				
 		return txt;
 	},
 	

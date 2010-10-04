@@ -121,12 +121,12 @@ Logger::debug("$domain has site_id = $current_site_id");
 
         <!--
         Apollo Sites Google API Key: 
-        <script type="text/javascript" src="code/js/3rdparty/jquery-1.4.2.min.js"></script>
-        <script type="text/javascript" src="code/js/3rdparty/jquery-ui/jquery-ui-1.8.4.custom.min.js"></script>
-        -->
-
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
+        -->
+        <script type="text/javascript" src="code/js/3rdparty/jquery-1.4.2.min.js"></script>
+        <script type="text/javascript" src="code/js/3rdparty/jquery-ui/jquery-ui-1.8.4.custom.min.js"></script>
+
                 
         <script type="text/javascript" src="code/js/3rdparty/jquery.validate.min.js"></script>
         <!--<script type="text/javascript" src="code/js/3rdparty/jquery.json-1.3.min.js"></script>-->
@@ -251,9 +251,7 @@ Logger::debug("$domain has site_id = $current_site_id");
             <tr valign="top" style='width:100%;height:100%'>
 
                 <td width="180px" style='width:180px'>
-                    <div id='SideBar' align="left">
-
-                    </div><!-- SideBar -->
+                    <div id='SideBar' align="left"></div><!-- SideBar -->
                 </td>
 
                 <td>
@@ -409,7 +407,11 @@ Logger::debug("$domain has site_id = $current_site_id");
                                     <tr valign='top'>
 
                                         <td class='frameContents'>
-                                            <span class='frameTitle'>Images</span>
+                                            <span class='frameTitle'>Images                                            
+												<span class='more_link' id='prev_images_link' onclick='FilesFrame.showPrevImages()' title=''>&laquo; prev</span>
+												<span class='more_link' id='next_images_link' onclick='FilesFrame.showNextImages()' title=''>next &raquo;</span>
+                                            </span>
+                                            
                                             <div id='apollo_folder_contents'></div>
                                         </td>
 

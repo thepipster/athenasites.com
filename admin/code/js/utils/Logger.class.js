@@ -27,7 +27,7 @@ var Logger = {
 		Logger.m_width = $(Logger.m_div).width();
 		Logger.m_height = $(Logger.m_div).height();
 		
-		$(Logger.m_div).css('left','90%');
+		$(Logger.m_div).css('left','10%');
 		//$(Logger.m_div).dblclick(Logger.onToggleShrink);
 		
 	},

@@ -96,6 +96,7 @@ var DataStore = {
                 return DataStore.m_mediaList[i];
             }
         }
+        
         return false;
     },
 
