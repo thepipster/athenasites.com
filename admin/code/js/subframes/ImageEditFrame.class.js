@@ -81,8 +81,9 @@ var ImageEditFrame = {
         txt += "   </tr>";
 		
         txt += "   <tr>";
-        txt += "      <td class='titleField'>Tags</td>";
-        txt += "      <td class='dataField'><input id='apollo_image_tags' width='100%' type=text value='"+alt_text+"'/></td>";
+        txt += "      <td class='titleField'>Alt Text</td>";
+        txt += "      <td class='dataField'><textarea id='apollo_image_tags' width='100%'>"+alt_text+"</textarea></td>";
+//        txt += "      <td class='dataField'><input id='apollo_image_tags' width='100%' type=text value='"+alt_text+"'/></td>";
         txt += "   </tr>";
 
         txt += "   <tr align='center'>";

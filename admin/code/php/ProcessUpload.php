@@ -59,7 +59,11 @@ if (!isset($_FILES["Filedata"]) || !is_uploaded_file($_FILES["Filedata"]["tmp_na
 
     // Copy file to users directory
     $tmp_name = $_FILES["Filedata"]["tmp_name"];
-    $title = $_FILES["Filedata"]["name"];
+    
+    // separate filename from extension to get title
+    $title_parts = pathinfo($_FILES["Filedata"]["name"]);
+    $title = $path_parts['filename'];
+    
     $name = friendlyName($_FILES["Filedata"]["name"], $base_folder);
     
     $new_filepath = $base_folder . $filepath . $name;
