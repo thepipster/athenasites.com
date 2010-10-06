@@ -112,8 +112,13 @@ foreach ($site_list AS $site) {
                 // Get keywords
                 $key_str = getKeywordString($site_id, $date_from, $date_end);
 
+                // Remove any "
+                $tags = array("\"");
+                $replace = "";
+                $key_str = str_ireplace($tags, $replace, $key_str);
+
                 DatabaseManager::insert("INSERT INTO stats_{$site_id}_RollupPageViews (rollup_date, page_views, unique_visitors, page_title, keywords, page_id)
-                		VALUES ('$day_date', $page_views, $unique_views, '$page_title', '$key_str', $page_id)");
+                		VALUES ('$day_date', $page_views, $unique_views, '$page_title', \"$key_str\", $page_id)");
             }
 
         }

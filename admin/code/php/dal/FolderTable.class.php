@@ -110,6 +110,8 @@ class FolderTable {
 
     public static function addMedia($folder_id, $site_id, $filename, $mime_type, $file_size, $filepath, $title, $descriptions, $tags, $width, $height, $thumb_filename, $thumb_width, $thumb_height) {
 
+        //Logger::debug("addMedia($folder_id, $site_id, $filename, $mime_type, $file_size, $filepath, $title, $descriptions, $tags, $width, $height, $thumb_filename, $thumb_width, $thumb_height)");
+        
         // Get data in correct locale (SQL's NOW() doesn't do that)
         $target_date = mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y"));
         $date_str = date('Y-m-d H:i:s', $target_date);

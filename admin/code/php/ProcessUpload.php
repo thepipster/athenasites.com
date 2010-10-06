@@ -114,6 +114,7 @@ if (!isset($_FILES["Filedata"]) || !is_uploaded_file($_FILES["Filedata"]["tmp_na
     //FolderTable::addMedia($folder_id, $site_id, $name, $mime_type, $file_size);
     
     FolderTable::addMedia($folder_id, $site_id, $name, $mime_type, $file_size, $filepath, $title, '', '', $width, $height, $thumb_name, $thumb_width, $thumb_height);
+    FolderTable::addMedia($folder_id, $site_id, $name, $mime_type, $file_size, $filepath, $title, '', '', $width, $height, $thumb_name, $thumb_width, $thumb_height);
 
     // Make a thumbnail
 
