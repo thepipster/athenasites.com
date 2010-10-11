@@ -68,6 +68,12 @@ var ImageEditFrame = {
         txt += "   </tr>";
 
         txt += "   <tr>";
+        txt += "      <td class='titleField'>URL</td>";
+        //		txt += "      <td class='dataField'>"+added_date+" (GMT)</td>";
+        txt += "      <td class='dataField'><input id='' width='100%' type=text value='"+image_url+"' disabled/></td>";
+        txt += "   </tr>";
+
+        txt += "   <tr>";
         txt += "      <td class='titleField'>Size</td>";
         //		txt += "      <td class='dataField'>"+img_width+"px by "+img_height+"px</td>";
         txt += "      <td class='dataField'><input id='' width='100%' type=text value='"+img_width+"px by "+img_height+"px' disabled/></td>";
@@ -89,7 +95,7 @@ var ImageEditFrame = {
         txt += "   <tr align='center'>";
         //		txt += "      <td colspan='2'><div class='update_button' onclick=\"ImageEditFrame.onSave('"+image_id+"')\"></div></td>";
         txt += "      <td colspan='2'>";
-        txt += "          <button class='cancel_button' onclick=\"ImageEditFrame.onCancel()\">Cancel</button>";
+        txt += "          <button class='cancel_button' onclick=\"ImageEditFrame.onCancel()\">Done</button>";
         txt += "          <button class='save_button' onclick=\"ImageEditFrame.onSave('"+image_id+"')\">Save</button>";
         txt += "          <button class='delete_button' onclick=\"ImageEditFrame.onDelete('"+image_id+"')\">Delete</button>";
         txt += "      </td>";

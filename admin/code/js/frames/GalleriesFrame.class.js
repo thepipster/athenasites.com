@@ -7,18 +7,34 @@ var GalleriesFrame = {
 
     m_themeParaID :0,
 	
+	/** Images are divided into pages so we can fit the right number on the screen */
+    m_currentImagePage : 0,
+    
+    /** Max number of images per page */    
+    m_imagesPerPage : 50,
+    
+    /** Number of image pages */
+    m_numberImagePages : 0,
+
+	/** List of images based on the current folder selection */	
+	m_imageList : '',
+	
     // ////////////////////////////////////////////////////////////////////////////
 
     init : function(){
-
     },
 	
     // ////////////////////////////////////////////////////////////////////////////
 	
     repaint : function(){			
+
         GalleriesFrame.m_themeParaID = GalleriesFrame.getThemeParaForGalleryPage();
+        
+   		GalleriesFrame.m_imageList = DataStore.getImages();
+   		
+		GalleriesFrame.calcImagePages();
         GalleriesFrame.paintGallerySlots();
-        FilesFrame.paintImages('#apollo_image_contents');				
+        GalleriesFrame.paintImages();				
     },
 	
     // ////////////////////////////////////////////////////////////////////////////
@@ -29,11 +45,91 @@ var GalleriesFrame = {
 		
     // ////////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Calculate number of images to display per page, we divide the images into 'pages' 
+	* so we don't oveflow the display
+	*/
+	calcImagePages : function(){
+
+    	var h = $('#apollo_image_contents_wrapper').height();
+    	var w = 0;
+
+        if (GalleriesFrame.m_mode == 'edit_image'){
+	  		w = $('#GalleryFrameContent').width() - 500;
+        }
+        else {
+	  		w = $('#GalleryFrameContent').width() - 300;
+        }
+        
+    	// images per row = w / thumb_width
+    	// images per col = h / thumb_height
+    	// so.. images per page = (w/60) * (h/60) = (w*h)/(thumb_width*thumb_height)
+    	//    = (w*h) / (50*50) = (w*h) / 2500
+    	
+    	GalleriesFrame.m_imagesPerPage = Math.floor((w*h) / 4900);    
+        
+        
+		GalleriesFrame.m_numberImagePages = Math.ceil(GalleriesFrame.m_imageList.length / GalleriesFrame.m_imagesPerPage);
+        
+        if (GalleriesFrame.m_numberImagePages <= 1){
+        	$('.more_link').hide();
+        }
+        else {
+        	$('.more_link').show();
+        }
+        
+        /*        
+        Logger.show();
+		Logger.debug("Width: " + w + " Height: " + h);
+		Logger.info($('#apollo_image_contents_wrapper').height());
+		Logger.debug("Images per row: " + (w/70) + " per col: " + (h/70) + " per page: " + GalleriesFrame.m_imagesPerPage);
+		*/
+	},
+	
+    // ////////////////////////////////////////////////////////////////////////////
+
+	showPrevImages : function(){
+
+		GalleriesFrame.m_currentImagePage--;
+		
+		//var noPages = Math.ceil(GalleriesFrame.m_imageList.length / GalleriesFrame.m_imagesPerPage);
+		
+		if (GalleriesFrame.m_currentImagePage < 0){
+			GalleriesFrame.m_currentImagePage = GalleriesFrame.m_numberImagePages - 1;
+		}
+		
+		//Logger.error(GalleriesFrame.m_currentImagePage + " / " + noPages);
+		
+		GalleriesFrame.paintImages();		
+
+	},
+	
+    // ////////////////////////////////////////////////////////////////////////////
+
+	showNextImages : function(){
+
+		GalleriesFrame.m_currentImagePage++;
+
+		//m_numberImagePagesvar noPages = Math.ceil(GalleriesFrame.m_imageList.length / GalleriesFrame.m_imagesPerPage);
+
+		if (GalleriesFrame.m_currentImagePage >= GalleriesFrame.m_numberImagePages){
+			GalleriesFrame.m_currentImagePage = 0;
+		}
+	
+		//Logger.error(GalleriesFrame.m_currentImagePage + " / " + noPages);
+		
+		GalleriesFrame.paintImages();		
+		
+	},
+		
+    // ////////////////////////////////////////////////////////////////////////////
+	
     getThemeParaForGalleryPage : function(){
 
         var page = DataStore.getCurrentPage();
 				
         for(var i=0; i<DataStore.m_themeParaList.length; i++){
+        
             if (DataStore.m_themeParaList[i].page_template_name == page.template){
 
                 if (DataStore.m_themeParaList[i].para_type == 'gallery'){
@@ -46,6 +142,7 @@ var GalleriesFrame = {
 				
             }
         }
+        
         return 0;
     },
 		
@@ -56,6 +153,12 @@ var GalleriesFrame = {
         //$('#apollo_gallery_contents').remove();
         //$('#apollo_gallery_contents_wrapper').html("<div align='left' id='apollo_gallery_contents'></div>");
 
+		if (!DataStore.isGalleryPage(DataStore.m_currentPageID)){
+			$('#apollo_gallery_contents').html("<p>No gallery selected. Select a gallery from the page list to the left</p>");
+	        $('#galleryTitle').html("Gallery Contents");
+			return;
+		}
+		
         $('.gallery_slot').droppable('destroy');
         $(".gallery_thumb").draggable('destroy');
         $('#apollo_gallery_contents').html("");
@@ -86,6 +189,10 @@ var GalleriesFrame = {
         txt += "</div>";
 					
         $('#apollo_gallery_contents').html(txt);
+        
+        // Update the gallery title
+        var page = DataStore.getCurrentPage();
+        $('#galleryTitle').html("Gallery <i>"+page.title+"</i>");
 						
         for (var i=0; i<DataStore.m_galleryImageList.length; i++){
             
@@ -124,6 +231,75 @@ var GalleriesFrame = {
 				
     },
     
+    // ////////////////////////////////////////////////////////////////////////////
+    
+    paintImages : function(){
+		
+        $(".thumb").draggable('destroy');
+				
+		if (GalleriesFrame.m_imageList == ''){
+	   		GalleriesFrame.m_imageList = DataStore.getImages();
+			GalleriesFrame.calcImagePages();
+		}		
+				
+		var startIndex = GalleriesFrame.m_imagesPerPage * GalleriesFrame.m_currentImagePage;
+		var endIndex = Math.min(startIndex + GalleriesFrame.m_imagesPerPage, GalleriesFrame.m_imageList.length);
+		
+		//Logger.debug("Image page: " + GalleriesFrame.m_currentImagePage);
+				
+        var txt = "";
+    	
+		// Get the html for the selected images...
+        for (var i=startIndex; i<endIndex; i++){
+
+            var thumb_url = GalleriesFrame.m_imageList[i].thumb_url;
+            var post_id = GalleriesFrame.m_imageList[i].id;
+            var title = GalleriesFrame.m_imageList[i].title;
+            var thumb_width = GalleriesFrame.m_imageList[i].thumb_width;
+            var thumb_height = GalleriesFrame.m_imageList[i].thumb_height;
+            var width = GalleriesFrame.m_imageList[i].width;
+            var height = GalleriesFrame.m_imageList[i].height;
+
+        	txt += GalleriesFrame.getImageHTML(post_id, thumb_url, title, width, height, thumb_width, thumb_height);
+		}
+	
+	
+        if (txt == ""){
+            txt += "<div style='color:#444444;'>This folder is empty</div>";
+        }
+		
+        $('#apollo_image_contents').html(txt);
+        $('#apollo_image_contents').disableSelection();
+        $('#apollo_image_contents').noContext();
+
+        //$(".thumb").rightClick( function(e) {GalleriesFrame.onRightClickImage(e, this);});
+				
+        // Make draggable
+        $(".thumb").draggable({
+            revert: true,
+            zIndex: 300
+        });
+		
+		
+    },
+
+    // ////////////////////////////////////////////////////////////////////////////
+	
+    getImageHTML : function(post_id, thumb_url, title, width, height, thumb_width, thumb_height){
+
+        var txt = "";
+        //var ph = (60 - height - 8)/2;
+		
+        var titleText = title + " (" + width + "px by " + height + "px)";
+
+        var onclick = "GalleriesFrame.onSelectImage('"+post_id+"')";
+		
+        txt += "<div class='thumbwrapper' align='center' onclick=\""+onclick+"\">";
+        txt += "<img id='img_"+post_id+"' src='"+thumb_url+"' class='thumb' width='"+thumb_width+"px' height='"+thumb_height+"px' title='"+titleText+"'/>";
+        txt += "</div>";
+        return txt;
+    },
+        
     // ////////////////////////////////////////////////////////////////////////////
 		
     /**

@@ -43,8 +43,7 @@ switch ($cmd) {
 
     case "getDetailedStats":
         $no_days = CommandHelper::getPara('dys', false, CommandHelper::$PARA_TYPE_NUMERIC);
-        if (!isset($no_days))
-            $no_days = 30;
+        if (!isset($no_days)) $no_days = 30;
         getDetailedStats($site_id, $no_days);
         break;
 
@@ -855,7 +854,6 @@ function addFolder($site_id, $folder_name) {
 function getStats($site_id) {
 
     $disc_usage = du(SecurityUtils::getMediaFolder($site_id)) + du(SecurityUtils::getSitesFolder($site_id));
-    Logger::debug($disc_usage);
 
     // Get page views for the whole site for each day
     $page_views = StatsRollupTables::getAllPageViewsRollup($site_id, 30);
@@ -944,12 +942,16 @@ function getDetailedStats($site_id, $no_days) {
  * Call the 'du' command and parse its response
  */
 function du($dir) {
-    $res = `du -sk $dir`;             // Unix command
-    preg_match('/\d+/', $res, $KB); // Parse result
+
+    $res = "du -sk $dir";             // Unix command
+    
+    exec("du -sk $dir", $KB);
+            
     if (isset($KB[0])) {
         $MB = round($KB[0] / 1024, 2);  // From kilobytes to megabytes
-        return $MB;
+        return $MB;    
     }
+    
     return 0;
 }
 

@@ -22,7 +22,7 @@ var PostsFrame = {
     repaint : function(){
 			
         if (DataStore.m_postList.length == 0){
-            AthenaDialog.alert("<div class='noContent'>You currently have no posts, you can add a post using the side-bar</div>");
+            AthenaDialog.backgroundMessage("You currently have no posts, you can add a post using the side-bar");
         }
 
 		// Change listeners
@@ -113,7 +113,8 @@ var PostsFrame = {
         var blogPage = DataStore.getBlogPage();
 				
         if (!blogPage || blogPage == undefined){
-            AthenaDialog.alert("You do not have a blog page for your site yet. You can add one using the pages tab. You can continue to create blog posts, but they will not be visible to users", "No Blog Page!");
+            //AthenaDialog.backgroundMessage("You do not have a blog page for your site yet. You can add one using the pages tab. You can continue to create blog posts, but they will not be visible to users", "No Blog Page!");
+            AthenaDialog.backgroundMessage("You have not set blog page for your site yet.");
             $('#pageLink').html("");
         }
         else {

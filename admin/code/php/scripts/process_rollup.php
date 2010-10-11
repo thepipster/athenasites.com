@@ -13,6 +13,7 @@ $server_list = array(
 );
 
 // FOR DEBUGGING, CLEAR TABLES!!!
+/*
 DatabaseManager::submitQuery("TRUNCATE stats_RollupServer");
 
 // Create/clear rollup tables
@@ -23,7 +24,7 @@ for ($i = 1; $i <= 6; $i++) {
     DatabaseManager::submitQuery("DROP TABLE IF EXISTS stats_{$i}_RollupPageViews");
     StatsRollupTables::createTableForSite($i);
 }
-
+*/
 
 /*
   $wpdb->query("TRUNCATE TABLE stats_RollupPageViews");
@@ -32,6 +33,10 @@ for ($i = 1; $i <= 6; $i++) {
   $wpdb->query("TRUNCATE TABLE stats_RollupCrawler");
   $wpdb->query("TRUNCATE TABLE stats_RollupServer");
  */
+
+for ($i = 1; $i <= 6; $i++) {
+    StatsRollupTables::createTableForSite($i);
+}
 
 // Set the deafault time zone
 date_default_timezone_set('UTC');

@@ -936,6 +936,73 @@ var DataStore = {
 
         DataStore.m_galleryImageList = tempList;
 				
-    }
+    },
+    
+    // //////////////////////////////////////////////////////////////////////////////////
+    
+	/**
+	* Get a list of images for the currently selected folder/filter
+	* @return Return an array of images for the currently selected folder
+	*/
+	getImages : function(){
+
+        var d = new Date();
+        var localTime = d.getTime();
+        var localOffset = d.getTimezoneOffset() * 60000;
+        var utc_date = new Date(localTime + localOffset);
+        var utc_time = localTime + localOffset;
+												
+        var imageList = DataStore.m_mediaList;
+        
+		var folderImageList = new Array();
+		
+        for (var i=0; i<imageList.length; i++){
+
+            var image_folder_id = parseInt(imageList[i].folder_id);
+            var added_date = new Date(imageList[i].date_added);
+            var hours_ago = (utc_time - added_date.getTime())/3600000;
+									
+            switch(DataStore.m_currentFolderID){
+			
+                case FolderSidebarFrame.ID_UNASSIGNED:
+                    if (image_folder_id == FolderSidebarFrame.ID_ALL || image_folder_id == FolderSidebarFrame.ID_UNASSIGNED)
+                    	folderImageList.push(imageList[i]);
+                    break;
+					
+                case FolderSidebarFrame.ID_LAST_1_HOUR:
+                    if (hours_ago <= 1){
+                    	folderImageList.push(imageList[i]);
+                    }
+                    break;
+
+                case FolderSidebarFrame.ID_LAST_24_HOURS:
+                    if (hours_ago <= 24){
+                    	folderImageList.push(imageList[i]);
+                    }
+                    break;
+
+                case FolderSidebarFrame.ID_LAST_7_DAYS:
+                    if (hours_ago <= 168){
+                    	folderImageList.push(imageList[i]);
+                    }
+                    break;
+
+                case FolderSidebarFrame.ID_ALL:
+                   	folderImageList.push(imageList[i]);
+                    break;
+
+                case image_folder_id:
+                   	folderImageList.push(imageList[i]);
+                    break;
+
+                default:
+            // Nothing to do
+            }
+			
+        }
+        
+        return folderImageList;
+                
+	}
 
 }

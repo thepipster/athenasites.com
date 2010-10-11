@@ -63,9 +63,11 @@ function getSummary($site_id){
 
     $followers = SiteFollowersTable::getTopNFollowers($site_id, 25);
     $folower_list = array();
-    foreach($followers as $follower){
-        $follower['last_activity'] = date("m/d/Y H:i", strtotime($follower['last_activity'])); // Convert to JS compatible date
-        $folower_list[] = $follower;
+    if (isset($followers)){
+	    foreach($followers as $follower){
+	        $follower['last_activity'] = date("m/d/Y H:i", strtotime($follower['last_activity'])); // Convert to JS compatible date
+	        $folower_list[] = $follower;
+	    }
     }
 
     $msg['data'] = array(
@@ -216,11 +218,13 @@ function getComments($post_id, $site_id) {
         $comment_list = CommentsTable::getCommentsForPost($site_id, $post_id);
     }
     $comments = array();
-    foreach($comment_list as $comment){
-        $comment['created'] = date("m/d/Y H:i", strtotime($comment['created'])); // Convert to JS compatible date
-        $comments[] = $comment;
-    }
-
+    if (isset($comment_list)){
+	    foreach($comment_list as $comment){
+	        $comment['created'] = date("m/d/Y H:i", strtotime($comment['created'])); // Convert to JS compatible date
+	        $comments[] = $comment;
+	    }
+	}
+	
     $msg['data'] = array('post_id' => $post_id, 'comments' => $comments);
 
     CommandHelper::sendMessage($msg);

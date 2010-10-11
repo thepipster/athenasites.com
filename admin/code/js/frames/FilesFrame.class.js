@@ -17,6 +17,9 @@ var FilesFrame = {
     /** Number of image pages */
     m_numberImagePages : 0,
     
+	/** List of images based on the current folder selection */	
+	m_imageList : '',
+    
     /** Flag to determine if we have done a full repaint or not */	
     painted : false,
 	
@@ -63,7 +66,7 @@ var FilesFrame = {
 	*/
     repaintData : function(){
                 
-		FilesFrame.getImages();
+		FilesFrame.m_imageList = DataStore.getImages();
 		FilesFrame.calcImagePages();
 
         if (FilesFrame.m_mode == 'edit_image'){
@@ -257,76 +260,6 @@ var FilesFrame = {
 		
         $('#flashUploaderProgress').height( $('#FilesFrame').outerHeight() - $('.uploadControls').outerHeight() - 60 );
     },
-	
-    // ////////////////////////////////////////////////////////////////////////////
-	
-	m_imageList : '',
-	
-	/**
-	* Get the list of images for the currently selected folder/filter
-	*/
-	getImages : function(){
-
-        var d = new Date();
-        var localTime = d.getTime();
-        var localOffset = d.getTimezoneOffset() * 60000;
-        var utc_date = new Date(localTime + localOffset);
-        var utc_time = localTime + localOffset;
-												
-        var imageList = DataStore.m_mediaList;
-        
-		FilesFrame.m_imageList = new Array();
-		
-        for (var i=0; i<imageList.length; i++){
-
-            var image_folder_id = parseInt(imageList[i].folder_id);
-            var added_date = new Date(imageList[i].date_added);
-            var hours_ago = (utc_time - added_date.getTime())/3600000;
-						
-            //FilesFrame.showMessage(added_date + "  |||   " + utc_date + " Delta = " + hours_ago);
-            //FilesFrame.showMessage(" Delta = " + hours_ago);
-			
-            switch(DataStore.m_currentFolderID){
-			
-                case FolderSidebarFrame.ID_UNASSIGNED:
-                    if (image_folder_id == FilesFrame.ID_ALL || image_folder_id == FolderSidebarFrame.ID_UNASSIGNED)
-                    	FilesFrame.m_imageList.push(imageList[i]);
-                    break;
-					
-                case FolderSidebarFrame.ID_LAST_1_HOUR:
-                    if (hours_ago <= 1){
-                    	FilesFrame.m_imageList.push(imageList[i]);
-                    }
-                    break;
-
-                case FolderSidebarFrame.ID_LAST_24_HOURS:
-                    if (hours_ago <= 24){
-                    	FilesFrame.m_imageList.push(imageList[i]);
-                    }
-                    break;
-
-                case FolderSidebarFrame.ID_LAST_7_DAYS:
-                    if (hours_ago <= 168){
-                    	FilesFrame.m_imageList.push(imageList[i]);
-                    }
-                    break;
-
-                case FolderSidebarFrame.ID_ALL:
-                   	FilesFrame.m_imageList.push(imageList[i]);
-                    break;
-
-                case image_folder_id:
-                   	FilesFrame.m_imageList.push(imageList[i]);
-                    break;
-
-                default:
-            // Nothing to do
-            }
-			
-        }
-        
-        
-	},
 
     // ////////////////////////////////////////////////////////////////////////////
 
@@ -375,7 +308,7 @@ var FilesFrame = {
         $(".thumb").draggable('destroy');
 				
 		if (FilesFrame.m_imageList == ''){
-			FilesFrame.getImages();
+			FilesFrame.m_imageList = DataStore.getImages();
 			FilesFrame.calcImagePages();
 		}		
 				
@@ -437,5 +370,5 @@ var FilesFrame = {
         return txt;
     }
 
-// ////////////////////////////////////////////////////////////////////////////
+	// ////////////////////////////////////////////////////////////////////////////
 }

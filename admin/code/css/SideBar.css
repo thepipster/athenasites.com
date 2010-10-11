@@ -73,6 +73,11 @@
     height: 20px;
 }
 
+#SideBar .page_name:hover {
+    color: white;
+    cursor: pointer;
+}
+
 #SideBar .page_icon{
     height: 22px;
 }

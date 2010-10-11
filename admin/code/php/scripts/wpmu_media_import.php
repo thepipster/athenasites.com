@@ -34,11 +34,11 @@ $base_folder = SecurityUtils::getMediaFolder($athenaSiteID);
 // Clear the athena sites tables
 mysql_select_db('athenasites');
 
-DatabaseManager::submitQuery("TRUNCATE TABLE athena_{$athenaSiteID}_GalleryMeta");
-DatabaseManager::submitQuery("TRUNCATE TABLE athena_{$athenaSiteID}_GalleryTable");
-DatabaseManager::submitQuery("TRUNCATE TABLE athena_{$athenaSiteID}_Pages");
-DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$athenaSiteID}_Folders");
-DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$athenaSiteID}_Media");
+//DatabaseManager::submitQuery("TRUNCATE TABLE athena_{$athenaSiteID}_GalleryMeta");
+//DatabaseManager::submitQuery("TRUNCATE TABLE athena_{$athenaSiteID}_GalleryTable");
+//DatabaseManager::submitQuery("TRUNCATE TABLE athena_{$athenaSiteID}_Pages");
+//DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$athenaSiteID}_Folders");
+//DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$athenaSiteID}_Media");
 FolderTable::createTableForSite($athenaSiteID);
 
 DatabaseManager::submitQuery("DELETE FROM stats_PageViews WHERE site_id = $athenaSiteID");

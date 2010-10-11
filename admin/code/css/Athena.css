@@ -77,6 +77,24 @@ html, body {
 */
 }
 
+
+#menu_container .user_message {		
+	height: 20px;
+	float: left;
+	font-size: 13px;
+	padding: 0px;
+	margin: 0px;
+	margin-top: 2px;
+	padding-top: 3px;
+	margin-right: 15px;
+	float: right;
+	text-align: right;
+	color: #2b93e6;
+	font-size: 11.5px;
+	overflow: none;
+}	
+
+
 #debug_txt {
 	display: none;
 	position: absolute;
@@ -116,11 +134,12 @@ html, body {
 	background-color: transparent;
 }
 
-.status_draft { color: #2c6c11 !important;}
-.status_private { color: #990000 !important;}
-.status_public { color: #233c57 !important;}
-.status_spam { color: #233c57 !important;}
-.status_trash { color: #233c57 !important;}
+.status_draft { color: #2c6c11;}
+.status_private { color: #990000;}
+.status_public { color: #233c57;}
+.status_spam { color: #233c57;}
+.status_trash { color: #233c57;}
+
 /*
 .select_option_public { background-color: #233c57 !important; color: white !important}
 .select_option_private { background-color: #990000 !important; color: white !important}
@@ -230,14 +249,14 @@ html, body {
 }
 
 .subframebox .subFrameCommand {
-    font-size: 9px !important;
-    color: #890101;
+    font-size: 10.5px !important;
+    color: #2c2e80;
     cursor: pointer;
     margin-bottom: 2px;
 }
 
-.subframebox .subFrameCommand:hover { color: #e40202;}
-.subframebox .selected { color: #e40202;}
+.subframebox .subFrameCommand:hover { color: #d6e1e6;}
+.subframebox .selected { color: #d6e1e6;}
 
 .subframebox .title {
 	background-color: #b8bfc8;

@@ -290,6 +290,9 @@ Logger::debug("$domain has site_id = $current_site_id");
                             echo '</select>';
                         }
                         ?>
+                        
+                        <div class='user_message'></div>
+                        
                     </div><!-- menu_container -->
 
                     <div id='MainContent'>
@@ -718,7 +721,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                                     <tr valign='top' height='250px' width='100%' id='galleryRow'>
 
                                         <td class='frameContents frame_controls_bar'>
-                                            <span class='frameTitle'>Gallery Contents</span>
+                                            <span class='frameTitle' id='galleryTitle'>Gallery Contents</span>
                                             <div id="apollo_gallery_contents_wrapper">
                                                 <div align='left' id='apollo_gallery_contents'></div>
                                             </div>
@@ -738,8 +741,11 @@ Logger::debug("$domain has site_id = $current_site_id");
 
                                     <tr valign='top' width='100%'>
 
-                                        <td class='frameContents'>
-                                            <span class='frameTitle'>Images</span>
+                                        <td class='frameContents' id='apollo_image_contents_wrapper'>
+                                            <span class='frameTitle'>Images                                            
+												<span class='more_link' id='prev_images_link' onclick='GalleriesFrame.showPrevImages()' title=''>&laquo; prev</span>
+												<span class='more_link' id='next_images_link' onclick='GalleriesFrame.showNextImages()' title=''>next &raquo;</span>
+                                            </span>
                                             <div id='apollo_image_contents'></div>
                                         </td>
 
@@ -783,7 +789,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 
     defines.session_id = '<?php echo session_id(); ?>';
     defines.domain = '<?php echo $domain; ?>';
-
+	
     $(document).ready(function(){ssMain.init(<?= $current_site_id ?>);});
 
 </script>

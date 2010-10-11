@@ -83,6 +83,35 @@ var AthenaDialog = {
     },
 	
     // ////////////////////////////////////////////////////////////////////////
+	
+	/**
+	* Display an alert to the user that is not in the form of a dialog, but is just text that
+	* isn't too distracting
+	*/
+	backgroundMessage : function(msg){
+
+		$('.user_message').stop(true, true);
+	
+		var startCol = '#032f5d'; 
+//		var midCol = '#cc2222';
+		var midCol = '#cc2222';
+		var endCol = startCol;
+		
+		$('.user_message').html(msg);
+		$('.user_message').css('color', startCol);
+		
+		$('.user_message').animate({ color: midCol }, 3000, 
+			function(){
+				$('.user_message').animate({ color: endCol }, 3000, function(){$('.user_message').fadeOut('slow')})
+			}
+		);
+	},
+	
+	clearBackgroundMessage : function(msg){
+		$('.user_message').fadeOut('slow');
+	},
+	
+    // ////////////////////////////////////////////////////////////////////////
 
     /**
 	* Display a info message to the user

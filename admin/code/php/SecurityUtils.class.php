@@ -209,6 +209,7 @@ class SecurityUtils {
         PagesTable::createTableForSite($site_id);
         PostsTable::createTableForSite($site_id);
         CommentsTable::createTableForSite($site_id);
+        StatsRollupTables::createTableForSite($site_id);
 
         //PageViewsTable::createTableForSite($site_id);
         //StatsRollupTables::createTableForSite($site_id);

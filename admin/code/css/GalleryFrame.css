@@ -30,6 +30,15 @@
 	z-index: 1;
 }
 
+#GalleryFrameContent .more_link {
+    font-size: 10px;
+    color: #00315f;
+    cursor: pointer;
+}
+
+#GalleryFrameContent .more_link:hover { color: #006fdc;}
+
+
 #GalleryFrameContent .gallery_slot {
 	margin: 5px;	
 	border-width: 4px;
@@ -81,7 +90,7 @@
 
 #GalleryFrameContent #apollo_gallery_contents {
 	height: auto;
-	background-color: gray;
+	/*background-color: gray;*/
 }
 
 /*
