@@ -375,9 +375,12 @@ function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_c
 
     $tags = array("\\n", "\\r");
     $replace = '';
+    
     $safe_content = str_ireplace($tags, $replace, $content);
     $safe_content = stripslashes($safe_content);
+    
     $safe_title = str_ireplace($tags, $replace, $title);
+    $safe_title = stripslashes($safe_title);
 
     PostsTable::update($site_id, $post_id, $safe_content, $status, $safe_title, $can_comment, StringUtils::encodeSlug($title), 'Apollo');
 
@@ -714,11 +717,16 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
 
     $user_id = SecurityUtils::getCurrentUserID();
     $path = ''; //getPath($site_id, $page_id);
-
+	
     $tags = array("\\n", "\\r");
     $replace = '';
+    
     $safe_content = str_ireplace($tags, $replace, $content);
+	$safe_content = stripslashes($safe_content);
+
     $safe_title = str_ireplace($tags, $replace, $title);
+	$safe_title = stripslashes($safe_title);
+
 
     PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $safe_title, $tamplate_name, StringUtils::encodeSlug($title), $path, $order, $ishome, $description, $browser_title);
 

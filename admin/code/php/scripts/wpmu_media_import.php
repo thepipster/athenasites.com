@@ -36,7 +36,7 @@ mysql_select_db('athenasites');
 
 DatabaseManager::submitQuery("TRUNCATE TABLE athena_{$athenaSiteID}_GalleryMeta");
 DatabaseManager::submitQuery("TRUNCATE TABLE athena_{$athenaSiteID}_GalleryTable");
-DatabaseManager::submitQuery("TRUNCATE TABLE athena_{$athenaSiteID}_Pages");
+//DatabaseManager::submitQuery("TRUNCATE TABLE athena_{$athenaSiteID}_Pages");
 DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$athenaSiteID}_Folders");
 DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$athenaSiteID}_Media");
 FolderTable::createTableForSite($athenaSiteID);
@@ -266,7 +266,7 @@ foreach($wp_media_list as $media){
         
     // Add into Athena
     //$name = friendlyName($filename, $base_folder);
-    $name = $filename;
+    $name = basename($filename);
     
     mysql_select_db('athenasites');
     // addMedia($folder_id, $site_id, $filename, $mime_type, $file_size, $filepath, $title, $descriptions, $tags, $width, $height, $thumb_filename, $thumb_width, $thumb_height)

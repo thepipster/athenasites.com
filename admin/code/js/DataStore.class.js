@@ -547,18 +547,25 @@ var DataStore = {
 	*/
     save : function(){
         
+        var autosaved = false;
+        
     	for (var i=0; i<DataStore.m_postList.length; i++){
     		if (DataStore.m_postList[i].isChanged != undefined && DataStore.m_postList[i].isChanged == 1){    	
-    			DataStore.savePost(DataStore.m_postList[i]);   			
+    			DataStore.savePost(DataStore.m_postList[i]);   	
+    			autosaved = true;		
     		}
     	}
 
     	for (var i=0; i<DataStore.m_pageList.length; i++){
     		if (DataStore.m_pageList[i].isChanged != undefined && DataStore.m_pageList[i].isChanged == 1){  
     			DataStore.savePage(DataStore.m_pageList[i]);   			
+    			autosaved = true;		
     		}
     	}    	
-    	
+
+		if (autosaved){
+			AthenaDialog.backgroundMessage("Autosaved");
+		}    	
     },
 
     // //////////////////////////////////////////////////////////////////////////////////

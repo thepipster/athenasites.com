@@ -119,12 +119,23 @@ var WordpressImporter = {
                 import_source:'wordpress',
                 source_id: post.id
             };
-									
+	
+			// Clear backup timer...	
+			if (WordpressImporter.nextPostTimeout != ''){
+				clearTimeout(WordpressImporter.nextPostTimeout);
+			}
+			
+			// Just in case we fail, set a timer to get the next post...					
+			if (WordpressImporter.postCt <  WordpressImporter.noPosts - 1){
+				WordpressImporter.nextPostTimeout = setTimeout(WordpressImporter.backupGetNextPost, 10000);
+			}
+						
             $.ajax({
                 url: MediaAPI.m_url,
                 type: 'post',
                 dataType: "json",
                 success: function(ret){WordpressImporter.onPostAdded(ret)},
+                error: function(){ alert('error!')},
                 data: paras
             });
 	
@@ -139,6 +150,19 @@ var WordpressImporter = {
 							
     },
 
+	backupGetNextPost : function(){
+		//Logger.show();
+		//Logger.error("Something went wrong, get the next post");
+		WordpressImporter.getNextPost();
+		// Just in case we fail (again), set a timer to get the next post...					
+		if (WordpressImporter.postCt <  WordpressImporter.noPosts - 1){
+			WordpressImporter.nextPostTimeout = setTimeout(WordpressImporter.backupGetNextPost, 10000);
+		}
+		
+	},
+	
+	nextPostTimeout : '',
+	
     // ////////////////////////////////////////////////////////////////////////
 		
     /**
@@ -147,6 +171,8 @@ var WordpressImporter = {
     onPostAdded : function(ret){
 	
         if (ret.result != 'ok'){
+			Logger.show();
+			Logger.error("No result!?");
             return;
         }
 		
@@ -211,6 +237,14 @@ var WordpressImporter = {
         else {
             window.document.WordpressImporter.getNextPost();
         }
+        
+		// Clear backup timer...	
+		//if (WordpressImporter.nextPostTimeout != ''){
+		//	Logger.show();
+		//	Logger.debug("Clearing timeout! " + WordpressImporter.postCt);
+		//	clearTimeout(WordpressImporter.nextPostTimeout);
+		//}
+        
     },
 
     // ////////////////////////////////////////////////////////////////////////

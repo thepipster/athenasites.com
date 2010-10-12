@@ -90,7 +90,7 @@ var AthenaDialog = {
 	*/
 	backgroundMessage : function(msg){
 
-		$('.user_message').stop(true, true);
+		$('.user_message').stop();
 	
 		var startCol = '#032f5d'; 
 //		var midCol = '#cc2222';
@@ -98,6 +98,7 @@ var AthenaDialog = {
 		var endCol = startCol;
 		
 		$('.user_message').html(msg);
+		$('.user_message').show();
 		$('.user_message').css('color', startCol);
 		
 		$('.user_message').animate({ color: midCol }, 3000, 

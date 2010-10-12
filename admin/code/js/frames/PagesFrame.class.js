@@ -17,7 +17,7 @@ var PagesFrame = {
     repaint : function(){
 	
         if (DataStore.m_pageList.length == 0){
-            AthenaDialog.alert("You currently have no pages, you can add a post using the side-bar");
+            AthenaDialog.backgroundMessage("You currently have no pages, you can add a post using the side-bar");
             return;
         }
 

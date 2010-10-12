@@ -121,7 +121,7 @@ var Logger = {
 		if (type){
 			if (type == 'error') col = 'red';
 			if (type == 'warn') col = 'orange';
-			if (type == 'info') col = 'blue';
+			if (type == 'info') col = 'white';
 			if (type == 'debug') col = 'green';
 		} 
 		        
@@ -132,7 +132,7 @@ var Logger = {
 		//var text = $(Logger.m_div).html();
 		//$(Logger.m_div).html(text + "<b style='color: "+col+"'>" + msg + "</b><br/>");
 		//var text = $(Logger.m_div).html();
-		$('#Logger_content').append("<b style='color: "+col+"'>" + msg + "</b><br/>");
+		$('#Logger_content').prepend("<b style='color: "+col+"'>" + msg + "</b><br/>");
 /*
 	  	try { 
 	  		throw Error('') 
