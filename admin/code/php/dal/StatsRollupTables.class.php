@@ -74,13 +74,22 @@ class StatsRollupTables {
         return DatabaseManager::getResults($sql);
     }
 
-    public static function getGlobalNumberPageViews($no_days) {
+	/**
+	* Get the number of page views across all sites.
+	* @param int (optional) specify the last N days to get, or omit to get ALL page views
+	*/
+    public static function getGlobalNumberPageViews($no_days=null) {
 
         date_default_timezone_set('UTC');
 
-        $date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $no_days, date("Y")));
+		if (isset($no_days)){
+        	$date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $no_days, date("Y")));
+        	$sql = DatabaseManager::prepare("SELECT sum(page_views) FROM stats_RollupServer WHERE rollup_date > %s", $date_from);
+        }
+        else {
+        	$sql = "SELECT sum(page_views) FROM stats_RollupServer";
+        }
 
-        $sql = DatabaseManager::prepare("SELECT sum(page_views) FROM stats_RollupServer WHERE rollup_date > %s", $site_id, $date_from);
         $no = DatabaseManager::getVar($sql);
         if (!isset($no)) {
             $no = 0;

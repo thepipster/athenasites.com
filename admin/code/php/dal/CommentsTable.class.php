@@ -145,7 +145,7 @@ class CommentsTable {
     // /////////////////////////////////////////////////////////////////////////////////
 
     public static function getAllPendingComments($site_id){
-        $sql = DatabaseManager::prepare("SELECT c.*, f.name FROM athena_%d_Comments c INNER JOIN athena_SiteFollowers f WHERE c.site_follower_id = f.id AND status = 'Pending' ORDER BY c.created DESC", $site_id);
+        $sql = DatabaseManager::prepare("SELECT c.*, f.name FROM athena_%d_Comments c INNER JOIN apollo_SiteFollowers f WHERE c.site_follower_id = f.id AND status = 'Pending' ORDER BY c.created DESC", $site_id);
         return DatabaseManager::getResults($sql);
     }
 
@@ -163,12 +163,12 @@ class CommentsTable {
         $date_end = date("Y-m-d 23:59:59", mktime(date("H"), date("i"), date("s"), date("m") , date("d"), date("Y")));
 
         $sql = "SELECT c.*, f.name FROM athena_%d_Comments c
-        INNER JOIN athena_SiteFollowers f
+        INNER JOIN apollo_SiteFollowers f
         WHERE c.site_follower_id = f.id
         AND status = 'Pending'
         UNION
         SELECT c.*, f.name FROM athena_%d_Comments c
-        INNER JOIN athena_SiteFollowers f
+        INNER JOIN apollo_SiteFollowers f
         WHERE c.site_follower_id = f.id
         AND status != 'Pending'
         AND c.created > '%s' AND c.created <= '%s'
@@ -198,12 +198,12 @@ class CommentsTable {
      * @return array list of comments
      */
     public static function getCommentsForPost($site_id, $post_id) {
-        $sql = DatabaseManager::prepare("SELECT c.*, f.name FROM athena_%d_Comments c INNER JOIN athena_SiteFollowers f WHERE c.post_id = %d AND c.site_follower_id = f.id ORDER BY c.created DESC", $site_id, $post_id);
+        $sql = DatabaseManager::prepare("SELECT c.*, f.name FROM athena_%d_Comments c INNER JOIN apollo_SiteFollowers f WHERE c.post_id = %d AND c.site_follower_id = f.id ORDER BY c.created DESC", $site_id, $post_id);
         return DatabaseManager::getResults($sql);
     }
 
     public static function getCommentsForPostForStatus($site_id, $post_id, $status) {
-        $sql = DatabaseManager::prepare("SELECT c.*, f.name FROM athena_%d_Comments c INNER JOIN athena_SiteFollowers f WHERE c.post_id = %d AND c.site_follower_id = f.id AND status=%s ORDER BY c.created DESC", $site_id, $post_id, $status);
+        $sql = DatabaseManager::prepare("SELECT c.*, f.name FROM athena_%d_Comments c INNER JOIN apollo_SiteFollowers f WHERE c.post_id = %d AND c.site_follower_id = f.id AND status=%s ORDER BY c.created DESC", $site_id, $post_id, $status);
         return DatabaseManager::getResults($sql);
     }
     // /////////////////////////////////////////////////////////////////////////////////

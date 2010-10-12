@@ -12,29 +12,17 @@ $server_list = array(
     array('no' => 99, 'iplong' => ip2long('127.0.0.1'), 'ip' => '127.0.0.1')
 );
 
+$NO_SITES = 7;
+
 // FOR DEBUGGING, CLEAR TABLES!!!
-/*
 DatabaseManager::submitQuery("TRUNCATE stats_RollupServer");
 
 // Create/clear rollup tables
-for ($i = 1; $i <= 6; $i++) {
+for ($i = 1; $i <= $NO_SITES; $i++) {
     DatabaseManager::submitQuery("DROP TABLE IF EXISTS stats_{$i}_RollupBrowser");
     DatabaseManager::submitQuery("DROP TABLE IF EXISTS stats_{$i}_RollupCrawler");
     DatabaseManager::submitQuery("DROP TABLE IF EXISTS stats_{$i}_RollupOS");
     DatabaseManager::submitQuery("DROP TABLE IF EXISTS stats_{$i}_RollupPageViews");
-    StatsRollupTables::createTableForSite($i);
-}
-*/
-
-/*
-  $wpdb->query("TRUNCATE TABLE stats_RollupPageViews");
-  $wpdb->query("TRUNCATE TABLE stats_RollupOS");
-  $wpdb->query("TRUNCATE TABLE stats_RollupBrowser");
-  $wpdb->query("TRUNCATE TABLE stats_RollupCrawler");
-  $wpdb->query("TRUNCATE TABLE stats_RollupServer");
- */
-
-for ($i = 1; $i <= 6; $i++) {
     StatsRollupTables::createTableForSite($i);
 }
 

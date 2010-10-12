@@ -34,11 +34,11 @@ $base_folder = SecurityUtils::getMediaFolder($athenaSiteID);
 // Clear the athena sites tables
 mysql_select_db('athenasites');
 
-//DatabaseManager::submitQuery("TRUNCATE TABLE athena_{$athenaSiteID}_GalleryMeta");
-//DatabaseManager::submitQuery("TRUNCATE TABLE athena_{$athenaSiteID}_GalleryTable");
-//DatabaseManager::submitQuery("TRUNCATE TABLE athena_{$athenaSiteID}_Pages");
-//DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$athenaSiteID}_Folders");
-//DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$athenaSiteID}_Media");
+DatabaseManager::submitQuery("TRUNCATE TABLE athena_{$athenaSiteID}_GalleryMeta");
+DatabaseManager::submitQuery("TRUNCATE TABLE athena_{$athenaSiteID}_GalleryTable");
+DatabaseManager::submitQuery("TRUNCATE TABLE athena_{$athenaSiteID}_Pages");
+DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$athenaSiteID}_Folders");
+DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$athenaSiteID}_Media");
 FolderTable::createTableForSite($athenaSiteID);
 
 DatabaseManager::submitQuery("DELETE FROM stats_PageViews WHERE site_id = $athenaSiteID");
@@ -186,7 +186,13 @@ foreach($wp_media_list as $media){
 
     $id = $media['ID'];
     
-    $url = 'http://' . $media['guid'];
+    if (substr($media['guid'], 0, 4) != 'http'){
+	    $url = 'http://' . $media['guid'];
+    }
+    else {
+	    $url = $media['guid'];
+    }
+    
     $description = $media['post_content'];
     $title = $media['post_title'];
     $created_date = $media['post_date_gmt'];
@@ -219,11 +225,12 @@ foreach($wp_media_list as $media){
     $file_size = filesize($new_filepath);
 
     // Get its folder id
-    $wp_folder_id = wpGetVar("SELECT folder_id FROM apollo_MediaToFolder WHERE media_post_id = $id AND blog_id = ");
+    $wp_folder_id = wpGetVar("SELECT folder_id FROM apollo_MediaToFolder WHERE media_post_id = $id AND blog_id = $wpSiteID");
     if (!isset($wp_folder_id)) $wp_folder_id = 0;
 
     // Get the folder id from the wpmu-to-athena folder id mapping
     $folder_id = $folder_mapping[$wp_folder_id];
+    //Logger::debug("Folder ID: $folder_id --> $wp_folder_id (" . $folder_mapping[$wp_folder_id] . ")");
     
     // Get the image info    
     $image_info = getimagesize($new_filepath);
@@ -261,18 +268,25 @@ foreach($wp_media_list as $media){
     $name = friendlyName($filename, $base_folder);
     
     mysql_select_db('athenasites');
-    $athena_image_id = FolderTable::addMedia($folder_id, $athenaSiteID, $name, $mime_type, $file_size, $filepath, $title, '', '', $width, $height, $thumb_name, $thumb_width, $thumb_height);
+    // addMedia($folder_id, $site_id, $filename, $mime_type, $file_size, $filepath, $title, $descriptions, $tags, $width, $height, $thumb_filename, $thumb_width, $thumb_height)
+    $athena_image_id = FolderTable::addMedia($folder_id, $athenaSiteID, $name, $mime_type, $file_size, $filepath, $title, $description, $alt_text, $width, $height, $thumb_name, $thumb_width, $thumb_height);
 
     // If it has been assigned to a gallery, create the mapping.....
     $gal_data = wpGetResults("SELECT * FROM apollo_GalleryTable WHERE blog_id = $wpSiteID AND image_post_id = $id");
     
     if (isset($gal_data)){
+        
         mysql_select_db('athenasites');
+        
+        //Logger::dump($gal_data);
+        
         foreach($gal_data as $gal){
+        	
             if (isset($page_mapping[$gal['page_post_id']])){
-                GalleryTable::addImageToSlot($athena_image_id, $page_mapping[$gal['page_post_id']], $gal['slot_number'], $gal['theme_para_id'], 0, $athenaSiteID);
+                GalleryTable::addImageToSlot($athena_image_id, $page_mapping[$gal['page_post_id']], $gal['slot_number'], $gal['theme_para_id'], 1, $athenaSiteID);
             }
         }
+        
     }
 
 }

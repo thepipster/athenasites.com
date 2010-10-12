@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>ApolloSites | Athena Login</title>
+<title>ApolloSites | Welcome to Athena</title>
 
 <meta name="Description" content="Photography business in a box" />
 <meta name="Keywords" content="" />
@@ -129,7 +129,7 @@ label.error { float: none; color: red; padding-left: .5em; vertical-align: top; 
 			<div align='center' class='contentsBox' id='loginBox' style='padding-top:30px;'>
 	
 				<div align='center'>
-					<h3>Welcome to the Athena System!&nbsp;<span class='red'>(alpha)</span></h3>
+					<h3>Welcome to the Athena System!&nbsp;<span class='red'>(beta)</span></h3>
 				</div>	
 				<br/>
 	
@@ -222,7 +222,7 @@ var ssLogin = {
 	},	
 			
 	onGotStats : function(no_users, no_sites, no_pageviews){
-    	var txt = no_sites + " sites, with " + no_users + " users with " + no_pageviews + " page views";
+    	var txt = no_sites + " sites, with " + no_users + " users and " + no_pageviews + " page views";
     	$('.stats').html(txt);
 	}
 }

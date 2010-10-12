@@ -192,7 +192,7 @@ var GalleriesFrame = {
         
         // Update the gallery title
         var page = DataStore.getCurrentPage();
-        $('#galleryTitle').html("Gallery <i>"+page.title+"</i>");
+        $('#galleryTitle').html("Gallery "+page.title);
 						
         for (var i=0; i<DataStore.m_galleryImageList.length; i++){
             

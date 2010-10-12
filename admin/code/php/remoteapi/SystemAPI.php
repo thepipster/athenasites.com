@@ -62,7 +62,7 @@ switch($cmd){
 
 function getSystemStats(){
 	
-//	$query = "SELECT COUNT(id) AS no FROM athena_Sites UNION SELECT COUNT(id) FROM athena_Users UNION SELECT COUNT(id) FROM athena_Pages UNION SELECT COUNT(id) FROM athena_Posts";					
+//	$query = "SELECT COUNT(id) AS no FROM apollo_Sites UNION SELECT COUNT(id) FROM apollo_Users UNION SELECT COUNT(id) FROM athena_Pages UNION SELECT COUNT(id) FROM athena_Posts";					
 
 	$data = array(4);
 	
