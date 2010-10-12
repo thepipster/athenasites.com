@@ -1,6 +1,14 @@
 <?php
 
 class StringUtils {
+
+    // ////////////////////////////////////////////////////////////////////
+
+	public static function stripQuotes($content, $replace = "'"){
+        $tags = array("\"");
+        return str_ireplace($tags, $replace, $content);
+	}
+	
     // ////////////////////////////////////////////////////////////////////
 
     /**

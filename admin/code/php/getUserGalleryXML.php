@@ -43,9 +43,9 @@ echo "<?xml version='1.0' encoding='UTF-8'?>
 			
 			$image_url = $media_root_url . $image['filepath'] . $image['filename'];
 			$thumb_url = $media_root_url . $image['filepath'] . $image['thumb_filename'];
-			$title =  $image['title'];
-			$description = $image['description'];										
-			$tags = $image['tags'];
+			$title =  StringUtils::stripQuotes($image['title']);
+			$description = StringUtils::stripQuotes($image['description']);	
+			$tags = StringUtils::stripQuotes($image['tags']);
 			
 			//error_log(print_r($post, true));
 	

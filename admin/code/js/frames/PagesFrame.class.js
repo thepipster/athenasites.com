@@ -51,7 +51,7 @@ var PagesFrame = {
         $('#pageStatusSelector').val(pageObj.status);
         $('#pageParent').val(pageObj.parent_page_id);
         $('#pageTemplate').val(pageObj.template);
-        $('#pageOrder').val(pageObj.order);
+        $('#pageOrder').val(pageObj.page_order);
         $('#pageDesc').val(pageObj.description);
 
         var txt = "<select id='pageTemplate' onchange=\"PagesFrame.onChange(); PagesFrame.paintThemeParas();\">";
@@ -81,6 +81,7 @@ var PagesFrame = {
 
     updatePageLink : function(pageObj){
         $('#pageLink').html("View Page");
+        if (pageObj.path == "") pageObj.path = "/";
         $('#pageLink').attr('href', 'http://' + defines.domain + pageObj.path + pageObj.slug);
     },
 	

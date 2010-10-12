@@ -156,7 +156,7 @@ PageManager::doHeader();
 															
 						foreach (PageManager::$page_list as $page){
 						
-							if ($page['parent_page_id'] == 0){
+							if ($page['parent_page_id'] == 0 && $page['status'] == 'Published'){
 			
 								$id = $page['id'];
 								$parent_page_id = $page['parent_page_id'];

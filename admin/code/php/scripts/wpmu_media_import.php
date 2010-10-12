@@ -265,7 +265,8 @@ foreach($wp_media_list as $media){
     }
         
     // Add into Athena
-    $name = friendlyName($filename, $base_folder);
+    //$name = friendlyName($filename, $base_folder);
+    $name = $filename;
     
     mysql_select_db('athenasites');
     // addMedia($folder_id, $site_id, $filename, $mime_type, $file_size, $filepath, $title, $descriptions, $tags, $width, $height, $thumb_filename, $thumb_width, $thumb_height)
