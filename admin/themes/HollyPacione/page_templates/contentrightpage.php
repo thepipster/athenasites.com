@@ -14,9 +14,9 @@ if (isset($image)){
 	$height = $image['height'];
 }
 else {
-	$background_image = '';
-	$width = 0;
-	$height = 0;
+	$background_image = PageManager::$common_url_root . 'imgs/blank.png';
+	$width = 128;
+	$height = 128;
 }
 
 $styleStr = "";
@@ -27,9 +27,9 @@ if ($width > $height){
 
 	<div id="content" style="border:none; <?=$styleStr?>">
 		
-		<table border="0" cellpadding="0" cellspacing="0" id='contentTable' width="100%" height="100%" style="width:100%; height:100%;background-image: url('<?=$background_image?>')">
+		<table border="0" cellpadding="0" cellspacing="0" id='contentTable' width="100%" height="100%" style="width:100%; height:100%; max-width: 1200px; background-image: url('<?=$background_image?>')">
 			
-			<tr valign="top" height="100%">
+			<tr valign="top" align='left' height="100%">
 
 				<td width="45%" height="100%"> 
 					<!-- Empty -->

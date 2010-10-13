@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+
+	<title>Athena jQuery Fade Test</title>
+
+	<!-- JS Includes ///////////////////////////////////////////////////// -->
+
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
+
+<!--
+	<script type="text/javascript" src="../js/3rdparty/jquery.ez-bg-resize.js"></script>
+-->
+	<script type="text/javascript" src="../js/jquery.bgxfade.js"></script>
+	 			 	 
+	<!-- Page Styles  //////////////////////////////////////////////////// -->
+
+	<style type="text/css">
+
+		html, body {
+		    font-family: century gothic, optima, Lucida Sans Unicode, Verdana, Tahoma, Trebuchet MS, Helvetica, Arial;
+		    font-size: 11px;
+		    height: 100%;
+		    width:100%;
+		    margin: 0;
+		    padding: 0;
+		    overflow: hidden;
+		}
+						
+	</style>
+
+
+</head>
+
+<body>
+	
+	<!-- This gets positioned absolutely so place it anywhere. -->
+	<div id="body-background"></div> 		
+	
+
+	<script type="text/javascript">
+	
+	
+		var crossFadeTest = {
+
+			center : 0,
+			
+			imageList : ["test_images/rover1.jpg", "test_images/bear.jpg", "test_images/rover2.jpg", "test_images/bear.jpg"],
+			
+			currentImage : 0,			
+			img1 : 0,
+			img2 : 1,
+			
+			// ///////////////////////////////////////////////////////////////////
+			
+			init : function(){
+					
+				$("body").css({
+					"overflow-x":"hidden"
+				});
+				
+				$(window).load(function() {
+					crossFadeTest.resizeImage();
+					crossFadeTest.doTransition();					
+				});
+				
+				$(window).bind("resize",function() {
+					crossFadeTest.resizeImage();
+				});		
+				
+				$('#body-background').html("<img id='xFadeImage1' class='xFadeImage' src='"+crossFadeTest.imageList[crossFadeTest.img1]+"'><img id='xFadeImage2' class='xFadeImage'  src='"+crossFadeTest.imageList[crossFadeTest.img2]+"'>");	
+			},
+
+			// ///////////////////////////////////////////////////////////////////
+
+			img1Front : true,
+						
+			doTransition : function(){
+			
+				//$("#xFadeFrontImage").attr('src', crossFadeTest.imageList[crossFadeTest.img1]);
+				//$("#xFadeBackImage").attr('src', crossFadeTest.imageList[crossFadeTest.img2]);
+				
+				//crossFadeTest.currentImage++;
+				
+				if (crossFadeTest.img1Front){
+					$("#xFadeImage1").fadeOut(3000, crossFadeTest.transistionComplete);
+					$("#xFadeImage2").fadeIn(3000);					
+				}
+				else {
+					$("#xFadeImage1").fadeIn(3000);
+					$("#xFadeImage2").fadeOut(3000, crossFadeTest.transistionComplete);					
+				}			
+								
+			},
+			
+			transistionComplete : function(){
+				
+				crossFadeTest.img1Front = !crossFadeTest.img1Front;
+
+				crossFadeTest.img1 = crossFadeTest.img2;				
+				crossFadeTest.img2++;
+				if (crossFadeTest.img2 >= crossFadeTest.imageList.length) crossFadeTest.img2 = 0;
+
+				// Swap out image src for whatever imnage is currently 'behind'
+				if (crossFadeTest.img1Front){
+					// Image 1 is in front
+					$("#xFadeImage2").attr('src', crossFadeTest.imageList[crossFadeTest.img2]);
+				}
+				else {
+					// Image 2 is in front
+					$("#xFadeImage1").attr('src', crossFadeTest.imageList[crossFadeTest.img2]);
+				}
+									
+								
+				setTimeout(crossFadeTest.doTransition, 10000);
+			},
+			
+			// ///////////////////////////////////////////////////////////////////
+					
+			resizeImage : function() {
+				
+				$("body").css({
+					"overflow-x":"auto"
+				});
+				
+				$('.xFadeImage').css({
+					"position":"absolute",
+					"top":"0px",
+					"left":"0px",
+					"z-index":"-1",
+					"overflow":"hidden",
+					"width":$(window).width() + "px",
+					"height":$(window).height() + "px"
+				});
+				
+				$('#xFadeImage1').css("z-index", 1);
+				$('#xFadeImage2').css("z-index", 0);
+				
+				var containerObj = $('.xFadeImage');
+				
+				// Resize the img object to the proper ratio of the window.
+				var iw = containerObj.children('img').width();
+				var ih = containerObj.children('img').height();
+				
+				if ($(window).width() > $(window).height()) {
+					if (iw > ih) {
+						var fRatio = iw/ih;
+						containerObj.children('img').css("width",$(window).width() + "px");
+						containerObj.children('img').css("height",Math.round($(window).width() * (1/fRatio)));
+		
+						var newIh = Math.round($(window).width() * (1/fRatio));
+		
+						if(newIh < $(window).height()) {
+							var fRatio = ih/iw;
+							containerObj.children('img').css("height",$(window).height());
+							containerObj.children('img').css("width",Math.round($(window).height() * (1/fRatio)));
+						}
+					} else {
+						var fRatio = ih/iw;
+						containerObj.children('img').css("height",$(window).height());
+						containerObj.children('img').css("width",Math.round($(window).height() * (1/fRatio)));
+					}
+				} else {
+					var fRatio = ih/iw;
+					containerObj.children('img').css("height",$(window).height());
+					containerObj.children('img').css("width",Math.round($(window).height() * (1/fRatio)));
+				}
+				
+				containerObj.css("visibility","visible");
+				
+				// Center BG Image
+				if (crossFadeTest.center) {
+					
+					containerObj.children('img').css("position","relative");
+					
+					if (containerObj.children('img').width() > containerObj.width()) {
+						var wDiff = (containerObj.children('img').width() - containerObj.width()) / 2;
+						containerObj.children('img').css("left", "-" + wDiff + "px");
+					}
+				}
+			}
+		}
+		
+		crossFadeTest.init();
+		
+	/*
+		$(document).ready(function() {
+				
+		    $("#body-background").bgXfade();
+		    
+
+			// Test jQuery fade on the large background image
+			$("image1").fadeOut(3000);
+			$("image2").fadeIn(3000);
+		    
+		}); 	
+	*/
+		
+	</script>
+
+</body>
+</html>

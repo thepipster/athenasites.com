@@ -13,7 +13,7 @@ if (SecurityUtils::isLoggedIn()){
 	$user_id = SecurityUtils::getCurrentUserID();
 	$user = UserTable::getUser($user_id);
 	$sites = SitesTable::getSitesForUser($user_id);
-	$name = $user['nicename'];
+	$name = $user['nice_name'];
 	$email = $user['email'];
 	$url = $sites[0]['domain'];
 }
@@ -167,7 +167,7 @@ function stripImages($postContent){
 
             </td>
 
-            <td width="200px">
+            <td width="200px" align="left">
                 <div class='blogSidebarWrapper'>
 
                     <h2>Tags</h2>

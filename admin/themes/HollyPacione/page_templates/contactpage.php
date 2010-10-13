@@ -14,7 +14,7 @@ $background_image = PageManager::getMediaURLFromThemePara(205);
 		
 		<table border="0" cellpadding="0" cellspacing="0" id='contentTable' width="100%" height="100%" style="width:100%; height:100%;background-image: url('<?=$background_image?>')">
 			
-			<tr valign="top" height="100%">
+			<tr valign="top" align='left' height="100%">
 
 				<td width="55%" height="100%"> 
 					<!-- Empty -->

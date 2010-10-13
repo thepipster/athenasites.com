@@ -144,8 +144,8 @@ Logger::debug("$domain has site_id = $current_site_id");
 
 <!--
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
--->
         <script type="text/javascript" src="code/js/3rdparty/swfobject.js"></script>
+-->
         <script type="text/javascript" src="code/js/3rdparty/SWFUpload/swfupload.js"></script>
         <script type="text/javascript" src="code/js/3rdparty/SWFUpload/plugins/swfupload.queue.js"></script>
 

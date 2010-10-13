@@ -1,8 +1,10 @@
 <?php
 
+$DEBUG = 0;
+
 require_once("admin/code/php/setup.php");
 
-//Logger::echoLog();
+if ($DEBUG) Logger::echoLog();
 //$domain = strtolower($_SERVER['HTTP_HOST']);
 //$page = strtolower(basename($_SERVER['REQUEST_URI']));
 //$path = strtolower(dirname($_SERVER['REQUEST_URI']));
@@ -35,9 +37,9 @@ if (isset($parts['query'])) {
 }
 $ext = substr(strrchr($page, '.'), 1);
 
-//Logger::debug(">>>> Request page: $page Ext: $ext Full request: " . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-//Logger::debug(">>>> Domain: $domain Page: $page Path: $path ");
-//Logger::debug(">>>> Tag: $tag Category: $category Month: $month Year: $year");
+if ($DEBUG) Logger::debug(">>>> Request page: $page Ext: $ext Full request: " . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+if ($DEBUG) Logger::debug(">>>> Domain: $domain Page: $page Path: $path ");
+if ($DEBUG) Logger::debug(">>>> Tag: $tag Category: $category Month: $month Year: $year");
 
 PageManager::init();
 
@@ -52,6 +54,8 @@ if ($page == '' || (($ext == 'html') || ($ext == 'htm') || ($ext == 'php'))) {
 
     // Log the page view if this is a real page
     PageViewsTable::logView(PageManager::$site_id, PageManager::$page_id, $page, $path, $query_string);
+
+	if ($DEBUG) die();
 
     // Echo header
     require_once(PageManager::$theme_file_root . 'header.php');

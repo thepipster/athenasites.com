@@ -5,6 +5,11 @@
 * @Description: Basic Page
 */			
 $background_image = PageManager::getMediaURLFromThemePara(215); 
+
+if (!isset($background_image) || $background_image == ""){
+	$background_image = PageManager::$common_url_root . 'imgs/blank.png';
+}
+
 ?>
 
 		<div id='content'><div id='scroller'>

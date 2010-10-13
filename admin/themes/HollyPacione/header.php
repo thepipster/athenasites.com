@@ -56,6 +56,10 @@ PageManager::doHeader();
 		$blog_image_border_width = ThemeTable::getGlobalParaValue(PageManager::$site_id, 220);
 		$blog_image_border_color = ThemeTable::getGlobalParaValue(PageManager::$site_id, 221);
 
+		Logger::debug("blog_post_title_color = " . $blog_post_title_color);
+		Logger::debug("blog_image_border_width = " . $blog_image_border_width);
+		Logger::debug("blog_image_border_color = " . $blog_image_border_color);
+		
 	?>
 
 	<script type="text/javascript">
@@ -93,7 +97,7 @@ PageManager::doHeader();
 			}
 
 			if (isset($blog_post_title_color)){				
-				echo "#content .blogPostTitle {color: #".$blog_post_title_color." !important; }\n";
+				echo "#content .postTitle a {color: #".$blog_post_title_color." !important; }\n";
 			}
 
 			if (isset($blog_image_border_width)){				
@@ -183,7 +187,7 @@ PageManager::doHeader();
 								// Get child pages 
 								foreach(PageManager::$page_list as $child){
 									
-									if ($child['parent_page_id'] == $id){
+									if ($child['parent_page_id'] == $id && $child['status'] == 'Published'){
 
 										$child_id = $child['id'];
 										$child_title = $child['title'];

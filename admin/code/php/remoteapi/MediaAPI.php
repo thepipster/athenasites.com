@@ -382,9 +382,11 @@ function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_c
     $safe_title = str_ireplace($tags, $replace, $title);
     $safe_title = stripslashes($safe_title);
 
-    PostsTable::update($site_id, $post_id, $safe_content, $status, $safe_title, $can_comment, StringUtils::encodeSlug($title), 'Apollo');
-
+    PostsTable::update($site_id, $post_id, $safe_content, $status, $safe_title, $can_comment, StringUtils::encodeSlug($title), 'apollo');
+	
     $post = PostsTable::getPost($site_id, $post_id);
+
+	processPostContent($site_id, $post);
 
     $day = date("d", strtotime($post['created']));
     $month = date("n", strtotime($post['created']));
@@ -407,6 +409,45 @@ function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_c
     CommandHelper::sendMessage($msg);
 }
 
+
+function processPostContent($site_id, $post){
+
+    $content = $post['content'];
+            
+    // Do a one time conversion, if required
+    if ($post['source'] != 'apollo'){
+        $content = ImportHelper::convertContent($content, $post['source']);
+		PostsTable::updateSourceAndContent($site_id, $post['id'], $content, 'apollo');
+    }
+
+    $result = preg_match("/<div class='apolloPageBreak'>(.*?)<\/div>/i", $content, $match);
+
+    if ($result) {
+
+        if (isset($match) && isset($match[1])) {
+            $more_text = $match[1];
+        }
+
+        $tag = "<div class='apolloPageBreak'>$more_text</div>";
+        $post_link = self::getPostLink($post);
+        $link_tag .= "<p><a href='$post_link' class='apolloPageBreak'>$more_text</a></p>";
+
+        $s_pos = strpos($content, $tag);
+
+        $excerpt = substr($content, 0, $s_pos) . $link_tag;
+        
+        PostsTable::updateExcerpt($site_id, $post['id'], $excerpt);
+    } 
+    //else {
+    //	$excerpt = $content;
+    //}
+	
+	
+	//$processed_full_content = preg_replace("/<div class='apolloPageBreak'>(.*?)<\/div>/i", "", $content);
+        
+}
+
+
 // ///////////////////////////////////////////////////////////////////////////////////////
 
 function addPost($site_id, $title, $content, $status, $slug, $can_comment) {
@@ -415,7 +456,7 @@ function addPost($site_id, $title, $content, $status, $slug, $can_comment) {
     //$path = getPath($site_id, $page_id);
     $path = '';
 
-    $post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, StringUtils::encodeSlug($title), 'Apollo');
+    $post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, StringUtils::encodeSlug($title), 'apollo');
 
     $post = PostsTable::getPost($site_id, $post_id);
 
@@ -727,10 +768,22 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
     $safe_title = str_ireplace($tags, $replace, $title);
 	$safe_title = stripslashes($safe_title);
 
+	Logger::debug(">>>> $tamplate_name - " . stripos($tamplate_name, 'home'));
+	
+	if (stripos('_'.$tamplate_name, 'home')){
+		Logger::debug("This is the home page!!");
+		$ishome = 1;
+		$slug = "index.html";
+	}
+	else {
+		$slug = StringUtils::encodeSlug($title);
+	}
+	 
+    PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $safe_title, $tamplate_name, $slug, $path, $order, $ishome, $description, $browser_title);
 
-    PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $safe_title, $tamplate_name, StringUtils::encodeSlug($title), $path, $order, $ishome, $description, $browser_title);
 
     $page = PagesTable::getPage($site_id, $page_id);
+
     if (isset($page)) {
         $page['last_edit'] = date("m/d/Y H:i", strtotime($page['last_edit'])); // Convert to JS compatible date
         $page['created'] = date("m/d/Y H:i", strtotime($page['created'])); // Convert to JS compatible date

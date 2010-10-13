@@ -165,15 +165,34 @@ var ssMain = {
 
     // ////////////////////////////////////////////////////////////////////////
 
-    onShowDashboard : function(){ssMain.view = ssMain.VIEW_DASHBOARD;ssMain.repaint();},
-    onShowPages : function(){ssMain.view = ssMain.VIEW_PAGES;ssMain.repaint();},
-    onShowFiles : function(){ssMain.view = ssMain.VIEW_FILES;ssMain.repaint();},
-    onShowPosts : function(){ssMain.view = ssMain.VIEW_POSTS;ssMain.repaint();},
-    onShowGalleries : function(){ssMain.view = ssMain.VIEW_GALLERIES;ssMain.repaint();},
-    onShowStats : function(){ssMain.view = ssMain.VIEW_STATS;ssMain.repaint();},
-    onShowEditImages : function(){ssMain.view = ssMain.VIEW_EDITFILES;ssMain.repaint();},
+    onShowDashboard : function(){ssMain.savePageContent(); ssMain.view = ssMain.VIEW_DASHBOARD;ssMain.repaint();},
+    onShowPages : function(){ssMain.savePageContent(); ssMain.view = ssMain.VIEW_PAGES;ssMain.repaint();},
+    onShowFiles : function(){ssMain.savePageContent(); ssMain.view = ssMain.VIEW_FILES;ssMain.repaint();},
+    onShowPosts : function(){ssMain.savePageContent(); ssMain.view = ssMain.VIEW_POSTS;ssMain.repaint();},
+    onShowGalleries : function(){ssMain.savePageContent(); ssMain.view = ssMain.VIEW_GALLERIES;ssMain.repaint();},
+    onShowStats : function(){ssMain.savePageContent(); ssMain.view = ssMain.VIEW_STATS;ssMain.repaint();},
+    onShowEditImages : function(){ssMain.savePageContent(); ssMain.view = ssMain.VIEW_EDITFILES;ssMain.repaint();},
 
+    // ////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Make sure we grab any content and update the local data store before we allow a page change
+	*/
+	savePageContent : function(){
+
+        switch(ssMain.view){
+
+            case ssMain.VIEW_PAGES : PagesFrame.onChange();break;
+            case ssMain.VIEW_POSTS : PostsFrame.onChange();break;
+            case ssMain.VIEW_DASHBOARD:
+            case ssMain.VIEW_FILES:
+            case ssMain.VIEW_GALLERIES:
+            case ssMain.VIEW_STATS:
+            case ssMain.VIEW_EDITFILES: break;
+        }
+
+	},
+	
     // ////////////////////////////////////////////////////////////////////////
 
     repaint : function(){

@@ -67,10 +67,10 @@ class SideBarManager {
 
         // How many months ago was this?
         $seconds_per_month = 2629744;
-        $delta_months = 1 + (time() - strtotime($oldest_post_date)) / $seconds_per_month;
+        $delta_months = ceil(1 + (time() - strtotime($oldest_post_date)) / ($seconds_per_month * 1000));
 
         $txt = "<ul class='$listCSS'>";
-
+		
         for($i=0; $i<=$delta_months; $i++){
 
             $month_epoch = mktime(date("H"), date("i"), date("s"), date("m")-$i, date("d"), date("Y"));
@@ -92,6 +92,8 @@ class SideBarManager {
             // Now get the number of posts for this month
             $no_posts = PostsTable::getNoPostsForTimeSpan($site_id, $date_from, $date_end);
             
+            //Logger::debug("$no_posts posts from $date_from to $date_end");
+            
             if ($no_posts > 0){
 	            $link = PageManager::$blog_url . "?year=$year&month=$month_digit";
     	        $txt .= "<li><a href='{$link}'><span class='{$monthCSS}'>{$month} {$year} &nbsp;</span></a>($no_posts)</li>";
@@ -99,7 +101,6 @@ class SideBarManager {
             
         }
         $txt .= "</ul>";
-
 
         return $txt;
 

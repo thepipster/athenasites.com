@@ -222,9 +222,22 @@ var ssLogin = {
 	},	
 			
 	onGotStats : function(no_users, no_sites, no_pageviews){
-    	var txt = no_sites + " sites, with " + no_users + " users and " + no_pageviews + " page views";
+    	var txt = no_sites + " sites, with " + no_users + " users and " + ssLogin.addCommas(no_pageviews) + " page views";
     	$('.stats').html(txt);
+	},
+	
+	addCommas : function(nStr) {
+		nStr += '';
+		x = nStr.split('.');
+		x1 = x[0];
+		x2 = x.length > 1 ? '.' + x[1] : '';
+		var rgx = /(\d+)(\d{3})/;
+		while (rgx.test(x1)) {
+			x1 = x1.replace(rgx, '$1' + ',' + '$2');
+		}
+		return x1 + x2;
 	}
+	
 }
 
 ssLogin.init();

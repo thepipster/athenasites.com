@@ -65,6 +65,9 @@ class PageManager {
     
     /** The full url, including pate e.g.  /parentpage/blog */
     public static $blog_url;
+
+    /** The home base path, e.g.  blog - NOTE by conventionthe home page should be index.html */
+    //public static $home_base_url;
     
     /** The blog base path, e.g.  blog - NOTE blogs by convention just use the page slug 'blog' rather than 'blog.html' */
     public static $blog_base_url;
@@ -128,6 +131,11 @@ class PageManager {
         self::$blog_base_url = $blogPage['slug'];
         self::$no_posts = PostsTable::getNoPosts(self::$site_id);
 
+        // Get home page info....
+        //$homePage = PagesTable::getHomepage(self::$site_id);
+		//self::$home_base_url = $homePage['slug'];
+		//Logger::dump($homePage);
+		
         self::$media_root_url = self::$url_root . "/user_files/" . self::$site_id . "/";
         self::$theme_url_root = self::$url_root . '/admin/themes/' . $theme['theme_name'] . "/";
         self::$common_url_root = self::$url_root . "/admin/themes/common/";
@@ -330,7 +338,7 @@ class PageManager {
             $media_folder = SecurityUtils::getMediaFolder(PageManager::$site_id);
             $image = FolderTable::getMedia(self::$site_id, $fav_image_id);
             if (isset($image)) {
-                return $media_root_url . $image['filename'];
+                return self::$media_root_url .  $image['filepath'] . $image['filename'];
             }
         }
 
@@ -447,7 +455,6 @@ class PageManager {
                 break;
 
             case self::$BLOGMODE_ALL :
-            	Logger::debug("Current Blog page = " . self::$blog_page_no);
             	$start_n = (self::$blog_page_no-1) * self::$MAX_POSTS_PER_PAGE;
             	$end_n = self::$blog_page_no * self::$MAX_POSTS_PER_PAGE;            	
                 $temp_list = PostsTable::getNPosts(self::$site_id, $start_n, $end_n);
@@ -536,38 +543,25 @@ class PageManager {
      */
     public static function getBlogContent($post) {
 
-        $content = stripslashes($post['content']);
-        $content = ImportHelper::convertContent($content, $post['source']);
-
-
-//		$result = preg_match("/<!--more (.*?)-->/i", $content, $match);
-// <div class='apolloPageBreak'>More photos from their wedding</div>
-        // Get the more text
-
+        //$content = stripslashes($post['content']);
+        $content = $post['content'];
+        
+        return $content;
+        
+                
         if (self::$blog_mode == self::$BLOGMODE_SINGLEPOST) {
-
             // Remove more tag
             $post_content = preg_replace("/<div class='apolloPageBreak'>(.*?)<\/div>/i", "", $content);
-        } else {
+        } 
+        else {
 
-            $result = preg_match("/<div class='apolloPageBreak'>(.*?)<\/div>/i", $content, $match);
-
-            if ($result) {
-
-                if (isset($match) && isset($match[1])) {
-                    $more_text = $match[1];
-                }
-
-                $tag = "<div class='apolloPageBreak'>$more_text</div>";
-                $post_link = self::getPostLink($post);
-                $link_tag .= "<p><a href='$post_link' class='apolloPageBreak'>$more_text</a></p>";
-
-                $s_pos = strpos($content, $tag);
-
-                $post_content = substr($content, 0, $s_pos) . $link_tag;
-            } else {
-                $post_content = $content;
-            }
+			if (isset($post['excerpt']) && $post['excerpt'] != ""){
+				$post_content = $post['excerpt'];
+			}
+			else {
+				$post_content = $content;
+			}
+			
         }
 
         return $post_content;

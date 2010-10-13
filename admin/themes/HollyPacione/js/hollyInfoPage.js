@@ -100,7 +100,7 @@ var hollyInfoPage = {
 				
 //			$("#content").height(imgH);
 //			$("#content").width(imgW);								
-
+/*
 			if (hollyInfoPage.pageType == 'left'){
 				$('.leftCol').width(0.5 * imgW);
 			}
@@ -109,6 +109,7 @@ var hollyInfoPage = {
 			}
 			else {
 			}
+*/		
 		}
 		
 		

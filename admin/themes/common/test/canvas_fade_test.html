@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+
+	<title>Athena Canvas Fade Test</title>
+
+	<!-- JS Includes ///////////////////////////////////////////////////// -->
+
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>	
+
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
+	 			 	 
+	<!-- Page Styles  //////////////////////////////////////////////////// -->
+
+	<style type="text/css">
+
+		html, body {
+		    font-family: century gothic, optima, Lucida Sans Unicode, Verdana, Tahoma, Trebuchet MS, Helvetica, Arial;
+		    font-size: 11px;
+		    height: 100%;
+		    width:100%;
+		    margin: 0;
+		    padding: 0;
+		}
+		
+		html {
+		    height: 100%;
+		    width:100%;
+		    margin: 0;
+		    padding: 0;
+		}
+			
+		#imageCanvas {
+			width: 100%;
+			height:100%; 
+		}
+						
+	</style>
+
+
+</head>
+
+<body>
+		
+	<div id='canvasWrapper' style='width:100%; height:100%; background-color:gray'>
+		<!--
+		<canvas id="imageCanvas"></canvas>
+		-->
+	</div>	
+
+	<div id='debug'></div>
+
+	<script type="text/javascript">
+	
+	var fadeTest = {
+		
+		imageData : '',
+		context : '',
+		
+		/** Fade time, in ms */
+		fadeTime : 3000,
+		
+		/** Time step, in ms */		
+		Ts : 5,
+				
+		/** Pre-calculate easing values for the animation */
+		easingIn : '',
+		easingOut : '',
+		
+		/** The animation step */				
+		step : 0,
+		
+		/** The number of animation steps per cycle */
+		noSteps : 0,
+		
+		alpha : 255,
+		width : 0,
+		height : 0,
+
+		init : function(){
+			
+		    fadeTest.width = $('#canvasWrapper').width();
+		    fadeTest.height = $('#canvasWrapper').height();
+		    
+			//$('#imageCanvas').attr('width', fadeTest.width);
+			//$('#imageCanvas').attr('height', fadeTest.height);
+		    
+			var canvas = document.createElement("canvas");		
+			canvas.setAttribute('width', fadeTest.width);
+			canvas.setAttribute('height', fadeTest.height);
+			canvas.setAttribute('id', "imageCanvas");			
+			document.getElementById("canvasWrapper").appendChild(canvas);
+
+			var im = new Image();
+			im.src = "test_images/rover1.jpg"; 
+			//im.onload = fadeTest.onImageLoaded;	
+			$(im).bind('load', fadeTest.onImageLoaded);
+						
+			// Precalculate the easing values for the animation...
+
+			fadeTest.noSteps = Math.ceil(fadeTest.fadeTime / (fadeTest.Ts));
+			var alpha_step = fadeTest.alpha / fadeTest.noSteps;						
+			
+			//alert("No Steps = " + fadeTest.noSteps + " dAlpha = " + alpha_step);
+						
+			fadeTest.easingIn = new Array();
+			fadeTest.easingOut = new Array();
+			
+			var alpha = 0;
+			
+			for (var i = 0; i < fadeTest.noSteps; i++){		
+				var temp = fadeTest.alpha * fadeTest.smoothstep(0, fadeTest.alpha, alpha);				
+				fadeTest.easingIn.push(temp);
+				fadeTest.easingOut.push(255-temp);
+				alpha += alpha_step;
+			}
+			
+					
+		},
+		
+		imgObject : '',
+		
+		onImageLoaded : function(ev){
+
+			//$('#imageCanvas').width(1200);
+			//$('#imageCanvas').height(800);
+			
+		    var element = document.getElementById("imageCanvas");
+		    fadeTest.context = element.getContext("2d");
+								
+		    // Read the width and height of the canvas
+		    fadeTest.imgObject = ev.target;
+		    
+		    // stamp the image on the left of the canvas:
+		    fadeTest.context.globalAlpha = 1.0;
+		    fadeTest.context.drawImage(fadeTest.imgObject, 0, 0,  fadeTest.width, fadeTest.height);
+						
+		    // get all canvas pixel data
+		    fadeTest.imageData = fadeTest.context.getImageData(0, 0, fadeTest.width, fadeTest.height);
+					
+			fadeTest.fadeOut();
+		},		
+		
+		/**
+		* Start the fadeout animation
+		*/
+		fadeOut : function(fadeTime){
+			fadeTest.step = 0;
+			fadeTest.doFadeOut();	
+		},
+		
+		
+		
+		doFadeOut : function(){
+			
+			var tempData = fadeTest.imageData.data; // Detach pixel array from DOM for performance tweak
+			var no = tempData.length;
+
+		    for (var i = 3; i < no; i+=4) {
+		    	//var r = fadeTest.imageData.data[i];
+		    	//var g = fadeTest.imageData.data[i+1];
+		    	//var b = fadeTest.imageData.data[i+2];
+		    	//var a = fadeTest.imageData.data[i+3];
+		    	tempData[i] = fadeTest.easingOut[fadeTest.step];    
+		    }
+
+			fadeTest.step++;
+						
+		    // put pixel data on canvas
+		    fadeTest.imageData.data = tempData;
+		    fadeTest.context.putImageData(fadeTest.imageData, 0, 0);
+			
+			if (fadeTest.step < fadeTest.noSteps){	
+				setTimeout(fadeTest.doFadeOut, fadeTest.Ts);
+			}						
+		},
+
+		/**
+		* Calculate the easing value for a smoother animation
+		*/		
+		smoothstep : function(min, max, input) {  
+	    	var r = (input - min) / (max - min);  
+    		return r * r * (3 - 2 * r);  
+		}   		
+		
+	}
+		
+	fadeTest.init();	
+	
+	</script>
+
+</body>
+</html>

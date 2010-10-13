@@ -17,6 +17,7 @@ class PostsTable {
 		  `id` int(11) NOT NULL auto_increment,
 		  `user_id` int(11) default NULL,
 		  `content` text,
+		  `excerpt` text,
 		  `status` enum('Published','Draft','Private','Revision','Trash') default 'Draft',
 		  `last_edit` datetime default NULL,
 		  `created` datetime default NULL,
@@ -98,6 +99,23 @@ class PostsTable {
         return DatabaseManager::update($sql);
     }
 
+    // /////////////////////////////////////////////////////////////////////////////////
+
+	public static function updateSourceAndContent($site_id, $post_id, $content, $source){	
+        $sql = DatabaseManager::prepare("UPDATE athena_%d_Posts SET content = %s, source=%s WHERE id = %d", $site_id, $content, $source, $post_id);                        
+        return DatabaseManager::update($sql);
+	}
+	
+    // /////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Update the excerpt for a given post (the excerpt is any content before a 'more' tag, if there is no more tag this will be empty)
+	*/
+	public static function updateExcerpt($site_id, $post_id, $excerpt){
+        $sql = DatabaseManager::prepare("UPDATE athena_%d_Posts SET excerpt = %s WHERE id = %d", $site_id, $excerpt, $post_id);                        
+        return DatabaseManager::update($sql);
+	}
+	
     // /////////////////////////////////////////////////////////////////////////////////
 
     public static function delete($site_id, $post_id) {
@@ -508,7 +526,6 @@ class PostsTable {
      * @return <type>
      */
      public static function getNPosts($site_id, $start_n, $end_n) {
-     	Logger::debug("getNPosts($site_id, $start_n, $end_n)");
         $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts ORDER BY created DESC LIMIT %d, %d", $site_id, $start_n, ($end_n-$start_n));
         return DatabaseManager::getResults($sql);
     }
