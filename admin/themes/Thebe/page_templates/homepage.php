@@ -13,24 +13,25 @@ $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id
 ?>
 <script type="text/javascript">
 
-	hollyGallery.preInit();		
+	thebeGallery.preInit();		
 	<?php
 		if (isset($noflash) && $noflash == 1){
-			echo 'hollyGallery.hasFlash = false;';
+			echo 'thebeGallery.hasFlash = false;';
 		}
 	?>
 
 </script>
 
-		<div id='content' style='background-color:<?php if (isset($border_color)) echo "#$border_color;"; else echo "black;";?>'>	
+		<div id='content'>	
 			<?php
 				foreach($gallery_image_list as $gal_mapping){
 				
 					$image_id = $gal_mapping['image_id'];
 					$image = FolderTable::getMedia(PageManager::$site_id, $image_id);
+					Logger::dump($image);
 					
-					$image_url = PageManager::$media_root_url . $image['filename'];
-					$thumb_url = PageManager::$media_root_url . $image['thumb_filename'];
+					$image_url = PageManager::$media_root_url . $image['filepath'] . $image['filename'];
+					$thumb_url = PageManager::$media_root_url . $image['filepath'] . $image['thumb_filename'];
 					$title =  $image['title'];
 					$description = $image['description'];										
 					$tags = $image['tags'];					
@@ -48,11 +49,9 @@ $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id
 
 <script type="text/javascript">
 
-	hollyGallery.init({
-		swf:"<?= PageManager::$theme_url_root; ?>/flash/homeGal.swf", 
+	thebeGallery.init({
+		swf:"<?= PageManager::$theme_url_root; ?>/flash/fullScreenGal.swf", 
 		xml:"<?= $xml_url?>",
-		width: 1200,
-		height: 800,
 		loadingSpinner: false
 		});
 		

@@ -24,20 +24,35 @@ SPGallery = {
 		
 		$(targetDiv).flash({
 //		    wmode: 'transparent',
-			 id: 'SPGallery_flashObject',
+			 id: 'thebeGal_flashObject',
 		    src: SPGallery.swf_url,
 		    width: w,
 		    height: h
 		});
 
-		var isIE = navigator.appName.indexOf("Microsoft") != -1;
-  		SPGallery.flash = (isIE) ? window['SPGallery_flashObject'] : document['SPGallery_flashObject'];
   		
  		//alert(SPGallery.flash);
 
 	},
 
-
+	nextImage : function(){	
+		var isIE = navigator.appName.indexOf("Microsoft") != -1;
+  		var flashObj = (isIE) ? window['thebeGal_flashObject'] : document['thebeGal_flashObject'];
+  		flashObj.nextImage();	
+	},
+	
+	prevImage : function(){
+		var isIE = navigator.appName.indexOf("Microsoft") != -1;
+  		var flashObj = (isIE) ? window['thebeGal_flashObject'] : document['thebeGal_flashObject'];
+  		flashObj.prevImage();	
+	},
+	
+	togglePlay : function(){
+		var isIE = navigator.appName.indexOf("Microsoft") != -1;
+  		var flashObj = (isIE) ? window['thebeGal_flashObject'] : document['thebeGal_flashObject'];
+  		flashObj.togglePlay();		
+	},
+	
 	// ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/**

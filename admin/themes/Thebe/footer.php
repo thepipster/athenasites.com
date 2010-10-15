@@ -5,41 +5,67 @@
  */ 
 ?>
 <!-- begin footer -->
-
-		<div id='nav_container'>
-		
-			<div class='ribbonMask' id='ribbonMask'>
-				<img class='logo' src='SB.png' />
-				<a class='option' onClick='showServices();'>services</a>
-				<a class='option' onClick='showAbout();'>about</a>
-				<a class='option' onClick='showContact();'>contact</a>
-		
-				<a class='option' href='http://www.stephaniebrauerweddings.com/Blog/' target='_blank'>blog</a>
-				<a class='option' onClick='showClients();'>clients</a>
-				<a class='control1' id='control1' onClick='goPrevious();'><</a>
-				<a class='control2'  id='toggle' onClick='pausePlay();'>pause</a>
-				<a class='control3'  onClick='goNext();'>></a>
-			</div>		
-
-			<?php 
-													
-				foreach (PageManager::$page_list as $page){
-				
-					if ($page['parent_page_id'] == 0 && $page['status'] == 'Published'){
 	
-						$id = $page['id'];
-						$parent_page_id = $page['parent_page_id'];
-						$title = $page['title'];								
-						$page_slug = $page['slug'];
-						$link = PageManager::getPageLink($id);
-													
-					}	
-				}			
-			?>
+	<div id='menuRibbon'>
+	
+		<img class='logo' src='' />
+		<a class='menuItem' onClick='showServices();'>services</a>
+		<a class='menuItem' onClick='showAbout();'>about</a>
+		<a class='menuItem' onClick='showContact();'>contact</a>
+
+		<a class='menuItem' href='http://www.stephaniebrauerweddings.com/Blog/' target='_blank'>blog</a>
+		<a class='menuItem' onClick='showClients();'>clients</a>
 		
-		</div>
-		
-	</div> <!-- Wrapper -->
+		<?php 
+												
+			foreach (PageManager::$page_list as $page){
+			
+				if ($page['parent_page_id'] == 0 && $page['status'] == 'Published'){
+	
+					$id = $page['id'];
+					$parent_page_id = $page['parent_page_id'];
+					$title = $page['title'];								
+					$page_slug = $page['slug'];
+					$link = PageManager::getPageLink($id);
+												
+				}	
+			}			
+		?>
+	
+		<div class='controls_padding'></div>
+		<a class='control' onClick='thebeMain.onNextImage();'>></a>
+		<a class='control' id='togglePlay' onClick='thebeMain.onTogglePlay();'>pause</a>
+		<a class='control' onClick='thebeMain.onPrevImage();'><</a>
+	
+	</div><!-- menuRibbon -->				
+	
+<!-- Javascript code /////////////////////////////////////////////////////////////// -->
+
+<script type="text/javascript">
+	
+var thebeMain = {
+	
+	onNextImage : function(){
+		thebeGallery.nextImage();
+	},
+
+	onPrevImage : function(){
+		thebeGallery.prevImage();
+	},
+	
+	onTogglePlay : function(){
+		thebeGallery.togglePlay();
+		if ($('#togglePlay').html() == 'pause') {
+			$('#togglePlay').html('play');
+		}
+		else {
+			$('#togglePlay').html('pause');
+		}	
+	}
+
+}
+	
+</script>
 
 <?php PageManager::doFooter(); ?>
 

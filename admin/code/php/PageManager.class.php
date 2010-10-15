@@ -141,7 +141,7 @@ class PageManager {
         self::$common_url_root = self::$url_root . "/admin/themes/common/";
         self::$theme_file_root = FILE_ROOT . 'admin/themes/' . $theme['theme_name'] . "/";
 
-	
+	/*
       	Logger::debug("\n".
               "Request URI: " . $_SERVER['REQUEST_URI'] . "\n" .
               "Host: " . $_SERVER['HTTP_HOST'] . "\n" .
@@ -152,7 +152,7 @@ class PageManager {
               "Theme file root: " . self::$theme_file_root . "\n" .
               "Medi Root URL: " . self::$media_root_url . "\n\n"
               );
-         
+     */    
     }
     
     

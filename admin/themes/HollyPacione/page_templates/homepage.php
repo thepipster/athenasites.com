@@ -29,8 +29,8 @@ $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id
 					$image_id = $gal_mapping['image_id'];
 					$image = FolderTable::getMedia(PageManager::$site_id, $image_id);
 					
-					$image_url = PageManager::$media_root_url . $image['filename'];
-					$thumb_url = PageManager::$media_root_url . $image['thumb_filename'];
+					$image_url = PageManager::$media_root_url . $image['filepath'] . $image['filename'];
+					$thumb_url = PageManager::$media_root_url . $image['filepath'] . $image['thumb_filename'];
 					$title =  $image['title'];
 					$description = $image['description'];										
 					$tags = $image['tags'];					
