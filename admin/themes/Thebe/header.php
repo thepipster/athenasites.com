@@ -21,14 +21,18 @@ PageManager::doHeader();
 	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>style.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>datePicker.css" type="text/css" id="" media="print, projection, screen" />
 	
+	<!-- styles needed by jScrollPane -->
+	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>/jscrollpane.css" type="text/css" id="" media="print, projection, screen" />
+	
 	<!-- JS Includes ///////////////////////////////////////////////////// -->
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
-<!--    
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
-	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/jquery-1.4.2.min.js"></script>
--->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
+
+	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/jquery.jscrollpane.min.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/jquery.mousewheel.js"></script>	 
+	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/jquery-glowing.js"></script>
 
 	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/AC_OETags.js"></script>
 	
@@ -58,3 +62,4 @@ PageManager::doHeader();
 </head>
 
 <body>
+<div id='popupWrapper'></div>

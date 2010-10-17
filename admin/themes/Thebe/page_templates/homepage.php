@@ -10,6 +10,8 @@ $xml_url = "http://" . $_SERVER['HTTP_HOST'] ."/admin/code/php/getUserGalleryXML
 
 $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id, PageManager::$page_id);
 
+Session::set('pre_gallery_page_id', PageManager::$page_id);
+
 ?>
 <script type="text/javascript">
 
@@ -28,7 +30,6 @@ $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id
 				
 					$image_id = $gal_mapping['image_id'];
 					$image = FolderTable::getMedia(PageManager::$site_id, $image_id);
-					Logger::dump($image);
 					
 					$image_url = PageManager::$media_root_url . $image['filepath'] . $image['filename'];
 					$thumb_url = PageManager::$media_root_url . $image['filepath'] . $image['thumb_filename'];

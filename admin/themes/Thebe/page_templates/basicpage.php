@@ -4,35 +4,54 @@
 * @Template: Basic Page
 * @Description: Basic Page
 */			
-$background_image = PageManager::getMediaURLFromThemePara(215); 
 
-if (!isset($background_image) || $background_image == ""){
-	$background_image = PageManager::$common_url_root . 'imgs/blank.png';
+$pre_gallery_page_id = Session::get('pre_gallery_page_id');
+
+if (isset($pre_gallery_page_id)){
+	$xml_url = "http://" . $_SERVER['HTTP_HOST'] ."/admin/code/php/getUserGalleryXML.php?p=".PageManager::$site_id.",".$pre_gallery_page_id."&cache=" . mt_rand();
 }
 
 ?>
 
-		<div id='content'><div id='scroller'>
-
-			<div class='backgroundImage'>
-				<img src="<?=$background_image?>" width='100%' height='100%'/>
-			</div>
-			
-			<div class="singleCol" align="left">
-				<div class='contentText'>
-					<?php echo PageManager::getCurrentPageContent(); ?>
-				</div>
-			</div>
-			
-		</div></div><!-- content -->
-
-		
 <script type="text/javascript">
 
-hollyInfoPage.init({
-	width: 1350,
-	height: 800,
-	pageType: 'none'
-});
+	<?php if (isset($pre_gallery_page_id)){ ?>
+		thebeGallery.preInit();				
+	<?php } ?>
 
+</script>
+
+<div id='content'>
+</div><!-- content -->
+
+<div id='popupPage'>
+	
+	<div align="center" class='popupContent'>
+	
+		<h2><?php echo PageManager::getPageTitle(); ?></h2>
+		
+		<span class='divider'></span>
+						
+		<div class='popupText vertical-only' align="left">
+			<?php echo PageManager::getCurrentPageContent(); ?>
+		</div>
+		
+	</div>
+	
+</div>
+
+<script type="text/javascript">
+
+	$('.popupContent').jScrollPane();
+
+	<?php if (isset($pre_gallery_page_id)){ ?>
+
+	thebeGallery.init({
+		swf:"<?= PageManager::$theme_url_root; ?>/flash/fullScreenGal.swf", 
+		xml:"<?= $xml_url?>",
+		loadingSpinner: false
+		});
+		
+	<?php } ?>
+		
 </script>

@@ -77,7 +77,11 @@ var thebeGallery = {
 		
 	*/
 	
-		var flashvars = { xmlFile: thebeGallery.flashXML };
+		var flashvars = { 
+			xmlFile: thebeGallery.flashXML, 
+			startGal: 1,
+			startImg: 5 
+		};
 		
 		var params = {
 		  menu: "false",

@@ -1,6 +1,7 @@
 		
 html, body {
-	font-family: GeosansLight, Sans-serif;
+	font-family: Lucida Sans Unicode, Lucida Grande, sans-serif;
+	/* Check out http://www.ampsoft.net/webdesign-l/WindowsMacFonts.html for safe x-browser font families */
 	font-size: 11px;
 	height: 100%;
 	width:100%;
@@ -42,16 +43,77 @@ a {
 	outline:none;
 }
 
-/* Menu Ribbon ///////////////// */
+/* Popup Pages //////////////////////////////////// */
+
+#popupPage {
+
+	-moz-border-radius: 20px;
+	-webkit-border-radius: 20px;
+	-khtml-border-radius: 20px;
+	border-radius: 20px;
+
+	background-image: url("../common/imgs/white90.png"); 
+	background-repeat: repeat;
+	
+	position: absolute;
+	
+	width: 50%;
+	height: 70%;
+	top: 10%;
+	left: 25%;
+	
+	padding: 10px;
+}
+
+#popupPage .popupContent {
+	width: 100%;
+	height: 100%;
+	overflow-x: auto;
+	overflow-y: hidden;	
+}
+
+#popupPage .popupContent h2 {
+	color: #9b0100;
+	font-size: 18px;
+}
+
+#popupPage .popupContent .divider {
+	display: block;
+	width: 90%;
+	padding: 0px;
+	margin: 0px;
+	margin-bottom: 20px;
+	border-bottom: solid black;
+	border-bottom-width: 1px;
+}
+
+#popupPage .popupContent .popupText {
+	font-size: 14px;
+	padding-left: 25px;
+	padding-right: 25px;
+	padding: 0;
+	margin: 0;
+	width: 95%;
+	height: 100%;
+}
+/*
+#popupPage .popupInlineImage {
+	max-width: 40%;
+	float: left;
+	padding-right: 10px;
+	margin-top: 5px;
+}
+*/
+/* Menu Ribbon //////////////////////////////////// */
 	
 #menuRibbon {
 	position: absolute;
-	bottom: 65px;
+	bottom: 15px;
 	height:40px;
 	width: 100%;
 	z-index:2;
 	padding-top: 20px;
-	background-image: url("../common/imgs/white80.png"); 
+	background-image: url("../common/imgs/white40.png"); 
 	background-repeat: repeat;
 	/* filter: alpha(opacity=60);-moz-opacity:.60;opacity:.20;*/	
 }
@@ -64,22 +126,22 @@ a {
 #menuRibbon a { text-decoration: none; }
 
 #menuRibbon .menuItem {
-	font-family:GeosansLight, Sans-serif;
-	font-size: 18px;
+	font-size: 14px;
 	margin-left: 10px;
 	margin-right: 10px;
 	cursor: pointer;
 	color: black;
 }
 
-#menuRibbon .menuItem:hover { color:red}
+#menuRibbon .menuItem:hover { color:white}
+
+#menuRibbon .menuItemSelected { color: white; }
 
 #menuRibbon .control {
-	font-family:GeosansLight, Sans-serif;
-	font-size:1.6em;
+	font-size:14px;
 	float: right;
 	cursor: pointer;
-	width: 50px;
+	width: 40px;
 	text-align: center;
 }
 
@@ -88,4 +150,4 @@ a {
 	width: 30px;
 	height: 20px;
 }
-#menuRibbon .control:hover { color:red}
+#menuRibbon .control:hover { color:white}

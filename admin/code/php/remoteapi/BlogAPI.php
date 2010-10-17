@@ -26,6 +26,11 @@ switch ($cmd) {
         getPost($site_id);
         break;
 
+    case "getPage":
+        $page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+        getPage($site_id, $page_id);
+        break;
+
     case "getComments":
         $post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
         getComments($post_id, $site_id);
@@ -253,7 +258,28 @@ function getApprovedComments($post_id, $site_id) {
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////
+//
+// Page getters
+//
+// ///////////////////////////////////////////////////////////////////////////////////////
 
+function getPage($site_id, $page_id){
 
+    $page = PagesTable::getPage($site_id, $page_id);
+
+	$msg['result'] = 'fail';
+	
+    if (isset($page)) {
+        $page['last_edit'] = date("m/d/Y H:i", strtotime($page['last_edit'])); // Convert to JS compatible date
+        $page['created'] = date("m/d/Y H:i", strtotime($page['created'])); // Convert to JS compatible date
+	    $msg['result'] = 'ok';
+    }
+
+    $msg['cmd'] = "getPage";
+    $msg['data'] = array('page' => $page);
+
+    CommandHelper::sendMessage($msg);
+
+}
 
 ?>
