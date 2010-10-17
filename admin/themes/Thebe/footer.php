@@ -41,21 +41,19 @@
 						}
 									
 						if ($is_page){
-							//echo "<span id='page_$id' class='menuItem menuItemSelected' onClick='thebeMain.doPopup($id); return false;'>$title</span>";
-							echo "<a id='page_$id' class='menuItem menuItemSelected glowlink' href='$link' onClick='thebeMain.doPopup($id); return false;'>$title</a>";
+							echo "<a class='glowlink' href='$link' onClick='thebeMain.doPopup($id); return false;'><span id='page_$id' class='menuItem menuItemSelected'>$title</span></a>";
 						}
 						else {
-							echo "<a id='page_$id' class='menuItem glowlink' href='$link' onClick='thebeMain.doPopup($id); return false;'>$title</a>";
+							echo "<a class='glowlink' href='$link' onClick='thebeMain.doPopup($id); return false;'><span id='page_$id'  class='menuItem'>$title</span></a>";
 						}
 												
 					}
 					else {
 						if ($is_page){
-							//echo "<span id='page_$id' class='menuItemSelected'>$title</span>";
-							echo "<a id='page_$id' class='menuItem menuItemSelected' href='$link'>$title</a>";
+							echo "<a class='glowlink' href='$link'><span id='page_$id'  class='menuItem menuItemSelected'>$title</span></a>";
 						}
 						else {
-							echo "<a id='page_$id' class='menuItem glowlink' href='$link'>$title</a>";
+							echo "<a class='glowlink' href='$link'><span id='page_$id'  class='menuItem'>$title</span></a>";
 						}
 					}
 												
@@ -124,7 +122,7 @@ var thebeMain = {
         });		
 				
 		// Update menu
-		$('.menuItem').removeClass('menuItemSelected glowlink');
+		$('.menuItem').removeClass('menuItemSelected');
 		
 		$('#page_'+id).addClass('menuItemSelected');
 		

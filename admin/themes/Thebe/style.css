@@ -74,12 +74,12 @@ a {
 
 #popupPage .popupContent h2 {
 	color: #9b0100;
-	font-size: 18px;
+	font-size: 22px;
 }
 
 #popupPage .popupContent .divider {
 	display: block;
-	width: 90%;
+	width: 85%;
 	padding: 0px;
 	margin: 0px;
 	margin-bottom: 20px;
@@ -93,7 +93,7 @@ a {
 	padding-right: 25px;
 	padding: 0;
 	margin: 0;
-	width: 95%;
+	width: 90%;
 	height: 100%;
 }
 /*
