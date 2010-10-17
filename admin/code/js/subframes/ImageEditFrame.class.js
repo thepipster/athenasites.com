@@ -66,13 +66,13 @@ var ImageEditFrame = {
         //		txt += "      <td class='dataField'>"+added_date+" (GMT)</td>";
         txt += "      <td class='dataField'><input id='' width='100%' type=text value='"+added_date+" (GMT)' disabled/></td>";
         txt += "   </tr>";
-
+/*
         txt += "   <tr>";
         txt += "      <td class='titleField'>URL</td>";
         //		txt += "      <td class='dataField'>"+added_date+" (GMT)</td>";
         txt += "      <td class='dataField'><input id='' width='100%' type=text value='"+image_url+"' disabled/></td>";
         txt += "   </tr>";
-
+*/
         txt += "   <tr>";
         txt += "      <td class='titleField'>Size</td>";
         //		txt += "      <td class='dataField'>"+img_width+"px by "+img_height+"px</td>";

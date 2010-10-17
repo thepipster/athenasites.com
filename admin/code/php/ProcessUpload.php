@@ -29,7 +29,8 @@ if (!isset($_FILES["Filedata"]) || !is_uploaded_file($_FILES["Filedata"]["tmp_na
         echo $_FILES["Filedata"]["error"];
     }
     exit(0);
-} else {
+} 
+else {
 
     // Get user info
     $user_id = SecurityUtils::getCurrentUserID();
