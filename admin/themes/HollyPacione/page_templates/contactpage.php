@@ -12,7 +12,7 @@ $background_image = PageManager::getMediaURLFromThemePara(205);
 
 	<div id="content" style="border:none;">
 		
-		<table border="0" cellpadding="0" cellspacing="0" id='contentTable' width="100%" height="100%" style="width:100%; height:100%;background-image: url('<?=$background_image?>')">
+		<table border="0" cellpadding="0" cellspacing="0" id='contentTable' width="100%" height="100%" style="width:100%; height:100%; background-image: url('<?=$background_image?>')">
 			
 			<tr valign="top" align='left' height="100%">
 
@@ -45,6 +45,12 @@ $background_image = PageManager::getMediaURLFromThemePara(205);
 		
 <script type="text/javascript">
 
+hollyInfoPage.init({
+	width: 1350,
+	height: 800,
+	pageType: 'right'
+});
+
 // Major version of Flash required
 var requiredMajorVersion = 8;
 
@@ -57,42 +63,19 @@ var requiredRevision = 0;
 var hasFlash = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
 
 var hpContact = {
-
-	/** Width of content box gallery viewer */
-	imgWidth : 1200,
-	
-	/** Height of flash gallery viewer */
-	imgHeight : 800,
-
-	/** Ratio of width to height */
-	imgRatio : 0,
-
-	/** Minimum allowed width */
-	minWidth : 800,
-	
-	commandURL : "<?= PageManager::$theme_url_root?>php/SendEmail.php",
-	
+		
 	page_id : <?=PageManager::$page_id?>,
 	
 	site_id : <?=PageManager::$site_id?>,
         
-        nonce : '<?= SecurityUtils::createNonce('email-link') ?>',
+    nonce : '<?= SecurityUtils::createNonce('email-link') ?>',
 	
 	sentMessage : 'Message sent, thankyou!',
 	
 	sentErrorMessage : 'Error sending message!',
 	
 	init : function(){
-						
-		// Optimize size for gallery
-		//hpContact.imgRatio = hpContact.imgHeight / hpContact.imgWidth;
-		hpContact.imgRatio = hpContact.imgWidth / hpContact.imgHeight;
-	
-		hpContact.onResize();
-		
-		setTimeout("hpContact.onResize()", 200);
-			
-			
+									
 		// Validation
 		$("#contactForm").validate();
 			
@@ -134,28 +117,6 @@ var hpContact = {
 		return true;
 	},
 	
-	onResize : function(){
-
-		if (hasFlash){
-								
-			var galH = $("#wrapper").height() - $("#nav_container").height();
-			var galW = Math.floor(hpContact.imgRatio * galH);	
-					
-			//alert('Min width: ' + $("#nav_container").attr('min-width'));			
-			
-			if (galW > hpContact.minWidth){
-			
-				$("#nav_container").width(galW);	
-				$("#container").width(galW);	
-				
-				$("#content").height(galH);
-				$("#content").width(galW);
-				
-			}
-		}
-		
-	},
-	
 	onChange : function(){
 		$("#contactForm").valid();
 	},
@@ -171,48 +132,27 @@ var hpContact = {
 			var aDatetime = $("#datetime").val();
 			var aComments = $("#comments").val();
 			
-			//alert(aName + " " + aEmail + " " + aPhone + " " + aLocation + " " + aDatetime + " " + aComments); 
+			// submitRequest : function(siteID, pageID, reqName, reqEmail, reqPhone, reqLocation, reqDate, reqComments, callback)
+
+			apolloContactRequest.submitRequest(hpContact.site_id, hpContact.page_id, hpContact.nonce, aName, aEmail, aPhone, aLocation, aDatetime, aComments, hpContact.onSentForm);
 			
-			var paras = {
-					page_id: hpContact.page_id, 
-					site_id: hpContact.site_id, 
-					nonce: hpContact.nonce, 
-					name: aName, 
-					email: aEmail, 
-					phone: aPhone, 
-					location: aLocation, 
-					comments: aComments, 
-					datetime: aDatetime
-			};
-										
-			$.ajax({
-				url: hpContact.commandURL,
-				dataType: "text",
-				data: paras,
-				success: function(ret){hpContact.onSentForm(ret);}
-			});	
 		}	
 		
 		return false;
 	},
-		
-	onSentForm : function(ret){
-		
-		if (ret == "TRUE"){
-			$('.formMessage').html(hpContact.sentMessage);
+	
+	onSentForm : function(isSuccess, isSpam, message){
+	
+		if (isSuccess){
+			$('.formMessage').html("Request sent!");
 		}
-		else if (ret == "FALSE"){
-			$('.formMessage').html(hpContact.sentErrorMessage);
-		}
-		else if (ret == "SPAM"){
+		else if (isSpam) {
 			$('.formMessage').html("Sorry, this comment looks like spam?");
 		}
-		else if (ret == "NA"){
-			$('.formMessage').html("Not authorized error!");
-		}
 		else {
-			$('.formMessage').html("Unknown error!");
-		}
+			$('.formMessage').html(message);
+		}	
+		
 	}
 
 }
@@ -220,6 +160,5 @@ var hpContact = {
 // /////////////////////////////////////////////////////////////////////////////////
 
 $(document).ready(hpContact.init);
-$(window).resize(hpContact.onResize);
 
 </script>

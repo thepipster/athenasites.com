@@ -191,7 +191,8 @@ class SecurityUtils {
     public static function createSite($user_id, $site_domain, $site_path, $site_theme) {
 
         // Create entry in site table
-        $site_id = SitesTable::create($site_domain, $site_path, $site_theme);
+        $site_id = SitesTable::getNextSiteID();
+        SitesTable::create($site_id, $site_domain, $site_path, $site_theme);
 
         Logger::debug("Created site $site_domain, id = $site_id");
 

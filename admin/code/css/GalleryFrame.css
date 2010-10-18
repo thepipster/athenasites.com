@@ -74,13 +74,18 @@
 	padding-top: 14px;
 }
 
-#GalleryFrameContent .delete_slot_text {
+#GalleryFrameContent .remove_image_box {
 	font-size: 24px;
-	color: white;
-	width: 66px;
-	height: 41px;
-	padding-top: 20px;
-	background-color: #ed613c;
+	border-color: #fffad3;	                
+	border-style: solid;	                
+	border-width: 2px;	          
+	float: left;                
+	color: #797979;
+	width: 90%;
+	height: 40px;
+	margin-top: 20px;
+	padding-top: 17px;
+	background-color: #f1eed9;
 	font-size: 14px;
 }
 

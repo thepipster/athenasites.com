@@ -53,14 +53,20 @@ function getTopParentPageTitle($post){
 	
 	<!-- JS Includes ///////////////////////////////////////////////////// -->
 
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/AC_OETags.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
 	
 	<script type="text/javascript" src="http://www.google-analytics.com/ga.js"></script>
 
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/jquery-1.3.1.min.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/AC_OETags.js"></script>
+	
+	<!--
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/jquery_plugins/jquery.dimensions.min.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/jquery_plugins/jquery.accordion.js"></script>
+	-->
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/jquery_plugins/jquery.corners.min.js"></script>
+	
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/jquery_plugins/date.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/jquery_plugins/jquery.datePicker.min-2.1.2.js"></script>
 
@@ -110,7 +116,7 @@ function getTopParentPageTitle($post){
 								
 								$page_id = $page['id'];
 								$parent_page_id = $page['parent_page_id'];
-								$title = $page['title'];								
+								$title = strtoupper($page['title']);		
 								$page_slug = $page['slug'];
 								$is_homepage = $page['is_homepage'];
 								$is_blogpage = $page['is_blogpage'];
@@ -200,4 +206,4 @@ function getTopParentPageTitle($post){
 
 				</td>
 				
-				<td height="100%" align="left" valign="top">
+				<td height="100%" align="left" valign="top" style='height:100%'>

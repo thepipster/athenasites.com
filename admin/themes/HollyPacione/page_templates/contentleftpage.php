@@ -29,7 +29,7 @@ if ($width < $height){
 
 	<div id="content" style="border:none; <?=$styleStr?>">
 						
-		<table border="0" cellpadding="0" cellspacing="0" id='contentTable' width="100%" height="100%" style="width:100%; height:100%; max-width: 1200px; background-image: url('<?=$background_image?>'); <?=$styleStr ?>">
+		<table border="0" cellpadding="0" cellspacing="0" id='contentTable' width="100%" height="100%" style="width:100%; height:100%; background-image: url('<?=$background_image?>'); <?=$styleStr ?>">
 			
 			<tr valign="top" height="100%" width="100%">
 			

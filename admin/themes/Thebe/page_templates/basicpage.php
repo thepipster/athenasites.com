@@ -1,6 +1,6 @@
 <?php
 /**
-* @Theme: HollyPacione
+* @Theme: Thebeh
 * @Template: Basic Page
 * @Description: Basic Page
 */			

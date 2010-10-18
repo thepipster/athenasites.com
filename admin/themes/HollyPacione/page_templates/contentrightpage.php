@@ -27,7 +27,7 @@ if ($width > $height){
 
 	<div id="content" style="border:none; <?=$styleStr?>">
 		
-		<table border="0" cellpadding="0" cellspacing="0" id='contentTable' width="100%" height="100%" style="width:100%; height:100%; max-width: 1200px; background-image: url('<?=$background_image?>')">
+		<table border="0" cellpadding="0" cellspacing="0" id='contentTable' width="100%" height="100%" style="width:100%; height:100%; background-image: url('<?=$background_image?>')">
 			
 			<tr valign="top" align='left' height="100%">
 
@@ -36,7 +36,7 @@ if ($width > $height){
 				</td>
 							
 				<td width="55%" height="100%" class='rightCol'>
-                                    <?php echo PageManager::getCurrentPageContent(); ?>
+                	<?php echo PageManager::getCurrentPageContent(); ?>
 				</td>
 				
 			</tr>

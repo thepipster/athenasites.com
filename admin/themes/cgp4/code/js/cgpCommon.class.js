@@ -12,10 +12,12 @@ var cgpCommon = {
 
 		// Setup menu		
 		$('#navigation').css('display', 'inline');
-		
+
 		$('#navigation').accordion({ 
 		    active: true, 
 		    header: '.menuHead', 
+//		    fillSpace: false,
+		    autoHeight: false,
 		    navigation: true,
 		   // event: 'mouseover'
 		});		

@@ -688,12 +688,12 @@ var DataStore = {
 
             var temp = new Object();
 
-            temp.id = gallery_images[i].id;
-            temp.image_id = gallery_images[i].image_id;
-            temp.slot_number = gallery_images[i].slot_number;
-            temp.gallery_number = gallery_images[i].gallery_number;
-            temp.theme_para_id = gallery_images[i].theme_para_id;
-            temp.page_id = gallery_images[i].page_id;
+            temp.id = parseInt(gallery_images[i].id);
+            temp.image_id = parseInt(gallery_images[i].image_id);
+            temp.slot_number = parseInt(gallery_images[i].slot_number);
+            temp.gallery_number = parseInt(gallery_images[i].gallery_number);
+            temp.theme_para_id = parseInt(gallery_images[i].theme_para_id);
+            temp.page_id = parseInt(gallery_images[i].page_id);
 
             DataStore.m_galleryImageList[i] = temp;
         }

@@ -108,11 +108,11 @@ a {
 	
 #menuRibbon {
 	position: absolute;
+	left: 0px;
 	bottom: 15px;
-	height:40px;
+	height:60px;
 	width: 100%;
 	z-index:2;
-	padding-top: 20px;
 	background-image: url("../common/imgs/white40.png"); 
 	background-repeat: repeat;
 	/* filter: alpha(opacity=60);-moz-opacity:.60;opacity:.20;*/	

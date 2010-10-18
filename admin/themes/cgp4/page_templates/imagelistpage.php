@@ -1,51 +1,33 @@
 <?php
 /**
- * @package WordPress
- * @subpackage CGP4 Theme
- */
-/*
-Template Name: Image List Page
+* @Theme: CGP4
+* @Template: Image List Page
+* @Description: A page the simply lists a bunch of images
 */
 
-// Get the current user info
-//get_currentuserinfo();
-$page_id = $wp_query->post->ID;
-
-error_log(">>> Page id = " . $page_id);
-
-$query = "SELECT * FROM apollo_GalleryTable WHERE page_post_id = $page_id ORDER BY slot_number ASC";
-$image_list = $wpdb->get_results($query, ARRAY_A);
+$gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id, PageManager::$page_id);
 
 ?>
 
-<?php get_header(); ?>
-
 <div class='pageContents'>
 
-	<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-										
-		<div class="storycontent">
-			<?php the_content(__('(more...)')); ?>
-		</div>
-		
-	<?php endwhile; endif; ?>
+	<?php echo PageManager::getCurrentPageContent(); ?>
 				
 	<p align="left">
 
+
 		<?php
-			foreach($image_list as $image){
+			foreach($gallery_image_list as $gal_mapping){
 			
-				$image_id = $image['image_post_id'];
-		
-				$post = get_post($image_id);
-				$meta = get_post_meta($image_id, '_wp_attachment_image_alt');
-		
-				$image_url = $post->guid;
-				$caption = $post->post_excerpt;
-				$title = $post->post_title;
-				$description = $post->post_content;										
-				$alt_text = $meta[0];
-								
+				$image_id = $gal_mapping['image_id'];
+				$image = FolderTable::getMedia(PageManager::$site_id, $image_id);
+				
+				$image_url = PageManager::$media_root_url . $image['filepath'] . $image['filename'];
+				$thumb_url = PageManager::$media_root_url . $image['filepath'] . $image['thumb_filename'];
+				$title =  $image['title'];
+				$description = $image['description'];										
+				$tags = $image['tags'];
+									
 				echo "<div id='noFlashImage'>";
 				echo "    <img src='$image_url' title='$title' alt='$alt_text' width='100%'/>";   
 				echo "    <span class='title'>$title</span>";
@@ -55,7 +37,7 @@ $image_list = $wpdb->get_results($query, ARRAY_A);
 				
 			}
 		?>
-	
+					
 	</p>
 
 	<br />							
@@ -66,4 +48,3 @@ $image_list = $wpdb->get_results($query, ARRAY_A);
 	</p>
 		
 </div>		
-<?php get_footer(); ?>

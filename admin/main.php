@@ -725,6 +725,11 @@ Logger::debug("$domain has site_id = $current_site_id");
                                             <div id="apollo_gallery_contents_wrapper">
                                                 <div align='left' id='apollo_gallery_contents'></div>
                                             </div>
+                                            
+                                            <div align="center">
+	                                            <div class='remove_image_box' id='delete_slot' align='center'>Drag images here to remove from this gallery</div>
+                                            </div>
+                                            
                                         </td>
 
                                         <!-- Gallery settings frame (for multi-gal)........... -->

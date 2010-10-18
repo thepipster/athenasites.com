@@ -1,80 +1,43 @@
 <?php
 /**
- * @package WordPress
- * @subpackage CGP4 Theme
- */
-/*
-Template Name: Text & Mini-Gallery Page
-*/
+* @Theme: CGP4
+* @Template: Text & Gallery Page
+* @Description: Text & Gallery Page
+*/	
 
-$page_id = $wp_query->post->ID;
+$xml_url = "http://" . $_SERVER['HTTP_HOST'] ."/admin/code/php/getUserGalleryXML.php?p=".PageManager::$site_id.",".PageManager::$page_id."&cache=" . mt_rand();
+$gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id, PageManager::$page_id);
 
-error_log(">>> Page id = " . $page_id);
-
-/*
-$data = $wpdb->get_row( "SELECT * FROM apollo_PageParas WHERE page_post_id = $page_id", ARRAY_A);
-
-error_log(print_r($data,true));
-			
-$background_image = '';
-
-if (isset($data['para_value'])){
-	$temp_post = get_post($data['para_value']);
-	$background_image = $temp_post->guid;				
-}
-*/
-
-$query = "SELECT * FROM apollo_GalleryTable WHERE page_post_id = $page_id ORDER BY slot_number ASC";
-$image_list = $wpdb->get_results($query, ARRAY_A);
-
-
-get_header();
 ?>
 
 <!-- INFO PAGE /////////////////////////// -->
 
 <div class='pageContents'>
 
-	<table width="100%" height="100%" border="0">
+	<table border='0' width="100%" height="100%" border="0">
 		<tr>
 			<td width="50%" valign="top">
 				<div class='infoPageText'>
-					<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-														
-						<div class="storycontent">
-							<?php the_content(__('(more...)')); ?>
-						</div>
-						
-					<?php endwhile; endif; ?>	
+					<?php echo PageManager::getCurrentPageContent(); ?>
 				</div>
 			</td>
 			<td valign="top" height="100%">
 				<div id='miniGallery' style='width:95%; height:100%;'>
 			
 					<?php
-						foreach($image_list as $image){
+						foreach($gallery_image_list as $gal_mapping){
 						
-							$image_id = $image['image_post_id'];
-					
-							$post = get_post($image_id);
-							$meta = get_post_meta($image_id, '_wp_attachment_image_alt');
-					
-							$image_url = $post->guid;
-							$caption = $post->post_excerpt;
-							$title = $post->post_title;
-							$description = $post->post_content;										
-							$alt_text = $meta[0];
+							$image_id = $gal_mapping['image_id'];
+							$image = FolderTable::getMedia(PageManager::$site_id, $image_id);
 							
-							/*
-							$meta = wp_get_attachment_metadata($post_id);
-							$meta->sizes->medium->file;
-							$meta->sizes->medium->width;
-							$meta->sizes->medium->height;
-							$thumb_url = 					
-							*/
-							
+							$image_url = PageManager::$media_root_url . $image['filepath'] . $image['filename'];
+							$thumb_url = PageManager::$media_root_url . $image['filepath'] . $image['thumb_filename'];
+							$title =  $image['title'];
+							$description = $image['description'];										
+							$tags = $image['tags'];
+												
 							echo "<div id='noFlashImage'>";
-							echo "    <img src='$image_url' title='$title' alt='$alt_text' width='95%'/>";   
+							echo "    <img src='$image_url' title='$title' alt='$alt_text' width='100%'/>";   
 							echo "    <span class='title'>$title</span>";
 							echo "    <span class='caption'>$caption</span>"; 
 							echo "</div>";
@@ -119,12 +82,10 @@ if (hasFlash){
 	txt += "	<param name='bgcolor' value='#ffffff' />"; 
 	txt += "	<param name='salign' value='t' />";
 	txt += "	<param name='FlashVars' value='xmlFile=<?= PageManager::$theme_url_root; ?>/code/php/getUserGalleryXML.php?pageid=<?=$page_id ?>' /> ";
-	txt += "	<embed FlashVars='xmlFile=<?= PageManager::$theme_url_root; ?>/code/php/getUserGalleryXML.php?pageid=<?=$page_id ?>' src='<?= PageManager::$theme_url_root; ?>/code/flash/infoGal.swf' quality='high' bgcolor='#ffffff' wmode='transparent' width='100%' height='100%' name='infoGalFlashObj' align='top' salign='t' allowScriptAccess='sameDomain' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' />";
+	txt += "	<embed FlashVars='xmlFile=<?= $xml_url ?>' src='<?= PageManager::$theme_url_root; ?>/code/flash/infoGal.swf' quality='high' bgcolor='#ffffff' wmode='transparent' width='100%' height='100%' name='infoGalFlashObj' align='top' salign='t' allowScriptAccess='sameDomain' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' />";
 	txt += "</object>";
 	
 	document.getElementById('miniGallery').innerHTML = txt;
 }	
 
 </script>						
-							
-<?php get_footer(); ?>

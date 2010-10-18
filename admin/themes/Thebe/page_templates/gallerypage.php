@@ -1,6 +1,6 @@
 <?php
 /**
-* @Theme: HollyPacione
+* @Theme: Thebe
 * @Template: Gallery Page
 * @Description: Gallery Page
 */

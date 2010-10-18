@@ -1,43 +1,25 @@
 <?php
 /**
- * @package WordPress
- * @subpackage CGP4 Theme
- */
-/*
-Template Name: Text & Image Page
-*/
+* @Theme: CGP4
+* @Template: Text & Image Page
+* @Description: Text & Image Page
+*/	
 
-$page_id = $wp_query->post->ID;
+$image = PageManager::getMediaFromThemePara(304); 
 
-error_log(">>> Page id = " . $page_id);
-
-
-$data = $wpdb->get_row( "SELECT * FROM apollo_PageParas WHERE page_post_id = $page_id", ARRAY_A);
-			
-$image_url = '';
-$image_title = '';
-$image_alt = '';
-$image_caption = '';
-$image_description = '';
-
-if (isset($data['para_value'])){
-
-	$post = get_post($data['para_value']);
-	$meta = get_post_meta($data['para_value'], '_wp_attachment_image_alt');
-	
-	$image_url = $post->guid;				
-	$image_title = $post->post_title;				
-	$image_description = $post->post_content;										
-	$image_caption = $post->post_excerpt;										
-	$image_alt = $meta[0];				
+if (!isset($image) || $image == ""){
+	$image_url = PageManager::$common_url_root . 'imgs/blank.png';
+	$image_title = "";
+	$image_alt = "";
+}
+else {
+	$image_url = PageManager::$media_root_url . $image['filepath'] . $image['filename'];
+	//$thumb_url = PageManager::$media_root_url . $image['filepath'] . $image['thumb_filename'];
+	$image_title =  $image['title'];
+	//$description = $image['description'];										
+	$image_alt = $image['tags'];
 }
 
-
-$query = "SELECT * FROM apollo_GalleryTable WHERE page_post_id = $page_id ORDER BY slot_number ASC";
-$image_list = $wpdb->get_results($query, ARRAY_A);
-
-
-get_header();
 ?>
 
 <!-- INFO PAGE /////////////////////////// -->
@@ -48,13 +30,7 @@ get_header();
 		<tr>
 			<td width="50%" valign="top">
 				<div class='infoPageText'>
-					<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-														
-						<div class="storycontent">
-							<?php the_content(__('(more...)')); ?>
-						</div>
-						
-					<?php endwhile; endif; ?>	
+					<?php echo PageManager::getCurrentPageContent(); ?>
 				</div>
 			</td>
 			<td valign="top">
@@ -64,6 +40,3 @@ get_header();
 	</table>
 
 </div><!-- infoPage -->
-
-							
-<?php get_footer(); ?>

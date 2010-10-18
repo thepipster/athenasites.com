@@ -156,8 +156,11 @@ var GalleriesFrame = {
 		if (!DataStore.isGalleryPage(DataStore.m_currentPageID)){
 			$('#apollo_gallery_contents').html("<p>No gallery selected. Select a gallery from the page list to the left</p>");
 	        $('#galleryTitle').html("Gallery Contents");
+	        $('#delete_slot').hide();
 			return;
 		}
+
+        $('#delete_slot').show();
 		
         $('.gallery_slot').droppable('destroy');
         $(".gallery_thumb").draggable('destroy');
@@ -167,12 +170,13 @@ var GalleriesFrame = {
 
         var noSlots = 23;
         for (var i=0; i<DataStore.m_galleryImageList.length; i++){
-            if (DataStore.m_galleryImageList[i].theme_para_id == GalleriesFrame.m_themeParaID &&
-                DataStore.m_galleryImageList[i].slot_number > noSlots){
-                noSlots = DataStore.m_galleryImageList[i].slot_number;
+        	var slot = parseInt(DataStore.m_galleryImageList[i].slot_number);
+            if (DataStore.m_galleryImageList[i].theme_para_id == GalleriesFrame.m_themeParaID &&  slot > noSlots){
+                noSlots = slot;
             }
         }
-        noSlots++;
+
+        noSlots = noSlots + 2;
 		
         for (var i=0; i<noSlots; i++){
             //txt += "<div class='gallery_slot' id='slot_"+i+"' align='center'><table><tr valigin='center'><td>";
@@ -182,12 +186,12 @@ var GalleriesFrame = {
             txt += "    <div class='gallery_slot_text' align='center'>"+(i+1)+"</div>";
             txt += "</div>";
         }
-
+/*
         // Add special delete slot
         txt += "<div class='gallery_slot' id='delete_slot' align='center'>";
         txt += "    <div class='delete_slot_text' align='center'>remove</div>";        
         txt += "</div>";
-					
+*/					
         $('#apollo_gallery_contents').html(txt);
         
         // Update the gallery title
@@ -204,7 +208,7 @@ var GalleriesFrame = {
                 var image = DataStore.getImage(img_id);
                 var url = image.thumb_url;
                 var slot_no = DataStore.m_galleryImageList[i].slot_number;
-												
+
                 $("#slot_"+slot_no).html("<img class='gallery_slot_image gallery_thumb' slot='"+slot_no+"' id='galimg_"+img_id+"' src='"+url+"'/>");
 		//$(".gallery_thumb").draggable({	revert: false, zIndex: 300 });
             }
@@ -227,7 +231,18 @@ var GalleriesFrame = {
                 $(this).removeClass( 'gallery_slot_hover' );
             }
         });
-
+	
+		// Make the 'drop here to remove from gallery' box droppable
+        $('#delete_slot').droppable({
+            drop: GalleriesFrame.onRemoveImage,
+            over: function(ev, ui) {
+                $(this).addClass( 'gallery_slot_hover' );
+            },
+            out: function(ev, ui) {
+                $(this).removeClass( 'gallery_slot_hover' );
+            }
+        });
+		
 				
     },
     
@@ -301,7 +316,26 @@ var GalleriesFrame = {
     },
         
     // ////////////////////////////////////////////////////////////////////////////
-		
+
+    /**
+	* Handle an image being dropped on the remove box
+	*/	
+    onRemoveImage : function(event, ui){
+
+        img_id = parseInt($(ui.draggable).attr('id').substring(7));
+        prev_slot_id = $(ui.draggable).attr('slot');        
+        //slot_id = parseInt($(this).attr('id').substring(5));
+        GalleryAPI.onRemoveImage(DataStore.m_siteID,
+					            DataStore.m_currentPageID,
+					            img_id,
+					            DataStore.m_currentGalleryNo,
+					            prev_slot_id,
+					            GalleriesFrame.m_themeParaID,
+					            GalleriesFrame.onImageRemoved);
+    },
+        
+    // ////////////////////////////////////////////////////////////////////////////
+				
     /**
 	* Handle an image being dropped on the gallery, or moved withing the gallery
 	*/	
@@ -317,53 +351,37 @@ var GalleriesFrame = {
 				        
         if ($(ui.draggable).attr('id').substring(0,3) == 'gal'){
 
-            if ($(this).attr('id') == 'delete_slot'){
-                img_id = parseInt($(ui.draggable).attr('id').substring(7));
-                prev_slot_id = $(ui.draggable).attr('slot');
-                //slot_id = parseInt($(this).attr('id').substring(5));
-                GalleryAPI.onRemoveImage(	DataStore.m_siteID,
-                    DataStore.m_currentPageID,
-                    img_id,
-                    DataStore.m_currentGalleryNo,
-                    prev_slot_id,
-                    GalleriesFrame.m_themeParaID,
-                    GalleriesFrame.onImageRemoved);
-            }
-            else {
-                // This is an existing image being moved!
-                img_id = parseInt($(ui.draggable).attr('id').substring(7));
-                slot_id = parseInt($(this).attr('id').substring(5));
-                url = $('#galimg_'+img_id).attr('src');
-                prev_slot_id = $(ui.draggable).attr('slot');
-				
-                GalleryAPI.onMoveImage( DataStore.m_siteID,
-                    DataStore.m_currentPageID,
-                    img_id,
-                    prev_slot_id,
-                    slot_id,
-                    DataStore.m_currentGalleryNo,
-                    DataStore.m_currentGalleryNo,
-                    GalleriesFrame.m_themeParaID,
-                    GalleriesFrame.onImageMoved);
-            }
+            // This is an existing image being moved!
+            img_id = parseInt($(ui.draggable).attr('id').substring(7));
+            slot_id = parseInt($(this).attr('id').substring(5));
+            url = $('#galimg_'+img_id).attr('src');
+            prev_slot_id = $(ui.draggable).attr('slot');
+			
+            GalleryAPI.onMoveImage( DataStore.m_siteID,
+                DataStore.m_currentPageID,
+                img_id,
+                prev_slot_id,
+                slot_id,
+                DataStore.m_currentGalleryNo,
+                DataStore.m_currentGalleryNo,
+                GalleriesFrame.m_themeParaID,
+                GalleriesFrame.onImageMoved);
         }
         else {
 
-            if ($(this).attr('id') != 'delete_slot'){
-                // This is a new image being added
-                image_moved = false;
-                img_id = parseInt($(ui.draggable).attr('id').substring(4));
-                slot_id = parseInt($(this).attr('id').substring(5));
-                url = $('#img_'+img_id).attr('src');
-				
-                GalleryAPI.onAddImage(	DataStore.m_siteID,
-                    DataStore.m_currentPageID,
-                    img_id,
-                    slot_id,
-                    DataStore.m_currentGalleryNo,
-                    GalleriesFrame.m_themeParaID,
-                    GalleriesFrame.onImageAdded);
-            }
+            // This is a new image being added
+            image_moved = false;
+            img_id = parseInt($(ui.draggable).attr('id').substring(4));
+            slot_id = parseInt($(this).attr('id').substring(5));
+            url = $('#img_'+img_id).attr('src');
+			
+            GalleryAPI.onAddImage(	DataStore.m_siteID,
+                DataStore.m_currentPageID,
+                img_id,
+                slot_id,
+                DataStore.m_currentGalleryNo,
+                GalleriesFrame.m_themeParaID,
+                GalleriesFrame.onImageAdded);
 			
         }
 

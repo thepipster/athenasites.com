@@ -89,12 +89,16 @@ foreach($user_list as $user){
     Logger::dump($user);
 
     $target_email = $user['email'];
+    $target_email = 'mikep76@gmail.com';
+    
     Logger::debug("Target email: $target_email");
 
     //Logger::debug("mail($target_email, $subject, $message, $headers)");
 
     if (mail($target_email, $subject, $message, $headers)) {
         Logger::debug("Email sent OK!");
+        // Log the request with the CRM!
+        ContactRequestTable::create($site_id, $client_email, $name, $phone, $location, $datetime, $comments);      
         echo "TRUE";
     } else {
         Logger::error("Error sending email");

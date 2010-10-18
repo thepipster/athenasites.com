@@ -1,24 +1,11 @@
 <?php
 /**
- * @package WordPress
- * @subpackage CGP4 Theme
- */
-/*
-Template Name: Gallery Page
+* @Theme: CGP4
+* @Template: Products Page
+* @Description: Products Page
 */
 
-// Get the current user info
-//get_currentuserinfo();
-$page_id = $wp_query->post->ID;
-
-error_log(">>> Page id = " . $page_id);
-
-$query = "SELECT * FROM apollo_GalleryTable WHERE page_post_id = $page_id ORDER BY slot_number ASC";
-$image_list = $wpdb->get_results($query, ARRAY_A);
-
 ?>
-
-<?php get_header(); ?>
 				
 	<div id='productsPage' class='pageContents'>
 	
@@ -208,5 +195,3 @@ $(document).ready(cgpProduct.init);
 $(window).resize(cgpProduct.onResize);
 
 </script>
-
-<?php get_footer(); ?>

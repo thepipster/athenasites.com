@@ -15,6 +15,7 @@ $server_list = array(
 $NO_SITES = 7;
 
 // FOR DEBUGGING, CLEAR TABLES!!!
+/*
 DatabaseManager::submitQuery("TRUNCATE stats_RollupServer");
 
 // Create/clear rollup tables
@@ -25,7 +26,7 @@ for ($i = 1; $i <= $NO_SITES; $i++) {
     DatabaseManager::submitQuery("DROP TABLE IF EXISTS stats_{$i}_RollupPageViews");
     StatsRollupTables::createTableForSite($i);
 }
-
+*/
 // Set the deafault time zone
 date_default_timezone_set('UTC');
 

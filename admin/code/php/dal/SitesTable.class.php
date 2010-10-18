@@ -11,11 +11,18 @@ class SitesTable {
     /**
      * Create a new site
      */
-	public static function create($domain, $path, $theme_id){	
-		$sql = DatabaseManager::prepare("INSERT INTO apollo_Sites (domain, path, theme_id) VALUES (%s, %s, %d)", $domain, $path, $theme_id);			
+	public static function create($site_id, $domain, $path, $theme_id){	
+		$sql = DatabaseManager::prepare("INSERT INTO apollo_Sites (id, domain, path, theme_id) VALUES (%d, %s, %s, %d)", $site_id, $domain, $path, $theme_id);			
 		return DatabaseManager::insert($sql);
     }
 
+	// ///////////////////////////////////////////////////////////////////////////////////////
+	
+	public static function getNextSiteID(){
+		$sql = DatabaseManager::prepare("SELECT max(id) FROM apollo_Sites WHERE domain = %s", $domain);			
+		return DatabaseManager::getVar($sql) + 1;				
+	}
+	
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
     /**

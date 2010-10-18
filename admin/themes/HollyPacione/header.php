@@ -23,9 +23,6 @@ PageManager::doHeader();
 	
 	<!-- JS Includes ///////////////////////////////////////////////////// -->
 
-	<?php
-		ProductionBuilder
-	?>
 	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/jquery-1.4.2.min.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/AC_OETags.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/jquery.validate.min.js"></script>
@@ -33,6 +30,8 @@ PageManager::doHeader();
 	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/jquery.datePicker.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/date.format.js"></script>
 
+	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/apolloContactRequest.class.js"></script>
+	
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/hpBlog.class.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/hollyGallery.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/hollyInfoPage.js"></script>
