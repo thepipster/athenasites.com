@@ -89,7 +89,6 @@ foreach($user_list as $user){
     Logger::dump($user);
 
     $target_email = $user['email'];
-    $target_email = 'mikep76@gmail.com';
     
     Logger::debug("Target email: $target_email");
 

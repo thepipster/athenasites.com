@@ -180,6 +180,8 @@ var ssMain = {
 	*/
 	savePageContent : function(){
 
+		return;
+		
         switch(ssMain.view){
 
             case ssMain.VIEW_PAGES : PagesFrame.onChange();break;
@@ -265,7 +267,43 @@ var ssMain = {
             groups: groupsObj
         });
 
+ 		setInterval(ssMain.setEditorChangeListener, 750);
+
     },
+	
+	m_contentChangedTO : '',
+	m_prevContent : '',
+	
+	/**
+	* Called whenever is key is pressed in the content editor. We want to wait until the user has stopped
+	* typing before we submit changes
+	*/
+	setEditorChangeListener : function(){
+				
+		// Get content
+		var content = oUtil.obj.getXHTMLBody();
+		if (ssMain.m_prevContent == '') ssMain.m_prevContent = content;
+				
+		if (content != ssMain.m_prevContent){
+			
+	        switch(ssMain.view){
+    	        case ssMain.VIEW_PAGES : PagesFrame.onChange();break;
+	            case ssMain.VIEW_POSTS : PostsFrame.onChange();break;
+			}		
+			
+	/*	
+			if (ssMain.m_contentChangedTO != ''){
+				// Still typing, so clear timeout and reset
+				clearTimeout(ssMain.m_contentChangedTO);
+			}
+			
+			ssMain.m_contentChangedTO = setTimeout(ssMain.onEditorContentChanged, 500);
+	*/
+		}		
+
+		ssMain.m_prevContent = content;
+		
+	},	
 
     // ////////////////////////////////////////////////////////////////////////
 

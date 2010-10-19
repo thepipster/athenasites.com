@@ -172,8 +172,8 @@ class CommentsTable {
         WHERE c.site_follower_id = f.id
         AND status != 'Pending'
         AND c.created > '%s' AND c.created <= '%s'
-        ORDER BY created DESC";
-
+        ORDER BY created DESC LIMIT 100";
+				
         $sql = DatabaseManager::prepare($sql, $site_id, $site_id, $date_before, $date_end);
         return DatabaseManager::getResults($sql);
     }

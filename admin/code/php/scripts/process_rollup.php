@@ -43,7 +43,7 @@ if (!isset($last_date)) {
     $no_days = floor(TimeUtils::getElapsedDays($last_date));
 }
 
-Logger::debug("Last Date: $last_date ($last_datetime), which was $no_days days ago");
+Logger::debug("Last Date: $last_date, which was $no_days days ago");
 
 // Get a list of all the sites
 $site_list = SitesTable::getSites();

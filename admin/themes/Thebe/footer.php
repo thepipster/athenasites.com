@@ -7,81 +7,90 @@
 
 <!-- begin footer -->
 		
+		
+			
+	<div id='menuRibbonWrapper'></div>
 	<div id='menuRibbon'>
 	
-		<img class='logo' src='' />
-		
-		<?php 
-									
-			$url = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-			$parts = parse_url($url);
-			$current_page_slug = strtolower(basename($parts['path']));
-																		
-			foreach (PageManager::$page_list as $page){
-			
-				if ($page['parent_page_id'] == 0 && $page['status'] == 'Published'){
-						
-					$id = $page['id'];
-					$parent_page_id = $page['parent_page_id'];
-					$title = strtoupper($page['title']);	
-					$page_slug = $page['slug'];
-					$link = PageManager::getPageLink($id);					
+		<table border="0" width="100%" height="100%" style='width:100%; height:100%'>
+			<tr valign="center">
+			<td align="left" width="150px" style='width:150px'><img class='logo' src='' /></td>
+			<td align="left">
+				<?php 
+											
+					$url = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+					$parts = parse_url($url);
+					$current_page_slug = strtolower(basename($parts['path']));
+																				
+					foreach (PageManager::$page_list as $page){
 					
-					$is_page = false;
-					if (($page['slug'] == $current_page_slug) || ($current_page_slug == '' && $page['is_homepage'])) {
-						$is_page = true;
-					}
+						if ($page['parent_page_id'] == 0 && $page['status'] == 'Published'){
 								
-					if ($page['template'] == 'basicpage.php'){
-					
-						$image = PageManager::getMediaURLFromThemePara(704); 
-
-						if (!isset($image) || $image == ""){
-							$image = PageManager::$common_url_root . 'imgs/blank.png';
-						}
-									
-						if ($is_page){
-							echo "<a class='glowlink' href='$link' onClick='thebeMain.doPopup($id); return false;'><span id='page_$id' class='menuItem menuItemSelected'>$title</span></a>";
-						}
-						else {
-							echo "<a class='glowlink' href='$link' onClick='thebeMain.doPopup($id); return false;'><span id='page_$id'  class='menuItem'>$title</span></a>";
-						}
-												
-					}
-					else {
-						if ($is_page){
-							echo "<a class='glowlink' href='$link'><span id='page_$id'  class='menuItem menuItemSelected'>$title</span></a>";
-						}
-						else {
-							echo "<a class='glowlink' href='$link'><span id='page_$id'  class='menuItem'>$title</span></a>";
-						}
-					}
-												
-				}	
-			}			
-		?>
-	
-		<div class='controls_padding'></div>
-		<a class='control' onClick='thebeMain.onNextImage();'>></a>
-		<a class='control' id='togglePlay' onClick='thebeMain.onTogglePlay();'>pause</a>
-		<a class='control' onClick='thebeMain.onPrevImage();'><</a>
-	
-	</div><!-- menuRibbon -->				
+							$id = $page['id'];
+							$parent_page_id = $page['parent_page_id'];
+							$title = strtoupper($page['title']);	
+							$page_slug = $page['slug'];
+							$link = PageManager::getPageLink($id);					
+							
+							$is_page = false;
+							if (($page['slug'] == $current_page_slug) || ($current_page_slug == '' && $page['is_homepage'])) {
+								$is_page = true;
+							}
+										
+							if ($page['template'] == 'basicpage.php'){
+							
+								$image = PageManager::getMediaURLFromThemePara(704); 
 		
+								if (!isset($image) || $image == ""){
+									$image = PageManager::$common_url_root . 'imgs/blank.png';
+								}
+											
+								if ($is_page){
+									echo "<a class='glowlink' href='$link' onClick='thebeMain.doPopup($id); return false;'><span id='page_$id' class='menuItem menuItemSelected'>$title</span></a>";
+								}
+								else {
+									echo "<a class='glowlink' href='$link' onClick='thebeMain.doPopup($id); return false;'><span id='page_$id' class='menuItem'>$title</span></a>";
+								}
+														
+							}
+							else {
+								if ($is_page){
+									echo "<a class='glowlink' href='$link'><span id='page_$id' class='menuItem menuItemSelected'>$title</span></a>";
+								}
+								else {
+									echo "<a class='glowlink' href='$link'><span id='page_$id' class='menuItem'>$title</span></a>";
+								}
+							}
+														
+						}	
+					}			
+				?>
+			</td>
+			<td align="left" width="130px" style='width:130px'>
+				<a class='control' onClick='thebeMain.onPrevImage();'><</a>			
+				<a class='control' id='togglePlay' onClick='thebeMain.onTogglePlay();'>pause</a>
+				<a class='control' onClick='thebeMain.onNextImage();'>></a>
+			</td>
+			</tr>
+		</table>
+		
+			
+	</div>				
+	
 <!-- Javascript code /////////////////////////////////////////////////////////////// -->
 
 <script type="text/javascript">
-	
+	/*
 $('.glowlink').addGlow({
     radius: 20,
     textColor: '#fff',
     haloColor: '#eec',
     duration: 200
 });
-	
+	*/
 siteID = <?= PageManager::$site_id ?>;
 pageID = <?= PageManager::$page_id ?>;
-	
+		
 var thebeMain = {
 	
 	onNextImage : function(){
@@ -130,13 +139,14 @@ var thebeMain = {
 				
 		//$('.menuItemSelected').removeClass('glowlink');
 		
+		/*
 		$('.glowlink').addGlow({
 		    radius: 20,
 		    textColor: '#fff',
 		    haloColor: '#eec',
 		    duration: 200
 		});
-			
+		*/	
 		
 	},
 	
@@ -159,7 +169,7 @@ var thebeMain = {
 			txt += "    </div>";
 			
 			$('#popupPage').html(txt);
-			$('.popupContent').jScrollPane();
+			//$('.popupContent').jScrollPane();
 		}		
 		
 	}

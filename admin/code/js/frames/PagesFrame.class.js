@@ -25,11 +25,9 @@ var PagesFrame = {
 		//oUtil.obj.change(PagesFrame.onChange);		
 		$('.apolloDataInput').change(PagesFrame.onChange);
 				
-		oUtil.obj.onKeyPress = PagesFrame.onContentKeyPress;
-		
+		//oUtil.obj.onKeyPress = PagesFrame.onContentKeyPress;
         var pageObj = DataStore.getCurrentPage();
-        PagesFrame.repaintData(pageObj);
-								
+        PagesFrame.repaintData(pageObj);								
     },
 
     // ////////////////////////////////////////////////////////////////////////////

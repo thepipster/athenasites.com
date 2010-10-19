@@ -86,8 +86,8 @@ Logger::debug("$domain has site_id = $current_site_id");
         <!--
         <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/smoothness/jquery-ui.css" type="text/css"/>
         <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/redmond/jquery-ui.css" type="text/css"/>
-        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/overcast/jquery-ui.css" type="text/css"/>
         <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/cupertino/jquery-ui.css" type="text/css"/>
+        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/overcast/jquery-ui.css" type="text/css"/>
         -->
         <link rel="stylesheet" href="code/js/3rdparty/jquery-ui/overcast/jquery-ui-1.8.4.custom.css" type="text/css"/>
 
@@ -142,8 +142,8 @@ Logger::debug("$domain has site_id = $current_site_id");
         <script type="text/javascript" src="code/js/3rdparty/jquery.datePicker.js"></script>
         <script type="text/javascript" src="code/js/3rdparty/jquery.advancedClick.js"></script>
 
-<!--
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
+<!--
         <script type="text/javascript" src="code/js/3rdparty/swfobject.js"></script>
 -->
         <script type="text/javascript" src="code/js/3rdparty/SWFUpload/swfupload.js"></script>

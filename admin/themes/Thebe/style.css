@@ -7,10 +7,12 @@ html, body {
 	width:100%;
 	margin: 0;
 	padding: 0;
+	/*
 	-moz-user-select: none;
     -khtml-user-select: none;
     user-select: none;	
-    background-color: gray;
+    */
+    background-color: white;
 }
 
 #content {
@@ -18,6 +20,7 @@ html, body {
 	height: 100%;
 	padding: 0;
 	margin: 0;
+	z-index: 1;
 }
 
 h1 {
@@ -45,8 +48,38 @@ a {
 
 /* Popup Pages //////////////////////////////////// */
 
-#popupPage {
+.rounded-corners {
+	-moz-border-radius: 20px;
+	-webkit-border-radius: 20px;
+	-khtml-border-radius: 20px;
+	border-radius: 20px;
+/*  behavior: url("/admin/themes/common/htc/border-radius.htc"); */
+	behavior: url(border-radius.htc);
+}
 
+#popupPageWrapper {
+
+	/* filter: alpha(opacity=90);-moz-opacity:.90;opacity:.90; */
+	background-color: white;
+		
+	position: absolute;
+	width: 50%;
+	height: 70%;
+	top: 10%;
+	left: 25%;
+	
+	padding: 10px;
+	z-index: 999;
+	
+	-moz-border-radius: 15px;
+	-webkit-border-radius: 15px;
+	border-radius: 15px;
+	behavior: url(border-radius.htc);
+	
+}
+
+#popupPage {
+/*
 	-moz-border-radius: 20px;
 	-webkit-border-radius: 20px;
 	-khtml-border-radius: 20px;
@@ -54,22 +87,26 @@ a {
 
 	background-image: url("../common/imgs/white90.png"); 
 	background-repeat: repeat;
-	
-	position: absolute;
-	
+
+*/
+	background-color: transparent;		
+	position: absolute;	
 	width: 50%;
 	height: 70%;
 	top: 10%;
-	left: 25%;
-	
+	left: 25%;	
 	padding: 10px;
+	z-index: 999;
+	padding: 0;
+	margin: 0;
 }
 
 #popupPage .popupContent {
 	width: 100%;
 	height: 100%;
-	overflow-x: auto;
-	overflow-y: hidden;	
+	overflow: auto;
+	padding: 0;
+	margin: 0;
 }
 
 #popupPage .popupContent h2 {
@@ -95,6 +132,7 @@ a {
 	margin: 0;
 	width: 90%;
 	height: 100%;
+	display: block;
 }
 /*
 #popupPage .popupInlineImage {
@@ -104,18 +142,148 @@ a {
 	margin-top: 5px;
 }
 */
+
+/* Blog Styles //////////////////////////////////// */
+
+#blogPage {
+	width: 100%;
+	margin-bottom: 80px;
+}
+
+#blogPage a {
+	text-decoration: none;
+}
+
+#blogPage .postWrapper {
+	width: 80%;
+	max-width: 900px;
+	background-color: white;
+	margin-top: 10px;
+	padding: 20px;
+	background-color: white;
+}
+
+
+#blogPage .dateWrapper {
+	width:50px;
+	border-left: solid;
+	border-right: solid;
+	border-width: 1px;
+	text-align: center;
+	display: inline-block;
+}
+
+#blogPage .day {
+	font-size: 18px !important;
+	letter-spacing:2px;
+	display: block;
+}
+
+#blogPage .month {
+	font-size: 14px !important;
+	letter-spacing:2px;
+	display: block;
+}
+
+#blogPage .year {
+	font-size: 12px !important;
+	letter-spacing:2px;
+	display: block;
+}
+
+#blogPage .postTitle {
+/*
+	display: inline-block;
+	margin-left: 20px;
+
+	position: relative;
+	left: 70px;
+	top: -28px;
+	*/
+	width: auto;
+	border-bottom:solid;
+	border-width:1px;
+	letter-spacing: 2;
+	font-size: 18px;
+}
+
+#blogPage .postContent{
+	margin-top: 20px;
+}
+
+#blogPage .morePostsLink {
+	font-size: 14px;
+}
+
+#blogPage .blogArchive {
+	height: 100px;
+}
+
+
+#blogPage img {
+	margin-top:10px;
+	margin-bottom:10px;
+}
+
+#blogPage p {
+	font-size: 12px !important;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+#blogPage h1 {
+	font-size: 18px !important;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+#blogPage h2 {
+	font-size: 16px !important;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+#blogPage h3 {
+	font-size: 14px !important;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
 /* Menu Ribbon //////////////////////////////////// */
-	
-#menuRibbon {
-	position: absolute;
+
+#menuRibbonWrapper {
+	position: fixed;
 	left: 0px;
 	bottom: 15px;
 	height:60px;
 	width: 100%;
+	padding: 0;
+	margin: 0;
 	z-index:2;
-	background-image: url("../common/imgs/white40.png"); 
+
+	background-color: #adadad;
+	filter: alpha(opacity=60);-moz-opacity:.60;opacity:.60;
+
+	border-style: solid;
+	border-color: #7c7c7c;
+	border-width: 0px;
+	border-bottom-width: 2px;
+	border-top-width: 2px;
+}
+
+#menuRibbon {
+	position: fixed;
+	left: 0px;
+	bottom: 15px;
+	height:60px;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	z-index:2;
+	/*
+	background-image: url("../common/imgs/back40.png"); 
 	background-repeat: repeat;
-	/* filter: alpha(opacity=60);-moz-opacity:.60;opacity:.20;*/	
+	*/
 }
 
 #menuRibbon .logo {
@@ -133,16 +301,21 @@ a {
 	color: black;
 }
 
-#menuRibbon .menuItem:hover { color:white}
+#menuRibbon .menuItem:hover { color:white }
 
 #menuRibbon .menuItemSelected { color: white; }
 
 #menuRibbon .control {
 	font-size:14px;
-	float: right;
 	cursor: pointer;
 	width: 40px;
 	text-align: center;
+	display: inline-block;
+}
+
+#menuRibbon .controls {
+	float: right;
+	background-color:green;
 }
 
 #menuRibbon .controls_padding {

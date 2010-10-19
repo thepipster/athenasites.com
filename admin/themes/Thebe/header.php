@@ -17,7 +17,10 @@ PageManager::doHeader();
 	<link rel="icon" type="image/png" href="<?= PageManager::getFavIconURL() ?>">
 	
 	<!-- Style sheets ///////////////////////////////////////////////////// -->
-
+<!--
+	<link rel="stylesheet" href="<?= PageManager::$common_url_root; ?>reset-min.css" type="text/css" media="screen" />
+-->
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.1/build/reset/reset-min.css">
 	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>style.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>datePicker.css" type="text/css" id="" media="print, projection, screen" />
 	

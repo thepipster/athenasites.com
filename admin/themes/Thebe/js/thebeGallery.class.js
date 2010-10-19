@@ -85,7 +85,8 @@ var thebeGallery = {
 		
 		var params = {
 		  menu: "false",
-		  wmode: 'transparent'
+		  wmode: 'transparent',
+		  bgcolor: '#ccc'
 
 		};
 		var attributes = {

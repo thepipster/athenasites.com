@@ -13,9 +13,6 @@ class ImportHelper {
         // Convert put date to php date
         $date_str = date('Y-m-d H:i:s', strtotime($created_date));
 
-        // Convert content based on source
-        //$content = self::convertContent($content, $import_source);
-
         if ($title == "") {
             $slug = "post";
         } else {
@@ -70,6 +67,11 @@ class ImportHelper {
                 PostsTable::addCategoryToPost($site_id, $post_id, $safecat);
             }
         }
+                
+        // Pre-process the post to ready it for rendering...
+	    $post = PostsTable::getPost($site_id, $post_id);
+		ImportHelper::processPostContent($site_id, $post);
+        
 
         return $post_id;
     }
@@ -153,11 +155,14 @@ class ImportHelper {
         // Add follower to site
         SiteFollowersTable::addFollowerToSite($follower_id, $site_id);
 
+		Logger::debug(">>> Approved = $approved");
+		
         // Create the comment
-        $status = 'Pending';
-        if ($approved == 1) {
-            $status = 'Approved';
-        }
+        //$status = 'Pending';
+        //if ($approved == 1) {
+        //    $status = 'Approved';
+        //}
+        $status = $approved;
 
         // Check to see if this comment already exists, if so then we over-write it
         //$comment_id = CommentsTable::getCommentIDFromDateAndFollower($site_id, $date_str, $follower_id);
@@ -180,6 +185,48 @@ class ImportHelper {
         
         return $comment_id;
     }
+
+    // /////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* This processes a post for faster rendering by extracting an excerpt
+	*/
+	public static function processPostContent($site_id, $post){
+
+	    $content = $post['content'];
+	            
+	    // Do a one time conversion, if required
+	    if ($post['source'] != 'apollo'){
+	        $content = ImportHelper::convertContent($content, $post['source']);
+			PostsTable::updateSourceAndContent($site_id, $post['id'], $content, 'apollo');
+	    }
+	
+	    $result = preg_match("/<div class='apolloPageBreak'>(.*?)<\/div>/i", $content, $match);
+	
+	    if ($result) {
+	
+	        if (isset($match) && isset($match[1])) {
+	            $more_text = $match[1];
+	        }
+	
+	        $tag = "<div class='apolloPageBreak'>$more_text</div>";
+	        $post_link = PageManager::getPostLink($post);
+	        $link_tag .= "<p><a href='$post_link' class='apolloPageBreak'>$more_text</a></p>";
+	
+	        $s_pos = strpos($content, $tag);
+	
+	        $excerpt = substr($content, 0, $s_pos) . $link_tag;
+	        
+	        PostsTable::updateExcerpt($site_id, $post['id'], $excerpt);
+	    } 
+	    //else {
+	    //	$excerpt = $content;
+	    //}
+		
+		
+		//$processed_full_content = preg_replace("/<div class='apolloPageBreak'>(.*?)<\/div>/i", "", $content);
+	        
+	}
 
     // /////////////////////////////////////////////////////////////////////////////////
 

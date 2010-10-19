@@ -27,7 +27,7 @@ var PostsFrame = {
 
 		// Change listeners
 		$('.apolloDataInput').change(PostsFrame.onChange);
-		oUtil.obj.onKeyPress = PostsFrame.onContentKeyPress;
+		//oUtil.obj.onKeyPress = PostsFrame.onContentKeyPress;
 
         MediaAPI.getPostDetails(DataStore.m_siteID, DataStore.m_currentPostID, PostsFrame.repaintData);
 								

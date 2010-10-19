@@ -24,16 +24,19 @@ if (isset($pre_gallery_page_id)){
 <div id='content'>
 </div><!-- content -->
 
+<div id='popupPageWrapper'></div>
 <div id='popupPage'>
 	
-	<div align="center" class='popupContent'>
+	<div align="left" class='popupContent'>
 	
+		<div align="center" style='padding-top:20px'>
 		<h2><?php echo PageManager::getPageTitle(); ?></h2>
 		
 		<span class='divider'></span>
 						
-		<div class='popupText vertical-only' align="left">
+		<div class='popupText' align="left">
 			<?php echo PageManager::getCurrentPageContent(); ?>
+		</div>
 		</div>
 		
 	</div>
@@ -42,8 +45,8 @@ if (isset($pre_gallery_page_id)){
 
 <script type="text/javascript">
 
-	$('.popupContent').jScrollPane();
-
+	//$('.popupContent').jScrollPane();
+		
 	<?php if (isset($pre_gallery_page_id)){ ?>
 
 	thebeGallery.init({

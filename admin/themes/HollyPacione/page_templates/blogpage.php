@@ -5,18 +5,6 @@
  * @Description: Blog Page
  */
 
-$name = "";
-$email = "";
-$url = "";
-
-if (SecurityUtils::isLoggedIn()){
-	$user_id = SecurityUtils::getCurrentUserID();
-	$user = UserTable::getUser($user_id);
-	$sites = SitesTable::getSitesForUser($user_id);
-	$name = $user['nice_name'];
-	$email = $user['email'];
-	$url = $sites[0]['domain'];
-}
 
 /**
 * Strip out any hard coded style attributes
@@ -127,17 +115,17 @@ function stripImages($postContent){
 							
 							<form id='commentForm' method='post' action='' onsubmit="hpBlog.onPostComment(); return false;">
 														
-								<p><input type="text" name="author" id="author" size="22" tabindex="1" class="required_name" value="<?=$name?>"/>
+								<p><input type="text" name="author" id="author" size="22" tabindex="1" class="required_name" value=""/>
 							
 								<label for="author"><small>Name (required)</small></label></p>
 							
 								<p>
-									<input type="text" name="email" id="email" size="22" tabindex="2" class="required_email" value="<?=$email?>" />
+									<input type="text" name="email" id="email" size="22" tabindex="2" class="required_email" value="" />
 									<label for="email"><small>Email (will not be published) (required)</small></label>
 								</p>
 								
 								<p>
-									<input type="text" name="url" id="url" size="22" tabindex="3" value="<?=$url?>" />
+									<input type="text" name="url" id="url" size="22" tabindex="3" value="" />
 									<label for="url"><small>Website</small></label>
 								</p>
 														

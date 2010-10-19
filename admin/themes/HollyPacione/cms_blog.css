@@ -56,3 +56,16 @@ a {
 }
 
 a:hover { color: #d8d8d8 }
+
+img {
+	clear: both;
+	padding: 0;
+	margin: 0;
+	border-width: 5px;
+	border-style: solid;	
+	/*width:100%;*/
+	border-color: black;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	display: block;
+}
