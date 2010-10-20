@@ -66,18 +66,14 @@ class ThemeTable {
 	*/
 	public static function getGlobalImageParaValue($site_id, $theme_para_id){
 	
-		$post_id = DatabaseManager::getVar(DatabaseManager::prepare("SELECT para_value FROM athena_%d_PageParas WHERE theme_para_id = %d AND page_id = 0 ",  $site_id, $theme_para_id));
+		$image_id = DatabaseManager::getVar(DatabaseManager::prepare("SELECT para_value FROM athena_%d_PageParas WHERE theme_para_id = %d AND page_id = 0 ",  $site_id, $theme_para_id));
 		
 		// If the value isn't set, get the default (if there is one)
-		if (isset($post_id)){
-			$post = get_post($post_id);	
-			$url = $post->guid;	
-		}
-		else {
-			$url = null;
+		if (isset($image_id)){
+			return PageManager::getMediaURL($image_id);
 		}
 		
-		return $url;
+		return null;
 	}
 	
 	// //////////////////////////////////////////////////////////////////////////////////////

@@ -2,7 +2,14 @@
 /**
  * @package WordPress
  * @subpackage Holly Pacione Theme
- */ 
+ */
+ 
+$logo_url = ThemeTable::getGlobalImageParaValue(PageManager::$site_id, 703);
+
+if (!isset($logo_url) || $logo_url == ""){
+	$logo_url = PageManager::$common_url_root . 'imgs/blank.png';
+}
+  
 ?>
 
 <!-- begin footer -->
@@ -14,7 +21,11 @@
 	
 		<table border="0" width="100%" height="100%" style='width:100%; height:100%'>
 			<tr valign="center">
-			<td align="left" width="150px" style='width:150px'><img class='logo' src='' /></td>
+			<td align="left" width="150px" style='width:150px'>
+				<div class='logoWrapper'>
+					<img class='logo' src='<?= $logo_url ?>' />
+				</div>
+			</td>
 			<td align="left">
 				<?php 
 											
@@ -44,21 +55,26 @@
 								if (!isset($image) || $image == ""){
 									$image = PageManager::$common_url_root . 'imgs/blank.png';
 								}
+									
+								$onclick = "";			
+								if (!PageManager::$is_blogpage){
+									$onclick = "'onClick='thebeMain.doPopup($id); return false;'";
+								}
 											
 								if ($is_page){
-									echo "<a class='glowlink' href='$link' onClick='thebeMain.doPopup($id); return false;'><span id='page_$id' class='menuItem menuItemSelected'>$title</span></a>";
+									echo "<a id='page_$id' class='menuItem menuItemSelected' href='$link' $onclick >$title</a>";
 								}
 								else {
-									echo "<a class='glowlink' href='$link' onClick='thebeMain.doPopup($id); return false;'><span id='page_$id' class='menuItem'>$title</span></a>";
+									echo "<a id='page_$id' class='glowlink menuItem' href='$link' $onclick >$title</a>";
 								}
 														
 							}
 							else {
 								if ($is_page){
-									echo "<a class='glowlink' href='$link'><span id='page_$id' class='menuItem menuItemSelected'>$title</span></a>";
+									echo "<a id='page_$id' class='menuItem menuItemSelected' href='$link'>$title</a>";
 								}
 								else {
-									echo "<a class='glowlink' href='$link'><span id='page_$id' class='menuItem'>$title</span></a>";
+									echo "<a id='page_$id' class='glowlink menuItem' href='$link'>$title</a>";
 								}
 							}
 														
@@ -77,17 +93,37 @@
 			
 	</div>				
 	
+		
 <!-- Javascript code /////////////////////////////////////////////////////////////// -->
 
 <script type="text/javascript">
-	/*
-$('.glowlink').addGlow({
-    radius: 20,
-    textColor: '#fff',
-    haloColor: '#eec',
-    duration: 200
-});
-	*/
+
+//useMenuGlow = false; // Need to remove #menuRibbon .menuItem:hover
+
+	$(window).resize(function() {
+		
+		if ($('.scrollWrapper').length){
+			if (!$.browser.msie){
+				$('.scrollWrapper').jScrollPane();
+			}
+		}
+		
+	});
+
+	$(window).ready(function() {
+
+//		if (useMenuGlow){
+//			
+//			$('.glowlink').addGlow({
+//			    radius: 20,
+//			    textColor: '#fff',
+//			    haloColor: '#eec',
+//			    duration: 200
+//			});
+//		}
+
+	});
+
 siteID = <?= PageManager::$site_id ?>;
 pageID = <?= PageManager::$page_id ?>;
 		
@@ -117,6 +153,11 @@ var thebeMain = {
 		txt += "<div id='popupPage'>";
 		txt += "</div>";
 		
+		// Clear any old content
+		$('#popupWrapper').html("");
+		$('#popupPage').remove();
+		
+		// Add new wrapper
 		$('#popupWrapper').html(txt);
 		
 		// Get the popup content
@@ -131,25 +172,35 @@ var thebeMain = {
         });		
 				
 		// Update menu
-		$('.menuItem').removeClass('menuItemSelected');
-		
-		$('#page_'+id).addClass('menuItemSelected');
-		
-		//$('.menuItem').addClass('glowlink');
+
+		// Remove the glow effect				
+//		if (useMenuGlow){
+//			$(".menuItem").unbind('mouseenter');
+//			$(".menuItem").unbind('mouseleave');
+//		}
 				
-		//$('.menuItemSelected').removeClass('glowlink');
+		// Hard code the colors back to what they should be (glow effect interferes with this)
+		$(".menuItem").css('color', 'black');
+		$('#page_'+id).css('color', 'white');
 		
-		/*
-		$('.glowlink').addGlow({
-		    radius: 20,
-		    textColor: '#fff',
-		    haloColor: '#eec',
-		    duration: 200
-		});
-		*/	
-		
+		// Remove the previopuslly selected menu item's selected status
+		$('.menuItem').removeClass('menuItemSelected');
+//		$('.menuItem').addClass('glowlink');
+
+		$('#page_'+id).removeClass('glowlink');
+		$('#page_'+id).addClass('menuItemSelected');
+
+//		if (useMenuGlow){
+//			// Restart glow effect						
+//			$('.glowlink').addGlow({
+//			    radius: 20,
+//			    textColor: '#fff',
+//			    haloColor: '#eec',
+//			    duration: 200
+//			});
+//		}								
 	},
-	
+		
 	gotPopupContent : function(ret){
 		
 		if (ret.result == 'ok'){
@@ -160,6 +211,27 @@ var thebeMain = {
 			
 			var txt = "";
 			
+			txt += "<div  id='popupPage' class='curvedOuterWrapper'>";
+			txt += "    <div class='curvedWrapper'>";
+			txt += "		<div class='curved' align='center' >";
+					
+			txt += "			<div class='scrollWrapper' align='left'>";
+						
+			txt += "				<div class='popupContent' align='center'>";
+			txt += "					<h2>"+title+"</h2>";
+								
+			txt += "					<span class='divider'></span>";
+												
+			txt += "					<div class='popupText' align='left'>"+content+"</div>";
+			txt += "				</div>";
+							
+			txt += "			</div>	";		
+						
+			txt += "		</div>";
+			txt += "	</div>";
+			txt += "</div>";
+
+			/*
 			txt += "    <div align='center' class='popupContent' style=\"background-image: url('"+backgroundImage+"')\">";
 			txt += "        <h2>"+title+"</h2>";
 			txt += "        <span class='divider'></span>";
@@ -167,9 +239,9 @@ var thebeMain = {
 			txt += content;
 			txt += "        </div>";
 			txt += "    </div>";
-			
+			*/
 			$('#popupPage').html(txt);
-			//$('.popupContent').jScrollPane();
+			$('.scrollWrapper').jScrollPane();
 		}		
 		
 	}

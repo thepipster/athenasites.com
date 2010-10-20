@@ -51,13 +51,96 @@ PageManager::doHeader();
 -->
 	<!-- Page Styles  //////////////////////////////////////////////////// -->
 
+
+	<?php
+				
+		// Over-ride any default styles with user content	
+		$background_col = ThemeTable::getGlobalParaValue(PageManager::$site_id, 710);
+		
+		$text_color = ThemeTable::getGlobalParaValue(PageManager::$site_id, 711);
+		$text_title_color = ThemeTable::getGlobalParaValue(PageManager::$site_id, 712);
+		
+		$nav_bar_text_hover_color = ThemeTable::getGlobalParaValue(PageManager::$site_id, 709);
+		$nav_bar_text_color = ThemeTable::getGlobalParaValue(PageManager::$site_id, 708);
+		
+		$nav_bar_border_color = ThemeTable::getGlobalParaValue(PageManager::$site_id, 706);
+		$nav_bar_color = ThemeTable::getGlobalParaValue(PageManager::$site_id, 705);
+		$nav_bar_border_width = ThemeTable::getGlobalParaValue(PageManager::$site_id, 707);
+		
+	?>
+	
 	<style type="text/css">
 
-		/* ie6 png fix */		
-		div { behavior: url("<?= PageManager::$theme_url_root; ?>/iepngfix.htc") }
-
+		<?php if(isset($background_col)) echo "html, body {background-color: #{$background_col};}" ?>	
+		
+		<?php 
+			if(isset($text_color)) {			
+				echo "html, body {color: #{$text_color};}";
+				echo "#blogPage {color: #{$text_color};}";
+				echo "#popupPage .popupContent .popupText {color: #{$text_color};}";
+			}
+		?>
+			
+		<?php 
+			if(isset($text_title_color)) {			
+				echo "h1, h2, h3 {color: #{$text_title_color} !important;}";
+				echo "#blogPage .postTitle {color: #{$text_title_color} !important;}";								
+				echo "#blogPage .postTitle a {color: #{$text_title_color} !important;}";								
+			}
+		?>
+				
+		<?php 
+			if(isset($nav_bar_text_color)) {			
+				echo "#menuRibbon .menuItem {color: #{$nav_bar_text_color};}";
+				echo "#menuRibbon .control {color: #{$nav_bar_text_color};}";
+			}
+		?>
+											
+		<?php if(isset($nav_bar_text_color)) echo "#menuRibbon .menuItem {color: #{$nav_bar_text_color};}" ?>	
+		<?php if(isset($nav_bar_text_hover_color)) echo "#menuRibbon .menuItem:hover {color: #{$nav_bar_text_hover_color};}" ?>	
+		<?php if(isset($nav_bar_text_hover_color)) echo "#menuRibbon .menuItemSelected {color: #{$nav_bar_text_hover_color};}" ?>	
+		
+		<?php if(isset($nav_bar_color)) echo "#menuRibbonWrapper {background-color: #{$nav_bar_color};}" ?>	
+		<?php if(isset($nav_bar_border_color)) echo "#menuRibbonWrapper {border-color: #{$nav_bar_border_color};}" ?>	
+		<?php if(isset($nav_bar_border_width)) echo "#menuRibbonWrapper {border-width: {$nav_bar_border_width}px;}" ?>	
+			
+		.curvedOuterWrapper {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+		}
+		
+		.curvedWrapper {
+			position: relative;
+			margin: 0px 0 0 0px;
+			padding: 25px;
+			width: 50%;
+			height: 70%;
+			top: 10%;
+			left: 25%;	
+			z-index: inherit;
+		}
+		
+		.curved {
+			width: 100%;
+			height: 100%;
+			background-color: transparent;
+			background-image: url("<?= PageManager::$common_url_root; ?>/imgs/white80.png"); 
+			background-repeat: repeat;
+			color: black;
+			-moz-border-radius: 20px;
+			-webkit-border-radius: 20px;
+			-khtml-border-radius: 20px;
+			border-radius: 20px;
+			/* filter: alpha(opacity=60);-moz-opacity:.60;opacity:.60; */
+			behavior:url("<?= PageManager::$theme_url_root; ?>border-radius.htc");
+			z-index: 2005;
+			padding: 25px;
+		}
+		
 	</style>
 
+						
 	<!-- Pingback ////////////////////////////////////////////////////////////// -->
 
 	<link rel="pingback" href="<?= PageManager::getPingBackURL();?>" />
@@ -65,4 +148,6 @@ PageManager::doHeader();
 </head>
 
 <body>
+
+	
 <div id='popupWrapper'></div>

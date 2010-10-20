@@ -140,6 +140,12 @@ class PagesTable {
 		return null;
 	}
 
+	public static function getHomepageID($site_id){
+		//Logger::debug("getPage(site_id = $site_id, page_id = $page_id");	
+		$sql = DatabaseManager::prepare("SELECT id FROM athena_%d_Pages WHERE is_homepage = 1", $site_id);		
+		return DatabaseManager::getVar($sql);				
+	}
+
 	// /////////////////////////////////////////////////////////////////////////////////
 
 	public static function getBlogpage($site_id){

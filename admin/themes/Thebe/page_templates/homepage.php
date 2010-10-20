@@ -47,9 +47,11 @@ Session::set('pre_gallery_page_id', PageManager::$page_id);
 				}
 			?>
 		</div>
-
+		
 <script type="text/javascript">
 
+	//$(".curved").html("THIS IS A TEST");
+	
 	thebeGallery.init({
 		swf:"<?= PageManager::$theme_url_root; ?>/flash/fullScreenGal.swf", 
 		xml:"<?= $xml_url?>",
