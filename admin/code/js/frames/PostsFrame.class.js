@@ -21,6 +21,9 @@ var PostsFrame = {
 
     repaint : function(){
 			
+		$('#postTitle').show();
+		$('#pageTitle').hide();
+			
         if (DataStore.m_postList.length == 0){
             AthenaDialog.backgroundMessage("You currently have no posts, you can add a post using the side-bar");
         }
@@ -51,7 +54,7 @@ var PostsFrame = {
 	        
 	        //PostsFrame.oEdit.loadHTML(postObj.content);
 		
-	        $('#pageTitle').val(postObj.title);
+	        $('#postTitle').val(postObj.title);
 	        $('#postSlug').html(postObj.slug);
 	        $('#postLastEdit').html(postObj.last_edit);
 	        $('#postCreated').html(postObj.created);
@@ -119,7 +122,7 @@ var PostsFrame = {
         }
         else {
             if (blogPage.status != 'Published'){
-                AthenaDialog.alert("Your blog page is not public, therefore visitors to your site will not be able to see your blog. You can change your blog pages status using the Pages tab", "Blog Page is not public!");
+                AthenaDialog.backgroundMessage("Your blog page is not public. You can change your blog pages status using the Pages tab");
             }
 		
             var blogslug = blogPage.path + blogPage.slug;
@@ -231,7 +234,7 @@ var PostsFrame = {
 						
         //var content = CKEDITOR.instances.postContentEditor.getData();
         postObj.content = oUtil.obj.getXHTMLBody();
-        postObj.title = $('#pageTitle').val();
+        postObj.title = $('#postTitle').val();
         postObj.status = $('#postStatusSelector').val();
         postObj.canComment = $('#postCanCommentSelector').val();
         postObj.slug = AthenaUtils.encodeSlug(postObj.title);

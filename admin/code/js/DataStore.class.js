@@ -476,7 +476,7 @@ var DataStore = {
 	* Update an existing page
 	*/
     updatePost : function(postObj){
-
+		
         for (var i=0; i<DataStore.m_postList.length; i++){
             if (DataStore.m_postList[i].id == postObj.id){
 

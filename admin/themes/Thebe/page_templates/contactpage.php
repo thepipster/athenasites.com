@@ -4,121 +4,159 @@
 * @Template: Contact Page
 * @Description: Contact Page
 */
+		
+$pre_gallery_page_id = Session::get('pre_gallery_page_id');
 
-$background_image = PageManager::getMediaURLFromThemePara(205); 
-// Email = 206 
+if (!isset($pre_gallery_page_id) || $pre_gallery_page_id == 0){
+	$pre_gallery_page_id = PagesTable::getHomepageID(PageManager::$site_id);
+}
+
+$gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id, $pre_gallery_page_id);
+$xml_url = "http://" . $_SERVER['HTTP_HOST'] ."/admin/code/php/getUserGalleryXML.php?p=".PageManager::$site_id.",".$pre_gallery_page_id."&cache=" . mt_rand();
+
+
+// Get a string representation of a Javascript array to feed to JS xFader (if needed)
+$gal_images_string = "[";
+$ct = 0;
+foreach($gallery_image_list as $gal_mapping){
+
+	if ($ct != 0){
+		$gal_images_string .= ", ";
+	}
+
+	$image_id = $gal_mapping['image_id'];
+	$image = FolderTable::getMedia(PageManager::$site_id, $image_id);	
+	
+	$image_url = "'" . PageManager::$media_root_url . $image['filepath'] . $image['filename'] . "'";
+
+	$gal_images_string .= $image_url;
+	
+	$ct++;
+}
+$gal_images_string .= "]";
+
 ?>
 
+<script type="text/javascript">
 
-	<div id="content" style="border:none;">
+	<?php if (isset($pre_gallery_page_id)){ ?>
+		thebeGallery.preInit();				
+	<?php } ?>
+
+</script>
+
+<div  id='popupPage' class='curvedOuterWrapper'>
+	<div class='curvedWrapper'>
+		<div class="curved" align="center" >
 		
-		<table border="0" cellpadding="0" cellspacing="0" id='contentTable' width="100%" height="100%" style="width:100%; height:100%;background-image: url('<?=$background_image?>')">
+			<div class='scrollWrapper' align="left">
 			
-			<tr valign="top" align='left' height="100%">
-
-				<td width="55%" height="100%"> 
-					<!-- Empty -->
-				</td>
-							
-				<td width="45%" height="100%" class='rightCol'>
-					<?php echo PageManager::getCurrentPageContent(); ?>
+				<div class='popupContent' align="center">
+					<h2><?php echo PageManager::getPageTitle(); ?></h2>
 					
-					<form id='contactForm' method='post' action='' onsubmit="hpContact.onSubmit(); return false;">
-						<input type="text" class='inputText required_name' id='name' name='name' value="Your Name" onfocus="if (this.value == 'Your Name'){this.value = '';}" onblur='hpContact.onChange()'>
-						<input type="text" class='inputText required_email' id='email' name='email' value="Your E-mail Address" onfocus="if (this.value == 'Your E-mail Address'){this.value = '';}" onblur='hpContact.onChange()'>
-						<input type="text" class='inputText required_phone' id='phone' name='phone' value="Your Phone" onfocus="if (this.value == 'Your Phone'){this.value = '';}" onblur='hpContact.onChange()'>
-						<input type="text" class='inputText' id='location' name='location' value="Event Location" onfocus="if (this.value == 'Event Location'){this.value = '';}" onblur='hpContact.onChange()'>
-						<input type="text" class='inputText datepicker' id='datetime' name='datetime' value="Requested Date">
-						<textarea class='inputTextArea' id='comments' name='comments' onfocus="if (this.value == 'How did you find out about us?'){this.value = '';}" rows="5">How did you find out about us?</textarea>
-						<input type="submit" value="Submit" onclick=""><span class='formMessage'></span>
-						<!-- <button onclick="hpContact.onSubmit()">Submit</button> -->
+					<span class='divider'></span>
+									
+					<div class='popupText' align="left">
+						<?php echo PageManager::getCurrentPageContent(); ?>
+						<br/>
+					
+					<form id='contactForm' method='post' action='' onsubmit="thebeContact.onSubmit(); return false;">					
+					<table border="0" cellpadding="50px" cellspacing="0" id='contentTable' width="100%" height="100%" style="width:100%; height:100%;">
+						
+						<tr valign="top" align='left' height="100%">
+							<td colspan='2' >Name</td>
+						</tr>
+
+						<tr valign="top" align='left' height="100%">
+							<td colspan='2' ><input type="text" class='inputText required_name' id='name' name='name' value=""></td>
+						</tr>
+
+						<tr valign="top" align='left' height="100%">
+							<td>Email</td>
+							<td>Phone</td>
+						</tr>
+
+						<tr valign="top" align='left' height="100%">
+							<td width="70%"><input type="text" class='inputText required_email' id='email' name='email' value=""></td>
+							<td width="30%"><input type="text" class='inputText required_phone' id='phone' name='phone' value=""></td>
+						</tr>
+
+						<tr valign="top" align='left' height="100%">
+							<td>Event Location</td>
+							<td>Requested Date</td>
+						</tr>
+
+						<tr valign="top" align='left' height="100%">
+							<td><input type="text" class='inputText' id='location' name='location' value=""></td>
+							<td><input type="text" class='inputText datepicker' id='datetime' name='datetime' value=""></td>
+						</tr>
+
+						<tr valign="top" align='left' height="100%">
+							<td colspan='2' >How did you find out about us?</td>
+						</tr>							
+
+						<tr valign="top" align='left' height="100%">
+							<td colspan='2' ><input type="text" class='inputText' id='request_source' name='request_source' value=""></td>
+						</tr>	
+						
+						<tr valign="top" align='left' height="100%">
+							<td colspan='2' >Message</td>
+						</tr>
+							
+						<tr valign="top" align='left' height="100%">
+							<td colspan='2' ><textarea class='inputTextArea' id='comments' name='comments' rows="5"></textarea></td>
+						</tr>									
+									
+						<tr valign="top" align='left' height="100%">
+							<td colspan='2' ><input type="submit" value="Submit" onclick=""><span class='formMessage'></span></td>
+						</tr>																																											
+						
+					</table>					
 					</form>
-				</td>
+					
+					</div>
+					
+				</div>
 				
-			</tr>
+			</div>			
 			
-		</table>
-		
+		</div>
 	</div>
-	
+</div>
+
+<div id='content'>
+</div><!-- content -->
 	
 		
 <script type="text/javascript">
 
-// Major version of Flash required
-var requiredMajorVersion = 8;
-
-// Minor version of Flash required
-var requiredMinorVersion = 0;
-
-// Minor version of Flash required
-var requiredRevision = 0;
-
-var hasFlash = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
-
-var hpContact = {
-
-	/** Width of content box gallery viewer */
-	imgWidth : 1200,
-	
-	/** Height of flash gallery viewer */
-	imgHeight : 800,
-
-	/** Ratio of width to height */
-	imgRatio : 0,
-
-	/** Minimum allowed width */
-	minWidth : 800,
-	
-	commandURL : "<?= PageManager::$theme_url_root?>php/SendEmail.php",
-	
+var thebeContact = {
+		
 	page_id : <?=PageManager::$page_id?>,
 	
 	site_id : <?=PageManager::$site_id?>,
         
-        nonce : '<?= SecurityUtils::createNonce('email-link') ?>',
-	
-	sentMessage : 'Message sent, thankyou!',
-	
-	sentErrorMessage : 'Error sending message!',
-	
+    nonce : '<?= SecurityUtils::createNonce('email-link') ?>',
+
 	init : function(){
-						
-		// Optimize size for gallery
-		//hpContact.imgRatio = hpContact.imgHeight / hpContact.imgWidth;
-		hpContact.imgRatio = hpContact.imgWidth / hpContact.imgHeight;
-	
-		hpContact.onResize();
-		
-		setTimeout("hpContact.onResize()", 200);
-			
-			
+									
 		// Validation
 		$("#contactForm").validate();
-			
-			
+						
 		$.validator.addMethod(
 			"required_email", function(value, element) { 
-			
-		  		if (value == 'Your E-mail Address') return false; 
 		  		if (value == '') return false; 
-		  		
-		  		// Check to see if this group is complete
-		  		return hpContact.checkEmail(value);
+		  		return thebeContact.checkEmail(value);
 			}, 
-			"Enter a valid email");
+			" ");
 
 		$.validator.addMethod(
-			"required_name", function(value, element) { 
-			
-		  		if (value == 'Your Name') return false; 
-		  		if (value == '') return false; 
-		  		
+			"required_name", function(value, element) { 			
+		  		if (value == '') return false; 		  		
 		  		return true;
 			}, 
-			"Please enter your name");
-	
-					
+			" ");
+						
 		// Setup date picker...
 		Date.firstDayOfWeek = 0;
 		Date.format = 'mm/dd/yyyy';
@@ -133,33 +171,7 @@ var hpContact = {
 		}
 		return true;
 	},
-	
-	onResize : function(){
-
-		if (hasFlash){
-								
-			var galH = $("#wrapper").height() - $("#nav_container").height();
-			var galW = Math.floor(hpContact.imgRatio * galH);	
-					
-			//alert('Min width: ' + $("#nav_container").attr('min-width'));			
-			
-			if (galW > hpContact.minWidth){
-			
-				$("#nav_container").width(galW);	
-				$("#container").width(galW);	
-				
-				$("#content").height(galH);
-				$("#content").width(galW);
-				
-			}
-		}
 		
-	},
-	
-	onChange : function(){
-		$("#contactForm").valid();
-	},
-	
 	onSubmit : function(){
 		
 		if ($("#contactForm").valid()){
@@ -171,55 +183,50 @@ var hpContact = {
 			var aDatetime = $("#datetime").val();
 			var aComments = $("#comments").val();
 			
-			//alert(aName + " " + aEmail + " " + aPhone + " " + aLocation + " " + aDatetime + " " + aComments); 
+			// submitRequest : function(siteID, pageID, reqName, reqEmail, reqPhone, reqLocation, reqDate, reqComments, callback)
+
+			apolloContactRequest.submitRequest(thebeContact.site_id, thebeContact.page_id, thebeContact.nonce, aName, aEmail, aPhone, aLocation, aDatetime, aComments, thebeContact.onSentForm);
 			
-			var paras = {
-					page_id: hpContact.page_id, 
-					site_id: hpContact.site_id, 
-					nonce: hpContact.nonce, 
-					name: aName, 
-					email: aEmail, 
-					phone: aPhone, 
-					location: aLocation, 
-					comments: aComments, 
-					datetime: aDatetime
-			};
-										
-			$.ajax({
-				url: hpContact.commandURL,
-				dataType: "text",
-				data: paras,
-				success: function(ret){hpContact.onSentForm(ret);}
-			});	
 		}	
 		
 		return false;
 	},
-		
-	onSentForm : function(ret){
-		
-		if (ret == "TRUE"){
-			$('.formMessage').html(hpContact.sentMessage);
+	
+	onSentForm : function(isSuccess, isSpam, message){
+	
+		if (isSuccess){
+			$('.formMessage').html("Request sent!");
 		}
-		else if (ret == "FALSE"){
-			$('.formMessage').html(hpContact.sentErrorMessage);
-		}
-		else if (ret == "SPAM"){
+		else if (isSpam) {
 			$('.formMessage').html("Sorry, this comment looks like spam?");
 		}
-		else if (ret == "NA"){
-			$('.formMessage').html("Not authorized error!");
-		}
 		else {
-			$('.formMessage').html("Unknown error!");
-		}
+			$('.formMessage').html(message);
+		}	
+		
 	}
 
 }
 
-// /////////////////////////////////////////////////////////////////////////////////
+$(window).ready(function() {
 
-$(document).ready(hpContact.init);
-$(window).resize(hpContact.onResize);
+	thebeContact.init();
+	
+	<?php if (isset($pre_gallery_page_id)){ ?>
 
+	thebeGallery.init({
+		swf:"<?= PageManager::$theme_url_root; ?>/flash/fullScreenGal.swf", 
+		xml:"<?= $xml_url?>",
+		images: <?= $gal_images_string ?>
+		});
+
+		
+	<?php } ?>
+
+	$('.scrollWrapper').jScrollPane();
+	
+	// Chrome was stuborn, so wait and try later...
+	setTimeout("$('.scrollWrapper').jScrollPane()", 200)
+});
+	
 </script>

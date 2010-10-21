@@ -15,7 +15,10 @@ var PagesFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 
     repaint : function(){
-	
+		
+		$('#postTitle').hide();
+		$('#pageTitle').show();
+		
         if (DataStore.m_pageList.length == 0){
             AthenaDialog.backgroundMessage("You currently have no pages, you can add a post using the side-bar");
             return;
@@ -387,7 +390,7 @@ var PagesFrame = {
         DataStore.updatePage(originalPage);
 				
         if ((originalPage.parent_page_id != parent_id) && (newDepth > DataStore.m_theme.max_page_depth)){
-            AthenaDialog.alert("Sorry, your theme does not support page depths of more than 3, please choose another parent page!");
+            AthenaDialog.alert("Sorry, your theme does not support page depths of more than " +  DataStore.m_theme.max_page_depth + ", please choose another parent page!");
             return;
         }
         

@@ -267,7 +267,7 @@ var ssMain = {
             groups: groupsObj
         });
 
- 		setInterval(ssMain.setEditorChangeListener, 750);
+ 		setInterval(ssMain.setEditorChangeListener, 500);
 
     },
 	
@@ -287,8 +287,8 @@ var ssMain = {
 		if (content != ssMain.m_prevContent){
 			
 	        switch(ssMain.view){
-    	        case ssMain.VIEW_PAGES : PagesFrame.onChange();break;
-	            case ssMain.VIEW_POSTS : PostsFrame.onChange();break;
+    	        case ssMain.VIEW_PAGES : PagesFrame.onChange(); break;
+	            case ssMain.VIEW_POSTS : PostsFrame.onChange(); break;
 			}		
 			
 	/*	

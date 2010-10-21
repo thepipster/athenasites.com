@@ -469,6 +469,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                                         <div class='frameControlsBar'>
                                             <span class='label'>Title:</span>
                                             <input id='pageTitle' type='text' value='' class='apolloDataInput'/>
+                                            <input id='postTitle' type='text' value='' class='apolloDataInput'/>
                                             <!--
                                             <button class='basic_button' style='' onclick="ImagePickerDialog.show('#PagesFrameImagePicker', PagesFrame.onImageSelected);">Insert Image</button>
                                             -->

@@ -85,8 +85,7 @@ class PagesTable {
 		}
 
 		$ishome = 0;
-		if (stripos('_'.$tamplate_name, 'home')){
-			Logger::debug("This is the home page!!");
+		if (strpos(strtolower("  " . $template_name), 'home') > 0){
 			$ishome = 1;
 			$slug = "index.html";
 		}

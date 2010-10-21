@@ -23,10 +23,10 @@
 		<table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%" >
 			<tr>
 				<!-- Page content -->
-				<td width="50%" height="100%" valign="top" align="left" style='padding-right:20px'>
+				<td width="100%" height="100%" valign="top" align="left" style='padding-right:20px'>
 
 					<?php echo PageManager::getCurrentPageContent(); ?>
-
+<!--
 					<div class='float_left_button_holder'>
 						<a href='about' class='take_tour_button'></a>
 					</div>	
@@ -34,7 +34,7 @@
 					<div class='float_left_button_holder'>
 						<a href='themes' class='view_themes_button'></a>
 					</div>	
-					
+	-->				
 				</td>
 				<td valign="top"  style='padding-left:20px'>
 					<div id='miniGallery' style='width:100%; height:100%'>

@@ -252,9 +252,11 @@ class PageManager {
         }
 
         // If we couldn't find the page, load the home page
-        //if (!isset($page)) {
-        //    $page = PagesTable::getHomepage(self::$site_id);
-        // }
+        Logger::debug("&&&&&& Page name = $page_name");
+        if (!isset($page) && $page_name == "") {
+        	Logger::debug("Loading home page!");
+            $page = PagesTable::getHomepage(self::$site_id);
+        }
 
         // If page is still not set, hit the 404 page!
         if (!isset($page)) {

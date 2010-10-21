@@ -19,8 +19,7 @@ class SitesTable {
 	// ///////////////////////////////////////////////////////////////////////////////////////
 	
 	public static function getNextSiteID(){
-		$sql = DatabaseManager::prepare("SELECT max(id) FROM apollo_Sites WHERE domain = %s", $domain);			
-		return DatabaseManager::getVar($sql) + 1;				
+		return DatabaseManager::getVar("SELECT max(id) FROM apollo_Sites") + 1;				
 	}
 	
 	// ///////////////////////////////////////////////////////////////////////////////////////

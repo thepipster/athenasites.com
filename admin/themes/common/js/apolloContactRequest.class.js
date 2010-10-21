@@ -30,6 +30,7 @@ var apolloContactRequest = {
 		
 	},
 			
+				
 	/**
 	* Parse the server response on send data to callback, with the following form;
 	*
@@ -38,10 +39,10 @@ var apolloContactRequest = {
 	onSentForm : function(ret, callback){
 		
 		if (ret == "TRUE"){
-			callback(true, false, hpContact.sentMessage);
+			callback(true, false, 'Message sent, thankyou!');
 		}
 		else if (ret == "FALSE"){
-			callback(false, false, hpContact.sentErrorMessage);
+			callback(false, false, 'Error sending message!');
 		}
 		else if (ret == "SPAM"){
 			callback(false, true, 'Sorry, this comment looks like spam');

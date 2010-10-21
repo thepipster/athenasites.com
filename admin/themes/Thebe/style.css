@@ -293,3 +293,58 @@ a {
 	height: 20px;
 }
 #menuRibbon .control:hover { color:white}
+
+
+/* Contact Form ///////////////////////////////////////////////// */
+
+#contactForm {
+	overflow: hidden;
+	width: 100%;
+	clear: left;
+}
+
+#contactForm td {
+	padding-right: 10px;
+	padding-top: 5px;
+}
+
+#contactForm .dp-choose-date{
+	display: none;
+}
+
+#contactForm .inputText {
+	background-color: gray;
+	width: 100%;
+	border: none;
+	margin: 0px;
+	color: white;
+}
+
+#contactForm .inputTextArea {
+	background-color: gray;
+	width: 100%;
+	border: none;
+	margin: 5px;
+	margin-left: 0px;
+	color: white;	
+}
+
+#contactForm .formMessage{
+	color: #336699;
+	font-size: 12px;
+	padding-left: 10px;
+}
+
+#contactForm label.error { 	
+	color: red; 
+	padding: 0px;
+	margin: 0;
+	left: -999em;
+	display: none;
+}
+
+#contactForm input.error {
+	border: 1px solid red;
+	/* background-color: #ffdacf; */
+	background-color: #9b9b9b;
+}			

@@ -7,7 +7,7 @@ class SecurityUtils {
     /**
      * The nonce (number used once) duration (in seconds)
      */
-    private static $nonce_duration = 600; 
+    private static $nonce_duration = 900; 
 
     // //////////////////////////////////////////////////////////////
 
@@ -191,7 +191,7 @@ class SecurityUtils {
     public static function createSite($user_id, $site_domain, $site_path, $site_theme) {
 
         // Create entry in site table
-        $site_id = SitesTable::getNextSiteID();
+        $site_id = SitesTable::getNextSiteID();        
         SitesTable::create($site_id, $site_domain, $site_path, $site_theme);
 
         Logger::debug("Created site $site_domain, id = $site_id");
@@ -211,6 +211,10 @@ class SecurityUtils {
         PostsTable::createTableForSite($site_id);
         CommentsTable::createTableForSite($site_id);
         StatsRollupTables::createTableForSite($site_id);
+
+		// Create CRM Tables...
+        ContactRequestTable::createTableForSite($site_id);
+        CustomerTable::createTableForSite($site_id);
 
         //PageViewsTable::createTableForSite($site_id);
         //StatsRollupTables::createTableForSite($site_id);
