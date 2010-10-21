@@ -179,8 +179,6 @@ var ssMain = {
 	* Make sure we grab any content and update the local data store before we allow a page change
 	*/
 	savePageContent : function(){
-
-		return;
 		
         switch(ssMain.view){
 
@@ -193,6 +191,9 @@ var ssMain = {
             case ssMain.VIEW_EDITFILES: break;
         }
 
+		// Clear the content
+		oUtil.obj.putHTML("");
+		
 	},
 	
     // ////////////////////////////////////////////////////////////////////////

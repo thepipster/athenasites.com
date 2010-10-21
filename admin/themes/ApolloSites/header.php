@@ -12,7 +12,7 @@ PageManager::doHeader();
 	
 	<!-- Favicon ///////////////////////////////////////////////////// -->
 
-	<link rel="icon" type="image/png" href="<?= PageManager::getFavIconURL() ?>/favicon.png">
+	<link rel="shortcut icon" type="image/png" href="<?= PageManager::getFavIconURL() ?>">
 
 	<!-- Style sheets //////////////////////////////////////////////////////////// -->
 

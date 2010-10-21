@@ -58,18 +58,7 @@ if (stripos($_SERVER['HTTP_HOST'], 'local') > 0){
 	
 	<!-- Favicon ///////////////////////////////////////////////////// -->
 
-	<?php
-	if (!isset($fav_url)){
-	?>
-		<link rel="shortcut icon" type="image/ico" href="<?= PageManager::$theme_url_root; ?>/favicon.ico"> 
-	<?php
-	}
-	else {
-	?>
-		<link rel="shortcut icon" type="image/ico" href="<?=$fav_url?>"> 
-	<?php
-	}
-	?>
+	<link rel="shortcut icon" type="image/png" href="<?= PageManager::getFavIconURL() ?>">
 		
 	<!-- Style sheets ///////////////////////////////////////////////////// -->
 	

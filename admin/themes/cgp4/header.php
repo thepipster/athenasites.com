@@ -45,7 +45,7 @@ function getTopParentPageTitle($post){
 	
 	<!-- Favicon ///////////////////////////////////////////////////// -->
 
-	<link rel="icon" type="image/png" href="<?= PageManager::getFavIconURL() ?>">
+	<link rel="shortcut icon" type="image/png" href="<?= PageManager::getFavIconURL() ?>">
 	
 	<!-- Style sheets ///////////////////////////////////////////////////// -->
 

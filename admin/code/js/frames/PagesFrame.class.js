@@ -395,7 +395,6 @@ var PagesFrame = {
         }
         
         // Update the page
-
         originalPage.content = oUtil.obj.getXHTMLBody();		
         originalPage.title = $('#pageTitle').val();
         originalPage.browser_title = $('#pageBrowserTitle').val();        
