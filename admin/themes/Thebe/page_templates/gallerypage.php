@@ -12,6 +12,26 @@ $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id
 
 Session::set('pre_gallery_page_id', PageManager::$page_id);
 
+// Get a string representation of a Javascript array to feed to JS xFader (if needed)
+$gal_images_string = "[";
+$ct = 0;
+foreach($gallery_image_list as $gal_mapping){
+
+	if ($ct != 0){
+		$gal_images_string .= ", ";
+	}
+
+	$image_id = $gal_mapping['image_id'];
+	$image = FolderTable::getMedia(PageManager::$site_id, $image_id);	
+	
+	$image_url = "'" . PageManager::$media_root_url . $image['filepath'] . $image['filename'] . "'";
+
+	$gal_images_string .= $image_url;
+	
+	$ct++;
+}
+$gal_images_string .= "]";
+
 ?>
 <script type="text/javascript">
 
@@ -25,6 +45,7 @@ Session::set('pre_gallery_page_id', PageManager::$page_id);
 </script>
 
 		<div id='content'>	
+			<noscript>
 			<?php
 				foreach($gallery_image_list as $gal_mapping){
 				
@@ -47,14 +68,18 @@ Session::set('pre_gallery_page_id', PageManager::$page_id);
 					
 				}
 			?>
+			</noscript>
 		</div>
 
 <script type="text/javascript">
 
-	thebeGallery.init({
-		swf:"<?= PageManager::$theme_url_root; ?>/flash/fullScreenGal.swf", 
-		xml:"<?= $xml_url?>",
-		loadingSpinner: false
-		});
+	$(window).ready(function() {
+		thebeGallery.init({
+			swf:"<?= PageManager::$theme_url_root; ?>/flash/fullScreenGal.swf", 
+			xml:"<?= $xml_url?>",
+			images: <?= $gal_images_string ?>
+			});
+	});
+
 		
 </script>

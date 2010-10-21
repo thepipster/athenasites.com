@@ -115,7 +115,7 @@ PageManager::doHeader();
 					$title = $page['title'];								
 					$page_slug = $page['slug'];
 
-					if ($parent_page_id == 0){
+					if ($parent_page_id == 0 && $page['status'] == 'Published'){
 
 						$link = PageManager::getPageLink($page_id);
 						

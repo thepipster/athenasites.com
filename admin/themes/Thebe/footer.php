@@ -58,14 +58,14 @@ if (!isset($logo_url) || $logo_url == ""){
 									
 								$onclick = "";			
 								if (!PageManager::$is_blogpage){
-									$onclick = "'onClick='thebeMain.doPopup($id); return false;'";
+									$onclick = "onclick=\"thebeMain.doPopup($id); return false;\"";
 								}
 											
 								if ($is_page){
-									echo "<a id='page_$id' class='menuItem menuItemSelected' href='$link' $onclick >$title</a>";
+									echo "<a id='page_$id' class='menuItem menuItemSelected' href='$link'  $onclick >$title</a>";
 								}
 								else {
-									echo "<a id='page_$id' class='glowlink menuItem' href='$link' $onclick >$title</a>";
+									echo "<a id='page_$id' class='glowlink menuItem' href='$link'  $onclick >$title</a>";
 								}
 														
 							}
@@ -148,7 +148,7 @@ var thebeMain = {
 	},
 	
 	doPopup : function(id){
-				
+		
 		var txt = "";		
 		txt += "<div id='popupPage'>";
 		txt += "</div>";
@@ -171,34 +171,18 @@ var thebeMain = {
             success: thebeMain.gotPopupContent
         });		
 				
-		// Update menu
-
-		// Remove the glow effect				
-//		if (useMenuGlow){
-//			$(".menuItem").unbind('mouseenter');
-//			$(".menuItem").unbind('mouseleave');
-//		}
-				
+		// Update menu...
+		
 		// Hard code the colors back to what they should be (glow effect interferes with this)
 		$(".menuItem").css('color', 'black');
 		$('#page_'+id).css('color', 'white');
 		
 		// Remove the previopuslly selected menu item's selected status
 		$('.menuItem').removeClass('menuItemSelected');
-//		$('.menuItem').addClass('glowlink');
 
 		$('#page_'+id).removeClass('glowlink');
 		$('#page_'+id).addClass('menuItemSelected');
-
-//		if (useMenuGlow){
-//			// Restart glow effect						
-//			$('.glowlink').addGlow({
-//			    radius: 20,
-//			    textColor: '#fff',
-//			    haloColor: '#eec',
-//			    duration: 200
-//			});
-//		}								
+							
 	},
 		
 	gotPopupContent : function(ret){

@@ -39,6 +39,7 @@ PageManager::doHeader();
 
 	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/AC_OETags.js"></script>
 	
+	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/apolloFullScreenXfader.class.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/date.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/jquery.datePicker.js"></script>
