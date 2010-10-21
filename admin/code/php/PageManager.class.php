@@ -6,6 +6,9 @@
  */
 class PageManager {
 
+	/** Flag to determin if this page is valid or not (indicates a 404 error if this is false */
+	public static $validPage = false;
+	
     /** The site url root, e.g. http://cgp.apollosites.com/ */
     public static $url_root;
     
@@ -249,13 +252,17 @@ class PageManager {
         }
 
         // If we couldn't find the page, load the home page
-        if (!isset($page)) {
-            $page = PagesTable::getHomepage(self::$site_id);
-        }
+        //if (!isset($page)) {
+        //    $page = PagesTable::getHomepage(self::$site_id);
+        // }
 
-        // If page is still not set, select the first in the page list
+        // If page is still not set, hit the 404 page!
         if (!isset($page)) {
-            $page = self::$page_list[0];
+            //$page = self::$page_list[0];
+            self::$validPage = false;
+        }
+        else {
+            self::$validPage = true;
         }
 		
         self::$is_homepage = $page['is_homepage'];

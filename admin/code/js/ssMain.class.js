@@ -35,7 +35,7 @@ var ssMain = {
 
         // Setup the JS logger
         Logger.init('#debug_txt');
-        Logger.showOnError();
+        //Logger.showOnError();
 
         // Setup the data store for the site
         DataStore.m_siteID = currentSiteID;;

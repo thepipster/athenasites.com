@@ -37,7 +37,6 @@ $gal_images_string .= "]";
 <script type="text/javascript">
 
 	thebeGallery.preInit();		
-	thebeGallery.hasFlash = false;
 
 </script>
 

@@ -81,6 +81,14 @@ class PagesTable {
 		$is_blogpage = 0;
 		if (strpos(strtolower("  " . $template_name), 'blog') > 0){
 			$is_blogpage = 1;			
+			$slug = "blog";
+		}
+
+		$ishome = 0;
+		if (stripos('_'.$tamplate_name, 'home')){
+			Logger::debug("This is the home page!!");
+			$ishome = 1;
+			$slug = "index.html";
 		}
 
 		$sql = DatabaseManager::prepare("UPDATE athena_%d_Pages SET parent_page_id=%d, content=%s, title=%s, slug=%s, status=%s, path=%s, user_id=%d, page_order=%d, is_homepage=%d, template=%s, last_edit='$date_str', is_blogpage = $is_blogpage, description = %s, browser_title = %s WHERE id = %d", 

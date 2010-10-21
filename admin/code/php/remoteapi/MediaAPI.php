@@ -734,20 +734,20 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
 
 	Logger::debug(">>>> $tamplate_name - " . stripos($tamplate_name, 'home'));
 	
-	if (stripos('_'.$tamplate_name, 'home')){
-		Logger::debug("This is the home page!!");
-		$ishome = 1;
-		$slug = "index.html";
-	}
+//	if (stripos('_'.$tamplate_name, 'home')){
+//		Logger::debug("This is the home page!!");
+//		$ishome = 1;
+//		$slug = "index.html";
+//	}
 // TODO: is_blogpage being set inside PagesTable::update - should probably pull out to here?	
 //	else if (stripos('_'.$tamplate_name, 'blog')){
 //		Logger::debug("This is the blog page!!");
 //		$isblog = 1;
-//		$slug = "index.html";
+//		$slug = "blog";
 //	}
-	else {
+//	else {
 		$slug = StringUtils::encodeSlug($title);
-	}
+//	}
 	 
     PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $safe_title, $tamplate_name, $slug, $path, $order, $ishome, $description, $browser_title);
 

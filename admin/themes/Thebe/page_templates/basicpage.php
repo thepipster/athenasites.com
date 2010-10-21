@@ -11,6 +11,7 @@ if (!isset($pre_gallery_page_id) || $pre_gallery_page_id == 0){
 	$pre_gallery_page_id = PagesTable::getHomepageID(PageManager::$site_id);
 }
 
+$gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id, $pre_gallery_page_id);
 $xml_url = "http://" . $_SERVER['HTTP_HOST'] ."/admin/code/php/getUserGalleryXML.php?p=".PageManager::$site_id.",".$pre_gallery_page_id."&cache=" . mt_rand();
 
 
@@ -71,41 +72,8 @@ $gal_images_string .= "]";
 </div><!-- content -->
 
 
-<!--
-<div id="popupPageWrapper">
-
-<div id='popupPage'>
-	
-	<div align="left" class='popupContent'>
-	
-		<div align="center" style='padding-top:20px'>
-		<h2><?php echo PageManager::getPageTitle(); ?></h2>
-		
-		<span class='divider'></span>
-						
-		<div class='popupText' align="left">
-			<?php echo PageManager::getCurrentPageContent(); ?>
-		</div>
-		</div>
-		
-	</div>
-	
-</div>
-</div>
--->
-
 <script type="text/javascript">
 
-/*				
-	// moved to footer
-	$(window).resize(function() {
-		
-		if (!$.browser.msie){
-			$('.scrollWrapper').jScrollPane();
-		}
-		
-	});
-*/
 	$(window).ready(function() {
 	
 		<?php if (isset($pre_gallery_page_id)){ ?>

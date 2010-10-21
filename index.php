@@ -61,7 +61,13 @@ if ($page == '' || (($ext == 'html') || ($ext == 'htm') || ($ext == 'php'))) {
     require_once(PageManager::$theme_file_root . 'header.php');
 
     // Get the contents..
-    require_once(PageManager::$theme_file_root . 'page_templates/' . PageManager::$template_filename);
+    if (PageManager::$validPage){
+	    require_once(PageManager::$theme_file_root . 'page_templates/' . PageManager::$template_filename);
+    }
+    else {
+        $page404 = PageManager::$theme_file_root . '404.php';
+        require_once($page404);
+    }
 
     // Echo footer
     require_once(PageManager::$theme_file_root . 'footer.php');
