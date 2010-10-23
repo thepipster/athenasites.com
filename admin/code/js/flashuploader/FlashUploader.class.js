@@ -131,7 +131,12 @@ var FlashUploader = {
 	
 			switch (errorCode) {
 			case SWFUpload.UPLOAD_ERROR.HTTP_ERROR:
-				progress.setStatus("Upload Error: " + message);
+				if (message == 413){
+					progress.setStatus("Error: Exceeded maximum file size");
+				}
+				else {
+					progress.setStatus("Upload Error: " + message);
+				}
 				Logger.error("[FlashUploader.uploadError] Error Code: HTTP Error, File name: " + file.name + ", Message: " + message);
 				break;
 			case SWFUpload.UPLOAD_ERROR.UPLOAD_FAILED:
@@ -151,7 +156,7 @@ var FlashUploader = {
 				Logger.error("[FlashUploader.uploadError] Error Code: Upload Limit Exceeded, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
 				break;
 			case SWFUpload.UPLOAD_ERROR.FILE_VALIDATION_FAILED:
-				progress.setStatus("Failed Validation.  Upload skipped.");
+				progress.setStatus("Failed Validation. Upload skipped.");
 				Logger.error("[FlashUploader.uploadError] Error Code: File Validation Failed, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
 				break;
 			case SWFUpload.UPLOAD_ERROR.FILE_CANCELLED:

@@ -39,7 +39,7 @@ if (!isset($logo_url) || $logo_url == ""){
 								
 							$id = $page['id'];
 							$parent_page_id = $page['parent_page_id'];
-							$title = strtoupper($page['title']);	
+							$title = $page['title'];	
 							$page_slug = $page['slug'];
 							$link = PageManager::getPageLink($id);					
 							
@@ -189,7 +189,7 @@ var thebeMain = {
 		
 		if (ret.result == 'ok'){
 		
-			var title = ret.data.page.title;
+			//var title = ret.data.page.title;
 			var backgroundImage = '';
 			var content = ret.data.page.content;
 			
@@ -197,20 +197,10 @@ var thebeMain = {
 			
 			txt += "<div  id='popupPage' class='curvedOuterWrapper'>";
 			txt += "    <div class='curvedWrapper'>";
-			txt += "		<div class='curved' align='center' >";
-					
-			txt += "			<div class='scrollWrapper' align='left'>";
-						
-			txt += "				<div class='popupContent' align='center'>";
-			txt += "					<h2>"+title+"</h2>";
-								
-			txt += "					<span class='divider'></span>";
-												
-			txt += "					<div class='popupText' align='left'>"+content+"</div>";
-			txt += "				</div>";
-							
-			txt += "			</div>	";		
-						
+			txt += "		<div class='curved' align='center' >";					
+			txt += "			<div class='scrollWrapper' align='left'>";						
+			txt += "				<div class='popupContent'>"+content+"</div>";							
+			txt += "			</div>	";								
 			txt += "		</div>";
 			txt += "	</div>";
 			txt += "</div>";

@@ -52,15 +52,7 @@ $gal_images_string .= "]";
 		
 			<div class='scrollWrapper' align="left">
 			
-				<div class='popupContent' align="center">
-					<h2><?php echo PageManager::getPageTitle(); ?></h2>
-					
-					<span class='divider'></span>
-									
-					<div class='popupText' align="left">
-						<?php echo PageManager::getCurrentPageContent(); ?>
-					</div>
-				</div>
+				<div class='popupContent'><?php echo PageManager::getCurrentPageContent(); ?></div>
 				
 			</div>			
 			

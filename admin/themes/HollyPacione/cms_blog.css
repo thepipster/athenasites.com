@@ -6,6 +6,17 @@ Version: 1.0
 Author: Mike Pritchard
 Author URI: http://apollosites.com
 */
+
+.apolloPageBreak {
+	border-style: solid;
+	border-color: #aaaaaa;
+	border-width: 1px;
+	background-color: #ebebeb;
+	padding-left: 5px;
+	margin: 10px;
+	margin-left: 20px;
+	margin-right: 20px;
+}
 			
 html, body {
 	/* font-family: Verdana, Verdana, Geneva, sans-serif; */

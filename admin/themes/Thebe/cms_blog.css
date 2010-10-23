@@ -1,49 +1,45 @@
-/*   
-Theme Name: Holly Pacione
-Theme URI: http://apollosites.com/holly
-Description: Wordpress theme for Holly Pacione (v1.0)
-Version: 1.0
-Author: Mike Pritchard
-Author URI: http://apollosites.com
-*/
-			
+.apolloPageBreak {
+	border-style: solid;
+	border-color: #aaaaaa;
+	border-width: 1px;
+	background-color: #ebebeb;
+	padding-left: 5px;
+	margin: 10px;
+	margin-left: 20px;
+	margin-right: 20px;
+}
+		
 html, body {
-	/* font-family: Verdana, Verdana, Geneva, sans-serif; */
-	font-family: MS Sans Serif4, Geneva, sans-serif;
+	font-family: Lucida Sans Unicode, Lucida Grande, sans-serif;
+	/* Check out http://www.ampsoft.net/webdesign-l/WindowsMacFonts.html for safe x-browser font families */
 	font-size: 11px;
 	height: 100%;
 	width:100%;
 	margin: 0;
 	padding: 0;
+    background-color: white;
 }
 
-
-html {
-	height: 100%;
-	width:100%;
-/*	background-color: #262636;  */
-	background-color: #f9f9f9; 
-
-	padding-left: 20px;
-	padding-right: 20px;
-} 
-
- 
 h1 {
-	font-weight: normal;
+	font-size: 18px !important;
+	padding-top: 5px;
+	padding-bottom: 5px;
 }
 
 h2 {
-	font-weight: normal;
+	font-size: 16px !important;
+	padding-top: 5px;
+	padding-bottom: 5px;
 }
 
 h3 {
-	font-weight: normal;
+	font-size: 14px !important;
+	padding-top: 5px;
+	padding-bottom: 5px;
 }
 
-
 p {
-	font-size: 12px;
+	font-size: 12px !important;
 	padding-top: 5px;
 	padding-bottom: 5px;
 }
@@ -51,8 +47,9 @@ p {
 a { 
 	text-decoration: none;
 	outline:none;
-	padding: 0;
-	margin: 0;	
 }
-
-a:hover { color: #d8d8d8 }
+		
+img {
+	margin-top:10px;
+	margin-bottom:10px;
+}

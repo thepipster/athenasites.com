@@ -1,0 +1,50 @@
+html, body {
+	font-family: Lucida Sans Unicode, Lucida Grande, sans-serif;
+	/* Check out http://www.ampsoft.net/webdesign-l/WindowsMacFonts.html for safe x-browser font families */
+	font-size: 11px;
+	height: 100%;
+	width:100%;
+	margin: 0;
+	padding: 0;
+	/*
+	-moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;	
+    */
+    background-color: white;
+}
+
+h1 {
+	font-weight: normal;
+	color: #9b0100;
+	font-size: 28px;
+	display: block;
+	width: 100%;
+	padding: 0px;
+	margin: 0px;
+}
+
+h2 {
+	font-weight: normal;
+	color: #9b0100;
+	font-size: 22px;
+	display: block;
+	width: 100%;
+	padding: 0px;
+	margin: 0px;
+}
+
+h3 {
+	font-weight: normal;
+}
+
+p {
+	font-size: 12px !important;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+a { 
+	text-decoration: none;
+	outline:none;
+}

@@ -130,37 +130,6 @@ var PagesSidebarFrame = {
 
         return txt;
     },
-
-//    getPageHtml : function(page_id, page_title, page_status, page_depth){
-//
-//        var txt = '';
-//
-//        var status = "";
-//        if (page_status == 'Draft'){
-//            icon = "images/webpage_draft.png";
-//        }
-//        else if (page_status == 'Private'){
-//            icon = "images/webpage_private.png";
-//        }
-//        else if (page_status == 'Published'){
-//            icon = "images/webpage_published.png";
-//        }
-//
-//        var nodeIcon = "images/FileTreeIcons/collapsed.png";
-//
-//        var selected = '';
-//        if (page_id == DataStore.m_currentPageID){
-//            selected = 'selected';
-//        }
-//
-//        txt += "<div onclick=\"PagesSidebarFrame.onSelectPage('"+page_id+"')\" class='page page_depth_"+page_depth+"' id='page_"+page_id+"' title=''>";
-//        //txt += "    <img class='node_icon' src='"+nodeIcon+"'>";
-//        txt += "    <img class='page_icon' src='"+icon+"'>";
-//        txt += "    <span class='page_name "+selected+"'>"+page_title+"</span>";
-//        txt += "</div>";
-//
-//        return txt;
-//    },
 	
     // ////////////////////////////////////////////////////////////////////////////
 
