@@ -51,14 +51,10 @@ $gal_images_string .= "]";
 		
 			<div class='scrollWrapper' align="left">
 			
-				<div class='popupContent' align="center">
-					<h2><?php echo PageManager::getPageTitle(); ?></h2>
-					
-					<span class='divider'></span>
-									
-					<div class='popupText' align="left">
-						<?php echo PageManager::getCurrentPageContent(); ?>
-						<br/>
+				<div class='popupContent' align="left">
+
+					<?php echo PageManager::getCurrentPageContent(); ?>
+					<br/>
 					
 					<form id='contactForm' method='post' action='' onsubmit="thebeContact.onSubmit(); return false;">					
 					<table border="0" cellpadding="50px" cellspacing="0" id='contentTable' width="100%" height="100%" style="width:100%; height:100%;">
