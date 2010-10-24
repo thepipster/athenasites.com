@@ -68,6 +68,7 @@ var ssMain = {
 		// Change listeners
 		//$(':text').typing({ stop: ssMain.onDataChange, delay: 400});
 		$('.apolloDataInput').typing({ stop: ssMain.onDataChange, delay: 400});
+		$('.apolloDataInput').change(ssMain.onDataChange);
 
     },
 

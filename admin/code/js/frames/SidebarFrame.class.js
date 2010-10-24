@@ -49,12 +49,19 @@ var SidebarFrame = {
                 }
                 break;
 			
-            case ssMain.VIEW_STATS :
             case ssMain.VIEW_PAGES :
                 if (SidebarFrame.m_mode != 'Pages'){
                     $('#SideBar').html("");
                     SidebarFrame.m_mode = 'Pages';
                     SidebarFrame.paintPages();
+                }
+                break;
+			
+            case ssMain.VIEW_STATS :
+                if (SidebarFrame.m_mode != 'Stats'){
+                    $('#SideBar').html("");
+                    SidebarFrame.m_mode = 'Stats';
+                    SidebarFrame.paintStatsSidebar();
                 }
                 break;
 			
@@ -105,6 +112,20 @@ var SidebarFrame = {
 
     // ////////////////////////////////////////////////////////////////////////////
 
+	paintStatsSidebar : function(){
+
+        var txt = SidebarFrame.getHeader();
+        txt += "<p>Pages<span class='add_new_project' onclick='PagesSidebarFrame.addPage()' title='Add a new blank page to you site.'>&nbsp;(add)</span></p>";
+        txt += "<div id='SideBar_Pages'></div>";
+		
+        $('#SideBar').append(txt);
+
+        StatsSidebarFrame.paint('#SideBar_Pages');
+
+	},
+	
+    // ////////////////////////////////////////////////////////////////////////////
+	
     paintPages : function(){
 
         var txt = SidebarFrame.getHeader();

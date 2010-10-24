@@ -151,15 +151,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 
         <script src="code/js/3rdparty/date.format.js" type="text/javascript"></script>
 
-        <!-- CKEditor -->
-        <!--
-        <script type="text/javascript" src="code/ckeditor/ckeditor.js"></script>
-        <script type="text/javascript" src="code/3rdparty/ckeditor/ckeditor_source.js"></script>
-        -->
-        <!--
-                <script type="text/javascript" src="code/3rdparty/openwysiwyg/scripts/wysiwyg.js"></script>
-                <script type="text/javascript" src="code/3rdparty/openwysiwyg/scripts/wysiwyg-settings.js"></script>
-        -->
+        <!-- InnovaStudio -->
         <script type="text/javascript" src="code/3rdparty/InnovaStudio/scripts/innovaeditor.js"></script>
 
         <!-- Utils -->
@@ -195,6 +187,7 @@ Logger::debug("$domain has site_id = $current_site_id");
         <!-- Sub-Frame Displays -->
         <script src="code/js/subframes/FolderSidebarFrame.class.js" type="text/javascript"></script>
         <script src="code/js/subframes/PagesSidebarFrame.class.js" type="text/javascript"></script>
+        <script src="code/js/subframes/StatsSidebarFrame.class.js" type="text/javascript"></script>
         <script src="code/js/subframes/ImageSelector.class.js" type="text/javascript"></script>
         <script src="code/js/subframes/ImageEditFrame.class.js" type="text/javascript"></script>
         <script src="code/js/subframes/PostsSidebarFrame.class.js" type="text/javascript"></script>
@@ -206,6 +199,7 @@ Logger::debug("$domain has site_id = $current_site_id");
         <script src="code/js/frames/GalleriesFrame.class.js" type="text/javascript"></script>
         <script src="code/js/frames/PagesFrame.class.js" type="text/javascript"></script>
         <script src="code/js/frames/PostsFrame.class.js" type="text/javascript"></script>
+        <script src="code/js/frames/StatsFrame.class.js" type="text/javascript"></script>
         <script src="code/js/frames/SidebarFrame.class.js" type="text/javascript"></script>
 
 
@@ -263,6 +257,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                         <div id='files_menu' class='menu_item' onclick='ssMain.onShowFiles()'>Files</div>
                         <div id='gallery_menu' class='menu_item' onclick='ssMain.onShowGalleries()'>Galleries</div>
                         <div id='stats_menu' class='menu_item' onclick='ssMain.onShowStats()'>Stats</div>
+                        <div id='stats_menu' class='menu_item' onclick='ssMain.onShowSettings()'>Settings</div>
 
                         <?php
                         if ($user['service_client_gallery'] == 1) {
@@ -698,12 +693,14 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                     <span class='pageLabel'>Last Edit:</span>
                                                     <span class='pageData' id='pageLastEdit'></span>
                                                 </div>
-
+                                                
+                                                <!--
                                                 <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Created:</span>
                                                     <span class='pageData' id='pageCreated'></span>
                                                 </div>
-
+												-->
+												
                                                 <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Global:</span>
                                                     <a href='#' onclick="PagesFrame.editGlobalSettings()" title="Edit your global page settings">Edit Settings</a>
@@ -849,9 +846,34 @@ Logger::debug("$domain has site_id = $current_site_id");
                         <!-- Stats Page Content ///////////////////////////////////////////////////////////// -->
 
                         <div id='StatsFrame' class='ViewFrame'>
+                        
                             <div class="frameContents">
+                            
                                 <h3>This awesome feature will be here soon, wish we could have it now - but we're working on is as fast as we can!</h3>
                                 <p>This page will allow you to look at your total stats, and also allow you to drill down and look at stats for each page.</p>
+
+                            	<!--
+                            
+                            	<div class='apolloStatsControls'>
+                            	
+                            		<button class='basic_button'>Site</button>
+                            		<button class='basic_button'>Top Pages</button>
+                            		<button class='basic_button'>Top Posts</button>
+                            		
+                            		<select>
+                            			<option id='month'>Last 30 days</option>
+                            			<option id='quarter'>Last 90 days</option>
+                            			<option id='year'>This year</option>
+                            		</select>
+                            		
+                            	</div>    
+                            	
+                                <div class="apolloStatsGraphWrapper" style='height:200px; width:90%; margin-top:10px'>
+                                	<div id="apollo_stats_graph_small" class="" style='height:100%; width:100%;'></div>
+                                </div>
+                                -->
+
+
                             </div>
                         </div> <!-- content -->
 

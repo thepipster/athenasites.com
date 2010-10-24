@@ -58,11 +58,14 @@
 					<div class='postContent' align="left">
 						<?=$content?>			
 					</div>
+					<br/>
 					
+					<!--
 			        <div class="post_author">
 						by <?= $author ?>
 			        </div>
-			
+					-->
+					
 			        <p>
 			            Categories: <?= PageManager::getCategories($post); ?><br/>
 			            Tags: <?= PageManager::getTags($post); ?><br/>
