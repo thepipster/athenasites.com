@@ -28,8 +28,6 @@ var PostsFrame = {
             AthenaDialog.backgroundMessage("You currently have no posts, you can add a post using the side-bar");
         }
 
-		// Change listeners
-		$('.apolloDataInput').change(PostsFrame.onChange);
 		//oUtil.obj.onKeyPress = PostsFrame.onContentKeyPress;
 
         MediaAPI.getPostDetails(DataStore.m_siteID, DataStore.m_currentPostID, PostsFrame.repaintData);
@@ -126,7 +124,12 @@ var PostsFrame = {
             }
 		
             var blogslug = blogPage.path + blogPage.slug;
-            blogslug = blogslug.substring(0, blogslug.length-5); // Strip .html
+            
+            // Strip .html, if it has it
+            var pos = blogslug.indexOf('.html');
+            if (pos > 0){
+	            blogslug = blogslug.substring(0, pos); 
+            }
             $('#pageLink').html("View Post");
             $('#pageLink').attr('href', 'http://' + defines.domain + blogslug + postObj.path + postObj.slug);
         }

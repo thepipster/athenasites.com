@@ -23,10 +23,6 @@ var PagesFrame = {
             AthenaDialog.backgroundMessage("You currently have no pages, you can add a post using the side-bar");
             return;
         }
-
-		// Change listeners
-		//oUtil.obj.change(PagesFrame.onChange);		
-		$('.apolloDataInput').change(PagesFrame.onChange);
 				
 		//oUtil.obj.onKeyPress = PagesFrame.onContentKeyPress;
         var pageObj = DataStore.getCurrentPage();

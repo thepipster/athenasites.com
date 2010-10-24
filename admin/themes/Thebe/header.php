@@ -108,17 +108,22 @@ PageManager::doHeader();
 		.curvedOuterWrapper {
 			width: 100%;
 			height: 100%;
-			position: absolute;
+			position: fixed;
+			bottom: 200px;
+			left: 25%;
+			width: 50%;
+			height: 70%;
 		}
 		
 		.curvedWrapper {
 			position: relative;
-			margin: 0px 0 0 0px;
-			padding: 25px;
-			width: 50%;
-			height: 70%;
-			top: 10%;
+			padding: 0;
+			margin: 0;
+			width: 100%;
+			height: 100%;
+			/*top: 10%;
 			left: 25%;	
+			*/
 			z-index: inherit;
 		}
 		

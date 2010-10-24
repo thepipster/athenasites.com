@@ -46,14 +46,14 @@ $gal_images_string .= "]";
 </script>
 
 
-<div  id='popupPage' class='curvedOuterWrapper'>
+<div id='popupPage' class='curvedOuterWrapper'>
 	<div class='curvedWrapper'>
 		<div class="curved" align="center" >
 		
-			<div class='scrollWrapper' align="left">
+			<div class='closePopup' onclick='thebeMain.onClose()'>X</div>
 			
-				<div class='popupContent'><?php echo PageManager::getCurrentPageContent(); ?></div>
-				
+			<div class='scrollWrapper' align="left">			
+				<div class='popupContent'><?php echo PageManager::getCurrentPageContent(); ?></div>				
 			</div>			
 			
 		</div>

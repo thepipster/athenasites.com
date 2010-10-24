@@ -11,7 +11,6 @@ var ssMain = {
     VIEW_POSTS : 4,
     VIEW_GALLERIES : 5,
     VIEW_STATS : 6,
-    VIEW_EDITFILES : 9,
 
     view : 1,
 
@@ -65,7 +64,11 @@ var ssMain = {
         GalleriesFrame.init();
         PagesFrame.init();
         PostsFrame.init();
-        EditImageFrame.init();
+        
+		// Change listeners
+		//$(':text').typing({ stop: ssMain.onDataChange, delay: 400});
+		$('.apolloDataInput').typing({ stop: ssMain.onDataChange, delay: 400});
+
     },
 
     // ////////////////////////////////////////////////////////////////////////
@@ -156,7 +159,23 @@ var ssMain = {
 
         ssMain.repaint();
     },
+	
+    // ////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Listen for changes in data input fields (that have the class 'apolloDataInput'), and pipe to the correct frame
+	*/	
+	onDataChange : function(){
+        switch(ssMain.view){
+            case ssMain.VIEW_PAGES : PagesFrame.onChange(); break;
+            case ssMain.VIEW_POSTS : PostsFrame.onChange(); break;
+            case ssMain.VIEW_FILES: FilesFrame.onImageEditorChange(); break;
+            case ssMain.VIEW_DASHBOARD:
+            case ssMain.VIEW_GALLERIES:
+            case ssMain.VIEW_STATS:break;
+        }		
+	},
+		
     // ////////////////////////////////////////////////////////////////////////
 
     onSelectSite : function(site_id){
@@ -165,35 +184,62 @@ var ssMain = {
 
     // ////////////////////////////////////////////////////////////////////////
 
-    onShowDashboard : function(){ssMain.savePageContent(); ssMain.view = ssMain.VIEW_DASHBOARD;ssMain.repaint();},
-    onShowPages : function(){ssMain.savePageContent(); ssMain.view = ssMain.VIEW_PAGES;ssMain.repaint();},
-    onShowFiles : function(){ssMain.savePageContent(); ssMain.view = ssMain.VIEW_FILES;ssMain.repaint();},
-    onShowPosts : function(){ssMain.savePageContent(); ssMain.view = ssMain.VIEW_POSTS;ssMain.repaint();},
-    onShowGalleries : function(){ssMain.savePageContent(); ssMain.view = ssMain.VIEW_GALLERIES;ssMain.repaint();},
-    onShowStats : function(){ssMain.savePageContent(); ssMain.view = ssMain.VIEW_STATS;ssMain.repaint();},
-    onShowEditImages : function(){ssMain.savePageContent(); ssMain.view = ssMain.VIEW_EDITFILES;ssMain.repaint();},
+    onShowDashboard : function(){ssMain.changePage(ssMain.VIEW_DASHBOARD);},
+    onShowPages : function(){ssMain.changePage(ssMain.VIEW_PAGES);},
+    onShowFiles : function(){ssMain.changePage(ssMain.VIEW_FILES);},
+    onShowPosts : function(){ssMain.changePage(ssMain.VIEW_POSTS);},
+    onShowGalleries : function(){ssMain.changePage(ssMain.VIEW_GALLERIES);},
+    onShowStats : function(){ssMain.changePage(ssMain.VIEW_STATS);},
 
     // ////////////////////////////////////////////////////////////////////////
 
 	/**
 	* Make sure we grab any content and update the local data store before we allow a page change
 	*/
-	savePageContent : function(){
-		
-        switch(ssMain.view){
-
+	changePage : function(newPage){
+								
+		//Logger.show();
+		//Logger.debug("Changing from " + ssMain.getPageName(oldPage) + " to " + ssMain.getPageName(newPage));
+								
+		var oldPage = ssMain.view;						
+		ssMain.view = newPage;		
+				
+		// Save page content...		
+        switch(oldPage){
             case ssMain.VIEW_PAGES : PagesFrame.onChange();break;
             case ssMain.VIEW_POSTS : PostsFrame.onChange();break;
+            case ssMain.VIEW_FILES: FilesFrame.onImageEditorChange(); break;
             case ssMain.VIEW_DASHBOARD:
-            case ssMain.VIEW_FILES:
             case ssMain.VIEW_GALLERIES:
-            case ssMain.VIEW_STATS:
-            case ssMain.VIEW_EDITFILES: break;
+            case ssMain.VIEW_STATS: break;
         }
+        
+        // Force the save
+        DataStore.save();
+
+		// Stop autosave thread..
+		DataStore.m_doAutoSave = false;
 
 		// Clear the content
 		oUtil.obj.putHTML("");
 		
+		ssMain.repaint();
+	},
+	
+	getPageName : function(pageNo){
+	
+		var page = "";
+		
+        switch(pageNo){
+            case ssMain.VIEW_PAGES : page = "PAGES"; break;
+            case ssMain.VIEW_POSTS : page = "POSTS"; break;
+            case ssMain.VIEW_DASHBOARD: page = "DASHBOARD"; break;
+            case ssMain.VIEW_FILES: page = "FILES"; break;
+            case ssMain.VIEW_GALLERIES: page = "GALLERIES"; break;
+            case ssMain.VIEW_STATS: page = "STATS"; break;
+        }
+
+		return page;
 	},
 	
     // ////////////////////////////////////////////////////////////////////////
@@ -218,10 +264,12 @@ var ssMain = {
             case ssMain.VIEW_DASHBOARD:$('#DashboardFrame').show();$('#dashboard_menu').addClass('selected');DashboardFrame.repaint();break;
             case ssMain.VIEW_FILES:$('#FilesFrame').show();$('#files_menu').addClass('selected');FilesFrame.repaint();break;
             case ssMain.VIEW_GALLERIES:$('#GalleriesFrame').show();$('#gallery_menu').addClass('selected');GalleriesFrame.repaint();break;
-            case ssMain.VIEW_STATS:$('#StatsFrame').show();$('#stats_menu').addClass('selected');StatsFrame.repaint();break;
-            case ssMain.VIEW_EDITFILES:$('#EditFilesFrame').show();$('#edit_files_menu').addClass('selected');EditImageFrame.repaint();break;
+            case ssMain.VIEW_STATS:$('#StatsFrame').show();$('#stats_menu').addClass('selected');StatsFrame.repaint();break;            
         }
 
+		// Start autosave thread..
+		DataStore.m_doAutoSave = true;
+		
         //window.location.hash = ssMain.view;
 
         SidebarFrame.repaint();
@@ -251,7 +299,8 @@ var ssMain = {
             ["grpObjects", "Objects", ["Image", "InsertInternalImage", "Flash", "Media", "BRK", "Hyperlink", "Characters", "Line",  "ApolloPageBreak"]]
         ];
 
-        oUtil.initializeEditor("apolloContentEditor", {
+		// apolloContentEditor
+        oUtil.initializeEditor("#pageContentEditor", {
             width:"100%",
             height:ht+"px",
 //            height:"100%",
@@ -292,14 +341,6 @@ var ssMain = {
 	            case ssMain.VIEW_POSTS : PostsFrame.onChange(); break;
 			}		
 			
-	/*	
-			if (ssMain.m_contentChangedTO != ''){
-				// Still typing, so clear timeout and reset
-				clearTimeout(ssMain.m_contentChangedTO);
-			}
-			
-			ssMain.m_contentChangedTO = setTimeout(ssMain.onEditorContentChanged, 500);
-	*/
 		}		
 
 		ssMain.m_prevContent = content;
@@ -321,6 +362,8 @@ var ssMain = {
      */
     onInsertPageBreak : function(){
 
+		if (ssMain.view != ssMain.VIEW_POSTS) return;
+		
         // Has the user already got a apollo page break in this page?
         var content = oUtil.obj.getXHTMLBody();
         var myRegExp = /apolloPageBreak/;

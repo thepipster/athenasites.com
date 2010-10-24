@@ -49,6 +49,8 @@ $gal_images_string .= "]";
 	<div class='curvedWrapper'>
 		<div class="curved" align="center" >
 		
+			<div class='closePopup' onclick='thebeMain.onClose()'>X</div>
+			
 			<div class='scrollWrapper' align="left">
 			
 				<div class='popupContent' align="left">

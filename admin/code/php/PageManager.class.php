@@ -554,13 +554,11 @@ class PageManager {
 
         //$content = stripslashes($post['content']);
         $content = $post['content'];
-        
-        return $content;
-        
-                
+                        
         if (self::$blog_mode == self::$BLOGMODE_SINGLEPOST) {
             // Remove more tag
             $post_content = preg_replace("/<div class='apolloPageBreak'>(.*?)<\/div>/i", "", $content);
+            $post_content = preg_replace("/<div class=\"apolloPageBreak\">(.*?)<\/div>/i", "", $content);
         } 
         else {
 

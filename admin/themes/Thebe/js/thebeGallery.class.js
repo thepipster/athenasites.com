@@ -53,7 +53,7 @@ var thebeGallery = {
 		var flashvars = { 
 			xmlFile: thebeGallery.flashXML, 
 			startGal: 1,
-			startImg: 5 
+			startImg: 0 
 		};
 		
 		var params = {

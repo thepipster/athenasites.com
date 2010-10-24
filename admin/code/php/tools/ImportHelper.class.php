@@ -194,6 +194,7 @@ class ImportHelper {
 	public static function processPostContent($site_id, $post){
 
 	    $content = $post['content'];
+	    $blogpage = PagesTable::getBlogpage($site_id);
 	            
 	    // Do a one time conversion, if required
 	    if ($post['source'] != 'apollo'){
@@ -201,8 +202,18 @@ class ImportHelper {
 			PostsTable::updateSourceAndContent($site_id, $post['id'], $content, 'apollo');
 	    }
 	
+		Logger::debug($content);
+		
+//		<div class="apolloPageBreak">More...</div>
 	    $result = preg_match("/<div class='apolloPageBreak'>(.*?)<\/div>/i", $content, $match);
 	
+		if (!$result){
+			// Try buy using double quotes
+		    $result = preg_match("/<div class=\"apolloPageBreak\">(.*?)<\/div>/i", $content, $match);
+		}
+		
+		Logger::debug("Match result = $result");
+		
 	    if ($result) {
 	
 	        if (isset($match) && isset($match[1])) {
@@ -210,7 +221,14 @@ class ImportHelper {
 	        }
 	
 	        $tag = "<div class='apolloPageBreak'>$more_text</div>";
-	        $post_link = PageManager::getPostLink($post);
+	        
+	        if (isset($blogpage)){
+		        $post_link = $blogpage['path'] . $blogpage['slug'] . $post['path'] . $post['slug'];
+	        }
+	        else {
+		        $post_link = $post['path'] . $post['slug'];
+	        }
+	        
 	        $link_tag .= "<p><a href='$post_link' class='apolloPageBreak'>$more_text</a></p>";
 	
 	        $s_pos = strpos($content, $tag);

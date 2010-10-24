@@ -112,6 +112,8 @@ if (!isset($logo_url) || $logo_url == ""){
 
 	$(window).ready(function() {
 
+		thebeMain.init();
+		
 //		if (useMenuGlow){
 //			
 //			$('.glowlink').addGlow({
@@ -128,7 +130,17 @@ siteID = <?= PageManager::$site_id ?>;
 pageID = <?= PageManager::$page_id ?>;
 		
 var thebeMain = {
+
+	init : function(){		
+	},
 	
+	/**
+	* Close the popup box
+	*/	
+	onClose : function(){
+		$('#popupPage').remove();
+	},
+		
 	onNextImage : function(){
 		thebeGallery.nextImage();
 	},
@@ -195,9 +207,10 @@ var thebeMain = {
 			
 			var txt = "";
 			
-			txt += "<div  id='popupPage' class='curvedOuterWrapper'>";
+			txt += "<div id='popupPage' class='curvedOuterWrapper'>";
 			txt += "    <div class='curvedWrapper'>";
 			txt += "		<div class='curved' align='center' >";					
+			txt += "            <div class='closePopup' onclick='thebeMain.onClose()'>X</div>";
 			txt += "			<div class='scrollWrapper' align='left'>";						
 			txt += "				<div class='popupContent'>"+content+"</div>";							
 			txt += "			</div>	";								
@@ -214,7 +227,7 @@ var thebeMain = {
 			txt += "        </div>";
 			txt += "    </div>";
 			*/
-			$('#popupPage').html(txt);
+			$('#popupWrapper').html(txt);
 			$('.scrollWrapper').jScrollPane();
 		}		
 		

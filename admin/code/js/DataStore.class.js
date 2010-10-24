@@ -46,6 +46,9 @@ var DataStore = {
 
     /** List of post tags */
     m_tags : '',
+    
+    /** Flag to enable stopping/starting of auto-save feature */
+    m_doAutoSave : true,
 
     // //////////////////////////////////////////////////////////////////////////////////
 
@@ -547,27 +550,70 @@ var DataStore = {
 	*/
     save : function(){
         
-        var autosaved = false;
+        if (!DataStore.m_doAutoSave) return;
         
+        var autosaved = false;
+        var savingPost = false;
+        var savingPage = false;
+        var savingMedia = false;
+        
+        // Check posts
     	for (var i=0; i<DataStore.m_postList.length; i++){
     		if (DataStore.m_postList[i].isChanged != undefined && DataStore.m_postList[i].isChanged == 1){    	
     			DataStore.savePost(DataStore.m_postList[i]);   	
     			autosaved = true;		
+    			savingPost = true;
     		}
     	}
 
-    	for (var i=0; i<DataStore.m_pageList.length; i++){
+		// Check pages...
+    	for (i=0; i<DataStore.m_pageList.length; i++){
     		if (DataStore.m_pageList[i].isChanged != undefined && DataStore.m_pageList[i].isChanged == 1){  
     			DataStore.savePage(DataStore.m_pageList[i]);   			
     			autosaved = true;		
+    			savingPage = true;
     		}
     	}    	
 
+		// Check images/media....
+    	for (i=0; i<DataStore.m_mediaList.length; i++){
+    		if (DataStore.m_mediaList[i].isChanged != undefined && DataStore.m_mediaList[i].isChanged == 1){  
+    			DataStore.saveMedia(DataStore.m_mediaList[i]);   			
+    			autosaved = true;		
+    			savingMedia = true;
+    		}
+    	}  
+		
 		if (autosaved){
-			AthenaDialog.backgroundMessage("Autosaved");
+
+			var what = "";
+			
+			if (savingPost) what += " post";
+			if (savingPage) what += " page";
+			if (savingMedia) what += " media";
+							
+			AthenaDialog.backgroundMessage("Autosaved" + what);
 		}    	
     },
 
+    // //////////////////////////////////////////////////////////////////////////////////
+
+	saveMedia : function(mediaObj){
+        MediaAPI.updateMediaInfo(DataStore.m_siteID, mediaObj.id, mediaObj.title, mediaObj.description, mediaObj.tags, DataStore.onMediaSaved);
+	},
+	
+	onMediaSaved : function(mediaObj){
+	
+		DataStore.updateMedia(mediaObj);
+		
+		// Mark as saved...
+    	for (var i=0; i<DataStore.m_mediaList.length; i++){
+    		if (DataStore.m_mediaList[i].id == mediaObj.id){
+    			DataStore.m_mediaList[i].isChanged = 0;
+    		}
+		}			
+	},
+	
     // //////////////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -887,18 +933,28 @@ var DataStore = {
     // //////////////////////////////////////////////////////////////////////////////////
 
     /**
-    * Update an existing page
+    * Update an existing page, if preserveURL is set to true then don't add the path to the image url
     */
-    updateMedia : function(mediaObj){
+    updateMedia : function(mediaObj, preserveURL){
 
+		if (preserveURL == undefined) preserveURL = false;
+		
         for (var i=0; i<DataStore.m_mediaList.length; i++){
             if (DataStore.m_mediaList[i].id == mediaObj.id){
 
                 var files_root = defines.user_files_root_url + DataStore.m_siteID + "/";
 
                 DataStore.m_mediaList[i].id = mediaObj.id;
-                DataStore.m_mediaList[i].thumb_url = files_root + mediaObj.filepath + mediaObj.thumb_filename;
-                DataStore.m_mediaList[i].file_url = files_root + mediaObj.filepath + mediaObj.filename;
+                
+                if (preserveURL){
+	                DataStore.m_mediaList[i].thumb_url = mediaObj.thumb_url;
+	                DataStore.m_mediaList[i].file_url = mediaObj.file_url;
+                }
+                else {
+	                DataStore.m_mediaList[i].thumb_url = files_root + mediaObj.filepath + mediaObj.thumb_filename;
+	                DataStore.m_mediaList[i].file_url = files_root + mediaObj.filepath + mediaObj.filename;
+                }
+                
                 DataStore.m_mediaList[i].mime_type = mediaObj.mime_type;
                 DataStore.m_mediaList[i].title = mediaObj.title;
                 DataStore.m_mediaList[i].description = mediaObj.description;
@@ -909,6 +965,7 @@ var DataStore = {
                 DataStore.m_mediaList[i].thumb_height = mediaObj.thumb_height;
                 DataStore.m_mediaList[i].date_added = mediaObj.date_added;
                 DataStore.m_mediaList[i].folder_id = mediaObj.folder_id;
+                DataStore.m_mediaList[i].isChanged = 1;
 
                 return;
             }

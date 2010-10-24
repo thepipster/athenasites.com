@@ -10,6 +10,12 @@
 <div align='center'>
 <div id='blogPage' align="center">
 
+	<div class='postWrapper' align="left">
+	<?php echo PageManager::getCurrentPageContent(); ?>
+	</div>
+	
+	<br/>
+
 	<?php
 
         $post_list = PageManager::getPosts();

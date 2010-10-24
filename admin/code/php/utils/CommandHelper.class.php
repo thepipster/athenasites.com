@@ -90,6 +90,10 @@ class CommandHelper {
 	        $val_set = true;
 	    }
 	
+		if ($type == self::$PARA_TYPE_STRING && $val == ""){
+			$val_set = true;
+		}
+		
 		$typestr = "Unknown";
 	
 	    if ($val_set){
@@ -104,6 +108,7 @@ class CommandHelper {
 	                break;
 	
 	            case self::$PARA_TYPE_STRING :
+	            	$typestr = 'string';
 	                return mysql_real_escape_string($val);
 	                break;
 	

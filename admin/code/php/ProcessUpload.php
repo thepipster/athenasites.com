@@ -112,8 +112,8 @@ else {
      */
     //chmod($new_filename, 0777);
     // Add to media table
-    //FolderTable::addMedia($folder_id, $site_id, $name, $mime_type, $file_size);
     
+    // addMedia($folder_id, $site_id, $filename, $mime_type, $file_size, $filepath, $title, $descriptions, $tags, $width, $height, $thumb_filename, $thumb_width, $thumb_height)
     FolderTable::addMedia($folder_id, $site_id, $name, $mime_type, $file_size, $filepath, $title, '', '', $width, $height, $thumb_name, $thumb_width, $thumb_height);
 
     // Make a thumbnail

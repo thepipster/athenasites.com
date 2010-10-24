@@ -102,10 +102,6 @@ var FilesFrame = {
 		
     // ////////////////////////////////////////////////////////////////////////////
 	
-    onCancelSelectImage : function(){
-        FilesFrame.onShowUploader();
-    },
-	
 	onSelectFolder : function(){
 		FilesFrame.m_currentImagePage = 0;
 		FilesFrame.repaintData();
@@ -148,10 +144,27 @@ var FilesFrame = {
 	},	
 	
     // ////////////////////////////////////////////////////////////////////////////
+	
+    updateFolderName : function(name){
+    //$('#apollo_title_folder_name').html(name);
+    },
+
+    // ////////////////////////////////////////////////////////////////////////
+    //
+    // Image Editor
+    //
+    // ////////////////////////////////////////////////////////////////////////
 
 	m_currentImageID : 0,
 	
     onSelectImage : function(image_id){		
+        
+        var imageData = DataStore.getImage(image_id);
+
+        if (!imageData) {
+            AthenaDialog.error('Error, could not find image!');
+            return;
+        }
         
         $('#imageEditContent').show();
         $('#flashUploderContent').hide();		
@@ -163,7 +176,32 @@ var FilesFrame = {
         	image_id = FilesFrame.m_imageList[0].id;	
         }
         
-        ImageEditFrame.paint('#imageInfoContent', image_id);		       
+        //ImageEditFrame.paint('#imageInfoContent', image_id);	
+        									
+        var thumb_url = imageData.thumb_url;
+        var img_width = imageData.width;
+        var img_height = imageData.height;
+        var image_folder_id = imageData.folder_id;
+        var added_date = imageData.date_added;	// UTC
+
+        var img_title = AthenaUtils.htmlEncode(imageData.title);
+        var desc = AthenaUtils.htmlEncode(imageData.description);
+        var alt_text = AthenaUtils.htmlEncode(imageData.tags);
+        var image_url = imageData.file_url;        
+        
+        var max_img_width = $('#imageEditContent').innerWidth() - 20;
+        var max_img_height = 400;        
+                
+        $('#apollo_image_title').val(img_title);
+        $('#apollo_image_date').val(added_date + " (GMT)");
+        $('#apollo_image_size').val(img_width + "px by " + img_height + "px");
+        $('#apollo_image_desc').val(desc);
+        $('#apollo_image_tags').val(img_title);
+        $('#apollo_image_url').css('max-width', max_img_width);
+        $('#apollo_image_url').css('max-height', max_img_height);
+        $('#apollo_image_url').attr('src', image_url);
+                        
+                               	       
 		FilesFrame.m_currentImageID = image_id;  
 		
 		var prevMode = FilesFrame.m_mode;
@@ -176,10 +214,63 @@ var FilesFrame = {
 			FilesFrame.paintImages();		
 		}
 		     
-    },
+    },	
 	
     // ////////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Called whenever something changes on the edit image sub-frame. Stores the content locally
+	* which is then stored to the server by the autosave feature
+	*/	
+	onImageEditorChange : function(){
+	
+        var mediaObj = DataStore.getImage(FilesFrame.m_currentImageID);
+        mediaObj.title = $('#apollo_image_title').val();        
+        mediaObj.description = $('#apollo_image_desc').val();        
+        mediaObj.tags = $('#apollo_image_tags').val(); 
+                       
+        DataStore.updateMedia(mediaObj, true);
+	},
+	
+    // ////////////////////////////////////////////////////////////////////////////
+
+	/** 
+	* Hide the image edit sub-frame
+	*/
+    onCancel : function(){
+        FilesFrame.onShowUploader();
+    },
+	
+    // ////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	* Delete a image
+	*/
+    onDeleteImage : function(media_id){
+    	
+    	var media_id = FilesFrame.m_currentImageID;	
+    	
+        AthenaDialog.confirm("Are you sure you want to delete this image? This can not be undone!", function(){
+            FilesFrame.onDoDelete(media_id);
+        });
+    },
+
+    onDoDelete : function(media_id){
+        MediaAPI.deleteMedia(DataStore.m_siteID, media_id, FilesFrame.onDeleted);
+    },
+
+    onDeleted : function(media_id){
+        // Update data store
+        DataStore.deleteMedia(media_id);
+        FilesFrame.repaint();
+    },	
+		
+    // ////////////////////////////////////////////////////////////////////////
+    //
+    // File Uploader
+    //
+    // ////////////////////////////////////////////////////////////////////////
+	
     onShowUploader : function(){        
     
         $('#imageEditContent').hide();
@@ -197,16 +288,9 @@ var FilesFrame = {
 		}
         
     },
-	
-    // ////////////////////////////////////////////////////////////////////////////
-	
-    updateFolderName : function(name){
-    //$('#apollo_title_folder_name').html(name);
-    },
-	
+    	
     // ////////////////////////////////////////////////////////////////////////
-    // ////////////////////////////////////////////////////////////////////////
-	
+    	
     paintUploader : function(){
 
         //FlashUploader.paint('#flashUploader');

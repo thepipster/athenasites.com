@@ -129,7 +129,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 
                 
         <script type="text/javascript" src="code/js/3rdparty/jquery.validate.min.js"></script>
-        <!--<script type="text/javascript" src="code/js/3rdparty/jquery.json-1.3.min.js"></script>-->
+        <script type="text/javascript" src="code/js/3rdparty/jquery.typing-0.2.0.min.js"></script><!-- libray to allow us to know when a user has stopped typing! See http://narf.pl/jquery-typing/ -->
         <script type="text/javascript" src="code/js/3rdparty/jquery.json-2.2.js"></script>
 
         <script type="text/javascript" src="code/js/3rdparty/flot/jquery.flot.min.js"></script>
@@ -206,7 +206,6 @@ Logger::debug("$domain has site_id = $current_site_id");
         <script src="code/js/frames/GalleriesFrame.class.js" type="text/javascript"></script>
         <script src="code/js/frames/PagesFrame.class.js" type="text/javascript"></script>
         <script src="code/js/frames/PostsFrame.class.js" type="text/javascript"></script>
-        <script src="code/js/frames/EditImageFrame.class.js" type="text/javascript"></script>
         <script src="code/js/frames/SidebarFrame.class.js" type="text/javascript"></script>
 
 
@@ -332,8 +331,10 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                         <td width='90px'>Blog Posts</td>
                                                         <td >
                                                             <span class="status_public"><span id="no_posts_published"></span> published </span>,
-                                                            <span class="status_draft"><span id="no_posts_draft"></span> draft</span>,
-                                                            <span class="status_private"><span id="no_posts_private"></span> private </span>
+                                                            <span class="status_draft"><span id="no_posts_draft"></span> draft</span>
+                                                            <!--
+		                                                    ,<span class="status_private"><span id="no_posts_private"></span> private </span>
+                                                            -->
                                                         </td>
                                                     </tr>
 
@@ -423,8 +424,60 @@ Logger::debug("$domain has site_id = $current_site_id");
                                         <td id='imageEditContent' style='height:100%; padding:5px'>
                                             <div class='subframebox' style='height:100%; width:500px;'>
                                                 <span class='title'>Edit Image</span>
+                                                
+                                                
                                                 <div id='imageInfoContent'>
-                                                </div>
+                                               
+                                                
+													<div id='ApolloImageEditDialog' align='center'>
+														
+														<table width='100%' height='100%' cellspacing='3px'>
+														
+														   <tr valign='center' align='center' class='imageDisplay'>
+														      <td class='dataField' colspan='2' >
+														          <img id='apollo_image_url' src=''/>
+														      </td>
+														   </tr>
+														
+														   <tr>
+														      <td class='titleField'>Title</td>
+														      <td class='dataField'><input id='apollo_image_title' type=text class='apolloDataInput' value=''/></td>
+														   </tr>
+														
+														   <tr>
+														      <td class='titleField'>Added</td>
+														      <td class='dataField'><input id='apollo_image_date' width='100%' type=text value='' disabled/></td>
+														   </tr>
+														
+														   <tr>
+														      <td class='titleField'>Size</td>
+														      <td class='dataField'><input id='apollo_image_size' width='100%' type=text value='' disabled/></td>
+														   </tr>														
+														
+														   <tr>
+														      <td class='titleField'>Description</td>
+														      <td class='dataField'><textarea id='apollo_image_desc5555' width='100%' class='apolloDataInput'></textarea></td>
+														   </tr>
+																
+														   <tr>
+														      <td class='titleField'>Alt Text</td>
+														      <td class='dataField'><textarea id='apollo_image_tags555' width='100%' class='apolloDataInput'></textarea></td>
+														   </tr>
+														
+														   <tr align='center'>
+														      <td colspan='2'>
+														          <button class='cancel_button' onclick="FilesFrame.onCancel()">Close</button>
+														          <button class='delete_button' onclick="FilesFrame.onDeleteImage()">Delete</button>
+														      </td>
+														   </tr>														
+														
+														</table>
+														
+													</div><!-- ApolloImageEditDialog -->                                                                                                                                              
+                                                
+                                                </div><!-- imageInfoContent -->
+                                                
+                                                
                                             </div>
                                         </td>
 
@@ -452,6 +505,32 @@ Logger::debug("$domain has site_id = $current_site_id");
                         <!-- Edit Images/Files Page Content ///////////////////////////////////////////////////////////// -->
 
                         <div id='EditFilesFrame' class='ViewFrame'>                                                
+                        
+                        
+							<div id='FilesFrameContent' align='left'>
+							
+								<table border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>							
+									<tr valign='top'>									
+										<td>
+											<div id='athena_edit_images_content'></div>
+										</td>
+														
+										<td width='150px' style='height:100%; padding:5px'>																							
+											<div class='subframebox' style='height:100%; width:500px'>															
+												<span class='title'>Edit Image</span>
+																											
+												<div id='imageInfoContent'>
+												</div>
+														
+											</div>											
+												
+										</td>
+									</tr>
+							
+								</table>
+																
+							</div>                        
+                        
                         </div>
 
                         <!-- Pages/Posts Content /////////////////////////////////////////////////////////////////// -->
@@ -473,7 +552,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                                             <!--
                                             <button class='basic_button' style='' onclick="ImagePickerDialog.show('#PagesFrameImagePicker', PagesFrame.onImageSelected);">Insert Image</button>
                                             -->
-                                            <a id='pageLink' href='' style='font-size:10px'>View Page</a>
+                                            <a id='pageLink' href='' target='_blank' style='font-size:10px'>View Page</a>
                                         </div>
                                     </td>
 
@@ -500,7 +579,9 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                         <select id='postStatusSelector' class='apolloDataInput'>
                                                             <option value='Published' class=''>Published</option>
                                                             <option value='Draft' class=''>Draft</option>
+                                                            <!--
                                                             <option value='Private' class=''>Private</option>
+                                                            -->
                                                         </select>
                                                     </span>
                                                 </div>
@@ -596,7 +677,9 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                         <select id='pageStatusSelector' class='apolloDataInput'>
                                                             <option value='Published'>Published</option>
                                                             <option value='Draft'>Draft</option>
+                                                            <!--
                                                             <option value='Private'>Private</option>
+                                                            -->
                                                         </select>
                                                     </span>
                                                 </div>
