@@ -51,6 +51,7 @@ class StatsRollupTables {
 		  `unique_visitors` int(11) default NULL,
 		  `keywords` text,
 		  `page_id` int(11) default NULL,
+		  `post_id` int(11) default NULL,
 		  `page_title` varchar(125) default NULL,
 		  PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=latin1;";

@@ -43,7 +43,7 @@ switch ($cmd) {
 
     case "getDetailedStats":
         $no_days = CommandHelper::getPara('dys', false, CommandHelper::$PARA_TYPE_NUMERIC);
-        if (!isset($no_days)) $no_days = 30;
+        if (!isset($no_days) || $no_days == "") $no_days = 30;
         getDetailedStats($site_id, $no_days);
         break;
 
@@ -931,19 +931,23 @@ function getStats($site_id) {
  */
 function getDetailedStats($site_id, $no_days) {
 
+	Logger::debug("getDetailedStats($site_id, $no_days)");
+
+	// SELECT page_id, sum(unique_visitors) FROM stats_5_RollupPageViews WHERE rollup_date > '2010-10-16' GROUP BY page_id
+	
     // Get page views for the whole site for each day
     $page_views = StatsRollupTables::getPageViewsRollup($site_id, $no_days);
+	
     $views = array();
 
     if (isset($page_views)) {
         foreach ($page_views as $view) {
-            if ($view['page_title'] == 'all') {
-                $temp = array();
-                $temp['dt'] = $view['rollup_date'];
-                $temp['uv'] = $view['unique_visitors'];
-                $temp['pv'] = $view['page_views'];
-                $views[] = $temp;
-            }
+            $temp = array();
+            $temp['pid'] = $view['page_id'];
+            $temp['dt'] = $view['rollup_date'];
+            $temp['uv'] = $view['unique_visitors'];
+            $temp['pv'] = $view['page_views'];
+            $views[] = $temp;
         }
     }
 
@@ -960,10 +964,11 @@ function getDetailedStats($site_id, $no_days) {
             $crawler_views[] = $temp;
         }
     }
-
+	
     $msg['getStats'] = "getDetailedStats";
     $msg['result'] = 'ok';
     $msg['data'] = array('page_views' => $views, 'crawler_views' => $crawler_views);
+    
     CommandHelper::sendMessage($msg);
 }
 

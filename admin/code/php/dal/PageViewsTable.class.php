@@ -33,7 +33,7 @@ class PageViewsTable {
 
     // //////////////////////////////////////////////////////////////////////////////////////
 
-    public static function logView($site_id, $page_id, $page, $path, $query_string) {
+    public static function logView($site_id, $page_id, $post_id, $page, $path, $query_string) {
 
         if (Session::exists('pageview_etime')) {
             $etime = microtime(true) - Session::get('pageview_etime');
@@ -76,8 +76,8 @@ class PageViewsTable {
         $server_ip = $_SERVER['SERVER_ADDR'];
         $true_ip = self::getRealIPAddr();
 
-        $sql = DatabaseManager::prepare("INSERT INTO stats_PageViews ( site_id, page_id, page, path, query_string, view_date, ip_long, browser, browser_ver, os, referer, user_agent, is_bot, server_ip) VALUES (%d, %d, %s, %s, %s, %s, %d, %s, %s, %s, %s, %s, %d, %d)",
-                        $site_id, $page_id, $page, $path, $query_string, $date_now, ip2long($true_ip), $browser_name, $browser_ver, $os, $referer, $user_agent, $is_bot, ip2long($server_ip));
+        $sql = DatabaseManager::prepare("INSERT INTO stats_PageViews ( site_id, page_id, post_id, page, path, query_string, view_date, ip_long, browser, browser_ver, os, referer, user_agent, is_bot, server_ip) VALUES (%d, %d, %d, %s, %s, %s, %s, %d, %s, %s, %s, %s, %s, %d, %d)",
+                        $site_id, $page_id, $post_id, $page, $path, $query_string, $date_now, ip2long($true_ip), $browser_name, $browser_ver, $os, $referer, $user_agent, $is_bot, ip2long($server_ip));
         DatabaseManager::insert($sql);
     }
 

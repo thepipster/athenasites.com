@@ -252,7 +252,6 @@ class PageManager {
         }
 
         // If we couldn't find the page, load the home page
-        Logger::debug("&&&&&& Page name = $page_name");
         if (!isset($page) && $page_name == "") {
         	Logger::debug("Loading home page!");
             $page = PagesTable::getHomepage(self::$site_id);
@@ -457,6 +456,8 @@ class PageManager {
 
         $temp_list = array();
 
+        Logger::debug("><><><> BLOG MODE = " . self::$blog_mode);
+
         switch (self::$blog_mode) {
 
             case self::$BLOGMODE_SINGLEPOST :
@@ -465,7 +466,10 @@ class PageManager {
 
             case self::$BLOGMODE_ALL :
             	$start_n = (self::$blog_page_no-1) * self::$MAX_POSTS_PER_PAGE;
-            	$end_n = self::$blog_page_no * self::$MAX_POSTS_PER_PAGE;            	
+            	$end_n = self::$blog_page_no * self::$MAX_POSTS_PER_PAGE;        
+            	
+            	Logger::debug("><><><>");
+            	    	
                 $temp_list = PostsTable::getNPosts(self::$site_id, $start_n, $end_n);
                 break;
 
@@ -554,7 +558,7 @@ class PageManager {
 
         //$content = stripslashes($post['content']);
         $content = $post['content'];
-                        
+                                                
         if (self::$blog_mode == self::$BLOGMODE_SINGLEPOST) {
             // Remove more tag
             $post_content = preg_replace("/<div class='apolloPageBreak'>(.*?)<\/div>/i", "", $content);

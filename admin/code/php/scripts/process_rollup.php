@@ -77,7 +77,7 @@ foreach ($site_list AS $site) {
         
         // Get the page views
 
-        $sql = "SELECT pages.title as title, views.page_id as page_id, count(distinct(ip_long)) as unique_views, count(site_id) as page_views, server_ip
+        $sql = "SELECT pages.title as title, views.page_id as page_id, views.post_id as post_id, count(distinct(ip_long)) as unique_views, count(site_id) as page_views, server_ip
             FROM stats_PageViews views
             INNER JOIN athena_{$site_id}_Pages pages
             WHERE views.site_id = $site_id
@@ -94,6 +94,7 @@ foreach ($site_list AS $site) {
 
                 $page_title = $data['title'];
                 $page_id = $data['page_id'];
+                $post_id = $data['post_id'];
                 $unique_views = $data['unique_views'];
                 $page_views = $data['page_views'];
                 $server_ip = $data['server_ip'];
@@ -111,8 +112,8 @@ foreach ($site_list AS $site) {
                 $replace = "";
                 $key_str = str_ireplace($tags, $replace, $key_str);
 
-                DatabaseManager::insert("INSERT INTO stats_{$site_id}_RollupPageViews (rollup_date, page_views, unique_visitors, page_title, keywords, page_id)
-                		VALUES ('$day_date', $page_views, $unique_views, '$page_title', \"$key_str\", $page_id)");
+                DatabaseManager::insert("INSERT INTO stats_{$site_id}_RollupPageViews (rollup_date, page_views, unique_visitors, page_title, keywords, page_id, post_id)
+                		VALUES ('$day_date', $page_views, $unique_views, '$page_title', \"$key_str\", $page_id, $post_id)");
             }
 
         }
