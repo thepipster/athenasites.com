@@ -19,7 +19,7 @@ class PagesTable {
 		  `last_edit` datetime default NULL,
 		  `parent_page_id` int(11) default '0',
 		  `title` varchar(60) default NULL,
-		  `browser_title` varchar(60) default NULL,
+		  `browser_title` varchar(120) default NULL,
 		  `description` varchar(255) default NULL,
 		  `slug` varchar(255) default NULL,
 		  `path` varchar(255) default NULL,

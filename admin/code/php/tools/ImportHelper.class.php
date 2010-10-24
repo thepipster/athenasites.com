@@ -155,7 +155,7 @@ class ImportHelper {
         // Add follower to site
         SiteFollowersTable::addFollowerToSite($follower_id, $site_id);
 
-		Logger::debug(">>> Approved = $approved");
+		//Logger::debug(">>> Approved = $approved");
 		
         // Create the comment
         //$status = 'Pending';
@@ -201,15 +201,15 @@ class ImportHelper {
 	        $content = ImportHelper::convertContent($content, $post['source']);
 			PostsTable::updateSourceAndContent($site_id, $post['id'], $content, 'apollo');
 	    }
-	
-		Logger::debug($content);
-		
-//		<div class="apolloPageBreak">More...</div>
-	    $result = preg_match("/<div class='apolloPageBreak'>(.*?)<\/div>/i", $content, $match);
+			
+		// Look for the more tag, of the form: <div class="apolloPageBreak">More...</div>
+		$singleQuotes = false;
+		$result = preg_match("/<div class=\"apolloPageBreak\">(.*?)<\/div>/i", $content, $match);
 	
 		if (!$result){
-			// Try buy using double quotes
-		    $result = preg_match("/<div class=\"apolloPageBreak\">(.*?)<\/div>/i", $content, $match);
+			// Try buy using single quotes
+			$singleQuotes = true;
+	    	$result = preg_match("/<div class='apolloPageBreak'>(.*?)<\/div>/i", $content, $match);
 		}
 		
 		Logger::debug("Match result = $result");
@@ -220,7 +220,12 @@ class ImportHelper {
 	            $more_text = $match[1];
 	        }
 	
-	        $tag = "<div class='apolloPageBreak'>$more_text</div>";
+			if ($singleQuotes){
+		        $tag = "<div class='apolloPageBreak'>$more_text</div>";
+			}
+			else {
+		        $tag = "<div class=\"apolloPageBreak\">$more_text</div>";
+			}
 	        
 	        if (isset($blogpage)){
 		        $post_link = $blogpage['path'] . $blogpage['slug'] . $post['path'] . $post['slug'];
@@ -229,7 +234,7 @@ class ImportHelper {
 		        $post_link = $post['path'] . $post['slug'];
 	        }
 	        
-	        $link_tag .= "<p><a href='$post_link' class='apolloPageBreak'>$more_text</a></p>";
+	        $link_tag .= "<p><a href='$post_link' class=\"apolloPageBreak\">$more_text</a></p>";
 	
 	        $s_pos = strpos($content, $tag);
 	

@@ -456,8 +456,6 @@ class PageManager {
 
         $temp_list = array();
 
-        Logger::debug("><><><> BLOG MODE = " . self::$blog_mode);
-
         switch (self::$blog_mode) {
 
             case self::$BLOGMODE_SINGLEPOST :
@@ -467,9 +465,6 @@ class PageManager {
             case self::$BLOGMODE_ALL :
             	$start_n = (self::$blog_page_no-1) * self::$MAX_POSTS_PER_PAGE;
             	$end_n = self::$blog_page_no * self::$MAX_POSTS_PER_PAGE;        
-            	
-            	Logger::debug("><><><>");
-            	    	
                 $temp_list = PostsTable::getNPosts(self::$site_id, $start_n, $end_n);
                 break;
 

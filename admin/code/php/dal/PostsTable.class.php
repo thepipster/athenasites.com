@@ -112,7 +112,9 @@ class PostsTable {
 	* Update the excerpt for a given post (the excerpt is any content before a 'more' tag, if there is no more tag this will be empty)
 	*/
 	public static function updateExcerpt($site_id, $post_id, $excerpt){
+		//Logger::debug("updateExcerpt($site_id, $post_id, $excerpt)");
         $sql = DatabaseManager::prepare("UPDATE athena_%d_Posts SET excerpt = %s WHERE id = %d", $site_id, $excerpt, $post_id);                        
+        Logger::debug($sql);
         return DatabaseManager::update($sql);
 	}
 	
