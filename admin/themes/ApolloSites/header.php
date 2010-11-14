@@ -83,7 +83,7 @@ PageManager::doHeader();
 	     //images[7]="temp/home_page_image.png"
 	
 	     // start preloading
-	     for(i=0; i<=images.length; i++) {
+	     for(i=0; i<images.length; i++) {
 	          imageObj.src='<?= PageManager::$theme_url_root; ?>/images/'+images[i];
 	     }
 	} 
