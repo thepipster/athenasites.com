@@ -8,14 +8,14 @@
 ?>
 
 <script type="text/javascript">
-
+/*
 	apolloMiniGallery.preInit();		
 	<?php
 		if (isset($noflash) && $noflash == 1){
 			echo 'apolloMiniGallery.hasFlash = false;';
 		}
 	?>
-
+*/
 </script>
 
 <div id="page_contents" align="center">
@@ -70,7 +70,7 @@
 </div>
 
 <script type="text/javascript">
-
+/*
 	apolloMiniGallery.init({
 		swf:"<?= PageManager::$theme_url_root; ?>/flash/homeGal.swf", 
 		xml:"<?= $xml_url?>",
@@ -80,5 +80,5 @@
 		minWidth: 800,
 		maxHeight: 800
 	});
-
+*/
 </script>
