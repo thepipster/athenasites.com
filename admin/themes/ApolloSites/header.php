@@ -46,14 +46,14 @@ PageManager::doHeader();
 
 	<!-- JS Includes /////////////////////////////////////////////////////////// -->
 
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/jquery-1.4.2.min.js"></script>
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/jquery.easing.1.3.js"></script>
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/jquery.coda-slider-2.0.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/jquery.easing.1.3.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/jquery.coda-slider-2.0.js"></script>
 
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/AC_OETags.js"></script>
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/apolloMiniGallery.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/AC_OETags.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/apolloMiniGallery.js"></script>
 	<!--
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/jquery_ui/ui/ui.core.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/jquery_ui/ui/ui.core.js"></script>
 
 		<link rel="stylesheet" href="http://jquery-ui.googlecode.com/svn/tags/latest/themes/base/jquery-ui.css" type="text/css" media="all" />
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
@@ -61,7 +61,7 @@ PageManager::doHeader();
 	-->
 
 
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/reflection-jquery/js/reflection.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/reflection-jquery/js/reflection.js"></script>
 
 	<script language="JavaScript">
 	
@@ -103,7 +103,7 @@ PageManager::doHeader();
     <div id='site_wrapper'>
     <div id='nav_bar'>
     	
-    	<a href='<?=$url_root?>' id='logo'><img src="<?= PageManager::$theme_url_root; ?>/images/logo.png" width="256px" height="60px" alt="Apollo Sites, SEO Enhanced wordpress themes for photographers"></a>
+    	<a href='<?=$url_root?>' id='logo'><img src="<?= PageManager::$theme_url_root; ?>images/logo.png" width="256px" height="60px" alt="Apollo Sites, SEO Enhanced wordpress themes for photographers"></a>
     	
     	<div id='nav_menu' align="right">
 			<?php 
