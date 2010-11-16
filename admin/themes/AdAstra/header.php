@@ -75,23 +75,26 @@ global $tracker_code;
 						foreach (PageManager::$page_list as $page){
 						
 							//Logger::dump($page);
-						
-							$id = $page['id'];
-							$parent_page_id = $page['parent_page_id'];
-							$title = $page['title'];								
-							$page_slug = $page['slug'];
-							$is_homepage = $page['is_homepage'];
-							$is_blogpage = $page['is_blogpage'];
-							$link = PageManager::getPageLink($id);
 							
-							if ($title == 'Home' && $_SERVER["REQUEST_URI"] == "/"){
-								print("<a href='$link'><h1 id='$id' class='menu_selected_item'>$title</h1></a> \n");
-							}							
-							else if (strpos($_SERVER["REQUEST_URI"], $page_slug)){
-								print("<a href='$link'><h1 id='$id' class='menu_selected_item'>$title</h1></a> \n");
-							}
-							else {
-								print("<a href='$link'><h1 id='$id' class='menu_item'>$title</h1></a> \n");
+							if ($page['status'] == 'Published'){
+						
+								$id = $page['id'];
+								$parent_page_id = $page['parent_page_id'];
+								$title = $page['title'];								
+								$page_slug = $page['slug'];
+								$is_homepage = $page['is_homepage'];
+								$is_blogpage = $page['is_blogpage'];
+								$link = PageManager::getPageLink($id);
+								
+								if ($title == 'Home' && $_SERVER["REQUEST_URI"] == "/"){
+									print("<a href='$link'><h1 id='$id' class='menu_selected_item'>$title</h1></a> \n");
+								}							
+								else if (strpos($_SERVER["REQUEST_URI"], $page_slug)){
+									print("<a href='$link'><h1 id='$id' class='menu_selected_item'>$title</h1></a> \n");
+								}
+								else {
+									print("<a href='$link'><h1 id='$id' class='menu_item'>$title</h1></a> \n");
+								}
 							}
 						}			
 					?>
