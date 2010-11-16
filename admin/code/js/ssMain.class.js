@@ -11,8 +11,9 @@ var ssMain = {
     VIEW_POSTS : 4,
     VIEW_GALLERIES : 5,
     VIEW_STATS : 6,
+    VIEW_SETTINGS : 7,
 
-    view : 1,
+    view : 7,
 
     pageTracker : '',
 
@@ -178,11 +179,11 @@ var ssMain = {
 	},
 		
     // ////////////////////////////////////////////////////////////////////////
-
+/*
     onSelectSite : function(site_id){
         window.location = "main.php?site_id=" + site_id;
     },
-
+*/
     // ////////////////////////////////////////////////////////////////////////
 
     onShowDashboard : function(){ssMain.changePage(ssMain.VIEW_DASHBOARD);},
@@ -191,7 +192,8 @@ var ssMain = {
     onShowPosts : function(){ssMain.changePage(ssMain.VIEW_POSTS);},
     onShowGalleries : function(){ssMain.changePage(ssMain.VIEW_GALLERIES);},
     onShowStats : function(){ssMain.changePage(ssMain.VIEW_STATS);},
-
+    onShowSettings : function(){ssMain.changePage(ssMain.VIEW_SETTINGS);},
+    
     // ////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -212,6 +214,7 @@ var ssMain = {
             case ssMain.VIEW_FILES: FilesFrame.onImageEditorChange(); break;
             case ssMain.VIEW_DASHBOARD:
             case ssMain.VIEW_GALLERIES:
+            case ssMain.VIEW_SETTINGS:
             case ssMain.VIEW_STATS: break;
         }
         
@@ -238,6 +241,7 @@ var ssMain = {
             case ssMain.VIEW_FILES: page = "FILES"; break;
             case ssMain.VIEW_GALLERIES: page = "GALLERIES"; break;
             case ssMain.VIEW_STATS: page = "STATS"; break;
+            case ssMain.VIEW_SETTINGS: page = "SETTINGS"; break;
         }
 
 		return page;
@@ -266,6 +270,7 @@ var ssMain = {
             case ssMain.VIEW_FILES:$('#FilesFrame').show();$('#files_menu').addClass('selected');FilesFrame.repaint();break;
             case ssMain.VIEW_GALLERIES:$('#GalleriesFrame').show();$('#gallery_menu').addClass('selected');GalleriesFrame.repaint();break;
             case ssMain.VIEW_STATS:$('#StatsFrame').show();$('#stats_menu').addClass('selected');StatsFrame.repaint();break;            
+            case ssMain.VIEW_SETTINGS: $('#SettingsFrame').show();$('#settings_menu').addClass('selected');SettingsFrame.repaint();break; 
         }
 
 		// Start autosave thread..

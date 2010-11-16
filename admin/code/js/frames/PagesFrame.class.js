@@ -112,121 +112,11 @@ var PagesFrame = {
     */
     paintThemeParas : function(){	
         var templateName = $('#pageTemplate').val();
-        var txt = PagesFrame.getThemeParasHTML(templateName);
+        var txt = PagesFrame.getThemeParasHTML(templateName, 0);
+        if (txt != ""){
+        	txt = "<p><strong>Custom Parameters</strong></p>" + txt;
+        }
         $('#apollo_page_theme_paras').html(txt);
-    },
-
-    // ////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Get the html for editing the theme paras for the given template name.
-     * If you set the template name to 'All' it will return the global paras
-     * @param string templateName
-     */
-    getThemeParasHTML : function(templateName){
-        
-        var theme_para_list = DataStore.getPageThemeParas(templateName);
-
-        var txt = "";
-
-        if (theme_para_list.length > 0){
-            txt += "<p><strong>Custom Parameters</strong></p>";
-            txt += "<table border='0' width='100%'>";
-        }
-
-        var noParas = 0;
-
-        for (var i=0; i<theme_para_list.length; i++){
-
-            var pageID = DataStore.m_currentPageID;
-            if (templateName == 'all'){
-                pageID = 0;
-            }
-            var paraVal = DataStore.getSiteParaValue(pageID, theme_para_list[i].id);
-
-            // 'email','image','gallery','font-family','favicon','font-size','color','text','small-int','multi-gallery'
-            switch(theme_para_list[i].para_type){
-
-                case 'favicon':
-                case 'image':
-
-                    onclick = "PagesFrame.selectImagePara("+theme_para_list[i].id+")";
-
-                    txt += "<table border='0'>";
-                    txt += "<tr valign='top'>";
-                    txt += "    <td width='40px'>";
-                    var image_url = '';
-                    if (paraVal){
-                        var image = DataStore.getImage(parseInt(paraVal));
-                        if (image){
-                            image_url = image.thumb_url
-                            }
-                    }
-                    txt += "<img src='"+image_url+"' class='thumbBox' width='30px' height='30px' onclick=\""+onclick+"\" >";
-                    txt += "    </td>";
-
-                    txt += "    <td>";
-                    txt += "        <span class='paraTitle'>"+theme_para_list[i].description+"</span>";
-                    txt += "        <span class='paraDesc'>"+theme_para_list[i].help_text+"</span>";
-                    //txt += "        <button class='save_button' onclick=\""+onclick+"\" style='font-size:10px'>Change</button>";
-                    txt += "    </td>";
-                    txt += "</tr>";
-                    txt += "</table>";
-
-                    noParas++;
-
-                    break;
-
-                case 'color':
-
-                    onclick = "PagesFrame.selectColorPara("+theme_para_list[i].id+", '"+paraVal+"')";
-
-                    txt += "<table border='0'>";
-                    txt += "<tr valign='top'>";
-                    txt += "    <td width='40px'>";
-                    txt += "        <div class='colorBox' style='background-color:#"+paraVal+";' onclick=\""+onclick+"\"></div>";
-                    txt += "    </td>";
-
-                    txt += "    <td>";
-                    txt += "        <span class='paraTitle'>"+theme_para_list[i].description+"</span>";
-                    txt += "        <span class='paraDesc'>"+theme_para_list[i].help_text+"</span>";
-                    txt += "    </td>";
-                    txt += "</tr>";
-                    txt += "</table>";
-
-                    noParas++;
-
-                    break;
-
-                case 'email':
-                    break;
-
-                case 'text':
-                    break;
-
-                case 'small-int':
-                    break;
-
-                case 'font-family':
-                    break;
-
-                case 'font-size':
-                    break;
-
-                case 'multi-gallery':
-                case 'gallery':
-                    break;
-            }
-
-
-        }
-
-        if (theme_para_list.length > 0){
-            txt += "</table><br/>";
-        }
-
-        return txt;
-
     },
 
     // ////////////////////////////////////////////////////////////////////////////
@@ -246,18 +136,15 @@ var PagesFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 
     onParaSelected : function(newParaVal){
-
-        var page_id = DataStore.m_currentPageID;
-        if (PagesFrame.m_editingGlobalSettings){
-            page_id = 0;
-        }
-        
+        var page_id = DataStore.m_currentPageID;        
         MediaAPI.setPagePara(PagesFrame.m_themeParaID, newParaVal, page_id, PagesFrame.onPagesParaChanged);
     },
 	
     // ////////////////////////////////////////////////////////////////////////////
 
     onPagesParaChanged : function(theme_para_id, new_value, page_id){
+        
+        //alert("Theme:" + theme_para_id + " Val:" + new_value + "Page ID:" + page_id);
         
         //location.href = location.href;
         DataStore.updateSitePara(theme_para_id, page_id, new_value);
@@ -280,16 +167,120 @@ var PagesFrame = {
             DataStore.m_siteParaList.push(temp);
         }
 
-        // Now repaint...
-        
-        if (PagesFrame.m_editingGlobalSettings){
-            PagesFrame.editGlobalSettings();
-        }
-        else {
-            PagesFrame.repaint();
-        }
+        // Now repaint...        
+        PagesFrame.repaint();
     },
 	
+    // ////////////////////////////////////////////////////////////////////////////
+	
+   	/**
+     * Get the html for editing the theme paras for the given template name.
+     * If you set the template name to 'All' it will return the global paras
+     * @param string templateName
+     */
+    getThemeParasHTML : function(templateName, blogParas){
+        
+        var theme_para_list = DataStore.getPageThemeParas(templateName);
+
+        var txt = "";
+        var noParas = 0;
+
+        for (var i=0; i<theme_para_list.length; i++){
+
+			if ((blogParas == 1 && theme_para_list[i].is_blog_para == 1) || (blogParas == 0 && theme_para_list[i].is_blog_para == 0)){
+			
+	            var pageID = DataStore.m_currentPageID;
+	            if (templateName == 'all'){
+	                pageID = 0;
+	            }
+	            var paraVal = DataStore.getSiteParaValue(pageID, theme_para_list[i].id);
+	
+	            // 'email','image','gallery','font-family','favicon','font-size','color','text','small-int','multi-gallery'
+	            switch(theme_para_list[i].para_type){
+	
+	                case 'favicon':
+	                case 'image':
+	
+	                    onclick = "PagesFrame.selectImagePara("+theme_para_list[i].id+")";
+	
+	                    txt += "<table border='0'>";
+	                    txt += "<tr valign='top'>";
+	                    txt += "    <td width='40px'>";
+	                    var image_url = '';
+	                    if (paraVal){
+	                        var image = DataStore.getImage(parseInt(paraVal));
+	                        if (image){
+	                            image_url = image.thumb_url
+	                            }
+	                    }
+	                    txt += "<img src='"+image_url+"' class='thumbBox' width='30px' height='30px' onclick=\""+onclick+"\" >";
+	                    txt += "    </td>";
+	
+	                    txt += "    <td>";
+	                    txt += "        <span class='paraTitle'>"+theme_para_list[i].description+"</span>";
+	                    txt += "        <span class='paraDesc'>"+theme_para_list[i].help_text+"</span>";
+	                    //txt += "        <button class='save_button' onclick=\""+onclick+"\" style='font-size:10px'>Change</button>";
+	                    txt += "    </td>";
+	                    txt += "</tr>";
+	                    txt += "</table>";
+	
+	                    noParas++;
+	
+	                    break;
+	
+	                case 'color':
+	
+	                    onclick = "PagesFrame.selectColorPara("+theme_para_list[i].id+", '"+paraVal+"')";
+	
+	                    txt += "<table border='0'>";
+	                    txt += "<tr valign='top'>";
+	                    txt += "    <td width='40px'>";
+	                    txt += "        <div class='colorBox' style='background-color:#"+paraVal+";' onclick=\""+onclick+"\"></div>";
+	                    txt += "    </td>";
+	
+	                    txt += "    <td>";
+	                    txt += "        <span class='paraTitle'>"+theme_para_list[i].description+"</span>";
+	                    txt += "        <span class='paraDesc'>"+theme_para_list[i].help_text+"</span>";
+	                    txt += "    </td>";
+	                    txt += "</tr>";
+	                    txt += "</table>";
+	
+	                    noParas++;
+	
+	                    break;
+	
+	                case 'email':
+	                    break;
+	
+	                case 'text':
+	                    break;
+	
+	                case 'small-int':
+	                    break;
+	
+	                case 'font-family':
+	                    break;
+	
+	                case 'font-size':
+	                    break;
+	
+	                case 'multi-gallery':
+	                case 'gallery':
+	                    break;
+	            }
+
+			} 
+
+        }
+
+        if (noParas > 0){            
+            txt = "<table border='0' width='100%'>" + txt + "</table><br/>";
+        }
+
+        return txt;
+
+    },
+    	
     // ////////////////////////////////////////////////////////////////////////////
 	
     /**
@@ -487,36 +478,7 @@ var PagesFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 
     saveChildPages : function(){
-    },
+    }
 			
     // ////////////////////////////////////////////////////////////////////////////
-
-    m_editingGlobalSettings : false,
-    
-    /**
-     * Launch dialog that allows a user to edit their global page settings
-     */
-    editGlobalSettings : function(){
-
-        PagesFrame.m_editingGlobalSettings = true;
-
-        var txt = PagesFrame.getThemeParasHTML('all');
-
-        $('#apollo_dialog').dialog("destroy");
-        $('#apollo_dialog').html(txt);
-        $('#apollo_dialog').dialog({
-            resizable: false,
-            width: $(window).width()*2/3,
-            //	height:140,
-            modal: true,
-            title: "Your Global Page Settings",
-            buttons: {
-                Done: function() {
-                    PagesFrame.m_editingGlobalSettings = false;
-                    $(this).dialog('close');
-                }
-            }
-        });
-
-    }
 }

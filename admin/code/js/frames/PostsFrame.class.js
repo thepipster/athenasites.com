@@ -69,46 +69,6 @@ var PostsFrame = {
 
     // ////////////////////////////////////////////////////////////////////////////
 
-
-    paintTools : function(){
-
-        var txt = "";
-
-        txt += "<p>This tool allows you to import blog posts, comments and followers from other blogging engines.</p>";
-        txt += "<p>To get started, click on the button below that corresponds to the blog you want to import from.</p>";
-        txt += "<br/>";
-        txt += "<div align='center'>";
-        txt += "    <button class='basic_button' onclick='WordpressImporter.show()'>Wordpress</button>";
-        txt += "    <button class='basic_button' onclick='BloggerImporter.show()'>Blogger</button>";
-        txt += "    <button class='basic_button' onclick='LiveJournalImporter.show()'>LiveJournal</button>";
-        txt += "</div>"
-        txt += "<br/>";
-        txt += "<p>If you need to import from a blog engine not listed above, email us at <a href='mailto:support@apollosites.com?subject=Feature request: New blog import&body=It would be really awesome if you supported imports from my old blog, which is at xxxxx'>support@apollosites.com</a> and we'll try to add that blogging engine to the list as soon as we can!</p>";
-
-        //AthenaDialog.alert(txt, "Import Posts");
-
-
-        $('#apollo_dialog').dialog("destroy");
-
-        $('#apollo_dialog').html(txt);
-
-        $('#apollo_dialog').dialog({
-            resizable: false,
-            width: 400,
-            //	height:140,
-            modal: true,
-            title: "Import Posts",
-            buttons: {
-                Cancel: function() {
-                    $(this).dialog('close');
-                }
-            }
-        });
-
-    },
-
-    // ////////////////////////////////////////////////////////////////////////////
-
     updatePostLink : function(postObj){
 
         var blogPage = DataStore.getBlogPage();

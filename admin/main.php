@@ -70,7 +70,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 
         <!-- Favicon ///////////////////////////////////////////////////// -->
 
-        <link rel="icon" type="image/png" href="favicon.png">
+        <link rel="shortcut icon" type="image/png" href="favicon.png">
 
         <!--[if IE]>
         <link rel="shortcut icon" href="favicon.ico">
@@ -201,7 +201,7 @@ Logger::debug("$domain has site_id = $current_site_id");
         <script src="code/js/frames/PostsFrame.class.js" type="text/javascript"></script>
         <script src="code/js/frames/StatsFrame.class.js" type="text/javascript"></script>
         <script src="code/js/frames/SidebarFrame.class.js" type="text/javascript"></script>
-
+        <script src="code/js/frames/SettingsFrame.class.js" type="text/javascript"></script>
 
         <!-- Old
         <script src="code/js/subframes/UploadMediaFrame.class.js" type="text/javascript"></script>
@@ -257,7 +257,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                         <div id='files_menu' class='menu_item' onclick='ssMain.onShowFiles()'>Files</div>
                         <div id='gallery_menu' class='menu_item' onclick='ssMain.onShowGalleries()'>Galleries</div>
                         <div id='stats_menu' class='menu_item' onclick='ssMain.onShowStats()'>Stats</div>
-                        <div id='stats_menu' class='menu_item' onclick='ssMain.onShowSettings()'>Settings</div>
+                        <div id='settings_menu' class='menu_item' onclick='ssMain.onShowSettings()'>Settings</div>
 
                         <?php
                         if ($user['service_client_gallery'] == 1) {
@@ -270,6 +270,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                         <div id='account_menu' class='menu_link' onclick='AccountDialog.show()'>Account</div>
 
                         <?php
+                        /*
                         if (count($site_list) > 1) {
                             echo '<select class="menu_site_selector" onchange=\'ssMain.onSelectSite($(this).val())\'>';
                             foreach ($site_list as $site) {
@@ -283,6 +284,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                             }
                             echo '</select>';
                         }
+                        */
                         ?>
                         
                         <div class='user_message'></div>
@@ -294,7 +296,6 @@ Logger::debug("$domain has site_id = $current_site_id");
                         <!-- Dashboard Page Content ///////////////////////////////////////////////////////////// -->
 
                         <div id='DashboardFrame' class='ViewFrame'>
-
 
                             <table border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>
 
@@ -601,11 +602,13 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                     </span>
                                                 </div>
 
+												<!--
                                                 <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Import:</span>
                                                     <a href='#' onclick="PostsFrame.paintTools()">Import Posts</a>
                                                 </div>
-
+												-->
+												
                                                 <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Comments:</span>
                                                     <!-- <button class='basic_button' onclick="PostsFrame.paintTools()">Import Posts</button> -->
@@ -699,13 +702,14 @@ Logger::debug("$domain has site_id = $current_site_id");
                                                     <span class='pageLabel'>Created:</span>
                                                     <span class='pageData' id='pageCreated'></span>
                                                 </div>
-												-->
-												
+												-->												
+												<!--
                                                 <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Global:</span>
                                                     <a href='#' onclick="PagesFrame.editGlobalSettings()" title="Edit your global page settings">Edit Settings</a>
                                                 </div>
-
+												-->
+												
                                                 <div class='pageInfoLine'>
                                                     <span class='pageLabel'>Parent Page:</span>
                                                     <span class='pageData' id='parentPageContents'></span>
@@ -875,8 +879,57 @@ Logger::debug("$domain has site_id = $current_site_id");
 
 
                             </div>
-                        </div> <!-- content -->
+                        </div> <!-- StatsFrame -->
 
+                        <!-- Settings Frame ///////////////////////////////////////////////////////////// -->
+
+                        <div id='SettingsFrame' class='ViewFrame'>
+                        
+                        
+                            <table border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>
+
+                                <tr valign='top' width='100%'>
+
+                                    <td width="50%" height="70%" style='height:100%; padding:5px;'>
+
+                                        <div class='subframebox' style='height:100%; width:100%;'>
+
+                                            <span class='title'>Site Settings</span>
+
+                                            <div id='apollo_site_settings_site' class='frameContents' align='left'>  
+                                            	<p><strong>Custom Parameters</strong></p>                                               	                                       
+                                            	<div align='left' id='apollo_site_settings_site_custom_paras'><p>I'm sorry, you're theme does not have any site parameters that you can modify</p></div>
+                                            </div>
+
+                                        </div><!-- subframebox -->
+
+                                    </td>
+
+                                    <td width="50%" height="100%" style='height:100%; padding:5px;' rowspan="2">
+                                        
+                                        <div class='subframebox' style='height:100%; width:100%;'>
+
+                                            <span class='title'>Blog Settings</span>
+
+                                            <div id='apollo_site_settings_blog' class='frameContents' align='left'>
+                                            	<p><strong>Tools</strong></p>                                          
+                                            	<button class='basic_button' style='' onclick="SettingsFrame.onPaintPostImporter()">Import Posts</button>
+                                            	<p><strong>Custom Parameters</strong></p>                                               	                                       
+                                            	<div align='left'><p>I'm sorry, you're theme does not have any blog parameters that you can modify</p></div>
+                                            </div>
+
+                                        </div><!-- subframebox -->
+                                        
+                                    </td>
+
+
+
+                            </table>
+                        
+                        
+                        
+                        </div> <!-- SettingsFrame -->
+                        
                         <!-- Account Frame ///////////////////////////////////////////////////////////// -->
 
                         <div id='AccountFrame' class='ViewFrame'>
