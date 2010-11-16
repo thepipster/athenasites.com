@@ -53,7 +53,7 @@ PageManager::doHeader();
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/AC_OETags.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/apolloMiniGallery.js"></script>
 	<!--
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/jquery_ui/ui/ui.core.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/jquery_ui/ui/ui.core.js"></script>
 
 		<link rel="stylesheet" href="http://jquery-ui.googlecode.com/svn/tags/latest/themes/base/jquery-ui.css" type="text/css" media="all" />
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
@@ -83,8 +83,8 @@ PageManager::doHeader();
 	     //images[7]="temp/home_page_image.png"
 	
 	     // start preloading
-	     for(i=0; i<=images.length; i++) {
-	          imageObj.src='<?= PageManager::$theme_url_root; ?>images/'+images[i];
+	     for(i=0; i<images.length; i++) {
+	          imageObj.src='<?= PageManager::$theme_url_root; ?>/images/'+images[i];
 	     }
 	} 
 		
