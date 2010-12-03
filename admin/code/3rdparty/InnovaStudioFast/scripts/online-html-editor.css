@@ -1,0 +1,7 @@
+﻿.button {height:27px;width:auto;margin:8px 0 0;padding:0 7px 1px;
+    font-size:10px;font-family:arial;color:#333;font-weight:bold;
+    background:url('button.png') #EEE;
+    border:1px solid #DDD;
+    border-right:1px solid #AAA;
+    border-bottom:1px solid #AAA;
+    cursor:pointer;}
