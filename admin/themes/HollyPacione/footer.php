@@ -15,5 +15,11 @@
 
 <?php PageManager::doFooter(); ?>
 
+<script type="text/javascript">
+
+<?= PageManager::echoGoogleTracker($tracker_code); ?>
+
+</script>
+
 </body>
 </html>
