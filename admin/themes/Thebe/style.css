@@ -124,6 +124,10 @@ a {
 	*/
 }
 
+.curved {
+	padding-bottom: 50px !important;
+}
+
 /* Blog Styles //////////////////////////////////// */
 
 #blogPage {
