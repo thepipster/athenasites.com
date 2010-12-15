@@ -180,14 +180,13 @@ function stripImages($postContent){
 	<?php if (PageManager::$blog_mode == PageManager::$BLOGMODE_SINGLEPOST){ ?>
 
 	hpBlog.m_postID = <?= PageManager::$current_post['id'] ?>;	
-	
-	hpBlog.m_siteID = <?= PageManager::$site_id  ?>;
-	
-    hpBlog.init();
-    
+	    
 	<?php } ?>
 
+	hpBlog.m_siteID = <?= PageManager::$site_id  ?>;	
+    hpBlog.init();
+
     //$(document).ready(hpBlog.init);
-    $(window).resize(hpBlog.onResize);
+    //$(window).resize(hpBlog.onResize);
 
 </script>

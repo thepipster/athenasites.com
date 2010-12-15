@@ -20,6 +20,7 @@ if (!SecurityUtils::checkNonce($nonce, 'email-link')) {
     die();
 }
 
+
 // Get the form paras....
 $name = CommandHelper::getPara('name', false, CommandHelper::$PARA_TYPE_STRING);
 $client_email = CommandHelper::getPara('email', false, CommandHelper::$PARA_TYPE_STRING);
@@ -79,17 +80,17 @@ $message .= "Location: $location\n";
 $message .= "\n";
 $message .= "Date: $datetime\n";
 $message .= "\n";
-$message .= "Comments: $comments\n";
+
+$comments = stripslashes($comments);
+$message .= "Comments: ". $comments . "\n";
 
 // Get the owner id(s)for this site
 $user_list = UserTable::getUsersFromSiteID($site_id);
 
 foreach($user_list as $user){
 
-    Logger::dump($user);
-
     $target_email = $user['email'];
-    
+   
     Logger::debug("Target email: $target_email");
 
     //Logger::debug("mail($target_email, $subject, $message, $headers)");

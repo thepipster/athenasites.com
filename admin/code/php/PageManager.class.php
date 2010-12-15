@@ -327,12 +327,12 @@ class PageManager {
         if (!isset($tracker_code) || $tracker_code == '')
             return;
 
-        echo "// Tracking";
-        echo "try {";
-        echo "    var pageTracker = _gat._getTracker('$tracker_code');";
-        echo "    pageTracker._setDomainName('$domain');";
-        echo "    pageTracker._trackPageview('$page_title');";
-        echo "} catch(err) {}";
+        echo "// Tracking \n";
+        echo "try { \n";
+        echo "    var pageTracker = _gat._getTracker('$tracker_code'); \n";
+        echo "    pageTracker._setDomainName('$domain'); \n";
+        echo "    pageTracker._trackPageview('$page_title'); \n";
+        echo "} catch(err) {} \n";
     }
 
     // ///////////////////////////////////////////////////////////////////////////////////////

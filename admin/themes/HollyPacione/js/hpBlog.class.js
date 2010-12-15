@@ -16,12 +16,15 @@ var hpBlog = {
 	// ////////////////////////////////////////////////////////////////
 	
     init : function(){
-    
+        	
         hpBlog.m_commandURL = 'http://' + location.host + '/admin/code/php/remoteapi/BlogAPI.php';
+    
+        hpBlog.onResize();
+        setTimeout("hpBlog.onResize()", 200);
     
         // Get the comments
         hpBlog.getComments();
-    
+        
 		// Validation
 		$("#commentForm").validate();
 						
@@ -45,10 +48,7 @@ var hpBlog = {
 		  		return true;
 			}, 
 			"Please enter your name");
-		            	
-        hpBlog.onResize();
-        setTimeout("hpBlog.onResize()", 200);
-        
+		            	        
     },
 
 	// ////////////////////////////////////////////////////////////////
@@ -67,10 +67,12 @@ var hpBlog = {
 
         var postWidth = $('#content').width() - 340;
         var blogW = $("#blogTable").width();
+        
+        //alert(blogW +", " + $('#content').width());
 
         $("#nav_container").width(blogW);
         $("#container").width(blogW);
-        $("#content").width(blogW);
+        $("#content").width(blogW+20);
 
     },
     

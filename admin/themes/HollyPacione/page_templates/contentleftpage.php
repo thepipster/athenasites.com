@@ -14,8 +14,8 @@ if (isset($image)){
 }
 else {
 	$background_image = PageManager::$common_url_root . 'imgs/blank.png';
-	$width = 128;
-	$height = 128;
+	$width = 1350;
+	$height = 800;
 }
 
 Logger::debug("Background image = $background_image");
@@ -51,8 +51,8 @@ if ($width < $height){
 <script type="text/javascript">
 
 hollyInfoPage.init({
-	width: 1350,
-	height: 800,
+	width: <?= $width ?>,
+	height: <?= $height ?>,
 	pageType: 'left'
 });
 

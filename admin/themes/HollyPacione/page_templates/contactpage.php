@@ -5,7 +5,22 @@
 * @Description: Contact Page
 */
 
-$background_image = PageManager::getMediaURLFromThemePara(205); 
+//$background_image = PageManager::getMediaURLFromThemePara(205); 
+
+$image = PageManager::getMediaFromThemePara(205); 
+
+if (isset($image)){
+	$background_image = PageManager::getMediaURL($image['id']);
+	$width = $image['width'];
+	$height = $image['height'];
+}
+else {
+	$background_image = PageManager::$common_url_root . 'imgs/blank.png';
+	$width = 1350;
+	$height = 800;
+}
+
+
 // Email = 206 
 ?>
 
@@ -46,8 +61,8 @@ $background_image = PageManager::getMediaURLFromThemePara(205);
 <script type="text/javascript">
 
 hollyInfoPage.init({
-	width: 1350,
-	height: 800,
+	width: <?= $width ?>,
+	height: <?= $height ?>,
 	pageType: 'right'
 });
 

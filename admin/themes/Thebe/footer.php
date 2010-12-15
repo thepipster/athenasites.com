@@ -4,6 +4,9 @@
  * @subpackage Holly Pacione Theme
  */
  
+// Get the google tracker code (if set)	
+$tracker_code = ThemeTable::getGlobalParaValue(PageManager::$site_id, 713);
+ 
 $logo_url = ThemeTable::getGlobalImageParaValue(PageManager::$site_id, 703);
 
 if (!isset($logo_url) || $logo_url == ""){
@@ -234,6 +237,8 @@ var thebeMain = {
 	}
 
 }
+	
+<?= PageManager::echoGoogleTracker($tracker_code); ?>
 	
 </script>
 

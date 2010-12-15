@@ -84,6 +84,15 @@ class PostsTable {
     }
 
     // ///////////////////////////////////////////////////////////////////////////////////////
+/*
+	public static function createRevision($post_id){
+        $sql = DatabaseManager::prepare("INSERT INTO athena_%d_Posts (user_id, content, status, title, last_edit, created, canComment, slug, source)
+			VALUES (%d, %s, %s, %s, '$date_str', '$date_str', %d, %s, %s)", $site_id, $user_id, $content, $status, $title, $canComment, $slug, $source);
+        return DatabaseManager::insert($sql);
+	}
+	*/
+	
+    // ///////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Update a post

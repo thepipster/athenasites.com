@@ -5,7 +5,7 @@ var hollyInfoPage = {
 	
 	/** Height of flash gallery viewer */
 	imgHeight : 800,
-			
+							
 	/** Ratio of width to height */
 	imgRatio : 0,
 			
@@ -67,52 +67,7 @@ var hollyInfoPage = {
 		
 		$("#content").height(galH);
 		$("#content").width(galW);
-		
-		// Update the background image size
-		
-		var imgH = $('#back_image').height();
-		var imgW = $('#back_image').width();
-									
-		if ($('#back_image').width() < $('#back_image').height()){
-			if (hollyInfoPage.pageType == 'left'){
-				alert("galW = " + galW + " imgW = " + imgW);
-				$('.leftCol').width(galW - imgW);
-			}
-			else if (hollyInfoPage.pageType == 'right'){
-				$('.rightCol').width(galW - imgW);
-			}
-			
-		}
-		else {
-		
-			if (hollyInfoPage.pageType == 'none') return;
-			
-			// If the width is less than the minimum width, then adjust
-			if (minW != null && minW != undefined){
-				if (minW > imgW) {
-					var ratio = imgH / imgW;
-					imgW = minW;
-					imgH = ratio * imgW;					
-				}
-			}		
 				
-//			alert(imgW + ", " + imgH);
-				
-//			$("#content").height(imgH);
-//			$("#content").width(imgW);								
-/*
-			if (hollyInfoPage.pageType == 'left'){
-				$('.leftCol').width(0.5 * imgW);
-			}
-			else if (hollyInfoPage.pageType == 'right'){
-				$('.rightCol').width(0.5 * imgW);
-			}
-			else {
-			}
-*/		
-		}
-		
-		
 	}
 
 }
