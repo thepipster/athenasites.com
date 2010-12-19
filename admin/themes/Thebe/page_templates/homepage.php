@@ -70,7 +70,9 @@ $gal_images_string .= "]";
 
 	$(window).ready(function() {
 		thebeGallery.init({
-			swf:"http://files.apollosites.com/themes/Thebe/fullScreenGal.swf", 
+//			xml: "http://files.apollosites.com/themes/Thebe/images.xml",
+//			swf:"http://files.apollosites.com/themes/Thebe/fullScreenGal.swf", 
+			swf:"<?= PageManager::$theme_url_root; ?>/flash/fullScreenGal.swf", 
 			xml:"<?= $xml_url?>",
 			images: <?= $gal_images_string ?>
 			});

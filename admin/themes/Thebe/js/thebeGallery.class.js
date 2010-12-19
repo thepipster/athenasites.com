@@ -32,7 +32,7 @@ var thebeGallery = {
 			// Clear the div as fast as possible			
 			document.getElementById('content').innerHTML = "";		
 		}		
-		
+				
 		// If flash is available, use it - otherwise use the JS x-fader															
 		if (thebeGallery.hasFlash){				
 			setTimeout("thebeGallery.paintGallery()", 200);
@@ -63,13 +63,17 @@ var thebeGallery = {
 
 		};
 		var attributes = {
-		  align: 'center',
+		  align: 'left',
 		  id: "thebeGal_flashObject",
 		  name: "thebeGal_flashObject"
 		};
-		
+
+		var cw = $('#content').width();
+		var ch = $('#content').height();
+						
 		swfobject.embedSWF(thebeGallery.flashSWF, "content", "100%", "100%", "9.0.0","expressInstall.swf", flashvars, params, attributes);
-		
+				
+		//alert($('#thebeGal_flashObject').width() + " " + $('#content').width());
 				
 	},
 	
