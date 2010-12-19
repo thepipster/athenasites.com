@@ -68,6 +68,8 @@ else {
 	$secretKey = 'ZOgR1saGKCmQuHTDcwpfiraz/iERMBEDhcXIa7hn';
 	$s3 = new S3($accessKey, $secretKey, false);
 	
+	Logger::debug("Init S3 OK!");
+	
 	if (!$s3->putObject(S3::inputFile($tmp_name), "apollosites", $s3_file_path, S3::ACL_PUBLIC_READ)) {
     	Logger::fatal("Failed to upload file $s3_file_path to the Amazon S3 servers");
 	}
