@@ -37,64 +37,78 @@ else {
     $folder_id = CommandHelper::getPara('folder_id', false, CommandHelper::$PARA_TYPE_NUMERIC);
     $site_id = CommandHelper::getPara('site_id', false, CommandHelper::$PARA_TYPE_NUMERIC);
 
-    if (!isset($folder_id) || !$folder_id)
+    if (!isset($folder_id) || !$folder_id){
         $folder_id = 1; // folder id of 1 is considered 'unassigned'
-        //$user = UserTable::getUser($user_id);
+    }
 
-    $base_folder = SecurityUtils::getMediaFolder($site_id);
-
-    // Internally, use a file path of /<year>/<month>/
     $year = date("Y");
     $month = date("m");
     $filepath = $year . "/" . $month . "/";
-
-    // Make sure that directory exists, if not create it
-    @mkdir($base_folder . $year, 0777);
-    @mkdir($base_folder . $filepath, 0777);
-
     
-    Logger::debug('Upload script starting');
-    Logger::debug('User ID = ' . $user_id);
-    Logger::debug('Folder ID = ' . $folder_id);
-    Logger::debug('Folder = ' . $base_folder);
-
     // Copy file to users directory
     $tmp_name = $_FILES["Filedata"]["tmp_name"];
     
     // separate filename from extension to get title
     $title_parts = pathinfo($_FILES["Filedata"]["name"]);
-    $title = $path_parts['filename'];
+    $title = $title_parts['filename'];
     
-    $name = friendlyName($_FILES["Filedata"]["name"], $base_folder);
-    
-    $new_filepath = $base_folder . $filepath . $name;
+    // Get a safe name, and check for duplicates    
+    //$name = friendlyName($_FILES["Filedata"]["name"], $filepath);      
+    $name = friendlyName($_FILES["Filedata"]["name"], $site_id, $filepath);    
+    $s3_file_path = $site_id . "/" . $filepath . $name;
+        
+	//
+	// Upload the file to the Amazon S3 server
+	//
+	
+	$accessKey = 'AKIAJREFWQ2CC3ZIDWOQ';	
+	$secretKey = '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';
+	$s3 = new S3($accessKey, $secretKey, false);
+	
+	if (!$s3->putObject(S3::inputFile($tmp_name), "apollosites", $s3_file_path, S3::ACL_PUBLIC_READ)) {
+    	Logger::fatal("Failed to upload file $name to the Amazon S3 servers");
+	}
 
-    move_uploaded_file($tmp_name, $new_filepath);
-
+	//
+	// Now add into the apollo system
+	//
+		
     // If this is an image then get the info
-    $image_info = getimagesize($new_filepath);
+    $image_info = getimagesize($tmp_name);
 
     if ($image_info) {
 
-        $thumb_name = getThumbName($name, $base_folder);
-        $new_thumbfilepath = $base_folder . $filepath . $thumb_name;
+		// Create a temporary file to store the thumbnail 
+		$temp_file = tempnam(sys_get_temp_dir(), 'apollo_');
 
+        $thumb_name = getThumbName($name);
+        $s3_thumb_file_path = $site_id . "/" . $filepath . $thumb_name; 
+        
         $width = $image_info[0];
         $height = $image_info[1];
         $mime_type = $image_info['mime'];
 
         // Create thumbnails!
-        $src_image = ImageUtils::createImageFromFile($new_filepath, $mime_type);
+        $src_image = ImageUtils::createImageFromFile($tmp_name, $mime_type);
         //$thumb_img = ImageUtils::resizeImage($src_image, $mime_type, 'letterbox', THUMB_WIDTH, THUMB_HEIGHT);
         $thumb_img = ImageUtils::resizeImage($src_image, $mime_type, 'crop', THUMB_WIDTH, THUMB_HEIGHT);
 
         $thumb_width = imagesx($thumb_img);
         $thumb_height = imagesy($thumb_img);
 
-        imagepng($thumb_img, $new_thumbfilepath);
+        //imagepng($thumb_img, $new_thumbfilepath);
+        Logger::debug("Temp File: $temp_file");
+        imagepng($thumb_img, $temp_file);
+
+		if (!$s3->putObject(S3::inputFile($temp_file), "apollosites", $s3_thumb_file_path, S3::ACL_PUBLIC_READ)) {
+	    	Logger::fatal("Failed to upload thumbnail $thumb_name to the Amazon S3 servers");
+		}
+		
+		unlink($tmpfname);
+        
     } else {
         $mime = new MimeType();
-        $mime_type = $mime->getType(strtolower($new_filepath));
+        $mime_type = $mime->getType(strtolower($tmp_name));
         $width = null;
         $height = null;
         $thumb_name = null;
@@ -102,7 +116,7 @@ else {
         $thumb_height = null;
     }
 
-    $file_size = filesize($new_filepath);
+    $file_size = filesize($tmp_name);
 
 
     /*
@@ -127,7 +141,18 @@ echo "Upload complete! <br>";
 
 // ////////////////////////////////////////////////////////////////////////////////
 
-function friendlyName($filename, $dir) {
+/**
+* Get the media id for a the given filepath, filename and site id
+*/
+function getMediaID($site_id, $filepath, $filename){
+	$sql = DatabaseManager::prepare("SELECT id FROM athena_%d_Media WHERE filepath = %s AND filename = %s", $site_id, $filepath, $filename);
+	Logger::debug($sql);
+	return DatabaseManager::getVar($sql);
+}
+
+// ////////////////////////////////////////////////////////////////////////////////
+
+function friendlyName($filename, $site_id, $filepath) {
 
     // separate filename from extension
     $path_parts = pathinfo($filename);
@@ -137,11 +162,14 @@ function friendlyName($filename, $dir) {
     //remove non-standard characters from URL
     $name = ereg_replace("[[:punct:]]+", "", $name);
     $name = ereg_replace("[^[:alnum:]]+", "_", $name);
+    
+    // Check for duplicates
+    //$file_id = DatabaseManager::getVar(DatabaseManager::prepare("SELECT id FROM athena_%d_Media WHERE filepath = %s AND filename = %s", $site_id, $filepath, $name));    
 
-    if (file_exists($dir . $name . '.' . $ext)) {
+    if (getMediaID($site_id, $filepath, $name . '.' . $ext)) {
         $i = 1;
         $name .= '_';
-        while (file_exists($dir . $name . $i . '.' . $ext)) {
+        while (getMediaID($site_id, $filepath, $name . $i . '.' . $ext)) {
             $i++;
         }
         $name .= $i;
@@ -152,7 +180,7 @@ function friendlyName($filename, $dir) {
 
 // ////////////////////////////////////////////////////////////////////////////////
 
-function getThumbName($filename, $dir) {
+function getThumbName($filename) {
 
     // separate filename from extension
     $path_parts = pathinfo($filename);
