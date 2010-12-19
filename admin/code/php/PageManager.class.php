@@ -139,7 +139,7 @@ class PageManager {
 		//self::$home_base_url = $homePage['slug'];
 		//Logger::dump($homePage);
 		
-        self::$media_root_url = self::$url_root . "/user_files/" . self::$site_id . "/";
+        self::$media_root_url = "http://files.apollosites.com/" . self::$site_id . "/";
         self::$theme_url_root = self::$url_root . '/admin/themes/' . $theme['theme_name'] . "/";
         self::$common_url_root = self::$url_root . "/admin/themes/common/";
         self::$theme_file_root = FILE_ROOT . 'admin/themes/' . $theme['theme_name'] . "/";

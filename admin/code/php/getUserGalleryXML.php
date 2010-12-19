@@ -24,7 +24,7 @@ $gal_images = ClientGalleryTable::getImagesForPage($site_id, $page_id);
 
 //error_log(print_r($images, true));
 
-$media_root_url = 'http://' . $_SERVER['HTTP_HOST'] . "/user_files/".$site_id."/";
+$media_root_url = "http://files.apollosites.com/$site_id/";
 
 //ob_end_clean();
 
