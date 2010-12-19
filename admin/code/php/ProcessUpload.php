@@ -54,13 +54,16 @@ else {
     
     // Get a safe name, and check for duplicates    
     //$name = friendlyName($_FILES["Filedata"]["name"], $filepath);      
-    $name = friendlyName($_FILES["Filedata"]["name"], $site_id, $filepath);    
+    $name = friendlyName($_FILES["Filedata"]["name"], $site_id, $filepath); 
+    
     $s3_file_path = $site_id . "/" . $filepath . $name;
-        
+            
 	//
 	// Upload the file to the Amazon S3 server
 	//
 	
+    Logger::debug("Name = $name Path = $s3_file_path");
+    
 	$accessKey = 'AKIAJREFWQ2CC3ZIDWOQ';	
 	$secretKey = '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';
 	$s3 = new S3($accessKey, $secretKey, false);
