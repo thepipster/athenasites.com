@@ -263,6 +263,7 @@ var FilesFrame = {
         // Update data store
         DataStore.deleteMedia(media_id);
         FilesFrame.repaint();
+        FilesFrame.onShowUploader();
     },	
 		
     // ////////////////////////////////////////////////////////////////////////

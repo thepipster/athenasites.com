@@ -104,7 +104,7 @@ else {
 	    	Logger::fatal("Failed to upload thumbnail $thumb_name to the Amazon S3 servers");
 		}
 		
-		unlink($tmpfname);
+		unlink($temp_file);
         
     } else {
         $mime = new MimeType();

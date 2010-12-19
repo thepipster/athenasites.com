@@ -1126,11 +1126,26 @@ function deleteMedia($site_id, $media_id) {
     $media = FolderTable::getMedia($site_id, $media_id);
 
     // Phyiscally delete the file, and thumbnail if applicable
-    $path = SecurityUtils::getMediaFolder($site_id) . $media['filepath'] . $media['filename'];
-    unlink($path);
+    
+	$accessKey = 'AKIAJREFWQ2CC3ZIDWOQ';	
+	$secretKey = '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';
+	$s3 = new S3($accessKey, $secretKey, false);
+    
+    //$path = SecurityUtils::getMediaFolder($site_id) . $media['filepath'] . $media['filename'];
+    //unlink($path);
 
-    $path = SecurityUtils::getMediaFolder($site_id) . $media['filepath'] . $media['thumb_filename'];
-    unlink($path);
+    $s3_path = $site_id . "/" . $media['filepath'] . $media['filename'];
+    if (!S3::deleteObject("apollosites", $s3_path)) {
+        Logger::error("Error deleting file $s3_path");
+    }
+    
+    //$path = SecurityUtils::getMediaFolder($site_id) . $media['filepath'] . $media['thumb_filename'];
+    //unlink($path);
+
+    $s3_path = $site_id . "/" . $media['filepath'] . $media['thumb_filename'];
+    if (!S3::deleteObject("apollosites", $s3_path)) {
+        Logger::error("Error deleting file $s3_path");
+    }
 
     // Now remove from the database
     FolderTable::removeMedia($media_id, $site_id);
