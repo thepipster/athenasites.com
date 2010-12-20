@@ -63,7 +63,7 @@ else {
 	// Upload the file to the Amazon S3 server
 	//
 	
-    Logger::debug("Name = $name Path = $s3_file_path");
+    Logger::debug("[$tmp_name] Name = $name Path = $s3_file_path");
     
 	$accessKey = 'AKIAJREFWQ2CC3ZIDWOQ';	
 	$secretKey = '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';
