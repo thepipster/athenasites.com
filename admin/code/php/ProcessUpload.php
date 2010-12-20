@@ -46,10 +46,9 @@ else {
     $filepath = $year . "/" . $month . "/";
     
     // Copy file to users directory
-    $tmp_name = $_FILES["Filedata"]["tmp_name"];
-    
-    Logger::debug(file_get_contents($tmp_name));
-    
+	$tmp_name = tempnam(sys_get_temp_dir(), 'apollo_');    
+    move_uploaded_file($_FILES["Filedata"]["tmp_name"], $temp_file);
+            
     // separate filename from extension to get title
     $title_parts = pathinfo($_FILES["Filedata"]["name"]);
     $title = $title_parts['filename'];
@@ -89,7 +88,7 @@ else {
     if ($image_info) {
 
 		// Create a temporary file to store the thumbnail 
-		$temp_file = tempnam(sys_get_temp_dir(), 'apollo_');
+		$temp_file_thumb = tempnam(sys_get_temp_dir(), 'apollo_');
 
         $thumb_name = getThumbName($name);
         $s3_thumb_file_path = $site_id . "/" . $filepath . $thumb_name; 
@@ -107,14 +106,14 @@ else {
         $thumb_height = imagesy($thumb_img);
 
         //imagepng($thumb_img, $new_thumbfilepath);
-        Logger::debug("Temp File: $temp_file");
-        imagepng($thumb_img, $temp_file);
+        Logger::debug("Temp File: $temp_file_thumb");
+        imagepng($thumb_img, $temp_file_thumb);
 
-		if (!$s3->putObject(S3::inputFile($temp_file), "apollosites", $s3_thumb_file_path, S3::ACL_PUBLIC_READ)) {
+		if (!$s3->putObject(S3::inputFile($temp_file_thumb), "apollosites", $s3_thumb_file_path, S3::ACL_PUBLIC_READ)) {
 	    	Logger::fatal("Failed to upload thumbnail $thumb_name to the Amazon S3 servers");
 		}
 		
-		unlink($temp_file);
+		unlink($temp_file_thumb);
         
     } else {
         $mime = new MimeType();
@@ -144,6 +143,9 @@ else {
 
     Logger::debug("Upload complete!");
 }
+
+// Delete the temporary file
+unlink($tmp_name);
 
 // The flash uploader needs to get a response (on mac systems) otherwise
 // it won't fire its onComplete method - SO DO NOT REOMOVE FOLLOWING!	
