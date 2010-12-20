@@ -48,6 +48,8 @@ else {
     // Copy file to users directory
     $tmp_name = $_FILES["Filedata"]["tmp_name"];
     
+    Logger::debug(file_get_contents($tmp_name));
+    
     // separate filename from extension to get title
     $title_parts = pathinfo($_FILES["Filedata"]["name"]);
     $title = $title_parts['filename'];
