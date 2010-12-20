@@ -100,6 +100,13 @@ class FolderTable {
 
     // //////////////////////////////////////////////////////////////////////////////////////
 
+    public static function getDiscUsage($site_id) {
+        $sql = DatabaseManager::prepare("SELECT sum(file_size) FROM athena_%d_Media", $site_id);
+        return DatabaseManager::getVar($sql);
+    }
+
+    // //////////////////////////////////////////////////////////////////////////////////////
+
     public static function getMedia($site_id, $media_id) {
         //Logger::debug(">>>> getMedia($site_id, $media_id");
         $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Media WHERE id = %d", $site_id, $media_id);

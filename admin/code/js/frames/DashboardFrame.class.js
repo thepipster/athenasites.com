@@ -115,23 +115,26 @@ var DashboardFrame = {
         $('#no_tags').html( data.tags);
         $('#no_followers').html( data.no_followers);
             
-        $('#disc_usage').html(DashboardFrame.m_discUsage + "MB");
+        $('#disc_usage').html(AthenaUtils.addCommas(DashboardFrame.m_discUsage, 2) + " MB");
             
+        /*    
         var maxDisc = defines.max_hdd;
         DashboardFrame.m_discUsePC = 100 * DashboardFrame.m_discUsage / maxDisc  
         $("#disc_usage_bar").height(15);
         $("#disc_usage_bar").progressbar({
             value: 0
         });
-        AthenaDialog.setProgressBarColorMap("#disc_usage_bar", 0, 100, 'heat');
-		
+        
+        AthenaDialog.setProgressBarColorMap("#disc_usage_bar", 0, 100, 'heat');		
         DashboardFrame.animateDU();
+        
+        */
             
         StatViewer.paintCrawlerGraph("#apollo_crawler_graph_small", DashboardFrame.m_crawlerViews);
         StatViewer.paintStatGraph("#apollo_stats_graph_small", DashboardFrame.m_pageViews);        
     },
     
-
+	/*
     tempVal : 0,
 	
     animateDU : function(){
@@ -148,7 +151,7 @@ var DashboardFrame = {
                 });
         }
     },
-		    
+	*/	    
     // ////////////////////////////////////////////////////////////////////////////
                 
     /**

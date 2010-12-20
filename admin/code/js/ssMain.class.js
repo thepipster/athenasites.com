@@ -335,7 +335,7 @@ var ssMain = {
 	* typing before we submit changes
 	*/
 	setEditorChangeListener : function(){
-				
+								
 		// Get content
 		var content = oUtil.obj.getXHTMLBody();
 		if (ssMain.m_prevContent == '') ssMain.m_prevContent = content;

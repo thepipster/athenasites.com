@@ -303,40 +303,6 @@ class PageManager {
 
     // ///////////////////////////////////////////////////////////////////////////////////////
 
-    public static function echoGoogleTracker($tracker_code) {
-
-        $domain = PageManager::$domain;
-        $page_title = PageManager::$page_title;
-
-        /*
-          echo "<!-- Global tracking -->";
-          echo "<!--";
-          echo "<script type='text/javascript'>";
-          echo "var gaJsHost = (('https:' == document.location.protocol) ? 'https://ssl.' : 'http://www.');";
-          echo "document.write(unescape('%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E'));";
-          echo "</script>";
-          echo "<script type='text/javascript'>";
-          echo "try {";
-          echo "var pageTracker = _gat._getTracker('$tracker_code');";
-          echo "pageTracker._setDomainName('$domain');";
-          echo "pageTracker._trackPageview('$page_title');";
-          echo "} catch(err) {}</script>";
-          echo "-->";
-         */
-
-        if (!isset($tracker_code) || $tracker_code == '')
-            return;
-
-        echo "// Tracking \n";
-        echo "try { \n";
-        echo "    var pageTracker = _gat._getTracker('$tracker_code'); \n";
-        echo "    pageTracker._setDomainName('$domain'); \n";
-        echo "    pageTracker._trackPageview('$page_title'); \n";
-        echo "} catch(err) {} \n";
-    }
-
-    // ///////////////////////////////////////////////////////////////////////////////////////
-
     public static function getFavIconURL() {
 
         // See if the user has set a fav icon
@@ -407,10 +373,46 @@ class PageManager {
 
     // ///////////////////////////////////////////////////////////////////////////////////////
 
+    public static function echoGoogleTracker($tracker_code) {
+
+        $domain = PageManager::$domain;
+        $page_title = PageManager::$page_title;
+
+        /*
+          echo "<!-- Global tracking -->";
+          echo "<!--";
+          echo "<script type='text/javascript'>";
+          echo "var gaJsHost = (('https:' == document.location.protocol) ? 'https://ssl.' : 'http://www.');";
+          echo "document.write(unescape('%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E'));";
+          echo "</script>";
+          echo "<script type='text/javascript'>";
+          echo "try {";
+          echo "var pageTracker = _gat._getTracker('$tracker_code');";
+          echo "pageTracker._setDomainName('$domain');";
+          echo "pageTracker._trackPageview('$page_title');";
+          echo "} catch(err) {}</script>";
+          echo "-->";
+         */
+
+        if (!isset($tracker_code) || $tracker_code == '')
+            return;
+
+        echo "// Tracking \n";
+        echo "try { \n";
+        echo "    var pageTracker = _gat._getTracker('$tracker_code'); \n";
+        echo "    pageTracker._setDomainName('$domain'); \n";
+        echo "    pageTracker._trackPageview('$page_title'); \n";
+        echo "} catch(err) {} \n";
+    }
+
+    // ///////////////////////////////////////////////////////////////////////////////////////
+
     /**
      * Do any default actions in the footer
      */
     public static function doFooter() {
+
+		PageManager::echoGoogleTracker($tracker_code);
 
     }
 
