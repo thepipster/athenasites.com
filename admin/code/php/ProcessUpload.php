@@ -47,7 +47,7 @@ else {
     
     // Copy file to users directory
 	$tmp_name = tempnam(sys_get_temp_dir(), 'apollo_');    
-    move_uploaded_file($_FILES["Filedata"]["tmp_name"], $temp_file);
+    move_uploaded_file($_FILES["Filedata"]["tmp_name"], $tmp_name);
             
     // separate filename from extension to get title
     $title_parts = pathinfo($_FILES["Filedata"]["name"]);
