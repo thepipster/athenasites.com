@@ -118,6 +118,11 @@ class PageManager {
 
         // Get the site id
         $site = SitesTable::getSiteFromDomain(self::$domain);
+        
+        if (!isset($site)){
+        	return;
+        }
+        
         self::$site_id = $site['id'];
         // Get the list of pages
         self::$page_list = PagesTable::getPages(self::$site_id);

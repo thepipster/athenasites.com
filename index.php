@@ -43,6 +43,11 @@ if ($DEBUG) Logger::debug(">>>> Tag: $tag Category: $category Month: $month Year
 
 PageManager::init();
 
+if (!isset(PageManager::$site_id) || PageManager::$site_id == 0){
+	header('Location: http://apollosites.com/404.php');
+	die();
+}
+
 // The blog is a special case, as convention is to use just 'blog' rather than a real page like 'blog.html'
 if ($page == PageManager::$blog_base_url || ($page."/") == PageManager::$blog_base_url){
 	$ext = "html";

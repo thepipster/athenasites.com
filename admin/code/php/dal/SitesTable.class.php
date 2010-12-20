@@ -91,7 +91,7 @@ class SitesTable {
 	// /////////////////////////////////////////////////////////////////////////////////
 
 	public static function getSiteFromDomain($domain){
-		$sql = DatabaseManager::prepare("SELECT * FROM apollo_Sites WHERE domain = %s", $domain);			
+		$sql = DatabaseManager::prepare("SELECT * FROM apollo_Sites WHERE domain = %s AND is_live = 1", $domain);			
 		return DatabaseManager::getSingleResult($sql);				
 	}
 	
