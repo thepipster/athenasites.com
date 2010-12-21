@@ -1,0 +1,55 @@
+/* Contact Form Table /////////////////////////////////// */
+
+#contactForm table {
+	background-color: #99a1b4; 
+	width: 90%;
+}
+
+#contactForm .spacer {
+	height: 30px;
+}
+
+#contactForm .tableTitle {
+	color: black;
+	padding-bottom: 15px;
+	text-align: center;
+	font-size: 14px;
+	font-weight: normal;
+}
+
+#contactForm .fieldName {
+	color: black;
+	padding-right: 5px;
+	text-align: right;
+}
+
+#contactForm .fieldInput {
+	color: white;
+	text-align: left;
+}
+
+#contactForm .spacerCol {
+}
+
+
+#contactForm textArea {
+	width:91%; 
+	height:125px;
+}
+
+#contactForm input {
+	width:90%; 
+}
+
+#contactForm select {
+	width:91%; 
+}
+
+#contactForm .button {
+	width: 50px;
+	border: 1px solid #006; 
+}
+
+#contactForm .button:hover {
+	background-color: #cccccc;
+}

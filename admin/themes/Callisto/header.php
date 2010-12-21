@@ -1,28 +1,12 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Callisto Theme
- */
 
-// Figure out the location of this file
-$discRoot = realpath(dirname(__FILE__)) . "/";
-$common_code_root = substr($discRoot, 0, strpos($discRoot, 'wp-content')) . 'wp-content/CommonCode/';
+PageManager::doHeader();
 
-require_once($common_code_root . 'php/dal/ThemeTable.class.php');
+global $tracker_code;
+		
+// Get the google tracker code (if set)	
+$tracker_code = ThemeTable::getGlobalParaValue(PageManager::$site_id, 222);
 
-// Get fav icon
-global $blog_id;
-$fav_post_id = ThemeTable::getFavicon($blog_id);
-if (isset($fav_post_id)){
-	$post = get_post($fav_post_id);
-	$fav_url = $post->guid;
-}
-
-// Get the current page id
-$page_id = $wp_query->post->ID;
-
-// Get the current parent page id
-$parent_page_id = $wp_query->post->post_parent;
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -36,26 +20,27 @@ $parent_page_id = $wp_query->post->post_parent;
 	
 	<!-- Favicon ///////////////////////////////////////////////////// -->
 
-	<?php
-	if (!isset($fav_url)){
-	?>
-		<link rel="shortcut icon" type="image/ico" href="<?= PageManager::$theme_url_root; ?>/favicon.ico"> 
-	<?php
-	}
-	else {
-	?>
-		<link rel="shortcut icon" type="image/ico" href="<?=$fav_url?>"> 
-	<?php
-	}
-	?>
+	<link rel="shortcut icon" type="image/png" href="<?= PageManager::getFavIconURL() ?>">
 	
 	<!-- Style sheets ///////////////////////////////////////////////////// -->
 
-	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>/callisto-min.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>style.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>datePicker.css" type="text/css" id="" media="print, projection, screen" />
 	
 	<!-- JS Includes ///////////////////////////////////////////////////// -->
 
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>/js/callisto-min.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/AC_OETags.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/date.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/jquery.datePicker.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/date.format.js"></script>
+
+	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/apolloContactRequest.class.js"></script>
+	
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/hpBlog.class.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/hollyGallery.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/hollyInfoPage.js"></script>
 
 <!--
 	<script type="text/javascript" src="http://www.google-analytics.com/ga.js"></script>
@@ -63,34 +48,29 @@ $parent_page_id = $wp_query->post->post_parent;
 	<!-- Page Styles  //////////////////////////////////////////////////// -->
 
 	<?php
-		global $border_color;
-/*
-400, logo url
-401, fav icon
-402, background color
-403, foreground color
-404, menu text color
-405, footer text
-406, google tracking code
-407, 
-408, gallerypage.php (gallery)
-409, menu selected color
-410, border color
-411, border width (small_text)
-*/		
-		global $background_col, $logo_url, $foreground_color, $nav_text_color, $nav_selected_text_color, $border_color, $border_width, $copyright_notice, $google_tracking_code;
+		global $background_col, $border_color;
 		
 		// Over-ride any default styles with user content	
-		$background_col = ThemeTable::getGlobalParaValue($blog_id, 402);
-		$logo_url = ThemeTable::getGlobalImageParaValue($blog_id, 400);
-		$foreground_color = ThemeTable::getGlobalParaValue($blog_id, 403);
-		$nav_text_color = ThemeTable::getGlobalParaValue($blog_id, 404);
-		$copyright_notice = ThemeTable::getGlobalParaValue($blog_id, 405);
-		$google_tracking_code = ThemeTable::getGlobalParaValue($blog_id, 406);
-		$nav_selected_text_color = ThemeTable::getGlobalParaValue($blog_id, 409);
-		$border_color = ThemeTable::getGlobalParaValue($blog_id, 410);
-		$border_width = ThemeTable::getGlobalParaValue($blog_id, 411);		
+		$background_col = ThemeTable::getGlobalParaValue(PageManager::$site_id, 211);
+		$logo_url = ThemeTable::getGlobalImageParaValue(PageManager::$site_id, 207);
+		$foreground_color = ThemeTable::getGlobalParaValue(PageManager::$site_id, 212);
+		$nav_text_color = ThemeTable::getGlobalParaValue(PageManager::$site_id, 217);
+		$border_color = ThemeTable::getGlobalParaValue(PageManager::$site_id, 218);
+
+		$blog_post_title_color = ThemeTable::getGlobalParaValue(PageManager::$site_id, 219);
+		$blog_image_border_width = ThemeTable::getGlobalParaValue(PageManager::$site_id, 220);
+		$blog_image_border_color = ThemeTable::getGlobalParaValue(PageManager::$site_id, 221);
+
+		Logger::debug("blog_post_title_color = " . $blog_post_title_color);
+		Logger::debug("blog_image_border_width = " . $blog_image_border_width);
+		Logger::debug("blog_image_border_color = " . $blog_image_border_color);
+		
 	?>
+
+	<script type="text/javascript">
+		// Make the border color choice known to JS
+		border_color = '<?php if (isset($border_color)) { echo '#'.$border_color; } else { echo 'black'; }?>';
+	</script>
 	
 	<style type="text/css">
 
@@ -107,15 +87,11 @@ $parent_page_id = $wp_query->post->post_parent;
 			}
 
 			if (isset($logo_url)){				
-				//echo "#nav_container { background-image: url('".$logo_url."'); }\n";
+				echo "#nav_container { background-image: url('".$logo_url."'); }\n";
 			}
 			
 			if (isset($nav_text_color)){				
 				echo "#nav a { color: #".$nav_text_color."; }\n";
-			}
-
-			if (isset($nav_selected_text_color)){				
-				echo "#nav .level1:hover { color: #".$nav_text_color.";}\n";
 			}
 
 			if (isset($border_color)){				
@@ -123,15 +99,26 @@ $parent_page_id = $wp_query->post->post_parent;
 				echo "#content {border-color: #".$border_color."; }\n";
 				echo "#content .rightCol {border-color: #".$border_color."; }\n";
 				echo "#content .leftCol {border-color: #".$border_color."; }\n";
-				echo "#content .galback {background-color: #".$border_color."; }\n";
 			}
-			
-			if (isset($border_width)){				
-				echo "#nav li:hover {border-width: ".$border_width."px; }\n";
-				echo "#content {border-width: ".$border_width."px; }\n";
-				echo "#content .rightCol {border-width: ".$border_width."px; }\n";
-				echo "#content .leftCol {border-width: ".$border_width."px; }\n";
-			}			
+
+			if (isset($blog_post_title_color)){				
+				echo "#content .postTitle a {color: #".$blog_post_title_color." !important; }\n";
+			}
+
+			if (isset($blog_image_border_width)){				
+				echo "#content .blogImage {border-width: ".$blog_image_border_width."px; }\n";
+			}
+
+			if (isset($blog_image_border_color)){				
+				echo "#content .blogImage {border-color: #".$blog_image_border_color." !important; }\n";
+				/*
+				echo "#content .blogImage a {border-color: #".$blog_image_border_color." !important; }\n";
+				echo "#content .blogImage a:hover {border-color: #".$blog_image_border_color." !important; }\n";
+				echo "#content .blogImage a:link {border-color: #".$blog_image_border_color." !important; }\n";
+				echo "#content .blogImage a:visited {border-color: #".$blog_image_border_color." !important; }\n";
+				echo "#content .blogImage a:active {border-color: #".$blog_image_border_color." !important; }\n";
+				*/
+			}
 					
 		?>
 						
@@ -140,78 +127,94 @@ $parent_page_id = $wp_query->post->post_parent;
 	<!-- Pingback ////////////////////////////////////////////////////////////// -->
 
 	<link rel="pingback" href="<?= PageManager::getPingBackURL();?>" />
-		
-	
-	<?php wp_head(); ?>
 </head>
 
 <body>
 
 
-	<div id='wrapper' align='center' style='margin-top:20px'>
+	<script type="text/javascript">
+	
+	var hpNav = {
+		
+		//timeoutHandle : -1,
+		
+		mouseOver : function(level, parentID, thisID){			
+			$('#'+parentID).css('border-color', border_color);	
+			$('#'+thisID).addClass('sfhover'); // IE hover fix		
+		},
+	
+		mouseOut : function(level, parentID, thisID){
+			$('#'+parentID).css('border-color', 'transparent');	
+			$('#'+thisID).removeClass('sfhover'); // IE hover fix	
+		}
+		
+	}
+	
+	</script>
+
+
+	<div id='wrapper' align='center' style='padding-top:20px'>
 	
 		<div id='nav_container'>
-					
-			<a href='<?= bloginfo('url'); ?>'><img id='logo' src='<?=$logo_url?>'/></a>
-			
-			<div class='nav_bar' align="right">		
-								
+		
+			<div class='nav_bar' align="left">							
 				<ul id="nav">
-								
+				
+				
 					<?php 
-						$args = array('sort_order' => 'asc', 'sort_column' => 'menu_order');
-						$pages = get_pages($args);
-							
-						//error_log("Page ID: $page_id Parent Page ID: $parent_page_id");
-												
-						foreach ($pages as $page){
+															
+						foreach (PageManager::$page_list as $page){
 						
-							if ($page->post_parent == 0){
-								//error_log(print_r($page, true));
-								
-								$id = $page->ID;
-								$title = $page->post_title;
-								$link = get_page_link($page->ID);							
-								
-								// Blog show as page id=1, even if its not. Probably because the blog
-								// is set as the home page
-								if (strpos($_SERVER["REQUEST_URI"], $page->post_name)){
-									$page_id = $id;
+							if ($page['parent_page_id'] == 0 && $page['status'] == 'Published'){
+			
+								$id = $page['id'];
+								$parent_page_id = $page['parent_page_id'];
+								$title = $page['title'];								
+								$page_slug = $page['slug'];
+								$link = PageManager::getPageLink($id);
+															
+								// Get number children
+								$no_kids = 0;
+								foreach(PageManager::$page_list as $child){
+									if ($child['parent_page_id'] == $id){
+										$no_kids++;
+									}
 								}
 								
-								//error_log("[$id] $title ");
-								
-								if ($page_id == $id || $parent_page_id == $id){
-									print("<span class='nav_spacer'></span><li onmouseover=\"hpNav.mouseOver(1, $id, $id)\" onmouseout=\"hpNav.mouseOut(1, $id, $id)\" ><a id='$id' class='level1 selected' href='$link'>$title</a>");								
+								if ($no_kids > 0){
+									print("<li onmouseover=\"hpNav.mouseOver(1, $id, $id)\" onmouseout=\"hpNav.mouseOut(1, $id, $id)\" ><a id='$id' class='level1' href='#'>$title</a>");								
 								}
 								else {
-									print("<span class='nav_spacer'></span><li onmouseover=\"hpNav.mouseOver(1, $id, $id)\" onmouseout=\"hpNav.mouseOut(1, $id, $id)\" ><a id='$id' class='level1' href='$link'>$title</a>");								
-								}
+									print("<li onmouseover=\"hpNav.mouseOver(1, $id, $id)\" onmouseout=\"hpNav.mouseOut(1, $id, $id)\" ><a id='$id' class='level1' href='$link'>$title</a>");								
+								}								
 								print("    <ul>");
 								
 								// Get child pages 
-								foreach($pages as $child){
+								foreach(PageManager::$page_list as $child){
 									
-									if ($child->post_parent == $id){
+									if ($child['parent_page_id'] == $id && $child['status'] == 'Published'){
 
-										$child_id = $child->ID;
-										$child_title = $child->post_title;
-										$child_link = get_page_link($child->ID);									
+										$child_id = $child['id'];
+										$child_title = $child['title'];
+										$child_link = PageManager::getPageLink($child_id);	
+																		
 										print("        <li onmouseover=\"hpNav.mouseOver(2, $id, $child_id)\" onmouseout=\"hpNav.mouseOut(2, $id, $child_id)\" id='$child_id' ><a id='$child_id' class='level2' href='$child_link'>$child_title</a>");
 										
 										// Paint sub-children
+										/*
 										print("        <ul>");
-										foreach($pages as $sub_child){
+										foreach(PageManager::$page_list as $sub_child){
 											
-											if ($sub_child->post_parent == $child_id){
+											if ($sub_child['parent_page_id'] == $child_id){
 		
-												$subchild_id = $sub_child->ID;
-												$subchild_title = $sub_child->post_title;
-												$subchild_link = get_page_link($sub_child->ID);									
+												$subchild_id = $sub_child['id'];
+												$subchild_title = $sub_child['title'];
+												$subchild_link = PageManager::getPageLink($subchild_id);									
 												print("            <li onmouseover=\"hpNav.mouseOver(3, $id, $subchild_id)\" onmouseout=\"hpNav.mouseOut(3, $id, $subchild_id)\" id='$subchild_id' ><a class='level3' href='$subchild_link'>$subchild_title</a>");																								
 											}
 										}
 										print("        </ul>");
+										*/
 										
 									}
 								}

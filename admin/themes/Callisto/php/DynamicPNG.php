@@ -1,13 +1,13 @@
 <?php
 /**
 * 
-* Usage;  http://zip.local.com/test1/wp-content/themes/HollyPacione/php/DynamicPNG.php?r=40&g=144&b=85&a=55
+* Usage;  http://zip.local.com/DynamicPNG.php?r=40&g=144&b=85&a=55
 * 
 * Where
 * r = red (0-255)
 * g = green (0-255)
 * b = blue (0-255)
-* a = alpha (0-100);
+* a = alpha (0-100)
 *
 * @since 18th December, 2009
 * @author Mike Pritchard (mike@adastrasystems.com)
@@ -17,6 +17,7 @@
 $col = getPara('col');
 
 if ($col == false) {
+
 	$red1 = getPara('r'); // 0-255
 	if ($red1 == '') {$red1 = 255;}
 	if ($red1 > 255) {$red1 = 255;}
@@ -66,7 +67,6 @@ header("Content-Type: image/png");
 
 //Output the newly created image in jpeg format 
 imagepng($image);
-
 
 imagedestroy($image);
 

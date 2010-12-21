@@ -1,6 +1,6 @@
 <?php
 /**
-* @Theme: Thebeh
+* @Theme: Thebe
 * @Template: Basic Page
 * @Description: Basic Page
 */			

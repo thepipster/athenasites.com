@@ -4,19 +4,31 @@
  * @subpackage Default_Theme
  */
 
-get_header();
 ?>
 
+		<div id='content'><div id='scroller'>
 
-	<div id='page_contents' align='left' style="height:400px; padding-left:20px">
+			<div class='backgroundImage'>
+				<img src="" width='100%' height='100%'/>
+			</div>
 
-		<h1 class="center">Error 404 - Not Found</h2>
-	
-		<h2>Sorry, the page you were looking for (<?=$_SERVER["REQUEST_URI"]?>) can't be found on this server</h2>
+			<div class="singleCol" align="left">
+				<div class='contentText'>
+                        		<h1 class="center">Error 404 - Page Not Found</h1>
 
-	</div>
-		
+                                        <h2>Sorry, the page you were looking for can't be found on this server</h2>
+				</div>
+			</div>
 
-</div><!-- contents -->
+		</div></div><!-- content -->
 
-<?php get_footer(); ?>
+
+<script type="text/javascript">
+
+hollyInfoPage.init({
+	width: 1350,
+	height: 800,
+	pageType: 'none'
+});
+
+</script>

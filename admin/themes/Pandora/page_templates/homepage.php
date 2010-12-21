@@ -1,10 +1,8 @@
 <?php
 /**
- * @package WordPress
- * @subpackage Pandora Theme
- */
-/*
-Template Name: Home Page
+* @Theme: Pandora
+* @Template: Home Page
+* @Description: Home Page
 */
 
 global $blog_id;
