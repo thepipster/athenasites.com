@@ -19,9 +19,6 @@ html, body {
 }
 
 body {
-    background-repeat: no-repeat;
-    background-position: bottom right;
-    background-image: url("../imgs/branch_large.png");
     padding-top: 25px;
     margin-right: 10px;
     padding-bottom: 10px;
