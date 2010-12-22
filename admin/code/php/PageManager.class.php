@@ -404,18 +404,18 @@ class PageManager {
 		// 	<script type="text/javascript" src="http://www.google-analytics.com/ga.js"></script>
 
         if (isset($tracker_code) && $tracker_code != ''){        
-			echo "<!-- Global tracking -->";
-			echo "<script type='text/javascript'>";
-			echo "    var gaJsHost = (('https:' == document.location.protocol) ? 'https://ssl.' : 'http://www.');";
-			echo "    document.write(unescape('%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E'));";
-			echo "</script>";
-			echo "<script type='text/javascript'>";
-			echo "try {";
-			echo "    var pageTracker = _gat._getTracker('$tracker_code');";
-			echo "    pageTracker._setDomainName('$domain');";
-			echo "    pageTracker._trackPageview('$page_title');";
-			echo "} catch(err) {}";
-			echo "</script>";
+			echo "<!-- Global tracking --> \n";
+			echo "<script type='text/javascript'> \n";
+			echo "    var gaJsHost = (('https:' == document.location.protocol) ? 'https://ssl.' : 'http://www.'); \n";
+			echo "    document.write(unescape('%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E')); \n";
+			echo "</script> \n";
+			echo "<script type='text/javascript'> \n";
+			echo "try { \n";
+			echo "    var pageTracker = _gat._getTracker('$tracker_code'); \n";
+			echo "    pageTracker._setDomainName('$domain'); \n";
+			echo "    pageTracker._trackPageview('$page_title'); \n";
+			echo "} catch(err) {} \n";
+			echo "</script> \n";
 		}
         
     }
