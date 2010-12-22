@@ -846,7 +846,7 @@ var MediaAPI = {
      */
     updateMediaInfo : function(siteID, mediaID, mediaTitle, mediaDesc, mediaTags, callback){
 		
-        AthenaDialog.showLoading("Updating file");
+        //AthenaDialog.showLoading("Updating file");
 		
         var paras = {
             cmd : 'saveMediaInfo',

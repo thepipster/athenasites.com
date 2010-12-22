@@ -20,7 +20,7 @@ class UserTable {
                         "INSERT INTO apollo_Users (email, name, nice_name, password_hash, account_created, last_login, user_level) VALUES (%s, %s, %s, %s, %s, %s, %d)",
                         $email, $name, $name, $password_hash, $date_str, $date_str, $user_level);
 
-        DatabaseManager::submitQuery($sql);
+        DatabaseManager::insert($sql);
 
         return mysql_insert_id();
     }
@@ -32,9 +32,16 @@ class UserTable {
      */
     public static function update($id, $name, $password_hash) {
         $sql = DatabaseManager::prepare("UPDATE apollo_Users SET name = %s, password_hash = %s WHERE id = %d", $name, $password_hash, $id);
-        return DatabaseManager::submitQuery($sql);
+        return DatabaseManager::update($sql);
     }
 
+    // ///////////////////////////////////////////////////////////////////////////////////////
+
+	public static function updateLocation($id, $lat, $long){
+        $sql = DatabaseManager::prepare("UPDATE apollo_Users SET latitude = %f, longitude = %f WHERE id = %d", $lat, $long, $id);
+        return DatabaseManager::update($sql);
+	}
+	
     // ///////////////////////////////////////////////////////////////////////////////////////
 
     /**

@@ -102,6 +102,11 @@ class PageManager {
     public static $BLOGMODE_MONTH 	 	= 6;
     
     public static $MAX_POSTS_PER_PAGE 	= 5;
+
+	// Global theme paras (for all themes)....    
+    public static $PARA_META_DESCRIPTION  	= 1;
+    public static $PARA_META_KEYWORDS  		= 2;
+    public static $PARA_GOOGLE_TRACKER  	= 3;
     
     // ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -380,34 +385,7 @@ class PageManager {
 
     public static function echoGoogleTracker($tracker_code) {
 
-        $domain = PageManager::$domain;
-        $page_title = PageManager::$page_title;
 
-        /*
-          echo "<!-- Global tracking -->";
-          echo "<!--";
-          echo "<script type='text/javascript'>";
-          echo "var gaJsHost = (('https:' == document.location.protocol) ? 'https://ssl.' : 'http://www.');";
-          echo "document.write(unescape('%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E'));";
-          echo "</script>";
-          echo "<script type='text/javascript'>";
-          echo "try {";
-          echo "var pageTracker = _gat._getTracker('$tracker_code');";
-          echo "pageTracker._setDomainName('$domain');";
-          echo "pageTracker._trackPageview('$page_title');";
-          echo "} catch(err) {}</script>";
-          echo "-->";
-         */
-
-        if (!isset($tracker_code) || $tracker_code == '')
-            return;
-
-        echo "// Tracking \n";
-        echo "try { \n";
-        echo "    var pageTracker = _gat._getTracker('$tracker_code'); \n";
-        echo "    pageTracker._setDomainName('$domain'); \n";
-        echo "    pageTracker._trackPageview('$page_title'); \n";
-        echo "} catch(err) {} \n";
     }
 
     // ///////////////////////////////////////////////////////////////////////////////////////
@@ -417,10 +395,57 @@ class PageManager {
      */
     public static function doFooter() {
 
-		PageManager::echoGoogleTracker($tracker_code);
+        $domain = PageManager::$domain;
+        $page_title = PageManager::$page_title;
 
+		// Get the google tracker code (if set)	
+		$tracker_code = ThemeTable::getGlobalParaValue(self::$site_id, self::$PARA_GOOGLE_TRACKER);
+
+        if (isset($tracker_code) && $tracker_code != ''){        
+			echo "<!-- Global tracking -->";
+			echo "<script type='text/javascript'>";
+			echo "    var gaJsHost = (('https:' == document.location.protocol) ? 'https://ssl.' : 'http://www.');";
+			echo "    document.write(unescape('%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E'));";
+			echo "</script>";
+			echo "<script type='text/javascript'>";
+			echo "try {";
+			echo "    var pageTracker = _gat._getTracker('$tracker_code');";
+			echo "    pageTracker._setDomainName('$domain');";
+			echo "    pageTracker._trackPageview('$page_title');";
+			echo "} catch(err) {}";
+			echo "</script>";
+		}
+        
     }
 
+    // ///////////////////////////////////////////////////////////////////////////////////////
+
+	public static function doSiteMetaTags(){
+
+		$meta_desc = StringUtils::stripQuotes(ThemeTable::getGlobalParaValue(self::$site_id, self::$PARA_GOOGLE_TRACKER));
+		$meta_keywords = StringUtils::stripQuotes(ThemeTable::getGlobalParaValue(self::$site_id, self::$PARA_GOOGLE_TRACKER));
+
+		echo "<!-- Meta data //////////////////////////////////////////////////////// --> \n";
+
+		echo "<meta http-equiv='Content-Type' content='text/html; charset=ISO-8859-1' />\n";
+		echo "<meta name='Description' content=\"$meta_desc\" />\n";
+		echo "<meta name='Keywords' content=\"$meta_keywords\" />\n";
+		echo "<meta name='robots' content='index, follow' />\n";
+
+		/*
+		echo "<meta name='geo.position' content='38.8333; -104.8167' />\n";
+		echo "<meta name='geo.country' content='US' />\n";
+		echo "<meta name='geo.region' content='US-VA' />\n";
+		echo "<meta name='geo.placename' content='Arlington, VA 22101, USA' />\n";
+		
+		echo "<meta name='ICBM' content='38.8333, -104.8167' />\n";
+		echo "<meta name='DC.title' content='DC wedding photographer' />\n";
+		echo "<meta name='tgn.id' content='7013637' />\n";
+		echo "<meta name='tgn.name' content='Arlington' />\n";
+		echo "<meta name='tgn.nation' content='United States' />\n";
+		*/
+	}
+	
     // ///////////////////////////////////////////////////////////////////////////////////////
 
     public static function getPingBackURL() {
