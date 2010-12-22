@@ -424,8 +424,8 @@ class PageManager {
 
 	public static function doSiteMetaTags(){
 
-		$meta_desc = StringUtils::stripQuotes(ThemeTable::getGlobalParaValue(self::$site_id, self::$PARA_GOOGLE_TRACKER));
-		$meta_keywords = StringUtils::stripQuotes(ThemeTable::getGlobalParaValue(self::$site_id, self::$PARA_GOOGLE_TRACKER));
+		$meta_desc = StringUtils::stripQuotes(ThemeTable::getGlobalParaValue(self::$site_id, self::$PARA_META_DESCRIPTION));
+		$meta_keywords = StringUtils::stripQuotes(ThemeTable::getGlobalParaValue(self::$site_id, self::$PARA_META_KEYWORDS));
 		
 		$user_id = SitesTable::getUserIDForSite(self::$site_id);
 		$user = UserTable::getUser($user_id);
