@@ -898,7 +898,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 
                                             <div id='apollo_site_settings_site' class='frameContents' align='left'>  
                                             	<p><strong>Custom Parameters</strong></p>                                               	                                       
-                                            	<div align='left' id='apollo_site_settings_site_custom_paras'><p>I'm sorry, you're theme does not have any site parameters that you can modify</p></div>
+                                            	<div align='left' id='apollo_site_settings_site_custom_paras'><p>I'm sorry, your theme does not have any site parameters that you can modify</p></div>
                                             </div>
 
                                         </div><!-- subframebox -->
@@ -915,7 +915,7 @@ Logger::debug("$domain has site_id = $current_site_id");
                                             	<p><strong>Tools</strong></p>                                          
                                             	<button class='basic_button' style='' onclick="SettingsFrame.onPaintPostImporter()">Import Posts</button>
                                             	<p><strong>Custom Parameters</strong></p>                                               	                                       
-                                            	<div align='left'><p>I'm sorry, you're theme does not have any blog parameters that you can modify</p></div>
+                                            	<div align='left'><p>I'm sorry, your theme does not have any blog parameters that you can modify</p></div>
                                             </div>
 
                                         </div><!-- subframebox -->
