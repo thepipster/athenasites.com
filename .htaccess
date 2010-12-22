@@ -1,6 +1,14 @@
 RewriteEngine On
 #RewriteBase /
 
+# Sitemap.xml redirect
+RewriteCond $1 ^Sitemap.xml
+RewriteRule ^(.*)$ /sitemap.php [L]
+
+# Sitemap.xml redirect
+RewriteCond $1 ^sitemap.xml
+RewriteRule ^(.*)$ /sitemap.php [L]
+ 
 # If the file and directory does not exist, redirect
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d 

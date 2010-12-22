@@ -5,8 +5,8 @@ require_once("../setup.php");
 Logger::echoLog();
 
 $server_list = array(
-    array('no' => 1, 'iplong' => ip2long('10.179.62.127'), 'ip' => '10.179.62.127'),
-    array('no' => 1, 'iplong' => ip2long('173.203.126.118'), 'ip' => '173.203.126.118'),
+    array('no' => 1, 'iplong' => ip2long('10.179.34.7'), 'ip' => '10.179.34.7'),
+    array('no' => 1, 'iplong' => ip2long('173.203.100.231'), 'ip' => '173.203.100.231'),
     array('no' => 2, 'iplong' => ip2long('10.179.52.99'), 'ip' => '10.179.52.99'),
     array('no' => 2, 'iplong' => ip2long('173.203.123.58'), 'ip' => '173.203.123.58'),
     array('no' => 99, 'iplong' => ip2long('127.0.0.1'), 'ip' => '127.0.0.1')

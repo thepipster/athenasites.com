@@ -34,7 +34,12 @@ var GalleriesFrame = {
    		
 		GalleriesFrame.calcImagePages();
         GalleriesFrame.paintGallerySlots();
-        GalleriesFrame.paintImages();				
+        GalleriesFrame.paintImages();	
+
+        //alert($('#GalleriesFrame').height());		
+        
+        $('#GalleriesFrame').css('height','100%');	
+        
     },
 	
     // ////////////////////////////////////////////////////////////////////////////

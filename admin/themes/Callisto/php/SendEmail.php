@@ -1,111 +1,106 @@
 <?php
 
-error_log("Entering sendmail");
-		
-	
 // Figure out the location of this file
 $discRoot = realpath(dirname(__FILE__)) . "/";
+$codeRoot = substr($discRoot, 0, strpos($discRoot, "themes")) . '/code/php/';
+$themeRoot = substr($discRoot, 0, strpos($discRoot, "php"));
 
-$codeRoot = substr($discRoot, 0, strpos($discRoot, "php")) . "php/";
-$wpRoot = substr($discRoot, 0, strpos($discRoot, "wp-content"));
-
-require_once($wpRoot . 'wp-blog-header.php');
+require_once($codeRoot . 'setup.php');
 
 // Get the users email.....
-$page_id = $wpdb->escape(getPara('page_id'));
-$nonce = getPara('nonce');
 
-error_log($nonce);
+$page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+$site_id = CommandHelper::getPara('site_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+$nonce = CommandHelper::getPara('nonce', true, CommandHelper::$PARA_TYPE_STRING);
 
 // Verify this request came from a real page
-if ( !wp_verify_nonce( $nonce, 'contact_page' )) {
-	error_log("Not authorized!");
-	echo "NA";
-	die();
+if (!SecurityUtils::checkNonce($nonce, 'email-link')) {
+    Logger::error("Not authorized!");
+    echo "NA";
+    die();
+}
+
+// Get the form paras....
+$name = CommandHelper::getPara('name', false, CommandHelper::$PARA_TYPE_STRING);
+$client_email = CommandHelper::getPara('email', false, CommandHelper::$PARA_TYPE_STRING);
+$phone = CommandHelper::getPara('phone', false, CommandHelper::$PARA_TYPE_STRING);
+$location = CommandHelper::getPara('location', false, CommandHelper::$PARA_TYPE_STRING);
+$datetime = CommandHelper::getPara('datetime', false, CommandHelper::$PARA_TYPE_STRING);
+$comments = CommandHelper::getPara('comments', false, CommandHelper::$PARA_TYPE_STRING);
+
+// Check to see if the content is spam!
+$blogURL = PageManager::getPageLink($page_id);
+
+$author_ip = PageViewsTable::getRealIPAddr();
+$author_url = '';
+
+$akismet = new Akismet($blogURL , AKISMET_API_KEY);
+$akismet->setCommentAuthor($name);
+$akismet->setCommentAuthorEmail($client_email);
+$akismet->setCommentAuthorURL($author_url);
+$akismet->setCommentContent($comments);
+
+// Check from akismet..
+if($akismet->isCommentSpam()){
+    Logger::error("Caught some spam!");
+    echo "SPAM";
+    die();
 }
 
 
-$sql = $wpdb->prepare("SELECT pp.*, tp.para_type FROM apollo_PageParas pp INNER JOIN apollo_ThemeParas tp WHERE pp.page_post_id = %d AND pp.theme_para_id = tp.id",  $page_id ); 		
-$data_list = $wpdb->get_results($sql, ARRAY_A);
+//
+// Check to see if this is possible spam or not?
+//
 
-$target_email = '';
+// Innocent until proven guilty...
+$status = 'Pending';
+$isSpam = false;
 
-foreach($data_list as $data){
-	if ($data['para_type'] == 'email'){
-		$target_email = $data['para_value'];				
-	}
+// Check from akismet..
+if($akismet->isCommentSpam()){
+    $status = 'Spam';
+    $isSpam = true;
 }
 
 
-$name = getPara('name');
-$client_email = getPara('email');
-$phone = getPara('phone');
-$location = getPara('location');
-$datatime = getPara('datetime');
-$comments = getPara('comments');
 
-if ($client_email){
-		
-	$headers = "From: " . $client_email;
-	$headers = "From: $client_email\r\nX-Mailer: php";
-	//$replyto = $client_email;
-	
-	$subject = "Customer Request";
-	
-	$message = "Message from contact form;\n";
-	$message .= "\n";
-	$message .= "Phone: $phone\n";
-	$message .= "\n";
-	$message .= "Location: $location\n";
-	$message .= "\n";
-	$message .= "Date: $datetime\n";
-	$message .= "\n";
-	$message .= "Comments: $comments\n";
-	    	
-	error_log("mail($target_email, $subject, $message, $headers)");    	
-	
-	
+// Construct email
+$headers = "From: " . $client_email;
+$headers = "From: $client_email\r\nX-Mailer: php";
+//$replyto = $client_email;
 
-	if (mail($target_email, $subject, $message, $headers)){
-		error_log("Email sent OK!");
-		echo "TRUE";
-	}
-	else {
-		error_log("Error sending email");
-		echo "FALSE";
-	}
-	
-/*	
-	if ($email != ''){
-//		$res = mail($target_email, $subject, $message, $headers);	
-//		$res = mail($target_email, $subject, $message);	
-		$res = mail('mikep76@gmail.com', 'test mail', 'test');	
-	}    
-	
-	if ($res){
-		error_log("Mail sent to $target_email!");
-		echo "TRUE";
-	}
-	else {
-		error_log("Error sending mail to $target_email!");
-		echo "FALSE";
-	}
-	*/
-	// Integrate with akismet
-	// http://linuslin.com/2007/08/23/how-to-make-anti-spam-contact-form-with-akismet/		
-}
+$subject = "Customer Request";
 
-function getPara($paraName){
-	
-	$val = false;
+$message = "Message from contact form;\n";
+$message .= "\n";
+$message .= "Phone: $phone\n";
+$message .= "\n";
+$message .= "Location: $location\n";
+$message .= "\n";
+$message .= "Date: $datetime\n";
+$message .= "\n";
+$message .= "Comments: $comments\n";
 
-	if(isset($_GET[$paraName])) {
-	    $val = $_GET[$paraName];
-	}
-	else if(isset($_POST[$paraName])) {
-	    $val = $_POST[$paraName];
-	}
-	return $val;	
+// Get the owner id(s)for this site
+$user_list = UserTable::getUsersFromSiteID($site_id);
+
+foreach($user_list as $user){
+
+    Logger::dump($user);
+
+    $target_email = $user['email'];
+    Logger::debug("Target email: $target_email");
+
+    //Logger::debug("mail($target_email, $subject, $message, $headers)");
+
+    if (mail($target_email, $subject, $message, $headers)) {
+        Logger::debug("Email sent OK!");
+        echo "TRUE";
+    } else {
+        Logger::error("Error sending email");
+        echo "FALSE";
+    }
+
 }
 
 

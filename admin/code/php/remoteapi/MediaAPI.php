@@ -884,7 +884,8 @@ function addFolder($site_id, $folder_name) {
  */
 function getStats($site_id) {
 
-    $disc_usage = du(SecurityUtils::getMediaFolder($site_id)) + du(SecurityUtils::getSitesFolder($site_id));
+    //$disc_usage = du(SecurityUtils::getMediaFolder($site_id)) + du(SecurityUtils::getSitesFolder($site_id));
+    $disc_usage = FolderTable::getDiscUsage($site_id) / (1024*1024);
 
     // Get page views for the whole site for each day
     $page_views = StatsRollupTables::getAllPageViewsRollup($site_id, 30);

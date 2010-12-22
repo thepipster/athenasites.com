@@ -261,6 +261,8 @@ var ssMain = {
         $('.menu_item').removeClass('selected');
         $('.menu_link').removeClass('selected');
 
+		$('.ViewFrame').height();
+		
         switch(ssMain.view){
 
             case ssMain.VIEW_PAGES :$('#PagesFrame').show();$('#pages_menu').addClass('selected');PagesFrame.repaint();break;
@@ -335,7 +337,7 @@ var ssMain = {
 	* typing before we submit changes
 	*/
 	setEditorChangeListener : function(){
-				
+								
 		// Get content
 		var content = oUtil.obj.getXHTMLBody();
 		if (ssMain.m_prevContent == '') ssMain.m_prevContent = content;
