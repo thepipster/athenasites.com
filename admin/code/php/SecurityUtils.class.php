@@ -204,7 +204,7 @@ class SecurityUtils {
         mkdir(self::getSitesFolder($site_id), 0777);
 
         // Create site's tables
-        PageParasTable::createTableForSite($site_id);
+        //PageParasTable::createTableForSite($site_id);
         GalleryTable::createTableForSite($site_id);
         FolderTable::createTableForSite($site_id);
         PagesTable::createTableForSite($site_id);

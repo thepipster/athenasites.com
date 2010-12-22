@@ -901,7 +901,7 @@ var DataStore = {
         }
 
         DataStore.m_mediaList = new Array(media_list.length);
-
+		
         for(var i=0; i<media_list.length; i++){
 
             var files_root = defines.user_files_root_url + DataStore.m_siteID + "/";
@@ -920,7 +920,7 @@ var DataStore = {
             temp.id = media_list[i].id;
             temp.date_added = media_list[i].created;
             temp.folder_id = media_list[i].folder_id;
-
+			
             if (i == 0){
             //alert(temp.thumb_url);
             }

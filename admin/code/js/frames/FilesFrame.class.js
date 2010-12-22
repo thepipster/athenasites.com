@@ -105,6 +105,7 @@ var FilesFrame = {
 	onSelectFolder : function(){
 		FilesFrame.m_currentImagePage = 0;
 		FilesFrame.repaintData();
+        FilesFrame.onShowUploader();
 	},
 	
     // ////////////////////////////////////////////////////////////////////////////
@@ -166,6 +167,14 @@ var FilesFrame = {
             return;
         }
         
+        // Clear values
+        $('#apollo_image_title').val("");
+        $('#apollo_image_date').val("");
+        $('#apollo_image_size').val("");
+        $('#apollo_image_desc').val("");
+        $('#apollo_image_tags').val("");
+        $('#apollo_image_url').attr('src', '');
+        
         $('#imageEditContent').show();
         $('#flashUploderContent').hide();		
         $('#imageEditContent').width(500);		
@@ -191,7 +200,7 @@ var FilesFrame = {
         
         var max_img_width = $('#imageEditContent').innerWidth() - 20;
         var max_img_height = 400;        
-                
+                                
         $('#apollo_image_title').val(img_title);
         $('#apollo_image_date').val(added_date + " (GMT)");
         $('#apollo_image_size').val(img_width + "px by " + img_height + "px");
@@ -228,7 +237,8 @@ var FilesFrame = {
         mediaObj.title = $('#apollo_image_title').val();        
         mediaObj.description = $('#apollo_image_desc').val();        
         mediaObj.tags = $('#apollo_image_tags').val(); 
-                       
+        
+        //alert(FilesFrame.m_currentImageID + " = " + mediaObj.description);           
         DataStore.updateMedia(mediaObj, true);
 	},
 	

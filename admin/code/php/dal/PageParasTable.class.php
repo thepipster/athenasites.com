@@ -10,6 +10,7 @@ class PageParasTable {
     /**
      * To keep the database table from growing huge, we break this table up by site id
      */
+     /*
     public static function createTableForSite($site_id) {
 
         $sql = "CREATE TABLE `athena_{$site_id}_PageParas` (
@@ -22,19 +23,19 @@ class PageParasTable {
 
         DatabaseManager::submitQuery($sql);
     }
-
+*/
     // //////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Get all a specific parameter value
      */
     public static function getParaValue($page_id, $theme_para_id, $site_id) {
-        $sql = DatabaseManager::prepare("SELECT para_value FROM athena_%d_PageParas WHERE page_id = %d AND theme_para_id = %d", $site_id, $page_id, $theme_para_id);
+        $sql = DatabaseManager::prepare("SELECT para_value FROM apollo_PageParas WHERE site_id = %d AND page_id = %d AND theme_para_id = %d", $site_id, $page_id, $theme_para_id);
         return DatabaseManager::getVar($sql);
     }
 
     public static function getAllParas($site_id) {
-        $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_PageParas", $site_id);
+        $sql = DatabaseManager::prepare("SELECT * FROM apollo_PageParas WHERE site_id = %d", $site_id);
         return DatabaseManager::getResults($sql);
     }
 
@@ -60,14 +61,14 @@ class PageParasTable {
     // //////////////////////////////////////////////////////////////////////////////////////
 
     public static function updateParaValue($site_id, $page_id, $theme_para_id, $new_value) {
-        $sql = DatabaseManager::prepare("UPDATE athena_%d_PageParas SET para_value = %s WHERE page_id = %d AND theme_para_id = %d", $site_id, $new_value, $page_id, $theme_para_id);
+        $sql = DatabaseManager::prepare("UPDATE apollo_PageParas SET para_value = %s WHERE site_id = %d AND page_id = %d AND theme_para_id = %d", $site_id, $new_value, $page_id, $theme_para_id);
         return DatabaseManager::update($sql);
     }
 
     // //////////////////////////////////////////////////////////////////////////////////////
 
     public static function createParaValue($site_id, $page_id, $theme_para_id, $new_value) {
-        $sql = DatabaseManager::prepare("INSERT INTO athena_%d_PageParas (para_value, page_id, theme_para_id) VALUES (%s, %d, %d)", $site_id, $new_value, $page_id, $theme_para_id);
+        $sql = DatabaseManager::prepare("INSERT INTO apollo_PageParas (para_value, page_id, theme_para_id) VALUES (%s, %d, %d) WHERE site_id = %d", $new_value, $page_id, $theme_para_id, $site_id);
         return DatabaseManager::insert($sql);
     }
 

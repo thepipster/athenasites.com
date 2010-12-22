@@ -150,10 +150,6 @@ html, body {
 .select_option_draft:hover { background-color: #2c6c11 !important;}
 */
 
-.apolloDataInput {
-	font-size: 14px;
-}
-
 /* Main Frame Styles //////////////////////////////////////// */
 /*
 .ui-widget-overlay {

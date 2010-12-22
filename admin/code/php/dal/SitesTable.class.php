@@ -80,6 +80,23 @@ class SitesTable {
 		$sql = DatabaseManager::prepare("SELECT * FROM apollo_Sites sites INNER JOIN apollo_UserToSite uts WHERE uts.user_id = %d AND sites.id = uts.site_id ORDER BY sites.id", $user_id);			
 		return DatabaseManager::getResults($sql);				
 	}
+
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	public static function getUserIDForSite($site_id){
+		$sql = DatabaseManager::prepare("SELECT user_id FROM apollo_UserToSite WHERE site_id = %d LIMIT 1", ($site_id));			
+		return DatabaseManager::getVar($sql);				
+	}
+
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Get the latitude/longitude for the given site based on the geo-locaton of the first site owner we find in the user table
+	*/
+	public static function getSiteGeoLocation($site_id){
+		$sql = DatabaseManager::prepare("SELECT latitude, longitude FROM apollo_UserToSite uts INNER JOIN apollo_Users usr WHERE uts.site_id = %d AND uts.user_id = usr.id LIMIT 1", ($site_id));			
+		return DatabaseManager::getSingleResult($sql);				
+	}
 		
 	// /////////////////////////////////////////////////////////////////////////////////
 

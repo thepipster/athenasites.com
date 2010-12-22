@@ -6,33 +6,6 @@
 // Do default actions
 PageManager::doHeader();
 
-global $tracker_code;
-		
-// Get the google tracker code (if set)	
-$tracker_code = ThemeTable::getGlobalParaValue(PageManager::$site_id, 301);
-
-/*
-// Get the pages top level parent page title
-$parent_title = getTopParentPageTitle($wp_query->post);
-
-error_log("Parent title: " . $parent_title);
-
-function getTopParentPageTitle($post){
-
-	// If this page id != 0
-	// then keep going up until you find that page that has page id of 0
-	error_log("Title: " . $post->post_title . " Parent ID: " . $post->post_parent);
-	
-	if ($post->post_parent != 0){
-		return getTopParentPageTitle(get_post($post->post_parent));
-	}
-	else {
-		return $post->post_title;
-	}
-		
-}
-*/
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" <?= PageManager::getLanguageAttributes(); ?>>
@@ -42,6 +15,10 @@ function getTopParentPageTitle($post){
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 	<title><?= PageManager::getPageTitle() ?></title>
+
+	<!-- Meta data //////////////////////////////////////////////////////// --> 	
+	
+	<?php PageManager::doSiteMetaTags(); ?>
 	
 	<!-- Favicon ///////////////////////////////////////////////////// -->
 
@@ -57,10 +34,7 @@ function getTopParentPageTitle($post){
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
 	
-	<script type="text/javascript" src="http://www.google-analytics.com/ga.js"></script>
-
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/AC_OETags.js"></script>
-	
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/AC_OETags.js"></script>	
 	<!--
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/jquery_plugins/jquery.dimensions.min.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/jquery_plugins/jquery.accordion.js"></script>

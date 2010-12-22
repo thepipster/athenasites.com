@@ -38,7 +38,7 @@ class ThemeTable {
 	*/
 	public static function getFavicon($site_id){		
 		//get_user_option('template');		
-		$sql = DatabaseManager::prepare("SELECT para_value FROM athena_%d_PageParas gp INNER JOIN apollo_ThemeParas tp WHERE gp.theme_para_id = tp.id AND gp.page_id = 0 AND tp.para_type = 'favicon'", $site_id);
+		$sql = DatabaseManager::prepare("SELECT para_value FROM apollo_PageParas gp INNER JOIN apollo_ThemeParas tp WHERE gp.site_id = %d AND gp.theme_para_id = tp.id AND gp.page_id = 0 AND tp.para_type = 'favicon'", $site_id);
 		return DatabaseManager::getVar($sql);
 	}
 	
@@ -49,7 +49,7 @@ class ThemeTable {
 	*/
 	public static function getGlobalParaValue($site_id, $theme_para_id){
 
-		$val = DatabaseManager::getVar(DatabaseManager::prepare("SELECT para_value FROM athena_%d_PageParas WHERE theme_para_id = %d AND page_id = 0 ",  $site_id, $theme_para_id));
+		$val = DatabaseManager::getVar(DatabaseManager::prepare("SELECT para_value FROM apollo_PageParas WHERE site_id = %d AND theme_para_id = %d AND page_id = 0 ",  $site_id, $theme_para_id));
 		
 		// If the value isn't set, get the default (if there is one)
 		if (!isset($val)){
@@ -66,7 +66,7 @@ class ThemeTable {
 	*/
 	public static function getGlobalImageParaValue($site_id, $theme_para_id){
 	
-		$image_id = DatabaseManager::getVar(DatabaseManager::prepare("SELECT para_value FROM athena_%d_PageParas WHERE theme_para_id = %d AND page_id = 0 ",  $site_id, $theme_para_id));
+		$image_id = DatabaseManager::getVar(DatabaseManager::prepare("SELECT para_value FROM apollo_PageParas WHERE site_id = %d AND theme_para_id = %d AND page_id = 0 ",  $site_id, $theme_para_id));
 		
 		// If the value isn't set, get the default (if there is one)
 		if (isset($image_id)){
@@ -83,7 +83,7 @@ class ThemeTable {
 	*/
 	public static function getNumberGalleriesForMultiGallery($site_id, $page_id){
 
-		$sql = DatabaseManager::prepare("SELECT para_value FROM athena_%d_PageParas gp INNER JOIN apollo_ThemeParas tp WHERE page_id = %d AND gp.theme_para_id = tp.id AND tp.para_type = 'multi-gallery'", $site_id, $page_id);
+		$sql = DatabaseManager::prepare("SELECT para_value FROM apollo_PageParas gp INNER JOIN apollo_ThemeParas tp WHERE gp.site_id = %d AND page_id = %d AND gp.theme_para_id = tp.id AND tp.para_type = 'multi-gallery'", $site_id, $page_id);
 		$val = DatabaseManager::getVar($sql);
 		if (!isset($val)){
 			$val = 0;

@@ -41,6 +41,11 @@ class UserTable {
         $sql = DatabaseManager::prepare("UPDATE apollo_Users SET latitude = %f, longitude = %f WHERE id = %d", $lat, $long, $id);
         return DatabaseManager::update($sql);
 	}
+
+	public static function getLocation($id){
+        $sql = DatabaseManager::prepare("SELECT latitude as lat, longitude as lon apollo_Users FROM apollo_Users WHERE id = %d", $id);
+        return DatabaseManager::getSingleResult($sql);
+	}
 	
     // ///////////////////////////////////////////////////////////////////////////////////////
 

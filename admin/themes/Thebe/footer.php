@@ -235,8 +235,6 @@ var thebeMain = {
 
 }
 	
-<?= PageManager::echoGoogleTracker($tracker_code); ?>
-	
 </script>
 
 <?php PageManager::doFooter(); ?>

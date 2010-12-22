@@ -452,12 +452,12 @@ Logger::debug("$domain has site_id = $current_site_id");
 														
 														   <tr>
 														      <td class='titleField'>Description</td>
-														      <td class='dataField'><textarea id='apollo_image_desc5555' width='100%' class='apolloDataInput'></textarea></td>
+														      <td class='dataField'><textarea id='apollo_image_desc' width='100%' class='apolloDataInput'></textarea></td>
 														   </tr>
 																
 														   <tr>
 														      <td class='titleField'>Alt Text</td>
-														      <td class='dataField'><textarea id='apollo_image_tags555' width='100%' class='apolloDataInput'></textarea></td>
+														      <td class='dataField'><textarea id='apollo_image_tags' width='100%' class='apolloDataInput'></textarea></td>
 														   </tr>
 														
 														   <tr align='center'>

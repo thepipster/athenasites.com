@@ -401,6 +401,8 @@ class PageManager {
 		// Get the google tracker code (if set)	
 		$tracker_code = ThemeTable::getGlobalParaValue(self::$site_id, self::$PARA_GOOGLE_TRACKER);
 
+		// 	<script type="text/javascript" src="http://www.google-analytics.com/ga.js"></script>
+
         if (isset($tracker_code) && $tracker_code != ''){        
 			echo "<!-- Global tracking -->";
 			echo "<script type='text/javascript'>";
@@ -424,20 +426,29 @@ class PageManager {
 
 		$meta_desc = StringUtils::stripQuotes(ThemeTable::getGlobalParaValue(self::$site_id, self::$PARA_GOOGLE_TRACKER));
 		$meta_keywords = StringUtils::stripQuotes(ThemeTable::getGlobalParaValue(self::$site_id, self::$PARA_GOOGLE_TRACKER));
-
-		echo "<!-- Meta data //////////////////////////////////////////////////////// --> \n";
-
-		echo "<meta http-equiv='Content-Type' content='text/html; charset=ISO-8859-1' />\n";
-		echo "<meta name='Description' content=\"$meta_desc\" />\n";
-		echo "<meta name='Keywords' content=\"$meta_keywords\" />\n";
-		echo "<meta name='robots' content='index, follow' />\n";
-
-		/*
-		echo "<meta name='geo.position' content='38.8333; -104.8167' />\n";
-		echo "<meta name='geo.country' content='US' />\n";
-		echo "<meta name='geo.region' content='US-VA' />\n";
-		echo "<meta name='geo.placename' content='Arlington, VA 22101, USA' />\n";
 		
+		$user_id = SitesTable::getUserIDForSite(self::$site_id);
+		$user = UserTable::getUser($user_id);
+		
+		//$pos = SitesTable::getSiteGeoLocation(self::$site_id);
+			
+		$lat = $user['latitude'];
+		$lon = $user['longitude'];
+		$state = $user['state'];
+		$city = $user['city'];
+		$zip = $user['post_code'];
+		$country = $user['iso_country_code'];
+				
+		echo "    <meta http-equiv='Content-Type' content='text/html; charset=ISO-8859-1' />\n";
+		echo "    <meta name='Description' content=\"$meta_desc\" />\n";
+		echo "    <meta name='Keywords' content=\"$meta_keywords\" />\n";
+		echo "    <meta name='robots' content='index, follow' />\n";
+
+		echo "    <meta name='geo.position' content='$lat; $lon' />\n";
+		echo "    <meta name='geo.country' content='$country' />\n";
+		echo "    <meta name='geo.region' content='$country-$state' />\n";
+		echo "    <meta name='geo.placename' content='$city, $state $zip, $country' />\n";
+/*		
 		echo "<meta name='ICBM' content='38.8333, -104.8167' />\n";
 		echo "<meta name='DC.title' content='DC wedding photographer' />\n";
 		echo "<meta name='tgn.id' content='7013637' />\n";
