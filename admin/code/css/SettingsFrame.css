@@ -1,0 +1,11 @@
+
+#SettingsFrame .paraDesc {
+	font-size: 10px;
+	color: gray;	
+}
+
+#SettingsFrame .blogParaIndicator {
+	color: maroon;
+	padding-left: 5px;
+	font-size: 10px;
+}

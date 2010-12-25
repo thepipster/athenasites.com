@@ -94,7 +94,7 @@ class ThemeTable {
 	// //////////////////////////////////////////////////////////////////////////////////////
 
 	public static function getAllThemeParas($theme_id){
-		$sql = DatabaseManager::prepare("SELECT * FROM apollo_ThemeParas WHERE theme_id = %d AND is_public='1' ORDER BY admin_order",  $theme_id ); 		
+		$sql = DatabaseManager::prepare("SELECT * FROM apollo_ThemeParas WHERE (theme_id = %d OR theme_id = 0) AND is_public='1' ORDER BY admin_order",  $theme_id ); 		
 		return DatabaseManager::getResults($sql);
 	}
 

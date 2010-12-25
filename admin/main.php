@@ -104,6 +104,7 @@ Logger::debug("$domain has site_id = $current_site_id");
         <link rel="stylesheet" href="code/css/GalleryFrame.css" type="text/css" />
         <link rel="stylesheet" href="code/css/StatsFrame.css" type="text/css" />
         <link rel="stylesheet" href="code/css/Dashboard.css" type="text/css" />
+        <link rel="stylesheet" href="code/css/SettingsFrame.css" type="text/css" />
         <link rel="stylesheet" href="code/css/datePicker.css" type="text/css" />
 
         <link rel="stylesheet" href="code/colorpicker/css/colorpicker.css" type="text/css" />
@@ -892,38 +893,25 @@ Logger::debug("$domain has site_id = $current_site_id");
 
                                     <td width="50%" height="70%" style='height:100%; padding:5px;'>
 
-                                        <div class='subframebox' style='height:100%; width:100%;'>
-
-                                            <span class='title'>Site Settings</span>
-
-                                            <div id='apollo_site_settings_site' class='frameContents' align='left'>  
-                                            	<p><strong>Custom Parameters</strong></p>                                               	                                       
-                                            	<div align='left' id='apollo_site_settings_site_custom_paras'><p>I'm sorry, your theme does not have any site parameters that you can modify</p></div>
-                                            </div>
-
-                                        </div><!-- subframebox -->
-
+			                            <div class="frameContents">
+                                    	
+	                                    	<p><strong>Tools</strong></p>                                       	                                       
+	                                    	<button class='basic_button' style='' onclick="SettingsFrame.onPaintPostImporter()">Import Posts</button>
+	
+	                                    	<div align='left' id='apollo_site_settings_custom_paras_1'></div>
+                                    	
+                                    	</div>
+                                    	
                                     </td>
 
-                                    <td width="50%" height="100%" style='height:100%; padding:5px;' rowspan="2">
-                                        
-                                        <div class='subframebox' style='height:100%; width:100%;'>
-
-                                            <span class='title'>Blog Settings</span>
-
-                                            <div id='apollo_site_settings_blog' class='frameContents' align='left'>
-                                            	<p><strong>Tools</strong></p>                                          
-                                            	<button class='basic_button' style='' onclick="SettingsFrame.onPaintPostImporter()">Import Posts</button>
-                                            	<p><strong>Custom Parameters</strong></p>                                               	                                       
-                                            	<div align='left'><p>I'm sorry, your theme does not have any blog parameters that you can modify</p></div>
-                                            </div>
-
-                                        </div><!-- subframebox -->
-                                        
+                                    <td width="50%" height="100%" style='height:100%; padding:5px;'>
+			                            <div class="frameContents">
+	                                    	<div align='left' id='apollo_site_settings_custom_paras_2'></div>
+	                                    </div>
                                     </td>
 
-
-
+								</tr>
+								
                             </table>
                         
                         

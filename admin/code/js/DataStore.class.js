@@ -336,6 +336,28 @@ var DataStore = {
 
     updateSitePara : function(theme_para_id, page_id, new_para_val){
 
+		//alert(theme_para_id + ", " + page_id + ", " + new_para_val);
+		
+        // Update para in data store
+        var paraFound = false;
+        for (var i=0; i<DataStore.m_siteParaList.length; i++){
+            if ((DataStore.m_siteParaList[i].theme_para_id == theme_para_id) && (DataStore.m_siteParaList[i].page_id == page_id)){
+                DataStore.m_siteParaList[i].para_value = new_para_val;
+                paraFound = true;
+            }
+        }
+        
+//        alert(paraFound);
+
+        // If we didn't find the para, it must be a new para (that wasn't set before)
+        if (!paraFound){
+            var temp = new Object();
+            temp.theme_para_id = theme_para_id;
+            temp.para_value = new_para_val;
+            temp.page_id = page_id;
+            DataStore.m_siteParaList.push(temp);
+        }		
+		/*
         for (var i=0; i<DataStore.m_siteParaList.length; i++){
 
             if ((DataStore.m_siteParaList[i].theme_para_id == theme_para_id) && (DataStore.m_siteParaList[i].page_id == page_id)){
@@ -344,6 +366,7 @@ var DataStore = {
             }
 
         }
+        */
     },
 
     // //////////////////////////////////////////////////////////////////////////////////

@@ -61,14 +61,14 @@ class PageParasTable {
     // //////////////////////////////////////////////////////////////////////////////////////
 
     public static function updateParaValue($site_id, $page_id, $theme_para_id, $new_value) {
-        $sql = DatabaseManager::prepare("UPDATE apollo_PageParas SET para_value = %s WHERE site_id = %d AND page_id = %d AND theme_para_id = %d", $site_id, $new_value, $page_id, $theme_para_id);
+        $sql = DatabaseManager::prepare("UPDATE apollo_PageParas SET para_value = %s WHERE site_id = %d AND page_id = %d AND theme_para_id = %d", $new_value, $site_id, $page_id, $theme_para_id);
         return DatabaseManager::update($sql);
     }
 
     // //////////////////////////////////////////////////////////////////////////////////////
 
     public static function createParaValue($site_id, $page_id, $theme_para_id, $new_value) {
-        $sql = DatabaseManager::prepare("INSERT INTO apollo_PageParas (para_value, page_id, theme_para_id) VALUES (%s, %d, %d) WHERE site_id = %d", $new_value, $page_id, $theme_para_id, $site_id);
+        $sql = DatabaseManager::prepare("INSERT INTO apollo_PageParas (para_value, page_id, theme_para_id, site_id) VALUES (%s, %d, %d, %d)", $new_value, $page_id, $theme_para_id, $site_id);
         return DatabaseManager::insert($sql);
     }
 

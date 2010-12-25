@@ -1033,7 +1033,8 @@ function getAll($site_id) {
 
     // Get page theme variables
     $site_theme_paras = ThemeTable::getAllThemeParas($site['theme_id']);
-
+	//Logger::dump($site_theme_paras);
+	
     // Get any set page paras
     $page_paras = PageParasTable::getAllParas($site_id);
 
@@ -1162,7 +1163,7 @@ function deleteMedia($site_id, $media_id) {
 
 function assignPagePara($site_id, $page_id, $theme_para_id, $new_value) {
 
-    //Logger::debug("assignPagePara($site_id, $page_post_id, $theme_para_id, $new_value)");
+    Logger::debug("assignPagePara($site_id, $page_id, $theme_para_id, $new_value)");
 
     $id = PageParasTable::setParaValue($site_id, $page_id, $theme_para_id, $new_value);
 

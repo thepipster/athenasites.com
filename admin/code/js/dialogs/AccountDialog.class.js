@@ -14,6 +14,14 @@ var AccountDialog = {
         txt += "    <div id='commentList'></div>"
         txt += "</div>";
 
+		// Change password
+		
+		// email, name, nice_name
+		// payment_plan, last_payment, next_payment_due, monthly_fee,
+		// address, city, state, post_code, iso_country_code, 
+		// service_client_gallery
+		// latitude, longitude
+		
         $('#apollo_dialog').html(txt);
         $('#apollo_dialog').dialog( 'destroy' );
         $('#apollo_dialog').dialog({
