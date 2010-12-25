@@ -245,7 +245,7 @@ var SettingsFrame = {
 		// Paint text and others...
 		//
 
-		txt += "<p><strong>Other Settings</strong></p>";
+		txt += "<p><strong>Settings</strong></p>";
 
         for (var i=0; i<theme_para_list.length; i++){
 
