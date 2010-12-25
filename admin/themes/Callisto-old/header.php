@@ -10,14 +10,6 @@ $common_code_root = substr($discRoot, 0, strpos($discRoot, 'wp-content')) . 'wp-
 
 require_once($common_code_root . 'php/dal/ThemeTable.class.php');
 
-// Get fav icon
-global $blog_id;
-$fav_post_id = ThemeTable::getFavicon($blog_id);
-if (isset($fav_post_id)){
-	$post = get_post($fav_post_id);
-	$fav_url = $post->guid;
-}
-
 // Get the current page id
 $page_id = $wp_query->post->ID;
 

@@ -107,6 +107,7 @@ class PageManager {
     public static $PARA_META_DESCRIPTION  	= 1;
     public static $PARA_META_KEYWORDS  		= 2;
     public static $PARA_GOOGLE_TRACKER  	= 3;
+    public static $PARA_FAV_ICON  			= 4;
     
     // ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -316,10 +317,10 @@ class PageManager {
     public static function getFavIconURL() {
 
         // See if the user has set a fav icon
-        $fav_image_id = ThemeTable::getFavicon(PageManager::$site_id);
+        $fav_image_id = ThemeTable::getGlobalParaValue(self::$site_id, self::$PARA_FAV_ICON);
 
         if (isset($fav_image_id)) {
-            $media_folder = SecurityUtils::getMediaFolder(PageManager::$site_id);
+            $media_folder = SecurityUtils::getMediaFolder(self::$site_id);
             $image = FolderTable::getMedia(self::$site_id, $fav_image_id);
             if (isset($image)) {
                 return self::$media_root_url .  $image['filepath'] . $image['filename'];

@@ -30,18 +30,7 @@ class ThemeTable {
 		//return DatabaseManager::getResults($sql, ARRAY_A);	
 			
 	}
-	
-	// //////////////////////////////////////////////////////////////////////////////////////
-
-	/**
-	* Get the favicon for the specified blog. If the user hasn't set one, this will return null
-	*/
-	public static function getFavicon($site_id){		
-		//get_user_option('template');		
-		$sql = DatabaseManager::prepare("SELECT para_value FROM apollo_PageParas gp INNER JOIN apollo_ThemeParas tp WHERE gp.site_id = %d AND gp.theme_para_id = tp.id AND gp.page_id = 0 AND tp.para_type = 'favicon'", $site_id);
-		return DatabaseManager::getVar($sql);
-	}
-	
+		
 	// //////////////////////////////////////////////////////////////////////////////////////
 
 	/**
