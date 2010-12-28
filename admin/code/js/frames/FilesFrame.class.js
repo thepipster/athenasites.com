@@ -205,7 +205,7 @@ var FilesFrame = {
         $('#apollo_image_date').val(added_date + " (GMT)");
         $('#apollo_image_size').val(img_width + "px by " + img_height + "px");
         $('#apollo_image_desc').val(desc);
-        $('#apollo_image_tags').val(img_title);
+        $('#apollo_image_tags').val(alt_text);
         $('#apollo_image_url').css('max-width', max_img_width);
         $('#apollo_image_url').css('max-height', max_img_height);
         $('#apollo_image_url').attr('src', image_url);
