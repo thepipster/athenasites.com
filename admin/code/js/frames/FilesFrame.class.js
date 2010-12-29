@@ -458,10 +458,22 @@ var FilesFrame = {
         var titleText = title + " (" + width + "px by " + height + "px)";
 
         var onclick = "FilesFrame.onSelectImage('"+post_id+"')";
+       	var mt = 0;
+        if (thumb_height < 50){
+        	mt = (50 - thumb_height)/2;
+	        //alert(thumb_height + ", " + mt);
+        }
+        
 		
         txt += "<div class='thumbwrapper' align='center' onclick=\""+onclick+"\">";
-        txt += "<img id='img_"+post_id+"' src='"+thumb_url+"' class='thumb' width='"+thumb_width+"px' height='"+thumb_height+"px' title='"+titleText+"'/>";
+        txt += "<span></span>"; // hacky-IE7 fix for vertical alignment
+        txt += "<img id='img_"+post_id+"' src='"+thumb_url+"' class='thumb' width='"+thumb_width+"px' height='"+thumb_height+"px' title='"+titleText+"' style='margin-top:"+mt+"px'/>";
         txt += "</div>";
+        
+//        txt += "<div class="wraptocenter"><span></span><img src="..." alt="..."></div>";
+//        txt += "<div class='thumbwrapper'><span></span><img src="..." alt="..."></div>";
+
+
         return txt;
     }
 

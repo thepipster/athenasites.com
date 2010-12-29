@@ -44,14 +44,15 @@ else {
     $year = date("Y");
     $month = date("m");
     $filepath = $year . "/" . $month . "/";
-    
-    // Copy file to users directory
-	$tmp_name = tempnam(sys_get_temp_dir(), 'apollo_');    
-    move_uploaded_file($_FILES["Filedata"]["tmp_name"], $tmp_name);
-            
+                
     // separate filename from extension to get title
     $title_parts = pathinfo($_FILES["Filedata"]["name"]);
     $title = $title_parts['filename'];
+    $original_ext = $title_parts['extension'];
+    
+    // Copy file to users directory
+	$tmp_name = tempnam(sys_get_temp_dir(), 'apollo_') . "." . $original_ext;    
+    move_uploaded_file($_FILES["Filedata"]["tmp_name"], $tmp_name);
     
     // Get a safe name, and check for duplicates    
     //$name = friendlyName($_FILES["Filedata"]["name"], $filepath);      
@@ -87,21 +88,26 @@ else {
 
     if ($image_info) {
 
+        $width = $image_info[0];
+        $height = $image_info[1];
+
+		//if (THUMB_WIDTH < $width && THUMB_HEIGHT < $height){
+
 		// Create a temporary file to store the thumbnail 
-		$temp_file_thumb = tempnam(sys_get_temp_dir(), 'apollo_');
+		$temp_file_thumb = tempnam(sys_get_temp_dir(), 'apollo_') . "." . $original_ext;
 
         $thumb_name = getThumbName($name);
         $s3_thumb_file_path = $site_id . "/" . $filepath . $thumb_name; 
         
-        $width = $image_info[0];
-        $height = $image_info[1];
         $mime_type = $image_info['mime'];
 
         // Create thumbnails!
-        $src_image = ImageUtils::createImageFromFile($tmp_name, $mime_type);
+        //$src_image = ImageUtils::createImageFromFile($tmp_name, $mime_type);
         //$thumb_img = ImageUtils::resizeImage($src_image, $mime_type, 'letterbox', THUMB_WIDTH, THUMB_HEIGHT);
-        $thumb_img = ImageUtils::resizeImage($src_image, $mime_type, 'crop', THUMB_WIDTH, THUMB_HEIGHT);
-
+        //$thumb_img = ImageUtils::resizeImage($src_image, $mime_type, 'letterbox', THUMB_WIDTH, THUMB_HEIGHT);
+		
+		$thumb_img = ImageUtils::resizeImage($tmp_name, THUMB_WIDTH, THUMB_HEIGHT, false, 'return', false);
+		
         $thumb_width = imagesx($thumb_img);
         $thumb_height = imagesy($thumb_img);
 
@@ -114,8 +120,10 @@ else {
 		}
 		
 		unlink($temp_file_thumb);
+		
         
-    } else {
+    } 
+    else {
         $mime = new MimeType();
         $mime_type = $mime->getType(strtolower($tmp_name));
         $width = null;
