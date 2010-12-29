@@ -104,15 +104,21 @@ PageManager::doHeader();
 
 <div align='center' style='width:100%; height:100%'>
     
-    <div id='site_wrapper'>
-    <div id='nav_bar'>
+    <div id='navBarWrapper'>
     	
-    	<a href='<?=$url_root?>' id='logo'><img src="<?= PageManager::$theme_url_root; ?>images/logo.png" width="256px" height="60px" alt="Apollo Sites, SEO Enhanced wordpress themes for photographers"></a>
+	    <div id='navBar'>
     	
-    	<div id='nav_menu' align="right">
+	    	<a href='<?=$url_root?>' id='logo'><img src="<?= PageManager::$theme_url_root; ?>images/logo.png" width="256px" height="60px" alt="Apollo Sites, SEO Enhanced wordpress themes for photographers"></a>
+    	
+			<a href='/admin'><div class='menu_item' align='center'><div class='menu_text'>Login</div></div></a>
+
 			<?php 
 
-				foreach (PageManager::$page_list as $page){
+				$ct = count(PageManager::$page_list);
+				
+				for ($i = $ct-1; $i>=0; $i--){				
+				//foreach (PageManager::$page_list as $page){
+					$page = PageManager::$page_list[$i];
 				
 					$page_id = $page['id'];
 					$parent_page_id = $page['parent_page_id'];
@@ -123,10 +129,6 @@ PageManager::doHeader();
 
 						$link = PageManager::getPageLink($page_id);
 						
-						//if ($title == 'home' || $title == 'Home'){
-							//print("<a href='$link'><h1 id='$id' class='menu_selected_item'>$title</span></a> \n");
-							// do nothing, hide the home page!
-						//}
 						if (($title == 'home' || $title == 'Home') && $_SERVER["REQUEST_URI"] == '/'){
 							print("<a href='$link'><div id='$page_id' class='menu_item menu_selected_item' align='center'><div class='menu_text'>$title</div></div></a> \n");
 						}	
@@ -139,8 +141,10 @@ PageManager::doHeader();
 					}
 				}			
 			?>    	
-    	</div> <!-- nav -->
+						
+	    </div><!-- navBar -->
     	
-    </div><!-- nav_bar -->
+    </div><!-- navBarWrapper -->
     
-    <div id='contents'>
+    <div id='contentsWrapper'>
+	    <div id='contents'>
