@@ -10,6 +10,10 @@ PageManager::doHeader();
 
 	<title><?= PageManager::getPageTitle() ?></title>
 	
+	<!-- Meta data //////////////////////////////////////////////////////// --> 	
+	
+	<?php PageManager::doSiteMetaTags(); ?>
+	
 	<!-- Favicon ///////////////////////////////////////////////////// -->
 
 	<link rel="shortcut icon" type="image/png" href="<?= PageManager::getFavIconURL() ?>">
