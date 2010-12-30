@@ -199,18 +199,30 @@ var FilesFrame = {
         var image_url = imageData.file_url;        
         
         var max_img_width = $('#imageEditContent').innerWidth() - 20;
-        var max_img_height = 400;        
+        var max_img_height = 0.4*$(window).height();    
                                 
         $('#apollo_image_title').val(img_title);
         $('#apollo_image_date').val(added_date + " (GMT)");
         $('#apollo_image_size').val(img_width + "px by " + img_height + "px");
         $('#apollo_image_desc').val(desc);
         $('#apollo_image_tags').val(alt_text);
+        
         $('#apollo_image_url').css('max-width', max_img_width);
         $('#apollo_image_url').css('max-height', max_img_height);
         $('#apollo_image_url').attr('src', image_url);
-                        
-                               	       
+        
+        // Paint tags...
+        var tags = new Array();
+        tags.push('tag 1');
+        tags.push('tag 2');
+        
+        var txt = "";
+        for (var i=0; i<tags.length; i++){
+            var onclick = "FilesFrame.deleteImageTag(\""+tags[i]+"\")";
+	        txt += "<div class='postTagCatLine'><span class='postTagCat'>"+tags[i]+"</span><span class='postRemoveTagCat' onclick='"+onclick+"'></span></div>";
+        }
+		$('#apollo_image_custom_tag_list').html(txt);
+                                                       	       
 		FilesFrame.m_currentImageID = image_id;  
 		
 		var prevMode = FilesFrame.m_mode;
@@ -241,7 +253,20 @@ var FilesFrame = {
         //alert(FilesFrame.m_currentImageID + " = " + mediaObj.description);           
         DataStore.updateMedia(mediaObj, true);
 	},
-	
+
+	// ////////////////////////////////////////////////////////////////////////////
+
+	deleteImageTag : function(tag){
+		alert('TBD Tag = ' + tag)
+	},
+		
+	// ////////////////////////////////////////////////////////////////////////////
+
+	addImageTag : function(){
+		var tag = $('#apollo_image_custom_tags').val();
+		alert(tag);
+	},
+			
     // ////////////////////////////////////////////////////////////////////////////
 
 	/** 
@@ -476,6 +501,7 @@ var FilesFrame = {
 
         return txt;
     }
-
-	// ////////////////////////////////////////////////////////////////////////////
+    
+    // ////////////////////////////////////////////////////////////////////////////
+	
 }

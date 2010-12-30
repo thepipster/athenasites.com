@@ -430,7 +430,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 														
 														<table width='100%' height='100%' cellspacing='3px'>
 														
-														   <tr valign='center' align='center' class='imageDisplay'>
+														   <tr valign='center' align='center' class='imageDisplay' height='30%'>
 														      <td class='dataField' colspan='2' >
 														          <img id='apollo_image_url' src=''/>
 														      </td>
@@ -441,6 +441,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 														      <td class='dataField'><input id='apollo_image_title' type=text class='apolloDataInput' value=''/></td>
 														   </tr>
 														
+															<!--
 														   <tr>
 														      <td class='titleField'>Added</td>
 														      <td class='dataField'><input id='apollo_image_date' width='100%' type=text value='' disabled/></td>
@@ -450,7 +451,8 @@ Logger::debug("$domain has site_id = $current_site_id");
 														      <td class='titleField'>Size</td>
 														      <td class='dataField'><input id='apollo_image_size' width='100%' type=text value='' disabled/></td>
 														   </tr>														
-														
+															-->
+															
 														   <tr>
 														      <td class='titleField'>Description</td>
 														      <td class='dataField'><textarea id='apollo_image_desc' width='100%' class='apolloDataInput'></textarea></td>
@@ -461,13 +463,27 @@ Logger::debug("$domain has site_id = $current_site_id");
 														      <td class='dataField'><textarea id='apollo_image_tags' width='100%' class='apolloDataInput'></textarea></td>
 														   </tr>
 														
+														
+														   <tr valign="top">
+														      <td rowspan='2' class='titleField'>Tags</td>
+														      <td class='dataField'>
+														      	<input id='apollo_image_custom_tags' type=text value='' style='width:100px'/>
+														      	<button class='basic_button' onclick='FilesFrame.addImageTag();'>Add</button>														      	
+														      </td>
+														   </tr>
+
+														   <tr>
+														      <td class='dataField'><div id='apollo_image_custom_tag_list'></div></td>
+														   </tr>
+														
+															
 														   <tr align='center'>
 														      <td colspan='2'>
-														          <button class='cancel_button' onclick="FilesFrame.onCancel()">Close</button>
-														          <button class='delete_button' onclick="FilesFrame.onDeleteImage()">Delete</button>
+														          <button class='cancel_button' onclick="FilesFrame.onCancel()" style='margin-right:5px;float:right'>Close</button>
+														          <button class='delete_button' onclick="FilesFrame.onDeleteImage()" style='margin-right:8px;float:right'>Delete</button>
 														      </td>
 														   </tr>														
-														
+															
 														</table>
 														
 													</div><!-- ApolloImageEditDialog -->                                                                                                                                              
@@ -507,12 +523,15 @@ Logger::debug("$domain has site_id = $current_site_id");
 							<div id='FilesFrameContent' align='left'>
 							
 								<table border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>							
-									<tr valign='top'>									
+								
+									<tr valign='top'>	
+																	
 										<td>
 											<div id='athena_edit_images_content'></div>
 										</td>
 														
 										<td width='150px' style='height:100%; padding:5px'>																							
+											
 											<div class='subframebox' style='height:100%; width:500px'>															
 												<span class='title'>Edit Image</span>
 																											
@@ -522,6 +541,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 											</div>											
 												
 										</td>
+																				
 									</tr>
 							
 								</table>

@@ -903,6 +903,43 @@ var MediaAPI = {
             AthenaDialog.showAjaxError(ret);
         }
 
-    }
+    },
+    
+    // ////////////////////////////////////////////////////////////////////////
+
+	addMediaTag : function(siteID, mediaID, tagStr, callback){
+	
+        AthenaDialog.showLoading("Adding tag");
+
+        var paras = {
+            cmd : 'addMediaTag',
+            site_id: siteID,
+            media_id: mediaID,
+            tag: tagStr
+        };
+
+        $.ajax({
+            url: MediaAPI.m_url,
+            dataType: "json",
+            success: function(ret){
+                MediaAPI.onTagAdded(ret, callback);
+            },
+            data: paras
+        });	
+	},
+	
+	onTagAdded : function(ret, callback) {
+
+        AthenaDialog.clearLoading();
+
+        if (ret.result == 'ok'){
+            callback(ret.data.media_id);
+        }
+        else {
+            AthenaDialog.showAjaxError(ret);
+        }
+
+
+	}   
 }
     

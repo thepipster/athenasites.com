@@ -78,8 +78,9 @@ PageManager::doHeader();
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/reflection-jquery/js/reflection.js"></script>
 
 	<script language="JavaScript">
-	/*
+
 	function preloader() {
+	/*
 	
 	     // create object
 	     imageObj = new Image();	
@@ -100,8 +101,8 @@ PageManager::doHeader();
 	     for(i=0; i<images.length; i++) {
 	          imageObj.src='<?= PageManager::$theme_url_root; ?>/images/'+images[i];
 	     }
-	} 
 	*/	
+	} 
 	</script>
 
 	<!-- Pingback ////////////////////////////////////////////////////////////// -->
