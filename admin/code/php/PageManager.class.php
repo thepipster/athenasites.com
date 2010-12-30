@@ -436,7 +436,7 @@ class PageManager {
 			
 			  var _gaq = _gaq || [];
 			  _gaq.push(['_setAccount', '$tracker_code']);
-			  _gaq.push(['_setDomainName', '.apollosites.com']);
+			  _gaq.push(['_setDomainName', '$domain']);
 			  _gaq.push(['_trackPageview']);
 			
 			  (function() {
