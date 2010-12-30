@@ -145,7 +145,8 @@ else {
     // Add to media table
     
     // addMedia($folder_id, $site_id, $filename, $mime_type, $file_size, $filepath, $title, $descriptions, $tags, $width, $height, $thumb_filename, $thumb_width, $thumb_height)
-    FolderTable::addMedia($folder_id, $site_id, $name, $mime_type, $file_size, $filepath, $title, '', '', $width, $height, $thumb_name, $thumb_width, $thumb_height);
+    $title = "";
+    MediaTable::addMedia($folder_id, $site_id, $name, $mime_type, $file_size, $filepath, $title, '', '', $width, $height, $thumb_name, $thumb_width, $thumb_height);
 
     // Make a thumbnail
 
