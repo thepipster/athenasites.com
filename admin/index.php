@@ -10,7 +10,7 @@ else {
 	PageManager::init('apollosites.com');
 }
 
-PageManager::$page_title = 'admin';
+PageManager::$page_title = 'ApolloSites | Admin';
 
 // Echo header
 require_once('themes/ApolloSites/header.php');
@@ -136,5 +136,6 @@ ssLogin.init();
 </script>
 <?php
 // Echo footer
+PageManager::$page_title = 'Admin';
 require_once('themes/ApolloSites/footer.php');
 ?>
