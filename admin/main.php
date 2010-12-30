@@ -4,7 +4,7 @@ require_once("code/php/setup.php");
 if (!SecurityUtils::isLoggedIn()) {
 //	header("Location: http://".$_SERVER['HTTP_HOST']."/admin/index.html");
     SecurityUtils::logOut();
-    header("Location: index.html");
+    header("Location: index.php");
 }
 
 $user_id = SecurityUtils::getCurrentUserID();

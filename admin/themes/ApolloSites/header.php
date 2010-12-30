@@ -22,6 +22,7 @@ PageManager::doHeader();
 
 	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>/style.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>/css/coda-slider-2.0.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>/css/login.css" type="text/css" media="screen" />
 
 	<!-- Page Styles  ..///////////////////////////////////////////////////////// -->
 
@@ -63,7 +64,6 @@ PageManager::doHeader();
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
 		<script src="http://jquery-ui.googlecode.com/svn/tags/latest/ui/minified/jquery-ui.min.js" type="text/javascript"></script>
 	-->
-
 
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/reflection-jquery/js/reflection.js"></script>
 
@@ -110,36 +110,44 @@ PageManager::doHeader();
     	
 	    	<a href='<?=$url_root?>' id='logo'><img src="<?= PageManager::$theme_url_root; ?>images/logo.png" width="256px" height="60px" alt="Apollo Sites, SEO Enhanced wordpress themes for photographers"></a>
     	
-			<a href='/admin'><div class='menu_item' align='center'><div class='menu_text'>Login</div></div></a>
+    		<?php 
+    		
+    		Logger::debug($_SERVER["REQUEST_URI"]);
+    		
+    		if ($_SERVER["REQUEST_URI"] == '/admin' || $_SERVER["REQUEST_URI"] == '/admin/' || $_SERVER["REQUEST_URI"] == 'admin'){
+    			echo "<a href='/admin'><div class='menu_item menu_selected_item' align='center'><div class='menu_text'>Login</div></div></a>";
+    		}
+    		else {
+    			echo "<a href='/admin'><div class='menu_item' align='center'><div class='menu_text'>Login</div></div></a>";
+    		}
+    					
+			$ct = count(PageManager::$page_list);
+			
+			for ($i = $ct-1; $i>=0; $i--){				
+			//foreach (PageManager::$page_list as $page){
+				$page = PageManager::$page_list[$i];
+			
+				$page_id = $page['id'];
+				$parent_page_id = $page['parent_page_id'];
+				$title = $page['title'];								
+				$page_slug = $page['slug'];
 
-			<?php 
+				if ($parent_page_id == 0 && $page['status'] == 'Published'){
 
-				$ct = count(PageManager::$page_list);
-				
-				for ($i = $ct-1; $i>=0; $i--){				
-				//foreach (PageManager::$page_list as $page){
-					$page = PageManager::$page_list[$i];
-				
-					$page_id = $page['id'];
-					$parent_page_id = $page['parent_page_id'];
-					$title = $page['title'];								
-					$page_slug = $page['slug'];
-
-					if ($parent_page_id == 0 && $page['status'] == 'Published'){
-
-						$link = PageManager::getPageLink($page_id);
-						
-						if (($title == 'home' || $title == 'Home') && $_SERVER["REQUEST_URI"] == '/'){
-							print("<a href='$link'><div id='$page_id' class='menu_item menu_selected_item' align='center'><div class='menu_text'>$title</div></div></a> \n");
-						}	
-						else if (strpos($_SERVER["REQUEST_URI"], $page_slug)){
-							print("<a href='$link'><div id='$page_id' class='menu_item menu_selected_item' align='center'><div class='menu_text'>$title</div></div></a> \n");
-						}
-						else {
-							print("<a href='$link'><div id='$page_id' class='menu_item' align='center'><div class='menu_text'>$title</div></div></a> \n");
-						}
+					$link = PageManager::getPageLink($page_id);
+					
+					if (($title == 'home' || $title == 'Home') && $_SERVER["REQUEST_URI"] == '/'){
+						print("<a href='$link'><div id='$page_id' class='menu_item menu_selected_item' align='center'><div class='menu_text'>$title</div></div></a> \n");
+					}	
+					else if (strpos($_SERVER["REQUEST_URI"], $page_slug)){
+						print("<a href='$link'><div id='$page_id' class='menu_item menu_selected_item' align='center'><div class='menu_text'>$title</div></div></a> \n");
 					}
-				}			
+					else {
+						print("<a href='$link'><div id='$page_id' class='menu_item' align='center'><div class='menu_text'>$title</div></div></a> \n");
+					}
+				}
+			}		
+				
 			?>    	
 						
 	    </div><!-- navBar -->

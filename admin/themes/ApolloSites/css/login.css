@@ -1,0 +1,54 @@
+#leftCol {
+	width: 55%;
+	height: 100%;
+	float: left;
+	overflow: hidden;
+	text-align: left;
+}
+
+#leftColContents {
+	padding: 0;
+	margin: 0;
+	padding-right: 40px;
+}
+
+#rightCol {
+	width: 43%;
+	height: 100%;
+	float: right;
+}
+
+#loginForm .stats {
+	color: blue;
+	font-size: 10px;
+	margin-top: 10px;
+}
+
+#loginBox {
+	margin-top: 15px;
+	border-width: 2px;
+	border-color: #a4a4ae;
+	border-style: solid;
+	background-color: #d8d9e5;
+	font-size: 14px;
+	color: black;
+	width: 100%;
+	height: 200px;
+}
+
+#loginBox h3 {
+	font-weight: normal;
+	font-size: 16px;
+}
+
+#logoBox {
+	width: 256px;
+}
+
+.red {
+	color: red;
+	font-size: 14px;
+}
+
+label { width: 10em; float: left; }
+label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
