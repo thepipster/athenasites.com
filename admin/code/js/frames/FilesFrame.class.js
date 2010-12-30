@@ -27,6 +27,14 @@ var FilesFrame = {
 
     init : function(){
         PagesFrame.painted = false;
+        
+		$('#apollo_image_custom_tags').keyup(function(e) {
+			//alert(e.keyCode);
+			if(e.keyCode == 13) {
+				FilesFrame.addMediaTag();
+			}
+		}); 
+		       
     },
 	
     // ////////////////////////////////////////////////////////////////////////
@@ -217,6 +225,7 @@ var FilesFrame = {
         // Paint tags...
         var txt = "";
         $('#apollo_image_custom_tag_list').html("");
+        
         if (imageData.media_tags != undefined || imageData.media_tags != null){
 	        for (var i=0; i<imageData.media_tags.length; i++){
 	            var onclick = "FilesFrame.deleteImageTag(\""+imageData.media_tags[i]+"\")";

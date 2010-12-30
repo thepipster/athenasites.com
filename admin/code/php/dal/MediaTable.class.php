@@ -127,7 +127,9 @@ class MediaTable {
     public static function getMedia($site_id, $media_id) {
         //Logger::debug(">>>> getMedia($site_id, $media_id");
         $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Media WHERE id = %d", $site_id, $media_id);
-        return DatabaseManager::getSingleResult($sql);
+        $media = DatabaseManager::getSingleResult($sql);
+        $media['media_tags'] = self::getTagsForMedia($site_id, $media_id);
+		return $media;
     }
 
     // //////////////////////////////////////////////////////////////////////////////////////

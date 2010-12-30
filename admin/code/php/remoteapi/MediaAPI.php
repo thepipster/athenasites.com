@@ -916,7 +916,8 @@ function addMediaToFolder($site_id, $media_id, $folder_id) {
 
     if (isset($current_folder_id) && $current_folder_id == $folder_id) {
         $msg['result'] = 'duplicate';
-    } else {
+    } 
+    else {
 
         // If this was added to the 'unassigned' or 'all' folder, remove
         if ($folder_id == 0 || $folder_id == 1) {
@@ -1215,6 +1216,7 @@ function getImages($site_id) {
     foreach ($media_list as $media) {
         $temp = $media;
         $temp['created'] = date("m/d/Y H:i", strtotime($media['created'])); // Convert to JS compatible date
+        $temp['media_tags'] = MediaTable::getTagsForMedia($site_id, $media['id']);
         $data[] = $temp;
     }
 
@@ -1235,6 +1237,7 @@ function updateMediaInfo($site_id, $media_id, $title, $desc, $csv_tags) {
     MediaTable::updateMedia($site_id, $media_id, $title, $desc, $csv_tags);
 
     $media = MediaTable::getMedia($site_id, $media_id);
+   	$media['created'] = date("m/d/Y H:i", strtotime($media['created'])); // Convert to JS compatible date
     
     $msg['data'] = $media;
     CommandHelper::sendMessage($msg);
@@ -1252,6 +1255,7 @@ function deleteMedia($site_id, $media_id) {
 	GalleryTable::removeImageFromAll($media_id, $site_id);
 	
     $media = MediaTable::getMedia($site_id, $media_id);
+   	$media['created'] = date("m/d/Y H:i", strtotime($media['created'])); // Convert to JS compatible date
 
     // Phyiscally delete the file, and thumbnail if applicable
     
