@@ -849,14 +849,43 @@ var MediaAPI = {
     // ////////////////////////////////////////////////////////////////////////
 
 	/**
+	* Remove the association of the given tag from the given media file
+	*/
+	removeMediaTag : function(siteID, mediaID, tagStr, callback){
+
+        //AthenaDialog.showLoading("Removing tag");
+
+        var paras = {cmd: 'removeMediaTag', site_id: siteID, media_id: mediaID, tag: tagStr};
+
+        $.ajax({
+            url: MediaAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: 
+            	function(ret){ 
+			        //AthenaDialog.clearLoading();
+			        
+			        if (ret.result == "ok"){
+			            callback(ret.data.media);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+            	}
+        });	
+	},
+
+    // ////////////////////////////////////////////////////////////////////////
+
+	/**
 	* Delete a media tag, which will remove this from ALL media files that are associated
 	* with this tag
 	*/
-	deleteMediaTag : function(siteID, mediaID, tagStr, callback){
+	deleteMediaTag : function(siteID, tagStr, callback){
 
         AthenaDialog.showLoading("Deleting tag");
 
-        var paras = {cmd: 'deleteMediaTag', site_id: siteID, tag: globalTag};
+        var paras = {cmd: 'deleteMediaTag', site_id: siteID, tag: tagStr};
 
         $.ajax({
             url: MediaAPI.m_url,
@@ -875,53 +904,21 @@ var MediaAPI = {
             	}
         });	
 	},
-	
-    // ////////////////////////////////////////////////////////////////////////
-
-	/**
-	* Remove tag from a media file
-	*/
-    removeTag : function(siteID, mediaID, mediaTag, callback){
-
-        AthenaDialog.showLoading("Removing tag");
-
-        var paras = {
-            cmd: 'removeTag',
-            site_id: siteID,
-            pmedia_id: mediaID,
-            tag: mediaTag
-        };
-				
-        $.ajax({
-            url: MediaAPI.m_url,
-            dataType: "json",
-            data: paras,
-            success: 
-            	function(ret){
-			        AthenaDialog.clearLoading();
-			
-			        if (ret.result == "ok"){
-			            callback(ret.data.media_id, ret.data.tag);
-			        }
-			        else {
-			            AthenaDialog.showAjaxError(ret);
-			        }
-                }
-        });
-    },
-    	
+	    	
     // ////////////////////////////////////////////////////////////////////////
 	
-	addMediaTag : function(siteID, mediaID, tagStr, callback){
+/*
+    case "addMediaTags":
+        $csv_tags = CommandHelper::getPara('csvtags', true, CommandHelper::$PARA_TYPE_STRING);
+        addMediaTags($site_id, $csv_tags);
+        break;
+
+*/	
+	addMediaCSVTags : function(siteID, mediaID, tagsCSV, callback){
 	
         AthenaDialog.showLoading("Adding tag");
 
-        var paras = {
-            cmd : 'addMediaTag',
-            site_id: siteID,
-            media_id: mediaID,
-            tag: tagStr
-        };
+        var paras = {cmd : 'addMediaTags', site_id: siteID, media_id: mediaID, csvtags: tagsCSV};
 
         $.ajax({
             url: MediaAPI.m_url,
@@ -931,7 +928,7 @@ var MediaAPI = {
 					AthenaDialog.clearLoading();
 					
 					if (ret.result == 'ok'){
-					    callback(ret.data.media_id);
+					    callback(ret.data.media);
 					}
 					else {
 					    AthenaDialog.showAjaxError(ret);

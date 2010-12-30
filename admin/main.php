@@ -468,7 +468,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 														      <td rowspan='2' class='titleField'>Tags</td>
 														      <td class='dataField'>
 														      	<input id='apollo_image_custom_tags' type=text value='' style='width:100px'/>
-														      	<button class='basic_button' onclick='FilesFrame.addImageTag();'>Add</button>														      	
+														      	<button class='basic_button' onclick='FilesFrame.addMediaTag();'>Add</button>														      	
 														      </td>
 														   </tr>
 

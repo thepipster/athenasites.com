@@ -75,7 +75,7 @@ class MediaTable {
     }
 
     // //////////////////////////////////////////////////////////////////////////////////////
-
+    
     /**
      * Get all the images associated with a page
      */
@@ -301,6 +301,11 @@ class MediaTable {
         $sql = DatabaseManager::prepare("SELECT tag FROM athena_%d_MediaTags ORDER BY tag", $site_id);
         return DatabaseManager::getColumn($sql);
     }
+
+    public static function getTagsForMedia($site_id, $media_id) {
+        $sql = DatabaseManager::prepare("SELECT t.tag FROM athena_%d_MediaTags t INNER JOIN athena_%d_MediaToTags pt WHERE pt.media_id = %d AND pt.tag_id = t.id", $site_id, $site_id, $media_id);
+        return DatabaseManager::getColumn($sql);
+    }
     
     // /////////////////////////////////////////////////////////////////////////////////
 
@@ -320,6 +325,24 @@ class MediaTable {
         return $freq;
     }
     
+    // /////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Remove a tag from all posts, and delete from the tag list
+     * @param int $site_id
+     * @param string $tag
+     */
+    public static function globalRemoveTag($site_id, $tag) {
+
+        // Delete from post-tag mapping
+        $tag_id = self::getTagID($site_id, $tag);
+        $sql = DatabaseManager::prepare("DELETE FROM athena_%d_MediaToTags WHERE tag_id = %d", $site_id, $tag_id);
+        DatabaseManager::submitQuery($sql);
+
+        // Remove from tag list
+        $sql = DatabaseManager::prepare("DELETE FROM athena_%d_MediaTags WHERE id=%d", $site_id, $tag_id);
+        DatabaseManager::submitQuery($sql);
+    }    
 }
 
 ?>

@@ -159,7 +159,15 @@ var FilesFrame = {
 	m_currentImageID : 0,
 	
     onSelectImage : function(image_id){		
+                
+		FilesFrame.m_currentImageID = image_id;  
         
+        // If this image id does not exist, then select the first image for
+        // the current image list
+        if (!DataStore.getImage(image_id)){
+        	image_id = FilesFrame.m_imageList[0].id;	
+        }
+                
         var imageData = DataStore.getImage(image_id);
 
         if (!imageData) {
@@ -179,11 +187,6 @@ var FilesFrame = {
         $('#flashUploderContent').hide();		
         $('#imageEditContent').width(500);		
         
-        // If this image id does not exist, then select the first image for
-        // the current image list
-        if (!DataStore.getImage(image_id)){
-        	image_id = FilesFrame.m_imageList[0].id;	
-        }
         
         //ImageEditFrame.paint('#imageInfoContent', image_id);	
         									
@@ -212,19 +215,14 @@ var FilesFrame = {
         $('#apollo_image_url').attr('src', image_url);
         
         // Paint tags...
-        var tags = new Array();
-        tags.push('tag 1');
-        tags.push('tag 2');
-        
         var txt = "";
-        for (var i=0; i<tags.length; i++){
-            var onclick = "FilesFrame.deleteImageTag(\""+tags[i]+"\")";
-	        txt += "<div class='postTagCatLine'><span class='postTagCat'>"+tags[i]+"</span><span class='postRemoveTagCat' onclick='"+onclick+"'></span></div>";
+        $('#apollo_image_custom_tag_list').html("");
+        for (var i=0; i<imageData.media_tags.length; i++){
+            var onclick = "FilesFrame.deleteImageTag(\""+imageData.media_tags[i]+"\")";
+	        txt += "<div class='postTagCatLine'><span class='postTagCat'>"+imageData.media_tags[i]+"</span><span class='postRemoveTagCat' onclick='"+onclick+"'></span></div>";
         }
 		$('#apollo_image_custom_tag_list').html(txt);
-                                                       	       
-		FilesFrame.m_currentImageID = image_id;  
-		
+                                                       	       		
 		var prevMode = FilesFrame.m_mode;
 		FilesFrame.m_mode = 'edit_image'; 
 		
@@ -257,16 +255,22 @@ var FilesFrame = {
 	// ////////////////////////////////////////////////////////////////////////////
 
 	deleteImageTag : function(tag){
-		alert('TBD Tag = ' + tag)
+		MediaAPI.removeMediaTag(DataStore.m_siteID, FilesFrame.m_currentImageID, tag, FilesFrame.onMediaTagChanged)
 	},
 		
 	// ////////////////////////////////////////////////////////////////////////////
 
-	addImageTag : function(){
-		var tag = $('#apollo_image_custom_tags').val();
-		alert(tag);
+	addMediaTag : function(){
+		var csvtags = $('#apollo_image_custom_tags').val();
+        $('#apollo_image_custom_tags').val('');		
+        MediaAPI.addMediaCSVTags(DataStore.m_siteID, FilesFrame.m_currentImageID, csvtags, FilesFrame.onMediaTagChanged);
 	},
 			
+    onMediaTagChanged : function(mediaObj){
+        DataStore.updateMedia(mediaObj);				
+        FilesFrame.repaint();
+    },	
+    		
     // ////////////////////////////////////////////////////////////////////////////
 
 	/** 

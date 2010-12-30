@@ -243,16 +243,17 @@ switch ($cmd) {
         $media_id = CommandHelper::getPara('media_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
         deleteMedia($site_id, $media_id);
         break;
-
+/*
     case "addMediaTag":
         $tag = CommandHelper::getPara('tag', true, CommandHelper::$PARA_TYPE_STRING);
         $media_id = CommandHelper::getPara('media_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
         addMediaTag($site_id, $media_id, $tag);
         break;
-
+*/
     case "addMediaTags":
         $csv_tags = CommandHelper::getPara('csvtags', true, CommandHelper::$PARA_TYPE_STRING);
-        addMediaTags($site_id, $csv_tags);
+        $media_id = CommandHelper::getPara('media_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+        addMediaTags($site_id, $media_id, $csv_tags);
         break;
 
     case "removeMediaTag":
@@ -283,6 +284,81 @@ switch ($cmd) {
 // ///////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////
+
+function getAll($site_id) {
+
+    Logger::debug("Loading all data for site $site_id");
+    // Get the folder list.........
+    $folder_list = MediaTable::getFoldersForSite($site_id);
+
+    // Get the media list
+    $media_list = MediaTable::getMediaForSite($site_id);
+
+    // Get the page list
+    //$page_list = PagesTable::getPageSummaries($site_id);
+    $page_list = PagesTable::getPages($site_id);
+
+    $page_data = array();
+    foreach ($page_list as $page) {
+        $temp = $page;
+        $temp['last_edit'] = date("m/d/Y H:i", strtotime($page['last_edit'])); // Convert to JS compatible date
+        $temp['created'] = date("m/d/Y H:i", strtotime($page['created'])); // Convert to JS compatible date
+        $page_data[] = $temp;
+    }
+
+    // Get the post list
+    $post_list = PostsTable::getPostSummaries($site_id);
+
+    // Get the media file list
+    $media_data = array();
+    foreach ($media_list as $media) {
+        $temp = $media;
+        $temp['created'] = date("m/d/Y H:i", strtotime($media['created'])); // Convert to JS compatible date
+        $temp['media_tags'] = MediaTable::getTagsForMedia($site_id, $media['id']);
+        $media_data[] = $temp;
+    }
+
+    // Get theme and page template data
+    $site = SitesTable::getSite($site_id);
+    $theme = ThemeTable::getTheme($site['theme_id']);
+    $page_templates = TemplateManager::getThemePageTemplates($theme['theme_name']);
+
+    // Get page theme variables
+    $site_theme_paras = ThemeTable::getAllThemeParas($site['theme_id']);
+	//Logger::dump($site_theme_paras);
+	
+    // Get any set page paras
+    $page_paras = PageParasTable::getAllParas($site_id);
+
+    // Get the tag list
+    $tag_list = PostsTable::getTags($site_id);
+    $cat_list = PostsTable::getCategories($site_id);
+
+    $msg = array();
+    $msg['cmd'] = 'getAll';
+    $msg['result'] = 'ok';
+    $msg['data'] = array(
+        'folders' => $folder_list,
+        'media' => $media_data,
+        'pages' => $page_data,
+        'theme' => $theme,
+        'page_templates' => $page_templates,
+        'theme_paras' => $site_theme_paras, 
+        'page_paras' => $page_paras,
+        'posts' => $post_list,
+        'tags' => $tag_list,
+        'categories' => $cat_list);
+
+    CommandHelper::sendMessage($msg);
+}
+
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+//
+// Support functions
+//
+// ///////////////////////////////////////////////////////////////////////////////////////
+
 
 /**
  * If a page title has changed, then we need to update its path and all of its children
@@ -905,52 +981,66 @@ function addFolder($site_id, $folder_name) {
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////
-
-function addMediaTag($site_id, $post_id, $tag) {
+/*
+function addMediaTag($site_id, $media_id, $tag) {
 
     $safetag = StringUtils::makeTextSafe($tag);
 
-    $tag_id = PostsTable::addTagToPost($site_id, $post_id, $safetag);
+    $tag_id = MediaTable::addTagToMedia($site_id, $media_id, $safetag);
 
-    $msg['cmd'] = "addTag";
+    $msg['cmd'] = "addMediaTag";
     $msg['result'] = $tag_id > 0 ? 'ok' : 'fail';
-    $msg['data'] = array('tag' => $safetag, 'post_id' => $post_id);
+    $msg['data'] = array('tag' => $safetag, 'media_id' => $media_id);
 
     CommandHelper::sendMessage($msg);
 }
-
+*/
 // ///////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Add mutliple tags at once, in the form of a csv list of them
  */
-function addMediaTags($site_id, $csv_tags) {
-
+function addMediaTags($site_id, $media_id, $csv_tags) {
+	
     $tag_list = explode(",", $csv_tags);
 
     foreach ($tag_list as $tag) {
         $tag = trim($tag);
         if ($tag != "") {
+        
             $safetag = StringUtils::makeTextSafe($tag);
-            $tag_id = PostsTable::addTag($site_id, $safetag);
+            //$tag_id = MediaTable::addTag($site_id, $safetag);
+		    $tag_id = MediaTable::addTagToMedia($site_id, $media_id, $safetag);		    
         }
     }
 
-    $msg['cmd'] = "addTags";
-    $msg['result'] = 'ok';
+	$media = MediaTable:: getMedia($site_id, $media_id);	
+    $media['created'] = date("m/d/Y H:i", strtotime($media['created'])); // Convert to JS compatible date
+    $media['media_tags'] = MediaTable::getTagsForMedia($site_id, $media_id);
 
+    $msg['cmd'] = "addMediaTags";
+    $msg['result'] = 'ok';
+    $msg['data'] = array('media' => $media);
+    
     CommandHelper::sendMessage($msg);
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function removeMediaTag($site_id, $post_id, $tag) {
+/**
+* Remove a tag from a media file
+*/
+function removeMediaTag($site_id, $media_id, $tag) {
 
-    PostsTable::removeTag($site_id, $post_id, $tag);
+    MediaTable::removeTag($site_id, $media_id, $tag);
 
-    $msg['cmd'] = "removeTag";
+	$media = MediaTable:: getMedia($site_id, $media_id);	
+    $media['created'] = date("m/d/Y H:i", strtotime($media['created'])); // Convert to JS compatible date
+    $media['media_tags'] = MediaTable::getTagsForMedia($site_id, $media_id);
+
+    $msg['cmd'] = "removeMediaTag";
     $msg['result'] = 'ok';
-    $msg['data'] = array('tag' => $tag, 'post_id' => $post_id);
+    $msg['data'] = array('media' => $media);
 
     CommandHelper::sendMessage($msg);
 }
@@ -958,16 +1048,15 @@ function removeMediaTag($site_id, $post_id, $tag) {
 // ///////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Delete a tag from the entire blog, and remove from any posts
+ * Delete a tag from the entire site, and remove from any media files
  * @param int $site_id
  * @param string $category
  */
-
 function deleteMediaTag($site_id, $tag) {
 
-    PostsTable::globalRemoveTag($site_id, $tag);
+    MediaTable::globalRemoveTag($site_id, $tag);
 
-    $msg['cmd'] = "deleteTag";
+    $msg['cmd'] = "deleteMediaTag";
     $msg['result'] = 'ok';
     $msg['data'] = array('tag' => $tag);
 
@@ -1095,74 +1184,6 @@ function du($dir) {
     }
     
     return 0;
-}
-
-// ///////////////////////////////////////////////////////////////////////////////////////
-
-function getAll($site_id) {
-
-    Logger::debug("Loading all data for site $site_id");
-    // Get the folder list.........
-    $folder_list = MediaTable::getFoldersForSite($site_id);
-
-    // Get the media list
-    $media_list = MediaTable::getMediaForSite($site_id);
-
-    // Get the page list
-    //$page_list = PagesTable::getPageSummaries($site_id);
-    $page_list = PagesTable::getPages($site_id);
-
-    $page_data = array();
-    foreach ($page_list as $page) {
-        $temp = $page;
-        $temp['last_edit'] = date("m/d/Y H:i", strtotime($page['last_edit'])); // Convert to JS compatible date
-        $temp['created'] = date("m/d/Y H:i", strtotime($page['created'])); // Convert to JS compatible date
-        $page_data[] = $temp;
-    }
-
-    // Get the post list
-    $post_list = PostsTable::getPostSummaries($site_id);
-
-    // Get the media file list
-    $media_data = array();
-    foreach ($media_list as $media) {
-        $temp = $media;
-        $temp['created'] = date("m/d/Y H:i", strtotime($media['created'])); // Convert to JS compatible date
-        $media_data[] = $temp;
-    }
-
-    // Get theme and page template data
-    $site = SitesTable::getSite($site_id);
-    $theme = ThemeTable::getTheme($site['theme_id']);
-    $page_templates = TemplateManager::getThemePageTemplates($theme['theme_name']);
-
-    // Get page theme variables
-    $site_theme_paras = ThemeTable::getAllThemeParas($site['theme_id']);
-	//Logger::dump($site_theme_paras);
-	
-    // Get any set page paras
-    $page_paras = PageParasTable::getAllParas($site_id);
-
-    // Get the tag list
-    $tag_list = PostsTable::getTags($site_id);
-    $cat_list = PostsTable::getCategories($site_id);
-
-    $msg = array();
-    $msg['cmd'] = 'getAll';
-    $msg['result'] = 'ok';
-    $msg['data'] = array(
-        'folders' => $folder_list,
-        'media' => $media_data,
-        'pages' => $page_data,
-        'theme' => $theme,
-        'page_templates' => $page_templates,
-        'theme_paras' => $site_theme_paras, 
-        'page_paras' => $page_paras,
-        'posts' => $post_list,
-        'tags' => $tag_list,
-        'categories' => $cat_list);
-
-    CommandHelper::sendMessage($msg);
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////

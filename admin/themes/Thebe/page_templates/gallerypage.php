@@ -22,7 +22,7 @@ foreach($gallery_image_list as $gal_mapping){
 	}
 
 	$image_id = $gal_mapping['image_id'];
-	$image = FolderTable::getMedia(PageManager::$site_id, $image_id);	
+	$image = MediaTable::getMedia(PageManager::$site_id, $image_id);	
 	
 	$image_url = "'" . PageManager::$media_root_url . $image['filepath'] . $image['filename'] . "'";
 
@@ -50,7 +50,7 @@ $gal_images_string .= "]";
 				foreach($gallery_image_list as $gal_mapping){
 				
 					$image_id = $gal_mapping['image_id'];
-					$image = FolderTable::getMedia(PageManager::$site_id, $image_id);
+					$image = MediaTable::getMedia(PageManager::$site_id, $image_id);
 					Logger::dump($image);
 					
 					$image_url = PageManager::$media_root_url . $image['filepath'] . $image['filename'];
