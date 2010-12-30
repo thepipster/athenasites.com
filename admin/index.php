@@ -2,13 +2,13 @@
 
 require_once("code/php/setup.php");
 
-if ($_SERVER['HTTP_HOST'] == "apollo.local"){
+
+if (strpos($_SERVER['HTTP_HOST'], "apollo.local") > 0){
 	PageManager::init('apollo.local');
 }
 else {
 	PageManager::init('apollosites.com');
 }
-
 
 // Echo header
 require_once('themes/ApolloSites/header.php');

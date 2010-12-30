@@ -4,7 +4,7 @@ global $apollo_root_url;
 
 $apollo_root_url = "http://apollosites.com";
 
-if ($_SERVER['HTTP_HOST'] == "apollo.local"){
+if (strpos($_SERVER['HTTP_HOST'], "apollo.local") > 0){
 	$apollo_root_url = "http://apollo.local";
 }
 
@@ -123,7 +123,7 @@ PageManager::doHeader();
     		<?php 
     		    		    		
     		if ($_SERVER["REQUEST_URI"] == '/admin' || $_SERVER["REQUEST_URI"] == '/admin/' || $_SERVER["REQUEST_URI"] == 'admin'){
-    			echo "<a href='/admin'><div class='menu_item menu_selected_item' align='center'><div class='menu_text'>Login</div></div></a>";
+    			echo "<div class='menu_item menu_selected_item' align='center'><div class='menu_text'>Login</div></div>";
     		}
     		else {
     			echo "<a href='/admin'><div class='menu_item' align='center'><div class='menu_text'>Login</div></div></a>";
