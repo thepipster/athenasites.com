@@ -437,7 +437,7 @@ class PageManager {
 			  var _gaq = _gaq || [];
 			  _gaq.push(['_setAccount', '$tracker_code']);
 			  _gaq.push(['_setDomainName', '$domain']);
-			  _gaq.push(['_trackPageview']);
+			  _gaq.push(['_trackPageview', '$page_title']);
 			
 			  (function() {
 			    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
