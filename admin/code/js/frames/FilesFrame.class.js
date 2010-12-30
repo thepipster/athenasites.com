@@ -217,11 +217,13 @@ var FilesFrame = {
         // Paint tags...
         var txt = "";
         $('#apollo_image_custom_tag_list').html("");
-        for (var i=0; i<imageData.media_tags.length; i++){
-            var onclick = "FilesFrame.deleteImageTag(\""+imageData.media_tags[i]+"\")";
-	        txt += "<div class='postTagCatLine'><span class='postTagCat'>"+imageData.media_tags[i]+"</span><span class='postRemoveTagCat' onclick='"+onclick+"'></span></div>";
+        if (imageData.media_tags != undefined || imageData.media_tags != null){
+	        for (var i=0; i<imageData.media_tags.length; i++){
+	            var onclick = "FilesFrame.deleteImageTag(\""+imageData.media_tags[i]+"\")";
+		        txt += "<div class='postTagCatLine'><span class='postTagCat'>"+imageData.media_tags[i]+"</span><span class='postRemoveTagCat' onclick='"+onclick+"'></span></div>";
+	        }
+			$('#apollo_image_custom_tag_list').html(txt);
         }
-		$('#apollo_image_custom_tag_list').html(txt);
                                                        	       		
 		var prevMode = FilesFrame.m_mode;
 		FilesFrame.m_mode = 'edit_image'; 
