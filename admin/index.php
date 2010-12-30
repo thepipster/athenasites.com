@@ -10,6 +10,8 @@ else {
 	PageManager::init('apollosites.com');
 }
 
+PageManager::$page_title = 'admin';
+
 // Echo header
 require_once('themes/ApolloSites/header.php');
 
