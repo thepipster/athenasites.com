@@ -2,7 +2,7 @@
 
 require_once("code/php/setup.php");
 
-PageManager::init();
+PageManager::init('apollo.local');
 
 // Echo header
 require_once('themes/ApolloSites/header.php');

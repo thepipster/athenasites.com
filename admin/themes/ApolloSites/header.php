@@ -1,5 +1,15 @@
 <?php
+
+global $apollo_root_url;
+
+$apollo_root_url = "http://apollosites.com";
+
+if ($_SERVER['HTTP_HOST'] == "apollo.local"){
+	$apollo_root_url = "http://apollo.local";
+}
+
 PageManager::doHeader();
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" <?= PageManager::getLanguageAttributes(); ?>>
@@ -111,9 +121,7 @@ PageManager::doHeader();
 	    	<a href='<?=$url_root?>' id='logo'><img src="<?= PageManager::$theme_url_root; ?>images/logo.png" width="256px" height="60px" alt="Apollo Sites, SEO Enhanced wordpress themes for photographers"></a>
     	
     		<?php 
-    		
-    		Logger::debug($_SERVER["REQUEST_URI"]);
-    		
+    		    		    		
     		if ($_SERVER["REQUEST_URI"] == '/admin' || $_SERVER["REQUEST_URI"] == '/admin/' || $_SERVER["REQUEST_URI"] == 'admin'){
     			echo "<a href='/admin'><div class='menu_item menu_selected_item' align='center'><div class='menu_text'>Login</div></div></a>";
     		}
@@ -134,7 +142,7 @@ PageManager::doHeader();
 
 				if ($parent_page_id == 0 && $page['status'] == 'Published'){
 
-					$link = PageManager::getPageLink($page_id);
+					$link = $apollo_root_url . PageManager::getPageLink($page_id);
 					
 					if (($title == 'home' || $title == 'Home') && $_SERVER["REQUEST_URI"] == '/'){
 						print("<a href='$link'><div id='$page_id' class='menu_item menu_selected_item' align='center'><div class='menu_text'>$title</div></div></a> \n");
