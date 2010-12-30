@@ -3,7 +3,7 @@
 require_once("code/php/setup.php");
 
 
-if (strpos($_SERVER['HTTP_HOST'], "apollo.local") > 0){
+if (strpos("_" . $_SERVER['HTTP_HOST'], "apollo.local") > 0){
 	PageManager::init('apollo.local');
 }
 else {
@@ -31,9 +31,20 @@ require_once('themes/ApolloSites/header.php');
 <div id='leftCol'>
 	<h3>ApolloSites News & Latest Features</h3>
 	<div id='leftColContents'>
-		<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin pellentesque, est ut venenatis aliquam, lorem quam porttitor ligula, eget ultrices velit dui sed quam. Praesent vehicula placerat lectus. Nulla pede. Quisque a nulla quis massa pulvinar sagittis. Pellentesque neque massa, mattis vulputate, pellentesque nec, vehicula volutpat, purus. Proin pretium dui et nulla cursus eleifend. Aenean aliquam urna eget urna. Vestibulum euismod elit. Donec eget augue sit amet neque elementum pretium. Proin posuere lacus id lacus. Duis vel justo suscipit neque ornare iaculis.</p>	
-		<p>Ut urna urna, rhoncus eget, vestibulum tempus, venenatis non, nunc. Nunc consequat quam in nulla. Praesent feugiat posuere orci. Sed ac ante. Mauris pellentesque massa vitae ante mattis bibendum. Quisque dapibus lectus eu eros. Nulla facilisi. Praesent hendrerit egestas erat. Suspendisse at velit. Quisque mollis feugiat est. Curabitur ut leo. Cras auctor semper augue. Pellentesque leo pede, tempus sed, ornare in, venenatis sed, nisl. Quisque est velit, eleifend vitae, mollis ac, adipiscing at, eros. Mauris velit. Etiam nec lorem. Vestibulum pellentesque ligula a velit. Maecenas felis metus, suscipit et, eleifend vel, accumsan vitae, magna. Phasellus ut justo vel magna congue laoreet.</p>	
-		<p>Sed vel nisl. Vivamus pretium est non mauris. Fusce condimentum. Proin molestie. Vestibulum est. Morbi at metus. Nam nisl nulla, euismod at, vehicula nec, molestie vitae, enim. Donec euismod nulla a metus. Suspendisse venenatis metus dapibus dolor. Quisque euismod libero a est. Aliquam feugiat.</p>
+		<p>
+		Welcome to the new design for ApolloSites! We're one step closer to launching, we have a few more 
+		features to roll-out before we launch, but that won't be the end - just the beginning! Over the next 
+		few weeks you can expect the following features to be rolled out;
+		</p>
+		<ul>
+		<li><p>Some style fixes - we know that for people with a lot of images, folders or pages the page starts to look
+		funky. We'll be fixing that soon.</p></li>
+		<li><p>Account tab - this will allow you to view your account status, update your address and change your password.</p></li>
+		<li><p>We'll add the ability to manually modify a post's creation date.</p></li>
+		<li><p>Stats tab - this will allow you to see a breakdown of your stats per page. More features will be added to this page in the future!</p></li>
+		<li><p>Image Tagging - this is a biggie, but we found that people with a lot of images need a way to organize them that goes beyond
+		basic folders, so we're introducting the ability to add image tags, that will allow you to more rapidly organize your images.</p></li>
+		</ul>
 	</div>
 </div><!-- leftCol -->
 

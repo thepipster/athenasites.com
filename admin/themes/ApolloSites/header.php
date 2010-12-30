@@ -4,7 +4,7 @@ global $apollo_root_url;
 
 $apollo_root_url = "http://apollosites.com";
 
-if (strpos($_SERVER['HTTP_HOST'], "apollo.local") > 0){
+if (strpos("_" . $_SERVER['HTTP_HOST'], "apollo.local") > 0){
 	$apollo_root_url = "http://apollo.local";
 }
 
@@ -78,7 +78,7 @@ PageManager::doHeader();
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/reflection-jquery/js/reflection.js"></script>
 
 	<script language="JavaScript">
-	
+	/*
 	function preloader() {
 	
 	     // create object
@@ -101,7 +101,7 @@ PageManager::doHeader();
 	          imageObj.src='<?= PageManager::$theme_url_root; ?>/images/'+images[i];
 	     }
 	} 
-		
+	*/	
 	</script>
 
 	<!-- Pingback ////////////////////////////////////////////////////////////// -->

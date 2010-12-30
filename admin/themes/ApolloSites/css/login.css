@@ -2,7 +2,7 @@
 	width: 55%;
 	height: 100%;
 	float: left;
-	overflow: hidden;
+	overflow: auto;
 	text-align: left;
 }
 
