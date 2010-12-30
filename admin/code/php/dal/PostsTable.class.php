@@ -28,7 +28,7 @@ class PostsTable {
 		  `source_id` varchar(30) default NULL,
 		  `canComment` tinyint(1) default '1',
 		  PRIMARY KEY  (`id`)
-		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;";
+		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;";
 
         DatabaseManager::submitQuery($sql);
 
@@ -36,7 +36,7 @@ class PostsTable {
 		  `id` int(11) NOT NULL auto_increment,
 		  `tag` varchar(255),
 		  PRIMARY KEY  (`id`)
-		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;";
+		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;";
 
         DatabaseManager::submitQuery($sql);
 
@@ -45,7 +45,7 @@ class PostsTable {
 		  `post_id` int(11),
 		  `tag_id` int(11),
 		  PRIMARY KEY  (`id`)
-		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;";
+		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;";
 
         DatabaseManager::submitQuery($sql);
 
@@ -53,7 +53,7 @@ class PostsTable {
 		  `id` int(11) NOT NULL auto_increment,
 		  `category` varchar(255),
 		  PRIMARY KEY  (`id`)
-		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;";
+		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;";
 
         DatabaseManager::submitQuery($sql);
 
@@ -62,7 +62,7 @@ class PostsTable {
 		  `post_id` int(11),
 		  `category_id` int(11),
 		  PRIMARY KEY  (`id`)
-		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;";
+		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;";
 
         DatabaseManager::submitQuery($sql);
     }

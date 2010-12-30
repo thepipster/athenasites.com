@@ -206,7 +206,7 @@ class SecurityUtils {
         // Create site's tables
         //PageParasTable::createTableForSite($site_id);
         GalleryTable::createTableForSite($site_id);
-        FolderTable::createTableForSite($site_id);
+        MediaTable::createTableForSite($site_id);
         PagesTable::createTableForSite($site_id);
         PostsTable::createTableForSite($site_id);
         CommentsTable::createTableForSite($site_id);

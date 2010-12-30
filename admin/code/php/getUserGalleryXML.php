@@ -40,7 +40,7 @@ echo "<?xml version='1.0' encoding='UTF-8'?>
 	
 			$image_id = $gal_image['image_id'];
 	
-			$image = FolderTable::getMedia($site_id, $image_id);
+			$image = MediaTable::getMedia($site_id, $image_id);
 			
 			$image_url = $media_root_url . $image['filepath'] . $image['filename'];
 			$thumb_url = $media_root_url . $image['filepath'] . $image['thumb_filename'];

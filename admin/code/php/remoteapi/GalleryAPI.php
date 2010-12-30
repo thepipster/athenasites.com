@@ -116,7 +116,7 @@ function getGalleryImageList($site_id){
 		if (isset($gal_images)){	
 			foreach($gal_images as $gal_image){
 			
-				$image = FolderTable::getMedia($site_id, $gal_image['image_id']);
+				$image = MediaTable::getMedia($site_id, $gal_image['image_id']);
 				
 				$temp = array();
 				$temp['id'] = $gal_image['id'];			

@@ -22,7 +22,7 @@ class CustomerTable {
 			  `last_activity` datetime default NULL,
 			  `ip` bigint(20) default NULL,
 			  PRIMARY KEY  (`id`)
-			) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+			) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
         DatabaseManager::submitQuery($sql);
     }

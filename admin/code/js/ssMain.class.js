@@ -140,7 +140,7 @@ var ssMain = {
     },
 
     doLogout : function(){
-        window.location = "index.html";
+        window.location = "index.php";
     },
 
     // ////////////////////////////////////////////////////////////////////////

@@ -207,6 +207,8 @@ switch ($cmd) {
         addPage($site_id, $title, $parent_page_id, $content, $status, $template, $slug, $order, $ishome, $desc);
         break;
 
+    // MEDIA /////////////////////////////////////////////////////////////////////////
+
     case "addFolder":
         $folder_name = CommandHelper::getPara('folder_name', true, CommandHelper::$PARA_TYPE_STRING);
         addFolder($site_id, $folder_name);
@@ -240,6 +242,28 @@ switch ($cmd) {
     case "deleteMedia":
         $media_id = CommandHelper::getPara('media_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
         deleteMedia($site_id, $media_id);
+        break;
+
+    case "addMediaTag":
+        $tag = CommandHelper::getPara('tag', true, CommandHelper::$PARA_TYPE_STRING);
+        $media_id = CommandHelper::getPara('media_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+        addMediaTag($site_id, $media_id, $tag);
+        break;
+
+    case "addMediaTags":
+        $csv_tags = CommandHelper::getPara('csvtags', true, CommandHelper::$PARA_TYPE_STRING);
+        addMediaTags($site_id, $csv_tags);
+        break;
+
+    case "removeMediaTag":
+        $tag = CommandHelper::getPara('tag', true, CommandHelper::$PARA_TYPE_STRING);
+        $media_id = CommandHelper::getPara('media_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+        removeMediaTag($site_id, $media_id, $tag);
+        break;
+
+    case "deleteMediaTag":
+        $tag = CommandHelper::getPara('tag', true, CommandHelper::$PARA_TYPE_STRING);
+        deleteMediaTag($site_id,  $tag);
         break;
 
     // Para management..............
@@ -803,12 +827,16 @@ function addPage($site_id, $title, $parent_page_id, $content, $status, $tamplate
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////
+//
+// Media
+//
+// ///////////////////////////////////////////////////////////////////////////////////////
 
 function addMediaToFolder($site_id, $media_id, $folder_id) {
 
     //Logger::debug("addMediaToFolder(site_id = $site_id, media_id = $media_id, folder_id = $folder_id)");
     // Is the media already in this folder?
-    $current_folder_id = FolderTable::getMediaFolderID($media_id, $site_id);
+    $current_folder_id = MediaTable::getMediaFolderID($media_id, $site_id);
 
     if (isset($current_folder_id) && $current_folder_id == $folder_id) {
         $msg['result'] = 'duplicate';
@@ -816,9 +844,9 @@ function addMediaToFolder($site_id, $media_id, $folder_id) {
 
         // If this was added to the 'unassigned' or 'all' folder, remove
         if ($folder_id == 0 || $folder_id == 1) {
-            $res = FolderTable::removeMedia($media_id, $site_id);
+            $res = MediaTable::removeMedia($media_id, $site_id);
         } else {
-            $res = FolderTable::addMediaToFolder($folder_id, $media_id, $site_id);
+            $res = MediaTable::addMediaToFolder($folder_id, $media_id, $site_id);
         }
 
         $msg['result'] = $res > 0 ? 'ok' : 'fail';
@@ -834,7 +862,7 @@ function addMediaToFolder($site_id, $media_id, $folder_id) {
 
 function renameFolder($site_id, $folder_id, $name) {
 
-    $res = FolderTable::renameFolder($site_id, $folder_id, $name);
+    $res = MediaTable::renameFolder($site_id, $folder_id, $name);
 
     $msg['cmd'] = "renameFolder";
     $msg['result'] = $res > 0 ? 'ok' : 'fail';
@@ -847,7 +875,7 @@ function renameFolder($site_id, $folder_id, $name) {
 
 function deleteFolder($site_id, $folder_id) {
 
-    $res = FolderTable::deleteFolder($site_id, $folder_id);
+    $res = MediaTable::deleteFolder($site_id, $folder_id);
 
     $msg['cmd'] = "deleteFolder";
     $msg['result'] = 'ok';
@@ -861,7 +889,7 @@ function deleteFolder($site_id, $folder_id) {
 function addFolder($site_id, $folder_name) {
 
     // Get the folder list.........
-    $id = FolderTable::addFolder($folder_name, $site_id);
+    $id = MediaTable::addFolder($folder_name, $site_id);
 
     $msg = array();
     $msg['cmd'] = 'addFolder';
@@ -878,6 +906,83 @@ function addFolder($site_id, $folder_name) {
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 
+function addMediaTag($site_id, $post_id, $tag) {
+
+    $safetag = StringUtils::makeTextSafe($tag);
+
+    $tag_id = PostsTable::addTagToPost($site_id, $post_id, $safetag);
+
+    $msg['cmd'] = "addTag";
+    $msg['result'] = $tag_id > 0 ? 'ok' : 'fail';
+    $msg['data'] = array('tag' => $safetag, 'post_id' => $post_id);
+
+    CommandHelper::sendMessage($msg);
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Add mutliple tags at once, in the form of a csv list of them
+ */
+function addMediaTags($site_id, $csv_tags) {
+
+    $tag_list = explode(",", $csv_tags);
+
+    foreach ($tag_list as $tag) {
+        $tag = trim($tag);
+        if ($tag != "") {
+            $safetag = StringUtils::makeTextSafe($tag);
+            $tag_id = PostsTable::addTag($site_id, $safetag);
+        }
+    }
+
+    $msg['cmd'] = "addTags";
+    $msg['result'] = 'ok';
+
+    CommandHelper::sendMessage($msg);
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function removeMediaTag($site_id, $post_id, $tag) {
+
+    PostsTable::removeTag($site_id, $post_id, $tag);
+
+    $msg['cmd'] = "removeTag";
+    $msg['result'] = 'ok';
+    $msg['data'] = array('tag' => $tag, 'post_id' => $post_id);
+
+    CommandHelper::sendMessage($msg);
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Delete a tag from the entire blog, and remove from any posts
+ * @param int $site_id
+ * @param string $category
+ */
+
+function deleteMediaTag($site_id, $tag) {
+
+    PostsTable::globalRemoveTag($site_id, $tag);
+
+    $msg['cmd'] = "deleteTag";
+    $msg['result'] = 'ok';
+    $msg['data'] = array('tag' => $tag);
+
+    CommandHelper::sendMessage($msg);
+}
+
+
+
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+//
+// Stats
+//
+// ///////////////////////////////////////////////////////////////////////////////////////
+
 /**
  * Get the stats summary for the given site
  * @param int $site_id
@@ -885,7 +990,7 @@ function addFolder($site_id, $folder_name) {
 function getStats($site_id) {
 
     //$disc_usage = du(SecurityUtils::getMediaFolder($site_id)) + du(SecurityUtils::getSitesFolder($site_id));
-    $disc_usage = FolderTable::getDiscUsage($site_id) / (1024*1024);
+    $disc_usage = MediaTable::getDiscUsage($site_id) / (1024*1024);
 
     // Get page views for the whole site for each day
     $page_views = StatsRollupTables::getAllPageViewsRollup($site_id, 30);
@@ -998,10 +1103,10 @@ function getAll($site_id) {
 
     Logger::debug("Loading all data for site $site_id");
     // Get the folder list.........
-    $folder_list = FolderTable::getFoldersForSite($site_id);
+    $folder_list = MediaTable::getFoldersForSite($site_id);
 
     // Get the media list
-    $media_list = FolderTable::getMediaForSite($site_id);
+    $media_list = MediaTable::getMediaForSite($site_id);
 
     // Get the page list
     //$page_list = PagesTable::getPageSummaries($site_id);
@@ -1065,7 +1170,7 @@ function getAll($site_id) {
 function getFolders($site_id) {
 
     // Get the folder list.........
-    $folder_list = FolderTable::getFoldersForSite($site_id);
+    $folder_list = MediaTable::getFoldersForSite($site_id);
 
     $msg = array();
     $msg['cmd'] = 'getFolders';
@@ -1079,7 +1184,7 @@ function getFolders($site_id) {
 
 function getImages($site_id) {
 
-    $media_list = FolderTable::getMediaForSite($site_id);
+    $media_list = MediaTable::getMediaForSite($site_id);
 
     $msg = array();
     $msg['cmd'] = 'getMedia';
@@ -1106,9 +1211,9 @@ function updateMediaInfo($site_id, $media_id, $title, $desc, $csv_tags) {
     $msg['cmd'] = 'saveMediaInfo';
     $msg['result'] = 'ok';
 
-    FolderTable::updateMedia($site_id, $media_id, $title, $desc, $csv_tags);
+    MediaTable::updateMedia($site_id, $media_id, $title, $desc, $csv_tags);
 
-    $media = FolderTable::getMedia($site_id, $media_id);
+    $media = MediaTable::getMedia($site_id, $media_id);
     
     $msg['data'] = $media;
     CommandHelper::sendMessage($msg);
@@ -1125,7 +1230,7 @@ function deleteMedia($site_id, $media_id) {
 	// Remove from any galleries
 	GalleryTable::removeImageFromAll($media_id, $site_id);
 	
-    $media = FolderTable::getMedia($site_id, $media_id);
+    $media = MediaTable::getMedia($site_id, $media_id);
 
     // Phyiscally delete the file, and thumbnail if applicable
     
@@ -1150,7 +1255,7 @@ function deleteMedia($site_id, $media_id) {
     }
 
     // Now remove from the database
-    FolderTable::removeMedia($media_id, $site_id);
+    MediaTable::removeMedia($media_id, $site_id);
 
     $msg['data'] = array('media_id'=>$media_id);
     

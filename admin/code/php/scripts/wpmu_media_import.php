@@ -39,7 +39,7 @@ DatabaseManager::submitQuery("TRUNCATE TABLE athena_{$athenaSiteID}_GalleryTable
 //DatabaseManager::submitQuery("TRUNCATE TABLE athena_{$athenaSiteID}_Pages");
 DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$athenaSiteID}_Folders");
 DatabaseManager::submitQuery("DROP TABLE IF EXISTS athena_{$athenaSiteID}_Media");
-FolderTable::createTableForSite($athenaSiteID);
+MediaTable::createTableForSite($athenaSiteID);
 
 DatabaseManager::submitQuery("DELETE FROM stats_PageViews WHERE site_id = $athenaSiteID");
 
@@ -68,7 +68,7 @@ mysql_select_db('athenasites');
 foreach($wp_folder_list as $folder){
     //$sql = DatabaseManager::prepare("INSERT INTO athena_%d_Folders (id, name) VALUES (%d, %s)", $athenaSiteID, , $folder['name']);
     //DatabaseManager::insert($sql);
-    $athena_folder_id = FolderTable::addFolder($folder['name'], $athenaSiteID);
+    $athena_folder_id = MediaTable::addFolder($folder['name'], $athenaSiteID);
     $folder_mapping[$folder['id']] = $athena_folder_id;
 }
 
@@ -272,7 +272,7 @@ foreach($wp_media_list as $media){
     
     mysql_select_db('athenasites');
     // addMedia($folder_id, $site_id, $filename, $mime_type, $file_size, $filepath, $title, $descriptions, $tags, $width, $height, $thumb_filename, $thumb_width, $thumb_height)
-    $athena_image_id = FolderTable::addMedia($folder_id, $athenaSiteID, $name, $mime_type, $file_size, $filepath, $title, $description, $alt_text, $width, $height, $thumb_name, $thumb_width, $thumb_height);
+    $athena_image_id = MediaTable::addMedia($folder_id, $athenaSiteID, $name, $mime_type, $file_size, $filepath, $title, $description, $alt_text, $width, $height, $thumb_name, $thumb_width, $thumb_height);
 
     // If it has been assigned to a gallery, create the mapping.....
     $gal_data = wpGetResults("SELECT * FROM apollo_GalleryTable WHERE blog_id = $wpSiteID AND image_post_id = $id");

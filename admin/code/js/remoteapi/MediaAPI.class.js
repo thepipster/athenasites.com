@@ -36,28 +36,21 @@ var MediaAPI = {
             url: MediaAPI.m_url,
             dataType: "json",
             data: paras,
-            success: function(ret){
-                MediaAPI.onGotAll(ret, callback);
-            }
+            success: 
+            	function(ret){
+			        AthenaDialog.clearLoading();
+					
+			        if (ret.result == 'ok'){
+			            callback(ret.data.folders, ret.data.media, ret.data.pages, ret.data.theme, ret.data.page_templates, ret.data.theme_paras, ret.data.page_paras, ret.data.posts, ret.data.tags, ret.data.categories);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+            	}
         });
 		
     },
 			
-    /**
-    * Check the response from the server, and load data if login is good
-    */
-    onGotAll : function(ret, callback){
-		
-        AthenaDialog.clearLoading();
-		
-        if (ret.result == 'ok'){
-            callback(ret.data.folders, ret.data.media, ret.data.pages, ret.data.theme, ret.data.page_templates, ret.data.theme_paras, ret.data.page_paras, ret.data.posts, ret.data.tags, ret.data.categories);
-        }
-        else {
-            AthenaDialog.showAjaxError(ret);
-        }
-    },
-
     // ////////////////////////////////////////////////////////////////////////
 
     /**
@@ -76,73 +69,26 @@ var MediaAPI = {
             url: MediaAPI.m_url,
             dataType: "json",
             data: paras,
-            success: function(ret){
-                MediaAPI.onGotStats(ret, callback);
-            }
-        });
-
-    },
-
-    /**
-    * Check the response from the server, and load data if login is good
-    */
-    onGotStats : function(ret, callback){
-
-        AthenaDialog.clearLoading();
-
-		if (!ret || ret == undefined){
-            callback(0);
-            return;
-		}
-		
-        if (ret.result == 'ok'){
-            callback(ret.data.disc_usage, ret.data.page_views, ret.data.crawler_views);
-        }
-        else {
-            AthenaDialog.showAjaxError(ret);
-        }
-    },
-
-    // ////////////////////////////////////////////////////////////////////////
-	
-    /**
-    * Get the list of folders for this site
-    */
-    getFolders : function(siteID, callback){
-	
-        AthenaDialog.showLoading();
-		
-        var paras = {
-            cmd : 'getFolders',
-            site_id: siteID
-        };
-
-        $.ajax({
-            url: MediaAPI.m_url,
-            dataType: "json",
-            data: paras,
-            success: function(ret){
-                MediaAPI.onGotFolders(ret, callback);
-            }
-        });
-		
-    },
+            success: 
+            	function(ret){
+			       AthenaDialog.clearLoading();
 			
-    /**
-	* Check the response from the server, and load data if login is good
-	*/
-    onGotFolders : function(ret, callback){
-		
-        AthenaDialog.clearLoading();
-		
-        if (ret.result == 'ok'){
-            callback(ret.data);
-        }
-        else {
-            AthenaDialog.showAjaxError(ret);
-        }
+					if (!ret || ret == undefined){
+			            callback(0);
+			            return;
+					}
+					
+			        if (ret.result == 'ok'){
+			            callback(ret.data.disc_usage, ret.data.page_views, ret.data.crawler_views);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+               	}
+        });
+
     },
-	
+				
     // ////////////////////////////////////////////////////////////////////////
 	
     setPagePara : function(themeParaID, paraValue, pageID, callback){
@@ -159,19 +105,16 @@ var MediaAPI = {
             url: MediaAPI.m_url,
             dataType: "json",
             data: paras,
-            success: function(ret){
-                MediaAPI.onPageParaSet(ret, callback);
-            }
+            success: 
+            	function(ret){
+			        if (ret.result == "ok"){
+			            callback(ret.data.theme_para_id, ret.data.new_value, ret.data.page_id);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+            	}
         });
-    },
-
-    onPageParaSet : function(ret, callback){
-        if (ret.result == "ok"){
-            callback(ret.data.theme_para_id, ret.data.new_value, ret.data.page_id);
-        }
-        else {
-            AthenaDialog.showAjaxError(ret);
-        }
     },
 	
     // ////////////////////////////////////////////////////////////////////////
@@ -189,19 +132,16 @@ var MediaAPI = {
             url: MediaAPI.m_url,
             dataType: "json",
             data: paras,
-            success: function(ret){
-                MediaAPI.onGlobalParaSet(ret, callback);
-            }
+            success: 
+				function(ret){
+			        if (ret.result == "ok"){
+			            callback(ret.data.theme_para_id, ret.data.new_value);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+				}
         });
-    },
-
-    onGlobalParaSet : function(ret, callback){
-        if (ret.result == "ok"){
-            callback(ret.data.theme_para_id, ret.data.new_value);
-        }
-        else {
-            AthenaDialog.showAjaxError(ret);
-        }
     },
 	
     // ////////////////////////////////////////////////////////////////////////
@@ -310,24 +250,24 @@ var MediaAPI = {
             url: MediaAPI.m_url,
             dataType: "json",
             data: paras,
-            success: function(ret){
-                MediaAPI.onPostDeleted(ret, callback)
+            success: 
+            	function(ret){
+			        AthenaDialog.clearLoading();
+			
+			        if (ret.result == "ok"){
+			            callback(ret.data.post_id);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
                 }
         });
     },
 	
-    onPostDeleted : function(ret, callback){
-
-        AthenaDialog.clearLoading();
-
-        if (ret.result == "ok"){
-            callback(ret.data.post_id);
-        }
-        else {
-            AthenaDialog.showAjaxError(ret);
-        }
-    },
-
+    // ////////////////////////////////////////////////////////////////////////
+    //
+    // Post Tags and Categories
+    //
     // ////////////////////////////////////////////////////////////////////////
 
     addTag : function(siteID, postID, postTag, callback){
@@ -345,23 +285,19 @@ var MediaAPI = {
             url: MediaAPI.m_url,
             dataType: "json",
             data: paras,
-            success: function(ret){
-                MediaAPI.onTagAdded(ret, callback)
+            success: 
+            	function(ret){
+			        //AthenaDialog.clearLoading();
+			
+			        if (ret.result == "ok"){
+			            callback(ret.data.post_id, ret.data.tag);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
                 }
         });
-    },
-	
-    onTagAdded : function(ret, callback){
-
-        //AthenaDialog.clearLoading();
-
-        if (ret.result == "ok"){
-            callback(ret.data.post_id, ret.data.tag);
-        }
-        else {
-            AthenaDialog.showAjaxError(ret);
-        }
-    },
+    },	
 	
     // ////////////////////////////////////////////////////////////////////////
 
@@ -380,24 +316,20 @@ var MediaAPI = {
             url: MediaAPI.m_url,
             dataType: "json",
             data: paras,
-            success: function(ret){
-                MediaAPI.onCategoryAdded(ret, callback)
+            success: 
+            	function(ret){
+			        //AthenaDialog.clearLoading();
+			
+			        if (ret.result == "ok"){
+			            callback(ret.data.post_id, ret.data.category);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
                 }
         });
     },
 	
-    onCategoryAdded : function(ret, callback){
-
-        //AthenaDialog.clearLoading();
-
-        if (ret.result == "ok"){
-            callback(ret.data.post_id, ret.data.category);
-        }
-        else {
-            AthenaDialog.showAjaxError(ret);
-        }
-    },
-
     // ////////////////////////////////////////////////////////////////////////
 
     /**
@@ -410,17 +342,16 @@ var MediaAPI = {
             url: MediaAPI.m_url,
             dataType: "json",
             data: paras,
-            success: function(ret){ MediaAPI.onTagDeleted(ret, callback)}
+            success: 
+            	function(ret){ 
+			        if (ret.result == "ok"){
+			            callback(ret.data.tag);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+            	}
         });
-    },
-
-    onTagDeleted : function(ret, callback){
-        if (ret.result == "ok"){
-            callback(ret.data.tag);
-        }
-        else {
-            AthenaDialog.showAjaxError(ret);
-        }
     },
 
     // ////////////////////////////////////////////////////////////////////////
@@ -435,17 +366,16 @@ var MediaAPI = {
             url: MediaAPI.m_url,
             dataType: "json",
             data: paras,
-            success: function(ret){ MediaAPI.onCategoryDeleted(ret, callback)}
+            success: 
+            	function(ret){ 
+			        if (ret.result == "ok"){
+			            callback(ret.data.category);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+            	}
         });
-    },
-
-    onCategoryDeleted : function(ret, callback){
-        if (ret.result == "ok"){
-            callback(ret.data.category);
-        }
-        else {
-            AthenaDialog.showAjaxError(ret);
-        }
     },
 
     // ////////////////////////////////////////////////////////////////////////
@@ -465,24 +395,20 @@ var MediaAPI = {
             url: MediaAPI.m_url,
             dataType: "json",
             data: paras,
-            success: function(ret){
-                MediaAPI.onTagRemoved(ret, callback)
+            success: 
+            	function(ret){
+			        AthenaDialog.clearLoading();
+			
+			        if (ret.result == "ok"){
+			            callback(ret.data.post_id, ret.data.tag);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
                 }
         });
     },
-	
-    onTagRemoved : function(ret, callback){
-
-        AthenaDialog.clearLoading();
-
-        if (ret.result == "ok"){
-            callback(ret.data.post_id, ret.data.tag);
-        }
-        else {
-            AthenaDialog.showAjaxError(ret);
-        }
-    },
-	
+		
     // ////////////////////////////////////////////////////////////////////////
 
     removeCategory : function(siteID, postID, postCategory, callback){
@@ -500,24 +426,24 @@ var MediaAPI = {
             url: MediaAPI.m_url,
             dataType: "json",
             data: paras,
-            success: function(ret){
-                MediaAPI.onCategoryRemoved(ret, callback)
+            success: 
+            	function(ret){
+			        AthenaDialog.clearLoading();
+			
+			        if (ret.result == "ok"){
+			            callback(ret.data.post_id, ret.data.category);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
                 }
         });
     },
 	
-    onCategoryRemoved : function(ret, callback){
-
-        AthenaDialog.clearLoading();
-
-        if (ret.result == "ok"){
-            callback(ret.data.post_id, ret.data.category);
-        }
-        else {
-            AthenaDialog.showAjaxError(ret);
-        }
-    },
-
+    // ////////////////////////////////////////////////////////////////////////
+    //
+    // Comments
+    //
     // ////////////////////////////////////////////////////////////////////////
 
     updateCommentStatus : function(siteID, commentID, newStatus, callback){
@@ -535,22 +461,18 @@ var MediaAPI = {
             url: MediaAPI.m_url,
             dataType: "json",
             data: paras,
-            success: function(ret){
-                MediaAPI.onCommentStatusUpdated(ret, callback)
+            success: 
+            	function(ret){
+			        AthenaDialog.clearLoading();
+			
+			        if (ret.result == "ok"){
+			            callback(ret.data.comment_id, ret.data.status);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
                 }
         });
-    },
-
-    onCommentStatusUpdated : function(ret, callback){
-
-        AthenaDialog.clearLoading();
-
-        if (ret.result == "ok"){
-            callback(ret.data.comment_id, ret.data.status);
-        }
-        else {
-            AthenaDialog.showAjaxError(ret);
-        }
     },
 
 
@@ -647,26 +569,59 @@ var MediaAPI = {
             url: MediaAPI.m_url,
             dataType: "json",
             data: paras,
-            success: function(ret){
-                MediaAPI.onPageDeleted(ret, callback)
+            success: 
+            	function(ret){
+			        AthenaDialog.clearLoading();
+			
+			        if (ret.result == "ok"){
+			            callback(ret.data.page_id);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
                 }
         });
     },
-	
-    onPageDeleted : function(ret, callback){
-
-        AthenaDialog.clearLoading();
-
-        if (ret.result == "ok"){
-            callback(ret.data.page_id);
-        }
-        else {
-            AthenaDialog.showAjaxError(ret);
-        }
-    },
-		
+			
     // ////////////////////////////////////////////////////////////////////////
+    //
+    // Folders and media
+    //
+    // ////////////////////////////////////////////////////////////////////////
+		
+    /**
+    * Get the list of folders for this site
+    */
+    getFolders : function(siteID, callback){
 	
+        AthenaDialog.showLoading();
+		
+        var paras = {
+            cmd : 'getFolders',
+            site_id: siteID
+        };
+
+        $.ajax({
+            url: MediaAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: 
+            	function(ret){
+			        AthenaDialog.clearLoading();
+					
+			        if (ret.result == 'ok'){
+			            callback(ret.data);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+            	}
+        });
+		
+    },
+    
+    // ////////////////////////////////////////////////////////////////////////
+    	
     addFolder : function(siteID, folderName, callback){
 
         AthenaDialog.showLoading("Adding folder");
@@ -685,24 +640,21 @@ var MediaAPI = {
             url: MediaAPI.m_url,
             dataType: "json",
             data: paras,
-            success: function(ret){
-                MediaAPI.onAddedFolder(ret, callback)
+            success: 
+            	function(ret){
+            			
+			        AthenaDialog.clearLoading();
+											
+			        if (ret.result == "ok"){
+			            callback(ret.data.name, ret.data.id);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
                 }
         });
     },
 	
-    onAddedFolder : function(ret, callback){
-		
-        AthenaDialog.clearLoading();
-								
-        if (ret.result == "ok"){
-            callback(ret.data.name, ret.data.id);
-        }
-        else {
-            AthenaDialog.showAjaxError(ret);
-        }
-    },
-
     // ////////////////////////////////////////////////////////////////////////
 		
     renameFolder : function(siteID, folderID, newName, callback){
@@ -718,21 +670,18 @@ var MediaAPI = {
             url: MediaAPI.m_url,
             dataType: "json",
             data: paras,
-            success: function(ret){
-                MediaAPI.onRenamedFolder(ret, callback)
+            success: 
+            	function(ret){
+			        if (ret.result == "ok"){
+			            callback(ret.data.id, ret.data.name);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
                 }
         });
     },
 	
-    onRenamedFolder : function(ret, callback){
-        if (ret.result == "ok"){
-            callback(ret.data.id, ret.data.name);
-        }
-        else {
-            AthenaDialog.showAjaxError(ret);
-        }
-    },
-
     // ////////////////////////////////////////////////////////////////////////
 		
     addMediaToFolder : function(siteID, mediaID, folderID, callback){
@@ -748,21 +697,18 @@ var MediaAPI = {
             url: MediaAPI.m_url,
             dataType: "json",
             data: paras,
-            success: function(ret){
-                MediaAPI.onMediaAddedToFolder(ret, callback)
+            success: 
+            	function(ret){
+			        if (ret.result == "ok"){
+			            callback(ret.data.folder_id, ret.data.media_id);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }            		            		
                 }
         });
     },
 	
-    onMediaAddedToFolder : function(ret, callback){
-        if (ret.result == "ok"){
-            callback(ret.data.folder_id, ret.data.media_id);
-        }
-        else {
-            AthenaDialog.showAjaxError(ret);
-        }
-    },
-
     // ////////////////////////////////////////////////////////////////////////
 	
     /**
@@ -781,22 +727,18 @@ var MediaAPI = {
             url: MediaAPI.m_url,
             dataType: "json",
             data: paras,
-            success: function(ret){
-                MediaAPI.onDeletedFolder(ret, callback)
+            success: 
+            	function(ret){
+			        if (ret.result == "ok"){
+			            callback(ret.data.id);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
                 }
         });
     },
 	
-    onDeletedFolder : function(ret, callback){
-        if (ret.result == "ok"){
-            callback(ret.data.id);
-        }
-        else {
-            AthenaDialog.showAjaxError(ret);
-        }
-	
-    },
-
     // ////////////////////////////////////////////////////////////////////////
 			
     /**
@@ -885,28 +827,91 @@ var MediaAPI = {
         $.ajax({
             url: MediaAPI.m_url,
             dataType: "json",
-            success: function(ret){
-                MediaAPI.onMediaDeleted(ret, callback);
+            success: 
+            function(ret){
+		        AthenaDialog.clearLoading();
+		
+		        if (ret.result == 'ok'){
+		            callback(ret.data.media_id);
+		        }
+		        else {
+		            AthenaDialog.showAjaxError(ret);
+		        }
             },
             data: paras
         });
     },
-
-    onMediaDeleted : function(ret, callback){
-
-        AthenaDialog.clearLoading();
-
-        if (ret.result == 'ok'){
-            callback(ret.data.media_id);
-        }
-        else {
-            AthenaDialog.showAjaxError(ret);
-        }
-
-    },
     
     // ////////////////////////////////////////////////////////////////////////
+    //
+    // Media tags
+    //
+    // ////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Delete a media tag, which will remove this from ALL media files that are associated
+	* with this tag
+	*/
+	deleteMediaTag : function(siteID, mediaID, tagStr, callback){
+
+        AthenaDialog.showLoading("Deleting tag");
+
+        var paras = {cmd: 'deleteMediaTag', site_id: siteID, tag: globalTag};
+
+        $.ajax({
+            url: MediaAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: 
+            	function(ret){ 
+			        AthenaDialog.clearLoading();
+			        
+			        if (ret.result == "ok"){
+			            callback(ret.data.tag);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+            	}
+        });	
+	},
+	
+    // ////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Remove tag from a media file
+	*/
+    removeTag : function(siteID, mediaID, mediaTag, callback){
+
+        AthenaDialog.showLoading("Removing tag");
+
+        var paras = {
+            cmd: 'removeTag',
+            site_id: siteID,
+            pmedia_id: mediaID,
+            tag: mediaTag
+        };
+				
+        $.ajax({
+            url: MediaAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: 
+            	function(ret){
+			        AthenaDialog.clearLoading();
+			
+			        if (ret.result == "ok"){
+			            callback(ret.data.media_id, ret.data.tag);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+                }
+        });
+    },
+    	
+    // ////////////////////////////////////////////////////////////////////////
+	
 	addMediaTag : function(siteID, mediaID, tagStr, callback){
 	
         AthenaDialog.showLoading("Adding tag");
@@ -921,25 +926,19 @@ var MediaAPI = {
         $.ajax({
             url: MediaAPI.m_url,
             dataType: "json",
-            success: function(ret){
-                MediaAPI.onTagAdded(ret, callback);
-            },
+            success: 
+            	function(ret){
+					AthenaDialog.clearLoading();
+					
+					if (ret.result == 'ok'){
+					    callback(ret.data.media_id);
+					}
+					else {
+					    AthenaDialog.showAjaxError(ret);
+					}            
+				},
             data: paras
         });	
-	},
-	
-	onTagAdded : function(ret, callback) {
-
-        AthenaDialog.clearLoading();
-
-        if (ret.result == 'ok'){
-            callback(ret.data.media_id);
-        }
-        else {
-            AthenaDialog.showAjaxError(ret);
-        }
-
-
-	}   
+	} 
 }
     

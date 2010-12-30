@@ -19,7 +19,7 @@ class PageParasTable {
 		  `theme_para_id` int(11) default NULL,
 		  `para_value` varchar(255) default NULL,
 		  PRIMARY KEY  (`id`)
-		) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
         DatabaseManager::submitQuery($sql);
     }

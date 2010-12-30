@@ -19,7 +19,7 @@ class StatsRollupTables {
 		  `browser_ver` varchar(10) default NULL,
 		  `hits` int(11) default NULL,
 		  PRIMARY KEY  (`id`)
-		) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
         DatabaseManager::submitQuery($sql);
 
@@ -29,7 +29,7 @@ class StatsRollupTables {
 		  `crawler` varchar(25) default NULL,
 		  `hits` int(11) default NULL,
 		  PRIMARY KEY  (`id`)
-		) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
         DatabaseManager::submitQuery($sql);
 
@@ -40,7 +40,7 @@ class StatsRollupTables {
 		  `os_ver` varchar(10) default NULL,
 		  `hits` int(11) default NULL,
 		  PRIMARY KEY  (`id`)
-		) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
         DatabaseManager::submitQuery($sql);
 
@@ -54,7 +54,7 @@ class StatsRollupTables {
 		  `post_id` int(11) default NULL,
 		  `page_title` varchar(125) default NULL,
 		  PRIMARY KEY  (`id`)
-		) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
         DatabaseManager::submitQuery($sql);
     }

@@ -28,7 +28,7 @@ class CommentsTable {
 		  `source_post_id` varchar(30) default NULL,
 		  `site_follower_id` int(11) NOT NULL,
 		  PRIMARY KEY  (`id`)
-		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;";
+		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;";
 
         DatabaseManager::submitQuery($sql);
     }

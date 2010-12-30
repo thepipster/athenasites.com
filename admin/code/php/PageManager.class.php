@@ -327,7 +327,7 @@ class PageManager {
 
         if (isset($fav_image_id)) {
             $media_folder = SecurityUtils::getMediaFolder(self::$site_id);
-            $image = FolderTable::getMedia(self::$site_id, $fav_image_id);
+            $image = MediaTable::getMedia(self::$site_id, $fav_image_id);
             if (isset($image)) {
                 return self::$media_root_url .  $image['filepath'] . $image['filename'];
             }
@@ -340,7 +340,7 @@ class PageManager {
 
     public static function getMediaURL($media_id) {
 
-        $image = FolderTable::getMedia(PageManager::$site_id, $media_id);
+        $image = MediaTable::getMedia(PageManager::$site_id, $media_id);
 
         if (isset($image)) {
             return self::$media_root_url . $image['filepath'] . $image['filename'];
@@ -360,7 +360,7 @@ class PageManager {
     public static function getMediaFromThemePara($theme_para_id) {
         $media_id = PageParasTable::getParaValue(self::$page_id, $theme_para_id, self::$site_id);
         if (isset($media_id)) {
-            return FolderTable::getMedia(self::$site_id, $media_id);
+            return MediaTable::getMedia(self::$site_id, $media_id);
         }
         return null;
     }

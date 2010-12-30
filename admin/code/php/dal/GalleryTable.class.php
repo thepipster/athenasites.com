@@ -19,7 +19,7 @@ class GalleryTable {
 		  `gallery_number` tinyint(2) default '0',
 		  `theme_para_id` int(11) default NULL,
 		  PRIMARY KEY  (`id`)
-		) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 						
 		DatabaseManager::submitQuery($sql);
 

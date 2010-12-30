@@ -150,7 +150,7 @@ else {
 
     // Make a thumbnail
 
-    Logger::debug("Upload complete!");
+    Logger::debug(">>>>>> Upload complete!");
 }
 
 // Delete the temporary file
