@@ -1,12 +1,11 @@
 <?php
-
 /**
- * 
+ * Deals with any actions regarding media.
+ *
  * @author Mike Pritchard
  * @since March 24th, 2010
  */
-class FolderTable {
-    // ///////////////////////////////////////////////////////////////////////////////////////
+class MediaTable {
 
     /**
      * To keep the database table from growing huge, we break this table up by site id
@@ -53,6 +52,24 @@ class FolderTable {
 				(7,'Reserved'),
 				(8,'Reserved'),
 				(9,'Reserved');";
+        DatabaseManager::submitQuery($sql);
+        
+        // Create media tags table...
+        
+        $sql = "CREATE TABLE `athena_{$site_id}_MediaTags` (
+		  `id` int(11) NOT NULL auto_increment,
+		  `tag` varchar(255),
+		  PRIMARY KEY  (`id`)
+		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;";      
+		
+        DatabaseManager::submitQuery($sql);
+
+        $sql = "CREATE TABLE `athena_{$site_id}_MediaToTags` (
+		  `id` int(11) NOT NULL auto_increment,
+		  `media_id` int(11),
+		  `tag_id` int(11),
+		  PRIMARY KEY  (`id`)
+		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;";		  
 
         DatabaseManager::submitQuery($sql);
     }
@@ -210,6 +227,99 @@ class FolderTable {
     }
 
     // //////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Media Tags
+    //
+    // /////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Add a new tag, but only if doesn't exist already.
+     */
+    public static function addTag($site_id, $tag) {
+
+        // Does the tag already exist
+        $sql = DatabaseManager::prepare("SELECT id FROM athena_%d_MediaTags WHERE tag = %s", $site_id, $tag);
+        $tag_id = DatabaseManager::getVar($sql);
+
+        if (!isset($tag_id)) {
+            $sql = DatabaseManager::prepare("INSERT INTO athena_%d_MediaTags (tag) VALUES (%s)", $site_id, $tag);
+            $tag_id = DatabaseManager::insert($sql);
+        }
+
+        return $tag_id;
+    }
+
+    // /////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Assign a tag to a media file
+     */
+    public static function addTagToMedia($site_id, $media_id, $tag) {
+
+		// Add the tag (if it doesn't exist) and get the tag_id
+		$tag_id = self::addTag($site_id, $tag);
+		
+        // Does this media already have this category assigned?
+        $sql = DatabaseManager::prepare("SELECT id FROM athena_%d_MediaToTags WHERE tag_id=%d AND media_id=%d", $site_id, $tag_id, $media_id);
+        $id = DatabaseManager::getVar($sql);
+
+        if (isset($id)) {
+            //Logger::debug(">>> Tag already assigned to this post!");
+            return null;
+        }
+
+        $sql = DatabaseManager::prepare("INSERT INTO athena_%d_MediaToTags (tag_id, media_id) VALUES (%d, %d)", $site_id, $tag_id, $media_id);
+        DatabaseManager::insert($sql);
+
+        return $tag_id;
+    }    
+    
+    // /////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Remove a tag from a media file, and remove from the list of tags if there are no other references
+     */
+    public static function removeTag($site_id, $media_id, $tag) {
+
+        // Delete media-tag mapping
+        $tag_id = self::getTagID($site_id, $tag);
+        $sql = DatabaseManager::prepare("DELETE FROM athena_%d_MediaToTags WHERE tag_id = %d AND media_id = %d", $site_id, $tag_id, $media_id);
+        DatabaseManager::submitQuery($sql);
+
+        $freq = self::getTagFrequency($site_id, $tag);
+
+        // If there are no more references to this tag, remove the tag
+        if ($freq == 0) {
+            $sql = DatabaseManager::prepare("DELETE FROM athena_%d_MediaTags WHERE id=%d", $site_id, $tag_id);
+            DatabaseManager::submitQuery($sql);
+        }
+    }    
+    
+    // /////////////////////////////////////////////////////////////////////////////////
+    
+    public static function getTags($site_id) {
+        $sql = DatabaseManager::prepare("SELECT tag FROM athena_%d_MediaTags ORDER BY tag", $site_id);
+        return DatabaseManager::getColumn($sql);
+    }
+    
+    // /////////////////////////////////////////////////////////////////////////////////
+
+    public static function getTagID($site_id, $tag) {
+        $sql = DatabaseManager::prepare("SELECT id FROM athena_%d_MediaTags WHERE tag = %s", $site_id, $tag);
+        return DatabaseManager::getVar($sql);
+    }
+    
+    // /////////////////////////////////////////////////////////////////////////////////
+
+    public static function getTagFrequency($site_id, $tag) {
+        $sql = DatabaseManager::prepare("SELECT count(pt.id) FROM athena_%d_MediaToTags pt INNER JOIN athena_%d_MediaTags t WHERE pt.tag_id = t.id AND t.tag = %s", $site_id, $site_id, $tag);
+        $freq = DatabaseManager::getVar($sql);
+        if (!isset($freq)) {
+            $freq = 0;
+        }
+        return $freq;
+    }
+    
 }
 
 ?>
