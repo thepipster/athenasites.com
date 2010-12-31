@@ -22,11 +22,14 @@ var FolderSidebarFrame = {
 		
 		var txt = "";
 
-		txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('0')\" class='folder_filter' id='folder_0' title='Select to display all of your images'><img class='folder_filter_icon' src='images/system_folder_icon.png'><span class='folder_name'>Show All</span></div>";
-		txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('1')\" class='folder_filter droppable_folder' id='folder_1' title='Select to display all unassigned files (files that have not been added to a folder'><img class='folder_filter_icon' src='images/system_folder_icon.png'><span class='folder_name'>Unassigned Files</span></div>";
-		//txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('4')\" class='folder_filter' id='folder_4' title='Select to display all files uploaded in the last hour'><img class='folder_filter_icon' src='images/system_folder_icon.png'><span class='folder_name'>Added in last hour</span></div>";
-		//txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('2')\" class='folder_filter' id='folder_2' title='Select to display all files uploaded in the last 24 hours'><img class='folder_filter_icon' src='images/system_folder_icon.png'><span class='folder_name'>Added in last 24 hours</span></div>";
-		//txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('3')\" class='folder_filter' id='folder_3' title='Select to display all files uploaded in the last 7 days'><img class='folder_filter_icon' src='images/system_folder_icon.png'><span class='folder_name'>Added in last 7 days</span></div>";						
+		// Hard code 'switch to tag view' link		
+		txt += "<div onclick=\"SidebarFrame.showTags()\" class='folder droppable_folder' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/tag_icon_blue_24x24.png'><span class='folder_name'>Switch to tag view</span></div>";
+
+		txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('0')\" class='folder_filter' id='folder_0' title='Select to display all of your images'><img class='folder_fav_icon' src='images/folder_favorites.png'><span class='folder_fav_name'>Show All</span></div>";
+		txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('1')\" class='folder_filter droppable_folder' id='folder_1' title='Select to display all unassigned files (files that have not been added to a folder'><img class='folder_fav_icon' src='images/folder_favorites.png'><span class='folder_fav_name'>Unassigned Files</span></div>";
+		//txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('4')\" class='folder_filter' id='folder_4' title='Select to display all files uploaded in the last hour'><img class='folder_fav_icon' src='images/folder_favorites.png'><span class='folder_fav_name'>Added in last hour</span></div>";
+		//txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('2')\" class='folder_filter' id='folder_2' title='Select to display all files uploaded in the last 24 hours'><img class='folder_fav_icon' src='images/folder_favorites.png'><span class='folder_fav_name'>Added in last 24 hours</span></div>";
+		//txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('3')\" class='folder_filter' id='folder_3' title='Select to display all files uploaded in the last 7 days'><img class='folder_fav_icon' src='images/folder_favorites'><span class='folder_fav_name'>Added in last 7 days</span></div>";						
 					
 		txt += "<div id='apollo_folder_list'></div>";
 						
@@ -54,49 +57,52 @@ var FolderSidebarFrame = {
 				
 		var txt = "";
 		
-		// NOTE: Folder id's 0-9 are reserved for system folders, so can safely use these id's here
+		// NOTE: Folder id's 0-9 are reserved for system folders, so can safely use these id's here		
 		
 		// Hard-coded 'all' folder....		
-		if (DataStore.m_currentFolderID == 0){
-			$('#folders_select_0').addClass('selected');
-		}
-		else {
-			$('#folders_select_0').removeClass('selected');
+
+		for (var i=0; i<5; i++){
+			if (DataStore.m_currentFolderID == i){
+				$('#folder_'+i + " .folder_fav_name").addClass('selected');
+			}
+			else {
+				$('#folder_'+i + " .folder_fav_name").removeClass('selected');
+			}		
 		}
 		
-		
+		/*
 		// Hard-coded 'unassigned' folder....		
 		if (DataStore.m_currentFolderID == FolderSidebarFrame.ID_UNASSIGNED){
-			$('#folders_select_'+FolderSidebarFrame.ID_UNASSIGNED).addClass('selected');
+			$('#folders_'+FolderSidebarFrame.ID_UNASSIGNED + " .folder_fav_name").addClass('selected');
 		}
 		else {
-			$('#folders_select_'+FolderSidebarFrame.ID_UNASSIGNED).removeClass('selected');
+			$('#folders_'+FolderSidebarFrame.ID_UNASSIGNED + " .folder_fav_name").removeClass('selected');
 		}		
 
 		// Hard-coded 'last 7 days' folder....		
 		if (DataStore.m_currentFolderID == FolderSidebarFrame.ID_LAST_7_DAYS){
-			$('#folders_select_'+FolderSidebarFrame.ID_LAST_7_DAYS).addClass('selected');
+			$('#folders_'+FolderSidebarFrame.ID_LAST_7_DAYS + " .folder_fav_name").addClass('selected');
 		}
 		else {
-			$('#folders_select_'+FolderSidebarFrame.ID_LAST_7_DAYS).removeClass('selected');
+			$('#folders_'+FolderSidebarFrame.ID_LAST_7_DAYS + " .folder_fav_name").removeClass('selected');
 		}
 		
 		// Hard-coded 'last hour' folder....		
 		if (DataStore.m_currentFolderID == FolderSidebarFrame.ID_LAST_1_HOUR){
-			$('#folders_select_'+FolderSidebarFrame.ID_LAST_1_HOUR).addClass('selected');
+			$('#folders_'+FolderSidebarFrame.ID_LAST_1_HOUR + " .folder_fav_name").addClass('selected');
 		}
 		else {
-			$('#folders_select_'+FolderSidebarFrame.ID_LAST_1_HOUR).removeClass('selected');
+			$('#folders_'+FolderSidebarFrame.ID_LAST_1_HOUR + " .folder_fav_name").removeClass('selected');
 		}	
 
 		// Hard-coded 'added last 24 hours' folder....		
 		if (DataStore.m_currentFolderID == FolderSidebarFrame.ID_LAST_24_HOURS){
-			$('#folders_select_'+FolderSidebarFrame.ID_LAST_24_HOURS).addClass('selected');
+			$('#folders_'+FolderSidebarFrame.ID_LAST_24_HOURS + " .folder_fav_name").addClass('selected');
 		}
 		else {
-			$('#folders_select_'+FolderSidebarFrame.ID_LAST_24_HOURS).removeClass('selected');
+			$('#folders_'+FolderSidebarFrame.ID_LAST_24_HOURS + " .folder_fav_name").removeClass('selected');
 		}		
-		
+		*/
 		
 		for (var i=0; i<folderList.length; i++){
 
@@ -104,7 +110,7 @@ var FolderSidebarFrame = {
 			var folder_id = folderList[i].id;
 			
 			if (folder_id == DataStore.m_currentFolderID){
-				txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\" class='folder droppable_folder' id='folder_"+folder_id+"' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/folder_icon.png'><span class='folder_name selected'>"+folder_name+"</span></div>";
+				txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\" class='folder droppable_folder' id='folder_"+folder_id+"' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/folder_images.png'><span class='folder_name selected'>"+folder_name+"</span></div>";
 			}
 			else {
 				txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\" class='folder droppable_folder' id='folder_"+folder_id+"' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/folder_icon.png'><span class='folder_name'>"+folder_name+"</span></div>";

@@ -102,6 +102,19 @@
     top: -2px;
 }
 
+#SideBar .folder_fav_name {
+    position: relative;
+    padding-left: 0px;
+    top: -8px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+#SideBar .folder_fav_icon {
+    position: relative;
+   	left: -3px;
+}
+
 #SideBar .folder_name:hover {
     color: white;
     cursor: pointer;

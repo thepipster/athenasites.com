@@ -39,6 +39,10 @@ var TagsSidebarFrame = {
 		var tagList = DataStore.m_mediaTags;
 				
 		var txt = "";
+
+		// Hard code a 'switch to folder view' item							
+//		txt += "<div onclick=\"SidebarFrame.showFolders()\" class='folder' title='Switch to folder view' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/folder_icon.png' height='20px'><span class='folder_name'>Folder view</span></div>";
+		txt += "<div onclick=\"SidebarFrame.showFolders()\" class='tag droppable_tag' id='tag_"+tag+"' title='' class='apollo_tag tag_with_menu'><img class='tag_icon' src='images/folder_icon.png' height='20px'><span class='tag_name'>Switch to folder view</span></div>";
 							
 		for (var i=0; i<tagList.length; i++){
 
