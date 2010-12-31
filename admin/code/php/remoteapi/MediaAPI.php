@@ -262,6 +262,12 @@ switch ($cmd) {
         removeMediaTag($site_id, $media_id, $tag);
         break;
 
+    case "renameMediaTag":
+        $tag = CommandHelper::getPara('tag', true, CommandHelper::$PARA_TYPE_STRING);
+        $new_tag = CommandHelper::getPara('new_tag', true, CommandHelper::$PARA_TYPE_STRING);
+        renameMediaTag($site_id, $tag, $new_tag);
+        break;
+
     case "deleteMediaTag":
         $tag = CommandHelper::getPara('tag', true, CommandHelper::$PARA_TYPE_STRING);
         deleteMediaTag($site_id,  $tag);
@@ -1080,12 +1086,31 @@ function deleteMediaTag($site_id, $tag) {
 
     $msg['cmd'] = "deleteMediaTag";
     $msg['result'] = 'ok';
-    $msg['data'] = array('tag' => $tag);
+    $msg['data'] = array('tags' => MediaTable::getTags($site_id));
 
     CommandHelper::sendMessage($msg);
 }
 
+// ///////////////////////////////////////////////////////////////////////////////////////
 
+/**
+* Rename a tag
+*/
+function renameMediaTag($site_id, $tag, $new_tag) {
+
+	// Make sure the new name is not already in use
+	$tagCheck = MediaTable::getTagByName($site_id, $new_tag);
+
+	if (!isset($tagCheck) || !$tagCheck){
+	    MediaTable::renameTag($site_id, $tag, $new_tag);
+	}
+
+    $msg['cmd'] = "renameMediaTag";
+    $msg['result'] = 'ok';
+    $msg['data'] = array('tags' => MediaTable::getTags($site_id));
+
+    CommandHelper::sendMessage($msg);
+}
 
 
 // ///////////////////////////////////////////////////////////////////////////////////////

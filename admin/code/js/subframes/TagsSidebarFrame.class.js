@@ -5,6 +5,11 @@
 */
 var TagsSidebarFrame = {
 
+    /** Number of tags per 'page' */
+    m_tagsPerPage : 25,    
+    m_currentPage : 0,    
+    m_numberPages : 0,
+
 	// ////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -13,17 +18,47 @@ var TagsSidebarFrame = {
 	paint : function(targetDiv){
 		
 		var txt = "";
-					
+
 		txt += "<div id='apollo_tag_list'></div>";
+															
+        txt += "<div class='sidebar_page_controls'>";        
+        txt += "<table border='0'>";
+        txt += "    <tr>";
+        txt += "        <td width='33%' align='left'><span class='more_posts_link' id='prev_posts_link' style='padding-left:15px' onclick='TagsSidebarFrame.showPrevPage()' title='Display previous page'>&laquo; prev</span></td>";
+        txt += "        <td width='33%' align='center'><span class='more_posts_link' id='page_no' style=''>Page 1 of 2</span></td>";                
+        txt += "        <td width='33%' align='right'><span class='more_posts_link' id='next_posts_link' style='padding-right:15px' onclick='TagsSidebarFrame.showNextPage()' title='Display next page'>next &raquo;</span></td>";
+        txt += "    </tr>";
+        txt += "</table>";        
+        txt += "</div>";
+						
 						
 		// Right click pop-up menu....
-		txt += "<ul id='folderMenu' class='rightClickMenu'>";
+		txt += "<ul id='tagMenu' class='rightClickMenu'>";
 		txt += "	<li class='edit'><a href='#edit'>Rename</a></li>";
 		txt += "	<li class='delete'><a href='#delete'>Delete</a></li>";
 		txt += "	<li class='quit separator'><a href='#quit'>Cancel</a></li>";
 		txt += "</ul>";
 
 		$(targetDiv).html(txt);
+		
+		var h = 0;
+		var offset = 120;
+		
+		switch(ssMain.view){			
+		
+			case ssMain.VIEW_GALLERIES : 
+				h = ($(window).height()/2) - offset;				 
+				break;
+				
+			case ssMain.VIEW_FILES : 
+				h = $(window).height() - offset; 
+				break;
+		}
+		    		    	    		
+		TagsSidebarFrame.m_tagsPerPage = Math.floor(h / 24);		
+        TagsSidebarFrame.m_numberPages = Math.ceil(DataStore.m_mediaTags.length / TagsSidebarFrame.m_tagsPerPage);
+        
+        $('#apollo_tag_list').height(h);
 		
 		TagsSidebarFrame.paintTags();		
 		
@@ -35,16 +70,23 @@ var TagsSidebarFrame = {
 	// ////////////////////////////////////////////////////////////////////////////
 	
 	paintTags : function(){
-		
-		var tagList = DataStore.m_mediaTags;
 				
+		var tagList = DataStore.m_mediaTags;
+						
+		if (tagList == undefined || tagList == null){
+			$("#apollo_tag_list").html("");
+		}
+		
+        var start_i = TagsSidebarFrame.m_currentPage * TagsSidebarFrame.m_tagsPerPage;
+        var end_i = Math.min(tagList.length, start_i+TagsSidebarFrame.m_tagsPerPage);
+        $('#page_no').html("Page " + (TagsSidebarFrame.m_currentPage+1) + " of " + TagsSidebarFrame.m_numberPages);
+		
 		var txt = "";
 
 		// Hard code a 'switch to folder view' item							
-//		txt += "<div onclick=\"SidebarFrame.showFolders()\" class='folder' title='Switch to folder view' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/folder_icon.png' height='20px'><span class='folder_name'>Folder view</span></div>";
-		txt += "<div onclick=\"SidebarFrame.showFolders()\" class='tag droppable_tag' id='tag_"+tag+"' title='' class='apollo_tag tag_with_menu'><img class='tag_icon' src='images/folder_icon.png' height='20px'><span class='tag_name'>Switch to folder view</span></div>";
+		txt += "<div onclick=\"SidebarFrame.showFolders()\" class='tag' title='' class='apollo_tag tag_with_menu'><img class='tag_icon' src='images/folder_icon_20x20.png'><span class='switch_to_folder_view_name'>Switch to folder view</span></div>";
 							
-		for (var i=0; i<tagList.length; i++){
+		for (var i=start_i; i<end_i; i++){
 
 			var tag = tagList[i];
 						
@@ -71,6 +113,40 @@ var TagsSidebarFrame = {
 				
 	},
 
+    // ////////////////////////////////////////////////////////////////////////////
+
+    showNextPage : function(){
+		
+        $('#prev_posts_link').show();
+        	
+        if (TagsSidebarFrame.m_currentPage < TagsSidebarFrame.m_numberPages-1){
+            TagsSidebarFrame.m_currentPage += 1;
+        }
+        
+        if (TagsSidebarFrame.m_currentPage == TagsSidebarFrame.m_numberPages-1){
+        	$('#next_posts_link').hide();
+        }
+        
+        TagsSidebarFrame.paintTags();
+    },
+
+    // ////////////////////////////////////////////////////////////////////////////
+
+    showPrevPage : function(){
+
+        $('#next_posts_link').show();
+
+        if (TagsSidebarFrame.m_currentPage > 0){
+            TagsSidebarFrame.m_currentPage -= 1;
+        }
+        
+        if (TagsSidebarFrame.m_currentPage == 0){
+        	$('#prev_posts_link').hide();
+        }
+        
+        TagsSidebarFrame.paintTags();
+    },
+    
 	// ////////////////////////////////////////////////////////////////////////////
 
 	onRightClickTag : function(e, obj){
@@ -82,17 +158,17 @@ var TagsSidebarFrame = {
 		var x = e.pageX;
 		var y = e.pageY;		
 
-		$('#folderMenu').css('top',y);
-		$('#folderMenu').css('left',x);
-		$('#folderMenu').show();
+		$('#tagMenu').css('top',y);
+		$('#tagMenu').css('left',x);
+		$('#tagMenu').show();
 
-		$('#folderMenu .edit').unbind('click');
-		$('#folderMenu .delete').unbind('click');
-		$('#folderMenu .quit').unbind('click');
+		$('#tagMenu .edit').unbind('click');
+		$('#tagMenu .delete').unbind('click');
+		$('#tagMenu .quit').unbind('click');
 
-		$('#folderMenu .edit').click(function(){TagsSidebarFrame.onMenuItem('rename_tag', obj)});
-		$('#folderMenu .delete').click(function(){TagsSidebarFrame.onMenuItem('delete_tag', obj)});
-		$('#folderMenu .quit').click(function(){TagsSidebarFrame.onMenuItem('quit', obj)});
+		$('#tagMenu .edit').click(function(){TagsSidebarFrame.onMenuItem('rename_tag', obj)});
+		$('#tagMenu .delete').click(function(){TagsSidebarFrame.onMenuItem('delete_tag', obj)});
+		$('#tagMenu .quit').click(function(){TagsSidebarFrame.onMenuItem('quit', obj)});
 		
 	},
 
@@ -104,59 +180,42 @@ var TagsSidebarFrame = {
 	* show during the drag (defined by the helper function)
 	*/
 	onAddToTag : function(event, ui){
-
+		
 		var imgID = parseInt($(ui.draggable).attr('id').substring(4));						
 		var tag = $(this).attr('id').substring(4);	// format tag_xxx
-		alert(tag);
+
+        MediaAPI.addMediaCSVTags(DataStore.m_siteID, imgID, tag, TagsSidebarFrame.onAddedToTag);
 		
-		//Logger.show();
-		//Logger.debug("imgID = " + imgID + " folder id = " + folderID);
-		
-		/*
-		if (folderID == TagsSidebarFrame.ID_UNASSIGNED || folderID > 9){		
-			MediaAPI.addMediaToFolder(DataStore.m_siteID, imgID, folderID, TagsSidebarFrame.onAddedToFolder)
-		}	
-		
-		$(this).removeClass( 'tag_name_hover' );
-		*/	
 	},
-	
-	onAddedToTag : function(folderID, mediaID){
-		/*
-		for (var i=0; i<DataStore.m_mediaList.length; i++){
 			
-			if (DataStore.m_mediaList[i].id == mediaID){
-				DataStore.m_mediaList[i].folder_id = folderID;						
-				break;
-			}
-		}
-		*/
-		FilesFrame.repaint();			
+	onAddedToTag : function(mediaObj, tags){
+        DataStore.updateMedia(mediaObj);				
+        DataStore.m_mediaTags = tags;
+		TagsSidebarFrame.onSelectTag(DataStore.m_currentTag);
 	},
 
 	// ////////////////////////////////////////////////////////////////////////////
-	
+		
 	/**
 	* Respond to the user selecting a menu item
 	*/
 	onMenuItem : function(item, selectedElement){
 				
-		$('#imageMenu').hide();
-		$('#folderMenu').hide();
+		$('#tagMenu').hide();
 		
 		var divID = $(selectedElement).attr('id');		
-		var tag = $(this).attr('id').substring(4);	// format tag_xxx
-		alert(tag);
+		var name = $('#'+divID + ' .tag_name').html();		
+		var tag = divID.substr(4);
 				
 		// Process events related to folders...					
 		if (item == 'rename_tag'){
 			TagsSidebarFrame.makeTagNameEditable(tag);
 		}
 		else if (item == 'delete_tag'){		
-			AthenaDialog.confirm("Are you sure you want to delete this media tag? This can not be undone.", function(){TagsSidebarFrame.deleteTag(tag);});
+			AthenaDialog.confirm("Are you sure you want to delete this tag? This will not delete any of your images, just this tag", function(){TagsSidebarFrame.deleteTag(tag);});
 		}
 				
-	},
+	},	
 
 	// ////////////////////////////////////////////////////////////////////////////
 
@@ -171,7 +230,7 @@ var TagsSidebarFrame = {
 		
 		$("#tag_name_edit").keypress(function (e) {
 			if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
-				TagsSidebarFrame.renameTag(folder_id, $("#tag_name_edit").val());
+				TagsSidebarFrame.renameTag(tag, $("#tag_name_edit").val());
 			}
 	    });
 		
@@ -181,8 +240,8 @@ var TagsSidebarFrame = {
 	// ////////////////////////////////////////////////////////////////////////////
 		
 	onSelectTag : function(tag){
-
-		DataStore.m_currentTag = parseInt(tag);
+		
+		DataStore.m_currentTag = tag;
 		TagsSidebarFrame.paintTags();				
 
 		switch(ssMain.view){			
@@ -195,25 +254,21 @@ var TagsSidebarFrame = {
 	// ////////////////////////////////////////////////////////////////////////////
 
 	deleteTag : function(tag){
-		//MediaAPI.deleteTag(DataStore.m_siteID, folderId, TagsSidebarFrame.onFolderDeleted);
+		MediaAPI.deleteMediaTag(DataStore.m_siteID, tag, TagsSidebarFrame.onTagDeleted)
 	},
 	
-	onTagDeleted : function(tag){
-/*
-		//AthenaDialog.message("Folder deleted");
-		
-		var temp = new Array();		
-		for (var i=0; i<DataStore.m_folderList.length; i++){
-		
-			if (DataStore.m_folderList[i].id != folder_id){
-				temp.push(DataStore.m_folderList[i]);
-			}
-			
-		}
-		DataStore.m_folderList = temp;
-		
-		TagsSidebarFrame.paintFolders()	
-*/
+	onTagDeleted : function(newTagList){
+        
+        DataStore.m_mediaTags = newTagList;
+        
+        if (DataStore.m_mediaTag != undefined && DataStore.m_mediaTag != null && DataStore.m_mediaTag.length > 0){
+        	DataStore.m_currentTag = DataStore.m_mediaTags[0];
+			TagsSidebarFrame.onSelectTag(DataStore.m_currentTag);
+        }
+        else {
+			TagsSidebarFrame.onSelectTag('');
+        }
+        		
 	},
 					
 	// ////////////////////////////////////////////////////////////////////////////
@@ -221,21 +276,23 @@ var TagsSidebarFrame = {
 	/**
 	* Rename a folder
 	*/
-	renameTag : function(tag){
-		//MediaAPI.renameFolder(DataStore.m_siteID, folderId, folderName, TagsSidebarFrame.onFolderRenamed);
-	},
+	renameTag : function(oldTagName, newTagName){
 	
-	onTagRenamed : function(folderId, folderName){
-		/*
-		for (var i=0; i<DataStore.m_folderList.length; i++){
-			if (DataStore.m_folderList[i].id == folderId){
-				DataStore.m_folderList[i].name = folderName;
-				break;
+		// Check to see if this new name is not in use
+		for (var i=0; i<DataStore.m_mediaTags.length; i++){
+			if (DataStore.m_mediaTags[i] == newTagName){
+				AthenaDialog.alert("Sorry, you already have a tag with that name!");
+				return;
 			}
 		}
-
-		TagsSidebarFrame.paintTags()
-		*/
+		
+		TagsSidebarFrame.m_newTag = newTagName;
+		MediaAPI.renameMediaTag(DataStore.m_siteID, oldTagName, newTagName, TagsSidebarFrame.onTagRenamed);
+	},
+	
+	onTagRenamed : function(tags){
+        DataStore.m_mediaTags = tags;
+		TagsSidebarFrame.onSelectTag(TagsSidebarFrame.m_newTag);
 	}			
 
 }

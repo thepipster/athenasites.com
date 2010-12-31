@@ -134,6 +134,9 @@ var PostsFrame = {
 	*/
     updateTagsAndCategoris : function(){
 
+        $('#postTag').autocomplete('destroy');		
+        $('#postCategory').autocomplete('destroy');		
+
         $("#postTag").autocomplete({
             source: DataStore.m_tags
         });

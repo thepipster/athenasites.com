@@ -110,7 +110,7 @@ var FolderSidebarFrame = {
 			var folder_id = folderList[i].id;
 			
 			if (folder_id == DataStore.m_currentFolderID){
-				txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\" class='folder droppable_folder' id='folder_"+folder_id+"' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/folder_images.png'><span class='folder_name selected'>"+folder_name+"</span></div>";
+				txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\" class='folder droppable_folder' id='folder_"+folder_id+"' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/folder_grey.png'><span class='folder_name selected'>"+folder_name+"</span></div>";
 			}
 			else {
 				txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\" class='folder droppable_folder' id='folder_"+folder_id+"' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/folder_icon.png'><span class='folder_name'>"+folder_name+"</span></div>";

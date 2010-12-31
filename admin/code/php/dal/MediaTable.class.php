@@ -300,6 +300,11 @@ class MediaTable {
     }    
     
     // /////////////////////////////////////////////////////////////////////////////////
+
+    public static function getTagByName($site_id, $tag) {
+        $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_MediaTags WHERE tag = %s", $site_id, $tag);
+        return DatabaseManager::getSingleResult($sql);
+    }
     
     public static function getTags($site_id) {
         $sql = DatabaseManager::prepare("SELECT tag FROM athena_%d_MediaTags ORDER BY tag", $site_id);
@@ -327,6 +332,14 @@ class MediaTable {
             $freq = 0;
         }
         return $freq;
+    }
+
+    // /////////////////////////////////////////////////////////////////////////////////
+    
+    public static function renameTag($site_id, $tag, $newTag){    		    	
+        $tag_id = self::getTagID($site_id, $tag);        
+        $sql = DatabaseManager::prepare("UPDATE athena_%d_MediaTags SET tag = %s WHERE id = %d", $site_id, $newTag, $tag_id);
+        DatabaseManager::submitQuery($sql);
     }
     
     // /////////////////////////////////////////////////////////////////////////////////

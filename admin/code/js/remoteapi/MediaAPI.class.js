@@ -884,6 +884,35 @@ var MediaAPI = {
     // ////////////////////////////////////////////////////////////////////////
 
 	/**
+	* Remove the association of the given tag from the given media file
+	*/
+	renameMediaTag : function(siteID, currentTagStr, newTagStr, callback){
+		
+        //AthenaDialog.showLoading("Removing tag");
+
+        var paras = {cmd: 'renameMediaTag', site_id: siteID, tag: currentTagStr, new_tag: newTagStr};
+
+        $.ajax({
+            url: MediaAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: 
+            	function(ret){ 
+			        //AthenaDialog.clearLoading();
+			        
+			        if (ret.result == "ok"){
+			            callback(ret.data.tags);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+            	}
+        });	
+	},
+	
+    // ////////////////////////////////////////////////////////////////////////
+
+	/**
 	* Delete a media tag, which will remove this from ALL media files that are associated
 	* with this tag
 	*/
@@ -902,7 +931,7 @@ var MediaAPI = {
 			        AthenaDialog.clearLoading();
 			        
 			        if (ret.result == "ok"){
-			            callback(ret.data.tag);
+			            callback(ret.data.tags);
 			        }
 			        else {
 			            AthenaDialog.showAjaxError(ret);

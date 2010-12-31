@@ -57,7 +57,6 @@ var DataStore = {
     // //////////////////////////////////////////////////////////////////////////////////
 
     init : function(){
-
     },
 
     // //////////////////////////////////////////////////////////////////////////////////
@@ -1033,12 +1032,36 @@ var DataStore = {
     },
     
     // //////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Get a list of all the images that have the given media tag associated with them
+	*/
+	getImagesForCurrentTag : function(){
+	
+		var tag = DataStore.m_currentTag;
+        var imageList = DataStore.m_mediaList;
+		var tagImageList = new Array();
+        	    		
+        for (var i=0; i<imageList.length; i++){
+        	if (imageList[i].media_tags != undefined && imageList[i].media_tags != null){
+	        	for (var j=0; j<imageList[i].media_tags.length; j++){  
+	        		if (imageList[i].media_tags[j] == tag){
+		        		tagImageList.push(imageList[i]);
+	        		}      	
+	        	}        	
+        	}
+		}
+			
+		return tagImageList;	
+	},
+	
+    // //////////////////////////////////////////////////////////////////////////////////
     
 	/**
 	* Get a list of images for the currently selected folder/filter
 	* @return Return an array of images for the currently selected folder
 	*/
-	getImages : function(){
+	getImagesForCurrentFolder : function(){
 
         var d = new Date();
         var localTime = d.getTime();

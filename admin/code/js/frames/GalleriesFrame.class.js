@@ -30,7 +30,12 @@ var GalleriesFrame = {
 
         GalleriesFrame.m_themeParaID = GalleriesFrame.getThemeParaForGalleryPage();
         
-   		GalleriesFrame.m_imageList = DataStore.getImages();
+        if (SidebarFrame.m_folderTagMode){
+			GalleriesFrame.m_imageList = DataStore.getImagesForCurrentTag();
+        }
+        else {
+			GalleriesFrame.m_imageList = DataStore.getImagesForCurrentFolder();
+        }        
    		
 		GalleriesFrame.calcImagePages();
         GalleriesFrame.paintGallerySlots();
@@ -258,7 +263,12 @@ var GalleriesFrame = {
         $(".thumb").draggable('destroy');
 				
 		if (GalleriesFrame.m_imageList == ''){
-	   		GalleriesFrame.m_imageList = DataStore.getImages();
+	        if (SidebarFrame.m_folderTagMode){
+				GalleriesFrame.m_imageList = DataStore.getImagesForCurrentTag();
+	        }
+	        else {
+				GalleriesFrame.m_imageList = DataStore.getImagesForCurrentFolder();
+	        }        
 			GalleriesFrame.calcImagePages();
 		}		
 				

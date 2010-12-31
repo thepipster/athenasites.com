@@ -74,7 +74,12 @@ var FilesFrame = {
 	*/
     repaintData : function(){
                 
-		FilesFrame.m_imageList = DataStore.getImages();
+        if (SidebarFrame.m_folderTagMode){
+			FilesFrame.m_imageList = DataStore.getImagesForCurrentTag();
+        }
+        else {
+			FilesFrame.m_imageList = DataStore.getImagesForCurrentFolder();
+        }        
 		FilesFrame.calcImagePages();
 
         if (FilesFrame.m_mode == 'edit_image'){
@@ -233,15 +238,13 @@ var FilesFrame = {
 	        }
 			$('#apollo_image_custom_tag_list').html(txt);
         }
-        
-        // Update auto-completer
+                
+        // Update auto-completer        
+        $('#apollo_image_custom_tags').autocomplete('destroy');		
         if (DataStore.m_mediaTags != undefined && DataStore.m_mediaTags != null){
-	        $("#apollo_image_custom_tags").autocomplete({
-	            source: DataStore.m_mediaTags
-	        });          
+	        $("#apollo_image_custom_tags").autocomplete({source: DataStore.m_mediaTags});          
         }
-        
-                                                                     	       		
+                        
 		var prevMode = FilesFrame.m_mode;
 		FilesFrame.m_mode = 'edit_image'; 
 		
@@ -281,13 +284,13 @@ var FilesFrame = {
 
 	addMediaTag : function(){
 		var csvtags = $('#apollo_image_custom_tags').val();
-        $('#apollo_image_custom_tags').val('');		
         MediaAPI.addMediaCSVTags(DataStore.m_siteID, FilesFrame.m_currentImageID, csvtags, FilesFrame.onMediaTagChanged);
 	},
 			
     onMediaTagChanged : function(mediaObj, tags){        
         DataStore.updateMedia(mediaObj);				
-        DataStore.m_categories = tags;
+        DataStore.m_mediaTags = tags;
+        $('#apollo_image_custom_tags').val('');		                                                                                     	       		
         FilesFrame.repaint();        
     },	
     		
@@ -452,7 +455,12 @@ var FilesFrame = {
         $(".thumb").draggable('destroy');
 				
 		if (FilesFrame.m_imageList == ''){
-			FilesFrame.m_imageList = DataStore.getImages();
+	        if (SidebarFrame.m_folderTagMode){
+				FilesFrame.m_imageList = DataStore.getImagesForCurrentTag();
+	        }
+	        else {
+				FilesFrame.m_imageList = DataStore.getImagesForCurrentFolder();
+	        }        
 			FilesFrame.calcImagePages();
 		}		
 				
@@ -492,8 +500,7 @@ var FilesFrame = {
         $(".thumb").draggable({
             revert: true,
             zIndex: 300
-        });
-		
+        });		
 		
     },
 

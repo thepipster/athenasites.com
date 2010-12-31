@@ -141,7 +141,7 @@ var SidebarFrame = {
 		
     // ////////////////////////////////////////////////////////////////////////////
 	
-	m_folderTagMode : true,
+	m_folderTagMode : false,
 	
 	showTags : function(){ 
 		SidebarFrame.m_mode = '';
