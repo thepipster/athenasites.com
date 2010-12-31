@@ -41,7 +41,7 @@ var MediaAPI = {
 			        AthenaDialog.clearLoading();
 					
 			        if (ret.result == 'ok'){
-			            callback(ret.data.folders, ret.data.media, ret.data.pages, ret.data.theme, ret.data.page_templates, ret.data.theme_paras, ret.data.page_paras, ret.data.posts, ret.data.tags, ret.data.categories);
+			            callback(ret.data.folders, ret.data.media, ret.data.pages, ret.data.theme, ret.data.page_templates, ret.data.theme_paras, ret.data.page_paras, ret.data.posts, ret.data.tags, ret.data.categories, ret.data.media_tags);
 			        }
 			        else {
 			            AthenaDialog.showAjaxError(ret);
@@ -270,15 +270,18 @@ var MediaAPI = {
     //
     // ////////////////////////////////////////////////////////////////////////
 
-    addTag : function(siteID, postID, postTag, callback){
+	/**
+	* Add a tag to a post, can handle single tags or csv tags
+	*/
+    addTag : function(siteID, postID, csvPostTags, callback){
 
         //AthenaDialog.showLoading("Adding tag");
 
         var paras = {
-            cmd: 'addTag',
+            cmd: 'addPostTags',
             site_id: siteID,
             post_id: postID,
-            tag: postTag
+            csvtags: csvPostTags
         };
 				
         $.ajax({
@@ -290,7 +293,7 @@ var MediaAPI = {
 			        //AthenaDialog.clearLoading();
 			
 			        if (ret.result == "ok"){
-			            callback(ret.data.post_id, ret.data.tag);
+			            callback(ret.data.post, ret.data.tags);
 			        }
 			        else {
 			            AthenaDialog.showAjaxError(ret);
@@ -301,15 +304,18 @@ var MediaAPI = {
 	
     // ////////////////////////////////////////////////////////////////////////
 
-    addCategory : function(siteID, postID, postCategory, callback){
+	/**
+	* Add a category to a post, can handle single category or csv category
+	*/
+    addCategory : function(siteID, postID, csvPostCategories, callback){
 
         //AthenaDialog.showLoading("Adding category");
 
         var paras = {
-            cmd: 'addCategory',
+            cmd: 'addPostCategories',
             site_id: siteID,
             post_id: postID,
-            category: postCategory
+            csvcats: csvPostCategories
         };
 				
         $.ajax({
@@ -321,7 +327,7 @@ var MediaAPI = {
 			        //AthenaDialog.clearLoading();
 			
 			        if (ret.result == "ok"){
-			            callback(ret.data.post_id, ret.data.category);
+			            callback(ret.data.post, ret.data.categories);
 			        }
 			        else {
 			            AthenaDialog.showAjaxError(ret);
@@ -928,7 +934,7 @@ var MediaAPI = {
 					AthenaDialog.clearLoading();
 					
 					if (ret.result == 'ok'){
-					    callback(ret.data.media);
+					    callback(ret.data.media, ret.data.tags);
 					}
 					else {
 					    AthenaDialog.showAjaxError(ret);

@@ -180,11 +180,13 @@ class MediaTable {
      * @param int $media_id the file/media id
      * @param string $title title of this file
      * @param string $description description of this file
-     * @param string $tags csv list of tags for this file
+     * @param string $$alt_text alt text
      * @return int result of the update
      */
-    public static function updateMedia($site_id, $media_id, $title, $description, $tags){
-        $sql = DatabaseManager::prepare("UPDATE athena_%d_Media SET title = %s, description = %s, tags = %s WHERE id = %d", $site_id, $title, $description, $tags, $media_id);
+    public static function updateMedia($site_id, $media_id, $title, $description, $alt_text){
+        Logger::debug("updateMedia($site_id, $media_id, $title, $description, $alt_text)");
+        $sql = DatabaseManager::prepare("UPDATE athena_%d_Media SET title = %s, description = %s, tags = %s WHERE id = %d", $site_id, $title, $description, $alt_text, $media_id);
+        Logger::debug($sql);
         return DatabaseManager::update($sql);
     }
     

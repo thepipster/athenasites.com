@@ -14,7 +14,21 @@ var PostsFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 
     init : function(){
-    //PostsFrame.painted = false;
+		
+		$('#postTag').keyup(function(e) {
+			//alert(e.keyCode);
+			if(e.keyCode == 13) {
+				PostsFrame.addTag();
+			}
+		}); 
+
+		$('#postCategory').keyup(function(e) {
+			//alert(e.keyCode);
+			if(e.keyCode == 13) {
+				PostsFrame.addCategory();
+			}
+		}); 
+		
     },
 	
     // ////////////////////////////////////////////////////////////////////////////
@@ -258,25 +272,9 @@ var PostsFrame = {
         MediaAPI.addTag(DataStore.m_siteID, DataStore.m_currentPostID, tag, PostsFrame.onTagAdded);
     },
 
-    onTagAdded : function(post_id, tag){
-		
-        var post = DataStore.getPost(post_id);
-        post.tags.push(tag);
-        DataStore.updatePost(post);
-		
-        // Is this a new tag?
-        var newTag = true;
-        for (var i=0; i<DataStore.m_tags.length; i++){
-            if (DataStore.m_tags[i] == tag){
-                newTag = false;
-                break;
-            }
-        }
-		
-        if (newTag){
-            DataStore.m_tags.push(tag);
-        }
-		
+    onTagAdded : function(postObj, tags){		
+        DataStore.updatePost(postObj);
+        DataStore.m_tags = tags;						
         PostsFrame.repaint();
     },
 	
@@ -288,25 +286,9 @@ var PostsFrame = {
         MediaAPI.addCategory(DataStore.m_siteID, DataStore.m_currentPostID, cat, PostsFrame.onCategoryAdded);
     },
 	
-    onCategoryAdded : function(post_id, category){
-	
-        var post = DataStore.getPost(post_id);
-        post.categories.push(category);
-        DataStore.updatePost(post);
-	
-        // Is this a new cat?
-        var newCat = true;
-        for (var i=0; i<DataStore.m_categories.length; i++){
-            if (DataStore.m_categories[i] == category){
-                newCat = false;
-                break;
-            }
-        }
-		
-        if (newCat){
-            DataStore.m_categories.push(category);
-        }
-
+    onCategoryAdded : function(postObj, categories){	
+        DataStore.updatePost(postObj);
+        DataStore.m_categories = categories;
         PostsFrame.repaint();
     },
 	

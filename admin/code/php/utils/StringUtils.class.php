@@ -16,7 +16,7 @@ class StringUtils {
      */
     public static function makeTextSafe($content) {
 
-        $tags = array("\\n", "\\r", "\\'", "\\\"");
+        $tags = array("\\n", "\\r", "\\'", "\"");
         $replace = '';
         $safe_content = str_ireplace($tags, $replace, $content);
         $safe_content = stripslashes(stripslashes($safe_content));
@@ -29,8 +29,8 @@ class StringUtils {
         $tags = array("\'", "\"");
         $safe_content = str_ireplace($tags, $replace, $safe_content);
 
-        //Logger::debug(">>> content = $content");
-        //Logger::debug(">>> safe content = $safe_content");
+        Logger::debug(">>> content = $content");
+        Logger::debug(">>> safe content = $safe_content");
 
         return $safe_content;
     }

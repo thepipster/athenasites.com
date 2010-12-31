@@ -127,10 +127,10 @@ switch ($cmd) {
         updateCommentStatus($site_id, $comment_id, $status);
         break;
 
-    case "addTag":
-        $tag = CommandHelper::getPara('tag', true, CommandHelper::$PARA_TYPE_STRING);
+    case "addPostTags":
+        $csv_tags = CommandHelper::getPara('csvtags', true, CommandHelper::$PARA_TYPE_STRING);
         $post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        addTag($site_id, $post_id, $tag);
+        addTag($site_id, $post_id, $csv_tags);
         break;
 
     case "addTags":
@@ -138,10 +138,10 @@ switch ($cmd) {
         addTags($site_id, $csv_tags);
         break;
 
-    case "addCategory":
-        $category = CommandHelper::getPara('category', true, CommandHelper::$PARA_TYPE_STRING);
+    case "addPostCategories":
+        $csv_categories = CommandHelper::getPara('csvcats', true, CommandHelper::$PARA_TYPE_STRING);
         $post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        addCategory($site_id, $post_id, $category);
+        addCategory($site_id, $post_id, $csv_categories);
         break;
 
     case "addCategories":
@@ -333,6 +333,7 @@ function getAll($site_id) {
     // Get the tag list
     $tag_list = PostsTable::getTags($site_id);
     $cat_list = PostsTable::getCategories($site_id);
+    $media_tag_list = MediaTable::getTags($site_id);
 
     $msg = array();
     $msg['cmd'] = 'getAll';
@@ -347,11 +348,35 @@ function getAll($site_id) {
         'page_paras' => $page_paras,
         'posts' => $post_list,
         'tags' => $tag_list,
-        'categories' => $cat_list);
+        'categories' => $cat_list,
+        'media_tags' => $media_tag_list);
 
     CommandHelper::sendMessage($msg);
 }
 
+// ///////////////////////////////////////////////////////////////////////////////////////
+//
+// Helper functions
+//
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+* Get all the details we need for a post, and format dates to be JS compatible
+*/
+function getPostComplete($site_id, $post_id){
+
+    $post = PostsTable::getPost($site_id, $post_id);
+
+    if (isset($post)) {
+        $post['last_edit'] = date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
+        $post['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
+        $post['tags'] = PostsTable::getPostTags($site_id, $post['id']);
+        $post['categories'] = PostsTable::getPostCategories($site_id, $post['id']);
+        $post['content'] = ImportHelper::convertContent($post['content'], $post['source']);
+    }
+    
+    return $post;
+}
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -430,15 +455,7 @@ function buildPagePath($page_id, $site_id, $path_array) {
 
 function getPostDetails($site_id, $post_id) {
 
-    $post = PostsTable::getPost($site_id, $post_id);
-
-    if (isset($post)) {
-        $post['last_edit'] = date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
-        $post['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
-        $post['tags'] = PostsTable::getPostTags($site_id, $post['id']);
-        $post['categories'] = PostsTable::getPostCategories($site_id, $post['id']);
-        $post['content'] = ImportHelper::convertContent($post['content'], $post['source']);
-    }
+    $post = getPostComplete($site_id, $post_id);
 
     //Logger::dump($post);
 
@@ -484,7 +501,7 @@ function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_c
 
     PostsTable::update($site_id, $post_id, $safe_content, $status, $safe_title, $can_comment, StringUtils::encodeSlug($title), 'apollo');
 	
-    $post = PostsTable::getPost($site_id, $post_id);
+    $post = getPostComplete($site_id, $post_id);
 
 	ImportHelper::processPostContent($site_id, $post);
 
@@ -494,13 +511,6 @@ function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_c
 
     $path = "/$year/$month/$day/";
     PostsTable::updatePath($post_id, $site_id, $path);
-
-    if (isset($post)) {
-        $post['last_edit'] = date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
-        $post['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
-        $post['tags'] = PostsTable::getPostTags($site_id, $post['id']);
-        $post['categories'] = PostsTable::getPostCategories($site_id, $post['id']);
-    }
 
     $msg['cmd'] = "updatePost";
     $msg['result'] = 'ok';
@@ -522,7 +532,7 @@ function addPost($site_id, $title, $content, $status, $slug, $can_comment) {
 
     $post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, StringUtils::encodeSlug($title), 'apollo');
 
-    $post = PostsTable::getPost($site_id, $post_id);
+    $post = getPostComplete($site_id, $post_id);
 
     $day = date("d", strtotime($post['created']));
     $month = date("n", strtotime($post['created']));
@@ -530,13 +540,6 @@ function addPost($site_id, $title, $content, $status, $slug, $can_comment) {
 
     $path = "/$year/$month/$day/";
     PostsTable::updatePath($post_id, $site_id, $path);
-
-    if (isset($post)) {
-        $post['last_edit'] = date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
-        $post['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
-        $post['tags'] = PostsTable::getPostTags($site_id, $post['id']);
-        $post['categories'] = PostsTable::getPostCategories($site_id, $post['id']);
-    }
 
     $msg['cmd'] = "addPost";
     $msg['result'] = $post_id > 0 ? 'ok' : 'fail';
@@ -656,32 +659,51 @@ function updateCommentStatus($site_id, $comment_id, $status) {
 // ///////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function addCategory($site_id, $post_id, $category) {
+function addCategory($site_id, $post_id, $csv_categories) {
 
-    $safecat = StringUtils::makeTextSafe($category);
+	//$cats = array();
+    $cat_list = explode(",", $csv_categories);
 
-    $category_id = PostsTable::addCategoryToPost($site_id, $post_id, $safecat);
+    foreach ($cat_list as $cat) {
+        $cat = trim($cat);
+        if ($cat != "") {
+            $safecat = StringUtils::makeTextSafe($cat);
+		    $category_id = PostsTable::addCategoryToPost($site_id, $post_id, $safecat);
+            //$cats[] = $safecat;
+        }
+    }
 
     $msg['cmd'] = "addCategory";
-    $msg['result'] = $category_id > 0 ? 'ok' : 'fail';
-    $msg['data'] = array('category' => $safecat, 'post_id' => $post_id);
+    $msg['result'] = 'ok';
+    $msg['data'] = array('post' =>  getPostComplete($site_id, $post_id), 'categories' => PostsTable::getCategories($site_id));
 
     CommandHelper::sendMessage($msg);
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function addTag($site_id, $post_id, $tag) {
+function addTag($site_id, $post_id, $csv_tags) {
 
-    $safetag = StringUtils::makeTextSafe($tag);
+	//$tags = array();
+    $tag_list = explode(",", $csv_tags);
 
-    $tag_id = PostsTable::addTagToPost($site_id, $post_id, $safetag);
+    foreach ($tag_list as $tag) {
+        $tag = trim($tag);
+        if ($tag != "") {
+            $safetag = StringUtils::makeTextSafe($tag);
+		    $tag_id = PostsTable::addTagToPost($site_id, $post_id, $safetag);
+		    //$tags[] = $safetag;
+        }
+    }
 
-    $msg['cmd'] = "addTag";
-    $msg['result'] = $tag_id > 0 ? 'ok' : 'fail';
-    $msg['data'] = array('tag' => $safetag, 'post_id' => $post_id);
+    $tag_list = PostsTable::getTags($site_id);
+
+    $msg['cmd'] = "addTags";
+    $msg['result'] = 'ok';
+    $msg['data'] = array('post' =>  getPostComplete($site_id, $post_id), 'tags' => PostsTable::getTags($site_id));
 
     CommandHelper::sendMessage($msg);
+
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////
@@ -692,7 +714,6 @@ function addTag($site_id, $post_id, $tag) {
 function addCategories($site_id, $csv_categories) {
 
     //Logger::debug($csv_categories);
-
     $cat_list = explode(",", $csv_categories);
 
     foreach ($cat_list as $cat) {
@@ -1021,7 +1042,7 @@ function addMediaTags($site_id, $media_id, $csv_tags) {
 
     $msg['cmd'] = "addMediaTags";
     $msg['result'] = 'ok';
-    $msg['data'] = array('media' => $media);
+    $msg['data'] = array('media' => $media, 'tags' => MediaTable::getTags($site_id));
     
     CommandHelper::sendMessage($msg);
 }
@@ -1228,13 +1249,15 @@ function getImages($site_id) {
 
 // //// ///////////////////////////////////////////////////////////////////////////////////////
 
-function updateMediaInfo($site_id, $media_id, $title, $desc, $csv_tags) {
+function updateMediaInfo($site_id, $media_id, $title, $desc, $alt_tag) {
+
+	Logger::debug("updateMediaInfo($site_id, $media_id, $title, $desc, $csv_tags)");
 
     $msg = array();
     $msg['cmd'] = 'saveMediaInfo';
     $msg['result'] = 'ok';
 
-    MediaTable::updateMedia($site_id, $media_id, $title, $desc, $csv_tags);
+    MediaTable::updateMedia($site_id, $media_id, $title, $desc, $alt_tag);
 
     $media = MediaTable::getMedia($site_id, $media_id);
    	$media['created'] = date("m/d/Y H:i", strtotime($media['created'])); // Convert to JS compatible date

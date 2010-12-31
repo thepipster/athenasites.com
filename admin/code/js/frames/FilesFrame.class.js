@@ -226,14 +226,22 @@ var FilesFrame = {
         var txt = "";
         $('#apollo_image_custom_tag_list').html("");
         
-        if (imageData.media_tags != undefined || imageData.media_tags != null){
+        if (imageData.media_tags != undefined && imageData.media_tags != null){
 	        for (var i=0; i<imageData.media_tags.length; i++){
 	            var onclick = "FilesFrame.deleteImageTag(\""+imageData.media_tags[i]+"\")";
 		        txt += "<div class='postTagCatLine'><span class='postTagCat'>"+imageData.media_tags[i]+"</span><span class='postRemoveTagCat' onclick='"+onclick+"'></span></div>";
 	        }
 			$('#apollo_image_custom_tag_list').html(txt);
         }
-                                                       	       		
+        
+        // Update auto-completer
+        if (DataStore.m_mediaTags != undefined && DataStore.m_mediaTags != null){
+	        $("#apollo_image_custom_tags").autocomplete({
+	            source: DataStore.m_mediaTags
+	        });          
+        }
+        
+                                                                     	       		
 		var prevMode = FilesFrame.m_mode;
 		FilesFrame.m_mode = 'edit_image'; 
 		
@@ -277,9 +285,10 @@ var FilesFrame = {
         MediaAPI.addMediaCSVTags(DataStore.m_siteID, FilesFrame.m_currentImageID, csvtags, FilesFrame.onMediaTagChanged);
 	},
 			
-    onMediaTagChanged : function(mediaObj){
+    onMediaTagChanged : function(mediaObj, tags){        
         DataStore.updateMedia(mediaObj);				
-        FilesFrame.repaint();
+        DataStore.m_categories = tags;
+        FilesFrame.repaint();        
     },	
     		
     // ////////////////////////////////////////////////////////////////////////////

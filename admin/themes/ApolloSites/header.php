@@ -123,7 +123,7 @@ PageManager::doHeader();
     	
     		<?php 
     		    		    		
-    		if ($_SERVER["REQUEST_URI"] == '/admin' || $_SERVER["REQUEST_URI"] == '/admin/' || $_SERVER["REQUEST_URI"] == 'admin'){
+    		if ($_SERVER["REQUEST_URI"] == '/admin' || $_SERVER["REQUEST_URI"] == '/admin/' || $_SERVER["REQUEST_URI"] == 'admin' || $_SERVER["REQUEST_URI"] == '/admin/index.php'){
     			echo "<div class='menu_item menu_selected_item' align='center'><div class='menu_text'>Login</div></div>";
     		}
     		else {

@@ -109,7 +109,9 @@ class CommandHelper {
 	
 	            case self::$PARA_TYPE_STRING :
 	            	$typestr = 'string';
-	                return mysql_real_escape_string($val);
+	            	// mysql_real_escape_string not needed as all DB queries should go through DatabaseManager::prepare
+	            	return $val;
+//	                return mysql_real_escape_string(stripslashes($val));
 	                break;
 	
 	            case self::$PARA_TYPE_JSON :

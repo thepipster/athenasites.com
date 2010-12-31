@@ -47,6 +47,9 @@ var DataStore = {
     /** List of post tags */
     m_tags : '',
     
+    /** List of media tags */
+    m_mediaTags : '',
+        
     /** Flag to enable stopping/starting of auto-save feature */
     m_doAutoSave : true,
 
@@ -725,14 +728,14 @@ var DataStore = {
         });
 
         MediaAPI.getAll(DataStore.m_siteID,
-            function(folders, media, pages, theme, page_templates, theme_paras, page_paras, posts, tags, categories){
-                DataStore.onGotData(folders, media, pages, theme, page_templates, theme_paras, page_paras, posts, tags, categories, callback);
+            function(folders, media, pages, theme, page_templates, theme_paras, page_paras, posts, tags, categories, media_tag_list){
+                DataStore.onGotData(folders, media, pages, theme, page_templates, theme_paras, page_paras, posts, tags, categories, media_tag_list, callback);
             });
     },
 
     // //////////////////////////////////////////////////////////////////////////////////
 
-    onGotData : function(folder_list, media_list, page_list, theme, page_templates, theme_paras, paga_paras, post_list, tag_list, categories_list, callback){
+    onGotData : function(folder_list, media_list, page_list, theme, page_templates, theme_paras, paga_paras, post_list, tag_list, categories_list, media_tag_list, callback){
 
         DataStore.onGotFolders(folder_list);
         DataStore.onGotMedia(media_list);
@@ -746,6 +749,7 @@ var DataStore = {
         DataStore.m_theme = theme; // id, theme_name, theme_title, price, thumb_url, description, is_private, max_page_depth
         DataStore.m_categories = categories_list;
         DataStore.m_tags = tag_list;
+        DataStore.m_mediaTags = media_tag_list;
 
         if (DataStore.m_themeParaList == undefined) DataStore.m_themeParaList = new Array();
         if (DataStore.m_siteParaList == undefined) DataStore.m_siteParaList = new Array();
