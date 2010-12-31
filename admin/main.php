@@ -187,6 +187,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 
         <!-- Sub-Frame Displays -->
         <script src="code/js/subframes/FolderSidebarFrame.class.js" type="text/javascript"></script>
+        <script src="code/js/subframes/TagsSidebarFrame.class.js" type="text/javascript"></script>
         <script src="code/js/subframes/PagesSidebarFrame.class.js" type="text/javascript"></script>
         <script src="code/js/subframes/StatsSidebarFrame.class.js" type="text/javascript"></script>
         <script src="code/js/subframes/ImageSelector.class.js" type="text/javascript"></script>

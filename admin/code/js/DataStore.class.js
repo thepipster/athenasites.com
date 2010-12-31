@@ -10,6 +10,7 @@ var DataStore = {
     m_currentPageID : 0,
     m_currentGalleryNo : 1, // For multi-galleries
     m_currentPostID : 0,
+    m_currentTag : '',
 
     /** Currently selected site id (if the user has more than 1 site!) */
     m_siteID : 0,

@@ -92,15 +92,6 @@
     cursor: pointer;
 }
 
-/*
-#SideBar .project_user_force_hover {
-	color: #303030;
-	cursor: pointer;
-	background-color: #dfe2e2;
-}
-*/
-
-
 #SideBar .selected {
     color: #f3f2f1 !important;
 }
@@ -110,7 +101,6 @@
     padding-left: 5px;
     top: -2px;
 }
-
 
 #SideBar .folder_name:hover {
     color: white;
@@ -138,6 +128,41 @@
 #SideBar .folder {
     margin-left: 5px;
     padding-top: 3px;
+}
+
+#SideBar .tag_icon {
+	padding-left: 5px;
+}
+
+#SideBar .tag_name:hover {
+    color: white;
+    cursor: pointer;
+}
+
+#SideBar .tag_name_hover {
+    color: black;
+    background-color: #c3d3df;
+}
+
+
+#SideBar .tag_name {
+    position: relative;
+    padding-left: 5px;
+    top: -8px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+#SideBar .tag {
+    margin-left: 5px;
+}
+
+#SideBar .folder_view_change_icon {
+    position: relative;
+    padding-left: 1px;
+    top: 2px;
+    font-size: 12px;
+    cursor: pointer;
 }
 
 /* Folder Pop-up context menu /////////////////////////// */
