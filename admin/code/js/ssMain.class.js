@@ -13,7 +13,7 @@ var ssMain = {
     VIEW_STATS : 6,
     VIEW_SETTINGS : 7,
 
-    view : 2,
+    view : 5,
 
     pageTracker : '',
 
@@ -265,11 +265,13 @@ var ssMain = {
 		
         switch(ssMain.view){
 
-            case ssMain.VIEW_PAGES :$('#PagesFrame').show();$('#pages_menu').addClass('selected');PagesFrame.repaint();break;
-            case ssMain.VIEW_POSTS :$('#PagesFrame').show();$('#posts_menu').addClass('selected');PostsFrame.repaint();break;
+            case ssMain.VIEW_PAGES :$('#PagesFrame').show();$('#pages_menu').addClass('selected'); PagesSidebarFrame.m_currentPage = 0; PagesFrame.repaint();break;
+            case ssMain.VIEW_POSTS :$('#PagesFrame').show();$('#posts_menu').addClass('selected'); PostsSidebarFrame.m_currentPage = 0; PostsFrame.repaint();break;
 
-            case ssMain.VIEW_DASHBOARD:$('#DashboardFrame').show();$('#dashboard_menu').addClass('selected');DashboardFrame.repaint();break;
-            case ssMain.VIEW_FILES:$('#FilesFrame').show();$('#files_menu').addClass('selected');FilesFrame.repaint();break;
+            case ssMain.VIEW_DASHBOARD:$('#DashboardFrame').show();$('#dashboard_menu').addClass('selected');DashboardFrame.repaint();break
+            ;
+            case ssMain.VIEW_FILES:$('#FilesFrame').show();$('#files_menu').addClass('selected'); TagsSidebarFrame.m_currentPage = 0; FolderSidebarFrame.m_currentPage = 0; FilesFrame.repaint();break;
+            
             case ssMain.VIEW_GALLERIES:$('#GalleriesFrame').show();$('#gallery_menu').addClass('selected');GalleriesFrame.repaint();break;
             case ssMain.VIEW_STATS:$('#StatsFrame').show();$('#stats_menu').addClass('selected');StatsFrame.repaint();break;            
             case ssMain.VIEW_SETTINGS: $('#SettingsFrame').show();$('#settings_menu').addClass('selected');SettingsFrame.repaint();break; 

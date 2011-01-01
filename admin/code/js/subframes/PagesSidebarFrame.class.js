@@ -30,9 +30,9 @@ var PagesSidebarFrame = {
         txt += "<div id='pagesSidebarControls' class='sidebar_page_controls'>";        
         txt += "<table border='0'>";
         txt += "    <tr>";
-        txt += "        <td width='33%' align='left'><span class='more_posts_link' id='prev_posts_link' style='padding-left:15px' onclick='PagesSidebarFrame.showPrevPage()' title='Display previous page'>&laquo; prev</span></td>";
-        txt += "        <td width='33%' align='center'><span class='more_posts_pages' id='page_no' style=''>1 of 2</span></td>";                
-        txt += "        <td width='33%' align='right'><span class='more_posts_link' id='next_posts_link' style='padding-right:15px' onclick='PagesSidebarFrame.showNextPage()' title='Display next page'>next &raquo;</span></td>";
+        txt += "        <td width='33%' align='left'><span class='more_posts_link' id='prev_pages_link' style='padding-left:15px' onclick='PagesSidebarFrame.showPrevPage()' title='Display previous page'>&laquo; prev</span></td>";
+        txt += "        <td width='33%' align='center'><span class='more_posts_pages' id='pages_sideframe_page_no' style=''>1 of 2</span></td>";                
+        txt += "        <td width='33%' align='right'><span class='more_posts_link' id='next_pages_link' style='padding-right:15px' onclick='PagesSidebarFrame.showNextPage()' title='Display next page'>next &raquo;</span></td>";
         txt += "    </tr>";
         txt += "</table>";        
         txt += "</div>";
@@ -84,7 +84,7 @@ var PagesSidebarFrame = {
 		
         var start_i = PagesSidebarFrame.m_currentPage * PagesSidebarFrame.m_tagsPerPage;
         var end_i = Math.min(pageList.length, start_i+PagesSidebarFrame.m_tagsPerPage);
-        $('#page_no').html((PagesSidebarFrame.m_currentPage+1) + " of " + PagesSidebarFrame.m_numberPages);
+        $('#pages_sideframe_page_no').html((PagesSidebarFrame.m_currentPage+1) + " of " + PagesSidebarFrame.m_numberPages);
 							
 		var pageNodes = new Array();
 			
@@ -136,14 +136,14 @@ var PagesSidebarFrame = {
 
     showNextPage : function(){
 		
-        $('#prev_posts_link').show();
+        $('#prev_pages_link').show();
         	
         if (PagesSidebarFrame.m_currentPage < PagesSidebarFrame.m_numberPages-1){
             PagesSidebarFrame.m_currentPage += 1;
         }
         
         if (PagesSidebarFrame.m_currentPage == PagesSidebarFrame.m_numberPages-1){
-        	$('#next_posts_link').hide();
+        	$('#next_pages_link').hide();
         }
         
         PagesSidebarFrame.paintPages();
@@ -153,14 +153,14 @@ var PagesSidebarFrame = {
 
     showPrevPage : function(){
 
-        $('#next_posts_link').show();
+        $('#next_pages_link').show();
 
         if (PagesSidebarFrame.m_currentPage > 0){
             PagesSidebarFrame.m_currentPage -= 1;
         }
         
         if (PagesSidebarFrame.m_currentPage == 0){
-        	$('#prev_posts_link').hide();
+        	$('#prev_pages_link').hide();
         }
         
         PagesSidebarFrame.paintPages();

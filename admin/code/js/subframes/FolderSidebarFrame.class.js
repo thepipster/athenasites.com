@@ -17,7 +17,7 @@ var FolderSidebarFrame = {
     m_foldersPerPage : 25,    
     m_currentPage : 0,    
     m_numberPages : 0,
-	
+		
 	// ////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -42,7 +42,7 @@ var FolderSidebarFrame = {
         txt += "<table border='0'>";
         txt += "    <tr>";
         txt += "        <td width='33%' align='left'><span class='more_posts_link' id='prev_posts_link' style='padding-left:15px' onclick='FolderSidebarFrame.showPrevPage()' title='Display previous page'>&laquo; prev</span></td>";
-        txt += "        <td width='33%' align='center'><span class='more_posts_pages' id='page_no' style=''>1 of 2</span></td>";                
+        txt += "        <td width='33%' align='center'><span class='more_posts_pages' id='folders_sideframe_page_no' style=''>1 of 2</span></td>";                
         txt += "        <td width='33%' align='right'><span class='more_posts_link' id='next_posts_link' style='padding-right:15px' onclick='FolderSidebarFrame.showNextPage()' title='Display next page'>next &raquo;</span></td>";
         txt += "    </tr>";
         txt += "</table>";        
@@ -60,19 +60,20 @@ var FolderSidebarFrame = {
 		
 		var h = 0;
 		var offset = 110;
+		var lineht = 30;
 		
 		switch(ssMain.view){			
 		
 			case ssMain.VIEW_GALLERIES : 
-				h = ($(window).height()/3) - offset;				 
+				h = ($(window).height()/2) - offset - 3*lineht; 				 
 				break;
 				
 			case ssMain.VIEW_FILES : 
-				h = $(window).height() - offset; 
+				h = $(window).height() - offset - 3*lineht; 
 				break;
 		}
-		    		    	    		
-		FolderSidebarFrame.m_foldersPerPage = Math.floor(h / 24);		
+		    	
+		FolderSidebarFrame.m_foldersPerPage = Math.floor(h / lineht);		
         FolderSidebarFrame.m_numberPages = Math.ceil(DataStore.m_folderList.length / FolderSidebarFrame.m_foldersPerPage);
         
         if (FolderSidebarFrame.m_numberPages == 1){
@@ -81,8 +82,8 @@ var FolderSidebarFrame = {
         
         		
 		FolderSidebarFrame.paintFolders();		
-        $('#apollo_tag_list').height(h);
-		
+        $('#apollo_folder_list').height(h);
+        		
 		$(targetDiv).disableSelection();
 		$(targetDiv).noContext();
 		
@@ -96,7 +97,7 @@ var FolderSidebarFrame = {
 				
         var start_i = FolderSidebarFrame.m_currentPage * FolderSidebarFrame.m_foldersPerPage;
         var end_i = Math.min(folderList.length, start_i+FolderSidebarFrame.m_foldersPerPage);
-        $('#page_no').html((FolderSidebarFrame.m_currentPage+1) + " of " + FolderSidebarFrame.m_numberPages);
+        $('#folders_sideframe_page_no').html((FolderSidebarFrame.m_currentPage+1) + " of " + FolderSidebarFrame.m_numberPages);
 				
 		var txt = "";
 		
@@ -127,14 +128,7 @@ var FolderSidebarFrame = {
 		}
 		
 		$('#apollo_folder_list').html(txt);
-		/*
-		$('.apollo_folder').droppable({
-				drop: FolderSidebarFrame.onAddToFolder,
-				over: function(ev, ui) {$(this).addClass( 'apollo_folder_droppable_hover' );},
-				out: function(ev, ui) {$(this).removeClass( 'apollo_folder_droppable_hover' );}
-			});			
 
-		*/
 				
 		$(".folder").rightClick( function(e) {FolderSidebarFrame.onRightClickFolder(e, this);});
 

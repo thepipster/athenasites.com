@@ -29,12 +29,12 @@ var GalleriesSidebarFrame = {
 
 		txt += "<div id='apollo_page_list'></div>";
 		
-        txt += "<div id='pagesSidebarControls' class='sidebar_page_controls'>";        
+        txt += "<div id='galPagesSidebarControls' class='sidebar_page_controls'>";        
         txt += "<table border='0'>";
         txt += "    <tr>";
-        txt += "        <td width='33%' align='left'><span class='more_posts_link' id='prev_posts_link' style='padding-left:15px' onclick='GalleriesSidebarFrame.showPrevPage()' title='Display previous page'>&laquo; prev</span></td>";
-        txt += "        <td width='33%' align='center'><span class='more_posts_pages' id='page_no' style=''>1 of 2</span></td>";                
-        txt += "        <td width='33%' align='right'><span class='more_posts_link' id='next_posts_link' style='padding-right:15px' onclick='GalleriesSidebarFrame.showNextPage()' title='Display next page'>next &raquo;</span></td>";
+        txt += "        <td width='33%' align='left'><span class='more_posts_link' id='prev_pages_link' style='padding-left:15px' onclick='GalleriesSidebarFrame.showPrevPage()' title='Display previous page'>&laquo; prev</span></td>";
+        txt += "        <td width='33%' align='center'><span class='more_posts_pages' id='galpages_sideframe_page_no' style=''>1 of 2</span></td>";                
+        txt += "        <td width='33%' align='right'><span class='more_posts_link' id='next_pages_link' style='padding-right:15px' onclick='GalleriesSidebarFrame.showNextPage()' title='Display next page'>next &raquo;</span></td>";
         txt += "    </tr>";
         txt += "</table>";        
         txt += "</div>";
@@ -49,6 +49,8 @@ var GalleriesSidebarFrame = {
 		txt += "</ul>";
 		*/
 		
+		$(targetDiv).html(txt);
+
 		GalleriesSidebarFrame.m_pageList = GalleriesSidebarFrame.getPagesWithGalleries();
 		
 		var offset = 110;
@@ -56,13 +58,10 @@ var GalleriesSidebarFrame = {
 				    		    	    		
 		GalleriesSidebarFrame.m_tagsPerPage = Math.floor(h / 25);		
         GalleriesSidebarFrame.m_numberPages = Math.ceil(GalleriesSidebarFrame.m_pageList.length / GalleriesSidebarFrame.m_tagsPerPage);
-                        
+                                                        				
         if (GalleriesSidebarFrame.m_numberPages == 1){
-        	$('#pagesSidebarControls').hide();
+        	$('#galPagesSidebarControls').hide();
         }
-                                
-		
-		$(targetDiv).html(txt);
 		
 		GalleriesSidebarFrame.paintPages();		
 
@@ -105,7 +104,7 @@ var GalleriesSidebarFrame = {
 				
         var start_i = GalleriesSidebarFrame.m_currentPage * GalleriesSidebarFrame.m_tagsPerPage;
         var end_i = Math.min(pageList.length, start_i+GalleriesSidebarFrame.m_tagsPerPage);
-        $('#page_no').html((GalleriesSidebarFrame.m_currentPage+1) + " of " + GalleriesSidebarFrame.m_numberPages);
+        $('#galpages_sideframe_page_no').html((GalleriesSidebarFrame.m_currentPage+1) + " of " + GalleriesSidebarFrame.m_numberPages);
 				
 		var txt = "";		
 				
@@ -135,14 +134,14 @@ var GalleriesSidebarFrame = {
 
     showNextPage : function(){
 		
-        $('#prev_posts_link').show();
+        $('#prev_pages_link').show();
         	
         if (GalleriesSidebarFrame.m_currentPage < GalleriesSidebarFrame.m_numberPages-1){
             GalleriesSidebarFrame.m_currentPage += 1;
         }
         
         if (GalleriesSidebarFrame.m_currentPage == GalleriesSidebarFrame.m_numberPages-1){
-        	$('#next_posts_link').hide();
+        	$('#next_pages_link').hide();
         }
         
         GalleriesSidebarFrame.paintPages();
@@ -152,14 +151,14 @@ var GalleriesSidebarFrame = {
 
     showPrevPage : function(){
 
-        $('#next_posts_link').show();
+        $('#next_pages_link').show();
 
         if (GalleriesSidebarFrame.m_currentPage > 0){
             GalleriesSidebarFrame.m_currentPage -= 1;
         }
         
         if (GalleriesSidebarFrame.m_currentPage == 0){
-        	$('#prev_posts_link').hide();
+        	$('#prev_pages_link').hide();
         }
         
         GalleriesSidebarFrame.paintPages();

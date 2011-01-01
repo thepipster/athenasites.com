@@ -24,9 +24,9 @@ var TagsSidebarFrame = {
         txt += "<div id='tagPageControls' class='sidebar_page_controls'>";        
         txt += "<table border='0'>";
         txt += "    <tr>";
-        txt += "        <td width='33%' align='left'><span class='more_posts_link' id='prev_posts_link' style='padding-left:15px' onclick='TagsSidebarFrame.showPrevPage()' title='Display previous page'>&laquo; prev</span></td>";
-        txt += "        <td width='33%' align='center'><span class='more_posts_pages' id='page_no' style=''>1 of 2</span></td>";                
-        txt += "        <td width='33%' align='right'><span class='more_posts_link' id='next_posts_link' style='padding-right:15px' onclick='TagsSidebarFrame.showNextPage()' title='Display next page'>next &raquo;</span></td>";
+        txt += "        <td width='33%' align='left'><span class='more_posts_link' id='prev_tags_page_link' style='padding-left:15px' onclick='TagsSidebarFrame.showPrevPage()' title='Display previous page'>&laquo; prev</span></td>";
+        txt += "        <td width='33%' align='center'><span class='more_posts_pages' id='tags_sideframe_page_no' style=''>1 of 2</span></td>";                
+        txt += "        <td width='33%' align='right'><span class='more_posts_link' id='next_tags_page_link' style='padding-right:15px' onclick='TagsSidebarFrame.showNextPage()' title='Display next page'>next &raquo;</span></td>";
         txt += "    </tr>";
         txt += "</table>";        
         txt += "</div>";
@@ -82,7 +82,7 @@ var TagsSidebarFrame = {
 		
         var start_i = TagsSidebarFrame.m_currentPage * TagsSidebarFrame.m_tagsPerPage;
         var end_i = Math.min(tagList.length, start_i+TagsSidebarFrame.m_tagsPerPage);
-        $('#page_no').html((TagsSidebarFrame.m_currentPage+1) + " of " + TagsSidebarFrame.m_numberPages);
+        $('#tags_sideframe_page_no').html((TagsSidebarFrame.m_currentPage+1) + " of " + TagsSidebarFrame.m_numberPages);
 		
 		var txt = "";
 
@@ -120,14 +120,14 @@ var TagsSidebarFrame = {
 
     showNextPage : function(){
 		
-        $('#prev_posts_link').show();
+        $('#prev_tags_page_link').show();
         	
         if (TagsSidebarFrame.m_currentPage < TagsSidebarFrame.m_numberPages-1){
             TagsSidebarFrame.m_currentPage += 1;
         }
         
         if (TagsSidebarFrame.m_currentPage == TagsSidebarFrame.m_numberPages-1){
-        	$('#next_posts_link').hide();
+        	$('#next_tags_page_link').hide();
         }
         
         TagsSidebarFrame.paintTags();
@@ -137,14 +137,14 @@ var TagsSidebarFrame = {
 
     showPrevPage : function(){
 
-        $('#next_posts_link').show();
+        $('#next_tags_page_link').show();
 
         if (TagsSidebarFrame.m_currentPage > 0){
             TagsSidebarFrame.m_currentPage -= 1;
         }
         
         if (TagsSidebarFrame.m_currentPage == 0){
-        	$('#prev_posts_link').hide();
+        	$('#prev_tags_page_link').hide();
         }
         
         TagsSidebarFrame.paintTags();
