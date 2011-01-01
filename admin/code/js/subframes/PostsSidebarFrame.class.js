@@ -203,6 +203,8 @@ var PostsSidebarFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 		
     onSelectPost : function(post_id){
+    	// Store the current content first!
+		PostsFrame.onChange();		
         DataStore.m_currentPostID = parseInt(post_id);
         PostsFrame.repaint();
         PostsSidebarFrame.paintPosts();

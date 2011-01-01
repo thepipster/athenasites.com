@@ -297,6 +297,8 @@ var PagesSidebarFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 		
     onSelectPage : function(page_id){
+    	// Store the current content first!
+		PagesFrame.onChange();		
         DataStore.m_currentPageID = parseInt(page_id);
         PagesFrame.repaint();
         PagesSidebarFrame.repaint();

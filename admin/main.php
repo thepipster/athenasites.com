@@ -2,7 +2,6 @@
 require_once("code/php/setup.php");
 
 if (!SecurityUtils::isLoggedIn()) {
-//	header("Location: http://".$_SERVER['HTTP_HOST']."/admin/index.html");
     SecurityUtils::logOut();
     header("Location: index.php");
 }
@@ -10,7 +9,7 @@ if (!SecurityUtils::isLoggedIn()) {
 $user_id = SecurityUtils::getCurrentUserID();
 $user_level = SecurityUtils::getCurrentUserLevel();
 $user = UserTable::getUser($user_id);
-//Logger::dump($user);
+
 // Get the site id's for this user
 // If this is a super-user, then just get all the site id's
 if ($user_level == 1) {
@@ -76,10 +75,11 @@ Logger::debug("$domain has site_id = $current_site_id");
         <link rel="shortcut icon" href="favicon.ico">
         <![endif]-->
 
-        <!-- Load styles //////////////////////////////////////////////////////////////////// -->
-        <!--
-        <link rel="stylesheet" href="css/SimpleScrum.css" type="text/css" />
-        -->
+        <!-- PRODUCTION INCLUDES /////////////////////////////////////////////////////////// -->
+
+
+        <!-- DEV INCLUDES /////////////////////////////////////////////////////////// -->
+
 
         <!-- Load styles //////////////////////////////////////////////////////////////////// -->
 
@@ -113,46 +113,43 @@ Logger::debug("$domain has site_id = $current_site_id");
 
         <!-- Javascript includes /////////////////////////////////////////////////////////// -->
 
-        <!-- PRODUCTION INCLUDES /////////////////////////////////////////////////////////// -->
-
-        <!-- DEV INCLUDES /////////////////////////////////////////////////////////// -->
-
-
-        <!-- jQuery and plugins -->
-
         <!--
         Apollo Sites Google API Key: 
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
         -->
-        <script type="text/javascript" src="code/js/3rdparty/jquery-1.4.2.min.js"></script>
-        <script type="text/javascript" src="code/js/3rdparty/jquery-ui/jquery-ui-1.8.4.custom.min.js"></script>
+        <script src="code/js/3rdparty/jquery-1.4.2.min.js" type="text/javascript"></script>
+        <script src="code/js/3rdparty/jquery-ui/jquery-ui-1.8.4.custom.min.js" type="text/javascript"></script>
 
                 
-        <script type="text/javascript" src="code/js/3rdparty/jquery.validate.min.js"></script>
-        <script type="text/javascript" src="code/js/3rdparty/jquery.typing-0.2.0.min.js"></script><!-- libray to allow us to know when a user has stopped typing! See http://narf.pl/jquery-typing/ -->
-        <script type="text/javascript" src="code/js/3rdparty/jquery.json-2.2.js"></script>
+        <script src="code/js/3rdparty/jquery.validate.min.js" type="text/javascript"></script>
+        <script src="code/js/3rdparty/jquery.typing-0.2.0.min.js" type="text/javascript"></script><!-- libray to allow us to know when a user has stopped typing! See http://narf.pl/jquery-typing/ -->
+        <script src="code/js/3rdparty/jquery.json-2.2.js" type="text/javascript" type="text/javascript"></script>
 
-        <script type="text/javascript" src="code/js/3rdparty/flot/jquery.flot.min.js"></script>
-        <script type="text/javascript" src="code/js/3rdparty/flot/jquery.flot.crosshair.js"></script>
-        <script type="text/javascript" src="code/js/3rdparty/jScrollPane-1.2.3.min.js"></script>
+		<!--[if IE]><script src="code/js/3rdparty/flot/excanvas.min.js" type="text/javascript"></script><![endif]-->  
+        <script src="code/js/3rdparty/flot/jquery.flot.min.js" type="text/javascript"></script>
+        <script src="code/js/3rdparty/flot/jquery.flot.crosshair.js" type="text/javascript"></script>
+        <script src="code/js/3rdparty/jScrollPane-1.2.3.min.js" type="text/javascript"></script>
+        
         <!--
         <script type="text/javascript" src="code/js/3rdparty/jquery.progressbar/js/jquery.progressbar.min.js"></script>
         -->
-        <script type="text/javascript" src="code/js/3rdparty/date.js"></script>
-        <script type="text/javascript" src="code/js/3rdparty/jquery.datePicker.js"></script>
-        <script type="text/javascript" src="code/js/3rdparty/jquery.advancedClick.js"></script>
+        <script src="code/js/3rdparty/date.js" type="text/javascript" ></script>
+        <script src="code/js/3rdparty/jquery.datePicker.js" type="text/javascript"></script>
+        <script src="code/js/3rdparty/jquery.advancedClick.js" type="text/javascript"></script>
 <!--
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
 -->
-        <script type="text/javascript" src="code/js/3rdparty/swfobject.js"></script>
-        <script type="text/javascript" src="code/js/3rdparty/SWFUpload/swfupload.js"></script>
-        <script type="text/javascript" src="code/js/3rdparty/SWFUpload/plugins/swfupload.queue.js"></script>
-
+        <script src="code/js/3rdparty/swfobject.js" type="text/javascript"></script>
+        <script src="code/js/3rdparty/SWFUpload/swfupload.js" type="text/javascript"></script>
+        <script src="code/js/3rdparty/SWFUpload/plugins/swfupload.queue.js" type="text/javascript"></script>
         <script src="code/js/3rdparty/date.format.js" type="text/javascript"></script>
 
         <!-- InnovaStudio -->
-        <script type="text/javascript" src="code/3rdparty/InnovaStudio/scripts/innovaeditor.js"></script>
+        <script src="code/3rdparty/InnovaStudio/scripts/innovaeditor.js" type="text/javascript"></script>
+
+        <!-- Color Picker -->
+        <script src="code/colorpicker/js/colorpicker.js" type="text/javascript"></script>
 
         <!-- Utils -->
         <script src="code/js/defines.js" type="text/javascript"></script>
@@ -182,7 +179,6 @@ Logger::debug("$domain has site_id = $current_site_id");
         <script src="code/js/dialogs/BloggerImporter.class.js" type="text/javascript"></script>
         <script src="code/js/dialogs/CommentsEditDialog.class.js" type="text/javascript"></script>
         <script src="code/js/dialogs/AccountDialog.class.js" type="text/javascript"></script>
-        <script src="code/colorpicker/js/colorpicker.js" type="text/javascript"></script>
 
         <!-- Sub-Frame Displays -->
         <script src="code/js/subframes/FolderSidebarFrame.class.js" type="text/javascript"></script>

@@ -221,7 +221,7 @@ if(jQuery) (function(){
 				
 			});
 			return jQuery(this);
-		},			
+		}		
 	});
 	
 })(jQuery);	

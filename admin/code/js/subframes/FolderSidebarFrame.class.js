@@ -18,6 +18,9 @@ var FolderSidebarFrame = {
     m_currentPage : 0,    
     m_numberPages : 0,
 		
+	/** Number of hard coded system folders */	
+	m_noSystemFolders : 2,
+	
 	// ////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -29,12 +32,6 @@ var FolderSidebarFrame = {
 
 		// Hard code 'switch to tag view' link		
 		txt += "<div onclick=\"SidebarFrame.showTags()\" class='folder droppable_folder' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/tag_icon_blue_24x24.png'><span class='folder_name'>Switch to tag view</span></div>";
-
-		txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('0')\" class='folder_filter' id='folder_0' title='Select to display all of your images'><img class='folder_fav_icon' src='images/folder_favorites.png'><span class='folder_fav_name'>Show All</span></div>";
-		txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('1')\" class='folder_filter droppable_folder' id='folder_1' title='Select to display all unassigned files (files that have not been added to a folder'><img class='folder_fav_icon' src='images/folder_favorites.png'><span class='folder_fav_name'>Unassigned Files</span></div>";
-		//txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('4')\" class='folder_filter' id='folder_4' title='Select to display all files uploaded in the last hour'><img class='folder_fav_icon' src='images/folder_favorites.png'><span class='folder_fav_name'>Added in last hour</span></div>";
-		//txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('2')\" class='folder_filter' id='folder_2' title='Select to display all files uploaded in the last 24 hours'><img class='folder_fav_icon' src='images/folder_favorites.png'><span class='folder_fav_name'>Added in last 24 hours</span></div>";
-		//txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('3')\" class='folder_filter' id='folder_3' title='Select to display all files uploaded in the last 7 days'><img class='folder_fav_icon' src='images/folder_favorites'><span class='folder_fav_name'>Added in last 7 days</span></div>";						
 					
 		txt += "<div id='apollo_folder_list'></div>";
 				
@@ -65,15 +62,16 @@ var FolderSidebarFrame = {
 		switch(ssMain.view){			
 		
 			case ssMain.VIEW_GALLERIES : 
-				h = ($(window).height()/2) - offset - 3*lineht; 				 
+				h = ($(window).height()/2) - offset; 				 
 				break;
 				
 			case ssMain.VIEW_FILES : 
-				h = $(window).height() - offset - 3*lineht; 
+				h = $(window).height() - offset; 
 				break;
 		}
 		    	
 		FolderSidebarFrame.m_foldersPerPage = Math.floor(h / lineht);		
+//        FolderSidebarFrame.m_numberPages = Math.ceil( (DataStore.m_folderList.length + FolderSidebarFrame.m_noSystemFolders) / FolderSidebarFrame.m_foldersPerPage);
         FolderSidebarFrame.m_numberPages = Math.ceil(DataStore.m_folderList.length / FolderSidebarFrame.m_foldersPerPage);
         
         if (FolderSidebarFrame.m_numberPages == 1){
@@ -103,15 +101,45 @@ var FolderSidebarFrame = {
 		
 		// NOTE: Folder id's 0-9 are reserved for system folders, so can safely use these id's here		
 		
-		// Deal with hard-coded 'faves' folders....		
-		for (var i=0; i<5; i++){
-			if (DataStore.m_currentFolderID == i){
-				$('#folder_'+i + " .folder_fav_name").addClass('selected');
+		// Deal with hard-coded 'faves' folders....	
+		
+		if (FolderSidebarFrame.m_currentPage == 0){
+		
+			var help_text = "";
+			var name = "";
+				
+			for (var i=0; i<FolderSidebarFrame.m_noSystemFolders; i++){
+			
+				switch(i){
+					case 0: help_text = "Select to display all of your images";
+					case 1: help_text = "Select to display all unassigned files (files that have not been added to a folder";
+					case 2: help_text = "Select to display all files uploaded in the last hour";
+					case 3: help_text = "Select to display all files uploaded in the last 24 hours";
+					case 4: help_text = "Select to display all files uploaded in the last 7 days";
+				}
+				
+				switch(i){
+					case 0: name = "Show All";
+					case 1: name = "Unassigned Files";
+					case 2: name = "Show Last Hour";
+					case 3: name = "Show Last 24 Hours";
+					case 4: name = "Show Last 7 Days";
+				}			
+				
+			
+				if (DataStore.m_currentFolderID == i){
+					txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder("+i+")\" class='folder_filter' id='folder_0' title='"+help_text+"'><img class='folder_fav_icon' src='images/folder_favorites.png'><span class='folder_fav_name selected'>"+name+"</span></div>";
+				}
+				else {
+					txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder("+i+")\" class='folder_filter' id='folder_0' title='"+help_text+"'><img class='folder_fav_icon' src='images/folder_favorites.png'><span class='folder_fav_name'>"+name+"</span></div>";
+				}		
+				
 			}
-			else {
-				$('#folder_'+i + " .folder_fav_name").removeClass('selected');
-			}		
+			
+			start_i += FolderSidebarFrame.m_noSystemFolders;
 		}
+		
+		// Now deal with the user's folders...
 		
 		for (var i=start_i; i<end_i; i++){
 

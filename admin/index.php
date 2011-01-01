@@ -68,9 +68,13 @@ require_once('themes/ApolloSites/header.php');
 			</table>				
 				
 			<br/>
-			<div align='center'>
+			<div align='center'>				
 				<input type="submit" value="Login" onclick='ssLogin.onLogin()'>
 				<br/>
+				<div class='browser_info'>During our beta period, we recommend using Firefox 3+</div>
+				<!--
+				<div class='browser_info'>Best viewed in Firefox 3+, Internet Explorer 7+, Chrome 8+ or Safari 5+</div>
+				-->
 				<div class='stats'>&nbsp;</div>
 			</div>	
 				

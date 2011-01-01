@@ -13,7 +13,7 @@ var ssMain = {
     VIEW_STATS : 6,
     VIEW_SETTINGS : 7,
 
-    view : 5,
+    view : 1,
 
     pageTracker : '',
 
@@ -209,8 +209,8 @@ var ssMain = {
 				
 		// Save page content...		
         switch(oldPage){
-            case ssMain.VIEW_PAGES : PagesFrame.onChange();break;
-            case ssMain.VIEW_POSTS : PostsFrame.onChange();break;
+            case ssMain.VIEW_PAGES : PagesFrame.onChange(); break;
+            case ssMain.VIEW_POSTS : PostsFrame.onChange(); break;
             case ssMain.VIEW_FILES: FilesFrame.onImageEditorChange(); break;
             case ssMain.VIEW_DASHBOARD:
             case ssMain.VIEW_GALLERIES:
