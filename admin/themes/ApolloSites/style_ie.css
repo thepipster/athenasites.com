@@ -1,0 +1,6 @@
+/**
+* Hacks for IE (ugh, we all hate IE)
+*/
+#footerBarWrapper {
+	padding-top: 10px;
+}

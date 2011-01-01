@@ -44,12 +44,15 @@ a img { border: none; }
 }
 
 #contentsWrapper {
-	margin-top: 80px;
+	position: relative;
+	top: 80px;
 	padding-top: 30px;
 	width: 100%;
 	background-color: #fefffe;
 	min-height: 500px;
-	height: 70%;		
+	height: 70%;	
+	display: block;
+	clear: both;
 	/*
 	background-image: url('images/background.png');
 	background-position: left;
@@ -58,6 +61,8 @@ a img { border: none; }
 }
 
 #footerBarWrapper {
+	position: relative;
+	top: 80px;
 	border-color: #b4b4bc;
 	border-style: solid;
 	border-left-width: 0px;

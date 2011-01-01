@@ -31,6 +31,11 @@ PageManager::doHeader();
 	<!-- Style sheets //////////////////////////////////////////////////////////// -->
 
 	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>/style.css" type="text/css" media="screen" />
+
+	<!--[if IE]>
+	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>/style_ie.css" type="text/css" media="screen" />
+	<![endif]-->
+	
 	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>/css/coda-slider-2.0.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>/css/login.css" type="text/css" media="screen" />
 

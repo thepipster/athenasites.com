@@ -7,17 +7,6 @@
 
 ?>
 
-<script type="text/javascript">
-
-	apolloMiniGallery.preInit();		
-	<?php
-		if (isset($noflash) && $noflash == 1){
-			echo 'apolloMiniGallery.hasFlash = false;';
-		}
-	?>
-
-</script>
-
 <div id="page_contents" align="center">
 
 		<table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%" >
@@ -68,17 +57,3 @@
 		</table>
 					
 </div>
-
-<script type="text/javascript">
-
-	apolloMiniGallery.init({
-		swf:"<?= PageManager::$theme_url_root; ?>/flash/homeGal.swf", 
-		xml:"<?= $xml_url?>",
-		div: 'miniGallery',
-		width: 1350,
-		height: 800,
-		minWidth: 800,
-		maxHeight: 800
-	});
-
-</script>
