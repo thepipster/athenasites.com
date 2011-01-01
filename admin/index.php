@@ -59,11 +59,11 @@ require_once('themes/ApolloSites/header.php');
 			<table width="90%" border="0">
 				<tr>
 					<td align="right">Email:</td>
-					<td><input type='text' name='email' id='email' value='' class="required email"/></td>
+					<td><input class='input_field' type='text' name='email' id='email' value='' class="required email"/></td>
 				</tr>
 				<tr>
 					<td align="right">Password:</td>
-					<td><input type='password' name='password' id='password' value='' class="required"/></td>
+					<td><input class='input_field' type='password' name='password' id='password' value='' class="required"/></td>
 				</tr>
 			</table>				
 				

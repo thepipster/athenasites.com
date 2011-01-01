@@ -36,6 +36,8 @@ global $apollo_root_url;
 				<td width="33%">
 					<h3>Community</h3>
 					<p><a href='<?=$apollo_root_url?>/#'>Community wiki</a><span class='coming_soon'>(coming soon)</span></p>
+					<h3>Custom Services</h3>
+					<p><a href='<?=$apollo_root_url?>/#'>Want us to convert your existing site?</a><span class='coming_soon'>(coming soon)</span></p>
 				</td>
 			</tr>
 		</table>
