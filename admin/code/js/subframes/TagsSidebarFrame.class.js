@@ -21,11 +21,11 @@ var TagsSidebarFrame = {
 
 		txt += "<div id='apollo_tag_list'></div>";
 															
-        txt += "<div class='sidebar_page_controls'>";        
+        txt += "<div id='tagPageControls' class='sidebar_page_controls'>";        
         txt += "<table border='0'>";
         txt += "    <tr>";
         txt += "        <td width='33%' align='left'><span class='more_posts_link' id='prev_posts_link' style='padding-left:15px' onclick='TagsSidebarFrame.showPrevPage()' title='Display previous page'>&laquo; prev</span></td>";
-        txt += "        <td width='33%' align='center'><span class='more_posts_link' id='page_no' style=''>Page 1 of 2</span></td>";                
+        txt += "        <td width='33%' align='center'><span class='more_posts_pages' id='page_no' style=''>1 of 2</span></td>";                
         txt += "        <td width='33%' align='right'><span class='more_posts_link' id='next_posts_link' style='padding-right:15px' onclick='TagsSidebarFrame.showNextPage()' title='Display next page'>next &raquo;</span></td>";
         txt += "    </tr>";
         txt += "</table>";        
@@ -42,7 +42,7 @@ var TagsSidebarFrame = {
 		$(targetDiv).html(txt);
 		
 		var h = 0;
-		var offset = 120;
+		var offset = 110;
 		
 		switch(ssMain.view){			
 		
@@ -58,9 +58,12 @@ var TagsSidebarFrame = {
 		TagsSidebarFrame.m_tagsPerPage = Math.floor(h / 24);		
         TagsSidebarFrame.m_numberPages = Math.ceil(DataStore.m_mediaTags.length / TagsSidebarFrame.m_tagsPerPage);
         
-        $('#apollo_tag_list').height(h);
-		
+        if (PagesSidebarFrame.m_numberPages == 1){
+        	$('#tagPageControls').hide();
+        }
+        
 		TagsSidebarFrame.paintTags();		
+        $('#apollo_tag_list').height(h);
 		
 		$(targetDiv).disableSelection();
 		$(targetDiv).noContext();
@@ -79,12 +82,12 @@ var TagsSidebarFrame = {
 		
         var start_i = TagsSidebarFrame.m_currentPage * TagsSidebarFrame.m_tagsPerPage;
         var end_i = Math.min(tagList.length, start_i+TagsSidebarFrame.m_tagsPerPage);
-        $('#page_no').html("Page " + (TagsSidebarFrame.m_currentPage+1) + " of " + TagsSidebarFrame.m_numberPages);
+        $('#page_no').html((TagsSidebarFrame.m_currentPage+1) + " of " + TagsSidebarFrame.m_numberPages);
 		
 		var txt = "";
 
 		// Hard code a 'switch to folder view' item							
-		txt += "<div onclick=\"SidebarFrame.showFolders()\" class='tag' title='' class='apollo_tag tag_with_menu'><img class='tag_icon' src='images/folder_icon_20x20.png'><span class='switch_to_folder_view_name'>Switch to folder view</span></div>";
+		txt += "<div onclick=\"SidebarFrame.showFolders()\" class='tag' title='' class='apollo_tag tag_with_menu'><img class='tag_icon' src='images/folder_view_select_icon.png'><span class='switch_to_folder_view_name'>Switch to folder view</span></div>";
 							
 		for (var i=start_i; i<end_i; i++){
 

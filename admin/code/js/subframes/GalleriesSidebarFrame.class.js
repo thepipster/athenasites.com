@@ -9,6 +9,13 @@ var GalleriesSidebarFrame = {
 	
 	m_targetDiv : '',
 	
+    /** Number of tags per 'page' */
+    m_tagsPerPage : 25,    
+    m_currentPage : 0,    
+    m_numberPages : 0,
+	
+	m_pageList : '',
+	
 	// ////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -22,6 +29,16 @@ var GalleriesSidebarFrame = {
 
 		txt += "<div id='apollo_page_list'></div>";
 		
+        txt += "<div id='pagesSidebarControls' class='sidebar_page_controls'>";        
+        txt += "<table border='0'>";
+        txt += "    <tr>";
+        txt += "        <td width='33%' align='left'><span class='more_posts_link' id='prev_posts_link' style='padding-left:15px' onclick='GalleriesSidebarFrame.showPrevPage()' title='Display previous page'>&laquo; prev</span></td>";
+        txt += "        <td width='33%' align='center'><span class='more_posts_pages' id='page_no' style=''>1 of 2</span></td>";                
+        txt += "        <td width='33%' align='right'><span class='more_posts_link' id='next_posts_link' style='padding-right:15px' onclick='GalleriesSidebarFrame.showNextPage()' title='Display next page'>next &raquo;</span></td>";
+        txt += "    </tr>";
+        txt += "</table>";        
+        txt += "</div>";
+		
 		/*
 		// Right click pop-up menu....
 		txt += "<ul id='pagesMenu' class='rightClickMenu'>";
@@ -31,10 +48,25 @@ var GalleriesSidebarFrame = {
 		txt += "	<li class='quit separator'><a href='#quit'>Cancel</a></li>";
 		txt += "</ul>";
 		*/
-
+		
+		GalleriesSidebarFrame.m_pageList = GalleriesSidebarFrame.getPagesWithGalleries();
+		
+		var offset = 110;
+		var h = ($(window).height() - offset)/2;				 
+				    		    	    		
+		GalleriesSidebarFrame.m_tagsPerPage = Math.floor(h / 25);		
+        GalleriesSidebarFrame.m_numberPages = Math.ceil(GalleriesSidebarFrame.m_pageList.length / GalleriesSidebarFrame.m_tagsPerPage);
+                        
+        if (GalleriesSidebarFrame.m_numberPages == 1){
+        	$('#pagesSidebarControls').hide();
+        }
+                                
+		
 		$(targetDiv).html(txt);
 		
 		GalleriesSidebarFrame.paintPages();		
+
+        $('#apollo_page_list').height(h);
 		
 		$(targetDiv).disableSelection();
 		$(targetDiv).noContext();
@@ -46,30 +78,42 @@ var GalleriesSidebarFrame = {
 	repaint : function(){
 		GalleriesSidebarFrame.paint(GalleriesSidebarFrame.m_targetDiv);
 	},
-	
+
+	// ////////////////////////////////////////////////////////////////////////////
+
+	getPagesWithGalleries : function(){
+
+		var pageList = new Array();
+		
+		for (var i=0; i<DataStore.m_pageList.length; i++){
+			
+			var hasGallery = DataStore.isGalleryPage(DataStore.m_pageList[i].id);
+			
+			if (hasGallery){
+				pageList.push(DataStore.m_pageList[i]);
+			}
+		}
+		
+		return pageList;
+	},
+		
 	// ////////////////////////////////////////////////////////////////////////////
 	
 	paintPages : function(){
 		
-		var pageList = DataStore.m_pageList;
+		var pageList = GalleriesSidebarFrame.m_pageList;
+				
+        var start_i = GalleriesSidebarFrame.m_currentPage * GalleriesSidebarFrame.m_tagsPerPage;
+        var end_i = Math.min(pageList.length, start_i+GalleriesSidebarFrame.m_tagsPerPage);
+        $('#page_no').html((GalleriesSidebarFrame.m_currentPage+1) + " of " + GalleriesSidebarFrame.m_numberPages);
 				
 		var txt = "";		
-		
-		var noGalPages = 0;
-		
-		// Get number of pages with galleries
-		for (var i=0; i<pageList.length; i++){
-			var hasGallery = DataStore.isGalleryPage(pageList[i].id);
-			if (hasGallery){
-				noGalPages++;
-			}
-		}
 				
-		if (noGalPages == 0){
+		if (pageList.length == 0){
 			txt += "<div style='padding-left:10px;color:#444444;'>You have no pages using a gallery template yet</div>";
 		}
 		else {
-			for (var i=0; i<pageList.length; i++){
+			for (var i=start_i; i<end_i; i++){
 				
 				var hasGallery = DataStore.isGalleryPage(pageList[i].id);
 				
@@ -78,9 +122,7 @@ var GalleriesSidebarFrame = {
 				}
 			}
 		}
-				
-		
-					
+											
 		$('#apollo_page_list').html(txt);
 		
 		//$(".folder").rightClick( function(e) {GalleriesSidebarFrame.onRightClickFolder(e, this);});
@@ -89,6 +131,40 @@ var GalleriesSidebarFrame = {
 				
 	},
 
+    // ////////////////////////////////////////////////////////////////////////////
+
+    showNextPage : function(){
+		
+        $('#prev_posts_link').show();
+        	
+        if (GalleriesSidebarFrame.m_currentPage < GalleriesSidebarFrame.m_numberPages-1){
+            GalleriesSidebarFrame.m_currentPage += 1;
+        }
+        
+        if (GalleriesSidebarFrame.m_currentPage == GalleriesSidebarFrame.m_numberPages-1){
+        	$('#next_posts_link').hide();
+        }
+        
+        GalleriesSidebarFrame.paintPages();
+    },
+
+    // ////////////////////////////////////////////////////////////////////////////
+
+    showPrevPage : function(){
+
+        $('#next_posts_link').show();
+
+        if (GalleriesSidebarFrame.m_currentPage > 0){
+            GalleriesSidebarFrame.m_currentPage -= 1;
+        }
+        
+        if (GalleriesSidebarFrame.m_currentPage == 0){
+        	$('#prev_posts_link').hide();
+        }
+        
+        GalleriesSidebarFrame.paintPages();
+    },
+    
 	// ////////////////////////////////////////////////////////////////////////////
 
 	getPageHtml : function(page_id, page_title, page_status, page_depth){
@@ -119,20 +195,19 @@ var GalleriesSidebarFrame = {
         
 		page_depth = 0;
 		
+		
+        txt += "<div onclick=\"GalleriesSidebarFrame.onSelectPage('"+page_id+"')\" class='page page_depth_"+page_depth+"' id='page_"+page_id+"' title=''>";
+        txt += "    <img class='page_icon' src='images/web_page2.png'>";
+        txt += "    <span class='page_name "+status_class+" "+selected+"'>"+page_title+"</span>";
+        txt += "</div>";
+
+/*		
         txt += "<div onclick=\"GalleriesSidebarFrame.onSelectPage('"+page_id+"')\" class='page page_depth_"+page_depth+"' id='page_"+page_id+"' title=''>";
         //txt += "    <img class='node_icon' src='"+nodeIcon+"'>";
         txt += "    <img class='page_icon' src='"+icon+"'>";
         txt += "    <span class='page_name "+status_class+" "+selected+"'>"+page_title+"</span>";
         txt += "</div>";
-        				
-/*												
-		if (page_id == DataStore.m_currentPageID){			
-			txt += "<div onclick=\"GalleriesSidebarFrame.onSelectPage('"+page_id+"')\" class='page page_depth_"+page_depth+"' id='page_"+page_id+"' title=''><img class='page_icon' src='"+icon+"'><span class='page_name selected'>"+page_title+"</span></div>";
-		}
-		else {
-			txt += "<div onclick=\"GalleriesSidebarFrame.onSelectPage('"+page_id+"')\" class='page page_depth_"+page_depth+"' id='page_"+page_id+"' title=''><img class='page_icon' src='"+icon+"'><span class='page_name'>"+page_title+"</span></div>";
-		}
-*/				
+  */      				
 		return txt;
 	},
 	

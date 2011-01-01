@@ -13,7 +13,7 @@ var ssMain = {
     VIEW_STATS : 6,
     VIEW_SETTINGS : 7,
 
-    view : 3,
+    view : 2,
 
     pageTracker : '',
 

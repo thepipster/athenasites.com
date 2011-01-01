@@ -29,6 +29,11 @@
     color: white;
 }
 
+#SideBar .more_posts_pages {
+    font-size: 9px;
+    color: #4c4c4c;
+}
+
 #SideBar .more_posts_link {
     font-size: 10px;
     color: #00315f;
@@ -188,11 +193,11 @@
     cursor: pointer;
 }
 
-
+/*
 #apollo_page_list {
 	background-color: yellow;
 }
-
+*/
 /* Folder Pop-up context menu /////////////////////////// */
 
 #SideBar .rightClickMenu {

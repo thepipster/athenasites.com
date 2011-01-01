@@ -14,8 +14,6 @@ var PagesSidebarFrame = {
     m_currentPage : 0,    
     m_numberPages : 0,
 	
-	m_height : 0,
-	
     // ////////////////////////////////////////////////////////////////////////////
 	
     /**
@@ -29,11 +27,11 @@ var PagesSidebarFrame = {
 
         txt += "<div id='apollo_page_list'></div>";
 		
-        txt += "<div class='sidebar_page_controls'>";        
+        txt += "<div id='pagesSidebarControls' class='sidebar_page_controls'>";        
         txt += "<table border='0'>";
         txt += "    <tr>";
         txt += "        <td width='33%' align='left'><span class='more_posts_link' id='prev_posts_link' style='padding-left:15px' onclick='PagesSidebarFrame.showPrevPage()' title='Display previous page'>&laquo; prev</span></td>";
-        txt += "        <td width='33%' align='center'><span class='more_posts_link' id='page_no' style=''>Page 1 of 2</span></td>";                
+        txt += "        <td width='33%' align='center'><span class='more_posts_pages' id='page_no' style=''>1 of 2</span></td>";                
         txt += "        <td width='33%' align='right'><span class='more_posts_link' id='next_posts_link' style='padding-right:15px' onclick='PagesSidebarFrame.showNextPage()' title='Display next page'>next &raquo;</span></td>";
         txt += "    </tr>";
         txt += "</table>";        
@@ -50,25 +48,21 @@ var PagesSidebarFrame = {
 		*/
 
 		var offset = 110;
-		
-		switch(ssMain.view){			
-		
-			case ssMain.VIEW_GALLERIES : 
-				PagesSidebarFrame.m_height = ($(window).height()/2) - offset;				 
-				break;
-				
-			case ssMain.VIEW_PAGES : 
-				PagesSidebarFrame.m_height = $(window).height() - offset; 
-				break;
-		}
+		var h = $(window).height() - offset; 
 				    		    	    		
-		PagesSidebarFrame.m_tagsPerPage = Math.floor(PagesSidebarFrame.m_height / 28);		
+		PagesSidebarFrame.m_tagsPerPage = Math.floor(h / 25);		
         PagesSidebarFrame.m_numberPages = Math.ceil(DataStore.m_pageList.length / PagesSidebarFrame.m_tagsPerPage);
-                
+                        
+        if (PagesSidebarFrame.m_numberPages == 1){
+        	$('#pagesSidebarControls').hide();
+        }
+                                
         $(targetDiv).html(txt);
 		
         PagesSidebarFrame.paintPages();
 		
+        $('#apollo_page_list').height(h);
+        
         $(targetDiv).disableSelection();
         $(targetDiv).noContext();
 		
@@ -82,25 +76,23 @@ var PagesSidebarFrame = {
 	
     // ////////////////////////////////////////////////////////////////////////////
 	
+	m_pageNodes : '',
+	
     paintPages : function(){
 		
         var pageList = DataStore.m_pageList;
 		
         var start_i = PagesSidebarFrame.m_currentPage * PagesSidebarFrame.m_tagsPerPage;
         var end_i = Math.min(pageList.length, start_i+PagesSidebarFrame.m_tagsPerPage);
-        $('#page_no').html("Page " + (PagesSidebarFrame.m_currentPage+1) + " of " + PagesSidebarFrame.m_numberPages);
-				
-        var txt = "";
-		var noPainted = 0;	
+        $('#page_no').html((PagesSidebarFrame.m_currentPage+1) + " of " + PagesSidebarFrame.m_numberPages);
+							
+		var pageNodes = new Array();
 			
-		//alert(PagesSidebarFrame.m_tagsPerPage);
-			
-        for (var i=start_i; i<pageList.length; i++){
+        for (var i=0; i<pageList.length; i++){
 									
-            if (noPainted < PagesSidebarFrame.m_tagsPerPage && pageList[i].parent_page_id == 0){
+            if (PagesSidebarFrame.m_tagsPerPage && pageList[i].parent_page_id == 0){
 
-                txt += PagesSidebarFrame.getPageHtml(pageList[i].id, pageList[i].title, pageList[i].status, 0);
-				noPainted++;
+	            pageNodes.push(PagesSidebarFrame.getPageHtml(pageList[i].id, pageList[i].title, pageList[i].status, 0));
 				
                 // Paint children...
 				
@@ -108,16 +100,15 @@ var PagesSidebarFrame = {
 
                     if (pageList[k].parent_page_id == pageList[i].id){
 						
-                        txt += PagesSidebarFrame.getPageHtml(pageList[k].id, pageList[k].title, pageList[k].status, 1);
-						noPainted++;
+                        pageNodes.push(PagesSidebarFrame.getPageHtml(pageList[k].id, pageList[k].title, pageList[k].status, 1));
 						
                         // Paint grand-children....
                         for (var m=0; m<pageList.length; m++){
 
                             if (pageList[m].parent_page_id == pageList[k].id){
-                                txt += PagesSidebarFrame.getPageHtml(pageList[m].id, pageList[m].title, pageList[m].status, 2);
-								noPainted++;
+                                pageNodes.push(PagesSidebarFrame.getPageHtml(pageList[m].id, pageList[m].title, pageList[m].status, 2));
                             }
+                            
                         }
                     }
 					
@@ -127,14 +118,18 @@ var PagesSidebarFrame = {
 							
         }
 		
+		PagesSidebarFrame.m_pageNodes = pageNodes;
+		
+        var txt = "";
+        for (var i=start_i; i<end_i; i++){
+        	txt += pageNodes[i];
+        }
+		
         $('#apollo_page_list').html(txt);
 		
         //$(".folder").rightClick( function(e) {PagesSidebarFrame.onRightClickFolder(e, this);});
 
-        $("#apollo_page_list").disableSelection();
-	
-        $('#apollo_page_list').height(PagesSidebarFrame.m_height);
-				
+        $("#apollo_page_list").disableSelection();					
     },
 
     // ////////////////////////////////////////////////////////////////////////////
@@ -213,11 +208,17 @@ var PagesSidebarFrame = {
     },
 	
     onPageAdded : function(pageObj){
-
-        DataStore.addPage(pageObj);
+        
+        DataStore.addPage(pageObj);        		
+        
+        // Make sure this new page is visible on the side bar                
+        PagesSidebarFrame.m_currentPage = PagesSidebarFrame.m_numberPages-1;
 
         PagesSidebarFrame.onSelectPage(pageObj.id);
+		
     },
+	
+    // ////////////////////////////////////////////////////////////////////////////
 	
     /**
 	* Encode the page slug based on the title
@@ -298,7 +299,7 @@ var PagesSidebarFrame = {
     onSelectPage : function(page_id){
         DataStore.m_currentPageID = parseInt(page_id);
         PagesFrame.repaint();
-        PagesSidebarFrame.paintPages();
+        PagesSidebarFrame.repaint();
     }
 			
 // ////////////////////////////////////////////////////////////////////////////

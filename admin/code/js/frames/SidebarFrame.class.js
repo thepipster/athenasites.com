@@ -46,7 +46,7 @@ var SidebarFrame = {
                     $('#SideBar').html("");
                     SidebarFrame.m_mode = 'Galleries';
                     SidebarFrame.paintGalleries();
-                    SidebarFrame.paintFolders();
+			        SidebarFrame.paintFolders(true);
                 }
                 break;
 			
@@ -108,7 +108,7 @@ var SidebarFrame = {
         $('#SideBar').append(txt);
 
         GalleriesSidebarFrame.paint('#SideBar_Pages');
-		
+				
     },
 
     // ////////////////////////////////////////////////////////////////////////////
@@ -155,19 +155,21 @@ var SidebarFrame = {
 		SidebarFrame.repaint();
 	},
 	
-    paintFolders : function(){
+    paintFolders : function(noHeader){
 			
-        var txt = SidebarFrame.getHeader();
+		var txt = "";
+		
+		
+		if (noHeader != undefined && noHeader){
+			txt = "";
+		}
+		else {
+	        txt = SidebarFrame.getHeader();
+		}	
 		
 		if (!SidebarFrame.m_folderTagMode){	
 	        txt += "<p>Folders";
-	        
-	        //txt += " <span class='add_new_project' onclick='SidebarFrame.showTags()' title=''>&nbsp;(view tags)</span>";
 	        txt += " <span class='add_new_project' onclick='FolderSidebarFrame.addFolder()' title='Add a new folder to help organize your images and other media files'>&nbsp;(add)</span>";
-	        
-	        //txt += " <img src='images/button_plus4_small.png'  class='folder_view_change_icon' height='16px' onclick='FolderSidebarFrame.addFolder()' title='Add a new folder to help organize your images and other media files' />";
-	        //txt += " <img src='images/tag_icon_blue.png'  class='folder_view_change_icon' height='16px' onclick='SidebarFrame.showTags()' title='View your media tags' />";
-	        
 	        txt += "</p>";
 	        txt += "<div id='SideBar_Folders'></div>";						
 	        $('#SideBar').append(txt);
@@ -175,7 +177,6 @@ var SidebarFrame = {
 		}
 		else {
 	        txt += "<p>Tags";
-	        //txt += " <img class='folder_view_change_icon' src='images/folder_small.png' onclick='SidebarFrame.showFolders()' title='View your folders' />";
 	        txt += "</p>";			
 	        txt += "<div id='SideBar_Folders'></div>";						
 	        $('#SideBar').append(txt);

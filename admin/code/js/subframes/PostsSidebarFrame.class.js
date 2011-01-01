@@ -26,19 +26,36 @@ var PostsSidebarFrame = {
         PostsSidebarFrame.m_targetDiv = targetDiv;
 
         var txt = "";
-
+/*
         txt += "<div style='height:20px'>";        
         txt += "<span class='more_posts_link' id='prev_posts_link' style='float:left; padding-left:15px' onclick='PostsSidebarFrame.showOlderPosts()' title='Display older posts'>&laquo; older</span>";
         txt += "<span class='more_posts_link' id='next_posts_link' style='float:right; padding-right:15px' onclick='PostsSidebarFrame.showNewerPosts()' title='Display newer posts'>newer &raquo;</span>";
         txt += "</div>";
-        
+ */              
         txt += "<div id='apollo_post_list'></div>";
+		
+        txt += "<div id='postsPageControls' class='sidebar_page_controls'>";        
+        txt += "<table border='0'>";
+        txt += "    <tr>";
+        txt += "        <td width='33%' align='left'><span class='more_posts_link' id='prev_posts_link' style='padding-left:15px' onclick='PostsSidebarFrame.showOlderPosts()' title='Display older posts'>&laquo; older</span></td>";
+        txt += "        <td width='33%' align='center'><span class='more_posts_pages' id='page_no' style=''>1 of 2</span></td>";                
+        txt += "        <td width='33%' align='right'><span class='more_posts_link' id='next_posts_link' style='padding-right:15px' onclick='PostsSidebarFrame.showNewerPosts()' title='Display newer posts'>newer &raquo;</span></td>";
+        txt += "    </tr>";
+        txt += "</table>";        
+        txt += "</div>";
+		
 		
         $(targetDiv).html(txt);
 		
-    	var h = $(window).height() - 80;		
+    	var h = $(window).height() - 110;		
 		PostsSidebarFrame.m_postsPerPage = Math.floor(h / 30);
         PostsSidebarFrame.m_numberPages = Math.ceil(DataStore.m_postList.length / PostsSidebarFrame.m_postsPerPage);
+		
+        if (PostsSidebarFrame.m_numberPages == 1){
+        	$('#postsPageControls').hide();
+        }
+        
+        $('#apollo_post_list').height(h);
 		
         PostsSidebarFrame.paintPosts();
 		
@@ -69,6 +86,7 @@ var PostsSidebarFrame = {
 
         var start_i = PostsSidebarFrame.m_currentPostPage * PostsSidebarFrame.m_postsPerPage;
         var end_i = Math.min(postList.length, start_i+PostsSidebarFrame.m_postsPerPage);
+        $('#page_no').html((PostsSidebarFrame.m_currentPostPage+1) + " of " + PostsSidebarFrame.m_numberPages);
                 
         for (var i=start_i; i< end_i; i++){
             txt += PostsSidebarFrame.getPostHtml(postList[i].id, postList[i].title, postList[i].status);

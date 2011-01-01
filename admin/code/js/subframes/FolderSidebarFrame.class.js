@@ -13,6 +13,11 @@ var FolderSidebarFrame = {
 	ID_LAST_7_DAYS : 3, // hard-coded folder id for images uploaded in last 7 days
 	ID_LAST_1_HOUR : 4, // hard-coded folder id for images uploaded in last 1 hrs
 	
+    /** Number of tags per 'page' */
+    m_foldersPerPage : 25,    
+    m_currentPage : 0,    
+    m_numberPages : 0,
+	
 	// ////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -32,7 +37,18 @@ var FolderSidebarFrame = {
 		//txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('3')\" class='folder_filter' id='folder_3' title='Select to display all files uploaded in the last 7 days'><img class='folder_fav_icon' src='images/folder_favorites'><span class='folder_fav_name'>Added in last 7 days</span></div>";						
 					
 		txt += "<div id='apollo_folder_list'></div>";
-						
+				
+        txt += "<div id='folderPageControls' class='sidebar_page_controls'>";        
+        txt += "<table border='0'>";
+        txt += "    <tr>";
+        txt += "        <td width='33%' align='left'><span class='more_posts_link' id='prev_posts_link' style='padding-left:15px' onclick='FolderSidebarFrame.showPrevPage()' title='Display previous page'>&laquo; prev</span></td>";
+        txt += "        <td width='33%' align='center'><span class='more_posts_pages' id='page_no' style=''>1 of 2</span></td>";                
+        txt += "        <td width='33%' align='right'><span class='more_posts_link' id='next_posts_link' style='padding-right:15px' onclick='FolderSidebarFrame.showNextPage()' title='Display next page'>next &raquo;</span></td>";
+        txt += "    </tr>";
+        txt += "</table>";        
+        txt += "</div>";
+        
+        						
 		// Right click pop-up menu....
 		txt += "<ul id='folderMenu' class='rightClickMenu'>";
 		txt += "	<li class='edit'><a href='#edit'>Rename</a></li>";
@@ -42,7 +58,30 @@ var FolderSidebarFrame = {
 
 		$(targetDiv).html(txt);
 		
+		var h = 0;
+		var offset = 110;
+		
+		switch(ssMain.view){			
+		
+			case ssMain.VIEW_GALLERIES : 
+				h = ($(window).height()/3) - offset;				 
+				break;
+				
+			case ssMain.VIEW_FILES : 
+				h = $(window).height() - offset; 
+				break;
+		}
+		    		    	    		
+		FolderSidebarFrame.m_foldersPerPage = Math.floor(h / 24);		
+        FolderSidebarFrame.m_numberPages = Math.ceil(DataStore.m_folderList.length / FolderSidebarFrame.m_foldersPerPage);
+        
+        if (FolderSidebarFrame.m_numberPages == 1){
+        	$('#folderPageControls').hide();
+        }
+        
+        		
 		FolderSidebarFrame.paintFolders();		
+        $('#apollo_tag_list').height(h);
 		
 		$(targetDiv).disableSelection();
 		$(targetDiv).noContext();
@@ -55,12 +94,15 @@ var FolderSidebarFrame = {
 		
 		var folderList = DataStore.m_folderList;
 				
+        var start_i = FolderSidebarFrame.m_currentPage * FolderSidebarFrame.m_foldersPerPage;
+        var end_i = Math.min(folderList.length, start_i+FolderSidebarFrame.m_foldersPerPage);
+        $('#page_no').html((FolderSidebarFrame.m_currentPage+1) + " of " + FolderSidebarFrame.m_numberPages);
+				
 		var txt = "";
 		
 		// NOTE: Folder id's 0-9 are reserved for system folders, so can safely use these id's here		
 		
-		// Hard-coded 'all' folder....		
-
+		// Deal with hard-coded 'faves' folders....		
 		for (var i=0; i<5; i++){
 			if (DataStore.m_currentFolderID == i){
 				$('#folder_'+i + " .folder_fav_name").addClass('selected');
@@ -70,41 +112,7 @@ var FolderSidebarFrame = {
 			}		
 		}
 		
-		/*
-		// Hard-coded 'unassigned' folder....		
-		if (DataStore.m_currentFolderID == FolderSidebarFrame.ID_UNASSIGNED){
-			$('#folders_'+FolderSidebarFrame.ID_UNASSIGNED + " .folder_fav_name").addClass('selected');
-		}
-		else {
-			$('#folders_'+FolderSidebarFrame.ID_UNASSIGNED + " .folder_fav_name").removeClass('selected');
-		}		
-
-		// Hard-coded 'last 7 days' folder....		
-		if (DataStore.m_currentFolderID == FolderSidebarFrame.ID_LAST_7_DAYS){
-			$('#folders_'+FolderSidebarFrame.ID_LAST_7_DAYS + " .folder_fav_name").addClass('selected');
-		}
-		else {
-			$('#folders_'+FolderSidebarFrame.ID_LAST_7_DAYS + " .folder_fav_name").removeClass('selected');
-		}
-		
-		// Hard-coded 'last hour' folder....		
-		if (DataStore.m_currentFolderID == FolderSidebarFrame.ID_LAST_1_HOUR){
-			$('#folders_'+FolderSidebarFrame.ID_LAST_1_HOUR + " .folder_fav_name").addClass('selected');
-		}
-		else {
-			$('#folders_'+FolderSidebarFrame.ID_LAST_1_HOUR + " .folder_fav_name").removeClass('selected');
-		}	
-
-		// Hard-coded 'added last 24 hours' folder....		
-		if (DataStore.m_currentFolderID == FolderSidebarFrame.ID_LAST_24_HOURS){
-			$('#folders_'+FolderSidebarFrame.ID_LAST_24_HOURS + " .folder_fav_name").addClass('selected');
-		}
-		else {
-			$('#folders_'+FolderSidebarFrame.ID_LAST_24_HOURS + " .folder_fav_name").removeClass('selected');
-		}		
-		*/
-		
-		for (var i=0; i<folderList.length; i++){
+		for (var i=start_i; i<end_i; i++){
 
 			var folder_name = AthenaUtils.htmlEncode(folderList[i].name);
 			var folder_id = folderList[i].id;
@@ -140,6 +148,40 @@ var FolderSidebarFrame = {
 				
 	},
 
+    // ////////////////////////////////////////////////////////////////////////////
+
+    showNextPage : function(){
+		
+        $('#prev_posts_link').show();
+        	
+        if (FolderSidebarFrame.m_currentPage < FolderSidebarFrame.m_numberPages-1){
+            FolderSidebarFrame.m_currentPage += 1;
+        }
+        
+        if (FolderSidebarFrame.m_currentPage == FolderSidebarFrame.m_numberPages-1){
+        	$('#next_posts_link').hide();
+        }
+        
+        FolderSidebarFrame.paintFolders();
+    },
+
+    // ////////////////////////////////////////////////////////////////////////////
+
+    showPrevPage : function(){
+
+        $('#next_posts_link').show();
+
+        if (FolderSidebarFrame.m_currentPage > 0){
+            FolderSidebarFrame.m_currentPage -= 1;
+        }
+        
+        if (FolderSidebarFrame.m_currentPage == 0){
+        	$('#prev_posts_link').hide();
+        }
+        
+        FolderSidebarFrame.paintFolders();
+    },
+    
 	// ////////////////////////////////////////////////////////////////////////////
 
 	onRightClickFolder : function(e, obj){
