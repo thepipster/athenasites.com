@@ -1,11 +1,5 @@
 
-#FilesFrameContent {
-	width: 100%;
-	height: 100%;
-}
-
-
-#FilesFrameContent .thumbwrapper {
+#FilesFrame .thumbwrapper {
 	width: 50px;
 	height: 50px;
 	margin: 5px;
@@ -16,7 +10,7 @@
 	float: left;
 }
 
-#FilesFrameContent .thumbtitle {
+#FilesFrame .thumbtitle {
 	font-size: 8px;
 	overflow: hidden;
 	text-align: center;
@@ -24,7 +18,7 @@
 	display: block;
 }
 
-#FilesFrameContent .thumb {
+#FilesFrame .thumb {
 	margin: 0px;
 	padding: 0px;
 	z-index: 1;
@@ -33,7 +27,7 @@
 
 /* Folder Pop-up context menu /////////////////////////// */
 
-#FilesFrameContent .rightClickMenu {
+#FilesFrame .rightClickMenu {
 	position: absolute;
 	width: 120px;
 	z-index: 99999;
@@ -44,13 +38,13 @@
 	display: none; 
 }
 
-#FilesFrameContent .rightClickMenu LI {
+#FilesFrame .rightClickMenu LI {
 	list-style: none;
 	padding: 0px;
 	margin: 0px;
 }
 
-#FilesFrameContent .rightClickMenu A {
+#FilesFrame .rightClickMenu A {
 	color: #333;
 	text-decoration: none;
 	display: block;
@@ -63,32 +57,32 @@
 	padding-left: 28px;
 }
 
-#FilesFrameContent .rightClickMenu LI:hover A {
+#FilesFrame .rightClickMenu LI:hover A {
 	color: #FFF;
 	background-color: #3399FF;
 }
 
-#FilesFrameContent .rightClickMenu LI.disabled A {
+#FilesFrame .rightClickMenu LI.disabled A {
 	color: #AAA;
 	cursor: default;
 }
 
-#FilesFrameContent .rightClickMenu LI.hover.disabled A {
+#FilesFrame .rightClickMenu LI.hover.disabled A {
 	background-color: transparent;
 }
 
-#FilesFrameContent .rightClickMenu LI.separator {
+#FilesFrame .rightClickMenu LI.separator {
 	border-top: solid 1px #CCC;
 }
 
 
-#FilesFrameContent .more_link {
+#FilesFrame .more_link {
     font-size: 10px;
     color: #00315f;
     cursor: pointer;
 }
 
-#FilesFrameContent .more_link:hover { color: #006fdc;}
+#FilesFrame .more_link:hover { color: #006fdc;}
 
 /*
 	Adding Icons
@@ -97,12 +91,12 @@
 	classes to the respective LI element(s)
 */
 
-#FilesFrameContent .rightClickMenu LI.edit A { background-image: url('../../images/menu_images/page_white_edit.png'); }
-#FilesFrameContent .rightClickMenu LI.cut A { background-image: url('../../images/menu_images/cut.png'); }
-#FilesFrameContent .rightClickMenu LI.copy A { background-image: url('../../images/menu_images/page_white_copy.png'); }
-#FilesFrameContent .rightClickMenu LI.paste A { background-image: url('../../images/menu_images/page_white_paste.png'); }
-#FilesFrameContent .rightClickMenu LI.delete A { background-image: url('../../images/menu_images/page_white_delete.png'); }
-#FilesFrameContent .rightClickMenu LI.quit A { background-image: url('../../images/menu_images/door.png'); }
+#FilesFrame .rightClickMenu LI.edit A { background-image: url('../../images/menu_images/page_white_edit.png'); }
+#FilesFrame .rightClickMenu LI.cut A { background-image: url('../../images/menu_images/cut.png'); }
+#FilesFrame .rightClickMenu LI.copy A { background-image: url('../../images/menu_images/page_white_copy.png'); }
+#FilesFrame .rightClickMenu LI.paste A { background-image: url('../../images/menu_images/page_white_paste.png'); }
+#FilesFrame .rightClickMenu LI.delete A { background-image: url('../../images/menu_images/page_white_delete.png'); }
+#FilesFrame .rightClickMenu LI.quit A { background-image: url('../../images/menu_images/door.png'); }
 
 /* Flash Upload styles /////////////////////////// */
 

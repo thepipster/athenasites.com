@@ -19,6 +19,9 @@ var TagsSidebarFrame = {
 		
 		var txt = "";
 
+		// Hard code a 'switch to folder view' item							
+		txt += "<div onclick=\"SidebarFrame.showFolders()\" id='switch_to_folder_view' class='folder' title='' class='apollo_tag tag_with_menu'><img class='tag_icon' src='images/folder_icon.png'><span class='switch_to_folder_view_name'>Switch to folder view</span></div>";
+
 		txt += "<div id='apollo_tag_list'></div>";
 															
         txt += "<div id='tagPageControls' class='sidebar_page_controls'>";        
@@ -40,22 +43,25 @@ var TagsSidebarFrame = {
 		txt += "</ul>";
 
 		$(targetDiv).html(txt);
+
+		var pos = $(targetDiv).position();
 		
 		var h = 0;
-		var offset = 110;
-		
+		var offset = pos.top + 30;
+		var lineht = 23;
+				
 		switch(ssMain.view){			
 		
 			case ssMain.VIEW_GALLERIES : 
-				h = ($(window).height()/2) - offset;				 
+				h = ($('.ViewFrame').height()/2) - offset - $('#tagPageControls').height();		 
 				break;
 				
 			case ssMain.VIEW_FILES : 
-				h = $(window).height() - offset; 
+				h = $('.ViewFrame').height() - offset - $('#tagPageControls').height(); 
 				break;
 		}
 		    		    	    		
-		TagsSidebarFrame.m_tagsPerPage = Math.floor(h / 24);		
+		TagsSidebarFrame.m_tagsPerPage = Math.floor(h / lineht);		
         TagsSidebarFrame.m_numberPages = Math.ceil(DataStore.m_mediaTags.length / TagsSidebarFrame.m_tagsPerPage);
         
         if (PagesSidebarFrame.m_numberPages == 1){
@@ -85,9 +91,6 @@ var TagsSidebarFrame = {
         $('#tags_sideframe_page_no').html((TagsSidebarFrame.m_currentPage+1) + " of " + TagsSidebarFrame.m_numberPages);
 		
 		var txt = "";
-
-		// Hard code a 'switch to folder view' item							
-		txt += "<div onclick=\"SidebarFrame.showFolders()\" class='tag' title='' class='apollo_tag tag_with_menu'><img class='tag_icon' src='images/folder_view_select_icon.png'><span class='switch_to_folder_view_name'>Switch to folder view</span></div>";
 							
 		for (var i=start_i; i<end_i; i++){
 

@@ -17,17 +17,16 @@ html, body {
 
 .ViewFrame {
 	background-color: #f3f2f1;
-	background-color: yellow;
 	font-size: 12px;
 	color: black;	
-	/*border: 1px solid black;*/
+	border: 1px solid black;
 	margin: 0px;
 	padding: 0px;
-	width: 50%;
+	width: 99%;
 	height: 100%;	
 	text-align: left;
-	display: none;
 	clear: both;
+	display: none;
 	/*border: medium double rgb(250,0,255);*/
 }
 
@@ -44,14 +43,11 @@ html, body {
 	width: auto;
 	height: 100%;
 	margin-left: 180px;
-	background-color: red;
 }
 
 #MainContents {
-	margin-top: -25px;
-	width: 100%;
+	width: 99%;
 	height: 100%;
-	background-color: green;
 }
 
 #apollo_loading_display {
@@ -182,6 +178,105 @@ html, body {
 	display: block;
 }
 
+/* Tabs //////////////////////////////////////////// */
+
+
+#menu_container {
+	width: 99%;	
+	height: 25px;
+	display: block;
+	padding: 0px;
+	margin: 0px;
+	/* margin-top: 10px; */
+}
+
+#menu_container .menu_item {		
+	color: white;		
+	padding: 0px;
+	margin: 0px;
+	/*width: 75px;*/
+	min-width: 50px;
+	padding-left: 5px;
+	padding-right: 5px;
+	height: 20px;
+	float: left;
+	font-size: 13px;
+	margin-top: 1px;
+	padding-top: 3px;
+	margin-left: 5px;
+	/*background-color: #999999;*/
+	background-color: #5d5d5d;
+	color: #acd6eb;
+	cursor: pointer;
+	text-align: center;		
+	border-color: black;
+	border-style: solid;
+	border-width: 1px;	
+	border-bottom-width: 0px;
+}
+
+/* Special case, title too long to fit */
+#menu_container .client_gallery_title {
+	font-size: 11px;
+	height: 18px;
+	padding-top: 5px;
+}
+
+#menu_container .menu_item:hover {
+	background-color: #bebebe;
+	color: #032f5d;	
+}
+
+#menu_container .menu_item.selected {
+	border-bottom-color: #f3f2f1;
+	border-bottom-style: solid;
+	background-color: #f3f2f1;
+	color: #032f5d;
+	/*border-color: #f3f2f1;
+	border-bottom-width: 1px;*/
+}
+
+#menu_container .menu_site_selector {
+	float:right; 
+	margin-right:20px; 
+	margin-top:3px;
+		
+	border-color: #797979;
+	border-width: 1px;
+	border-style: solid;
+	color: #acd6eb;
+	width: 136px;
+	background-color: #5d5d5d;
+	overflow: hidden;	
+}
+
+#menu_container .menu_link {		
+	width: 60px;
+	height: 20px;
+	float: left;
+	font-size: 13px;
+	padding: 0px;
+	margin: 0px;
+	margin-top: 2px;
+	padding-top: 3px;
+	margin-right: 5px;
+	cursor: pointer;
+	float: right;
+	text-align: right;
+	color: #00007a;
+}	
+
+#menu_container .menu_link:hover {
+	color: #f3f2f1;
+}
+
+#menu_container .menu_link.selected {
+	color: white;
+}
+
+#menu_container a { text-decoration: none; }
+#menu_container a:hover { text-decoration: none; }
+
 /* Parameter editing //////////////////////////////////////// */
 
 .paraTitle {
@@ -232,8 +327,8 @@ html, body {
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
-	margin-right: 5px;
-	padding-bottom:20px;
+	/*margin-right: 5px;
+	padding-bottom:20px;*/
 	-moz-border-radius: 3px;
 	border-radius: 3px;	
 	display: block;
@@ -396,101 +491,3 @@ html, body {
 	z-index: 100;
 }
 
-/* Tabs //////////////////////////////////////////// */
-
-
-#menu_container {
-	width: 97%;
-	height: 25px;
-	display: block;
-	padding: 0px;
-	margin: 0px;
-	/* margin-top: 10px; */
-}
-
-#menu_container .menu_item {		
-	color: white;		
-	padding: 0px;
-	margin: 0px;
-	/*width: 75px;*/
-	min-width: 50px;
-	padding-left: 5px;
-	padding-right: 5px;
-	height: 20px;
-	float: left;
-	font-size: 13px;
-	margin-top: 1px;
-	padding-top: 3px;
-	margin-left: 5px;
-	/*background-color: #999999;*/
-	background-color: #5d5d5d;
-	color: #acd6eb;
-	cursor: pointer;
-	text-align: center;	
-	
-	border-color: black;
-	border-style: solid;
-	border-width: 1px;	
-}
-
-/* Special case, title too long to fit */
-#menu_container .client_gallery_title {
-	font-size: 11px;
-	height: 18px;
-	padding-top: 5px;
-}
-
-#menu_container .menu_item:hover {
-	background-color: #bebebe;
-	color: #032f5d;	
-}
-
-#menu_container .menu_item.selected {
-	border-bottom-color: #f3f2f1;
-	border-bottom-style: solid;
-	background-color: #f3f2f1;
-	color: #032f5d;
-	/*border-color: #f3f2f1;
-	border-bottom-width: 1px;*/
-}
-
-#menu_container .menu_site_selector {
-	float:right; 
-	margin-right:20px; 
-	margin-top:3px;
-		
-	border-color: #797979;
-	border-width: 1px;
-	border-style: solid;
-	color: #acd6eb;
-	width: 136px;
-	background-color: #5d5d5d;
-	overflow: hidden;	
-}
-
-#menu_container .menu_link {		
-	width: 60px;
-	height: 20px;
-	float: left;
-	font-size: 13px;
-	padding: 0px;
-	margin: 0px;
-	margin-top: 2px;
-	padding-top: 3px;
-	margin-right: 5px;
-	cursor: pointer;
-	float: right;
-	text-align: right;
-	color: #00007a;
-}	
-
-#menu_container .menu_link:hover {
-	color: #f3f2f1;
-}
-
-#menu_container .menu_link.selected {
-	color: white;
-}
-
-#menu_container a { text-decoration: none; }
-#menu_container a:hover { text-decoration: none; }

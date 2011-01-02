@@ -269,31 +269,31 @@ Logger::debug("$domain has site_id = $current_site_id");
 			
 			<!-- Pages/Posts Content /////////////////////////////////////////////////////////////////// -->
 		
-			<?php //echo file_get_contents("code/html/PagesFrame.html") ?>
+			<?php echo file_get_contents("code/html/PagesFrame.html") ?>
 		
 	        <!-- Files Page Content ///////////////////////////////////////////////////////////// -->
 	
-			<?php //echo file_get_contents("code/html/FilesFrame.html") ?>
+			<?php echo file_get_contents("code/html/FilesFrame.html") ?>
 	
 			<!-- Edit Images/Files Page Content ///////////////////////////////////////////////////////////// -->
 	
-			<?php //echo file_get_contents("code/html/EditFilesFrame.html") ?>
+			<?php echo file_get_contents("code/html/EditFilesFrame.html") ?>
 	
 	        <!-- Galleries Page Content ///////////////////////////////////////////////////////////// -->
 	
-			<?php //echo file_get_contents("code/html/GalleriesFrame.html") ?>
+			<?php echo file_get_contents("code/html/GalleriesFrame.html") ?>
 	
 	        <!-- Stats Page Content ///////////////////////////////////////////////////////////// -->
 	
-			<?php //echo file_get_contents("code/html/StatsFrame.html") ?>
+			<?php echo file_get_contents("code/html/StatsFrame.html") ?>
 	
 	        <!-- Settings Frame ///////////////////////////////////////////////////////////// -->
 	
-			<?php //echo file_get_contents("code/html/SettingsFrame.html") ?>
+			<?php echo file_get_contents("code/html/SettingsFrame.html") ?>
 	        
 	        <!-- Account Frame ///////////////////////////////////////////////////////////// -->
 	
-			<?php //echo file_get_contents("code/html/AccountFrame.html") ?>
+			<?php echo file_get_contents("code/html/AccountFrame.html") ?>
 
 		</div>	
 	

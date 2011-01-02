@@ -31,7 +31,7 @@ var FolderSidebarFrame = {
 		var txt = "";
 
 		// Hard code 'switch to tag view' link		
-		txt += "<div onclick=\"SidebarFrame.showTags()\" class='folder droppable_folder' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/tag_icon_blue_24x24.png'><span class='folder_name'>Switch to tag view</span></div>";
+		txt += "<div onclick=\"SidebarFrame.showTags()\" id='switch_to_tag_view' class='folder droppable_folder' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/tag_icon_blue_24x24.png'><span class='folder_name'>Switch to tag view</span></div>";
 					
 		txt += "<div id='apollo_folder_list'></div>";
 				
@@ -55,18 +55,20 @@ var FolderSidebarFrame = {
 
 		$(targetDiv).html(txt);
 		
+		var pos = $(targetDiv).position();
+
 		var h = 0;
-		var offset = 110;
+		var offset = pos.top + 30;
 		var lineht = 30;
-		
+				
 		switch(ssMain.view){			
 		
 			case ssMain.VIEW_GALLERIES : 
-				h = ($(window).height()/2) - offset; 				 
+				h = ($('.ViewFrame').height()/2) - offset - $('#folderPageControls').height(); 
 				break;
 				
 			case ssMain.VIEW_FILES : 
-				h = $(window).height() - offset; 
+				h = $('.ViewFrame').height() - offset - $('#folderPageControls').height(); 
 				break;
 		}
 		    	
@@ -111,19 +113,19 @@ var FolderSidebarFrame = {
 			for (var i=0; i<FolderSidebarFrame.m_noSystemFolders; i++){
 			
 				switch(i){
-					case 0: help_text = "Select to display all of your images";
-					case 1: help_text = "Select to display all unassigned files (files that have not been added to a folder";
-					case 2: help_text = "Select to display all files uploaded in the last hour";
-					case 3: help_text = "Select to display all files uploaded in the last 24 hours";
-					case 4: help_text = "Select to display all files uploaded in the last 7 days";
+					case 0: help_text = "Select to display all of your images"; break;
+					case 1: help_text = "Select to display all unassigned files (files that have not been added to a folder"; break;
+					case 2: help_text = "Select to display all files uploaded in the last hour"; break;
+					case 3: help_text = "Select to display all files uploaded in the last 24 hours"; break;
+					case 4: help_text = "Select to display all files uploaded in the last 7 days"; break;
 				}
 				
 				switch(i){
-					case 0: name = "Show All";
-					case 1: name = "Unassigned Files";
-					case 2: name = "Show Last Hour";
-					case 3: name = "Show Last 24 Hours";
-					case 4: name = "Show Last 7 Days";
+					case 0: name = "Show All"; break;
+					case 1: name = "Unassigned Files"; break;
+					case 2: name = "Show Last Hour"; break;
+					case 3: name = "Show Last 24 Hours"; break;
+					case 4: name = "Show Last 7 Days"; break;
 				}			
 				
 			

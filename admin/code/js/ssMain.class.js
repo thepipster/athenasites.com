@@ -13,7 +13,7 @@ var ssMain = {
     VIEW_STATS : 6,
     VIEW_SETTINGS : 7,
 
-    view : 1,
+    view : 2,
 
     pageTracker : '',
 
@@ -21,12 +21,6 @@ var ssMain = {
 
     init : function(currentSiteID){
                 
-        // Set the sizes correctly...
-        ssMain.onResizeComplete();
-
-        // Paint the custom wyswig editors
-        ssMain.paintOpenWYSIWYG();
-
         // Initialize the remote API's
         SystemAPI.init();
         MediaAPI.init();
@@ -41,14 +35,6 @@ var ssMain = {
         DataStore.m_siteID = currentSiteID;;
         DataStore.init();
 
-        // Start auto-save timer....
-        setInterval ( "ssMain.onAutoSave()", 5000 );
-
-        // Save when browser quits
-        $(window).unload( function () {DataStore.save();} );
-
-        $(window).resize( function(){ssMain.onResize()});
-
         // Setup date picker...
         Date.firstDayOfWeek = 0;
         Date.format = 'yyyy-mm-dd';
@@ -58,6 +44,9 @@ var ssMain = {
 
         // Start loading data
         DataStore.load(ssMain.onDataLoaded);
+
+        // Paint the custom wyswig editors
+        ssMain.paintOpenWYSIWYG();
 
         // Setup classes...
         DashboardFrame.init();
@@ -70,6 +59,16 @@ var ssMain = {
 		//$(':text').typing({ stop: ssMain.onDataChange, delay: 400});
 		$('.apolloDataInput').typing({ stop: ssMain.onDataChange, delay: 400});
 		$('.apolloDataInput').change(ssMain.onDataChange);
+
+        // Start auto-save timer....
+        setInterval ( "ssMain.onAutoSave()", 5000 );
+
+        // Save when browser quits
+        $(window).unload( function () {DataStore.save();} );
+
+		// Force resize, and setup resize event
+		setTimeout("ssMain.onResize()", 100);
+        $(window).resize( function(){ssMain.onResize()});
 
     },
 
@@ -90,30 +89,8 @@ var ssMain = {
 
     // ////////////////////////////////////////////////////////////////////////
 
-    isResizing : false,
-
-    onResizeComplete : function(){
-
-        //$('.ViewFrame').height($(window).height()- $('#menu_container').height()-30);
-        //$('.subframebox').height( $('.ViewFrame').height() - 30);
-
-//        var h = $(window).height() - $('#menu_container').height()-35;
-//        var w = $(window).width() - $('#SideBar').width() - 20;
-//        //var ht = $('#mainContentTable').height() - 40;
-//
-//        $('.ViewFrame').height(h);
-//        $('.ViewFrame').width(w);
-        
-        //ssMain.init();
-        //ssMain.isResizing = false;
-        //window.location = "main.php?site_id=" + DataStore.m_siteID;
-    },
-
     onResize : function(){
-        if (!ssMain.isResizing){
-            ssMain.isResizing = true;
-            setTimeout("ssMain.onResizeComplete()", 1000);
-        }
+     	$('#MainContents').height($(window).height()-$('#menu_container').height()-20);
     },
 
     // ////////////////////////////////////////////////////////////////////////

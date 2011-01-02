@@ -43,7 +43,7 @@ var GalleriesFrame = {
 
         //alert($('#GalleriesFrame').height());		
         
-        $('#GalleriesFrame').css('height','100%');	
+        //$('#GalleriesFrame').css('height','100%');	
         
     },
 	

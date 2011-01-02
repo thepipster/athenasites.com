@@ -48,7 +48,8 @@ var FilesFrame = {
         else {
             FilesFrame.repaintData();
         }
-							
+					
+		ssMain.onResize();					
     },
 
     // ////////////////////////////////////////////////////////////////////////////
@@ -420,10 +421,10 @@ var FilesFrame = {
     	var w = 0;
 
         if (FilesFrame.m_mode == 'edit_image'){
-	  		w = $('#FilesFrameContent').width() - 500;
+	  		w = $('#FilesFrame').width() - 500;
         }
         else {
-	  		w = $('#FilesFrameContent').width() - 300;
+	  		w = $('#FilesFrame').width() - 300;
         }
         
     	// images per row = w / thumb_width
