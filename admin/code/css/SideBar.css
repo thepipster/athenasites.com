@@ -1,8 +1,10 @@
 
 #SideBar {
-    width: 100%;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+    width: 180px;
     height: 100%;
-    float: left;
     padding: 0px;
     margin: 0px;
 }

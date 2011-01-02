@@ -240,10 +240,7 @@ var FolderSidebarFrame = {
 
 		var imgID = parseInt($(ui.draggable).attr('id').substring(4));						
 		var folderID = parseInt($(this).attr('id').substring(7));	// format folder_xxx
-		
-		//Logger.show();
-		//Logger.debug("imgID = " + imgID + " folder id = " + folderID);
-		
+				
 		if (folderID == FolderSidebarFrame.ID_UNASSIGNED || folderID > 9){		
 			MediaAPI.addMediaToFolder(DataStore.m_siteID, imgID, folderID, FolderSidebarFrame.onAddedToFolder)
 		}	

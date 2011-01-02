@@ -218,9 +218,6 @@ var PostsFrame = {
         postObj.status = $('#postStatusSelector').val();
         postObj.canComment = $('#postCanCommentSelector').val();
         postObj.slug = AthenaUtils.encodeSlug(postObj.title);
-
-		Logger.show();
-		Logger.debug("[" + postObj.title + "] " + postObj.content);
 		
         DataStore.updatePost(postObj);
         PostsSidebarFrame.repaint();

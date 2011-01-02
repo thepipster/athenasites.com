@@ -1,0 +1,103 @@
+<!-- Dashboard Page Content ///////////////////////////////////////////////////////////// -->
+
+<div id='DashboardFrame' class='ViewFrame'>
+
+    <table border='1' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>
+
+        <tr valign='top' width='100%'>
+
+            <td width="50%" height="70%" style='height:100%; padding:5px;'>
+
+                <div class='subframebox' style='height:100%; width:100%;'>
+
+                    <span class='title'>Snap Shot
+                        <!--<a href='#' id="showCommentsAll" class="subFrameCommand" onclick="DashboardFrame.showComments('All')">All</a>-->
+                        <a href='#' id="showTraffic" class="subFrameCommand selected" onclick="DashboardFrame.showTraffic()">Traffic</a>
+                        <a href='#' id="showFollowers" class="subFrameCommand" onclick="DashboardFrame.showFollowers()">Top Commenters</a>
+                    </span>
+
+                    <div id='apollo_site_stats_summary' class='frameContents' style='display:none' align='center'>
+
+                        <table class="statsTable" border="0" cellspacing="2" cellpadding="3">
+
+                            <tr align="left" class="odd">
+                                <td>Disc Usage</td>
+                                <td valign="middle">
+                                    <div id="disc_usage" style='width:15%; float:left'></div>
+                                    <div id="disc_usage_bar" style='width:83%; float:left'></div>
+                                </td>
+                            </tr>
+
+                            <tr align="left" class="even">
+                                <td width='90px'>Blog Posts</td>
+                                <td >
+                                    <span class="status_public"><span id="no_posts_published"></span> published </span>,
+                                    <span class="status_draft"><span id="no_posts_draft"></span> draft</span>
+                                    <!--
+                                    ,<span class="status_private"><span id="no_posts_private"></span> private </span>
+                                    -->
+                                </td>
+                            </tr>
+
+                            <tr align="left" class="odd">
+                                <td>Comments</td>
+                                <td>
+                                    <span class="status_public"><span id="no_comments_approved"></span> approved </span>,
+                                    <span class="status_draft"><span id="no_comments_pending"></span> pending approval</span>,
+                                    <span class="status_spam"><span id="no_comments_spam"></span> spam </span>
+                                </td>
+                            </tr>
+
+                            <tr align="left" class="even">
+                                <td>Misc</td>
+                                <td>You have <span id="no_catgeories"></span> categories, <span id="no_tags"></span> tags and <span id="no_followers"></span> commenters</td>
+                            </tr>
+
+
+                        </table>
+
+                        <div align="center">
+
+                            <div class="apolloStatsGraphWrapper" style='height:200px; width:90%; margin-top:10px'>
+                                <div id="apollo_stats_graph_small" class="" style='height:100%; width:100%;'></div>
+                            </div>
+                            <p>Site traffic for last 30 days</p>                                                   
+
+                            <div class="apolloStatsGraphWrapper" style='height:200px; width:90%; margin-top:10px'>
+                                <div id="apollo_crawler_graph_small" class="" style='height:100%; width:100%;'></div>
+                            </div>
+                            <p>Search engine activity for last 30 days</p>                                                   
+
+                        </div>
+
+                    </div><!-- apollo_site_sumary -->
+
+                    <div id='apollo_followers_summary_wrapper' class='frameContents'>
+                        <div id='apollo_followers_summary' align="center" style="height:100%; width:100%;">
+                            <p>I'm sorry, you don't have any commentators yet</p3>
+                        </div>
+                    </div>
+
+                </div><!-- subframebox -->
+
+            </td>
+
+            <td width="50%" height="100%" style='height:100%; padding:5px;' rowspan="2">
+                <div class='subframebox' id="apollo_site_comments_wrapper">
+                    <span class='title'>Recent Comments
+                        <!--<a href='#' id="showCommentsAll" class="subFrameCommand" onclick="DashboardFrame.showComments('All')">All</a>-->
+                        <a href='#' id="showCommentsPending" class="subFrameCommand selected" onclick="DashboardFrame.showComments('Pending')">Unapproved</a>
+                        <a href='#' id="showCommentsApproved" class="subFrameCommand" onclick="DashboardFrame.showComments('Approved')">Approved</a>
+                        <a href='#' id="showCommentsTrash" class="subFrameCommand" onclick="DashboardFrame.showComments('Trash')" title="Comments marked as trash will be automatically removed after 30 days">Trash</a>
+                        <a href='#' id="showCommentsSpam" class="subFrameCommand" onclick="DashboardFrame.showComments('Spam')" title="Comments marked as spam will be automatically removed after 30 days">Spam</a>
+                    </span>
+                    <div id='apollo_site_comments' style="height:100%; width:100%; overflow:auto;"></div>
+                </div>
+            </td>
+		
+		</tr>
+
+
+    </table>
+
+</div> <!-- DashboardFrame -->

@@ -94,8 +94,8 @@ var ssMain = {
 
     onResizeComplete : function(){
 
-        $('.ViewFrame').height($(window).height()- $('#menu_container').height()-30);
-        $('.subframebox').height( $('.ViewFrame').height() - 30);
+        //$('.ViewFrame').height($(window).height()- $('#menu_container').height()-30);
+        //$('.subframebox').height( $('.ViewFrame').height() - 30);
 
 //        var h = $(window).height() - $('#menu_container').height()-35;
 //        var w = $(window).width() - $('#SideBar').width() - 20;
