@@ -244,7 +244,9 @@ Logger::debug("$domain has site_id = $current_site_id");
 	        <div id='pages_menu' class='menu_item' onclick='ssMain.onShowPages()'>Pages</div>
 	        <div id='files_menu' class='menu_item' onclick='ssMain.onShowFiles()'>Files</div>
 	        <div id='gallery_menu' class='menu_item' onclick='ssMain.onShowGalleries()'>Galleries</div>
+	        <!--
 	        <div id='stats_menu' class='menu_item' onclick='ssMain.onShowStats()'>Stats</div>
+	        -->
 	        <div id='settings_menu' class='menu_item' onclick='ssMain.onShowSettings()'>Settings</div>
 	
 	        <?php

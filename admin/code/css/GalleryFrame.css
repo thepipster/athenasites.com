@@ -1,10 +1,10 @@
 
-#GalleryFrameContent {
+#GalleriesFrame {
 	width: 100%;
 	height: 100%;
 }
 
-#GalleryFrameContent .thumbwrapper {
+#GalleriesFrame .thumbwrapper {
 	width: 60px;
 	height: 60px;
 	margin: 5px;	
@@ -12,7 +12,7 @@
 /*	text-align: center; */
 }
 
-#GalleryFrameContent .thumbtitle {
+#GalleriesFrame .thumbtitle {
 	font-size: 8px;
 	overflow: hidden;
 	text-align: center;
@@ -20,7 +20,7 @@
 	display: block;
 }
 
-#GalleryFrameContent .thumb {	
+#GalleriesFrame .thumb {	
 	border-width: 4px;
 	border-style: solid;
 	border-color: white;
@@ -30,16 +30,16 @@
 	z-index: 1;
 }
 
-#GalleryFrameContent .more_link {
+#GalleriesFrame .more_link {
     font-size: 10px;
     color: #00315f;
     cursor: pointer;
 }
 
-#GalleryFrameContent .more_link:hover { color: #006fdc;}
+#GalleriesFrame .more_link:hover { color: #006fdc;}
 
 
-#GalleryFrameContent .gallery_slot {
+#GalleriesFrame .gallery_slot {
 	margin: 5px;	
 	border-width: 4px;
 	border-style: solid;
@@ -51,12 +51,12 @@
 	float: left;
 }
 
-#GalleryFrameContent .gallery_slot_hover { background-color: #e6e4d0 !important;}
+#GalleriesFrame .gallery_slot_hover { background-color: #e6e4d0 !important;}
 
-#GalleryFrameContent .gallery_thumb {	
+#GalleriesFrame .gallery_thumb {	
 }
 
-#GalleryFrameContent .gallery_slot_image {
+#GalleriesFrame .gallery_slot_image {
 	border-width: 4px;
 	border-style: solid;
 	border-color: white;
@@ -66,7 +66,7 @@
 	height: 52px;
 }
 
-#GalleryFrameContent .gallery_slot_text{
+#GalleriesFrame .gallery_slot_text{
 	font-size: 24px;
 	color: gray;
 	width: 66px;
@@ -74,7 +74,7 @@
 	padding-top: 14px;
 }
 
-#GalleryFrameContent .remove_image_box {
+#GalleriesFrame .remove_image_box {
 	font-size: 24px;
 	border-color: #fffad3;	                
 	border-style: solid;	                
@@ -89,11 +89,11 @@
 	font-size: 14px;
 }
 
-#GalleryFrameContent #apollo_image_contents {
+#GalleriesFrame #apollo_image_contents {
 	height: auto;
 }
 
-#GalleryFrameContent #apollo_gallery_contents {
+#GalleriesFrame #apollo_gallery_contents {
 	height: auto;
 	/*background-color: gray;*/
 }

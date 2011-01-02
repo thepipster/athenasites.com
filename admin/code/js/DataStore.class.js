@@ -948,7 +948,7 @@ var DataStore = {
             temp.date_added = media_list[i].created;
             temp.folder_id = media_list[i].folder_id;
             temp.media_tags = media_list[i].media_tags;
-			
+					
             if (i == 0){
             //alert(temp.thumb_url);
             }

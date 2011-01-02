@@ -1,49 +1,41 @@
-<div id='GalleriesFrame' class='ViewFrame'>
+<table id='GalleriesFrame' class='ViewFrame' border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>
 
-    <div id='GalleryFrameContent' align='left'>
+    <tr valign='top' height='250px' width='100%' id='galleryRow'>
 
-        <table border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>
+        <td class='frameContents frame_controls_bar'>
+            <span class='frameTitle' id='galleryTitle'>Gallery Contents</span>
+            <div id="apollo_gallery_contents_wrapper">
+                <div align='left' id='apollo_gallery_contents'></div>
+            </div>
+            
+            <div align="center">
+                <div class='remove_image_box' id='delete_slot' align='center'>Drag images here to remove from this gallery</div>
+            </div>
+            
+        </td>
 
-            <tr valign='top' height='250px' width='100%' id='galleryRow'>
+        <!-- Gallery settings frame (for multi-gal)........... -->
 
-                <td class='frameContents frame_controls_bar'>
-                    <span class='frameTitle' id='galleryTitle'>Gallery Contents</span>
-                    <div id="apollo_gallery_contents_wrapper">
-                        <div align='left' id='apollo_gallery_contents'></div>
-                    </div>
-                    
-                    <div align="center">
-                        <div class='remove_image_box' id='delete_slot' align='center'>Drag images here to remove from this gallery</div>
-                    </div>
-                    
-                </td>
+        <td rowspan='2' width='250px' id='gallerySettings' style='height:100%; padding:5px; display:none'>
+            <div class='subframebox' style='height:100%; width:100%;'>
+                <span class='title'>Gallery Settings</span>
+                <div id='gallerySettingsContent'>
+                </div>
+            </div>
+        </td>
 
-                <!-- Gallery settings frame (for multi-gal)........... -->
+    </tr>
 
-                <td rowspan='2' width='250px' id='gallerySettings' style='height:100%; padding:5px; display:none'>
-                    <div class='subframebox' style='height:100%; width:100%;'>
-                        <span class='title'>Gallery Settings</span>
-                        <div id='gallerySettingsContent'>
-                        </div>
-                    </div>
-                </td>
+    <tr valign='top' width='100%'>
 
-            </tr>
+        <td class='frameContents' id='apollo_image_contents_wrapper'>
+            <span class='frameTitle'>Images                                            
+				<span class='more_link' id='prev_images_link' onclick='GalleriesFrame.showPrevImages()' title=''>&laquo; prev</span>
+				<span class='more_link' id='next_images_link' onclick='GalleriesFrame.showNextImages()' title=''>next &raquo;</span>
+            </span>
+            <div id='apollo_image_contents'></div>
+        </td>
 
-            <tr valign='top' width='100%'>
+    </tr>
 
-                <td class='frameContents' id='apollo_image_contents_wrapper'>
-                    <span class='frameTitle'>Images                                            
-						<span class='more_link' id='prev_images_link' onclick='GalleriesFrame.showPrevImages()' title=''>&laquo; prev</span>
-						<span class='more_link' id='next_images_link' onclick='GalleriesFrame.showNextImages()' title=''>next &raquo;</span>
-                    </span>
-                    <div id='apollo_image_contents'></div>
-                </td>
-
-            </tr>
-
-        </table>
-
-    </div>
-
-</div> <!-- GalleriesFrame -->
+</table><!-- GalleriesFrame -->

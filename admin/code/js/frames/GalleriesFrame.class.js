@@ -65,10 +65,10 @@ var GalleriesFrame = {
     	var w = 0;
 
         if (GalleriesFrame.m_mode == 'edit_image'){
-	  		w = $('#GalleryFrameContent').width() - 500;
+	  		w = $('#GalleriesFrame').width() - 500;
         }
         else {
-	  		w = $('#GalleryFrameContent').width() - 300;
+	  		w = $('#GalleriesFrame').width() - 300;
         }
         
     	// images per row = w / thumb_width

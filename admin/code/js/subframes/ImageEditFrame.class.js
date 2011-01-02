@@ -28,9 +28,9 @@ var ImageEditFrame = {
         var image_folder_id = imageData.folder_id;
         var added_date = imageData.date_added;	// UTC
 
-        var img_title = AthenaUtils.htmlEncode(imageData.title);
-        var desc = AthenaUtils.htmlEncode(imageData.description);
-        var alt_text = AthenaUtils.htmlEncode(imageData.tags);
+        var img_title = imageData.title;
+        var desc = imageData.description;
+        var alt_text = imageData.tags;
         var image_url = imageData.file_url;
 						
         var txt = "";

@@ -1,6 +1,10 @@
 RewriteEngine On
 #RewriteBase /
 
+RewriteRule ^mediatag/([^/\.]+)/?$ /admin/getimages.php?tag=$1 [L]
+RewriteRule ^wedding-ideas/([^/\.]+)/?$ /admin/getimages.php?tag=$1 [L]
+
+
 # Sitemap.xml redirect
 RewriteCond $1 ^Sitemap.xml
 RewriteRule ^(.*)$ /sitemap.php [L]

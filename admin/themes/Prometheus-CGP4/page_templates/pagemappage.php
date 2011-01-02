@@ -11,4 +11,5 @@
 
 	<?php echo PageManager::getCurrentPageContent(); ?>
 		
+		
 </div>

@@ -47,11 +47,14 @@ var PagesSidebarFrame = {
 		txt += "</ul>";
 		*/
 
-		var offset = 110;
-		var h = $(window).height() - offset; 
+		var pos = $(targetDiv).position();
+
+		var offset = pos.top;
+		var lineht = 25;				
+		var h = $('.ViewFrame').height() - offset - $('#pagesSidebarControls').height(); 
 				    		    	    		
-		PagesSidebarFrame.m_tagsPerPage = Math.floor(h / 25);		
-        PagesSidebarFrame.m_numberPages = Math.ceil(DataStore.m_pageList.length / PagesSidebarFrame.m_tagsPerPage);
+		PagesSidebarFrame.m_tagsPerPage = Math.floor(h / lineht);		
+        PagesSidebarFrame.m_numberPages = Math.ceil( DataStore.m_pageList.length / PagesSidebarFrame.m_tagsPerPage);
                         
         if (PagesSidebarFrame.m_numberPages == 1){
         	$('#pagesSidebarControls').hide();

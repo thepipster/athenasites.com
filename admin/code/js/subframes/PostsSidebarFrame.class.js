@@ -46,6 +46,12 @@ var PostsSidebarFrame = {
 		
 		
         $(targetDiv).html(txt);
+
+		var pos = $(targetDiv).position();
+		
+		var offset = pos.top + 30;
+		var lineht = 23;				
+		var h = $('.ViewFrame').height() - offset - $('#postsPageControls').height(); 
 		
     	var h = $(window).height() - 110;		
 		PostsSidebarFrame.m_postsPerPage = Math.floor(h / 30);

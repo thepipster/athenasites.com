@@ -313,6 +313,14 @@ class MediaTable {
 
     public static function getTagsForMedia($site_id, $media_id) {
         $sql = DatabaseManager::prepare("SELECT t.tag FROM athena_%d_MediaTags t INNER JOIN athena_%d_MediaToTags pt WHERE pt.media_id = %d AND pt.tag_id = t.id", $site_id, $site_id, $media_id);
+        Logger::debug($sql);
+        return DatabaseManager::getColumn($sql);
+    }
+
+    // /////////////////////////////////////////////////////////////////////////////////
+
+    public static function getMediaIDsByTag($site_id, $tag) {
+        $sql = DatabaseManager::prepare("SELECT pt.media_id FROM athena_%d_MediaTags t INNER JOIN athena_%d_MediaToTags pt WHERE pt.tag_id = t.id AND t.tag = %s", $site_id, $site_id, $tag);
         return DatabaseManager::getColumn($sql);
     }
     

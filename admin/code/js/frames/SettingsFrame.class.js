@@ -133,18 +133,18 @@ var SettingsFrame = {
 
                 case 'favicon':
                 case 'image':
-
-                    onclick = "SettingsFrame.selectImagePara("+theme_para_list[i].id+")";
-
+					
+                    var onclick = "SettingsFrame.selectImagePara("+theme_para_list[i].id+")";
+										
                     txt += "<table border='0'>";
                     txt += "<tr valign='top'>";
                     txt += "    <td width='40px'>";
-                    var image_url = '';
-                    if (paraVal){
+                    var image_url = '/admin/images/blank.gif';
+                    if (paraVal && paraVal != ''){
                         var image = DataStore.getImage(parseInt(paraVal));
                         if (image){
                             image_url = image.thumb_url
-                            }
+                        }
                     }
                     txt += "<img src='"+image_url+"' class='thumbBox' width='30px' height='30px' onclick=\""+onclick+"\" >";
                     txt += "    </td>";
@@ -156,7 +156,7 @@ var SettingsFrame = {
                     txt += "    </td>";
                     txt += "</tr>";
                     txt += "</table>";
-
+					
                     noParas++;
 
                     break;
@@ -182,7 +182,7 @@ var SettingsFrame = {
 	
                 case 'color':
 
-                    onclick = "SettingsFrame.selectColorPara("+theme_para_list[i].id+", '"+paraVal+"')";
+                    var onclick = "SettingsFrame.selectColorPara("+theme_para_list[i].id+", '"+paraVal+"')";
 	
 					/*
                     txt += "<table border='0' width='100%'>";	                    
@@ -313,6 +313,7 @@ var SettingsFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 	
     selectImagePara : function(themeParaID){
+    	alert(themeParaID);
         SettingsFrame.m_themeParaID = themeParaID;
         ImagePickerDialog.show('#PagesFrameImagePicker', SettingsFrame.onParaSelected)
     },    

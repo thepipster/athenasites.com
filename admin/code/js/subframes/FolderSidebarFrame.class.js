@@ -57,23 +57,24 @@ var FolderSidebarFrame = {
 		
 		var pos = $(targetDiv).position();
 
-		var h = 0;
 		var offset = pos.top + 30;
 		var lineht = 30;
+		var h = $('.ViewFrame').height() - offset - $('#folderPageControls').height(); 
 				
-		switch(ssMain.view){			
+/*		switch(ssMain.view){			
 		
 			case ssMain.VIEW_GALLERIES : 
-				h = ($('.ViewFrame').height()/2) - offset - $('#folderPageControls').height(); 
+//				h = ($(document).height()/2) - offset - $('#folderPageControls').height(); 
+				h = $(document).height() - offset - $('#folderPageControls').height(); 
 				break;
 				
 			case ssMain.VIEW_FILES : 
-				h = $('.ViewFrame').height() - offset - $('#folderPageControls').height(); 
+				h = $(document).height() - offset - $('#folderPageControls').height(); 
 				break;
 		}
+*/		
 		    	
 		FolderSidebarFrame.m_foldersPerPage = Math.floor(h / lineht);		
-//        FolderSidebarFrame.m_numberPages = Math.ceil( (DataStore.m_folderList.length + FolderSidebarFrame.m_noSystemFolders) / FolderSidebarFrame.m_foldersPerPage);
         FolderSidebarFrame.m_numberPages = Math.ceil(DataStore.m_folderList.length / FolderSidebarFrame.m_foldersPerPage);
         
         if (FolderSidebarFrame.m_numberPages == 1){
@@ -145,7 +146,7 @@ var FolderSidebarFrame = {
 		
 		for (var i=start_i; i<end_i; i++){
 
-			var folder_name = AthenaUtils.htmlEncode(folderList[i].name);
+			var folder_name = folderList[i].name;
 			var folder_id = folderList[i].id;
 			
 			if (folder_id == DataStore.m_currentFolderID){
