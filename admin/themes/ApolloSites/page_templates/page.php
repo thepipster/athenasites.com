@@ -6,6 +6,5 @@
 */
 ?>
 <?php 
-
 	echo PageManager::getCurrentPageContent();
 ?>
