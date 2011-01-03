@@ -6,19 +6,6 @@
 */
 ?>
 
-<div id="page_contents" align="center">
-
-	<div class='contentText'>
-	
-		<?php 
-			echo PageManager::getCurrentPageContent();
-		?>
-		
-	</div>
-					
-</div>
-
-		
-<script type="text/javascript">
-</script>
-
+<?php 
+	echo PageManager::getCurrentPageContent();
+?>
