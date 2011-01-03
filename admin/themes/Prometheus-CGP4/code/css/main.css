@@ -76,7 +76,7 @@ a {
 /* Global page styles ///////////////////////////////////////////////////// */
 
 .pageContents {
-    padding-top: 25px;
+    padding-top: 30px;
     margin-right: 10px;
     padding-bottom: 10px;
     height: auto;
@@ -150,9 +150,17 @@ a {
 /* Menu Container ///////////////////////////////////////////////////// */
 
 .treeMenuLogo {
-    background-image: url("../imgs/tree_whitebg.jpg");
-    background-position: bottom center;
+    background-image: url("../imgs/tree_whitebg2.jpg");
+    background-position: bottom left;
     background-repeat: no-repeat;
+    background-color: red;
+}
+
+#treeMenuLogo {
+	position: absolute;
+	bottom: 38px;
+	padding-left: 50px;
+	z-index: 0;
 }
 
 #menuContainer {
@@ -162,6 +170,7 @@ a {
     padding: 0px;
     margin: 0px;
     margin-top: 30px;
+    overflow: hidden;
 }
 
 #menuContainer .spacer {

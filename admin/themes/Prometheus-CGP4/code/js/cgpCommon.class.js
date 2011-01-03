@@ -16,7 +16,7 @@ var cgpCommon = {
 		$('#navigation').accordion({ 
 		    active: true, 
 		    header: '.menuHead', 
-//		    fillSpace: false,
+		    fillSpace: false,
 		    autoHeight: false,
 		    navigation: true,
 		   // event: 'mouseover'

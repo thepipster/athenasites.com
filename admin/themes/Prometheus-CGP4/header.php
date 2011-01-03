@@ -54,6 +54,15 @@ PageManager::doHeader();
 		/* ie6 png fix */		
 		div { behavior: url("<?= PageManager::$theme_url_root; ?>/iepngfix.htc") }
 						
+		<?php
+		// Handle any custom site styles
+		$background_image = PageManager::getGlobalMediaFromThemePara(309); 
+		
+		if (isset($background_image)){
+			$image_url = PageManager::$media_root_url . $background_image['filepath'] . $background_image['filename'];
+			echo "html {background-image: url('$image_url');}\n";			
+		}
+		?>				
 	</style>
 
 	<!-- Pingback ////////////////////////////////////////////////////////////// -->
@@ -69,15 +78,17 @@ PageManager::doHeader();
 	
 	<a href="/"><div id='logo'></div></a>
 
-	<div id='container'>
+	<div id='container' class='treeMenuLogo'>
 		
 		<table width="100%" height="100%" cellpadding="0" cellspacing="0" border="0">
 			
 			<tr>
-				<td width='200px' height="100%" valign="top" class='treeMenuLogo'>
+				<td width='200px' height="100%" valign="top">
 				
 					<div id='menuContainer' align="right">
-													
+						<!--
+						<div id='treeMenuLogo'><img src='<?= PageManager::$theme_url_root; ?>code/imgs/tree.png'/></div>
+						-->							
 						<ul id='navigation'>
 										
 						<?php 

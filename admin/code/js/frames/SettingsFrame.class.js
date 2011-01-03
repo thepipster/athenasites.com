@@ -262,12 +262,12 @@ var SettingsFrame = {
 
                 case 'text':
                 	                	
-                    txt += "<table border='0'>";	                    
-                    txt += "    <tr valign='top' rowspan='2'>";	                    
+                    txt += "<table border='0' style='width:100%'>";	                    
+                    txt += "    <tr valign='top' rowspan='2' width='100%' style='width:100%'>";	                    
                     txt += "        <td rowspan='2' width='100px'><div class='paraTitle'>"+theme_para_list[i].description+blogTxt+"</div></td>";
                     txt += "        <td><input id='paraID_"+theme_para_list[i].id+"' value='"+paraVal+"' class='customTextInput' style='width:95%;'/></td>";
                     txt += "    </tr>";	                    
-                    txt += "    <tr valign='top'>";	                    
+                    txt += "    <tr valign='top' width='100%' style='width:100%'>";	                    
                     txt += "        <td><span class='paraDesc' style='width:95%;'>"+theme_para_list[i].help_text+"</span></td>";	                    
                     txt += "    </tr>";	                    
                     txt += "</table>";
@@ -313,7 +313,6 @@ var SettingsFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 	
     selectImagePara : function(themeParaID){
-    	alert(themeParaID);
         SettingsFrame.m_themeParaID = themeParaID;
         ImagePickerDialog.show('#PagesFrameImagePicker', SettingsFrame.onParaSelected)
     },    

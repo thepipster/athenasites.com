@@ -114,7 +114,7 @@ class PageManager {
     /**
      * Initialize, this uses the domain to get the site id
      */
-    public static function init($force_domain = '') {
+    public static function init($force_domain = '', $force_site_id = 0) {
 
 		if ($force_domain != ''){
 	        self::$url_root = 'http://' . $force_domain;
@@ -126,10 +126,14 @@ class PageManager {
 	        self::$domain = $_SERVER['HTTP_HOST'];
 	        self::$domain = str_replace('www.', '', self::$domain);
 		}
-
-
-        // Get the site id
-        $site = SitesTable::getSiteFromDomain(self::$domain);
+	
+	    // Get the site id
+		if ($force_site_id == 0){
+	        $site = SitesTable::getSiteFromDomain(self::$domain);
+		}
+		else {
+	        $site = SitesTable::getSite($force_site_id);
+		}
         
         if (!isset($site)){
         	return;
@@ -365,6 +369,13 @@ class PageManager {
         return null;
     }
 
+    public static function getGlobalMediaFromThemePara($theme_para_id) {
+        $media_id = PageParasTable::getParaValue(0, $theme_para_id, self::$site_id);
+        if (isset($media_id)) {
+            return MediaTable::getMedia(self::$site_id, $media_id);
+        }
+        return null;
+    }
     // ///////////////////////////////////////////////////////////////////////////////////////
 
     public static function getPageTitle() {

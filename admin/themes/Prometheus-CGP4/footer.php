@@ -16,8 +16,8 @@ global $tracker_code;
 	</div> <!-- container -->
 
 	<div id='footer'>
-		<span class='left '>Colorado Springs wedding and portrait photographers. Available throughout Colorado and worldwide.</span>
-		<span class='right '>charlotte@charlottegeary.com | 719-685-1248</span>		
+		<span class='left '><?= ThemeTable::getGlobalParaValue(PageManager::$site_id, 307) ?></span>
+		<span class='right '><?= ThemeTable::getGlobalParaValue(PageManager::$site_id, 308) ?></span>		
 	</div> <!-- footer -->
 
 	<br />
@@ -27,8 +27,6 @@ global $tracker_code;
 </div>	
 
 <script type="text/javascript">
-
-<?= PageManager::echoGoogleTracker($tracker_code); ?>
 		
 // Don't wait for page to load, just initialize the menu as fast as possible
 cgpCommon.init();
