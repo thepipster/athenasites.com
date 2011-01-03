@@ -174,3 +174,14 @@ a img { border: none; }
 	height: 15px;
 }
 
+/* Blog page ////////////////////////////////////////////// */
+
+#BlogPage .postTitle a {
+	font-size: 20px;
+	color: #154a94 !important;
+}
+
+#BlogPage .postDate {
+	font-size: 14px;
+	color: #389ceb;
+}
