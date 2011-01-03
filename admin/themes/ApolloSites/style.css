@@ -55,11 +55,6 @@ a img { border: none; }
 	min-height: 500px;
 	display: block;
 	clear: both;
-	/*
-	background-image: url('images/background.png');
-	background-position: left;
-	background-repeat: no-repeat;	
-	*/
 }
 
 #footerBarWrapper {

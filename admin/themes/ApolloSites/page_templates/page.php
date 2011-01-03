@@ -5,7 +5,7 @@
 * @Description: Basic Page
 */
 ?>
-
 <?php 
+
 	echo PageManager::getCurrentPageContent();
 ?>

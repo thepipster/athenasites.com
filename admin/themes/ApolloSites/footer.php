@@ -24,6 +24,7 @@ global $apollo_root_url;
 					<p><a href='<?=$apollo_root_url?>/blog'>Get the latest news at our company Blog</a></p>
 					<p><a href='<?=$apollo_root_url?>/privacy.html'>Check out our privacy policy</a></p>
 					<p><a href='<?=$apollo_root_url?>/contact.html'>Contact us</a><span class='coming_soon'>(coming soon)</span></p>
+					<p><a href='<?=$apollo_root_url?>/privacy_fa1q.html'>Privacy FAQs</a></p>
 				</td>
 				
 				<td width="33%">
