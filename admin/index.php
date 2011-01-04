@@ -94,7 +94,7 @@ var ssLogin = {
 	onPasswordChecked : function(isValid){
 	
 		if (isValid){
-			window.location = "main.php";	
+			window.location = "dashboard.php";	
 		}
 		else {
 			alert('Bad username/password');
