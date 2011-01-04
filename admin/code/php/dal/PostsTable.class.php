@@ -192,6 +192,14 @@ class PostsTable {
 
     // /////////////////////////////////////////////////////////////////////////////////
 
+    public static function getLatestPostFromCategory($site_id, $category) {
+        $cat_id = self::getCategoryID($site_id, $category);
+        $sql = DatabaseManager::prepare("SELECT p.* FROM athena_%d_Posts p INNER JOIN athena_%d_PostToCategories pc WHERE pc.category_id = %d AND pc.post_id = p.id ORDER BY created DESC LIMIT 1", $site_id, $site_id, $cat_id);
+        return DatabaseManager::getSingleResult($sql);
+    }
+
+    // /////////////////////////////////////////////////////////////////////////////////
+
     public static function getPostsFromTag($site_id, $tag) {
         //Logger::debug("getPostsFromTag($site_id, $tag)");
         $tag_id = self::getTagID($site_id, $tag);

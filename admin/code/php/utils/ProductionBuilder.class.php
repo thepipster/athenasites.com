@@ -46,6 +46,53 @@ class ProductionBuilder {
 	 	
 	}
 	
+	// ////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Take all of the individual CSS files used and builds them into one
+	 * big CSS file, minifying each in turn
+	 * 
+	 * @param array $css_files Array of CSS include (full) paths to use to build the production file
+	 * @param string $master_filename The filename of the production ccss file
+	 * @param boolean $doMinify flag to determine if we minify the code or just concatanate
+	 * @return 
+	 */	
+	public static function buildProductionCSS($css_files, $master_filename, $doMinify=true) {
+		
+		Logger::debug("Processing CSS.. [$master_filename]");
+	 	 	
+	 	file_put_contents($master_filename, "");
+	 	 
+	 	$size = 0;
+	 	$no_files = count($css_files);
+	 	 	
+		foreach($css_files as $script_filename) {
+	 			 		
+	 		$size += filesize($script_filename);
+	 		
+	 		if ($doMinify){
+	 			$min_script = CSSMin::process(file_get_contents($script_filename));
+	 		}
+	 		else {
+	 			$min_script = file_get_contents($script_filename) . "\n";
+	 		}
+
+			//$base_dir = dirname($script);
+			//Logger::debug("BaseDir: $base_dir");
+	
+			file_put_contents($master_filename, $min_script, FILE_APPEND);
+									
+	 	}
+	
+		$new_size = filesize($master_filename);
+	 	
+	 	$size = round($size / 1024);
+	 	$new_size = round($new_size / 1024);
+	 	$pc = 100 * $new_size / $size;
+	 	
+	 	Logger::info("Merged $no_files files with a total size of $size kb to 1 file of size $new_size kb (".number_format($pc,2)."% compression)");
+	
+	}	
 }
 
 ?>

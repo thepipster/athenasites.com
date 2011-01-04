@@ -114,24 +114,20 @@ class PageManager {
     /**
      * Initialize, this uses the domain to get the site id
      */
-    public static function init($force_domain = '', $force_site_id = 0) {
-
-		if ($force_domain != ''){
-	        self::$url_root = 'http://' . $force_domain;
-	        self::$domain = $force_domain;
-		}
-		else {
-	        self::$url_root = 'http://' . $_SERVER['HTTP_HOST'];
-	        // Get the domain, and strip www if it has it
-	        self::$domain = $_SERVER['HTTP_HOST'];
-	        self::$domain = str_replace('www.', '', self::$domain);
-		}
+    public static function init($force_site_id = 0) {
 	
 	    // Get the site id
 		if ($force_site_id == 0){
+		
+	        self::$url_root = 'http://' . $_SERVER['HTTP_HOST'];
+	        
+	        // Get the domain, and strip www if it has it
+	        self::$domain = $_SERVER['HTTP_HOST'];
+	        self::$domain = str_replace('www.', '', self::$domain);
+
 	        $site = SitesTable::getSiteFromDomain(self::$domain);
 		}
-		else {
+		else {	        
 	        $site = SitesTable::getSite($force_site_id);
 		}
         

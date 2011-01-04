@@ -110,6 +110,15 @@ class SecurityUtils {
 
     // //////////////////////////////////////////////////////////////
 
+    public static function isSuperUser() {
+		if (self::getCurrentUserLevel() == 1) {
+			return true;
+		}
+		return false;
+    }
+
+    // //////////////////////////////////////////////////////////////
+
     /**
      * Check to see if the current user has access to the given site id
      */

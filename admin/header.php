@@ -62,7 +62,7 @@ Logger::debug("$domain has site_id = $current_site_id");
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
     <head>
-        <title>ApolloSites | Athena 1.0 </title>
+        <title>ApolloSites Admin 1.0</title>
 
         <meta name="Description" content="" />
         <meta name="Keywords" content="" />

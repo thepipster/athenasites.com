@@ -2,14 +2,7 @@
 
 require_once("code/php/setup.php");
 
-
-if (strpos("_" . $_SERVER['HTTP_HOST'], "apollo.local") > 0){
-	PageManager::init('apollo.local');
-}
-else {
-	PageManager::init('apollosites.com');
-}
-
+PageManager::init(1);
 PageManager::$page_title = 'ApolloSites | Admin';
 
 // Echo header
@@ -29,22 +22,12 @@ require_once('themes/ApolloSites/header.php');
 
 
 <div id='leftCol'>
-	<h3>ApolloSites News & Latest Features</h3>
+	<?php
+	$post = PostsTable::getLatestPostFromCategory(PageManager::$site_id, 'news');	
+	?>
+	<h3><?= $post['title'] ?></h3>
 	<div id='leftColContents'>
-		<p>
-		Welcome to the new design for ApolloSites! We're one step closer to launching, we have a few more 
-		features to roll-out before we launch, but that won't be the end - just the beginning! Over the next 
-		few weeks you can expect the following features to be rolled out;
-		</p>
-		<ul>
-		<li><p>Some style fixes - we know that for people with a lot of images, folders or pages the page starts to look
-		funky. We'll be fixing that soon.</p></li>
-		<li><p>Account tab - this will allow you to view your account status, update your address and change your password.</p></li>
-		<li><p>We'll add the ability to manually modify a post's creation date.</p></li>
-		<li><p>Stats tab - this will allow you to see a breakdown of your stats per page. More features will be added to this page in the future!</p></li>
-		<li><p>Image Tagging - this is a biggie, but we found that people with a lot of images need a way to organize them that goes beyond
-		basic folders, so we're introducting the ability to add image tags, that will allow you to more rapidly organize your images.</p></li>
-		</ul>
+		<?= $post['content'] ?>
 	</div>
 </div><!-- leftCol -->
 
