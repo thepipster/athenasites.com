@@ -57,15 +57,6 @@ if ($page == '' || (($ext == 'html') || ($ext == 'htm') || ($ext == 'php'))) {
 
     PageManager::load($page, $path, $tag, $category, $month, $year, $page_no);
 
-    // Log the page view if this is a real page
-    if (PageManager::$blog_mode == PageManager::$BLOGMODE_SINGLEPOST){
-    	$post_id = PageManager::$current_post['id'];
-	    PageViewsTable::logView(PageManager::$site_id, PageManager::$page_id, $post_id, $page, $path, $query_string);
-    }
-    else {
-	    PageViewsTable::logView(PageManager::$site_id, PageManager::$page_id, 0, $page, $path, $query_string);
-    }
-
 	if ($DEBUG) die();
 
     // Echo header

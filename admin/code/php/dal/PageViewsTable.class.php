@@ -35,6 +35,7 @@ class PageViewsTable {
 
     public static function logView($site_id, $page_id, $post_id, $page, $path, $query_string) {
 
+		/*
         if (Session::exists('pageview_etime')) {
             $etime = microtime(true) - Session::get('pageview_etime');
             Session::set('pageview_etime', microtime(true));
@@ -50,7 +51,8 @@ class PageViewsTable {
         } else {
             Logger::debug("Duplicated view: eTime = $etime");
         }
-
+		*/
+		
         $browser = new Browser();
 
         $browser_name = $browser->getBrowser();

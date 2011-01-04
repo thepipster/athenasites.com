@@ -16,7 +16,7 @@ Logger::debug("$domain has site_id = $site_id");
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-    <title>ApolloSites Admin 1.0 | Galleries</title>
+    <title>ApolloSites Admin 1.0 | Blog</title>
 
     <meta name="Description" content="" />
     <meta name="Keywords" content="" />
@@ -36,6 +36,9 @@ Logger::debug("$domain has site_id = $site_id");
     <script src="code/js/3rdparty/jquery-1.4.2.min.js" type="text/javascript"></script>
     <script src="code/js/3rdparty/jquery-ui/jquery-ui-1.8.4.custom.min.js" type="text/javascript"></script>
 
+        <!-- InnovaStudio -->
+        <script src="code/3rdparty/InnovaStudio/scripts/innovaeditor.js" type="text/javascript"></script>
+
 	<?php
 	
 	
@@ -47,6 +50,12 @@ Logger::debug("$domain has site_id = $site_id");
 			
 				// 3rd Party...
 				"$base_dir/code/js/3rdparty/jquery.advancedClick.js",				
+//				"$base_dir/code/3rdparty/InnovaStudio/scripts/innovaeditor.js",
+				"$base_dir/code/colorpicker/js/colorpicker.js",
+				"$base_dir/code/js/3rdparty/date.format.js",
+				"$base_dir/code/js/3rdparty/date.js",
+				"$base_dir/code/js/3rdparty/jquery.datePicker.js",
+				"$base_dir/code/js/3rdparty/jquery.typing-0.2.0.min.js",
 
 				// Settings...
 				"$base_dir/code/js/defines.js",
@@ -55,46 +64,56 @@ Logger::debug("$domain has site_id = $site_id");
 				"$base_dir/code/js/utils/Logger.class.js",
 				"$base_dir/code/js/utils/AthenaDialog.class.js",
 				"$base_dir/code/js/utils/AthenaUtils.class.js",
-				
+								
 				// Core....
 				"$base_dir/code/js/ssMain.class.js",
 				"$base_dir/code/js/DataStore.class.js",
-				
-				"$base_dir/code/js/pages/Galleries.class.js",
+				"$base_dir/code/js/pages/Posts.class.js",
 				
 				// Remote API's...
+				"$base_dir/code/js/remoteapi/BlogAPI.class.js",
 				"$base_dir/code/js/remoteapi/MediaAPI.class.js",
 				"$base_dir/code/js/remoteapi/GalleryAPI.class.js",
 				
 				// Dialogs...
 				"$base_dir/code/js/dialogs/AccountDialog.class.js",
-				
+				"$base_dir/code/js/dialogs/ImagePickerDialog.class.js",
+				"$base_dir/code/js/dialogs/ColorPickerDialog.class.js",
+				"$base_dir/code/js/dialogs/CommentsEditDialog.class.js",
+
 				// Sub-Frames....
-				"$base_dir/code/js/subframes/FolderSidebarFrame.class.js",
-				"$base_dir/code/js/subframes/TagsSidebarFrame.class.js",	
-				"$base_dir/code/js/subframes/GalleriesSidebarFrame.class.js",
+				"$base_dir/code/js/subframes/PostsSidebarFrame.class.js",
+				"$base_dir/code/js/subframes/ImageSelector.class.js",	
+				"$base_dir/code/js/subframes/ImageEditFrame.class.js",
 				
 				// Frames....
 				"$base_dir/code/js/frames/SidebarFrame.class.js",
-				"$base_dir/code/js/frames/GalleriesFrame.class.js"
+				"$base_dir/code/js/frames/PostsFrame.class.js"
 			);
-	
-			$css_list = array(
+		
+			$css_list = array(			
 				"$base_dir/code/css/Athena.css",
 				"$base_dir/code/css/SideBar.css",
-				"$base_dir/code/css/GalleryFrame.css"			
+				"$base_dir/code/css/PagesFrame.css",
+				// "$base_dir/code/css/PostsFrame.css", Merged posts and pages, so no need of this style sheet
+				"$base_dir/code/colorpicker/css/colorpicker.css",
+				"$base_dir/code/css/datePicker.css",
+				"$base_dir/code/css/ImageEditDialog.css",
+				"$base_dir/code/css/ImagePickerDialog.css",
+				"$base_dir/code/css/CommentDialog.css",
+				"$base_dir/code/css/ImageEditFrame.css"
 			);
 			
-			ProductionBuilder::buildProductionJS($js_list, "$base_dir/code/js/prod_galleries.js", true);
-			ProductionBuilder::buildProductionCSS($css_list, "$base_dir/code/css/prod_galleries.css", true);
+			ProductionBuilder::buildProductionJS($js_list, "$base_dir/code/js/prod_posts.js", true);
+			ProductionBuilder::buildProductionCSS($css_list, "$base_dir/code/css/prod_posts.css", true);
 			
 		}	
 
 	?>
 	
-    <script src="code/js/prod_galleries.js?ver=1.0" type="text/javascript"></script>
+    <script src="code/js/prod_posts.js?ver=1.0" type="text/javascript"></script>
 
-    <link rel="stylesheet" href="code/css/prod_galleries.css?ver=1.0" type="text/css"/>
+    <link rel="stylesheet" href="code/css/prod_posts.css?ver=1.0" type="text/css"/>
 
     <!-- Inline Style ////////////////////////////////////////////////////////////////// -->
 
@@ -133,10 +152,10 @@ Logger::debug("$domain has site_id = $site_id");
 	    <div id='menu_container'>
 	        
 	        <a class='menu_item' href='/admin/dashboard.php'>Dashboard</a>
-	        <a class='menu_item' href='/admin/posts.php'>Blog</a>
+	        <a class='menu_item selected' href='#'>Blog</a>
 	        <a class='menu_item' href='/admin/pages.php'>Pages</a>
 	        <a class='menu_item' href='/admin/files.php'>Files</a>
-	        <a class='menu_item selected' href='#'>Galleries</a>
+	        <a class='menu_item' href='/admin/galleries.php''>Galleries</a>
 	        <!--
 	        <a class='menu_item' href='/admin/stats.php'>Stats</a>
 	        -->
@@ -158,7 +177,7 @@ Logger::debug("$domain has site_id = $site_id");
 					
 		<div id='MainContents'>
 	
-			<?php echo file_get_contents("code/html/GalleriesFrame.html") ?>		
+			<?php echo file_get_contents("code/html/PostsFrame.html") ?>
 
 		</div>	
 	
@@ -176,8 +195,8 @@ Logger::debug("$domain has site_id = $site_id");
     defines.domain = '<?php echo $domain; ?>';
 	
     $(document).ready(function(){
-    	ssMain.init(<?= $site_id ?>, ssMain.VIEW_GALLERIES);
-    	Galleries.init(<?= $site_id ?>);
+    	ssMain.init(<?= $site_id ?>, ssMain.VIEW_POSTS);
+    	Posts.init(<?= $site_id ?>);
     });
 
 </script>

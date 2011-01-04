@@ -64,7 +64,7 @@ var TagsSidebarFrame = {
 		TagsSidebarFrame.m_tagsPerPage = Math.floor(h / lineht);		
         TagsSidebarFrame.m_numberPages = Math.ceil(DataStore.m_mediaTags.length / TagsSidebarFrame.m_tagsPerPage);
         
-        if (PagesSidebarFrame.m_numberPages == 1){
+        if (TagsSidebarFrame.m_numberPages == 1){
         	$('#tagPageControls').hide();
         }
         

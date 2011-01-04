@@ -42,6 +42,9 @@ class PageManager {
     /** The current page title */
     public static $page_title;
     
+    /** The current page path */
+    public static $page_path;
+    
     /** The browser title for the current page */
     public static $page_browser_title;
     
@@ -198,6 +201,7 @@ class PageManager {
             self::init();
         }
 
+		self::$page_path = $page_path;
 		self::$page_slug = $page_name;
 		
         //self::$user_id = SecurityUtils::getCurrentUserID();
@@ -409,33 +413,39 @@ class PageManager {
      */
     public static function doFooter() {
 
-        $domain = PageManager::$domain;
-        $page_title = PageManager::$page_title;
+        $domain = self::$domain;
+        $page_title = self::$page_title;
+        $site_id = self::$site_id;
+        $page_id = self::$page_id;
+        //$page_path = self::$page_path;
+        //$slug = self::$slug;
 
+/*
+   	// Log the page view if this is a real page
+    if (PageManager::$blog_mode == PageManager::$BLOGMODE_SINGLEPOST){
+	    PageViewsTable::logView(PageManager::$site_id, PageManager::$page_id, $post_id, $page, $path, $query_string);
+    }
+    else {
+	    PageViewsTable::logView(PageManager::$site_id, PageManager::$page_id, 0, $page, $path, $query_string);
+	}
+*/	        
+
+		// Hit the Apollo tracker..
+	    if (PageManager::$blog_mode == PageManager::$BLOGMODE_SINGLEPOST){	    	
+	    	$post_id = self::$current_post['id'];	    	
+			echo "<script type='text/javascript'>\n
+					$.get('/admin/tracker.php?pid=$page_id&bid=$post_id&ref='+document.referrer);\n
+				</script>\n";
+				
+		}
+		else {
+			echo "<script type='text/javascript'>\n
+					$.get('/admin/tracker.php?pid=$page_id&bid=&ref='+document.referrer);\n
+				</script>\n";
+		}
+			
 		// Get the google tracker code (if set)	
 		$tracker_code = ThemeTable::getGlobalParaValue(self::$site_id, self::$PARA_GOOGLE_TRACKER);
-
-		// 	<script type="text/javascript" src="http://www.google-analytics.com/ga.js"></script>
-
-		/*
-		Latest code
-		
-		<script type="text/javascript">
-		
-		  var _gaq = _gaq || [];
-		  _gaq.push(['_setAccount', 'UA-20462178-1']);
-		  _gaq.push(['_trackPageview']);
-		
-		  (function() {
-		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		  })();
-		
-		</script>
-		
-		*/
-		
 
         if (isset($tracker_code) && $tracker_code != ''){        
 			echo "
@@ -454,23 +464,7 @@ class PageManager {
 			
 			</script>";
 		}
-				
-	/*
-        if (isset($tracker_code) && $tracker_code != ''){        
-			echo "<!-- Global tracking --> \n";
-			echo "<script type='text/javascript'> \n";
-			echo "    var gaJsHost = (('https:' == document.location.protocol) ? 'https://ssl.' : 'http://www.'); \n";
-			echo "    document.write(unescape('%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E')); \n";
-			echo "</script> \n";
-			echo "<script type='text/javascript'> \n";
-			echo "try { \n";
-			echo "    var pageTracker = _gat._getTracker('$tracker_code'); \n";
-			echo "    pageTracker._setDomainName('$domain'); \n";
-			echo "    pageTracker._trackPageview('$page_title'); \n";
-			echo "} catch(err) {} \n";
-			echo "</script> \n";
-		}
-    */    
+ 
     }
 
     // ///////////////////////////////////////////////////////////////////////////////////////

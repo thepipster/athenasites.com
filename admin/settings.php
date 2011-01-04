@@ -59,8 +59,7 @@ Logger::debug("$domain has site_id = $site_id");
 				// Core....
 				"$base_dir/code/js/ssMain.class.js",
 				"$base_dir/code/js/DataStore.class.js",
-				
-				"$base_dir/code/js/pages/Galleries.class.js",
+				"$base_dir/code/js/Galleries.class.js",
 				
 				// Remote API's...
 				"$base_dir/code/js/remoteapi/MediaAPI.class.js",
@@ -85,8 +84,8 @@ Logger::debug("$domain has site_id = $site_id");
 				"$base_dir/code/css/GalleryFrame.css"			
 			);
 			
-			ProductionBuilder::buildProductionJS($js_list, "$base_dir/code/js/prod_galleries.js", true);
-			ProductionBuilder::buildProductionCSS($css_list, "$base_dir/code/css/prod_galleries.css", true);
+			ProductionBuilder::buildProductionJS($js_list, "$base_dir/code/js/prod_galleries.js", false);
+			ProductionBuilder::buildProductionCSS($css_list, "$base_dir/code/css/prod_galleries.css", false);
 			
 		}	
 

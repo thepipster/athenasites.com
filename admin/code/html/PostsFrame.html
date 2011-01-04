@@ -1,0 +1,261 @@
+
+<div id='PagesFrameImagePicker'></div>
+<div id='PagesFrameColorPicker'></div>
+
+<table id='PagesFrame' class='ViewFrame' border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>
+
+    <tr valign='top'>
+
+        <td height='30px'>
+            <div class='frameControlsBar'>
+                <span class='label'>Title:</span>
+                <input id='pageTitle' type='text' value='' class='apolloDataInput'/>
+                <input id='postTitle' type='text' value='' class='apolloDataInput'/>
+                <!--
+                <button class='basic_button' style='' onclick="ImagePickerDialog.show('#PagesFrameImagePicker', PagesFrame.onImageSelected);">Insert Image</button>
+                -->
+                <a id='pageLink' href='' target='_blank' style='font-size:10px'>View Page</a>
+            </div>
+        </td>
+
+        <td rowspan='2' width='250px' style='height:100%; padding:5px'>
+
+            <!-- Post settings sub-frame ////////////////////////////////////////////// -->
+
+            <div class='subframebox' id="postSettings" style="height:100%;width:255px;display:none">
+
+                <span class='title'>Post Settings</span>
+
+                <fieldset>
+                    <legend></legend>
+                    <!--
+                    <div class='postInfoLine'>
+                                            <span class='postLabel'>Slug:</span>
+                                            <span class='postData' id='postSlug'></span>
+                    </div>
+                    -->
+
+                    <div class='pageInfoLine'>
+                        <span class='pageLabel'>Status:</span>
+                        <span class='pageData' class='apolloDataInput'>
+                            <select id='postStatusSelector' class='apolloDataInput'>
+                                <option value='Published' class=''>Published</option>
+                                <option value='Draft' class=''>Draft</option>
+                                <!--
+                                <option value='Private' class=''>Private</option>
+                                -->
+                            </select>
+                        </span>
+                    </div>
+
+                    <div class='pageInfoLine'>
+                        <span class='pageLabel'>Last Edit:</span>
+                        <span class='pageData' id='postLastEdit'></span>
+                    </div>
+
+                    <div class='pageInfoLine'>
+                        <span class='pageLabel'>Created:</span>
+                        <span class='pageData' id='postCreated'></span>
+                    </div>
+
+                    <div class='pageInfoLine'>
+                        <span class='pageLabel'>Allow Comments:</span>
+                        <span class='pageData'>
+                            <select id='postCanCommentSelector' class='apolloDataInput'>
+                                <option value='1' selected>Yes</option>
+                                <option value='0'>No</option>
+                            </select>
+                        </span>
+                    </div>
+
+					<!--
+                    <div class='pageInfoLine'>
+                        <span class='pageLabel'>Import:</span>
+                        <a href='#' onclick="PostsFrame.paintTools()">Import Posts</a>
+                    </div>
+					-->
+					
+                    <div class='pageInfoLine'>
+                        <span class='pageLabel'>Comments:</span>
+                        <!-- <button class='basic_button' onclick="PostsFrame.paintTools()">Import Posts</button> -->
+                        <a href='#' onclick="CommentsEditDialog.show()">Edit Comments</a>
+                    </div>
+
+
+                    <div class='pageInfoLine'>
+                        <span class='pageLabel'>Controls:</span>
+                        <!--<button class='save_button' onclick="PostsFrame.onSavePost()">Save</button>-->
+                        <button class='delete_button' onclick="PostsFrame.onDeletePost()">Delete Post</button>
+                    </div>
+
+
+                </fieldset>
+
+                <fieldset>
+                    <legend></legend>
+
+                    <p><strong>Tags</strong><span class='subFrameCommand' onclick='PostsFrame.viewTags()' title='View and edit your tags'>&nbsp;(view all)</span></p>
+                    <div class='pageInfoLine'>
+                        <span class='pageData' id='postTags'><input id='postTag' type='text' value=''/></span>
+                        <span class='pageLabel'><button class='basic_button' onclick='PostsFrame.addTag();'>Add</button></span>
+                    </div>
+                    <div id='apollo_post_tags'></div>
+
+                    <p><strong>Categories</strong>
+                        <span class='subFrameCommand' onclick='PostsFrame.viewCategories()' title='View and edit your categories'>&nbsp;(view all)</span></p>
+                    <div class='pageInfoLine'>
+                        <span class='pageData' id='postCategories'><input id='postCategory' type='text' value=''/></span>
+                        <span class='pageLabel'><button class='basic_button' onclick='PostsFrame.addCategory()';>Add</button></span>
+                    </div>
+                    <div id='apollo_post_categories'></div>
+
+                </fieldset>
+
+            </div>
+
+            <!-- Page settings sub-frame ////////////////////////////////////////////// -->
+
+            <div class='subframebox' id="pageSettings" style="height:100%;width:255px;display:none">
+
+                <span class='title'>Page Settings</span>
+
+                <fieldset>
+                    <legend></legend>
+
+                    <!--
+                    <div class='pageInfoLine'>
+                        <span class='pageLabel'>Title:</span>
+                        <span class='pageData'><input id='pageTitle' type=text value=''/></span>
+                    </div>
+
+                    <div class='pageInfoLine'>
+                        <span class='pageLabel'>Slug:</span>
+                        <span class='pageData' id='pageSlug'></span>
+                    </div>
+                    -->
+
+                    <div class='pageInfoLine'>
+                        <span class='pageLabel'>Status:</span>
+                        <span class='pageData'>
+
+                            <select id='pageStatusSelector' class='apolloDataInput'>
+                                <option value='Published'>Published</option>
+                                <option value='Draft'>Draft</option>
+                                <!--
+                                <option value='Private'>Private</option>
+                                -->
+                            </select>
+                        </span>
+                    </div>
+
+                    <div class='pageInfoLine'>
+                        <span class='pageLabel'>Browser Title:</span>
+                        <span class='pageData'><input id='pageBrowserTitle' title='If set, this will be used as the title in the browser. If its not set, we use the title. This allows you to have a different title in the browser window than the title used in your menu.' type='text' value='' class='apolloDataInput'/></span>
+                    </div>
+
+                    <div class='pageInfoLine'>
+                        <span class='pageLabel'>Description:</span>
+                        <span class='pageData'><input id='pageDesc' title='Enter a description of this page so we can feed that to search engines!' type='text' value='' class='apolloDataInput'/></span>
+                    </div>
+
+                    <div class='pageInfoLine'>
+                        <span class='pageLabel'>Last Edit:</span>
+                        <span class='pageData' id='pageLastEdit'></span>
+                    </div>
+                    
+                    <!--
+                    <div class='pageInfoLine'>
+                        <span class='pageLabel'>Created:</span>
+                        <span class='pageData' id='pageCreated'></span>
+                    </div>
+					-->												
+					<!--
+                    <div class='pageInfoLine'>
+                        <span class='pageLabel'>Global:</span>
+                        <a href='#' onclick="PagesFrame.editGlobalSettings()" title="Edit your global page settings">Edit Settings</a>
+                    </div>
+					-->
+					
+                    <div class='pageInfoLine'>
+                        <span class='pageLabel'>Parent Page:</span>
+                        <span class='pageData' id='parentPageContents'></span>
+                    </div>
+
+                    <div class='pageInfoLine'>
+                        <span class='pageLabel'>Template:</span>
+                        <span class='pageData' id="pageTemplateWrapper">
+                            <select id='pageTemplate' onchange="PagesFrame.paintThemeParas()" class='apolloDataInput'>
+                                <option value=''>(none)</option>
+                            </select>
+                        </span>
+                    </div>
+
+                    <div class='pageInfoLine'>
+                        <span class='pageLabel'>Menu Order:</span>
+                        <!--<span class='pageData'><input id='pageOrder' type=text size=5 value=''/></span>-->
+                        <span class='pageData'>
+                            <select id='pageOrder' class='apolloDataInput'>
+                                <option value='1' selected>1</option>
+                                <option value='2'>2</option>
+                                <option value='3'>3</option>
+                                <option value='4'>4</option>
+                                <option value='5'>5</option>
+                                <option value='6'>6</option>
+                                <option value='7'>7</option>
+                                <option value='8'>8</option>
+                                <option value='9'>9</option>
+                                <option value='10'>10</option>
+                                <option value='11'>11</option>
+                                <option value='12'>12</option>
+                                <option value='13'>13</option>
+                                <option value='14'>14</option>
+                                <option value='15'>15</option>
+                                <option value='16'>16</option>
+                                <option value='17'>17</option>
+                                <option value='18'>18</option>
+                                <option value='19'>19</option>
+                                <option value='20'>20</option>
+                                <option value='21'>21</option>
+                                <option value='22'>22</option>
+                                <option value='23'>23</option>
+                                <option value='24'>24</option>
+                                <option value='25'>25</option>
+                                <option value='26'>26</option>
+                                <option value='27'>27</option>
+                                <option value='28'>28</option>
+                                <option value='29'>29</option>
+                                <option value='30'>30</option>
+                            </select>
+                        </span>
+                    </div>
+
+
+                    <div class='pageInfoLine'>
+                        <span class='pageLabel'>Controls:</span>
+                        <!--<button class='save_button' onclick="PagesFrame.onSavePage()">Save</button>-->
+                        <button class='delete_button' onclick="PagesFrame.onDeletePage()">Delete Page</button>
+                    </div>
+
+
+                </fieldset>
+
+                <fieldset>
+                    <legend></legend>
+                    <div id='apollo_page_theme_paras'></div>
+                </fieldset>
+
+            </div>
+
+        </td>
+
+    </tr>
+
+    <tr valign='top'>
+        <td>
+            <div style='margin-top:5px; margin-left:5px;'>
+                <textarea id='pageContentEditor' class="apolloContentEditor" name='pageContentEditor' style='width:100%; height:100%;'></textarea>
+            </div>
+        </td>
+    </tr>
+
+</table><!-- PagesFrame -->
