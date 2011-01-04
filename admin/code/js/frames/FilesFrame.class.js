@@ -26,7 +26,7 @@ var FilesFrame = {
     // ////////////////////////////////////////////////////////////////////////
 
     init : function(){
-        PagesFrame.painted = false;
+        FilesFrame.painted = false;
         
 		$('#apollo_image_custom_tags').keyup(function(e) {
 			//alert(e.keyCode);

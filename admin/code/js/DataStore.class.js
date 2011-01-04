@@ -675,7 +675,7 @@ var DataStore = {
 		}		
 		
 		// Is this page being displayed? If so, update the last edit display
-		if (pageObj.id == DataStore.m_currentPageID && apCommon.view == apCommon.VIEW_PAGES){
+		if (pageObj.id == DataStore.m_currentPageID && ssMain.view == ssMain.VIEW_PAGES){
 			$('#pageLastEdit').html(pageObj.last_edit);
 			//$('#pageLastEdit').effect("highlight", {color: 'white'}, 2000);
 			$('#pageLastEdit').effect("pulsate", { times:1 }, 2000);
@@ -711,7 +711,7 @@ var DataStore = {
 		}	
 		
 		// Is this page being displayed? If so, update the last edit display
-		if (postObj.id == DataStore.m_currentPostID && apCommon.view == apCommon.VIEW_POSTS){
+		if (postObj.id == DataStore.m_currentPostID && ssMain.view == ssMain.VIEW_POSTS){
 			$('#postLastEdit').html(postObj.last_edit);
 			$('#postLastEdit').effect("pulsate", { times:1 }, 2000);
 		}

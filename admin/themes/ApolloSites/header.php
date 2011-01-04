@@ -4,7 +4,7 @@ global $apollo_root_url;
 
 $apollo_root_url = "http://apollosites.com";
 
-if (strpos("_" . $_SERVER['HTTP_HOST'], "apollo.local") > 0){
+if (DEV_MODE){
 	$apollo_root_url = "http://apollo.local";
 }
 

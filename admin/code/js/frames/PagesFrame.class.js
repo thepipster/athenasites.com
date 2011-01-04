@@ -125,12 +125,12 @@ var PagesFrame = {
 	
     selectColorPara : function(themeParaID, paraVal){
         PagesFrame.m_themeParaID = themeParaID;
-        ColorPickerDialog.show('#PagesFrameColorPicker', paraVal, PagesFrame.onParaSelected)
+        ColorPickerDialog.show('#apollo_color_picker', paraVal, PagesFrame.onParaSelected)
     },
 	
     selectImagePara : function(themeParaID){
         PagesFrame.m_themeParaID = themeParaID;
-        ImagePickerDialog.show('#PagesFrameImagePicker', PagesFrame.onParaSelected)
+        ImagePickerDialog.show('#apollo_image_picker', PagesFrame.onParaSelected)
     },
 	
     // ////////////////////////////////////////////////////////////////////////////

@@ -2007,21 +2007,23 @@ var DataStore = {
 	}
 
 }
+
 /* 
- * Galleries Page functionality
+ * Settings Page functionality
  *
  * @author Mike Pritchard (mike@apollosites.com)
  * @since 3rd January, 2011
  */
-var Galleries = {
+var Settings = {
 
     // ////////////////////////////////////////////////////////////////////////
 
     init : function(siteID){
                 
-        $('#GalleriesFrame').show();
+        $('#SettingsFrame').show();
                 
         // Initialize the remote API's
+        BlogAPI.init();
         MediaAPI.init();
         GalleryAPI.init();
 
@@ -2029,38 +2031,178 @@ var Galleries = {
         DataStore.init(siteID);
 
         // Setup classes...
-        GalleriesFrame.init();
-        SidebarFrame.init();
+        SettingsFrame.init();
 
         // Start loading data
-        DataStore.load(Galleries.onDataLoaded);
+        DataStore.load(Settings.onDataLoaded);
         
     },
 
     // ////////////////////////////////////////////////////////////////////////
 
     onDataLoaded : function(){
-
-        if (DataStore.m_currentFolderID > 0){
-            FolderSidebarFrame.onSelectFolder(DataStore.m_currentFolderID);
-        }
-        else {
-            if (DataStore.m_currentFolderID == -1 && DataStore.m_folderList.length > 0){
-                FolderSidebarFrame.onSelectFolder(DataStore.m_folderList[0].id);
-            }
-            else {
-                FolderSidebarFrame.onSelectFolder(1); // unassigned folders
-            }
-        }
-
-        GalleriesFrame.repaint();
-        SidebarFrame.repaint();
+        SettingsFrame.repaint();
     }
 	
     // ////////////////////////////////////////////////////////////////////////
 }
 
 
+/**
+* Allows access to the remote (Ajax) Athena Blog API
+* 
+* @author Mike Pritchard (mike@apollosites.com)
+* @since 11th September, 2010
+*/
+var BlogAPI = {
+	
+    /** Command url */
+    m_url : '/code/php/remoteapi/BlogAPI.php',
+							
+    // ////////////////////////////////////////////////////////////////////////
+	
+    /**
+    * Initialize the API
+    */
+    init : function(){
+        BlogAPI.m_url = defines.root_url + BlogAPI.m_url;
+    },
+
+    // ////////////////////////////////////////////////////////////////////////
+		
+    /**
+    * Get the list of folders and media for this site
+    */
+    addComment : function(siteID, postID, authorName, authorEmail, postURL, parentCommentID, commentContent, callback){
+			
+        var paras = {
+            cmd : 'addComment',
+            site_id: siteID,
+            post_id: postID,
+            name: authorName,
+            email: authorEmail,
+            post_url: postURL,
+            content: commentContent,
+            pid: parentCommentID
+        };
+
+        $.ajax({
+            url: BlogAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: function(ret){
+                BlogAPI.onCommentAdded(ret, callback);
+            }
+        });
+		
+    },
+			
+    /**
+    * Check the response from the server, and load data if login is good
+    */
+    onCommentAdded : function(ret, callback){
+				
+        if (ret.result == 'ok'){
+            callback();
+        }
+        else {
+            AthenaDialog.showAjaxError(ret);
+        }
+    },
+    			
+    // ////////////////////////////////////////////////////////////////////////
+
+    /**
+    * Get the list of folders and media for this site
+    */
+    getComments : function(siteID, postID, callback){
+	
+        AthenaDialog.showLoading("Loading comments");
+		
+        var paras = {
+            cmd : 'getComments',
+            site_id: siteID,
+            post_id: postID
+        };
+
+        $.ajax({
+            url: BlogAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: function(ret){
+                BlogAPI.onGotComments(ret, callback);
+            }
+        });
+		
+    },
+			
+    /**
+    * Check the response from the server, and load data if login is good
+    */
+    onGotComments : function(ret, callback){
+		
+        AthenaDialog.clearLoading();
+		
+        if (ret.result == 'ok'){
+            callback(ret.data.post_id, ret.data.comments);
+        }
+        else {
+            AthenaDialog.showAjaxError(ret);
+        }
+    },
+
+    // ////////////////////////////////////////////////////////////////////////
+
+    /**
+    * Get the list of folders and media for this site
+    */
+    getSummary : function(siteID, callback){
+
+        AthenaDialog.showLoading("Loading comments");
+
+        var paras = {cmd : 'getSummary', site_id: siteID};
+
+        $.ajax({
+            url: BlogAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: function(ret){
+                BlogAPI.onGotSummary(ret, callback);
+            }
+        });
+
+    },
+
+    /**
+    * Check the response from the server, and load data if login is good
+    */
+    onGotSummary : function(ret, callback){
+
+        AthenaDialog.clearLoading();
+
+        if (ret.result == 'ok'){
+            
+            var data = new Object();
+
+            data.comments_approved = ret.data.comments_approved;
+            data.comments_pending = ret.data.comments_pending;
+            data.comments_trash = ret.data.comments_trash;
+            data.comments_spam = ret.data.comments_spam;
+            data.posts_published = ret.data.posts_published;
+            data.posts_private = ret.data.posts_private;
+            data.posts_draft = ret.data.posts_draft;            
+            data.categories = ret.data.categories;
+            data.tags = ret.data.tags;
+            data.no_followers = ret.data.no_followers;
+            data.top_followers = ret.data.followers;
+
+            callback(data);
+        }
+        else {
+            AthenaDialog.showAjaxError(ret);
+        }
+    }
+}
 /**
 * Allows access to the remote (Ajax) Athena System API
 * 
@@ -3238,52 +3380,319 @@ var AccountDialog = {
 }
 /**
 * Javascript class that allows a user to pick an image from their wordpress media library
+*/
+var ImagePickerDialog = {
+
+    folder_id : 0,
+    imageSelectCallback : '',
+    targetDiv : '',
+	
+    // ////////////////////////////////////////////////////////////////////////////
+	
+    /**
+     *
+     */
+    show : function(targetDiv, imageSelectCallback){
+
+        ImagePickerDialog.imageSelectCallback = imageSelectCallback;
+        ImagePickerDialog.targetDiv = targetDiv;
+		
+        var imageList = DataStore.m_mediaList;
+        var dialogTitle = 'Select an image';
+        var minHeight = $(window).height()/2;
+										
+        var txt = "";
+		
+        txt += "<div class='ImagePicker'>";
+        txt += "Folder: <select id='ImagePickerFolderSelect' onchange='ImagePickerDialog.onFolderSelected()'>";
+        txt += "<option value='1'>Unassigned</option>";
+        for (var i=0; i<DataStore.m_folderList.length; i++){
+            txt += "<option value='"+DataStore.m_folderList[i].id+"'>"+DataStore.m_folderList[i].name+"</option>";
+        }
+        txt += "</select>";
+        txt += "<div class='' style='height: 100%; width:100%; margin-top:10px' id='image_selector_content'></div>";
+        txt += "</div>";
+
+        $(targetDiv).html(txt);
+		
+        $(targetDiv).dialog( 'destroy' );
+        $(targetDiv).dialog({
+            modal: true,
+            width:200+$(window).width()/2,
+            height:130+minHeight,
+            title: dialogTitle
+        });
+	
+        ImagePickerDialog.paintImages();
+		
+        $(targetDiv).disableSelection();
+	
+    },
+
+    // ////////////////////////////////////////////////////////////////////////////
+
+    paintImages : function(){
+	
+        var imageList = DataStore.m_mediaList;
+		
+        var d = new Date();
+        var localTime = d.getTime();
+        var localOffset = d.getTimezoneOffset() * 60000;
+        var utc_date = new Date(localTime + localOffset);
+        var utc_time = localTime + localOffset;
+				
+        var txt = "";
+		
+        for (var i=0; i<imageList.length; i++){
+			
+            var thumb_url = imageList[i].thumb_url;
+            var image_id = imageList[i].id;
+            var title = imageList[i].title;
+            var width = imageList[i].width;
+            var height = imageList[i].height;
+            var image_folder_id = parseInt(imageList[i].folder_id);
+            var added_date = new Date(imageList[i].date_added);
+            var hours_ago = (utc_time - added_date.getTime())/3600000;
+						
+            //alert(image_folder_id + " = " + ImagePickerDialog.folder_id);
+						
+            switch(ImagePickerDialog.folder_id){
+			
+                case ImageSelector.ID_UNASSIGNED:
+                    if (image_folder_id == ImageSelector.ID_ALL || image_folder_id == ImageSelector.ID_UNASSIGNED)
+                        txt += ImagePickerDialog.getImageHTML(image_id, thumb_url, title, width, height);
+                    break;
+					
+                case ImageSelector.ID_LAST_1_HOUR:
+                    if (hours_ago <= 1){
+                        txt += ImagePickerDialog.getImageHTML(image_id, thumb_url, title, width, height);
+                    }
+                    break;
+
+                case ImageSelector.ID_LAST_24_HOURS:
+                    if (hours_ago <= 24){
+                        txt += ImagePickerDialog.getImageHTML(image_id, thumb_url, title, width, height);
+                    }
+                    break;
+
+                case ImageSelector.ID_LAST_7_DAYS:
+                    if (hours_ago <= 168){
+                        txt += ImagePickerDialog.getImageHTML(image_id, thumb_url, title, width, height);
+                    }
+                    break;
+
+                case ImageSelector.ID_ALL:
+                    txt += ImagePickerDialog.getImageHTML(image_id, thumb_url, title, width, height);
+                    break;
+
+                case image_folder_id:
+                    txt += ImagePickerDialog.getImageHTML(image_id, thumb_url, title, width, height);
+                    break;
+
+                default:
+            // Nothing to do
+            }
+			
+        }
+		
+        $('#image_selector_content').html(txt);
+				
+    },
+	
+    // ////////////////////////////////////////////////////////////////////////////
+	
+    getImageHTML : function(image_id, thumb_url, title, width, height){
+
+        var txt = "";
+
+        var titleText = title + " (" + width + "px by " + height + "px)";
+		
+        //		txt += "   <img id='img_"+image_id+"' src='"+thumb_url+"' class='thumb' width='50px' title='"+titleText+"'/>";
+
+        txt += "<div class='thumbwrapper' align='center' onclick=\"ImagePickerDialog.onSelectImage('"+image_id+"')\">";
+        txt += "   <img id='img+"+image_id+"' src='"+thumb_url+"' class='thumb' width='50px'/>";
+        txt += "   <div class='imageTitle'>" + title + "</div>";
+        txt += "   <div class='imageSize'>(" + width + ", " + height + ")</div>";
+        txt += "</div>";
+		
+						
+        // onclick='ImageSelector.onSelectImage("+image_id+")'
+        return txt;
+    },
+		
+    // ////////////////////////////////////////////////////////////////////////////
+		
+    onFolderSelected : function(){
+        ImagePickerDialog.folder_id = parseInt($('#ImagePickerFolderSelect').val());
+        ImagePickerDialog.paintImages();
+    },
+	
+    // ////////////////////////////////////////////////////////////////////////////
+
+    /**
+	* Get the image list for the currently selected gallery page
+	*/
+    onSelectImage : function(imageID){
+        if (ImagePickerDialog.imageSelectCallback != ''){
+            ImagePickerDialog.imageSelectCallback(imageID);
+        }
+        $(ImagePickerDialog.targetDiv).dialog('close');
+    }
+}
+/**
+* Javascript class that allows a user to pick an image from their wordpress media library
+* @see http://www.eyecon.ro/ColorPickerDialog
+*/
+var ColorPickerDialog = {
+			
+    m_callback : '',
+			
+    m_targetDiv : '',
+			
+    // ////////////////////////////////////////////////////////////////////////////
+	
+    /**
+	*
+	*/
+    show : function(targetDiv, currentCol, callback){
+	
+        ColorPickerDialog.m_targetDiv = targetDiv;
+        ColorPickerDialog.m_callback = callback;
+		
+        var txt = "<div id='apolloSelectColor'></div>";
+        //txt += "<button class='colorSelectButton' onclick=\"ColorPickerDialog.onSelectColor()\">OK</button>";
+						
+        ColorPickerDialog.col = currentCol;
+        
+        $(targetDiv).dialog('destroy');
+        $(targetDiv).html(txt);
+        
+        //jQuery(targetDiv).ColorPicker({color: currentCol, flat: true, onSubmit: ColorPickerDialog.onSelectColor(), onChange: function(hsb, hex, rgb, el) {ColorPickerDialog.col = hex;}});
+
+        
+        $(targetDiv).dialog({
+            modal: true,
+            width:385,
+            height:235,
+            resizable:false,
+            title: 'Pick a color'
+            });
+
+        $('#apolloSelectColor').ColorPicker({
+            color: currentCol,
+            flat: true,
+            onSubmit: function(hsb, hex, rgb, el) {
+                ColorPickerDialog.onSelectColor(hex);
+            }
+        });
+        
+    },
+
+    // ////////////////////////////////////////////////////////////////////////////
+
+    /**
+    * Get the image list for the currently selected gallery page
+    */
+    onSelectColor : function(col){
+
+        if (ColorPickerDialog.m_callback != ''){
+            ColorPickerDialog.m_callback(col);
+        }
+
+        $(ColorPickerDialog.m_targetDiv).dialog('close');
+
+    }
+	
+		
+}
+/**
+* Javascript class that allows a user to pick an image from their wordpress media library
 * The image data is assumed to be in the class ImagePickerData see the fucntion 
 * echoImagePickerJSImageData in plugin_functions.php
 *
 * @since 24th March, 2010
 */
-var FolderSidebarFrame = {
+var ImageSelector = {
 
+	folder_id : 0,
+	targetDiv : '',
+	
+	MODE_EDIT_GALLERY : 0,
+	MODE_ORG_MEDIA : 1,
+	
+	mode : 1,
+	
 	ID_ALL : 0, // hard-coded folder id for all images
 	ID_UNASSIGNED : 1, // hard-coded folder id for unassigned images
 	ID_LAST_24_HOURS : 2, // hard-coded folder id for images uploaded in last 24 hrs
 	ID_LAST_7_DAYS : 3, // hard-coded folder id for images uploaded in last 7 days
 	ID_LAST_1_HOUR : 4, // hard-coded folder id for images uploaded in last 1 hrs
 	
-    /** Number of tags per 'page' */
-    m_foldersPerPage : 25,    
-    m_currentPage : 0,    
-    m_numberPages : 0,
-		
-	/** Number of hard coded system folders */	
-	m_noSystemFolders : 2,
-	
 	// ////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	*
 	*/
-	paint : function(targetDiv){
+	paint : function(mode, targetDiv){
+	
+		ImageSelector.mode = mode;
+		ImageSelector.targetDiv = targetDiv;
+		
+		folder_name = "(All)";
+		
+		if (DataStore.m_folderList.length >= 1){
+			ImageSelector.folder_id = DataStore.m_folderList[0].id;	
+			folder_name = DataStore.m_folderList[0].folder_name;
+		}
+		
+		var minHeight = 550;
+
+		if (mode == ImageSelector.MODE_EDIT_GALLERY){
+			minHeight = 300;
+		}
 		
 		var txt = "";
+		
+		//txt += "<br/>";
+		
+		txt += "<table width='100%' cellspacing='0px' style='padding-right:20px'>";
+		txt += "   <tr valign='middle'>";
+		txt += "      <td width='65px'>";
+		txt += "         <h2>Folders</h2>";
+		txt += "      </td>";
+		txt += "      <td align='left' style='padding-top:8px' width='185px'>";
+		txt += "         <div class='nav_buttons'<div class='apollo_add_button' style='float:left' onclick='ImageSelector.addFolder()'></div>";
+		txt += "      </td>";
+		txt += "      <td style='padding-left:20px'>";
 
-		// Hard code 'switch to tag view' link		
-		txt += "<div onclick=\"SidebarFrame.showTags()\" id='switch_to_tag_view' class='folder droppable_folder' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/tag_icon_blue_24x24.png'><span class='folder_name'>Switch to tag view</span></div>";
-					
-		txt += "<div id='apollo_folder_list'></div>";
+		if (mode == ImageSelector.MODE_EDIT_GALLERY){
+			txt += "     <h2>Library Images<span id='apollo_title_folder_name'>"+folder_name+"</span><span id='apollo_title_feedback'></span></h2>";			
+		}
+		else {
+			txt += "     <h2>Library Images<span id='apollo_title_folder_name'>"+folder_name+"</span>";
+			txt += "         <span id='apollo_title_feedback'></span>";
+			txt += "         <span class='view_options' onclick='ImageSelector.onDeselectAll()'>clear all</span>";
+			txt += "         <span class='view_options' onclick='ImageSelector.onSelectAll()'>select all</span>";
+			//txt += "         <span id='apollo_show_titles' class='view_options' onclick='ImageSelector.onShowDetails()'>show details</span>";
+			txt += "     </h2>";			
+		}
+		
+		txt += "      </td>";		
+		txt += "   </tr>";
+		
+		txt += "   <tr valign='top'>";
+		txt += "      <td colspan='2' width='250px' height='100%'>";
+		txt += "         <div class='dialogbox' style='min-width: 100px; min-height:"+minHeight+"px' id='apollo_folder_list'></div>";
+		txt += "      </td>";
+		txt += "      <td style='padding-left:20px'>";
+		txt += "         <div class='dialogbox' style='min-width: 200px; min-height:"+minHeight+"px' id='apollo_image_library'></div>";
+		txt += "      </td>";		
+		txt += "   </tr>";
+		txt += "</table>";
 				
-        txt += "<div id='folderPageControls' class='sidebar_page_controls'>";        
-        txt += "<table border='0'>";
-        txt += "    <tr>";
-        txt += "        <td width='33%' align='left'><span class='more_posts_link' id='prev_posts_link' style='padding-left:15px' onclick='FolderSidebarFrame.showPrevPage()' title='Display previous page'>&laquo; prev</span></td>";
-        txt += "        <td width='33%' align='center'><span class='more_posts_pages' id='folders_sideframe_page_no' style=''>1 of 2</span></td>";                
-        txt += "        <td width='33%' align='right'><span class='more_posts_link' id='next_posts_link' style='padding-right:15px' onclick='FolderSidebarFrame.showNextPage()' title='Display next page'>next &raquo;</span></td>";
-        txt += "    </tr>";
-        txt += "</table>";        
-        txt += "</div>";
-        
-        						
+		txt += "<div id='imageEditDialog'></div>";
+		
+						
 		// Right click pop-up menu....
 		txt += "<ul id='folderMenu' class='rightClickMenu'>";
 		txt += "	<li class='edit'><a href='#edit'>Rename</a></li>";
@@ -3291,41 +3700,371 @@ var FolderSidebarFrame = {
 		txt += "	<li class='quit separator'><a href='#quit'>Cancel</a></li>";
 		txt += "</ul>";
 
-		$(targetDiv).html(txt);
-		
-		var pos = $(targetDiv).position();
 
-		var offset = pos.top + 30;
-		var lineht = 30;
-		var h = $('.ViewFrame').height() - offset - $('#folderPageControls').height(); 
-				
-/*		switch(ssMain.view){			
+		txt += "<ul id='imageMenu' class='rightClickMenu'>";
+		txt += "	<li class='edit'><a href='#edit_image'>Edit Information</a></li>";
+		//txt += "	<li class='delete'><a href='#delete_image'>Delete</a></li>";
+		txt += "	<li class='quit separator'><a href='#quit'>Cancel</a></li>";
+		txt += "</ul>";
+
+							
+		//$(targetDiv).attr('title',dialogTitle);					
+		$(ImageSelector.targetDiv).html(txt);
 		
-			case ssMain.VIEW_GALLERIES : 
-//				h = ($(document).height()/2) - offset - $('#folderPageControls').height(); 
-				h = $(document).height() - offset - $('#folderPageControls').height(); 
-				break;
+		ImageSelector.paintFolders();		
+		ImageSelector.paintImages();
+		
+		$(ImageSelector.targetDiv).disableSelection();
+		$(ImageSelector.targetDiv).noContext();
+		
+		// Disable right click menu except where we want it
+		//$(ImageSelector.targetDiv).bind("rightClickMenu",function(e){return false;}); 		
+		
+	},
+
+	// ////////////////////////////////////////////////////////////////////////////
+
+	onDeselectAll : function(){
+		ImageSelector.paintImages();			
+	},
+	
+	onSelectAll : function(){	
+		ImageSelector.paintImages();			
+		$('.thumb').addClass('multiselected');				
+		setTimeout('ImageSelector.makeMultiSelectedDraggable()', 300);
+	},
+
+	// ////////////////////////////////////////////////////////////////////////////
+	
+	paintImages : function(){
+		
+		var imageList = DataStore.m_mediaList;
+		
+		var txt = "";
+
+		var d = new Date();
+		var localTime = d.getTime();
+		var localOffset = d.getTimezoneOffset() * 60000;
+		var utc_date = new Date(localTime + localOffset);
+		var utc_time = localTime + localOffset;
+								
+		//alert(ImageSelector.folder_id + " " + ImageSelector.ID_LAST_24_HOURS);
 				
-			case ssMain.VIEW_FILES : 
-				h = $(document).height() - offset - $('#folderPageControls').height(); 
-				break;
+		for (var i=0; i<imageList.length; i++){
+
+			var thumb_url = imageList[i].thumb_url;
+			var post_id = imageList[i].id;
+			var title = imageList[i].title;
+			var width = imageList[i].width;
+			var height = imageList[i].height;
+			var image_folder_id = parseInt(imageList[i].folder_id);
+			var added_date = new Date(imageList[i].date_added);						
+			var hours_ago = (utc_time - added_date.getTime())/3600000;
+			
+			//ImageSelector.showMessage(added_date + "  |||   " + utc_date + " Delta = " + hours_ago);
+			//ImageSelector.showMessage(" Delta = " + hours_ago);
+			
+			switch(ImageSelector.folder_id){
+			
+				case ImageSelector.ID_UNASSIGNED:
+					if (image_folder_id == ImageSelector.ID_ALL || image_folder_id == ImageSelector.ID_UNASSIGNED)
+						txt += ImageSelector.getImageHTML(post_id, thumb_url, title, width, height);	
+					break;
+					
+				case ImageSelector.ID_LAST_1_HOUR:
+					if (hours_ago <= 1){
+						txt += ImageSelector.getImageHTML(post_id, thumb_url, title, width, height);				
+					}
+					break;
+
+				case ImageSelector.ID_LAST_24_HOURS:
+					if (hours_ago <= 24){
+						txt += ImageSelector.getImageHTML(post_id, thumb_url, title, width, height);				
+					}
+					break;
+
+				case ImageSelector.ID_LAST_7_DAYS:
+					if (hours_ago <= 168){
+						txt += ImageSelector.getImageHTML(post_id, thumb_url, title, width, height);				
+					}
+					break;
+
+				case ImageSelector.ID_ALL:
+					txt += ImageSelector.getImageHTML(post_id, thumb_url, title, width, height);				
+					break;	
+
+				case image_folder_id:	
+					txt += ImageSelector.getImageHTML(post_id, thumb_url, title, width, height);				
+					break;	
+
+				default:					
+					// Nothing to do
+			}
+			
 		}
-*/		
-		    	
-		FolderSidebarFrame.m_foldersPerPage = Math.floor(h / lineht);		
-        FolderSidebarFrame.m_numberPages = Math.ceil(DataStore.m_folderList.length / FolderSidebarFrame.m_foldersPerPage);
-        
-        if (FolderSidebarFrame.m_numberPages == 1){
-        	$('#folderPageControls').hide();
-        }
-        
-        		
-		FolderSidebarFrame.paintFolders();		
-        $('#apollo_folder_list').height(h);
-        		
-		$(targetDiv).disableSelection();
-		$(targetDiv).noContext();
+				
+		$('#apollo_image_library').html(txt);
+		$('#apollo_image_library').noContext();
+
+				
+		if (ImageSelector.mode == ImageSelector.MODE_EDIT_GALLERY){
+			$(".thumb").draggable({revert: true, zIndex: 300});				
+		}
+		else {
+
+			//$(dragClass).multiDrag();
+			
+
+			$('.thumb').mousedown( function(e) {					
+				
+				var evt = e;					
+				
+				$(this).mouseup( 
+					function() {
+									
+						//$(this).unbind('mousedown');
+						$(this).unbind('mouseup');
+						
+						//alert("Ctrl:"+evt.ctrlKey + " Alt:" + evt.altKey + " Shift:" + evt.shiftKey);
+						
+						if (evt.ctrlKey){
+							// Ctrl-left click
+							ImageSelector.onAltClick(e, this);
+						}
+						else if( evt.button == 0 ) {
+							if (evt.shiftKey){
+								// Shift-left click
+								ImageSelector.onShiftClick(e, this);
+							}
+							else if (evt.altKey){
+								// Ctrl-left click
+								ImageSelector.onAltClick(e, this);
+							}
+							else {
+								// Just a left click
+								ImageSelector.onStartClick(e, this);
+							}
+							return false;
+						} 
+						else if( evt.button == 2) {
+							// Right click
+							ImageSelector.onRightClickImage(e, this);
+							return true;
+						}
+					}
+				)
+			});
+
+		}		
 		
+	},
+
+	// ////////////////////////////////////////////////////////////////////////////
+
+	isDragging : false,
+	shiftSelectStarted : false,
+	shiftSelectStartedID : '',
+	
+	onStartClick : function(e, obj){
+		
+			var id = $(obj).attr('id');
+			var isSelected = $(obj).is('.multiselected');
+			
+			if (ImageSelector.shiftSelectStarted){
+				// This clears the current selection
+				$('.multiselected').removeClass('multiselected');
+			}
+			
+			//if (ImageSelector.isDragging) return;		
+			if (isSelected){
+				ImageSelector.shiftSelectStarted = false;
+				ImageSelector.paintImages();	
+			}
+			else {
+				ImageSelector.shiftSelectStartedID = id;
+				ImageSelector.shiftSelectStarted = true;
+				ImageSelector.paintImages();			
+				$('#'+id).addClass('multiselected');
+				setTimeout('ImageSelector.makeMultiSelectedDraggable()', 300);
+			}
+		
+
+	},
+
+	// ////////////////////////////////////////////////////////////////////////////
+	
+	onAltClick : function(e, obj){
+							
+		var id = $(obj).attr('id');
+		var isSelected = $(obj).is('.multiselected');
+			
+		if (isSelected){
+			$('#'+id).removeClass('multiselected');
+			$('#'+id).draggable('destroy');
+		}
+		else {
+			$('#'+id).addClass('multiselected');
+			setTimeout('ImageSelector.makeMultiSelectedDraggable()', 300);
+		}
+		
+		/*		
+		if ($(obj).is('.multiselected')){
+			$(obj).removeClass('multiselected');				
+		}
+		else {
+			$(obj).addClass('multiselected');
+		}
+		*/
+		
+	},
+		
+	// ////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	* Respond to a shift-click event
+	*/
+	onShiftClick : function(e, obj){
+										
+		var id = $(obj).attr('id');
+			
+	  	$('.thumb').removeClass('multiselected')
+			
+		if (ImageSelector.shiftSelectStarted){
+
+			var foundStart = false;
+			var foundEnd = false;
+					
+	  		$('.thumb').each(	
+	  			function(){	  				
+	  				if (!foundEnd){
+		  				if ($(this).attr('id') == ImageSelector.shiftSelectStartedID){
+		  					foundStart = true;
+		  				}
+		  				
+		  				if (foundStart){
+		  					$(this).addClass('multiselected');
+		  				}
+		  				
+		  				if (foundStart && $(this).attr('id') == id){
+		  					foundEnd = true;
+		  				}
+	  				}	  				
+	  			}
+	  		);
+	  		
+	  		// If we didn't find the end, try going backwards
+	  		if (!foundEnd){
+	  		
+	  			$('.multiselected').removeClass('multiselected')
+	  			
+				foundStart = false;
+				foundEnd = false;
+	  		
+		  		$('.thumb').each(	
+		  			function(){	  				
+		  				if (!foundEnd){
+		  				
+			  				if ($(this).attr('id') == id){
+			  					foundStart = true;
+			  				}
+		  							  				
+			  				if (foundStart){
+			  					$(this).addClass('multiselected');
+			  				}
+			  				
+			  				if ($(this).attr('id') == ImageSelector.shiftSelectStartedID){
+			  					foundEnd = true;
+			  				}
+			  				
+		  				}	  				
+		  			}
+		  		);
+	  		}
+		
+//			ImageSelector.makeMultiSelectedDraggable();
+			setTimeout('ImageSelector.makeMultiSelectedDraggable()', 300);
+			
+		}
+		else {
+			ImageSelector.onStartClick(e,obj);
+		}
+
+	},
+					
+	// ////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Respond to a shift/alt/ctrl-click event
+	*/
+	onCtrlClick : function(e, obj){
+	
+		//e.stopPropagation();
+		//$(obj).unbind('click')
+			/*		
+		if ($(obj).is('.multiselected')){
+			$(obj).removeClass('multiselected');				
+			$(obj).draggable({revert: true, zIndex: 300});
+		}
+		else {
+			$(obj).draggable("destroy");
+			$(obj).addClass('multiselected');
+			setTimeout('ImageSelector.makeMultiSelectedDraggable()', 300);
+		}
+		*/
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////////
+				
+	makeMultiSelectedDraggable : function(){
+	
+		$('.multiselected').draggable({		
+				revert: true,
+				zIndex: 300,
+				delay: 200,				
+			  	helper: function(){
+			  		//return "<div>sdgsgsg</div>"			  		
+			  		var txt = "<div id='multidrag_container'>";
+			  		var ct = 0;
+			  		
+			  		$('.multiselected').each(	
+			  			function(){
+			  				if (ct < 20){
+				  				var offset = ct * 5; ct++;
+				  				var src = $(this).attr('src');
+				  				var id = $(this).attr('id');
+				  				var style = "position: absolute; top: " + offset + "px; left:" + offset + "px;";
+				  				txt += "<img id='"+id+"' src='"+src+"' class='dragged_thumb' width='50px' height='50px' style='"+style+"'>";
+			  				}
+			  			}
+			  		);
+			  		
+			  		txt += "</div>";
+			  		
+			  		return txt;
+			  					  		
+    				//var selected = $('.multiselected');
+					//if (selected.length === 0) {
+					//	selected = $(this);
+					//}
+					//var container = $('<div/>').attr('id', 'draggingContainer');
+					//container.append(selected.clone());
+					//return container;					 					
+				}
+			}
+		);
+	},
+			
+	// ////////////////////////////////////////////////////////////////////////////
+	
+	getImageHTML : function(post_id, thumb_url, title, width, height){
+
+		var txt = "";
+
+		var titleText = title + " (" + width + "px by " + height + "px)";
+		txt += "   <img id='img_"+post_id+"' src='"+thumb_url+"' class='thumb' width='50px' title='"+titleText+"'/>";
+						
+		// onclick='ImageSelector.onSelectImage("+post_id+")'
+		return txt;
 	},
 
 	// ////////////////////////////////////////////////////////////////////////////
@@ -3333,118 +4072,86 @@ var FolderSidebarFrame = {
 	paintFolders : function(){
 		
 		var folderList = DataStore.m_folderList;
-				
-        var start_i = FolderSidebarFrame.m_currentPage * FolderSidebarFrame.m_foldersPerPage;
-        var end_i = Math.min(folderList.length, start_i+FolderSidebarFrame.m_foldersPerPage);
-        $('#folders_sideframe_page_no').html((FolderSidebarFrame.m_currentPage+1) + " of " + FolderSidebarFrame.m_numberPages);
-				
+		
 		var txt = "";
 		
-		// NOTE: Folder id's 0-9 are reserved for system folders, so can safely use these id's here		
+		// NOTE: Folder id's 0-9 are reserved for system folders, so can safely use these id's here
 		
-		// Deal with hard-coded 'faves' folders....	
-		
-		if (FolderSidebarFrame.m_currentPage == 0){
-		
-			var help_text = "";
-			var name = "";
-				
-			for (var i=0; i<FolderSidebarFrame.m_noSystemFolders; i++){
-			
-				switch(i){
-					case 0: help_text = "Select to display all of your images"; break;
-					case 1: help_text = "Select to display all unassigned files (files that have not been added to a folder"; break;
-					case 2: help_text = "Select to display all files uploaded in the last hour"; break;
-					case 3: help_text = "Select to display all files uploaded in the last 24 hours"; break;
-					case 4: help_text = "Select to display all files uploaded in the last 7 days"; break;
-				}
-				
-				switch(i){
-					case 0: name = "Show All"; break;
-					case 1: name = "Unassigned Files"; break;
-					case 2: name = "Show Last Hour"; break;
-					case 3: name = "Show Last 24 Hours"; break;
-					case 4: name = "Show Last 7 Days"; break;
-				}			
-				
-			
-				if (DataStore.m_currentFolderID == i){
-					txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder("+i+")\" class='folder_filter' id='folder_0' title='"+help_text+"'><img class='folder_fav_icon' src='images/folder_favorites.png'><span class='folder_fav_name selected'>"+name+"</span></div>";
-				}
-				else {
-					txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder("+i+")\" class='folder_filter' id='folder_0' title='"+help_text+"'><img class='folder_fav_icon' src='images/folder_favorites.png'><span class='folder_fav_name'>"+name+"</span></div>";
-				}		
-				
-			}
-			
-			start_i += FolderSidebarFrame.m_noSystemFolders;
+		// Hard-coded 'all' folder....		
+		if (ImageSelector.folder_id == 0){
+			txt += "<div id='folder_0' class='apollo_system_folder' style='width:100%;' onclick=\"ImageSelector.onSelectFolder('0')\"><div class='folder_name_selected'>Show All</div></div>";
+			$('#apollo_title_folder_name').html('(All)');
+		}
+		else {
+			txt += "<div id='folder_0' class='apollo_system_folder' style='width:100%;' onclick=\"ImageSelector.onSelectFolder('0')\"><div class='folder_name'>Show All</div></div>";
 		}
 		
-		// Now deal with the user's folders...
 		
-		for (var i=start_i; i<end_i; i++){
+		// Hard-coded 'unassigned' folder....		
+		if (ImageSelector.folder_id == ImageSelector.ID_UNASSIGNED){
+			txt += "<div id='folder_"+ImageSelector.ID_UNASSIGNED+"' class='apollo_folder apollo_system_folder' style='width:100%;' onclick=\"ImageSelector.onSelectFolder("+ImageSelector.ID_UNASSIGNED+")\"><div class='folder_name_selected'>Unassigned images</div></div>";
+			$('#apollo_title_folder_name').html('(Unassigned images)');
+		}
+		else {
+			txt += "<div id='folder_1' class='apollo_folder apollo_system_folder' style='width:100%;' onclick=\"ImageSelector.onSelectFolder("+ImageSelector.ID_UNASSIGNED+")\"><div class='folder_name'>Unassigned images</div></div>";
+		}		
 
-			var folder_name = folderList[i].name;
+		// Hard-coded 'last hour' folder....		
+		if (ImageSelector.folder_id == ImageSelector.ID_LAST_1_HOUR){
+			txt += "<div id='folder_"+ImageSelector.ID_LAST_1_HOUR+"' class='apollo_system_folder' style='width:100%;' onclick=\"ImageSelector.onSelectFolder("+ImageSelector.ID_LAST_1_HOUR+")\"><div class='folder_name_selected'>Added in last hour</div></div>";
+			$('#apollo_title_folder_name').html('(Added in last hour)');
+		}
+		else {
+			txt += "<div id='folder_"+ImageSelector.ID_LAST_1_HOUR+"' class='apollo_system_folder' style='width:100%;' onclick=\"ImageSelector.onSelectFolder("+ImageSelector.ID_LAST_1_HOUR+")\"><div class='folder_name'>Added in last hour</div></div>";
+		}	
+
+		// Hard-coded 'added last 24 hours' folder....		
+		if (ImageSelector.folder_id == ImageSelector.ID_LAST_24_HOURS){
+			txt += "<div id='folder_"+ImageSelector.ID_LAST_24_HOURS+"' class='apollo_system_folder' style='width:100%;' onclick=\"ImageSelector.onSelectFolder("+ImageSelector.ID_LAST_24_HOURS+")\"><div class='folder_name_selected'>Added in last 24 hours</div></div>";
+			$('#apollo_title_folder_name').html('(Added in last 24 hours)');
+		}
+		else {
+			txt += "<div id='folder_"+ImageSelector.ID_LAST_24_HOURS+"' class='apollo_system_folder' style='width:100%;' onclick=\"ImageSelector.onSelectFolder("+ImageSelector.ID_LAST_24_HOURS+")\"><div class='folder_name'>Added in last 24 hours</div></div>";
+		}		
+		
+		
+
+		for (var i=0; i<folderList.length; i++){
+
+			var folder_name = ApolloUtils.htmlEncode(folderList[i].name);
 			var folder_id = folderList[i].id;
 			
-			if (folder_id == DataStore.m_currentFolderID){
-				txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\" class='folder droppable_folder' id='folder_"+folder_id+"' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/folder_grey.png'><span class='folder_name selected'>"+folder_name+"</span></div>";
+			//alert(folder_name + " " + folder_id);
+			
+			if (folder_id == ImageSelector.folder_id){
+				$('#apollo_title_folder_name').html('('+folder_name+')');
+				txt += "<div id='folder_"+folder_id+"' class='apollo_folder folder_with_menu' style='width:100%;' title='Right click to edit' onclick=\"ImageSelector.onSelectFolder('"+folder_id+"')\"><div class='folder_name folder_name_selected'>"+folder_name+"</div></div>";
 			}
 			else {
-				txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\" class='folder droppable_folder' id='folder_"+folder_id+"' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/folder_icon.png'><span class='folder_name'>"+folder_name+"</span></div>";
-			}	
+				txt += "<div id='folder_"+folder_id+"' class='apollo_folder folder_with_menu' style='width:100%;' title='Right click to edit' onclick=\"ImageSelector.onSelectFolder('"+folder_id+"')\"><div class='folder_name'>"+folder_name+"</div></div>";
+			}
+
 			
 		}
 		
 		$('#apollo_folder_list').html(txt);
+		
+		$('.apollo_folder').droppable({
+				drop: ImageSelector.onAddToFolder,
+				over: function(ev, ui) {$(this).addClass( 'apollo_folder_droppable_hover' );},
+				out: function(ev, ui) {$(this).removeClass( 'apollo_folder_droppable_hover' );}
+			});			
 
 				
-		$(".folder").rightClick( function(e) {FolderSidebarFrame.onRightClickFolder(e, this);});
+	   // $(".folder_with_menu").rightClickMenu({menu: "folderMenu"}, function(action, el, pos){ImageSelector.onMenuItem(action, el)});
+		if (ImageSelector.mode != ImageSelector.MODE_EDIT_GALLERY){
+			$(".folder_with_menu").rightClick( function(e) {ImageSelector.onRightClickFolder(e, this);});
+		}
 
-		$('.droppable_folder').droppable({
-				drop: FolderSidebarFrame.onAddToFolder,
-				over: function(ev, ui) {$(this).addClass( 'folder_name_hover' );},
-				out: function(ev, ui) {$(this).removeClass( 'folder_name_hover' );}
-			});	
-			
 		$("#apollo_folder_list").disableSelection();
 				
 	},
 
-    // ////////////////////////////////////////////////////////////////////////////
-
-    showNextPage : function(){
-		
-        $('#prev_posts_link').show();
-        	
-        if (FolderSidebarFrame.m_currentPage < FolderSidebarFrame.m_numberPages-1){
-            FolderSidebarFrame.m_currentPage += 1;
-        }
-        
-        if (FolderSidebarFrame.m_currentPage == FolderSidebarFrame.m_numberPages-1){
-        	$('#next_posts_link').hide();
-        }
-        
-        FolderSidebarFrame.paintFolders();
-    },
-
-    // ////////////////////////////////////////////////////////////////////////////
-
-    showPrevPage : function(){
-
-        $('#next_posts_link').show();
-
-        if (FolderSidebarFrame.m_currentPage > 0){
-            FolderSidebarFrame.m_currentPage -= 1;
-        }
-        
-        if (FolderSidebarFrame.m_currentPage == 0){
-        	$('#prev_posts_link').hide();
-        }
-        
-        FolderSidebarFrame.paintFolders();
-    },
-    
 	// ////////////////////////////////////////////////////////////////////////////
 
 	onRightClickFolder : function(e, obj){
@@ -3464,76 +4171,90 @@ var FolderSidebarFrame = {
 		$('#folderMenu .delete').unbind('click');
 		$('#folderMenu .quit').unbind('click');
 
-		$('#folderMenu .edit').click(function(){FolderSidebarFrame.onMenuItem('rename_folder', obj)});
-		$('#folderMenu .delete').click(function(){FolderSidebarFrame.onMenuItem('delete_folder', obj)});
-		$('#folderMenu .quit').click(function(){FolderSidebarFrame.onMenuItem('quit', obj)});
+		$('#folderMenu .edit').click(function(){ImageSelector.onMenuItem('rename_folder', obj)});
+		$('#folderMenu .delete').click(function(){ImageSelector.onMenuItem('delete_folder', obj)});
+		$('#folderMenu .quit').click(function(){ImageSelector.onMenuItem('quit', obj)});
 		
-	},
-
-	// ////////////////////////////////////////////////////////////////////////////
-
-	/**
-	* Get the image list for the currently selected gallery page. Note that even for multi-drag
-	* the object dropped on the folder is still the source thumbnail, and not the image that is
-	* show during the drag (defined by the helper function)
-	*/
-	onAddToFolder : function(event, ui){
-
-		var imgID = parseInt($(ui.draggable).attr('id').substring(4));						
-		var folderID = parseInt($(this).attr('id').substring(7));	// format folder_xxx
-				
-		if (folderID == FolderSidebarFrame.ID_UNASSIGNED || folderID > 9){		
-			MediaAPI.addMediaToFolder(DataStore.m_siteID, imgID, folderID, FolderSidebarFrame.onAddedToFolder)
-		}	
-		
-		$(this).removeClass( 'folder_name_hover' );
-			
 	},
 	
-	onAddedToFolder : function(folderID, mediaID){
-		
-		/*	
-		if (folderID == 0){
-			AthenaDialog.message("Image removed from folder");			
-		}
-		else {
-			AthenaDialog.message("Image added to folder <i>" + DataStore.getFolderName(folderID) + "</i>");			
-		}	
-		*/
-		
-		for (var i=0; i<DataStore.m_mediaList.length; i++){
-			
-			if (DataStore.m_mediaList[i].id == mediaID){
-				DataStore.m_mediaList[i].folder_id = folderID;						
-				break;
-			}
-		}
-		
-		FilesFrame.repaint();			
-	},
+	onRightClickImage : function(e, obj){
 
+		e.stopPropagation();
+
+		//var x = e.pageX - $('#adminmenu').width() - 30;
+		//var y = e.pageY - $('#wphead').height() - $('#update-nag').height();		
+		var x = e.pageX;
+		var y = e.pageY;		
+
+		$('#imageMenu').css('top',y);
+		$('#imageMenu').css('left',x);
+		$('#imageMenu').show();
+
+		$('#imageMenu .edit').unbind('click');
+		$('#imageMenu .delete').unbind('click');
+		$('#imageMenu .quit').unbind('click');
+		
+		$('#imageMenu .edit').click(function(){ImageSelector.onMenuItem('edit_image', obj)});
+		$('#imageMenu .delete').click(function(){ImageSelector.onMenuItem('delete_image', obj)});
+		$('#imageMenu .quit').click(function(){ImageSelector.onMenuItem('quit', obj)});
+		
+	},
+		
+	// ////////////////////////////////////////////////////////////////////////////
+
+	messageTimeout : -1,
+	
+	showMessage : function(msg){
+		$('#apollo_title_feedback').html(msg);
+		$('#apollo_title_feedback').show();
+		if (ImageSelector.messageTimeout != -1){
+			clearTimeout(ImageSelector.messageTimeout)
+		}
+		setTimeout('ImageSelector.hideMessage()', 5000);
+	},
+	
+	hideMessage : function(){
+		$('#apollo_title_feedback').hide();
+	},
+	
 	// ////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	* Respond to the user selecting a menu item
 	*/
 	onMenuItem : function(item, selectedElement){
-				
+		
 		$('#imageMenu').hide();
 		$('#folderMenu').hide();
 		
-		var divID = $(selectedElement).attr('id');		
-		var name = $('#'+divID + ' .folder_name').html();		
-		var folder_id = parseInt(divID.substr(7));		
-				
+		
+		var divID = $(selectedElement).attr('id');
+		
+		if (item == 'rename_folder' || item == 'delete_folder'){
+			var name = $('#'+divID + ' .folder_name').html();
+			var folder_id = parseInt(divID.substr(7));
+		}
+		else {
+			var image_post_id = parseInt(divID.substr(4));
+		}
+		
+		
 		// Process events related to folders...					
 		if (item == 'rename_folder'){
-			FolderSidebarFrame.makeFolderNameEditable(folder_id);
+			ImageSelector.makeFolderNameEditable(folder_id);
 		}
 		else if (item == 'delete_folder'){		
-			AthenaDialog.confirm("Are you sure you want to delete this folder? This can not be undone.", function(){FolderSidebarFrame.deleteFolder(folder_id);});
+			ApolloDialog.confirm("Are you sure you want to delete this folder? This can not be undone.", function(){ImageSelector.deleteFolder(folder_id);});
 		}
-				
+		
+		// Process events related to images...											
+		else if (item == 'edit_image'){
+			ImageEditDialog.show('#imageEditDialog', image_post_id);
+		}
+		else if (item == 'delete_image'){
+			ApolloDialog.alert('feature coming soon');
+		}
+		
 	},
 
 	// ////////////////////////////////////////////////////////////////////////////
@@ -3544,12 +4265,11 @@ var FolderSidebarFrame = {
 		var name = $(divID + ' .folder_name').html();
 		
 		$(divID).attr('onclick','');
-
-		$(divID + ' .folder_name').html("<input id='folder_name_edit' style='width:100px' type='text' value='"+name+"' onblur='FolderSidebarFrame.paintFolders()'/>");
+		$(divID).html("<input id='folder_name_edit' style='margin-left:30px' type='text' value='"+name+"' onblur='ImageSelector.paintFolders()'/>");
 		
 		$("#folder_name_edit").keypress(function (e) {
 			if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
-				FolderSidebarFrame.renameFolder(folder_id, $("#folder_name_edit").val());
+				ImageSelector.renameFolder(folder_id, $("#folder_name_edit").val());
 			}
 	    });
 		
@@ -3559,28 +4279,31 @@ var FolderSidebarFrame = {
 	// ////////////////////////////////////////////////////////////////////////////
 		
 	onSelectFolder : function(folder_id){
-
-		DataStore.m_currentFolderID = parseInt(folder_id);
-		FolderSidebarFrame.paintFolders();				
-
-		switch(ssMain.view){			
-			case ssMain.VIEW_GALLERIES : GalleriesFrame.repaint(); break;
-			case ssMain.VIEW_FILES : FilesFrame.onSelectFolder(); break;
-		}
-		
+		ImageSelector.folder_id = parseInt(folder_id);
+		ImageSelector.paintImages();
+		ImageSelector.paintFolders();				
 	},
 			
 	// ////////////////////////////////////////////////////////////////////////////
 
-	deleteFolder : function(folderId){
-		MediaAPI.deleteFolder(DataStore.m_siteID, folderId, FolderSidebarFrame.onFolderDeleted);
+	deleteFolder : function(folderdId){
+	
+		var paras = {cmd: 14, folder_id: folderdId};
+												
+		$.ajax({
+			url: ImagePickerData.commandURL,
+			dataType: "text",
+			data: paras,
+			success: function(ret){ImageSelector.onFolderDeleted(ret, folderdId)}	
+		});	
 	},
 	
-	onFolderDeleted : function(folder_id){
+	onFolderDeleted : function(res, folder_id){
 
-		//AthenaDialog.message("Folder deleted");
+		ImageSelector.showMessage("Folder deleted");
 		
-		var temp = new Array();		
+		var temp = new Array();
+		
 		for (var i=0; i<DataStore.m_folderList.length; i++){
 		
 			if (DataStore.m_folderList[i].id != folder_id){
@@ -3588,49 +4311,53 @@ var FolderSidebarFrame = {
 			}
 			
 		}
+
 		DataStore.m_folderList = temp;
-		
-		FolderSidebarFrame.paintFolders()	
+		ImageSelector.paintFolders()	
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////////
 
-	addFolder : function(){		
-		MediaAPI.addFolder(DataStore.m_siteID, 'new folder', FolderSidebarFrame.onAddedFolder);
+	addFolder : function(folderName){
+
+		if (folderName == undefined){
+			folderName = 'new folder';
+		}
+		
+		var paras = {cmd: 12, folder_name: folderName};
+												
+		$.ajax({
+			url: ImagePickerData.commandURL,
+			dataType: "json",
+			data: paras,
+			success: function(ret){ImageSelector.onAddedFolder(ret, folderName)}
+		});	
 	},
 	
-	onAddedFolder : function(folderName, folderID){
-
-		//alert("Folder ID: " + folderID + " Folder Name: " + folderName);
-
-		var temp = new Object();
-		temp.id = folderID;
-		temp.name = folderName;
-
-		DataStore.m_folderList.push(temp);
-
-		FolderSidebarFrame.paintFolders()
-					
-		// Make the folder name editable so the user can give it a good name
-		FolderSidebarFrame.makeFolderNameEditable(folderID);					
-
-/*		
-		DataStore.load(function(){
-			
-			ssMain.onDataLoaded(); 
-			
-			// Make the folder name editable so the user can give it a good name
-			FolderSidebarFrame.makeFolderNameEditable(folderID);					
-		})
-*/		
+	onAddedFolder : function(msg, folderName){
 		
+		//eval("var msg = ("+ret+")");
+						
+		if (msg.result == "ok"){
+			var folder_id = msg.folder_id;
+			
+			var temp = new Array();
+			temp.id = folder_id;
+			temp.name = folderName;
+			DataStore.m_folderList.push(temp);
+			ImageSelector.paintFolders();		
+			ImageSelector.makeFolderNameEditable(folder_id);					
+			
+			ImageSelector.showMessage("Folder added");
+			
+		}					
 	},
 	
 	// ////////////////////////////////////////////////////////////////////////////
 
 	getFolderName : function(folder_id){
 	
-		if (folder_id == FolderSidebarFrame.ID_UNASSIGNED){
+		if (folder_id == ImageSelector.ID_UNASSIGNED){
 			return "Unassigned";
 		}
 		
@@ -3649,10 +4376,17 @@ var FolderSidebarFrame = {
 	* Rename a folder
 	*/
 	renameFolder : function(folderId, folderName){
-		MediaAPI.renameFolder(DataStore.m_siteID, folderId, folderName, FolderSidebarFrame.onFolderRenamed);
+		var paras = {cmd: 11, folder_id: folderId, folder_name: folderName};
+												
+		$.ajax({
+			url: ImagePickerData.commandURL,
+			dataType: "text",
+			data: paras,
+			success: function(ret){ImageSelector.onFolderRenamed(ret, folderId, folderName)}
+		});	
 	},
 	
-	onFolderRenamed : function(folderId, folderName){
+	onFolderRenamed : function(ret, folderId, folderName){
 
 		for (var i=0; i<DataStore.m_folderList.length; i++){
 			if (DataStore.m_folderList[i].id == folderId){
@@ -3661,536 +4395,103 @@ var FolderSidebarFrame = {
 			}
 		}
 
-		FolderSidebarFrame.paintFolders()
-	}			
-
-}
-/**
-*
-* @author Mike Pritchard (mike@apollosites.com)
-* @since 30th December, 2010
-*/
-var TagsSidebarFrame = {
-
-    /** Number of tags per 'page' */
-    m_tagsPerPage : 25,    
-    m_currentPage : 0,    
-    m_numberPages : 0,
+		ImageSelector.paintFolders()
+	},				
 
 	// ////////////////////////////////////////////////////////////////////////////
 	
-	/**
-	*
-	*/
-	paint : function(targetDiv){
-		
-		var txt = "";
-
-		// Hard code a 'switch to folder view' item							
-		txt += "<div onclick=\"SidebarFrame.showFolders()\" id='switch_to_folder_view' class='folder' title='' class='apollo_tag tag_with_menu'><img class='folder_icon' src='images/folder_icon.png'><span class='switch_to_folder_view_name'>Switch to folder view</span></div>";
-
-		txt += "<div id='apollo_tag_list'></div>";
-															
-        txt += "<div id='tagPageControls' class='sidebar_page_controls'>";        
-        txt += "<table border='0'>";
-        txt += "    <tr>";
-        txt += "        <td width='33%' align='left'><span class='more_posts_link' id='prev_tags_page_link' style='padding-left:15px' onclick='TagsSidebarFrame.showPrevPage()' title='Display previous page'>&laquo; prev</span></td>";
-        txt += "        <td width='33%' align='center'><span class='more_posts_pages' id='tags_sideframe_page_no' style=''>1 of 2</span></td>";                
-        txt += "        <td width='33%' align='right'><span class='more_posts_link' id='next_tags_page_link' style='padding-right:15px' onclick='TagsSidebarFrame.showNextPage()' title='Display next page'>next &raquo;</span></td>";
-        txt += "    </tr>";
-        txt += "</table>";        
-        txt += "</div>";
-						
-						
-		// Right click pop-up menu....
-		txt += "<ul id='tagMenu' class='rightClickMenu'>";
-		txt += "	<li class='edit'><a href='#edit'>Rename</a></li>";
-		txt += "	<li class='delete'><a href='#delete'>Delete</a></li>";
-		txt += "	<li class='quit separator'><a href='#quit'>Cancel</a></li>";
-		txt += "</ul>";
-
-		$(targetDiv).html(txt);
-
-		var pos = $(targetDiv).position();
-		
-		var offset = pos.top + 30;
-		var lineht = 23;				
-		var h = $('.ViewFrame').height() - offset - $('#tagPageControls').height(); 
-/*				
-		switch(ssMain.view){			
-		
-			case ssMain.VIEW_GALLERIES : 
-				h = ($('.ViewFrame').height()/2) - offset - $('#tagPageControls').height();		 
-				break;
-				
-			case ssMain.VIEW_FILES : 
-				h = $('.ViewFrame').height() - offset - $('#tagPageControls').height(); 
-				break;
-		}
-*/		    		    	    		
-		TagsSidebarFrame.m_tagsPerPage = Math.floor(h / lineht);		
-        TagsSidebarFrame.m_numberPages = Math.ceil(DataStore.m_mediaTags.length / TagsSidebarFrame.m_tagsPerPage);
-        
-        if (TagsSidebarFrame.m_numberPages == 1){
-        	$('#tagPageControls').hide();
-        }
-        
-		TagsSidebarFrame.paintTags();		
-        $('#apollo_tag_list').height(h);
-		
-		$(targetDiv).disableSelection();
-		$(targetDiv).noContext();
-		
-	},
-
-	// ////////////////////////////////////////////////////////////////////////////
-	
-	paintTags : function(){
-				
-		var tagList = DataStore.m_mediaTags;
-						
-		if (tagList == undefined || tagList == null){
-			$("#apollo_tag_list").html("");
-		}
-		
-        var start_i = TagsSidebarFrame.m_currentPage * TagsSidebarFrame.m_tagsPerPage;
-        var end_i = Math.min(tagList.length, start_i+TagsSidebarFrame.m_tagsPerPage);
-        $('#tags_sideframe_page_no').html((TagsSidebarFrame.m_currentPage+1) + " of " + TagsSidebarFrame.m_numberPages);
-		
-		var txt = "";
-							
-		for (var i=start_i; i<end_i; i++){
-
-			var tag = tagList[i];
-						
-			if (tag == DataStore.m_currentTag){
-				txt += "<div onclick=\"TagsSidebarFrame.onSelectTag('"+tag+"')\" class='tag droppable_tag' id='tag_"+tag+"' title='' class='apollo_tag tag_with_menu'><img class='tag_icon' src='images/tag_icon_blue.png'><span class='tag_name selected'>"+tag+"</span></div>";
-			}
-			else {
-				txt += "<div onclick=\"TagsSidebarFrame.onSelectTag('"+tag+"')\" class='tag droppable_tag' id='tag_"+tag+"' title='' class='apollo_tag tag_with_menu'><img class='tag_icon' src='images/tag_icon_blue.png'><span class='tag_name'>"+tag+"</span></div>";
-			}	
-			
-		}
-		
-		$('#apollo_tag_list').html(txt);
-
-		$(".tag").rightClick( function(e) {TagsSidebarFrame.onRightClickTag(e, this);});
-
-		$('.droppable_tag').droppable({
-				drop: TagsSidebarFrame.onAddToTag,
-				over: function(ev, ui) {$(this).addClass( 'tag_name_hover' );},
-				out: function(ev, ui) {$(this).removeClass( 'tag_name_hover' );}
-			});	
-			
-		$("#apollo_tag_list").disableSelection();
-				
-	},
-
-    // ////////////////////////////////////////////////////////////////////////////
-
-    showNextPage : function(){
-		
-        $('#prev_tags_page_link').show();
-        	
-        if (TagsSidebarFrame.m_currentPage < TagsSidebarFrame.m_numberPages-1){
-            TagsSidebarFrame.m_currentPage += 1;
-        }
-        
-        if (TagsSidebarFrame.m_currentPage == TagsSidebarFrame.m_numberPages-1){
-        	$('#next_tags_page_link').hide();
-        }
-        
-        TagsSidebarFrame.paintTags();
-    },
-
-    // ////////////////////////////////////////////////////////////////////////////
-
-    showPrevPage : function(){
-
-        $('#next_tags_page_link').show();
-
-        if (TagsSidebarFrame.m_currentPage > 0){
-            TagsSidebarFrame.m_currentPage -= 1;
-        }
-        
-        if (TagsSidebarFrame.m_currentPage == 0){
-        	$('#prev_tags_page_link').hide();
-        }
-        
-        TagsSidebarFrame.paintTags();
-    },
-    
-	// ////////////////////////////////////////////////////////////////////////////
-
-	onRightClickTag : function(e, obj){
-
-		e.stopPropagation();
-		
-		//var x = e.pageX - $('#adminmenu').width() - 30;
-		//var y = e.pageY - $('#wphead').height() - $('#update-nag').height();		
-		var x = e.pageX;
-		var y = e.pageY;		
-
-		$('#tagMenu').css('top',y);
-		$('#tagMenu').css('left',x);
-		$('#tagMenu').show();
-
-		$('#tagMenu .edit').unbind('click');
-		$('#tagMenu .delete').unbind('click');
-		$('#tagMenu .quit').unbind('click');
-
-		$('#tagMenu .edit').click(function(){TagsSidebarFrame.onMenuItem('rename_tag', obj)});
-		$('#tagMenu .delete').click(function(){TagsSidebarFrame.onMenuItem('delete_tag', obj)});
-		$('#tagMenu .quit').click(function(){TagsSidebarFrame.onMenuItem('quit', obj)});
-		
-	},
-
-	// ////////////////////////////////////////////////////////////////////////////
-
 	/**
 	* Get the image list for the currently selected gallery page. Note that even for multi-drag
 	* the object dropped on the folder is still the source thumbnail, and not the image that is
 	* show during the drag (defined by the helper function)
 	*/
-	onAddToTag : function(event, ui){
-		
+	onAddToFolder : function(event, ui){
+
 		var imgID = parseInt($(ui.draggable).attr('id').substring(4));						
-		var tag = $(this).attr('id').substring(4);	// format tag_xxx
+		var folderID = parseInt($(this).attr('id').substring(7));	// format folder_xxx
 
-        MediaAPI.addMediaCSVTags(DataStore.m_siteID, imgID, tag, TagsSidebarFrame.onAddedToTag);
+		// Check to see if there are images multi-selected, and whether this image
+		// is one of them
+		var imgList = new Array();
+		var is_multiDrag = false;
 		
-	},
+  		$('.multiselected').each(	
+  			function(){
+				var multi_imgID = parseInt($(this).attr('id').substring(4));
+				imgList.push(multi_imgID);	
+				if (imgID == multi_imgID){
+					is_multiDrag = true;
+				}					
+  			}
+  		);		
+		
+		// Its possible that the user didn't drag a multi-selected image, so in that case
+		// we want to ignore anything that is multi-selected
+		if (!is_multiDrag){
+			imgList = new Array();
+			imgList[0] = imgID;
+		}
+
+
+		// Now assign all the images in the image list 
+		for (var i=0; i<imgList.length; i++){
+		
+			var tempImgID = imgList[i];
 			
-	onAddedToTag : function(mediaObj, tags){
-        DataStore.updateMedia(mediaObj);				
-        DataStore.m_mediaTags = tags;
-		TagsSidebarFrame.onSelectTag(DataStore.m_currentTag);
-	},
-
-	// ////////////////////////////////////////////////////////////////////////////
-		
-	/**
-	* Respond to the user selecting a menu item
-	*/
-	onMenuItem : function(item, selectedElement){
+			if (folderID == ImageSelector.ID_UNASSIGNED || folderID > 9){		
 				
-		$('#tagMenu').hide();
-		
-		var divID = $(selectedElement).attr('id');		
-		var name = $('#'+divID + ' .tag_name').html();		
-		var tag = divID.substr(4);
+				//alert("Adding image: post_id: " + tempImgID + " folder_id: " + folderID);
 				
-		// Process events related to folders...					
-		if (item == 'rename_tag'){
-			TagsSidebarFrame.makeTagNameEditable(tag);
+				var paras = {cmd: 10, media_post_id: tempImgID, folder_id: folderID};
+														
+				$.ajax({
+					url: ImagePickerData.commandURL,
+					dataType: "json",
+					data: paras,
+					success: function(ret){ImageSelector.onAddedToFolder(ret)}
+				});
+			}	
 		}
-		else if (item == 'delete_tag'){		
-			AthenaDialog.confirm("Are you sure you want to delete this tag? This will not delete any of your images, just this tag", function(){TagsSidebarFrame.deleteTag(tag);});
-		}
-				
-	},	
 
-	// ////////////////////////////////////////////////////////////////////////////
-
-	makeTagNameEditable : function(tag){
+		//alert($(ui.draggable).html());
+		//alert($(ui.draggable).attr('id'));
 		
-		var divID = '#tag_' + tag;
-		var name = $(divID + ' .tag_name').html();
-		
-		$(divID).attr('onclick','');
-
-		$(divID + ' .tag_name').html("<input id='tag_name_edit' style='width:100px' type='text' value='"+name+"' onblur='TagsSidebarFrame.paintTags()'/>");
-		
-		$("#tag_name_edit").keypress(function (e) {
-			if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
-				TagsSidebarFrame.renameTag(tag, $("#tag_name_edit").val());
-			}
-	    });
-		
-		$("#tag_name_edit").focus();
-	},
-		
-	// ////////////////////////////////////////////////////////////////////////////
-		
-	onSelectTag : function(tag){
-		
-		DataStore.m_currentTag = tag;
-		TagsSidebarFrame.paintTags();				
-
-		switch(ssMain.view){			
-			case ssMain.VIEW_GALLERIES : GalleriesFrame.repaint(); break;
-			case ssMain.VIEW_FILES : FilesFrame.onSelectFolder(); break;
-		}
-		
-	},
+		$(this).removeClass( 'apollo_folder_droppable_hover' );
 			
-	// ////////////////////////////////////////////////////////////////////////////
-
-	deleteTag : function(tag){
-		MediaAPI.deleteMediaTag(DataStore.m_siteID, tag, TagsSidebarFrame.onTagDeleted)
 	},
 	
-	onTagDeleted : function(newTagList){
-        
-        DataStore.m_mediaTags = newTagList;
-        
-        if (DataStore.m_mediaTag != undefined && DataStore.m_mediaTag != null && DataStore.m_mediaTag.length > 0){
-        	DataStore.m_currentTag = DataStore.m_mediaTags[0];
-			TagsSidebarFrame.onSelectTag(DataStore.m_currentTag);
-        }
-        else {
-			TagsSidebarFrame.onSelectTag('');
-        }
-        		
-	},
+	onAddedToFolder : function(msg){
+								
+		if (msg.result == "ok"){
+
+			var imgID = msg.media_post_id;
+			var folderID = msg.folder_id;
 					
-	// ////////////////////////////////////////////////////////////////////////////
-
-	/**
-	* Rename a folder
-	*/
-	renameTag : function(oldTagName, newTagName){
-	
-		// Check to see if this new name is not in use
-		for (var i=0; i<DataStore.m_mediaTags.length; i++){
-			if (DataStore.m_mediaTags[i] == newTagName){
-				AthenaDialog.alert("Sorry, you already have a tag with that name!");
-				return;
-			}
-		}
-		
-		TagsSidebarFrame.m_newTag = newTagName;
-		MediaAPI.renameMediaTag(DataStore.m_siteID, oldTagName, newTagName, TagsSidebarFrame.onTagRenamed);
-	},
-	
-	onTagRenamed : function(tags){
-        DataStore.m_mediaTags = tags;
-		TagsSidebarFrame.onSelectTag(TagsSidebarFrame.m_newTag);
-	}			
-
-}
-/**
-* Javascript class that allows a user to pick an image from their wordpress media library
-* The image data is assumed to be in the class ImagePickerData see the fucntion 
-* echoImagePickerJSImageData in plugin_functions.php
-*
-* @since 24th March, 2010
-*/
-var GalleriesSidebarFrame = {
-	
-	m_targetDiv : '',
-	
-    /** Number of tags per 'page' */
-    m_tagsPerPage : 25,    
-    m_currentPage : 0,    
-    m_numberPages : 0,
-	
-	m_pageList : '',
-	
-	// ////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	*
-	*/
-	paint : function(targetDiv){
-		
-		GalleriesSidebarFrame.m_targetDiv = targetDiv;
-		
-		var txt = "";
-
-		txt += "<div id='apollo_page_list'></div>";
-		
-        txt += "<div id='galPagesSidebarControls' class='sidebar_page_controls'>";        
-        txt += "<table border='0'>";
-        txt += "    <tr>";
-        txt += "        <td width='33%' align='left'><span class='more_posts_link' id='prev_pages_link' style='padding-left:15px' onclick='GalleriesSidebarFrame.showPrevPage()' title='Display previous page'>&laquo; prev</span></td>";
-        txt += "        <td width='33%' align='center'><span class='more_posts_pages' id='galpages_sideframe_page_no' style=''>1 of 2</span></td>";                
-        txt += "        <td width='33%' align='right'><span class='more_posts_link' id='next_pages_link' style='padding-right:15px' onclick='GalleriesSidebarFrame.showNextPage()' title='Display next page'>next &raquo;</span></td>";
-        txt += "    </tr>";
-        txt += "</table>";        
-        txt += "</div>";
-		
-		/*
-		// Right click pop-up menu....
-		txt += "<ul id='pagesMenu' class='rightClickMenu'>";
-		txt += "	<li class='edit'><a href='#edit'>Rename</a></li>";
-		txt += "	<li class='duplicate'><a href='#edit'>Duplicate</a></li>";
-		txt += "	<li class='delete'><a href='#delete'>Delete</a></li>";
-		txt += "	<li class='quit separator'><a href='#quit'>Cancel</a></li>";
-		txt += "</ul>";
-		*/
-		
-		$(targetDiv).html(txt);
-
-		GalleriesSidebarFrame.m_pageList = GalleriesSidebarFrame.getPagesWithGalleries();
-		
-		var offset = 110;
-		var h = ($(window).height() - offset)/2;				 
-				    		    	    		
-		GalleriesSidebarFrame.m_tagsPerPage = Math.floor(h / 25);		
-        GalleriesSidebarFrame.m_numberPages = Math.ceil(GalleriesSidebarFrame.m_pageList.length / GalleriesSidebarFrame.m_tagsPerPage);
-                                                        				
-        if (GalleriesSidebarFrame.m_numberPages == 1){
-        	$('#galPagesSidebarControls').hide();
-        }
-		
-		GalleriesSidebarFrame.paintPages();		
-
-        $('#apollo_page_list').height(h);
-		
-		$(targetDiv).disableSelection();
-		$(targetDiv).noContext();
-		
-	},
-
-	// ////////////////////////////////////////////////////////////////////////////
-
-	repaint : function(){
-		GalleriesSidebarFrame.paint(GalleriesSidebarFrame.m_targetDiv);
-	},
-
-	// ////////////////////////////////////////////////////////////////////////////
-
-	getPagesWithGalleries : function(){
-
-		var pageList = new Array();
-		
-		for (var i=0; i<DataStore.m_pageList.length; i++){
-			
-			var hasGallery = DataStore.isGalleryPage(DataStore.m_pageList[i].id);
-			
-			if (hasGallery){
-				pageList.push(DataStore.m_pageList[i]);
-			}
-		}
-		
-		return pageList;
-	},
-		
-	// ////////////////////////////////////////////////////////////////////////////
-	
-	paintPages : function(){
-		
-		var pageList = GalleriesSidebarFrame.m_pageList;
+			for (var i=0; i<DataStore.m_mediaList.length; i++){
 				
-        var start_i = GalleriesSidebarFrame.m_currentPage * GalleriesSidebarFrame.m_tagsPerPage;
-        var end_i = Math.min(pageList.length, start_i+GalleriesSidebarFrame.m_tagsPerPage);
-        $('#galpages_sideframe_page_no').html((GalleriesSidebarFrame.m_currentPage+1) + " of " + GalleriesSidebarFrame.m_numberPages);
-				
-		var txt = "";		
-				
-		if (pageList.length == 0){
-			txt += "<div style='padding-left:10px;color:#444444;'>You have no pages using a gallery template yet</div>";
-		}
-		else {
-			for (var i=start_i; i<end_i; i++){
-				
-				var hasGallery = DataStore.isGalleryPage(pageList[i].id);
-				
-				if (hasGallery){
-					txt += GalleriesSidebarFrame.getPageHtml(pageList[i].id, pageList[i].title, pageList[i].status, 0);
+				if (DataStore.m_mediaList[i].post_id == imgID){
+					DataStore.m_mediaList[i].folder_id = folderID;						
+					break;
 				}
 			}
-		}
-											
-		$('#apollo_page_list').html(txt);
-		
-		//$(".folder").rightClick( function(e) {GalleriesSidebarFrame.onRightClickFolder(e, this);});
-
-		$("#apollo_page_list").disableSelection();
-				
-	},
-
-    // ////////////////////////////////////////////////////////////////////////////
-
-    showNextPage : function(){
-		
-        $('#prev_pages_link').show();
-        	
-        if (GalleriesSidebarFrame.m_currentPage < GalleriesSidebarFrame.m_numberPages-1){
-            GalleriesSidebarFrame.m_currentPage += 1;
-        }
-        
-        if (GalleriesSidebarFrame.m_currentPage == GalleriesSidebarFrame.m_numberPages-1){
-        	$('#next_pages_link').hide();
-        }
-        
-        GalleriesSidebarFrame.paintPages();
-    },
-
-    // ////////////////////////////////////////////////////////////////////////////
-
-    showPrevPage : function(){
-
-        $('#next_pages_link').show();
-
-        if (GalleriesSidebarFrame.m_currentPage > 0){
-            GalleriesSidebarFrame.m_currentPage -= 1;
-        }
-        
-        if (GalleriesSidebarFrame.m_currentPage == 0){
-        	$('#prev_pages_link').hide();
-        }
-        
-        GalleriesSidebarFrame.paintPages();
-    },
-    
-	// ////////////////////////////////////////////////////////////////////////////
-
-	getPageHtml : function(page_id, page_title, page_status, page_depth){
-
-		var txt = '';
-        var icon = "images/post.png";
-		
-        var status_class = "";
-        var icon = "images/post.png";
-
-        if (page_status == 'Draft'){
-            status_class = 'status_draft';
-            //icon = "images/webpage_draft.png";
-        }
-        else if (page_status == 'Private'){
-            //icon = "images/webpage_private.png";
-            status_class = 'status_private';
-        }
-        else if (page_status == 'Published'){
-            //icon = "images/webpage_published.png";
-            status_class = 'status_public';
-        }
-				
-        var selected = '';
-        if (page_id == DataStore.m_currentPageID){
-            selected = 'selected';
-        }
-        
-		page_depth = 0;
-		
-		
-        txt += "<div onclick=\"GalleriesSidebarFrame.onSelectPage('"+page_id+"')\" class='page page_depth_"+page_depth+"' id='page_"+page_id+"' title=''>";
-        txt += "    <img class='page_icon' src='images/web_page2.png'>";
-        txt += "    <span class='page_name "+status_class+" "+selected+"'>"+page_title+"</span>";
-        txt += "</div>";
-
-/*		
-        txt += "<div onclick=\"GalleriesSidebarFrame.onSelectPage('"+page_id+"')\" class='page page_depth_"+page_depth+"' id='page_"+page_id+"' title=''>";
-        //txt += "    <img class='node_icon' src='"+nodeIcon+"'>";
-        txt += "    <img class='page_icon' src='"+icon+"'>";
-        txt += "    <span class='page_name "+status_class+" "+selected+"'>"+page_title+"</span>";
-        txt += "</div>";
-  */      				
-		return txt;
-	},
-	
-	// ////////////////////////////////////////////////////////////////////////////
-
-	onSelectPage : function(page_id){
-		DataStore.m_currentPageID = parseInt(page_id);
-		GalleriesFrame.repaint();
-		GalleriesSidebarFrame.paintPages();				
-	}
 			
-	// ////////////////////////////////////////////////////////////////////////////
+			ImageSelector.paintImages();
 
+			if (folderID == 0){
+				ImageSelector.showMessage("Image removed from folder");			
+			}
+			else {
+				ImageSelector.showMessage("Image added to folder <i>" + ImageSelector.getFolderName(folderID) + "</i>");			
+			}
+
+			
+		}
+		else if(msg.result == 'duplicate'){
+			ImageSelector.showMessage("Image already in folder  <i>" + ImageSelector.getFolderName(folderID) + "</i>");			
+		}
+		
+	}
+		
 }
 /**
 *
@@ -4382,438 +4683,341 @@ var SidebarFrame = {
 	
 }
 /**
-*
+* Settings frame
 * 
-* @since 27th July, 2010
+* @since 24th November, 2010
 */
-var GalleriesFrame = {
+var SettingsFrame = {
 
-    m_themeParaID :0,
-	
-	/** Images are divided into pages so we can fit the right number on the screen */
-    m_currentImagePage : 0,
-    
-    /** Max number of images per page */    
-    m_imagesPerPage : 50,
-    
-    /** Number of image pages */
-    m_numberImagePages : 0,
+    // ////////////////////////////////////////////////////////////////////////////
 
-	/** List of images based on the current folder selection */	
-	m_imageList : '',
+	init : function(){
+	},
 	
     // ////////////////////////////////////////////////////////////////////////////
 
-    init : function(){
-    },
-	
-    // ////////////////////////////////////////////////////////////////////////////
-	
-    repaint : function(){			
-
-        GalleriesFrame.m_themeParaID = GalleriesFrame.getThemeParaForGalleryPage();
-        
-        if (SidebarFrame.m_folderTagMode){
-			GalleriesFrame.m_imageList = DataStore.getImagesForCurrentTag();
-        }
-        else {
-			GalleriesFrame.m_imageList = DataStore.getImagesForCurrentFolder();
-        }        
-   		
-		GalleriesFrame.calcImagePages();
-        GalleriesFrame.paintGallerySlots();
-        GalleriesFrame.paintImages();	
-
-        //alert($('#GalleriesFrame').height());		
-        
-        //$('#GalleriesFrame').css('height','100%');	
-        
-    },
-	
-    // ////////////////////////////////////////////////////////////////////////////
-
-    showMultiGalSettings : function(){
-        $('#gallerySettings').show();
-    },
+	repaint : function(){
+		SettingsFrame.paintSiteParas();
 		
+        //$('#SettingsFrame').css('height','100%');	
+        		
+	},
+	
+    // ////////////////////////////////////////////////////////////////////////////
+    
+    paintSiteParas : function(){
+        var txt = SettingsFrame.getThemeParasHTML('all', 0);
+        if (txt != ""){
+			//txt = "<p><strong>Custom Parameters</strong></p>" + txt;
+	        $('#apollo_site_settings_custom_paras_2').html(txt);   	
+        } 
+
+        var txt = SettingsFrame.getThemeTextParasHTML('all', 0);
+        if (txt != ""){
+			//txt = "<p><strong>Custom Parameters</strong></p>" + txt;
+	        $('#apollo_site_settings_custom_paras_1').html(txt);   	
+        } 
+        
+		$('#apollo_site_settings_custom_paras_1 .customTextInput').typing({ stop: SettingsFrame.onSaveTextInputPara, delay: 400});
+        
+    },
+    
     // ////////////////////////////////////////////////////////////////////////////
 
 	/**
-	* Calculate number of images to display per page, we divide the images into 'pages' 
-	* so we don't oveflow the display
+	* Launch a popup dialog that allows users to import blog posts from external sources,
+	* such as Wordpress, LiveJournal etc.
 	*/
-	calcImagePages : function(){
+    onPaintPostImporter : function(){
 
-    	var h = $('#apollo_image_contents_wrapper').height();
-    	var w = 0;
+        var txt = "";
 
-        if (GalleriesFrame.m_mode == 'edit_image'){
-	  		w = $('#GalleriesFrame').width() - 500;
-        }
-        else {
-	  		w = $('#GalleriesFrame').width() - 300;
-        }
-        
-    	// images per row = w / thumb_width
-    	// images per col = h / thumb_height
-    	// so.. images per page = (w/60) * (h/60) = (w*h)/(thumb_width*thumb_height)
-    	//    = (w*h) / (50*50) = (w*h) / 2500
-    	
-    	GalleriesFrame.m_imagesPerPage = Math.floor((w*h) / 4900);    
-        
-        
-		GalleriesFrame.m_numberImagePages = Math.ceil(GalleriesFrame.m_imageList.length / GalleriesFrame.m_imagesPerPage);
-        
-        if (GalleriesFrame.m_numberImagePages <= 1){
-        	$('.more_link').hide();
-        }
-        else {
-        	$('.more_link').show();
-        }
-        
-        /*        
-        Logger.show();
-		Logger.debug("Width: " + w + " Height: " + h);
-		Logger.info($('#apollo_image_contents_wrapper').height());
-		Logger.debug("Images per row: " + (w/70) + " per col: " + (h/70) + " per page: " + GalleriesFrame.m_imagesPerPage);
-		*/
-	},
-	
-    // ////////////////////////////////////////////////////////////////////////////
+        txt += "<p>This tool allows you to import blog posts, comments and followers from other blogging engines.</p>";
+        txt += "<p>To get started, click on the button below that corresponds to the blog you want to import from.</p>";
+        txt += "<br/>";
+        txt += "<div align='center'>";
+        txt += "    <button class='basic_button' onclick='WordpressImporter.show()'>Wordpress</button>";
+        txt += "    <button class='basic_button' onclick='BloggerImporter.show()'>Blogger</button>";
+        txt += "    <button class='basic_button' onclick='LiveJournalImporter.show()'>LiveJournal</button>";
+        txt += "</div>"
+        txt += "<br/>";
+        txt += "<p>If you need to import from a blog engine not listed above, email us at <a href='mailto:support@apollosites.com?subject=Feature request: New blog import&body=It would be really awesome if you supported imports from my old blog, which is at xxxxx'>support@apollosites.com</a> and we'll try to add that blogging engine to the list as soon as we can!</p>";
 
-	showPrevImages : function(){
+        //AthenaDialog.alert(txt, "Import Posts");
 
-		GalleriesFrame.m_currentImagePage--;
-		
-		//var noPages = Math.ceil(GalleriesFrame.m_imageList.length / GalleriesFrame.m_imagesPerPage);
-		
-		if (GalleriesFrame.m_currentImagePage < 0){
-			GalleriesFrame.m_currentImagePage = GalleriesFrame.m_numberImagePages - 1;
-		}
-		
-		//Logger.error(GalleriesFrame.m_currentImagePage + " / " + noPages);
-		
-		GalleriesFrame.paintImages();		
 
-	},
-	
-    // ////////////////////////////////////////////////////////////////////////////
+        $('#apollo_dialog').dialog("destroy");
 
-	showNextImages : function(){
+        $('#apollo_dialog').html(txt);
 
-		GalleriesFrame.m_currentImagePage++;
-
-		//m_numberImagePagesvar noPages = Math.ceil(GalleriesFrame.m_imageList.length / GalleriesFrame.m_imagesPerPage);
-
-		if (GalleriesFrame.m_currentImagePage >= GalleriesFrame.m_numberImagePages){
-			GalleriesFrame.m_currentImagePage = 0;
-		}
-	
-		//Logger.error(GalleriesFrame.m_currentImagePage + " / " + noPages);
-		
-		GalleriesFrame.paintImages();		
-		
-	},
-		
-    // ////////////////////////////////////////////////////////////////////////////
-	
-    getThemeParaForGalleryPage : function(){
-
-        var page = DataStore.getCurrentPage();
-				
-        for(var i=0; i<DataStore.m_themeParaList.length; i++){
-        
-            if (DataStore.m_themeParaList[i].page_template_name == page.template){
-
-                if (DataStore.m_themeParaList[i].para_type == 'gallery'){
-                    return DataStore.m_themeParaList[i].id;
+        $('#apollo_dialog').dialog({
+            resizable: false,
+            width: 400,
+            //	height:140,
+            modal: true,
+            title: "Import Posts",
+            buttons: {
+                Cancel: function() {
+                    $(this).dialog('close');
                 }
-                else if (DataStore.m_themeParaList[i].para_type == 'multi-gallery'){
-                    GalleriesFrame.showMultiGalSettings();
-                    return DataStore.m_themeParaList[i].id;
-                }
-				
             }
-        }
+        });
+
+    },
         
-        return 0;
-    },
-		
     // ////////////////////////////////////////////////////////////////////////////
-	
-    paintGallerySlots : function(){
 
-        //$('#apollo_gallery_contents').remove();
-        //$('#apollo_gallery_contents_wrapper').html("<div align='left' id='apollo_gallery_contents'></div>");
-
-		if (!DataStore.isGalleryPage(DataStore.m_currentPageID)){
-			$('#apollo_gallery_contents').html("<p>No gallery selected. Select a gallery from the page list to the left</p>");
-	        $('#galleryTitle').html("Gallery Contents");
-	        $('#delete_slot').hide();
-			return;
-		}
-
-        $('#delete_slot').show();
-		
-        $('.gallery_slot').droppable('destroy');
-        $(".gallery_thumb").draggable('destroy');
-        $('#apollo_gallery_contents').html("");
-
-        var txt = "";
-
-        var noSlots = 23;
-        for (var i=0; i<DataStore.m_galleryImageList.length; i++){
-        	var slot = parseInt(DataStore.m_galleryImageList[i].slot_number);
-            if (DataStore.m_galleryImageList[i].theme_para_id == GalleriesFrame.m_themeParaID &&  slot > noSlots){
-                noSlots = slot;
-            }
-        }
-
-        noSlots = noSlots + 2;
-		
-        for (var i=0; i<noSlots; i++){
-            //txt += "<div class='gallery_slot' id='slot_"+i+"' align='center'><table><tr valigin='center'><td>";
-            //txt += "<div class='gallery_slot_text' align='center'>"+(i+1)+"</div>";
-            //txt += "</td></tr></table></div>";
-            txt += "<div class='gallery_slot' id='slot_"+i+"' align='center'>";
-            txt += "    <div class='gallery_slot_text' align='center'>"+(i+1)+"</div>";
-            txt += "</div>";
-        }
-/*
-        // Add special delete slot
-        txt += "<div class='gallery_slot' id='delete_slot' align='center'>";
-        txt += "    <div class='delete_slot_text' align='center'>remove</div>";        
-        txt += "</div>";
-*/					
-        $('#apollo_gallery_contents').html(txt);
+	/**
+	* Update a text-input para
+	*/
+    onSaveTextInputPara : function(evt, obj){
+        AthenaDialog.backgroundMessage("Saving new value");
+    	var para_id = parseInt(obj.attr('id').substr(7));
+    	//DataStore.updateSitePara(para_id, DataStore.m_currentPageID, obj.val());
+        MediaAPI.setPagePara(para_id, obj.val(), 0, SettingsFrame.onTextInputParaSaved);
+    },
         
-        // Update the gallery title
-        var page = DataStore.getCurrentPage();
-        $('#galleryTitle').html("Gallery "+page.title);
-						
-        for (var i=0; i<DataStore.m_galleryImageList.length; i++){
-            
-            if ((DataStore.m_galleryImageList[i].page_id == DataStore.m_currentPageID) &&
-                (DataStore.m_galleryImageList[i].theme_para_id == GalleriesFrame.m_themeParaID) &&
-                (DataStore.m_galleryImageList[i].gallery_number == DataStore.m_currentGalleryNo)){
-						
-                var img_id = DataStore.m_galleryImageList[i].image_id;
-                var image = DataStore.getImage(img_id);
-                var url = image.thumb_url;
-                var slot_no = DataStore.m_galleryImageList[i].slot_number;
-
-                $("#slot_"+slot_no).html("<img class='gallery_slot_image gallery_thumb' slot='"+slot_no+"' id='galimg_"+img_id+"' src='"+url+"'/>");
-		//$(".gallery_thumb").draggable({	revert: false, zIndex: 300 });
-            }
-        }
-
-
-        // Make the images draggable
-        $(".gallery_thumb").draggable({
-            revert: false,
-            zIndex: 300
-        });
-
-
-        $('.gallery_slot').droppable({
-            drop: GalleriesFrame.onDrop,
-            over: function(ev, ui) {
-                $(this).addClass( 'gallery_slot_hover' );
-            },
-            out: function(ev, ui) {
-                $(this).removeClass( 'gallery_slot_hover' );
-            }
-        });
-	
-		// Make the 'drop here to remove from gallery' box droppable
-        $('#delete_slot').droppable({
-            drop: GalleriesFrame.onRemoveImage,
-            over: function(ev, ui) {
-                $(this).addClass( 'gallery_slot_hover' );
-            },
-            out: function(ev, ui) {
-                $(this).removeClass( 'gallery_slot_hover' );
-            }
-        });
-		
-				
-    },
-    
+    onTextInputParaSaved : function(theme_para_id, new_value, page_id){
+    	// Update value in local store
+        DataStore.updateSitePara(theme_para_id, page_id, new_value);
+    },	
+        
     // ////////////////////////////////////////////////////////////////////////////
-    
-    paintImages : function(){
-		
-        $(".thumb").draggable('destroy');
-				
-		if (GalleriesFrame.m_imageList == ''){
-	        if (SidebarFrame.m_folderTagMode){
-				GalleriesFrame.m_imageList = DataStore.getImagesForCurrentTag();
-	        }
-	        else {
-				GalleriesFrame.m_imageList = DataStore.getImagesForCurrentFolder();
-	        }        
-			GalleriesFrame.calcImagePages();
-		}		
-				
-		var startIndex = GalleriesFrame.m_imagesPerPage * GalleriesFrame.m_currentImagePage;
-		var endIndex = Math.min(startIndex + GalleriesFrame.m_imagesPerPage, GalleriesFrame.m_imageList.length);
-		
-		//Logger.debug("Image page: " + GalleriesFrame.m_currentImagePage);
-				
-        var txt = "";
-    	
-		// Get the html for the selected images...
-        for (var i=startIndex; i<endIndex; i++){
-
-            var thumb_url = GalleriesFrame.m_imageList[i].thumb_url;
-            var post_id = GalleriesFrame.m_imageList[i].id;
-            var title = GalleriesFrame.m_imageList[i].title;
-            var thumb_width = GalleriesFrame.m_imageList[i].thumb_width;
-            var thumb_height = GalleriesFrame.m_imageList[i].thumb_height;
-            var width = GalleriesFrame.m_imageList[i].width;
-            var height = GalleriesFrame.m_imageList[i].height;
-
-        	txt += GalleriesFrame.getImageHTML(post_id, thumb_url, title, width, height, thumb_width, thumb_height);
-		}
-	
-	
-        if (txt == ""){
-            txt += "<div style='color:#444444;'>This folder is empty</div>";
-        }
-		
-        $('#apollo_image_contents').html(txt);
-        $('#apollo_image_contents').disableSelection();
-        $('#apollo_image_contents').noContext();
-
-        //$(".thumb").rightClick( function(e) {GalleriesFrame.onRightClickImage(e, this);});
-				
-        // Make draggable
-        $(".thumb").draggable({
-            revert: true,
-            zIndex: 300
-        });
-		
-		
-    },
-
-    // ////////////////////////////////////////////////////////////////////////////
-	
-    getImageHTML : function(post_id, thumb_url, title, width, height, thumb_width, thumb_height){
+        
+    /**
+     * Get the html for editing the theme paras for the given template name.
+     * If you set the template name to 'All' it will return the global paras
+     * @param string templateName
+     */
+    getThemeParasHTML : function(templateName){
+        
+        var theme_para_list = DataStore.getPageThemeParas(templateName);
 
         var txt = "";
-        //var ph = (60 - height - 8)/2;
-		
-        var titleText = title + " (" + width + "px by " + height + "px)";
+        var noParas = 0;
+	    var pageID = DataStore.m_currentPageID;	            
+        
+	    if (templateName == 'all') pageID = 0;
 
-        var onclick = "GalleriesFrame.onSelectImage('"+post_id+"')";
+		//
+		// Paint images....
+		//
 		
-        txt += "<div class='thumbwrapper' align='center' onclick=\""+onclick+"\">";
-        txt += "<img id='img_"+post_id+"' src='"+thumb_url+"' class='thumb' width='"+thumb_width+"px' height='"+thumb_height+"px' title='"+titleText+"'/>";
-        txt += "</div>";
+		txt += "<p><strong>Images</strong></p>";
+		
+        for (var i=0; i<theme_para_list.length; i++){
+
+			var blogTxt = '';
+			//if (theme_para_list[i].is_blog_para == 1) blogTxt = "<span class='blogParaIndicator'>(blog)</span>";
+			
+            var paraVal = DataStore.getSiteParaValue(pageID, theme_para_list[i].id);
+            if (!paraVal) paraVal = "";
+
+            switch(theme_para_list[i].para_type){
+
+                case 'favicon':
+                case 'image':
+					
+                    var onclick = "SettingsFrame.selectImagePara("+theme_para_list[i].id+")";
+										
+                    txt += "<table border='0'>";
+                    txt += "<tr valign='top'>";
+                    txt += "    <td width='40px'>";
+                    var image_url = '/admin/images/blank.gif';
+                    if (paraVal && paraVal != ''){
+                        var image = DataStore.getImage(parseInt(paraVal));
+                        if (image){
+                            image_url = image.thumb_url
+                        }
+                    }
+                    txt += "<img src='"+image_url+"' class='thumbBox' width='30px' height='30px' onclick=\""+onclick+"\" >";
+                    txt += "    </td>";
+
+                    txt += "    <td>";
+                    txt += "        <span class='paraTitle'>"+theme_para_list[i].description+blogTxt+"</span>";
+                    txt += "        <span class='paraDesc'>"+theme_para_list[i].help_text+"</span>";
+                    //txt += "        <button class='save_button' onclick=\""+onclick+"\" style='font-size:10px'>Change</button>";
+                    txt += "    </td>";
+                    txt += "</tr>";
+                    txt += "</table>";
+					
+                    noParas++;
+
+                    break;
+			}
+
+        }
+
+		//
+		// Paint color pickers...
+		//
+
+		txt += "<p><strong>Colors</strong></p>";
+
+        for (var i=0; i<theme_para_list.length; i++){
+			
+			var blogTxt = '';
+			//if (theme_para_list[i].is_blog_para == 1) blogTxt = "<span class='blogParaIndicator'>(blog)</span>";
+			
+            var paraVal = DataStore.getSiteParaValue(pageID, theme_para_list[i].id);
+            if (!paraVal) paraVal = "";
+
+            switch(theme_para_list[i].para_type){
+	
+                case 'color':
+
+                    var onclick = "SettingsFrame.selectColorPara("+theme_para_list[i].id+", '"+paraVal+"')";
+	
+					/*
+                    txt += "<table border='0' width='100%'>";	                    
+                    txt += "    <tr valign='top' width='100%'>";	                    
+                    txt += "        <td colspan='2'><div class='paraTitle'>"+theme_para_list[i].description+"</div></td>";
+                    txt += "    </tr>";	                    
+                    txt += "    <tr valign='top'>";	                    
+                    txt += "        <td width='40px'><div class='colorBox' style='background-color:#"+paraVal+";' onclick=\""+onclick+"\"></div></td>";
+                    txt += "        <td><span class='paraDesc' style='width:95%;'>"+theme_para_list[i].help_text+"</span></td>";	                    
+                    txt += "    </tr>";	                    
+                    txt += "</table>";
+                    */
+                    
+                    txt += "<table border='0'>";
+                    txt += "<tr valign='top'>";
+                    txt += "    <td width='40px'>";
+                    txt += "        <div class='colorBox' style='background-color:#"+paraVal+";' onclick=\""+onclick+"\"></div>";
+                    txt += "    </td>";	
+                    txt += "    <td>";
+                    txt += "        <span class='paraTitle'>"+theme_para_list[i].description+blogTxt+"</span>";
+                    txt += "        <span class='paraDesc'>"+theme_para_list[i].help_text+"</span>";
+                    txt += "    </td>";
+                    txt += "</tr>";
+                    txt += "</table>";
+					
+                    noParas++;
+
+                    break;
+
+            }
+
+        }
+		
+        if (noParas > 0){            
+            txt = "<table border='0' width='100%'>" + txt + "</table><br/>";
+        }
+
         return txt;
+
+    },
+    
+    // ////////////////////////////////////////////////////////////////////////////
+        
+    /**
+     * Get the html for editing the theme paras for the given template name.
+     * If you set the template name to 'All' it will return the global paras
+     * @param string templateName
+     */
+    getThemeTextParasHTML : function(templateName){
+        
+        var theme_para_list = DataStore.getPageThemeParas(templateName);
+
+        var txt = "";
+        var noParas = 0;
+	    var pageID = DataStore.m_currentPageID;	            
+        
+	    if (templateName == 'all') pageID = 0;
+
+		//
+		// Paint text and others...
+		//
+
+		txt += "<p><strong>Settings</strong></p>";
+
+        for (var i=0; i<theme_para_list.length; i++){
+
+			var blogTxt = '';
+			//if (theme_para_list[i].is_blog_para == 1) blogTxt = "<span class='blogParaIndicator'>(blog)</span>";
+
+            var paraVal = DataStore.getSiteParaValue(pageID, theme_para_list[i].id);
+            if (!paraVal) paraVal = "";
+            
+            switch(theme_para_list[i].para_type){
+	
+                case 'email':
+                    break;
+
+                case 'text':
+                	                	
+                    txt += "<table border='0' style='width:100%'>";	                    
+                    txt += "    <tr valign='top' rowspan='2' width='100%' style='width:100%'>";	                    
+                    txt += "        <td rowspan='2' width='100px'><div class='paraTitle'>"+theme_para_list[i].description+blogTxt+"</div></td>";
+                    txt += "        <td><input id='paraID_"+theme_para_list[i].id+"' value='"+paraVal+"' class='customTextInput' style='width:95%;'/></td>";
+                    txt += "    </tr>";	                    
+                    txt += "    <tr valign='top' width='100%' style='width:100%'>";	                    
+                    txt += "        <td><span class='paraDesc' style='width:95%;'>"+theme_para_list[i].help_text+"</span></td>";	                    
+                    txt += "    </tr>";	                    
+                    txt += "</table>";
+                    	 
+                    noParas++;
+                    	                
+                    break;
+
+                case 'small-int':
+                    break;
+
+                case 'font-family':
+                    break;
+
+                case 'font-size':
+                    break;
+
+                case 'multi-gallery':
+                case 'gallery':
+                    break;
+            }
+
+        }
+
+
+        if (noParas > 0){            
+            txt = "<table border='0' width='100%'>" + txt + "</table><br/>";
+        }
+
+        return txt;
+
     },
         
     // ////////////////////////////////////////////////////////////////////////////
 
-    /**
-	* Handle an image being dropped on the remove box
-	*/	
-    onRemoveImage : function(event, ui){
-
-        img_id = parseInt($(ui.draggable).attr('id').substring(7));
-        prev_slot_id = $(ui.draggable).attr('slot');        
-        //slot_id = parseInt($(this).attr('id').substring(5));
-        GalleryAPI.onRemoveImage(DataStore.m_siteID,
-					            DataStore.m_currentPageID,
-					            img_id,
-					            DataStore.m_currentGalleryNo,
-					            prev_slot_id,
-					            GalleriesFrame.m_themeParaID,
-					            GalleriesFrame.onImageRemoved);
-    },
-        
-    // ////////////////////////////////////////////////////////////////////////////
-				
-    /**
-	* Handle an image being dropped on the gallery, or moved withing the gallery
-	*/	
-    onDrop : function(event, ui){
+    m_themeParaID : 0,
 	
-        //alert('GalleriesFrame.onDrop()');
-		
-        var slot_id = 0;
-        var img_id = -1;
-        var url = '';
-        var image_moved = true;
-        var prev_slot_id = -1;
-				        
-        if ($(ui.draggable).attr('id').substring(0,3) == 'gal'){
+    selectColorPara : function(themeParaID, paraVal){
+        SettingsFrame.m_themeParaID = themeParaID;
+        ColorPickerDialog.show('#apollo_color_picker', paraVal, SettingsFrame.onParaSelected)
+    },
+	
+    // ////////////////////////////////////////////////////////////////////////////
+	
+    selectImagePara : function(themeParaID){
+        SettingsFrame.m_themeParaID = themeParaID;
+        ImagePickerDialog.show('#apollo_image_picker', SettingsFrame.onParaSelected)
+    },    
+	
+  	// ////////////////////////////////////////////////////////////////////////////
 
-            // This is an existing image being moved!
-            img_id = parseInt($(ui.draggable).attr('id').substring(7));
-            slot_id = parseInt($(this).attr('id').substring(5));
-            url = $('#galimg_'+img_id).attr('src');
-            prev_slot_id = $(ui.draggable).attr('slot');
-			
-            GalleryAPI.onMoveImage( DataStore.m_siteID,
-                DataStore.m_currentPageID,
-                img_id,
-                prev_slot_id,
-                slot_id,
-                DataStore.m_currentGalleryNo,
-                DataStore.m_currentGalleryNo,
-                GalleriesFrame.m_themeParaID,
-                GalleriesFrame.onImageMoved);
-        }
-        else {
-
-            // This is a new image being added
-            image_moved = false;
-            img_id = parseInt($(ui.draggable).attr('id').substring(4));
-            slot_id = parseInt($(this).attr('id').substring(5));
-            url = $('#img_'+img_id).attr('src');
-			
-            GalleryAPI.onAddImage(	DataStore.m_siteID,
-                DataStore.m_currentPageID,
-                img_id,
-                slot_id,
-                DataStore.m_currentGalleryNo,
-                GalleriesFrame.m_themeParaID,
-                GalleriesFrame.onImageAdded);
-			
-        }
-
-    /*
-		if (img_id == -1){
-			alert('bad image id');
-			return;
-		}
-*/								
+    onParaSelected : function(newParaVal){
+        AthenaDialog.backgroundMessage("Saving new value");
+        page_id = 0;
+        MediaAPI.setPagePara(SettingsFrame.m_themeParaID, newParaVal, page_id, SettingsFrame.onPagesParaChanged);
     },
 	
     // ////////////////////////////////////////////////////////////////////////////
 
-    onImageMoved : function(gallery_images, gallery_meta){
-        // Add the new image to the data store
-        DataStore.onGotGalleryData(gallery_images, gallery_meta);
-        setTimeout("GalleriesFrame.paintGallerySlots()", 50);
-//        GalleriesFrame.paintGallerySlots();
-    },
-	
-    // ////////////////////////////////////////////////////////////////////////////
+    onPagesParaChanged : function(theme_para_id, new_value, page_id){
+                
+        //location.href = location.href;
+        DataStore.updateSitePara(theme_para_id, page_id, new_value);
 
-    onImageAdded : function(gallery_images, gallery_meta){
-        // Add the new image to the data store
-        DataStore.onGotGalleryData(gallery_images, gallery_meta);
-        setTimeout("GalleriesFrame.paintGallerySlots()", 50);
-//        GalleriesFrame.paintGallerySlots();
-    },
-	
-    // ////////////////////////////////////////////////////////////////////////////
+        // Now repaint...
+	    SettingsFrame.repaint();
 
-    onImageRemoved : function(slot_number){
-        DataStore.removeGalleryImage(slot_number);
-        setTimeout("GalleriesFrame.paintGallerySlots()", 50);        
-        //GalleriesFrame.paintGallerySlots();
-    }
+    }	
 }

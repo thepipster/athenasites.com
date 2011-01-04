@@ -1,16 +1,16 @@
 /* 
- * Dashboard Page functionality
+ * Settings Page functionality
  *
  * @author Mike Pritchard (mike@apollosites.com)
  * @since 3rd January, 2011
  */
-var Dashboard = {
+var Settings = {
 
     // ////////////////////////////////////////////////////////////////////////
 
     init : function(siteID){
                 
-        $('#DashboardFrame').show();
+        $('#SettingsFrame').show();
                 
         // Initialize the remote API's
         BlogAPI.init();
@@ -21,17 +21,17 @@ var Dashboard = {
         DataStore.init(siteID);
 
         // Setup classes...
-        DashboardFrame.init();
+        SettingsFrame.init();
 
         // Start loading data
-        DataStore.load(Dashboard.onDataLoaded);
+        DataStore.load(Settings.onDataLoaded);
         
     },
 
     // ////////////////////////////////////////////////////////////////////////
 
     onDataLoaded : function(){
-        DashboardFrame.repaint();
+        SettingsFrame.repaint();
     }
 	
     // ////////////////////////////////////////////////////////////////////////

@@ -297,7 +297,7 @@ var ssMain = {
             mode:"XHTML",
             useBR:true, // Force to use <br> for line breaks by default
             arrCustomButtons: [
-                ["InsertInternalImage","ImagePickerDialog.show('#PagesFrameImagePicker', ssMain.onInsertImage)","Insert an image from your media library", "btnInternalImage.gif"],
+                ["InsertInternalImage","ImagePickerDialog.show('#apollo_image_picker', ssMain.onInsertImage)","Insert an image from your media library", "btnInternalImage.gif"],
                 ["ApolloPageBreak","ssMain.onInsertPageBreak()","Insert a more link into your blog post", "btnApolloPageBreak.png"]],
             //features:featuresObj,
             //css: DataStore.m_theme.cms_blog_css

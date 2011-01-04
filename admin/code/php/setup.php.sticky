@@ -6,4 +6,7 @@ define("database_host", "localhost");
 define("database_verbose", false);
 //define("slave_host_1", "localhost");
 //define("slave_host_2", "localhost");
+
+define("DEV_MODE", true);
+define("DO_MINIFY", false);
 ?>

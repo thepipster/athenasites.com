@@ -2516,6 +2516,1496 @@ Date.fullYearStart = '20';
 // Author:  Maciej Konieczny <hello@narf.pl>
 (function(f){function l(g,h){function d(a){if(!e){e=true;c.start&&c.start(a,b)}}function i(a,j){if(e){clearTimeout(k);k=setTimeout(function(){e=false;c.stop&&c.stop(a,b)},j>=0?j:c.delay)}}var c=f.extend({start:null,stop:null,delay:400},h),b=f(g),e=false,k;b.keypress(d);b.keydown(function(a){if(a.keyCode===8||a.keyCode===46)d(a)});b.keyup(i);b.blur(function(a){i(a,0)})}f.fn.typing=function(g){return this.each(function(h,d){l(d,g)})}})(jQuery);
 
+/*	SWFObject v2.2 <http://code.google.com/p/swfobject/> 
+	is released under the MIT License <http://www.opensource.org/licenses/mit-license.php> 
+*/
+var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="ShockwaveFlash.ShockwaveFlash",q="application/x-shockwave-flash",R="SWFObjectExprInst",x="onreadystatechange",O=window,j=document,t=navigator,T=false,U=[h],o=[],N=[],I=[],l,Q,E,B,J=false,a=false,n,G,m=true,M=function(){var aa=typeof j.getElementById!=D&&typeof j.getElementsByTagName!=D&&typeof j.createElement!=D,ah=t.userAgent.toLowerCase(),Y=t.platform.toLowerCase(),ae=Y?/win/.test(Y):/win/.test(ah),ac=Y?/mac/.test(Y):/mac/.test(ah),af=/webkit/.test(ah)?parseFloat(ah.replace(/^.*webkit\/(\d+(\.\d+)?).*$/,"$1")):false,X=!+"\v1",ag=[0,0,0],ab=null;if(typeof t.plugins!=D&&typeof t.plugins[S]==r){ab=t.plugins[S].description;if(ab&&!(typeof t.mimeTypes!=D&&t.mimeTypes[q]&&!t.mimeTypes[q].enabledPlugin)){T=true;X=false;ab=ab.replace(/^.*\s+(\S+\s+\S+$)/,"$1");ag[0]=parseInt(ab.replace(/^(.*)\..*$/,"$1"),10);ag[1]=parseInt(ab.replace(/^.*\.(.*)\s.*$/,"$1"),10);ag[2]=/[a-zA-Z]/.test(ab)?parseInt(ab.replace(/^.*[a-zA-Z]+(.*)$/,"$1"),10):0}}else{if(typeof O.ActiveXObject!=D){try{var ad=new ActiveXObject(W);if(ad){ab=ad.GetVariable("$version");if(ab){X=true;ab=ab.split(" ")[1].split(",");ag=[parseInt(ab[0],10),parseInt(ab[1],10),parseInt(ab[2],10)]}}}catch(Z){}}}return{w3:aa,pv:ag,wk:af,ie:X,win:ae,mac:ac}}(),k=function(){if(!M.w3){return}if((typeof j.readyState!=D&&j.readyState=="complete")||(typeof j.readyState==D&&(j.getElementsByTagName("body")[0]||j.body))){f()}if(!J){if(typeof j.addEventListener!=D){j.addEventListener("DOMContentLoaded",f,false)}if(M.ie&&M.win){j.attachEvent(x,function(){if(j.readyState=="complete"){j.detachEvent(x,arguments.callee);f()}});if(O==top){(function(){if(J){return}try{j.documentElement.doScroll("left")}catch(X){setTimeout(arguments.callee,0);return}f()})()}}if(M.wk){(function(){if(J){return}if(!/loaded|complete/.test(j.readyState)){setTimeout(arguments.callee,0);return}f()})()}s(f)}}();function f(){if(J){return}try{var Z=j.getElementsByTagName("body")[0].appendChild(C("span"));Z.parentNode.removeChild(Z)}catch(aa){return}J=true;var X=U.length;for(var Y=0;Y<X;Y++){U[Y]()}}function K(X){if(J){X()}else{U[U.length]=X}}function s(Y){if(typeof O.addEventListener!=D){O.addEventListener("load",Y,false)}else{if(typeof j.addEventListener!=D){j.addEventListener("load",Y,false)}else{if(typeof O.attachEvent!=D){i(O,"onload",Y)}else{if(typeof O.onload=="function"){var X=O.onload;O.onload=function(){X();Y()}}else{O.onload=Y}}}}}function h(){if(T){V()}else{H()}}function V(){var X=j.getElementsByTagName("body")[0];var aa=C(r);aa.setAttribute("type",q);var Z=X.appendChild(aa);if(Z){var Y=0;(function(){if(typeof Z.GetVariable!=D){var ab=Z.GetVariable("$version");if(ab){ab=ab.split(" ")[1].split(",");M.pv=[parseInt(ab[0],10),parseInt(ab[1],10),parseInt(ab[2],10)]}}else{if(Y<10){Y++;setTimeout(arguments.callee,10);return}}X.removeChild(aa);Z=null;H()})()}else{H()}}function H(){var ag=o.length;if(ag>0){for(var af=0;af<ag;af++){var Y=o[af].id;var ab=o[af].callbackFn;var aa={success:false,id:Y};if(M.pv[0]>0){var ae=c(Y);if(ae){if(F(o[af].swfVersion)&&!(M.wk&&M.wk<312)){w(Y,true);if(ab){aa.success=true;aa.ref=z(Y);ab(aa)}}else{if(o[af].expressInstall&&A()){var ai={};ai.data=o[af].expressInstall;ai.width=ae.getAttribute("width")||"0";ai.height=ae.getAttribute("height")||"0";if(ae.getAttribute("class")){ai.styleclass=ae.getAttribute("class")}if(ae.getAttribute("align")){ai.align=ae.getAttribute("align")}var ah={};var X=ae.getElementsByTagName("param");var ac=X.length;for(var ad=0;ad<ac;ad++){if(X[ad].getAttribute("name").toLowerCase()!="movie"){ah[X[ad].getAttribute("name")]=X[ad].getAttribute("value")}}P(ai,ah,Y,ab)}else{p(ae);if(ab){ab(aa)}}}}}else{w(Y,true);if(ab){var Z=z(Y);if(Z&&typeof Z.SetVariable!=D){aa.success=true;aa.ref=Z}ab(aa)}}}}}function z(aa){var X=null;var Y=c(aa);if(Y&&Y.nodeName=="OBJECT"){if(typeof Y.SetVariable!=D){X=Y}else{var Z=Y.getElementsByTagName(r)[0];if(Z){X=Z}}}return X}function A(){return !a&&F("6.0.65")&&(M.win||M.mac)&&!(M.wk&&M.wk<312)}function P(aa,ab,X,Z){a=true;E=Z||null;B={success:false,id:X};var ae=c(X);if(ae){if(ae.nodeName=="OBJECT"){l=g(ae);Q=null}else{l=ae;Q=X}aa.id=R;if(typeof aa.width==D||(!/%$/.test(aa.width)&&parseInt(aa.width,10)<310)){aa.width="310"}if(typeof aa.height==D||(!/%$/.test(aa.height)&&parseInt(aa.height,10)<137)){aa.height="137"}j.title=j.title.slice(0,47)+" - Flash Player Installation";var ad=M.ie&&M.win?"ActiveX":"PlugIn",ac="MMredirectURL="+O.location.toString().replace(/&/g,"%26")+"&MMplayerType="+ad+"&MMdoctitle="+j.title;if(typeof ab.flashvars!=D){ab.flashvars+="&"+ac}else{ab.flashvars=ac}if(M.ie&&M.win&&ae.readyState!=4){var Y=C("div");X+="SWFObjectNew";Y.setAttribute("id",X);ae.parentNode.insertBefore(Y,ae);ae.style.display="none";(function(){if(ae.readyState==4){ae.parentNode.removeChild(ae)}else{setTimeout(arguments.callee,10)}})()}u(aa,ab,X)}}function p(Y){if(M.ie&&M.win&&Y.readyState!=4){var X=C("div");Y.parentNode.insertBefore(X,Y);X.parentNode.replaceChild(g(Y),X);Y.style.display="none";(function(){if(Y.readyState==4){Y.parentNode.removeChild(Y)}else{setTimeout(arguments.callee,10)}})()}else{Y.parentNode.replaceChild(g(Y),Y)}}function g(ab){var aa=C("div");if(M.win&&M.ie){aa.innerHTML=ab.innerHTML}else{var Y=ab.getElementsByTagName(r)[0];if(Y){var ad=Y.childNodes;if(ad){var X=ad.length;for(var Z=0;Z<X;Z++){if(!(ad[Z].nodeType==1&&ad[Z].nodeName=="PARAM")&&!(ad[Z].nodeType==8)){aa.appendChild(ad[Z].cloneNode(true))}}}}}return aa}function u(ai,ag,Y){var X,aa=c(Y);if(M.wk&&M.wk<312){return X}if(aa){if(typeof ai.id==D){ai.id=Y}if(M.ie&&M.win){var ah="";for(var ae in ai){if(ai[ae]!=Object.prototype[ae]){if(ae.toLowerCase()=="data"){ag.movie=ai[ae]}else{if(ae.toLowerCase()=="styleclass"){ah+=' class="'+ai[ae]+'"'}else{if(ae.toLowerCase()!="classid"){ah+=" "+ae+'="'+ai[ae]+'"'}}}}}var af="";for(var ad in ag){if(ag[ad]!=Object.prototype[ad]){af+='<param name="'+ad+'" value="'+ag[ad]+'" />'}}aa.outerHTML='<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"'+ah+">"+af+"</object>";N[N.length]=ai.id;X=c(ai.id)}else{var Z=C(r);Z.setAttribute("type",q);for(var ac in ai){if(ai[ac]!=Object.prototype[ac]){if(ac.toLowerCase()=="styleclass"){Z.setAttribute("class",ai[ac])}else{if(ac.toLowerCase()!="classid"){Z.setAttribute(ac,ai[ac])}}}}for(var ab in ag){if(ag[ab]!=Object.prototype[ab]&&ab.toLowerCase()!="movie"){e(Z,ab,ag[ab])}}aa.parentNode.replaceChild(Z,aa);X=Z}}return X}function e(Z,X,Y){var aa=C("param");aa.setAttribute("name",X);aa.setAttribute("value",Y);Z.appendChild(aa)}function y(Y){var X=c(Y);if(X&&X.nodeName=="OBJECT"){if(M.ie&&M.win){X.style.display="none";(function(){if(X.readyState==4){b(Y)}else{setTimeout(arguments.callee,10)}})()}else{X.parentNode.removeChild(X)}}}function b(Z){var Y=c(Z);if(Y){for(var X in Y){if(typeof Y[X]=="function"){Y[X]=null}}Y.parentNode.removeChild(Y)}}function c(Z){var X=null;try{X=j.getElementById(Z)}catch(Y){}return X}function C(X){return j.createElement(X)}function i(Z,X,Y){Z.attachEvent(X,Y);I[I.length]=[Z,X,Y]}function F(Z){var Y=M.pv,X=Z.split(".");X[0]=parseInt(X[0],10);X[1]=parseInt(X[1],10)||0;X[2]=parseInt(X[2],10)||0;return(Y[0]>X[0]||(Y[0]==X[0]&&Y[1]>X[1])||(Y[0]==X[0]&&Y[1]==X[1]&&Y[2]>=X[2]))?true:false}function v(ac,Y,ad,ab){if(M.ie&&M.mac){return}var aa=j.getElementsByTagName("head")[0];if(!aa){return}var X=(ad&&typeof ad=="string")?ad:"screen";if(ab){n=null;G=null}if(!n||G!=X){var Z=C("style");Z.setAttribute("type","text/css");Z.setAttribute("media",X);n=aa.appendChild(Z);if(M.ie&&M.win&&typeof j.styleSheets!=D&&j.styleSheets.length>0){n=j.styleSheets[j.styleSheets.length-1]}G=X}if(M.ie&&M.win){if(n&&typeof n.addRule==r){n.addRule(ac,Y)}}else{if(n&&typeof j.createTextNode!=D){n.appendChild(j.createTextNode(ac+" {"+Y+"}"))}}}function w(Z,X){if(!m){return}var Y=X?"visible":"hidden";if(J&&c(Z)){c(Z).style.visibility=Y}else{v("#"+Z,"visibility:"+Y)}}function L(Y){var Z=/[\\\"<>\.;]/;var X=Z.exec(Y)!=null;return X&&typeof encodeURIComponent!=D?encodeURIComponent(Y):Y}var d=function(){if(M.ie&&M.win){window.attachEvent("onunload",function(){var ac=I.length;for(var ab=0;ab<ac;ab++){I[ab][0].detachEvent(I[ab][1],I[ab][2])}var Z=N.length;for(var aa=0;aa<Z;aa++){y(N[aa])}for(var Y in M){M[Y]=null}M=null;for(var X in swfobject){swfobject[X]=null}swfobject=null})}}();return{registerObject:function(ab,X,aa,Z){if(M.w3&&ab&&X){var Y={};Y.id=ab;Y.swfVersion=X;Y.expressInstall=aa;Y.callbackFn=Z;o[o.length]=Y;w(ab,false)}else{if(Z){Z({success:false,id:ab})}}},getObjectById:function(X){if(M.w3){return z(X)}},embedSWF:function(ab,ah,ae,ag,Y,aa,Z,ad,af,ac){var X={success:false,id:ah};if(M.w3&&!(M.wk&&M.wk<312)&&ab&&ah&&ae&&ag&&Y){w(ah,false);K(function(){ae+="";ag+="";var aj={};if(af&&typeof af===r){for(var al in af){aj[al]=af[al]}}aj.data=ab;aj.width=ae;aj.height=ag;var am={};if(ad&&typeof ad===r){for(var ak in ad){am[ak]=ad[ak]}}if(Z&&typeof Z===r){for(var ai in Z){if(typeof am.flashvars!=D){am.flashvars+="&"+ai+"="+Z[ai]}else{am.flashvars=ai+"="+Z[ai]}}}if(F(Y)){var an=u(aj,am,ah);if(aj.id==ah){w(ah,true)}X.success=true;X.ref=an}else{if(aa&&A()){aj.data=aa;P(aj,am,ah,ac);return}else{w(ah,true)}}if(ac){ac(X)}})}else{if(ac){ac(X)}}},switchOffAutoHideShow:function(){m=false},ua:M,getFlashPlayerVersion:function(){return{major:M.pv[0],minor:M.pv[1],release:M.pv[2]}},hasFlashPlayerVersion:F,createSWF:function(Z,Y,X){if(M.w3){return u(Z,Y,X)}else{return undefined}},showExpressInstall:function(Z,aa,X,Y){if(M.w3&&A()){P(Z,aa,X,Y)}},removeSWF:function(X){if(M.w3){y(X)}},createCSS:function(aa,Z,Y,X){if(M.w3){v(aa,Z,Y,X)}},addDomLoadEvent:K,addLoadEvent:s,getQueryParamValue:function(aa){var Z=j.location.search||j.location.hash;if(Z){if(/\?/.test(Z)){Z=Z.split("?")[1]}if(aa==null){return L(Z)}var Y=Z.split("&");for(var X=0;X<Y.length;X++){if(Y[X].substring(0,Y[X].indexOf("="))==aa){return L(Y[X].substring((Y[X].indexOf("=")+1)))}}}return""},expressInstallCallback:function(){if(a){var X=c(R);if(X&&l){X.parentNode.replaceChild(l,X);if(Q){w(Q,true);if(M.ie&&M.win){l.style.display="block"}}if(E){E(B)}}a=false}}}}();
+/**
+ * SWFUpload: http://www.swfupload.org, http://swfupload.googlecode.com
+ *
+ * mmSWFUpload 1.0: Flash upload dialog - http://profandesign.se/swfupload/,  http://www.vinterwebb.se/
+ *
+ * SWFUpload is (c) 2006-2007 Lars Huring, Olov Nilzén and Mammon Media and is released under the MIT License:
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ * SWFUpload 2 is (c) 2007-2008 Jake Roberts and is released under the MIT License:
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ */
+
+
+/* ******************* */
+/* Constructor & Init  */
+/* ******************* */
+var SWFUpload;
+
+if (SWFUpload == undefined) {
+	SWFUpload = function (settings) {
+		this.initSWFUpload(settings);
+	};
+}
+
+SWFUpload.prototype.initSWFUpload = function (settings) {
+	try {
+		this.customSettings = {};	// A container where developers can place their own settings associated with this instance.
+		this.settings = settings;
+		this.eventQueue = [];
+		this.movieName = "SWFUpload_" + SWFUpload.movieCount++;
+		this.movieElement = null;
+
+
+		// Setup global control tracking
+		SWFUpload.instances[this.movieName] = this;
+
+		// Load the settings.  Load the Flash movie.
+		this.initSettings();
+		this.loadFlash();
+		this.displayDebugInfo();
+	} catch (ex) {
+		delete SWFUpload.instances[this.movieName];
+		throw ex;
+	}
+};
+
+/* *************** */
+/* Static Members  */
+/* *************** */
+SWFUpload.instances = {};
+SWFUpload.movieCount = 0;
+SWFUpload.version = "2.2.0 2009-03-25";
+SWFUpload.QUEUE_ERROR = {
+	QUEUE_LIMIT_EXCEEDED	  		: -100,
+	FILE_EXCEEDS_SIZE_LIMIT  		: -110,
+	ZERO_BYTE_FILE			  		: -120,
+	INVALID_FILETYPE		  		: -130
+};
+SWFUpload.UPLOAD_ERROR = {
+	HTTP_ERROR				  		: -200,
+	MISSING_UPLOAD_URL	      		: -210,
+	IO_ERROR				  		: -220,
+	SECURITY_ERROR			  		: -230,
+	UPLOAD_LIMIT_EXCEEDED	  		: -240,
+	UPLOAD_FAILED			  		: -250,
+	SPECIFIED_FILE_ID_NOT_FOUND		: -260,
+	FILE_VALIDATION_FAILED	  		: -270,
+	FILE_CANCELLED			  		: -280,
+	UPLOAD_STOPPED					: -290
+};
+SWFUpload.FILE_STATUS = {
+	QUEUED		 : -1,
+	IN_PROGRESS	 : -2,
+	ERROR		 : -3,
+	COMPLETE	 : -4,
+	CANCELLED	 : -5
+};
+SWFUpload.BUTTON_ACTION = {
+	SELECT_FILE  : -100,
+	SELECT_FILES : -110,
+	START_UPLOAD : -120
+};
+SWFUpload.CURSOR = {
+	ARROW : -1,
+	HAND : -2
+};
+SWFUpload.WINDOW_MODE = {
+	WINDOW : "window",
+	TRANSPARENT : "transparent",
+	OPAQUE : "opaque"
+};
+
+// Private: takes a URL, determines if it is relative and converts to an absolute URL
+// using the current site. Only processes the URL if it can, otherwise returns the URL untouched
+SWFUpload.completeURL = function(url) {
+	if (typeof(url) !== "string" || url.match(/^https?:\/\//i) || url.match(/^\//)) {
+		return url;
+	}
+	
+	var currentURL = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ":" + window.location.port : "");
+	
+	var indexSlash = window.location.pathname.lastIndexOf("/");
+	if (indexSlash <= 0) {
+		path = "/";
+	} else {
+		path = window.location.pathname.substr(0, indexSlash) + "/";
+	}
+	
+	return /*currentURL +*/ path + url;
+	
+};
+
+
+/* ******************** */
+/* Instance Members  */
+/* ******************** */
+
+// Private: initSettings ensures that all the
+// settings are set, getting a default value if one was not assigned.
+SWFUpload.prototype.initSettings = function () {
+	this.ensureDefault = function (settingName, defaultValue) {
+		this.settings[settingName] = (this.settings[settingName] == undefined) ? defaultValue : this.settings[settingName];
+	};
+	
+	// Upload backend settings
+	this.ensureDefault("upload_url", "");
+	this.ensureDefault("preserve_relative_urls", false);
+	this.ensureDefault("file_post_name", "Filedata");
+	this.ensureDefault("post_params", {});
+	this.ensureDefault("use_query_string", false);
+	this.ensureDefault("requeue_on_error", false);
+	this.ensureDefault("http_success", []);
+	this.ensureDefault("assume_success_timeout", 0);
+	
+	// File Settings
+	this.ensureDefault("file_types", "*.*");
+	this.ensureDefault("file_types_description", "All Files");
+	this.ensureDefault("file_size_limit", 0);	// Default zero means "unlimited"
+	this.ensureDefault("file_upload_limit", 0);
+	this.ensureDefault("file_queue_limit", 0);
+
+	// Flash Settings
+	this.ensureDefault("flash_url", "swfupload.swf");
+	this.ensureDefault("prevent_swf_caching", true);
+	
+	// Button Settings
+	this.ensureDefault("button_image_url", "");
+	this.ensureDefault("button_width", 1);
+	this.ensureDefault("button_height", 1);
+	this.ensureDefault("button_text", "");
+	this.ensureDefault("button_text_style", "color: #000000; font-size: 16pt;");
+	this.ensureDefault("button_text_top_padding", 0);
+	this.ensureDefault("button_text_left_padding", 0);
+	this.ensureDefault("button_action", SWFUpload.BUTTON_ACTION.SELECT_FILES);
+	this.ensureDefault("button_disabled", false);
+	this.ensureDefault("button_placeholder_id", "");
+	this.ensureDefault("button_placeholder", null);
+	this.ensureDefault("button_cursor", SWFUpload.CURSOR.ARROW);
+	this.ensureDefault("button_window_mode", SWFUpload.WINDOW_MODE.WINDOW);
+	
+	// Debug Settings
+	this.ensureDefault("debug", false);
+	this.settings.debug_enabled = this.settings.debug;	// Here to maintain v2 API
+	
+	// Event Handlers
+	this.settings.return_upload_start_handler = this.returnUploadStart;
+	this.ensureDefault("swfupload_loaded_handler", null);
+	this.ensureDefault("file_dialog_start_handler", null);
+	this.ensureDefault("file_queued_handler", null);
+	this.ensureDefault("file_queue_error_handler", null);
+	this.ensureDefault("file_dialog_complete_handler", null);
+	
+	this.ensureDefault("upload_start_handler", null);
+	this.ensureDefault("upload_progress_handler", null);
+	this.ensureDefault("upload_error_handler", null);
+	this.ensureDefault("upload_success_handler", null);
+	this.ensureDefault("upload_complete_handler", null);
+	
+	this.ensureDefault("debug_handler", this.debugMessage);
+
+	this.ensureDefault("custom_settings", {});
+
+	// Other settings
+	this.customSettings = this.settings.custom_settings;
+	
+	// Update the flash url if needed
+	if (!!this.settings.prevent_swf_caching) {
+		this.settings.flash_url = this.settings.flash_url + (this.settings.flash_url.indexOf("?") < 0 ? "?" : "&") + "preventswfcaching=" + new Date().getTime();
+	}
+	
+	if (!this.settings.preserve_relative_urls) {
+		//this.settings.flash_url = SWFUpload.completeURL(this.settings.flash_url);	// Don't need to do this one since flash doesn't look at it
+		this.settings.upload_url = SWFUpload.completeURL(this.settings.upload_url);
+		this.settings.button_image_url = SWFUpload.completeURL(this.settings.button_image_url);
+	}
+	
+	delete this.ensureDefault;
+};
+
+// Private: loadFlash replaces the button_placeholder element with the flash movie.
+SWFUpload.prototype.loadFlash = function () {
+	var targetElement, tempParent;
+
+	// Make sure an element with the ID we are going to use doesn't already exist
+	if (document.getElementById(this.movieName) !== null) {
+		throw "ID " + this.movieName + " is already in use. The Flash Object could not be added";
+	}
+
+	// Get the element where we will be placing the flash movie
+	targetElement = document.getElementById(this.settings.button_placeholder_id) || this.settings.button_placeholder;
+
+	if (targetElement == undefined) {
+		throw "Could not find the placeholder element: " + this.settings.button_placeholder_id;
+	}
+
+	// Append the container and load the flash
+	tempParent = document.createElement("div");
+	tempParent.innerHTML = this.getFlashHTML();	// Using innerHTML is non-standard but the only sensible way to dynamically add Flash in IE (and maybe other browsers)
+	targetElement.parentNode.replaceChild(tempParent.firstChild, targetElement);
+
+	// Fix IE Flash/Form bug
+	if (window[this.movieName] == undefined) {
+		window[this.movieName] = this.getMovieElement();
+	}
+	
+};
+
+// Private: getFlashHTML generates the object tag needed to embed the flash in to the document
+SWFUpload.prototype.getFlashHTML = function () {
+	// Flash Satay object syntax: http://www.alistapart.com/articles/flashsatay
+	return ['<object id="', this.movieName, '" type="application/x-shockwave-flash" data="', this.settings.flash_url, '" width="', this.settings.button_width, '" height="', this.settings.button_height, '" class="swfupload">',
+				'<param name="wmode" value="', this.settings.button_window_mode, '" />',
+				'<param name="movie" value="', this.settings.flash_url, '" />',
+				'<param name="quality" value="high" />',
+				'<param name="menu" value="false" />',
+				'<param name="allowScriptAccess" value="always" />',
+				'<param name="flashvars" value="' + this.getFlashVars() + '" />',
+				'</object>'].join("");
+};
+
+// Private: getFlashVars builds the parameter string that will be passed
+// to flash in the flashvars param.
+SWFUpload.prototype.getFlashVars = function () {
+	// Build a string from the post param object
+	var paramString = this.buildParamString();
+	var httpSuccessString = this.settings.http_success.join(",");
+	
+	// Build the parameter string
+	return ["movieName=", encodeURIComponent(this.movieName),
+			"&amp;uploadURL=", encodeURIComponent(this.settings.upload_url),
+			"&amp;useQueryString=", encodeURIComponent(this.settings.use_query_string),
+			"&amp;requeueOnError=", encodeURIComponent(this.settings.requeue_on_error),
+			"&amp;httpSuccess=", encodeURIComponent(httpSuccessString),
+			"&amp;assumeSuccessTimeout=", encodeURIComponent(this.settings.assume_success_timeout),
+			"&amp;params=", encodeURIComponent(paramString),
+			"&amp;filePostName=", encodeURIComponent(this.settings.file_post_name),
+			"&amp;fileTypes=", encodeURIComponent(this.settings.file_types),
+			"&amp;fileTypesDescription=", encodeURIComponent(this.settings.file_types_description),
+			"&amp;fileSizeLimit=", encodeURIComponent(this.settings.file_size_limit),
+			"&amp;fileUploadLimit=", encodeURIComponent(this.settings.file_upload_limit),
+			"&amp;fileQueueLimit=", encodeURIComponent(this.settings.file_queue_limit),
+			"&amp;debugEnabled=", encodeURIComponent(this.settings.debug_enabled),
+			"&amp;buttonImageURL=", encodeURIComponent(this.settings.button_image_url),
+			"&amp;buttonWidth=", encodeURIComponent(this.settings.button_width),
+			"&amp;buttonHeight=", encodeURIComponent(this.settings.button_height),
+			"&amp;buttonText=", encodeURIComponent(this.settings.button_text),
+			"&amp;buttonTextTopPadding=", encodeURIComponent(this.settings.button_text_top_padding),
+			"&amp;buttonTextLeftPadding=", encodeURIComponent(this.settings.button_text_left_padding),
+			"&amp;buttonTextStyle=", encodeURIComponent(this.settings.button_text_style),
+			"&amp;buttonAction=", encodeURIComponent(this.settings.button_action),
+			"&amp;buttonDisabled=", encodeURIComponent(this.settings.button_disabled),
+			"&amp;buttonCursor=", encodeURIComponent(this.settings.button_cursor)
+		].join("");
+};
+
+// Public: getMovieElement retrieves the DOM reference to the Flash element added by SWFUpload
+// The element is cached after the first lookup
+SWFUpload.prototype.getMovieElement = function () {
+	if (this.movieElement == undefined) {
+		this.movieElement = document.getElementById(this.movieName);
+	}
+
+	if (this.movieElement === null) {
+		throw "Could not find Flash element";
+	}
+	
+	return this.movieElement;
+};
+
+// Private: buildParamString takes the name/value pairs in the post_params setting object
+// and joins them up in to a string formatted "name=value&amp;name=value"
+SWFUpload.prototype.buildParamString = function () {
+	var postParams = this.settings.post_params; 
+	var paramStringPairs = [];
+
+	if (typeof(postParams) === "object") {
+		for (var name in postParams) {
+			if (postParams.hasOwnProperty(name)) {
+				paramStringPairs.push(encodeURIComponent(name.toString()) + "=" + encodeURIComponent(postParams[name].toString()));
+			}
+		}
+	}
+
+	return paramStringPairs.join("&amp;");
+};
+
+// Public: Used to remove a SWFUpload instance from the page. This method strives to remove
+// all references to the SWF, and other objects so memory is properly freed.
+// Returns true if everything was destroyed. Returns a false if a failure occurs leaving SWFUpload in an inconsistant state.
+// Credits: Major improvements provided by steffen
+SWFUpload.prototype.destroy = function () {
+	try {
+		// Make sure Flash is done before we try to remove it
+		this.cancelUpload(null, false);
+		
+
+		// Remove the SWFUpload DOM nodes
+		var movieElement = null;
+		movieElement = this.getMovieElement();
+		
+		if (movieElement && typeof(movieElement.CallFunction) === "unknown") { // We only want to do this in IE
+			// Loop through all the movie's properties and remove all function references (DOM/JS IE 6/7 memory leak workaround)
+			for (var i in movieElement) {
+				try {
+					if (typeof(movieElement[i]) === "function") {
+						movieElement[i] = null;
+					}
+				} catch (ex1) {}
+			}
+
+			// Remove the Movie Element from the page
+			try {
+				movieElement.parentNode.removeChild(movieElement);
+			} catch (ex) {}
+		}
+		
+		// Remove IE form fix reference
+		window[this.movieName] = null;
+
+		// Destroy other references
+		SWFUpload.instances[this.movieName] = null;
+		delete SWFUpload.instances[this.movieName];
+
+		this.movieElement = null;
+		this.settings = null;
+		this.customSettings = null;
+		this.eventQueue = null;
+		this.movieName = null;
+		
+		
+		return true;
+	} catch (ex2) {
+		return false;
+	}
+};
+
+
+// Public: displayDebugInfo prints out settings and configuration
+// information about this SWFUpload instance.
+// This function (and any references to it) can be deleted when placing
+// SWFUpload in production.
+SWFUpload.prototype.displayDebugInfo = function () {
+	this.debug(
+		[
+			"---SWFUpload Instance Info---\n",
+			"Version: ", SWFUpload.version, "\n",
+			"Movie Name: ", this.movieName, "\n",
+			"Settings:\n",
+			"\t", "upload_url:               ", this.settings.upload_url, "\n",
+			"\t", "flash_url:                ", this.settings.flash_url, "\n",
+			"\t", "use_query_string:         ", this.settings.use_query_string.toString(), "\n",
+			"\t", "requeue_on_error:         ", this.settings.requeue_on_error.toString(), "\n",
+			"\t", "http_success:             ", this.settings.http_success.join(", "), "\n",
+			"\t", "assume_success_timeout:   ", this.settings.assume_success_timeout, "\n",
+			"\t", "file_post_name:           ", this.settings.file_post_name, "\n",
+			"\t", "post_params:              ", this.settings.post_params.toString(), "\n",
+			"\t", "file_types:               ", this.settings.file_types, "\n",
+			"\t", "file_types_description:   ", this.settings.file_types_description, "\n",
+			"\t", "file_size_limit:          ", this.settings.file_size_limit, "\n",
+			"\t", "file_upload_limit:        ", this.settings.file_upload_limit, "\n",
+			"\t", "file_queue_limit:         ", this.settings.file_queue_limit, "\n",
+			"\t", "debug:                    ", this.settings.debug.toString(), "\n",
+
+			"\t", "prevent_swf_caching:      ", this.settings.prevent_swf_caching.toString(), "\n",
+
+			"\t", "button_placeholder_id:    ", this.settings.button_placeholder_id.toString(), "\n",
+			"\t", "button_placeholder:       ", (this.settings.button_placeholder ? "Set" : "Not Set"), "\n",
+			"\t", "button_image_url:         ", this.settings.button_image_url.toString(), "\n",
+			"\t", "button_width:             ", this.settings.button_width.toString(), "\n",
+			"\t", "button_height:            ", this.settings.button_height.toString(), "\n",
+			"\t", "button_text:              ", this.settings.button_text.toString(), "\n",
+			"\t", "button_text_style:        ", this.settings.button_text_style.toString(), "\n",
+			"\t", "button_text_top_padding:  ", this.settings.button_text_top_padding.toString(), "\n",
+			"\t", "button_text_left_padding: ", this.settings.button_text_left_padding.toString(), "\n",
+			"\t", "button_action:            ", this.settings.button_action.toString(), "\n",
+			"\t", "button_disabled:          ", this.settings.button_disabled.toString(), "\n",
+
+			"\t", "custom_settings:          ", this.settings.custom_settings.toString(), "\n",
+			"Event Handlers:\n",
+			"\t", "swfupload_loaded_handler assigned:  ", (typeof this.settings.swfupload_loaded_handler === "function").toString(), "\n",
+			"\t", "file_dialog_start_handler assigned: ", (typeof this.settings.file_dialog_start_handler === "function").toString(), "\n",
+			"\t", "file_queued_handler assigned:       ", (typeof this.settings.file_queued_handler === "function").toString(), "\n",
+			"\t", "file_queue_error_handler assigned:  ", (typeof this.settings.file_queue_error_handler === "function").toString(), "\n",
+			"\t", "upload_start_handler assigned:      ", (typeof this.settings.upload_start_handler === "function").toString(), "\n",
+			"\t", "upload_progress_handler assigned:   ", (typeof this.settings.upload_progress_handler === "function").toString(), "\n",
+			"\t", "upload_error_handler assigned:      ", (typeof this.settings.upload_error_handler === "function").toString(), "\n",
+			"\t", "upload_success_handler assigned:    ", (typeof this.settings.upload_success_handler === "function").toString(), "\n",
+			"\t", "upload_complete_handler assigned:   ", (typeof this.settings.upload_complete_handler === "function").toString(), "\n",
+			"\t", "debug_handler assigned:             ", (typeof this.settings.debug_handler === "function").toString(), "\n"
+		].join("")
+	);
+};
+
+/* Note: addSetting and getSetting are no longer used by SWFUpload but are included
+	the maintain v2 API compatibility
+*/
+// Public: (Deprecated) addSetting adds a setting value. If the value given is undefined or null then the default_value is used.
+SWFUpload.prototype.addSetting = function (name, value, default_value) {
+    if (value == undefined) {
+        return (this.settings[name] = default_value);
+    } else {
+        return (this.settings[name] = value);
+	}
+};
+
+// Public: (Deprecated) getSetting gets a setting. Returns an empty string if the setting was not found.
+SWFUpload.prototype.getSetting = function (name) {
+    if (this.settings[name] != undefined) {
+        return this.settings[name];
+	}
+
+    return "";
+};
+
+
+
+// Private: callFlash handles function calls made to the Flash element.
+// Calls are made with a setTimeout for some functions to work around
+// bugs in the ExternalInterface library.
+SWFUpload.prototype.callFlash = function (functionName, argumentArray) {
+	argumentArray = argumentArray || [];
+	
+	var movieElement = this.getMovieElement();
+	var returnValue, returnString;
+
+	// Flash's method if calling ExternalInterface methods (code adapted from MooTools).
+	try {
+		returnString = movieElement.CallFunction('<invoke name="' + functionName + '" returntype="javascript">' + __flash__argumentsToXML(argumentArray, 0) + '</invoke>');
+		returnValue = eval(returnString);
+	} catch (ex) {
+		throw "Call to " + functionName + " failed";
+	}
+	
+	// Unescape file post param values
+	if (returnValue != undefined && typeof returnValue.post === "object") {
+		returnValue = this.unescapeFilePostParams(returnValue);
+	}
+
+	return returnValue;
+};
+
+/* *****************************
+	-- Flash control methods --
+	Your UI should use these
+	to operate SWFUpload
+   ***************************** */
+
+// WARNING: this function does not work in Flash Player 10
+// Public: selectFile causes a File Selection Dialog window to appear.  This
+// dialog only allows 1 file to be selected.
+SWFUpload.prototype.selectFile = function () {
+	this.callFlash("SelectFile");
+};
+
+// WARNING: this function does not work in Flash Player 10
+// Public: selectFiles causes a File Selection Dialog window to appear/ This
+// dialog allows the user to select any number of files
+// Flash Bug Warning: Flash limits the number of selectable files based on the combined length of the file names.
+// If the selection name length is too long the dialog will fail in an unpredictable manner.  There is no work-around
+// for this bug.
+SWFUpload.prototype.selectFiles = function () {
+	this.callFlash("SelectFiles");
+};
+
+
+// Public: startUpload starts uploading the first file in the queue unless
+// the optional parameter 'fileID' specifies the ID 
+SWFUpload.prototype.startUpload = function (fileID) {
+	this.callFlash("StartUpload", [fileID]);
+};
+
+// Public: cancelUpload cancels any queued file.  The fileID parameter may be the file ID or index.
+// If you do not specify a fileID the current uploading file or first file in the queue is cancelled.
+// If you do not want the uploadError event to trigger you can specify false for the triggerErrorEvent parameter.
+SWFUpload.prototype.cancelUpload = function (fileID, triggerErrorEvent) {
+	if (triggerErrorEvent !== false) {
+		triggerErrorEvent = true;
+	}
+	this.callFlash("CancelUpload", [fileID, triggerErrorEvent]);
+};
+
+// Public: stopUpload stops the current upload and requeues the file at the beginning of the queue.
+// If nothing is currently uploading then nothing happens.
+SWFUpload.prototype.stopUpload = function () {
+	this.callFlash("StopUpload");
+};
+
+/* ************************
+ * Settings methods
+ *   These methods change the SWFUpload settings.
+ *   SWFUpload settings should not be changed directly on the settings object
+ *   since many of the settings need to be passed to Flash in order to take
+ *   effect.
+ * *********************** */
+
+// Public: getStats gets the file statistics object.
+SWFUpload.prototype.getStats = function () {
+	return this.callFlash("GetStats");
+};
+
+// Public: setStats changes the SWFUpload statistics.  You shouldn't need to 
+// change the statistics but you can.  Changing the statistics does not
+// affect SWFUpload accept for the successful_uploads count which is used
+// by the upload_limit setting to determine how many files the user may upload.
+SWFUpload.prototype.setStats = function (statsObject) {
+	this.callFlash("SetStats", [statsObject]);
+};
+
+// Public: getFile retrieves a File object by ID or Index.  If the file is
+// not found then 'null' is returned.
+SWFUpload.prototype.getFile = function (fileID) {
+	if (typeof(fileID) === "number") {
+		return this.callFlash("GetFileByIndex", [fileID]);
+	} else {
+		return this.callFlash("GetFile", [fileID]);
+	}
+};
+
+// Public: addFileParam sets a name/value pair that will be posted with the
+// file specified by the Files ID.  If the name already exists then the
+// exiting value will be overwritten.
+SWFUpload.prototype.addFileParam = function (fileID, name, value) {
+	return this.callFlash("AddFileParam", [fileID, name, value]);
+};
+
+// Public: removeFileParam removes a previously set (by addFileParam) name/value
+// pair from the specified file.
+SWFUpload.prototype.removeFileParam = function (fileID, name) {
+	this.callFlash("RemoveFileParam", [fileID, name]);
+};
+
+// Public: setUploadUrl changes the upload_url setting.
+SWFUpload.prototype.setUploadURL = function (url) {
+	this.settings.upload_url = url.toString();
+	this.callFlash("SetUploadURL", [url]);
+};
+
+// Public: setPostParams changes the post_params setting
+SWFUpload.prototype.setPostParams = function (paramsObject) {
+	this.settings.post_params = paramsObject;
+	this.callFlash("SetPostParams", [paramsObject]);
+};
+
+// Public: addPostParam adds post name/value pair.  Each name can have only one value.
+SWFUpload.prototype.addPostParam = function (name, value) {
+	this.settings.post_params[name] = value;
+	this.callFlash("SetPostParams", [this.settings.post_params]);
+};
+
+// Public: removePostParam deletes post name/value pair.
+SWFUpload.prototype.removePostParam = function (name) {
+	delete this.settings.post_params[name];
+	this.callFlash("SetPostParams", [this.settings.post_params]);
+};
+
+// Public: setFileTypes changes the file_types setting and the file_types_description setting
+SWFUpload.prototype.setFileTypes = function (types, description) {
+	this.settings.file_types = types;
+	this.settings.file_types_description = description;
+	this.callFlash("SetFileTypes", [types, description]);
+};
+
+// Public: setFileSizeLimit changes the file_size_limit setting
+SWFUpload.prototype.setFileSizeLimit = function (fileSizeLimit) {
+	this.settings.file_size_limit = fileSizeLimit;
+	this.callFlash("SetFileSizeLimit", [fileSizeLimit]);
+};
+
+// Public: setFileUploadLimit changes the file_upload_limit setting
+SWFUpload.prototype.setFileUploadLimit = function (fileUploadLimit) {
+	this.settings.file_upload_limit = fileUploadLimit;
+	this.callFlash("SetFileUploadLimit", [fileUploadLimit]);
+};
+
+// Public: setFileQueueLimit changes the file_queue_limit setting
+SWFUpload.prototype.setFileQueueLimit = function (fileQueueLimit) {
+	this.settings.file_queue_limit = fileQueueLimit;
+	this.callFlash("SetFileQueueLimit", [fileQueueLimit]);
+};
+
+// Public: setFilePostName changes the file_post_name setting
+SWFUpload.prototype.setFilePostName = function (filePostName) {
+	this.settings.file_post_name = filePostName;
+	this.callFlash("SetFilePostName", [filePostName]);
+};
+
+// Public: setUseQueryString changes the use_query_string setting
+SWFUpload.prototype.setUseQueryString = function (useQueryString) {
+	this.settings.use_query_string = useQueryString;
+	this.callFlash("SetUseQueryString", [useQueryString]);
+};
+
+// Public: setRequeueOnError changes the requeue_on_error setting
+SWFUpload.prototype.setRequeueOnError = function (requeueOnError) {
+	this.settings.requeue_on_error = requeueOnError;
+	this.callFlash("SetRequeueOnError", [requeueOnError]);
+};
+
+// Public: setHTTPSuccess changes the http_success setting
+SWFUpload.prototype.setHTTPSuccess = function (http_status_codes) {
+	if (typeof http_status_codes === "string") {
+		http_status_codes = http_status_codes.replace(" ", "").split(",");
+	}
+	
+	this.settings.http_success = http_status_codes;
+	this.callFlash("SetHTTPSuccess", [http_status_codes]);
+};
+
+// Public: setHTTPSuccess changes the http_success setting
+SWFUpload.prototype.setAssumeSuccessTimeout = function (timeout_seconds) {
+	this.settings.assume_success_timeout = timeout_seconds;
+	this.callFlash("SetAssumeSuccessTimeout", [timeout_seconds]);
+};
+
+// Public: setDebugEnabled changes the debug_enabled setting
+SWFUpload.prototype.setDebugEnabled = function (debugEnabled) {
+	this.settings.debug_enabled = debugEnabled;
+	this.callFlash("SetDebugEnabled", [debugEnabled]);
+};
+
+// Public: setButtonImageURL loads a button image sprite
+SWFUpload.prototype.setButtonImageURL = function (buttonImageURL) {
+	if (buttonImageURL == undefined) {
+		buttonImageURL = "";
+	}
+	
+	this.settings.button_image_url = buttonImageURL;
+	this.callFlash("SetButtonImageURL", [buttonImageURL]);
+};
+
+// Public: setButtonDimensions resizes the Flash Movie and button
+SWFUpload.prototype.setButtonDimensions = function (width, height) {
+	this.settings.button_width = width;
+	this.settings.button_height = height;
+	
+	var movie = this.getMovieElement();
+	if (movie != undefined) {
+		movie.style.width = width + "px";
+		movie.style.height = height + "px";
+	}
+	
+	this.callFlash("SetButtonDimensions", [width, height]);
+};
+// Public: setButtonText Changes the text overlaid on the button
+SWFUpload.prototype.setButtonText = function (html) {
+	this.settings.button_text = html;
+	this.callFlash("SetButtonText", [html]);
+};
+// Public: setButtonTextPadding changes the top and left padding of the text overlay
+SWFUpload.prototype.setButtonTextPadding = function (left, top) {
+	this.settings.button_text_top_padding = top;
+	this.settings.button_text_left_padding = left;
+	this.callFlash("SetButtonTextPadding", [left, top]);
+};
+
+// Public: setButtonTextStyle changes the CSS used to style the HTML/Text overlaid on the button
+SWFUpload.prototype.setButtonTextStyle = function (css) {
+	this.settings.button_text_style = css;
+	this.callFlash("SetButtonTextStyle", [css]);
+};
+// Public: setButtonDisabled disables/enables the button
+SWFUpload.prototype.setButtonDisabled = function (isDisabled) {
+	this.settings.button_disabled = isDisabled;
+	this.callFlash("SetButtonDisabled", [isDisabled]);
+};
+// Public: setButtonAction sets the action that occurs when the button is clicked
+SWFUpload.prototype.setButtonAction = function (buttonAction) {
+	this.settings.button_action = buttonAction;
+	this.callFlash("SetButtonAction", [buttonAction]);
+};
+
+// Public: setButtonCursor changes the mouse cursor displayed when hovering over the button
+SWFUpload.prototype.setButtonCursor = function (cursor) {
+	this.settings.button_cursor = cursor;
+	this.callFlash("SetButtonCursor", [cursor]);
+};
+
+/* *******************************
+	Flash Event Interfaces
+	These functions are used by Flash to trigger the various
+	events.
+	
+	All these functions a Private.
+	
+	Because the ExternalInterface library is buggy the event calls
+	are added to a queue and the queue then executed by a setTimeout.
+	This ensures that events are executed in a determinate order and that
+	the ExternalInterface bugs are avoided.
+******************************* */
+
+SWFUpload.prototype.queueEvent = function (handlerName, argumentArray) {
+	// Warning: Don't call this.debug inside here or you'll create an infinite loop
+	
+	if (argumentArray == undefined) {
+		argumentArray = [];
+	} else if (!(argumentArray instanceof Array)) {
+		argumentArray = [argumentArray];
+	}
+	
+	var self = this;
+	if (typeof this.settings[handlerName] === "function") {
+		// Queue the event
+		this.eventQueue.push(function () {
+			this.settings[handlerName].apply(this, argumentArray);
+		});
+		
+		// Execute the next queued event
+		setTimeout(function () {
+			self.executeNextEvent();
+		}, 0);
+		
+	} else if (this.settings[handlerName] !== null) {
+		throw "Event handler " + handlerName + " is unknown or is not a function";
+	}
+};
+
+// Private: Causes the next event in the queue to be executed.  Since events are queued using a setTimeout
+// we must queue them in order to garentee that they are executed in order.
+SWFUpload.prototype.executeNextEvent = function () {
+	// Warning: Don't call this.debug inside here or you'll create an infinite loop
+
+	var  f = this.eventQueue ? this.eventQueue.shift() : null;
+	if (typeof(f) === "function") {
+		f.apply(this);
+	}
+};
+
+// Private: unescapeFileParams is part of a workaround for a flash bug where objects passed through ExternalInterface cannot have
+// properties that contain characters that are not valid for JavaScript identifiers. To work around this
+// the Flash Component escapes the parameter names and we must unescape again before passing them along.
+SWFUpload.prototype.unescapeFilePostParams = function (file) {
+	var reg = /[$]([0-9a-f]{4})/i;
+	var unescapedPost = {};
+	var uk;
+
+	if (file != undefined) {
+		for (var k in file.post) {
+			if (file.post.hasOwnProperty(k)) {
+				uk = k;
+				var match;
+				while ((match = reg.exec(uk)) !== null) {
+					uk = uk.replace(match[0], String.fromCharCode(parseInt("0x" + match[1], 16)));
+				}
+				unescapedPost[uk] = file.post[k];
+			}
+		}
+
+		file.post = unescapedPost;
+	}
+
+	return file;
+};
+
+// Private: Called by Flash to see if JS can call in to Flash (test if External Interface is working)
+SWFUpload.prototype.testExternalInterface = function () {
+	try {
+		return this.callFlash("TestExternalInterface");
+	} catch (ex) {
+		return false;
+	}
+};
+
+// Private: This event is called by Flash when it has finished loading. Don't modify this.
+// Use the swfupload_loaded_handler event setting to execute custom code when SWFUpload has loaded.
+SWFUpload.prototype.flashReady = function () {
+	// Check that the movie element is loaded correctly with its ExternalInterface methods defined
+	var movieElement = this.getMovieElement();
+
+	if (!movieElement) {
+		this.debug("Flash called back ready but the flash movie can't be found.");
+		return;
+	}
+
+	this.cleanUp(movieElement);
+	
+	this.queueEvent("swfupload_loaded_handler");
+};
+
+// Private: removes Flash added fuctions to the DOM node to prevent memory leaks in IE.
+// This function is called by Flash each time the ExternalInterface functions are created.
+SWFUpload.prototype.cleanUp = function (movieElement) {
+	// Pro-actively unhook all the Flash functions
+	try {
+		if (this.movieElement && typeof(movieElement.CallFunction) === "unknown") { // We only want to do this in IE
+			this.debug("Removing Flash functions hooks (this should only run in IE and should prevent memory leaks)");
+			for (var key in movieElement) {
+				try {
+					if (typeof(movieElement[key]) === "function") {
+						movieElement[key] = null;
+					}
+				} catch (ex) {
+				}
+			}
+		}
+	} catch (ex1) {
+	
+	}
+
+	// Fix Flashes own cleanup code so if the SWFMovie was removed from the page
+	// it doesn't display errors.
+	window["__flash__removeCallback"] = function (instance, name) {
+		try {
+			if (instance) {
+				instance[name] = null;
+			}
+		} catch (flashEx) {
+		
+		}
+	};
+
+};
+
+
+/* This is a chance to do something before the browse window opens */
+SWFUpload.prototype.fileDialogStart = function () {
+	this.queueEvent("file_dialog_start_handler");
+};
+
+
+/* Called when a file is successfully added to the queue. */
+SWFUpload.prototype.fileQueued = function (file) {
+	file = this.unescapeFilePostParams(file);
+	this.queueEvent("file_queued_handler", file);
+};
+
+
+/* Handle errors that occur when an attempt to queue a file fails. */
+SWFUpload.prototype.fileQueueError = function (file, errorCode, message) {
+	file = this.unescapeFilePostParams(file);
+	this.queueEvent("file_queue_error_handler", [file, errorCode, message]);
+};
+
+/* Called after the file dialog has closed and the selected files have been queued.
+	You could call startUpload here if you want the queued files to begin uploading immediately. */
+SWFUpload.prototype.fileDialogComplete = function (numFilesSelected, numFilesQueued, numFilesInQueue) {
+	this.queueEvent("file_dialog_complete_handler", [numFilesSelected, numFilesQueued, numFilesInQueue]);
+};
+
+SWFUpload.prototype.uploadStart = function (file) {
+	file = this.unescapeFilePostParams(file);
+	this.queueEvent("return_upload_start_handler", file);
+};
+
+SWFUpload.prototype.returnUploadStart = function (file) {
+	var returnValue;
+	if (typeof this.settings.upload_start_handler === "function") {
+		file = this.unescapeFilePostParams(file);
+		returnValue = this.settings.upload_start_handler.call(this, file);
+	} else if (this.settings.upload_start_handler != undefined) {
+		throw "upload_start_handler must be a function";
+	}
+
+	// Convert undefined to true so if nothing is returned from the upload_start_handler it is
+	// interpretted as 'true'.
+	if (returnValue === undefined) {
+		returnValue = true;
+	}
+	
+	returnValue = !!returnValue;
+	
+	this.callFlash("ReturnUploadStart", [returnValue]);
+};
+
+
+
+SWFUpload.prototype.uploadProgress = function (file, bytesComplete, bytesTotal) {
+	file = this.unescapeFilePostParams(file);
+	this.queueEvent("upload_progress_handler", [file, bytesComplete, bytesTotal]);
+};
+
+SWFUpload.prototype.uploadError = function (file, errorCode, message) {
+	file = this.unescapeFilePostParams(file);
+	this.queueEvent("upload_error_handler", [file, errorCode, message]);
+};
+
+SWFUpload.prototype.uploadSuccess = function (file, serverData, responseReceived) {
+	file = this.unescapeFilePostParams(file);
+	this.queueEvent("upload_success_handler", [file, serverData, responseReceived]);
+};
+
+SWFUpload.prototype.uploadComplete = function (file) {
+	file = this.unescapeFilePostParams(file);
+	this.queueEvent("upload_complete_handler", file);
+};
+
+/* Called by SWFUpload JavaScript and Flash functions when debug is enabled. By default it writes messages to the
+   internal debug console.  You can override this event and have messages written where you want. */
+SWFUpload.prototype.debug = function (message) {
+	this.queueEvent("debug_handler", message);
+};
+
+
+/* **********************************
+	Debug Console
+	The debug console is a self contained, in page location
+	for debug message to be sent.  The Debug Console adds
+	itself to the body if necessary.
+
+	The console is automatically scrolled as messages appear.
+	
+	If you are using your own debug handler or when you deploy to production and
+	have debug disabled you can remove these functions to reduce the file size
+	and complexity.
+********************************** */
+   
+// Private: debugMessage is the default debug_handler.  If you want to print debug messages
+// call the debug() function.  When overriding the function your own function should
+// check to see if the debug setting is true before outputting debug information.
+SWFUpload.prototype.debugMessage = function (message) {
+	if (this.settings.debug) {
+		var exceptionMessage, exceptionValues = [];
+
+		// Check for an exception object and print it nicely
+		if (typeof message === "object" && typeof message.name === "string" && typeof message.message === "string") {
+			for (var key in message) {
+				if (message.hasOwnProperty(key)) {
+					exceptionValues.push(key + ": " + message[key]);
+				}
+			}
+			exceptionMessage = exceptionValues.join("\n") || "";
+			exceptionValues = exceptionMessage.split("\n");
+			exceptionMessage = "EXCEPTION: " + exceptionValues.join("\nEXCEPTION: ");
+			SWFUpload.Console.writeLine(exceptionMessage);
+		} else {
+			SWFUpload.Console.writeLine(message);
+		}
+	}
+};
+
+SWFUpload.Console = {};
+SWFUpload.Console.writeLine = function (message) {
+	var console, documentForm;
+
+	try {
+		console = document.getElementById("SWFUpload_Console");
+
+		if (!console) {
+			documentForm = document.createElement("form");
+			document.getElementsByTagName("body")[0].appendChild(documentForm);
+
+			console = document.createElement("textarea");
+			console.id = "SWFUpload_Console";
+			console.style.fontFamily = "monospace";
+			console.setAttribute("wrap", "off");
+			console.wrap = "off";
+			console.style.overflow = "auto";
+			console.style.width = "700px";
+			console.style.height = "350px";
+			console.style.margin = "5px";
+			documentForm.appendChild(console);
+		}
+
+		console.value += message + "\n";
+
+		console.scrollTop = console.scrollHeight - console.clientHeight;
+	} catch (ex) {
+		alert("Exception: " + ex.name + " Message: " + ex.message);
+	}
+};
+
+/*
+	Queue Plug-in
+	
+	Features:
+		*Adds a cancelQueue() method for cancelling the entire queue.
+		*All queued files are uploaded when startUpload() is called.
+		*If false is returned from uploadComplete then the queue upload is stopped.
+		 If false is not returned (strict comparison) then the queue upload is continued.
+		*Adds a QueueComplete event that is fired when all the queued files have finished uploading.
+		 Set the event handler with the queue_complete_handler setting.
+		
+	*/
+
+var SWFUpload;
+if (typeof(SWFUpload) === "function") {
+	SWFUpload.queue = {};
+	
+	SWFUpload.prototype.initSettings = (function (oldInitSettings) {
+		return function () {
+			if (typeof(oldInitSettings) === "function") {
+				oldInitSettings.call(this);
+			}
+			
+			this.queueSettings = {};
+			
+			this.queueSettings.queue_cancelled_flag = false;
+			this.queueSettings.queue_upload_count = 0;
+			
+			this.queueSettings.user_upload_complete_handler = this.settings.upload_complete_handler;
+			this.queueSettings.user_upload_start_handler = this.settings.upload_start_handler;
+			this.settings.upload_complete_handler = SWFUpload.queue.uploadCompleteHandler;
+			this.settings.upload_start_handler = SWFUpload.queue.uploadStartHandler;
+			
+			this.settings.queue_complete_handler = this.settings.queue_complete_handler || null;
+		};
+	})(SWFUpload.prototype.initSettings);
+
+	SWFUpload.prototype.startUpload = function (fileID) {
+		this.queueSettings.queue_cancelled_flag = false;
+		this.callFlash("StartUpload", [fileID]);
+	};
+
+	SWFUpload.prototype.cancelQueue = function () {
+		this.queueSettings.queue_cancelled_flag = true;
+		this.stopUpload();
+		
+		var stats = this.getStats();
+		while (stats.files_queued > 0) {
+			this.cancelUpload();
+			stats = this.getStats();
+		}
+	};
+	
+	SWFUpload.queue.uploadStartHandler = function (file) {
+		var returnValue;
+		if (typeof(this.queueSettings.user_upload_start_handler) === "function") {
+			returnValue = this.queueSettings.user_upload_start_handler.call(this, file);
+		}
+		
+		// To prevent upload a real "FALSE" value must be returned, otherwise default to a real "TRUE" value.
+		returnValue = (returnValue === false) ? false : true;
+		
+		this.queueSettings.queue_cancelled_flag = !returnValue;
+
+		return returnValue;
+	};
+	
+	SWFUpload.queue.uploadCompleteHandler = function (file) {
+		var user_upload_complete_handler = this.queueSettings.user_upload_complete_handler;
+		var continueUpload;
+		
+		if (file.filestatus === SWFUpload.FILE_STATUS.COMPLETE) {
+			this.queueSettings.queue_upload_count++;
+		}
+
+		if (typeof(user_upload_complete_handler) === "function") {
+			continueUpload = (user_upload_complete_handler.call(this, file) === false) ? false : true;
+		} else if (file.filestatus === SWFUpload.FILE_STATUS.QUEUED) {
+			// If the file was stopped and re-queued don't restart the upload
+			continueUpload = false;
+		} else {
+			continueUpload = true;
+		}
+		
+		if (continueUpload) {
+			var stats = this.getStats();
+			if (stats.files_queued > 0 && this.queueSettings.queue_cancelled_flag === false) {
+				this.startUpload();
+			} else if (this.queueSettings.queue_cancelled_flag === false) {
+				this.queueEvent("queue_complete_handler", [this.queueSettings.queue_upload_count]);
+				this.queueSettings.queue_upload_count = 0;
+			} else {
+				this.queueSettings.queue_cancelled_flag = false;
+				this.queueSettings.queue_upload_count = 0;
+			}
+		}
+	};
+}
+/*
+	A simple class for displaying file information and progress
+	Note: This is a demonstration only and not part of SWFUpload.
+	Note: Some have had problems adapting this class in IE7. It may not be suitable for your application.
+*/
+
+// Constructor
+// file is a SWFUpload file object
+// targetID is the HTML element id attribute that the FileProgress HTML structure will be added to.
+// Instantiating a new FileProgress object with an existing file will reuse/update the existing DOM elements
+function FileProgress(file, targetID) {
+	this.fileProgressID = file.id;
+
+	this.opacity = 100;
+	this.height = 0;
+	
+
+	this.fileProgressWrapper = document.getElementById(this.fileProgressID);
+	if (!this.fileProgressWrapper) {
+		this.fileProgressWrapper = document.createElement("div");
+		this.fileProgressWrapper.className = "progressWrapper";
+		this.fileProgressWrapper.id = this.fileProgressID;
+
+		this.fileProgressElement = document.createElement("div");
+		this.fileProgressElement.className = "progressContainer";
+
+		var progressCancel = document.createElement("a");
+		progressCancel.className = "progressCancel";
+		progressCancel.href = "#";
+		progressCancel.style.visibility = "hidden";
+		progressCancel.appendChild(document.createTextNode(" "));
+
+		var progressText = document.createElement("div");
+		progressText.className = "progressName";
+		progressText.appendChild(document.createTextNode(file.name));
+
+		var progressBar = document.createElement("div");
+		progressBar.className = "progressBarInProgress";
+
+		var progressStatus = document.createElement("div");
+		progressStatus.className = "progressBarStatus";
+		progressStatus.innerHTML = "&nbsp;";
+
+		this.fileProgressElement.appendChild(progressCancel);
+		this.fileProgressElement.appendChild(progressText);
+		this.fileProgressElement.appendChild(progressStatus);
+		this.fileProgressElement.appendChild(progressBar);
+
+		this.fileProgressWrapper.appendChild(this.fileProgressElement);
+
+		document.getElementById(targetID).appendChild(this.fileProgressWrapper);
+	} else {
+		this.fileProgressElement = this.fileProgressWrapper.firstChild;
+		this.reset();
+	}
+
+	this.height = this.fileProgressWrapper.offsetHeight;
+	this.setTimer(null);
+
+
+}
+
+FileProgress.prototype.setTimer = function (timer) {
+	this.fileProgressElement["FP_TIMER"] = timer;
+};
+FileProgress.prototype.getTimer = function (timer) {
+	return this.fileProgressElement["FP_TIMER"] || null;
+};
+
+FileProgress.prototype.reset = function () {
+	this.fileProgressElement.className = "progressContainer";
+
+	this.fileProgressElement.childNodes[2].innerHTML = "&nbsp;";
+	this.fileProgressElement.childNodes[2].className = "progressBarStatus";
+	
+	this.fileProgressElement.childNodes[3].className = "progressBarInProgress";
+	this.fileProgressElement.childNodes[3].style.width = "0%";
+	
+	this.appear();	
+};
+
+FileProgress.prototype.setProgress = function (percentage) {
+	this.fileProgressElement.className = "progressContainer green";
+	this.fileProgressElement.childNodes[3].className = "progressBarInProgress";
+	this.fileProgressElement.childNodes[3].style.width = percentage + "%";
+
+	this.appear();	
+};
+FileProgress.prototype.setComplete = function () {
+	this.fileProgressElement.className = "progressContainer blue";
+	this.fileProgressElement.childNodes[3].className = "progressBarComplete";
+	this.fileProgressElement.childNodes[3].style.width = "";
+
+	var oSelf = this;
+	this.setTimer(setTimeout(function () {
+		oSelf.disappear();
+	}, 5000));
+};
+FileProgress.prototype.setError = function () {
+	this.fileProgressElement.className = "progressContainer red";
+	this.fileProgressElement.childNodes[3].className = "progressBarError";
+	this.fileProgressElement.childNodes[3].style.width = "";
+
+	var oSelf = this;
+	this.setTimer(setTimeout(function () {
+		oSelf.disappear();
+	}, 5000));
+};
+FileProgress.prototype.setCancelled = function () {
+	this.fileProgressElement.className = "progressContainer";
+	this.fileProgressElement.childNodes[3].className = "progressBarError";
+	this.fileProgressElement.childNodes[3].style.width = "";
+
+	var oSelf = this;
+	this.setTimer(setTimeout(function () {
+		oSelf.disappear();
+	}, 2000));
+};
+FileProgress.prototype.setStatus = function (status) {
+	this.fileProgressElement.childNodes[2].innerHTML = status;
+};
+
+// Show/Hide the cancel button
+FileProgress.prototype.toggleCancel = function (show, swfUploadInstance) {
+	this.fileProgressElement.childNodes[0].style.visibility = show ? "visible" : "hidden";
+	if (swfUploadInstance) {
+		var fileID = this.fileProgressID;
+		this.fileProgressElement.childNodes[0].onclick = function () {
+			swfUploadInstance.cancelUpload(fileID);
+			return false;
+		};
+	}
+};
+
+FileProgress.prototype.appear = function () {
+	if (this.getTimer() !== null) {
+		clearTimeout(this.getTimer());
+		this.setTimer(null);
+	}
+	
+	if (this.fileProgressWrapper.filters) {
+		try {
+			this.fileProgressWrapper.filters.item("DXImageTransform.Microsoft.Alpha").opacity = 100;
+		} catch (e) {
+			// If it is not set initially, the browser will throw an error.  This will set it if it is not set yet.
+			this.fileProgressWrapper.style.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity=100)";
+		}
+	} else {
+		this.fileProgressWrapper.style.opacity = 1;
+	}
+		
+	this.fileProgressWrapper.style.height = "";
+	
+	this.height = this.fileProgressWrapper.offsetHeight;
+	this.opacity = 100;
+	this.fileProgressWrapper.style.display = "";
+	
+};
+
+// Fades out and clips away the FileProgress box.
+FileProgress.prototype.disappear = function () {
+
+	var reduceOpacityBy = 15;
+	var reduceHeightBy = 4;
+	var rate = 30;	// 15 fps
+
+	if (this.opacity > 0) {
+		this.opacity -= reduceOpacityBy;
+		if (this.opacity < 0) {
+			this.opacity = 0;
+		}
+
+		if (this.fileProgressWrapper.filters) {
+			try {
+				this.fileProgressWrapper.filters.item("DXImageTransform.Microsoft.Alpha").opacity = this.opacity;
+			} catch (e) {
+				// If it is not set initially, the browser will throw an error.  This will set it if it is not set yet.
+				this.fileProgressWrapper.style.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity=" + this.opacity + ")";
+			}
+		} else {
+			this.fileProgressWrapper.style.opacity = this.opacity / 100;
+		}
+	}
+
+	if (this.height > 0) {
+		this.height -= reduceHeightBy;
+		if (this.height < 0) {
+			this.height = 0;
+		}
+
+		this.fileProgressWrapper.style.height = this.height + "px";
+	}
+
+	if (this.height > 0 || this.opacity > 0) {
+		var oSelf = this;
+		this.setTimer(setTimeout(function () {
+			oSelf.disappear();
+		}, rate));
+	} else {
+		this.fileProgressWrapper.style.display = "none";
+		this.setTimer(null);
+	}
+};
+var FlashUploader = {
+
+	fileQueued : function(file) {
+						
+		try {
+			var progress = new FileProgress(file, this.customSettings.progressTarget);
+			progress.setStatus("Pending...");
+			progress.toggleCancel(true, this);
+	
+		} catch (ex) {
+			Logger.error("[FlashUploader.fileQueued] " + ex);
+		}
+
+	},
+
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	fileQueueError : function(file, errorCode, message) {
+		
+		try {
+			if (errorCode === SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED) {
+				AthenaDialog.message("You have attempted to queue too many files.\n" + (message === 0 ? "You have reached the upload limit." : "You may select " + (message > 1 ? "up to " + message + " files." : "one file.")));
+				return;
+			}
+	
+			var progress = new FileProgress(file, this.customSettings.progressTarget);
+			progress.setError();
+			progress.toggleCancel(false);
+	
+			switch (errorCode) {
+			case SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT:
+				progress.setStatus("File is too big.");
+				Logger.error("[FlashUploader.fileQueueError ] Error Code: File too big, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+				break;
+			case SWFUpload.QUEUE_ERROR.ZERO_BYTE_FILE:
+				progress.setStatus("Cannot upload Zero Byte files.");
+				Logger.error("[FlashUploader.fileQueueError ] Error Code: Zero byte file, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+				break;
+			case SWFUpload.QUEUE_ERROR.INVALID_FILETYPE:
+				progress.setStatus("Invalid File Type.");
+				Logger.error("[FlashUploader.fileQueueError ] Error Code: Invalid File Type, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+				break;
+			default:
+				if (file !== null) {
+					progress.setStatus("Unhandled Error");
+				}
+				Logger.error("[FlashUploader.fileQueueError ] Error Code: " + errorCode + ", File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+				break;
+			}
+		} catch (ex) {
+	        Logger.error(ex);
+	    }
+	},
+
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	fileDialogComplete : function(numFilesSelected, numFilesQueued) {
+		try {
+			if (numFilesSelected > 0) {
+				if (this.customSettings.cancelButtonId != undefined){
+					document.getElementById(this.customSettings.cancelButtonId).disabled = false;
+				}
+			}
+			
+			/* I want auto start the upload and I can do that here */
+			this.startUpload();
+		} catch (ex)  {
+	        Logger.error("[FlashUploader.fileDialogComplete] " + ex);
+		}
+	},
+	
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	uploadStart : function(file) {		
+		
+		try {
+			/* I don't want to do any file validation or anything,  I'll just update the UI and
+			return true to indicate that the upload should start.
+			It's important to update the UI here because in Linux no uploadProgress events are called. The best
+			we can do is say we are uploading.
+			 */
+			
+			this.removePostParam('folder_id');
+			this.addPostParam('folder_id', DataStore.m_currentFolderID);
+			
+			var progress = new FileProgress(file, this.customSettings.progressTarget);
+			progress.setStatus("Uploading...");
+			progress.toggleCancel(true, this);
+		}
+		catch (ex) {
+	        Logger.error("[FlashUploader.uploadStart] " + ex);
+		}
+		
+		return true;
+	},
+	
+	// //////////////////////////////////////////////////////////////////////////////////
+	
+	uploadProgress : function(file, bytesLoaded, bytesTotal) {
+		try {
+			var percent = Math.ceil((bytesLoaded / bytesTotal) * 100);	
+			var progress = new FileProgress(file, this.customSettings.progressTarget);
+			progress.setProgress(percent);
+			progress.setStatus("Uploading...");
+		} catch (ex) {
+			Logger.error("[FlashUploader.uploadProgress] " + ex);
+		}
+	},
+	
+	// //////////////////////////////////////////////////////////////////////////////////	
+	
+	uploadSuccess : function(file, serverData) {
+		try {
+			var progress = new FileProgress(file, this.customSettings.progressTarget);
+			progress.setComplete();
+			progress.setStatus("Complete.");
+			progress.toggleCancel(false);
+	
+		} catch (ex) {
+			Logger.error("[FlashUploader.uploadSuccess] " + ex);
+		}
+	},
+	
+	// //////////////////////////////////////////////////////////////////////////////////
+	
+	uploadError : function(file, errorCode, message) {
+		try {
+			var progress = new FileProgress(file, this.customSettings.progressTarget);
+			progress.setError();
+			progress.toggleCancel(false);
+	
+			switch (errorCode) {
+			case SWFUpload.UPLOAD_ERROR.HTTP_ERROR:
+				if (message == 413){
+					progress.setStatus("Error: Exceeded maximum file size");
+				}
+				else {
+					progress.setStatus("Upload Error: " + message);
+				}
+				Logger.error("[FlashUploader.uploadError] Error Code: HTTP Error, File name: " + file.name + ", Message: " + message);
+				break;
+			case SWFUpload.UPLOAD_ERROR.UPLOAD_FAILED:
+				progress.setStatus("Upload Failed.");
+				Logger.error("[FlashUploader.uploadError] Error Code: Upload Failed, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+				break;
+			case SWFUpload.UPLOAD_ERROR.IO_ERROR:
+				progress.setStatus("Server (IO) Error");
+				Logger.error("[FlashUploader.uploadError] Error Code: IO Error, File name: " + file.name + ", Message: " + message);
+				break;
+			case SWFUpload.UPLOAD_ERROR.SECURITY_ERROR:
+				progress.setStatus("Security Error");
+				Logger.error("[FlashUploader.uploadError] Error Code: Security Error, File name: " + file.name + ", Message: " + message);
+				break;
+			case SWFUpload.UPLOAD_ERROR.UPLOAD_LIMIT_EXCEEDED:
+				progress.setStatus("Upload limit exceeded.");
+				Logger.error("[FlashUploader.uploadError] Error Code: Upload Limit Exceeded, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+				break;
+			case SWFUpload.UPLOAD_ERROR.FILE_VALIDATION_FAILED:
+				progress.setStatus("Failed Validation. Upload skipped.");
+				Logger.error("[FlashUploader.uploadError] Error Code: File Validation Failed, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+				break;
+			case SWFUpload.UPLOAD_ERROR.FILE_CANCELLED:
+				// If there aren't any files left (they were all cancelled) disable the cancel button
+				if (FlashUploader.getStats().files_queued === 0) {
+					if (this.customSettings.cancelButtonId != undefined){
+						document.getElementById(this.customSettings.cancelButtonId).disabled = true;
+					}
+				}
+				progress.setStatus("Cancelled");
+				progress.setCancelled();
+				break;
+			case SWFUpload.UPLOAD_ERROR.UPLOAD_STOPPED:
+				progress.setStatus("Stopped");
+				break;
+			default:
+				progress.setStatus("Unhandled Error: " + errorCode);
+				Logger.error("[FlashUploader.uploadError] Error Code: " + errorCode + ", File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+				break;
+			}
+		} catch (ex) {
+	        Logger.error(ex);
+	    }
+	},
+	
+	// //////////////////////////////////////////////////////////////////////////////////
+
+	uploadComplete : function(file) {
+		if (this.getStats().files_queued === 0) {
+			if (this.customSettings.cancelButtonId != undefined){
+				document.getElementById(this.customSettings.cancelButtonId).disabled = true;
+			}
+		}
+	},
+	
+	// //////////////////////////////////////////////////////////////////////////////////
+	
+	// FlashUploader event comes from the Queue Plugin
+	queueComplete : function(numFilesUploaded) {
+		//$('#flashUploaderStatus').html(numFilesUploaded + " file" + (numFilesUploaded === 1 ? "" : "s") + " uploaded.");
+		ssMain.refresh();
+	}
+
+
+}
 /**
  * @author mikep
  */
@@ -4291,18 +5781,18 @@ var DataStore = {
 
 }
 /* 
- * Pages Page functionality
+ * Files Page functionality
  *
  * @author Mike Pritchard (mike@apollosites.com)
  * @since 3rd January, 2011
  */
-var Pages = {
+var Files = {
 
     // ////////////////////////////////////////////////////////////////////////
 
     init : function(siteID){
                 
-        $('#PagesFrame').show();
+        $('#FilesFrame').show();
                 
         // Initialize the remote API's
         BlogAPI.init();
@@ -4313,127 +5803,19 @@ var Pages = {
         DataStore.init(siteID);
 
         // Setup classes...
-        PagesFrame.init();
-
-        // Paint the custom wyswig editors
-        Pages.paintOpenWYSIWYG();
+        FilesFrame.init();
 
         // Start loading data
-        DataStore.load(Pages.onDataLoaded);
-                
+        DataStore.load(Files.onDataLoaded);
+        
     },
 
     // ////////////////////////////////////////////////////////////////////////
 
     onDataLoaded : function(){    
-        PagesFrame.repaint();
+        FilesFrame.repaint();
         SidebarFrame.repaint();
-    },
-	
-    // ////////////////////////////////////////////////////////////////////////
-    
-    paintOpenWYSIWYG : function(){
-
-		// Paint the InnovaStudio editor...
-		
-        var ht = $('.ViewFrame').height() - 40;
-
-        var groupsObj = [
-            ["grpPage", "Page & View", ["FullScreen", "XHTMLSource", "Search", "BRK", "Undo", "Redo", "SpellCheck", "RemoveFormat"]],
-            ["grpFont", "Font",
-                ["FontName", "FontSize", "Strikethrough", "Superscript", "Subscript", "BRK",
-                    "Bold", "Italic", "Underline", "ForeColor", "BackColor"
-                ]
-            ],
-            ["grpStyles", "Styles", ["Table", "Guidelines", "BRK",  "StyleAndFormatting", "Styles"]], //"Absolute"
-            ["grpPara", "Paragraph",
-                ["Paragraph", "Indent", "Outdent", "LTR", "RTL", "BRK", "JustifyLeft",
-                    "JustifyCenter", "JustifyRight","JustifyFull", "Numbering", "Bullets"
-                ]
-            ],
-            ["grpObjects", "Objects", ["Image", "InsertInternalImage", "Flash", "Media", "BRK", "Hyperlink", "Characters", "Line",  "ApolloPageBreak"]]
-        ];
-
-		// apolloContentEditor
-        oUtil.initializeEditor("#pageContentEditor", {
-            width:"100%",
-            height:ht+"px",
-//            height:"100%",
-            btnSpellCheck:true,
-            useTagSelector:false,
-            toolbarMode: 2,
-            mode:"XHTML",
-            useBR:true, // Force to use <br> for line breaks by default
-            arrCustomButtons: [
-                ["InsertInternalImage","ImagePickerDialog.show('#apollo_image_picker', Pages.onInsertImage)","Insert an image from your media library", "btnInternalImage.gif"],
-                ["ApolloPageBreak","Pages.onInsertPageBreak()","Insert a more link into your blog post", "btnApolloPageBreak.png"]],
-            //features:featuresObj,
-            //css: DataStore.m_theme.cms_blog_css
-            groups: groupsObj
-        });
-
- 		setInterval(Pages.setEditorChangeListener, 500);
-
-    },
-	
-	m_contentChangedTO : '',
-	m_prevContent : '',
-	
-	/**
-	* Called whenever is key is pressed in the content editor. We want to wait until the user has stopped
-	* typing before we submit changes
-	*/
-	setEditorChangeListener : function(){
-								
-		// Get content
-		var content = oUtil.obj.getXHTMLBody();
-		if (Pages.m_prevContent == '') Pages.m_prevContent = content;
-				
-		if (content != Pages.m_prevContent){
-			
-	        switch(Pages.view){
-    	        case ssMain.VIEW_PAGES : PagesFrame.onChange(); break;
-	            case ssMain.VIEW_Pages : PagesFrame.onChange(); break;
-			}		
-			
-		}		
-
-		Pages.m_prevContent = content;
-		
-	},	
-
-    // ////////////////////////////////////////////////////////////////////////
-
-    onInsertImage : function(imageID){
-        var img = DataStore.getImage(imageID);
-        var txt = "<img src='"+img.file_url+"' alt='"+img.description+"' width='"+img.width+"px' height='"+img.height+"px'/>";
-        oUtil.obj.insertHTML(txt);
-    },
-
-    // ////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Insert a custom apollo page break
-     */
-    onInsertPageBreak : function(){
-
-		if (Pages.view != Pages.VIEW_Pages) return;
-		
-        // Has the user already got a apollo page break in this page?
-        var content = oUtil.obj.getXHTMLBody();
-        var myRegExp = /apolloPageBreak/;
-        var pos = content.search(myRegExp);
-
-        if (pos > 0){
-            AthenaDialog.alert("Sorry, you already have a break in this post and you can only have one, you'll need to delete the old one before you can add one here!", "Can't add more than 1 break");
-            return;
-        }
-
-        var txt = "<div class='apolloPageBreak'>More...</div> ";
-        oUtil.obj.insertHTML(txt);
-    }
-
-    
+    }    
 }
 /**
 * Allows access to the remote (Ajax) Athena Blog API
@@ -6192,281 +7574,282 @@ var CommentsEditDialog = {
 *
 * @since 24th March, 2010
 */
-var PagesSidebarFrame = {
-	
-    m_targetDiv : '',
+var FolderSidebarFrame = {
+
+	ID_ALL : 0, // hard-coded folder id for all images
+	ID_UNASSIGNED : 1, // hard-coded folder id for unassigned images
+	ID_LAST_24_HOURS : 2, // hard-coded folder id for images uploaded in last 24 hrs
+	ID_LAST_7_DAYS : 3, // hard-coded folder id for images uploaded in last 7 days
+	ID_LAST_1_HOUR : 4, // hard-coded folder id for images uploaded in last 1 hrs
 	
     /** Number of tags per 'page' */
-    m_tagsPerPage : 25,    
+    m_foldersPerPage : 25,    
     m_currentPage : 0,    
     m_numberPages : 0,
+		
+	/** Number of hard coded system folders */	
+	m_noSystemFolders : 2,
 	
-    // ////////////////////////////////////////////////////////////////////////////
+	// ////////////////////////////////////////////////////////////////////////////
 	
-    /**
+	/**
 	*
 	*/
-    paint : function(targetDiv){
+	paint : function(targetDiv){
 		
-        PagesSidebarFrame.m_targetDiv = targetDiv;
-		
-        var txt = "";
+		var txt = "";
 
-        txt += "<div id='apollo_page_list'></div>";
-		
-        txt += "<div id='pagesSidebarControls' class='sidebar_page_controls'>";        
+		// Hard code 'switch to tag view' link		
+		txt += "<div onclick=\"SidebarFrame.showTags()\" id='switch_to_tag_view' class='folder droppable_folder' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/tag_icon_blue_24x24.png'><span class='folder_name'>Switch to tag view</span></div>";
+					
+		txt += "<div id='apollo_folder_list'></div>";
+				
+        txt += "<div id='folderPageControls' class='sidebar_page_controls'>";        
         txt += "<table border='0'>";
         txt += "    <tr>";
-        txt += "        <td width='33%' align='left'><span class='more_posts_link' id='prev_pages_link' style='padding-left:15px' onclick='PagesSidebarFrame.showPrevPage()' title='Display previous page'>&laquo; prev</span></td>";
-        txt += "        <td width='33%' align='center'><span class='more_posts_pages' id='pages_sideframe_page_no' style=''>1 of 2</span></td>";                
-        txt += "        <td width='33%' align='right'><span class='more_posts_link' id='next_pages_link' style='padding-right:15px' onclick='PagesSidebarFrame.showNextPage()' title='Display next page'>next &raquo;</span></td>";
+        txt += "        <td width='33%' align='left'><span class='more_posts_link' id='prev_posts_link' style='padding-left:15px' onclick='FolderSidebarFrame.showPrevPage()' title='Display previous page'>&laquo; prev</span></td>";
+        txt += "        <td width='33%' align='center'><span class='more_posts_pages' id='folders_sideframe_page_no' style=''>1 of 2</span></td>";                
+        txt += "        <td width='33%' align='right'><span class='more_posts_link' id='next_posts_link' style='padding-right:15px' onclick='FolderSidebarFrame.showNextPage()' title='Display next page'>next &raquo;</span></td>";
         txt += "    </tr>";
         txt += "</table>";        
         txt += "</div>";
-        		
-        /*
+        
+        						
 		// Right click pop-up menu....
-		txt += "<ul id='pagesMenu' class='rightClickMenu'>";
+		txt += "<ul id='folderMenu' class='rightClickMenu'>";
 		txt += "	<li class='edit'><a href='#edit'>Rename</a></li>";
-		txt += "	<li class='duplicate'><a href='#edit'>Duplicate</a></li>";
 		txt += "	<li class='delete'><a href='#delete'>Delete</a></li>";
 		txt += "	<li class='quit separator'><a href='#quit'>Cancel</a></li>";
 		txt += "</ul>";
-		*/
 
+		$(targetDiv).html(txt);
+		
 		var pos = $(targetDiv).position();
 
-		var offset = pos.top;
-		var lineht = 25;				
-		var h = $('.ViewFrame').height() - offset - $('#pagesSidebarControls').height(); 
-				    		    	    		
-		PagesSidebarFrame.m_tagsPerPage = Math.floor(h / lineht);		
-        PagesSidebarFrame.m_numberPages = Math.ceil( DataStore.m_pageList.length / PagesSidebarFrame.m_tagsPerPage);
-                        
-        if (PagesSidebarFrame.m_numberPages == 1){
-        	$('#pagesSidebarControls').hide();
-        }
-                                
-        $(targetDiv).html(txt);
+		var offset = pos.top + 30;
+		var lineht = 30;
+		var h = $('.ViewFrame').height() - offset - $('#folderPageControls').height(); 
+				
+/*		switch(ssMain.view){			
 		
-        PagesSidebarFrame.paintPages();
-		
-        $('#apollo_page_list').height(h);
+			case ssMain.VIEW_GALLERIES : 
+//				h = ($(document).height()/2) - offset - $('#folderPageControls').height(); 
+				h = $(document).height() - offset - $('#folderPageControls').height(); 
+				break;
+				
+			case ssMain.VIEW_FILES : 
+				h = $(document).height() - offset - $('#folderPageControls').height(); 
+				break;
+		}
+*/		
+		    	
+		FolderSidebarFrame.m_foldersPerPage = Math.floor(h / lineht);		
+        FolderSidebarFrame.m_numberPages = Math.ceil(DataStore.m_folderList.length / FolderSidebarFrame.m_foldersPerPage);
         
-        $(targetDiv).disableSelection();
-        $(targetDiv).noContext();
+        if (FolderSidebarFrame.m_numberPages == 1){
+        	$('#folderPageControls').hide();
+        }
+        
+        		
+		FolderSidebarFrame.paintFolders();		
+        $('#apollo_folder_list').height(h);
+        		
+		$(targetDiv).disableSelection();
+		$(targetDiv).noContext();
 		
-    },
+	},
 
-    // ////////////////////////////////////////////////////////////////////////////
-
-    repaint : function(){
-        PagesSidebarFrame.paint(PagesSidebarFrame.m_targetDiv);
-    },
+	// ////////////////////////////////////////////////////////////////////////////
 	
-    // ////////////////////////////////////////////////////////////////////////////
-	
-	m_pageNodes : '',
-	
-    paintPages : function(){
+	paintFolders : function(){
 		
-        var pageList = DataStore.m_pageList;
+		var folderList = DataStore.m_folderList;
+				
+        var start_i = FolderSidebarFrame.m_currentPage * FolderSidebarFrame.m_foldersPerPage;
+        var end_i = Math.min(folderList.length, start_i+FolderSidebarFrame.m_foldersPerPage);
+        $('#folders_sideframe_page_no').html((FolderSidebarFrame.m_currentPage+1) + " of " + FolderSidebarFrame.m_numberPages);
+				
+		var txt = "";
 		
-        var start_i = PagesSidebarFrame.m_currentPage * PagesSidebarFrame.m_tagsPerPage;
-        var end_i = Math.min(pageList.length, start_i+PagesSidebarFrame.m_tagsPerPage);
-        $('#pages_sideframe_page_no').html((PagesSidebarFrame.m_currentPage+1) + " of " + PagesSidebarFrame.m_numberPages);
-							
-		var pageNodes = new Array();
+		// NOTE: Folder id's 0-9 are reserved for system folders, so can safely use these id's here		
+		
+		// Deal with hard-coded 'faves' folders....	
+		
+		if (FolderSidebarFrame.m_currentPage == 0){
+		
+			var help_text = "";
+			var name = "";
+				
+			for (var i=0; i<FolderSidebarFrame.m_noSystemFolders; i++){
 			
-        for (var i=0; i<pageList.length; i++){
-									
-            if (PagesSidebarFrame.m_tagsPerPage && pageList[i].parent_page_id == 0){
-
-	            pageNodes.push(PagesSidebarFrame.getPageHtml(pageList[i].id, pageList[i].title, pageList[i].status, 0));
+				switch(i){
+					case 0: help_text = "Select to display all of your images"; break;
+					case 1: help_text = "Select to display all unassigned files (files that have not been added to a folder"; break;
+					case 2: help_text = "Select to display all files uploaded in the last hour"; break;
+					case 3: help_text = "Select to display all files uploaded in the last 24 hours"; break;
+					case 4: help_text = "Select to display all files uploaded in the last 7 days"; break;
+				}
 				
-                // Paint children...
+				switch(i){
+					case 0: name = "Show All"; break;
+					case 1: name = "Unassigned Files"; break;
+					case 2: name = "Show Last Hour"; break;
+					case 3: name = "Show Last 24 Hours"; break;
+					case 4: name = "Show Last 7 Days"; break;
+				}			
 				
-                for (var k=0; k<pageList.length; k++){
-
-                    if (pageList[k].parent_page_id == pageList[i].id){
-						
-                        pageNodes.push(PagesSidebarFrame.getPageHtml(pageList[k].id, pageList[k].title, pageList[k].status, 1));
-						
-                        // Paint grand-children....
-                        for (var m=0; m<pageList.length; m++){
-
-                            if (pageList[m].parent_page_id == pageList[k].id){
-                                pageNodes.push(PagesSidebarFrame.getPageHtml(pageList[m].id, pageList[m].title, pageList[m].status, 2));
-                            }
-                            
-                        }
-                    }
-					
-                }
-
-            }
-							
-        }
+			
+				if (DataStore.m_currentFolderID == i){
+					txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder("+i+")\" class='folder_filter' id='folder_0' title='"+help_text+"'><img class='folder_fav_icon' src='images/folder_favorites.png'><span class='folder_fav_name selected'>"+name+"</span></div>";
+				}
+				else {
+					txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder("+i+")\" class='folder_filter' id='folder_0' title='"+help_text+"'><img class='folder_fav_icon' src='images/folder_favorites.png'><span class='folder_fav_name'>"+name+"</span></div>";
+				}		
+				
+			}
+			
+			start_i += FolderSidebarFrame.m_noSystemFolders;
+		}
 		
-		PagesSidebarFrame.m_pageNodes = pageNodes;
+		// Now deal with the user's folders...
 		
-        var txt = "";
-        for (var i=start_i; i<end_i; i++){
-        	txt += pageNodes[i];
-        }
-		
-        $('#apollo_page_list').html(txt);
-		
-        //$(".folder").rightClick( function(e) {PagesSidebarFrame.onRightClickFolder(e, this);});
+		for (var i=start_i; i<end_i; i++){
 
-        $("#apollo_page_list").disableSelection();					
-    },
+			var folder_name = folderList[i].name;
+			var folder_id = folderList[i].id;
+			
+			if (folder_id == DataStore.m_currentFolderID){
+				txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\" class='folder droppable_folder' id='folder_"+folder_id+"' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/folder_grey.png'><span class='folder_name selected'>"+folder_name+"</span></div>";
+			}
+			else {
+				txt += "<div onclick=\"FolderSidebarFrame.onSelectFolder('"+folder_id+"')\" class='folder droppable_folder' id='folder_"+folder_id+"' title='' class='apollo_folder folder_with_menu'><img class='folder_filter_icon' src='images/folder_icon.png'><span class='folder_name'>"+folder_name+"</span></div>";
+			}	
+			
+		}
+		
+		$('#apollo_folder_list').html(txt);
+
+				
+		$(".folder").rightClick( function(e) {FolderSidebarFrame.onRightClickFolder(e, this);});
+
+		$('.droppable_folder').droppable({
+				drop: FolderSidebarFrame.onAddToFolder,
+				over: function(ev, ui) {$(this).addClass( 'folder_name_hover' );},
+				out: function(ev, ui) {$(this).removeClass( 'folder_name_hover' );}
+			});	
+			
+		$("#apollo_folder_list").disableSelection();
+				
+	},
 
     // ////////////////////////////////////////////////////////////////////////////
 
     showNextPage : function(){
 		
-        $('#prev_pages_link').show();
+        $('#prev_posts_link').show();
         	
-        if (PagesSidebarFrame.m_currentPage < PagesSidebarFrame.m_numberPages-1){
-            PagesSidebarFrame.m_currentPage += 1;
+        if (FolderSidebarFrame.m_currentPage < FolderSidebarFrame.m_numberPages-1){
+            FolderSidebarFrame.m_currentPage += 1;
         }
         
-        if (PagesSidebarFrame.m_currentPage == PagesSidebarFrame.m_numberPages-1){
-        	$('#next_pages_link').hide();
+        if (FolderSidebarFrame.m_currentPage == FolderSidebarFrame.m_numberPages-1){
+        	$('#next_posts_link').hide();
         }
         
-        PagesSidebarFrame.paintPages();
+        FolderSidebarFrame.paintFolders();
     },
 
     // ////////////////////////////////////////////////////////////////////////////
 
     showPrevPage : function(){
 
-        $('#next_pages_link').show();
+        $('#next_posts_link').show();
 
-        if (PagesSidebarFrame.m_currentPage > 0){
-            PagesSidebarFrame.m_currentPage -= 1;
+        if (FolderSidebarFrame.m_currentPage > 0){
+            FolderSidebarFrame.m_currentPage -= 1;
         }
         
-        if (PagesSidebarFrame.m_currentPage == 0){
-        	$('#prev_pages_link').hide();
+        if (FolderSidebarFrame.m_currentPage == 0){
+        	$('#prev_posts_link').hide();
         }
         
-        PagesSidebarFrame.paintPages();
+        FolderSidebarFrame.paintFolders();
     },
     
-    // ////////////////////////////////////////////////////////////////////////////
+	// ////////////////////////////////////////////////////////////////////////////
 
-    getPageHtml : function(page_id, page_title, page_status, page_depth){
+	onRightClickFolder : function(e, obj){
 
-        var txt = '';
-
-        var status_class = "";
-
-        if (page_status == 'Draft'){
-            status_class = 'status_draft';
-        }
-        else if (page_status == 'Private'){
-            status_class = 'status_private';
-        }
-        else if (page_status == 'Published'){
-            status_class = 'status_public';
-        }
-
-        var selected = '';
-        if (page_id == DataStore.m_currentPageID){
-            selected = 'selected';
-        }
-
-        txt += "<div onclick=\"PagesSidebarFrame.onSelectPage('"+page_id+"')\" class='page page_depth_"+page_depth+"' id='page_"+page_id+"' title=''>";
-        txt += "    <img class='page_icon' src='images/web_page2.png'>";
-        txt += "    <span class='page_name "+status_class+" "+selected+"'>"+page_title+"</span>";
-        txt += "</div>";
-
-        return txt;
-    },
-	
-    // ////////////////////////////////////////////////////////////////////////////
-
-    addPage : function(){
-        var title = 'New page ' + (DataStore.m_pageList.length+1);
-        var pageSlug = AthenaUtils.encodeSlug(title);
-        var order = 0;
-        var isHome = 0;
-        MediaAPI.addPage(DataStore.m_siteID, title, '', 'Draft', 0, 0, pageSlug, order, isHome, PagesSidebarFrame.onPageAdded);
-    },
-	
-    onPageAdded : function(pageObj){
-        
-        DataStore.addPage(pageObj);        		
-        
-        // Make sure this new page is visible on the side bar                
-        PagesSidebarFrame.m_currentPage = PagesSidebarFrame.m_numberPages-1;
-
-        PagesSidebarFrame.onSelectPage(pageObj.id);
+		e.stopPropagation();
 		
-    },
-	
-    // ////////////////////////////////////////////////////////////////////////////
-	
-    /**
-	* Encode the page slug based on the title
+		//var x = e.pageX - $('#adminmenu').width() - 30;
+		//var y = e.pageY - $('#wphead').height() - $('#update-nag').height();		
+		var x = e.pageX;
+		var y = e.pageY;		
+
+		$('#folderMenu').css('top',y);
+		$('#folderMenu').css('left',x);
+		$('#folderMenu').show();
+
+		$('#folderMenu .edit').unbind('click');
+		$('#folderMenu .delete').unbind('click');
+		$('#folderMenu .quit').unbind('click');
+
+		$('#folderMenu .edit').click(function(){FolderSidebarFrame.onMenuItem('rename_folder', obj)});
+		$('#folderMenu .delete').click(function(){FolderSidebarFrame.onMenuItem('delete_folder', obj)});
+		$('#folderMenu .quit').click(function(){FolderSidebarFrame.onMenuItem('quit', obj)});
+		
+	},
+
+	// ////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Get the image list for the currently selected gallery page. Note that even for multi-drag
+	* the object dropped on the folder is still the source thumbnail, and not the image that is
+	* show during the drag (defined by the helper function)
 	*/
-    encodeSlug : function(title){
+	onAddToFolder : function(event, ui){
+
+		var imgID = parseInt($(ui.draggable).attr('id').substring(4));						
+		var folderID = parseInt($(this).attr('id').substring(7));	// format folder_xxx
+				
+		if (folderID == FolderSidebarFrame.ID_UNASSIGNED || folderID > 9){		
+			MediaAPI.addMediaToFolder(DataStore.m_siteID, imgID, folderID, FolderSidebarFrame.onAddedToFolder)
+		}	
+		
+		$(this).removeClass( 'folder_name_hover' );
+			
+	},
 	
-        var slug = title.replace(/ /g, ""); // Remove spaces
-        slug = slug.replace(/'/g, ""); // Remove single quotes
-        slug = slug.replace(/\"/g, ""); // Remove double quotes
-
-        slug = escape(slug);
-        slug = slug.replace(/\//g,"%2F");
-        slug = slug.replace(/\?/g,"%3F");
-        slug = slug.replace(/=/g,"%3D");
-        slug = slug.replace(/&/g,"%26");
-        slug = slug.replace(/@/g,"%40");
+	onAddedToFolder : function(folderID, mediaID){
 		
-        return slug;
-    },
+		/*	
+		if (folderID == 0){
+			AthenaDialog.message("Image removed from folder");			
+		}
+		else {
+			AthenaDialog.message("Image added to folder <i>" + DataStore.getFolderName(folderID) + "</i>");			
+		}	
+		*/
 		
-    // ////////////////////////////////////////////////////////////////////////////
-
-    onRightClickFolder : function(e, obj){
-
-        e.stopPropagation();
+		for (var i=0; i<DataStore.m_mediaList.length; i++){
+			
+			if (DataStore.m_mediaList[i].id == mediaID){
+				DataStore.m_mediaList[i].folder_id = folderID;						
+				break;
+			}
+		}
 		
-        //var x = e.pageX - $('#adminmenu').width() - 30;
-        //var y = e.pageY - $('#wphead').height() - $('#update-nag').height();
-        var x = e.pageX;
-        var y = e.pageY;
+		FilesFrame.repaint();			
+	},
 
-        $('#folderMenu').css('top',y);
-        $('#folderMenu').css('left',x);
-        $('#folderMenu').show();
-
-        $('#folderMenu .edit').unbind('click');
-        $('#folderMenu .delete').unbind('click');
-        $('#folderMenu .quit').unbind('click');
-
-        $('#folderMenu .edit').click(function(){
-            PagesSidebarFrame.onMenuItem('rename_folder', obj)
-            });
-        $('#folderMenu .delete').click(function(){
-            PagesSidebarFrame.onMenuItem('delete_folder', obj)
-            });
-        $('#folderMenu .quit').click(function(){
-            PagesSidebarFrame.onMenuItem('quit', obj)
-            });
-		
-    },
-
-    // ////////////////////////////////////////////////////////////////////////////
+	// ////////////////////////////////////////////////////////////////////////////
 	
-    /**
+	/**
 	* Respond to the user selecting a menu item
 	*/
-    onMenuItem : function(item, selectedElement){
-    /*
+	onMenuItem : function(item, selectedElement){
+				
 		$('#imageMenu').hide();
 		$('#folderMenu').hide();
 		
@@ -6476,25 +7859,445 @@ var PagesSidebarFrame = {
 				
 		// Process events related to folders...					
 		if (item == 'rename_folder'){
-			PagesSidebarFrame.makeFolderNameEditable(folder_id);
+			FolderSidebarFrame.makeFolderNameEditable(folder_id);
 		}
 		else if (item == 'delete_folder'){		
-			AthenaDialog.confirm("Are you sure you want to delete this folder? This can not be undone.", function(){PagesSidebarFrame.deleteFolder(folder_id);});
+			AthenaDialog.confirm("Are you sure you want to delete this folder? This can not be undone.", function(){FolderSidebarFrame.deleteFolder(folder_id);});
 		}
-		*/		
+				
+	},
+
+	// ////////////////////////////////////////////////////////////////////////////
+
+	makeFolderNameEditable : function(folder_id){
+		
+		var divID = '#folder_' + folder_id;
+		var name = $(divID + ' .folder_name').html();
+		
+		$(divID).attr('onclick','');
+
+		$(divID + ' .folder_name').html("<input id='folder_name_edit' style='width:100px' type='text' value='"+name+"' onblur='FolderSidebarFrame.paintFolders()'/>");
+		
+		$("#folder_name_edit").keypress(function (e) {
+			if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+				FolderSidebarFrame.renameFolder(folder_id, $("#folder_name_edit").val());
+			}
+	    });
+		
+		$("#folder_name_edit").focus();
+	},
+		
+	// ////////////////////////////////////////////////////////////////////////////
+		
+	onSelectFolder : function(folder_id){
+
+		DataStore.m_currentFolderID = parseInt(folder_id);
+		FolderSidebarFrame.paintFolders();				
+
+		switch(ssMain.view){			
+			case ssMain.VIEW_GALLERIES : GalleriesFrame.repaint(); break;
+			case ssMain.VIEW_FILES : FilesFrame.onSelectFolder(); break;
+		}
+		
+	},
+			
+	// ////////////////////////////////////////////////////////////////////////////
+
+	deleteFolder : function(folderId){
+		MediaAPI.deleteFolder(DataStore.m_siteID, folderId, FolderSidebarFrame.onFolderDeleted);
+	},
+	
+	onFolderDeleted : function(folder_id){
+
+		//AthenaDialog.message("Folder deleted");
+		
+		var temp = new Array();		
+		for (var i=0; i<DataStore.m_folderList.length; i++){
+		
+			if (DataStore.m_folderList[i].id != folder_id){
+				temp.push(DataStore.m_folderList[i]);
+			}
+			
+		}
+		DataStore.m_folderList = temp;
+		
+		FolderSidebarFrame.paintFolders()	
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////////
+
+	addFolder : function(){		
+		MediaAPI.addFolder(DataStore.m_siteID, 'new folder', FolderSidebarFrame.onAddedFolder);
+	},
+	
+	onAddedFolder : function(folderName, folderID){
+
+		//alert("Folder ID: " + folderID + " Folder Name: " + folderName);
+
+		var temp = new Object();
+		temp.id = folderID;
+		temp.name = folderName;
+
+		DataStore.m_folderList.push(temp);
+
+		FolderSidebarFrame.paintFolders()
+					
+		// Make the folder name editable so the user can give it a good name
+		FolderSidebarFrame.makeFolderNameEditable(folderID);					
+
+/*		
+		DataStore.load(function(){
+			
+			ssMain.onDataLoaded(); 
+			
+			// Make the folder name editable so the user can give it a good name
+			FolderSidebarFrame.makeFolderNameEditable(folderID);					
+		})
+*/		
+		
+	},
+	
+	// ////////////////////////////////////////////////////////////////////////////
+
+	getFolderName : function(folder_id){
+	
+		if (folder_id == FolderSidebarFrame.ID_UNASSIGNED){
+			return "Unassigned";
+		}
+		
+		for (var i=0; i<DataStore.m_folderList.length; i++){
+			if (DataStore.m_folderList[i].id == folder_id){
+				return DataStore.m_folderList[i].name;
+			}			
+		}
+		
+		return "? ("+folder_id+")";
+	},
+			
+	// ////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Rename a folder
+	*/
+	renameFolder : function(folderId, folderName){
+		MediaAPI.renameFolder(DataStore.m_siteID, folderId, folderName, FolderSidebarFrame.onFolderRenamed);
+	},
+	
+	onFolderRenamed : function(folderId, folderName){
+
+		for (var i=0; i<DataStore.m_folderList.length; i++){
+			if (DataStore.m_folderList[i].id == folderId){
+				DataStore.m_folderList[i].name = folderName;
+				break;
+			}
+		}
+
+		FolderSidebarFrame.paintFolders()
+	}			
+
+}
+/**
+*
+* @author Mike Pritchard (mike@apollosites.com)
+* @since 30th December, 2010
+*/
+var TagsSidebarFrame = {
+
+    /** Number of tags per 'page' */
+    m_tagsPerPage : 25,    
+    m_currentPage : 0,    
+    m_numberPages : 0,
+
+	// ////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	*
+	*/
+	paint : function(targetDiv){
+		
+		var txt = "";
+
+		// Hard code a 'switch to folder view' item							
+		txt += "<div onclick=\"SidebarFrame.showFolders()\" id='switch_to_folder_view' class='folder' title='' class='apollo_tag tag_with_menu'><img class='folder_icon' src='images/folder_icon.png'><span class='switch_to_folder_view_name'>Switch to folder view</span></div>";
+
+		txt += "<div id='apollo_tag_list'></div>";
+															
+        txt += "<div id='tagPageControls' class='sidebar_page_controls'>";        
+        txt += "<table border='0'>";
+        txt += "    <tr>";
+        txt += "        <td width='33%' align='left'><span class='more_posts_link' id='prev_tags_page_link' style='padding-left:15px' onclick='TagsSidebarFrame.showPrevPage()' title='Display previous page'>&laquo; prev</span></td>";
+        txt += "        <td width='33%' align='center'><span class='more_posts_pages' id='tags_sideframe_page_no' style=''>1 of 2</span></td>";                
+        txt += "        <td width='33%' align='right'><span class='more_posts_link' id='next_tags_page_link' style='padding-right:15px' onclick='TagsSidebarFrame.showNextPage()' title='Display next page'>next &raquo;</span></td>";
+        txt += "    </tr>";
+        txt += "</table>";        
+        txt += "</div>";
+						
+						
+		// Right click pop-up menu....
+		txt += "<ul id='tagMenu' class='rightClickMenu'>";
+		txt += "	<li class='edit'><a href='#edit'>Rename</a></li>";
+		txt += "	<li class='delete'><a href='#delete'>Delete</a></li>";
+		txt += "	<li class='quit separator'><a href='#quit'>Cancel</a></li>";
+		txt += "</ul>";
+
+		$(targetDiv).html(txt);
+
+		var pos = $(targetDiv).position();
+		
+		var offset = pos.top + 30;
+		var lineht = 23;				
+		var h = $('.ViewFrame').height() - offset - $('#tagPageControls').height(); 
+/*				
+		switch(ssMain.view){			
+		
+			case ssMain.VIEW_GALLERIES : 
+				h = ($('.ViewFrame').height()/2) - offset - $('#tagPageControls').height();		 
+				break;
+				
+			case ssMain.VIEW_FILES : 
+				h = $('.ViewFrame').height() - offset - $('#tagPageControls').height(); 
+				break;
+		}
+*/		    		    	    		
+		TagsSidebarFrame.m_tagsPerPage = Math.floor(h / lineht);		
+        TagsSidebarFrame.m_numberPages = Math.ceil(DataStore.m_mediaTags.length / TagsSidebarFrame.m_tagsPerPage);
+        
+        if (TagsSidebarFrame.m_numberPages == 1){
+        	$('#tagPageControls').hide();
+        }
+        
+		TagsSidebarFrame.paintTags();		
+        $('#apollo_tag_list').height(h);
+		
+		$(targetDiv).disableSelection();
+		$(targetDiv).noContext();
+		
+	},
+
+	// ////////////////////////////////////////////////////////////////////////////
+	
+	paintTags : function(){
+				
+		var tagList = DataStore.m_mediaTags;
+						
+		if (tagList == undefined || tagList == null){
+			$("#apollo_tag_list").html("");
+		}
+		
+        var start_i = TagsSidebarFrame.m_currentPage * TagsSidebarFrame.m_tagsPerPage;
+        var end_i = Math.min(tagList.length, start_i+TagsSidebarFrame.m_tagsPerPage);
+        $('#tags_sideframe_page_no').html((TagsSidebarFrame.m_currentPage+1) + " of " + TagsSidebarFrame.m_numberPages);
+		
+		var txt = "";
+							
+		for (var i=start_i; i<end_i; i++){
+
+			var tag = tagList[i];
+						
+			if (tag == DataStore.m_currentTag){
+				txt += "<div onclick=\"TagsSidebarFrame.onSelectTag('"+tag+"')\" class='tag droppable_tag' id='tag_"+tag+"' title='' class='apollo_tag tag_with_menu'><img class='tag_icon' src='images/tag_icon_blue.png'><span class='tag_name selected'>"+tag+"</span></div>";
+			}
+			else {
+				txt += "<div onclick=\"TagsSidebarFrame.onSelectTag('"+tag+"')\" class='tag droppable_tag' id='tag_"+tag+"' title='' class='apollo_tag tag_with_menu'><img class='tag_icon' src='images/tag_icon_blue.png'><span class='tag_name'>"+tag+"</span></div>";
+			}	
+			
+		}
+		
+		$('#apollo_tag_list').html(txt);
+
+		$(".tag").rightClick( function(e) {TagsSidebarFrame.onRightClickTag(e, this);});
+
+		$('.droppable_tag').droppable({
+				drop: TagsSidebarFrame.onAddToTag,
+				over: function(ev, ui) {$(this).addClass( 'tag_name_hover' );},
+				out: function(ev, ui) {$(this).removeClass( 'tag_name_hover' );}
+			});	
+			
+		$("#apollo_tag_list").disableSelection();
+				
+	},
+
+    // ////////////////////////////////////////////////////////////////////////////
+
+    showNextPage : function(){
+		
+        $('#prev_tags_page_link').show();
+        	
+        if (TagsSidebarFrame.m_currentPage < TagsSidebarFrame.m_numberPages-1){
+            TagsSidebarFrame.m_currentPage += 1;
+        }
+        
+        if (TagsSidebarFrame.m_currentPage == TagsSidebarFrame.m_numberPages-1){
+        	$('#next_tags_page_link').hide();
+        }
+        
+        TagsSidebarFrame.paintTags();
     },
 
     // ////////////////////////////////////////////////////////////////////////////
+
+    showPrevPage : function(){
+
+        $('#next_tags_page_link').show();
+
+        if (TagsSidebarFrame.m_currentPage > 0){
+            TagsSidebarFrame.m_currentPage -= 1;
+        }
+        
+        if (TagsSidebarFrame.m_currentPage == 0){
+        	$('#prev_tags_page_link').hide();
+        }
+        
+        TagsSidebarFrame.paintTags();
+    },
+    
+	// ////////////////////////////////////////////////////////////////////////////
+
+	onRightClickTag : function(e, obj){
+
+		e.stopPropagation();
 		
-    onSelectPage : function(page_id){
-    	// Store the current content first!
-		PagesFrame.onChange();		
-        DataStore.m_currentPageID = parseInt(page_id);
-        PagesFrame.repaint();
-        PagesSidebarFrame.repaint();
-    }
+		//var x = e.pageX - $('#adminmenu').width() - 30;
+		//var y = e.pageY - $('#wphead').height() - $('#update-nag').height();		
+		var x = e.pageX;
+		var y = e.pageY;		
+
+		$('#tagMenu').css('top',y);
+		$('#tagMenu').css('left',x);
+		$('#tagMenu').show();
+
+		$('#tagMenu .edit').unbind('click');
+		$('#tagMenu .delete').unbind('click');
+		$('#tagMenu .quit').unbind('click');
+
+		$('#tagMenu .edit').click(function(){TagsSidebarFrame.onMenuItem('rename_tag', obj)});
+		$('#tagMenu .delete').click(function(){TagsSidebarFrame.onMenuItem('delete_tag', obj)});
+		$('#tagMenu .quit').click(function(){TagsSidebarFrame.onMenuItem('quit', obj)});
+		
+	},
+
+	// ////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Get the image list for the currently selected gallery page. Note that even for multi-drag
+	* the object dropped on the folder is still the source thumbnail, and not the image that is
+	* show during the drag (defined by the helper function)
+	*/
+	onAddToTag : function(event, ui){
+		
+		var imgID = parseInt($(ui.draggable).attr('id').substring(4));						
+		var tag = $(this).attr('id').substring(4);	// format tag_xxx
+
+        MediaAPI.addMediaCSVTags(DataStore.m_siteID, imgID, tag, TagsSidebarFrame.onAddedToTag);
+		
+	},
 			
-// ////////////////////////////////////////////////////////////////////////////
+	onAddedToTag : function(mediaObj, tags){
+        DataStore.updateMedia(mediaObj);				
+        DataStore.m_mediaTags = tags;
+		TagsSidebarFrame.onSelectTag(DataStore.m_currentTag);
+	},
+
+	// ////////////////////////////////////////////////////////////////////////////
+		
+	/**
+	* Respond to the user selecting a menu item
+	*/
+	onMenuItem : function(item, selectedElement){
+				
+		$('#tagMenu').hide();
+		
+		var divID = $(selectedElement).attr('id');		
+		var name = $('#'+divID + ' .tag_name').html();		
+		var tag = divID.substr(4);
+				
+		// Process events related to folders...					
+		if (item == 'rename_tag'){
+			TagsSidebarFrame.makeTagNameEditable(tag);
+		}
+		else if (item == 'delete_tag'){		
+			AthenaDialog.confirm("Are you sure you want to delete this tag? This will not delete any of your images, just this tag", function(){TagsSidebarFrame.deleteTag(tag);});
+		}
+				
+	},	
+
+	// ////////////////////////////////////////////////////////////////////////////
+
+	makeTagNameEditable : function(tag){
+		
+		var divID = '#tag_' + tag;
+		var name = $(divID + ' .tag_name').html();
+		
+		$(divID).attr('onclick','');
+
+		$(divID + ' .tag_name').html("<input id='tag_name_edit' style='width:100px' type='text' value='"+name+"' onblur='TagsSidebarFrame.paintTags()'/>");
+		
+		$("#tag_name_edit").keypress(function (e) {
+			if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+				TagsSidebarFrame.renameTag(tag, $("#tag_name_edit").val());
+			}
+	    });
+		
+		$("#tag_name_edit").focus();
+	},
+		
+	// ////////////////////////////////////////////////////////////////////////////
+		
+	onSelectTag : function(tag){
+		
+		DataStore.m_currentTag = tag;
+		TagsSidebarFrame.paintTags();				
+
+		switch(ssMain.view){			
+			case ssMain.VIEW_GALLERIES : GalleriesFrame.repaint(); break;
+			case ssMain.VIEW_FILES : FilesFrame.onSelectFolder(); break;
+		}
+		
+	},
+			
+	// ////////////////////////////////////////////////////////////////////////////
+
+	deleteTag : function(tag){
+		MediaAPI.deleteMediaTag(DataStore.m_siteID, tag, TagsSidebarFrame.onTagDeleted)
+	},
+	
+	onTagDeleted : function(newTagList){
+        
+        DataStore.m_mediaTags = newTagList;
+        
+        if (DataStore.m_mediaTag != undefined && DataStore.m_mediaTag != null && DataStore.m_mediaTag.length > 0){
+        	DataStore.m_currentTag = DataStore.m_mediaTags[0];
+			TagsSidebarFrame.onSelectTag(DataStore.m_currentTag);
+        }
+        else {
+			TagsSidebarFrame.onSelectTag('');
+        }
+        		
+	},
+					
+	// ////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Rename a folder
+	*/
+	renameTag : function(oldTagName, newTagName){
+	
+		// Check to see if this new name is not in use
+		for (var i=0; i<DataStore.m_mediaTags.length; i++){
+			if (DataStore.m_mediaTags[i] == newTagName){
+				AthenaDialog.alert("Sorry, you already have a tag with that name!");
+				return;
+			}
+		}
+		
+		TagsSidebarFrame.m_newTag = newTagName;
+		MediaAPI.renameMediaTag(DataStore.m_siteID, oldTagName, newTagName, TagsSidebarFrame.onTagRenamed);
+	},
+	
+	onTagRenamed : function(tags){
+        DataStore.m_mediaTags = tags;
+		TagsSidebarFrame.onSelectTag(TagsSidebarFrame.m_newTag);
+	}			
 
 }
 /**
@@ -7739,482 +9542,537 @@ var SidebarFrame = {
 * 
 * @since 27th July, 2010
 */
-var PagesFrame = {
-
-    pageObj : false,
-
-    // ////////////////////////////////////////////////////////////////////////////
+var FilesFrame = {
+	
+	/** Current sub-frame mode, 'upload', 'edit_image' */
+	m_mode : '',
+	
+	/** Images are divided into pages so we can fit the right number on the screen */
+    m_currentImagePage : 0,
+    
+    /** Max number of images per page */    
+    m_imagesPerPage : 50,
+    
+    /** Number of image pages */
+    m_numberImagePages : 0,
+    
+	/** List of images based on the current folder selection */	
+	m_imageList : '',
+    
+    /** Flag to determine if we have done a full repaint or not */	
+    painted : false,
+	
+    // ////////////////////////////////////////////////////////////////////////
 
     init : function(){
+        FilesFrame.painted = false;
+        
+		$('#apollo_image_custom_tags').keyup(function(e) {
+			//alert(e.keyCode);
+			if(e.keyCode == 13) {
+				FilesFrame.addMediaTag();
+			}
+		}); 
+		       
     },
 	
-    // ////////////////////////////////////////////////////////////////////////////
-
+    // ////////////////////////////////////////////////////////////////////////
+	
     repaint : function(){
-		
-		$('#postTitle').hide();
-		$('#pageTitle').show();
-		
-        if (DataStore.m_pageList.length == 0){
-            AthenaDialog.backgroundMessage("You currently have no pages, you can add a post using the side-bar");
-            return;
-        }
-				
-		//oUtil.obj.onKeyPress = PagesFrame.onContentKeyPress;
-        var pageObj = DataStore.getCurrentPage();
-        PagesFrame.repaintData(pageObj);								
-    },
-
-    // ////////////////////////////////////////////////////////////////////////////
-
-    repaintData : function(pageObj){
-		
-         $('#postSettings').hide();
-         $('#pageSettings').show();
-
-        oUtil.obj.css = DataStore.m_theme.cms_page_css;
-        oUtil.obj.loadHTML(pageObj.content);
-
-        //$('#pageContentEditor').html(pageObj.content);
-        $('#pageTitle').val(pageObj.title);
-        $('#pageBrowserTitle').val(pageObj.browser_title)
-        $('#pageSlug').html(pageObj.slug);
-        $('#pageLastEdit').html(pageObj.last_edit);
-        $('#pageCreated').html(pageObj.created);		
-        $('#pageStatusSelector').val(pageObj.status);
-        $('#pageParent').val(pageObj.parent_page_id);
-        $('#pageTemplate').val(pageObj.template);
-        $('#pageOrder').val(pageObj.page_order);
-        $('#pageDesc').val(pageObj.description);
-
-        var txt = "<select id='pageTemplate' onchange=\"PagesFrame.onChange(); PagesFrame.paintThemeParas();\">";
-        for (var i=0; i<DataStore.m_templateList.length; i++){
-            if (DataStore.m_templateList[i].template_file == pageObj.template){
-                txt += "<option value='"+DataStore.m_templateList[i].template_file+"' selected>"+DataStore.m_templateList[i].template_name+"</option>";
-            }
-            else {
-                txt += "<option value='"+DataStore.m_templateList[i].template_file+"'>"+DataStore.m_templateList[i].template_name+"</option>";
-            }
-        }
-        txt += "</select>";
-        
-        $('#pageTemplateWrapper').html(txt);
-
-        //PagesFrame.updateStatusColor();
-				
-        // Paint the parent pages...
-        PagesFrame.paintParentPages(pageObj);
 					
-        PagesFrame.paintThemeParas();
-        PagesFrame.updatePageLink(pageObj);
-						
-    },
-	
-    // ////////////////////////////////////////////////////////////////////////////
-
-    updatePageLink : function(pageObj){
-        $('#pageLink').html("View Page");
-        if (pageObj.path == "") pageObj.path = "/";
-        $('#pageLink').attr('href', 'http://' + defines.domain + pageObj.path + pageObj.slug);
-    },
-	
-    // ////////////////////////////////////////////////////////////////////////////
-	
-    updateStatusColor : function(){
-				
-        var status = $('#pageStatusSelector').val();
-		
-        $('#pageStatusSelector').removeClass('status_draft');
-        $('#pageStatusSelector').removeClass('status_private');
-        $('#pageStatusSelector').removeClass('status_public');
-		
-        switch (status){
-            case 'Draft':
-                $('#pageStatusSelector').addClass('status_draft');
-                break;
-            case 'Private':
-                $('#pageStatusSelector').addClass('status_private');
-                break;
-            case 'Published':
-                $('#pageStatusSelector').addClass('status_public');
-                break;
-        }
-    },
-	
-    // ////////////////////////////////////////////////////////////////////////////
-
-    /**
-    * Paint any special theme paras associated with the chosen template
-    */
-    paintThemeParas : function(){	
-        var templateName = $('#pageTemplate').val();
-        var txt = PagesFrame.getThemeParasHTML(templateName, 0);
-        if (txt != ""){
-        	txt = "<p><strong>Custom Parameters</strong></p>" + txt;
-        }
-        $('#apollo_page_theme_paras').html(txt);
-    },
-
-    // ////////////////////////////////////////////////////////////////////////////
-
-    m_themeParaID : 0,
-	
-    selectColorPara : function(themeParaID, paraVal){
-        PagesFrame.m_themeParaID = themeParaID;
-        ColorPickerDialog.show('#apollo_color_picker', paraVal, PagesFrame.onParaSelected)
-    },
-	
-    selectImagePara : function(themeParaID){
-        PagesFrame.m_themeParaID = themeParaID;
-        ImagePickerDialog.show('#apollo_image_picker', PagesFrame.onParaSelected)
-    },
-	
-    // ////////////////////////////////////////////////////////////////////////////
-
-    onParaSelected : function(newParaVal){
-        var page_id = DataStore.m_currentPageID;        
-        MediaAPI.setPagePara(PagesFrame.m_themeParaID, newParaVal, page_id, PagesFrame.onPagesParaChanged);
-    },
-	
-    // ////////////////////////////////////////////////////////////////////////////
-
-    onPagesParaChanged : function(theme_para_id, new_value, page_id){
-        
-        //alert("Theme:" + theme_para_id + " Val:" + new_value + "Page ID:" + page_id);
-        
-        //location.href = location.href;
-        DataStore.updateSitePara(theme_para_id, page_id, new_value);
-
-        // Update para in data store
-        var paraFound = false;
-        for (var i=0; i<DataStore.m_siteParaList.length; i++){
-            if (DataStore.m_siteParaList[i].theme_para_id == theme_para_id){
-                DataStore.m_siteParaList[i].para_value = new_value;
-                paraFound = true;
-            }
-        }
-
-        // If we didn't find the para, it must be a new para (that wasn't set before)
-        if (!paraFound){
-            var temp = new Object();
-            temp.theme_para_id = theme_para_id;
-            temp.para_value = new_value;
-            temp.page_id = page_id;
-            DataStore.m_siteParaList.push(temp);
-        }
-
-        // Now repaint...        
-        PagesFrame.repaint();
-    },
-	
-    // ////////////////////////////////////////////////////////////////////////////
-	
-   	/**
-     * Get the html for editing the theme paras for the given template name.
-     * If you set the template name to 'All' it will return the global paras
-     * @param string templateName
-     */
-    getThemeParasHTML : function(templateName, blogParas){
-        
-        var theme_para_list = DataStore.getPageThemeParas(templateName);
-
-        var txt = "";
-        var noParas = 0;
-
-        for (var i=0; i<theme_para_list.length; i++){
-
-			if ((blogParas == 1 && theme_para_list[i].is_blog_para == 1) || (blogParas == 0 && theme_para_list[i].is_blog_para == 0)){
-			
-	            var pageID = DataStore.m_currentPageID;
-	            if (templateName == 'all'){
-	                pageID = 0;
-	            }
-	            var paraVal = DataStore.getSiteParaValue(pageID, theme_para_list[i].id);
-	
-	            // 'email','image','gallery','font-family','favicon','font-size','color','text','small-int','multi-gallery'
-	            switch(theme_para_list[i].para_type){
-	
-	                case 'favicon':
-	                case 'image':
-	
-	                    onclick = "PagesFrame.selectImagePara("+theme_para_list[i].id+")";
-	
-	                    txt += "<table border='0'>";
-	                    txt += "<tr valign='top'>";
-	                    txt += "    <td width='40px'>";
-	                    var image_url = '';
-	                    if (paraVal){
-	                        var image = DataStore.getImage(parseInt(paraVal));
-	                        if (image){
-	                            image_url = image.thumb_url
-	                            }
-	                    }
-	                    txt += "<img src='"+image_url+"' class='thumbBox' width='30px' height='30px' onclick=\""+onclick+"\" >";
-	                    txt += "    </td>";
-	
-	                    txt += "    <td>";
-	                    txt += "        <span class='paraTitle'>"+theme_para_list[i].description+"</span>";
-	                    txt += "        <span class='paraDesc'>"+theme_para_list[i].help_text+"</span>";
-	                    //txt += "        <button class='save_button' onclick=\""+onclick+"\" style='font-size:10px'>Change</button>";
-	                    txt += "    </td>";
-	                    txt += "</tr>";
-	                    txt += "</table>";
-	
-	                    noParas++;
-	
-	                    break;
-	
-	                case 'color':
-	
-	                    onclick = "PagesFrame.selectColorPara("+theme_para_list[i].id+", '"+paraVal+"')";
-	
-	                    txt += "<table border='0'>";
-	                    txt += "<tr valign='top'>";
-	                    txt += "    <td width='40px'>";
-	                    txt += "        <div class='colorBox' style='background-color:#"+paraVal+";' onclick=\""+onclick+"\"></div>";
-	                    txt += "    </td>";
-	
-	                    txt += "    <td>";
-	                    txt += "        <span class='paraTitle'>"+theme_para_list[i].description+"</span>";
-	                    txt += "        <span class='paraDesc'>"+theme_para_list[i].help_text+"</span>";
-	                    txt += "    </td>";
-	                    txt += "</tr>";
-	                    txt += "</table>";
-	
-	                    noParas++;
-	
-	                    break;
-	
-	                case 'email':
-	                    break;
-	
-	                case 'text':
-	                    break;
-	
-	                case 'small-int':
-	                    break;
-	
-	                case 'font-family':
-	                    break;
-	
-	                case 'font-size':
-	                    break;
-	
-	                case 'multi-gallery':
-	                case 'gallery':
-	                    break;
-	            }
-
-			} 
-
-        }
-
-        if (noParas > 0){            
-            txt = "<table border='0' width='100%'>" + txt + "</table><br/>";
-        }
-
-        return txt;
-
-    },
-    	
-    // ////////////////////////////////////////////////////////////////////////////
-	
-    /**
-	* Paint the parent pages. Do not allow a user to select a parent page that is itself or
-	* one of its own children 
-	*/
-    paintParentPages : function(pageObj){
-	
-        var page_id = DataStore.m_currentPageID;
-		
-        var txt = '';
-        txt += "<select id='pageParent' onchange=\"PagesFrame.onChange()\">";
-        txt += "    <option value='0'>(none)</selected>";
-		
-        for (var i=0; i<DataStore.m_pageList.length; i++){
-			
-            var isChild = DataStore.isChildOff(page_id, DataStore.m_pageList[i].id);
-            //var isChild = false;
-			
-            if (DataStore.m_pageList[i].id != pageObj.id && !isChild){
-                if (DataStore.m_pageList[i].id == pageObj.parent_page_id){
-                    txt += "    <option value='"+DataStore.m_pageList[i].id+"' selected>"+DataStore.m_pageList[i].title+"</selected>";
-                }
-                else {
-                    txt += "    <option value='"+DataStore.m_pageList[i].id+"'>"+DataStore.m_pageList[i].title+"</selected>";
-                }
-            }
-        }
-        txt += "</select>";
-		
-        $('#parentPageContents').html(txt);
-    },
-	
-    // ////////////////////////////////////////////////////////////////////////////
-
-    /**
-	* Delete the page!
-	*/
-    onDeletePage : function(){
-        AthenaDialog.confirm("Are you sure you want to delete this page?", function(){
-            PagesFrame.onDoDelete();
-        });
-    },
-	
-    onDoDelete : function(){
-        MediaAPI.deletePage(DataStore.m_siteID, DataStore.m_currentPageID, PagesFrame.onPageDeleted);
-    },
-	
-    onPageDeleted : function(page_id){
-        DataStore.deletePage(page_id);
-        if (DataStore.m_pageList.length > 0){
-            DataStore.m_currentPageID = DataStore.m_pageList[0].id;
+        if (!FilesFrame.painted){
+            FilesFrame.fullRepaint();
+            FilesFrame.painted = true;
         }
         else {
-            DataStore.m_currentPageID = 0;
+            FilesFrame.repaintData();
         }
-        PagesFrame.repaint();
-        PagesSidebarFrame.repaint();
+					
+		ssMain.onResize();					
     },
-		
+
     // ////////////////////////////////////////////////////////////////////////////
 
 	/**
-	* Called whenever any page information is changed
-	*/	
-	onChange : function(){
-
-		//Logger.error('onchange!');
-
-        var page_id = DataStore.m_currentPageID;			
-        var originalPage = DataStore.getPage(page_id);
-        var parent_id = $('#pageParent').val();
-		        
-        var pageDepth = DataStore.getPageDepth(DataStore.m_currentPageID);
-			
-        // Check what the new max depth would be.....
-		
-        // Need to get the root page for this branch
-		
-        var old_parent_id = originalPage.parent_page_id;
-        originalPage.parent_page_id = parent_id;
-        DataStore.updatePage(originalPage);
-		
-        try {
-            //var newDepth = DataStore.getPageDepth(rootPage.id);
-            var newDepth = DataStore.getMaxDepth();
-        }
-        catch (e){
-            var newDepth = 99;
-        }
-		
-        // Revert the original back
-        originalPage.parent_page_id = old_parent_id;
-        DataStore.updatePage(originalPage);
-				
-        if ((originalPage.parent_page_id != parent_id) && (newDepth > DataStore.m_theme.max_page_depth)){
-            AthenaDialog.alert("Sorry, your theme does not support page depths of more than " +  DataStore.m_theme.max_page_depth + ", please choose another parent page!");
-            return;
-        }
+	* Do a full repaint. In this case, we don't want to repaint the flash upload unless we have to!
+	*/
+    fullRepaint : function(){
+    
+		FilesFrame.m_mode = 'upload'; 
+        FilesFrame.paintUploader();
+        FilesFrame.repaintData();          
         
-        // Update the page
-        originalPage.content = oUtil.obj.getXHTMLBody();		
-        originalPage.title = $('#pageTitle').val();
-        originalPage.browser_title = $('#pageBrowserTitle').val();        
-        originalPage.status = $('#pageStatusSelector').val();
-        originalPage.parent_page_id = $('#pageParent').val();
-        originalPage.template = $('#pageTemplate').val();
-        originalPage.page_order = $('#pageOrder').val();
-        originalPage.description = $('#pageDesc').val();
-        originalPage.slug = AthenaUtils.encodeSlug(originalPage.title);
-        originalPage.is_homepage = 0;
+		$('.more_link').disableSelection();
+		$('.more_link').noContext();
         
-	    DataStore.updatePage(originalPage);
-        PagesSidebarFrame.repaint();        
-        	
+    },
+
+    // ////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Just repaint the data
+	*/
+    repaintData : function(){
+                
+        if (SidebarFrame.m_folderTagMode){
+			FilesFrame.m_imageList = DataStore.getImagesForCurrentTag();
+        }
+        else {
+			FilesFrame.m_imageList = DataStore.getImagesForCurrentFolder();
+        }        
+		FilesFrame.calcImagePages();
+
+        if (FilesFrame.m_mode == 'edit_image'){
+	        FilesFrame.onSelectImage(FilesFrame.m_currentImageID);
+        }
+        else {
+	        FilesFrame.onShowUploader();
+        }
+		
+		FilesFrame.paintImages();		
+		
+                /*
+
+		var prevMode = FilesFrame.m_mode;
+
+        if (FilesFrame.m_mode == 'edit_image'){
+			FilesFrame.m_mode = 'edit_image'; 
+	        FilesFrame.onSelectImage(FilesFrame.m_currentImageID);
+        }
+        else {
+			FilesFrame.m_mode = 'upload'; 
+	        FilesFrame.onShowUploader();
+        }
+                
+		// If the mode has changed, we need to update the current images being
+		// dispalyed as the area used for painting images has changed size
+		if (prevMode != FilesFrame.m_mode){
+			FilesFrame.calcImagePages();
+			FilesFrame.paintImages();		
+		}
+	*/	        
+    },
+		
+    // ////////////////////////////////////////////////////////////////////////////
+	
+	onSelectFolder : function(){
+		FilesFrame.m_currentImagePage = 0;
+		FilesFrame.repaintData();
+        FilesFrame.onShowUploader();
 	},
 	
-	m_contentChangedTO : '',
-	
-	/**
-	* Called whenever is key is pressed in the content editor. We want to wait until the user has stopped
-	* typing before we submit changes
-	*/
-	onContentKeyPress : function(){
-				
-		if (PagesFrame.m_contentChangedTO != ''){
-			// Still typing, so clear timeout and reset
-			clearTimeout(PagesFrame.m_contentChangedTO);
+    // ////////////////////////////////////////////////////////////////////////////
+
+	showPrevImages : function(){
+
+		FilesFrame.m_currentImagePage--;
+		
+		//var noPages = Math.ceil(FilesFrame.m_imageList.length / FilesFrame.m_imagesPerPage);
+		
+		if (FilesFrame.m_currentImagePage < 0){
+			FilesFrame.m_currentImagePage = FilesFrame.m_numberImagePages - 1;
 		}
 		
-		PagesFrame.m_contentChangedTO = setTimeout(PagesFrame.onChange, 500);
+		//Logger.error(FilesFrame.m_currentImagePage + " / " + noPages);
+		
+		FilesFrame.paintImages();		
+
 	},
 	
     // ////////////////////////////////////////////////////////////////////////////
 
-    /**
-	* Save all the users changes to the site
-	*/
-	/*
-    onSavePage : function(){
-			
-        var page_id = DataStore.m_currentPageID;
-			
-        originalPage = DataStore.getPage(page_id);
+	showNextImages : function(){
+
+		FilesFrame.m_currentImagePage++;
+
+		//m_numberImagePagesvar noPages = Math.ceil(FilesFrame.m_imageList.length / FilesFrame.m_imagesPerPage);
+
+		if (FilesFrame.m_currentImagePage >= FilesFrame.m_numberImagePages){
+			FilesFrame.m_currentImagePage = 0;
+		}
+	
+		//Logger.error(FilesFrame.m_currentImagePage + " / " + noPages);
 		
-        var content = oUtil.obj.getXHTMLBody();
+		FilesFrame.paintImages();		
 		
-        var title = $('#pageTitle').val();
-        var status = $('#pageStatusSelector').val();
-        var parent_id = $('#pageParent').val();
-        var template = $('#pageTemplate').val();
-        var order = $('#pageOrder').val();
-        var desc = $('#pageDesc').val();
+	},	
+	
+    // ////////////////////////////////////////////////////////////////////////////
+	
+    updateFolderName : function(name){
+    //$('#apollo_title_folder_name').html(name);
+    },
+
+    // ////////////////////////////////////////////////////////////////////////
+    //
+    // Image Editor
+    //
+    // ////////////////////////////////////////////////////////////////////////
+
+	m_currentImageID : 0,
+	
+    onSelectImage : function(image_id){		
+                
+		FilesFrame.m_currentImageID = image_id;  
         
-        var pageDepth = DataStore.getPageDepth(DataStore.m_currentPageID);
-        var slug = AthenaUtils.encodeSlug(title);
-        //var path = DataStore.getPagePath();
-        var ishome = 0;
-			
-        // Check what the new max depth would be.....
-		
-        // Need to get the root page for this branch
-		
-        var old_parent_id = originalPage.parent_page_id;
-        originalPage.parent_page_id = parent_id;
-        DataStore.updatePage(originalPage);
-		
-        try {
-            //var newDepth = DataStore.getPageDepth(rootPage.id);
-            var newDepth = DataStore.getMaxDepth();
+        // If this image id does not exist, then select the first image for
+        // the current image list
+        if (!DataStore.getImage(image_id)){
+        	image_id = FilesFrame.m_imageList[0].id;	
         }
-        catch (e){
-            var newDepth = 99;
-        }
-		
-        // Revert the original back
-        originalPage.parent_page_id = old_parent_id;
-        DataStore.updatePage(originalPage);
-				
-        if ((originalPage.parent_page_id != parent_id) && (newDepth > DataStore.m_theme.max_page_depth)){
-            AthenaDialog.alert("Sorry, your theme does not support page depths of more than 3, please choose another parent page!");
+                
+        var imageData = DataStore.getImage(image_id);
+
+        if (!imageData) {
+            AthenaDialog.error('Error, could not find image!');
             return;
         }
-						
-        MediaAPI.updatePage(DataStore.m_siteID, DataStore.m_currentPageID, title, content, status, template, parent_id, slug, order, ishome, desc, PagesFrame.onPageSaved)
-				
-    },
+        
+        // Clear values
+        $('#apollo_image_title').val("");
+        $('#apollo_image_date').val("");
+        $('#apollo_image_size').val("");
+        $('#apollo_image_desc').val("");
+        $('#apollo_image_tags').val("");
+        $('#apollo_image_url').attr('src', '');
+        
+        $('#imageEditContent').show();
+        $('#flashUploderContent').hide();		
+        $('#imageEditContent').width(500);		
+        
+        
+        //ImageEditFrame.paint('#imageInfoContent', image_id);	
+        									
+        var thumb_url = imageData.thumb_url;
+        var img_width = imageData.width;
+        var img_height = imageData.height;
+        var image_folder_id = imageData.folder_id;
+        var added_date = imageData.date_added;	// UTC
+
+        var img_title = imageData.title;
+        var desc = imageData.description;
+        var alt_text = imageData.tags;
+        var image_url = imageData.file_url;        
+        
+        var max_img_width = $('#imageEditContent').innerWidth() - 20;
+        var max_img_height = 0.4*$(window).height();    
+                                
+        $('#apollo_image_title').val(img_title);
+        $('#apollo_image_date').val(added_date + " (GMT)");
+        $('#apollo_image_size').val(img_width + "px by " + img_height + "px");
+        $('#apollo_image_desc').val(desc);
+        $('#apollo_image_tags').val(alt_text);
+        
+        $('#apollo_image_url').css('max-width', max_img_width);
+        $('#apollo_image_url').css('max-height', max_img_height);
+        $('#apollo_image_url').attr('src', image_url);
+        
+        // Paint tags...
+        var txt = "";
+        $('#apollo_image_custom_tag_list').html("");
+        
+        if (imageData.media_tags != undefined && imageData.media_tags != null){
+	        for (var i=0; i<imageData.media_tags.length; i++){
+	            var onclick = "FilesFrame.deleteImageTag(\""+imageData.media_tags[i]+"\")";
+		        txt += "<div class='postTagCatLine'><span class='postTagCat'>"+imageData.media_tags[i]+"</span><span class='postRemoveTagCat' onclick='"+onclick+"'></span></div>";
+	        }
+			$('#apollo_image_custom_tag_list').html(txt);
+        }
+                
+        // Update auto-completer        
+        $('#apollo_image_custom_tags').autocomplete('destroy');		
+        if (DataStore.m_mediaTags != undefined && DataStore.m_mediaTags != null){
+	        $("#apollo_image_custom_tags").autocomplete({source: DataStore.m_mediaTags});          
+        }
+                        
+		var prevMode = FilesFrame.m_mode;
+		FilesFrame.m_mode = 'edit_image'; 
+		
+		// If the mode has changed, we need to update the current images being
+		// dispalyed as the area used for painting images has changed size
+		if (prevMode != 'edit_image'){
+			FilesFrame.calcImagePages();
+			FilesFrame.paintImages();		
+		}
+		     
+    },	
 	
-    onPageSaved : function(pageObj){
-        DataStore.updatePage(pageObj);
-        PagesFrame.repaint();
-        PagesSidebarFrame.repaint();
-    },
-*/
     // ////////////////////////////////////////////////////////////////////////////
 
-    saveChildPages : function(){
-    }
+	/**
+	* Called whenever something changes on the edit image sub-frame. Stores the content locally
+	* which is then stored to the server by the autosave feature
+	*/	
+	onImageEditorChange : function(){
+	
+        var mediaObj = DataStore.getImage(FilesFrame.m_currentImageID);
+        mediaObj.title = $('#apollo_image_title').val();        
+        mediaObj.description = $('#apollo_image_desc').val();        
+        mediaObj.tags = $('#apollo_image_tags').val(); 
+        
+        //alert(FilesFrame.m_currentImageID + " = " + mediaObj.description);           
+        DataStore.updateMedia(mediaObj, true);
+	},
+
+	// ////////////////////////////////////////////////////////////////////////////
+
+	deleteImageTag : function(tag){
+		MediaAPI.removeMediaTag(DataStore.m_siteID, FilesFrame.m_currentImageID, tag, FilesFrame.onMediaTagChanged)
+	},
+		
+	// ////////////////////////////////////////////////////////////////////////////
+
+	addMediaTag : function(){
+		var csvtags = $('#apollo_image_custom_tags').val();
+        MediaAPI.addMediaCSVTags(DataStore.m_siteID, FilesFrame.m_currentImageID, csvtags, FilesFrame.onMediaTagChanged);
+	},
+			
+    onMediaTagChanged : function(mediaObj, tags){        
+        DataStore.updateMedia(mediaObj);				
+        DataStore.m_mediaTags = tags;
+        $('#apollo_image_custom_tags').val('');		                                                                                     	       		
+        FilesFrame.repaint();        
+    },	
+    		
+    // ////////////////////////////////////////////////////////////////////////////
+
+	/** 
+	* Hide the image edit sub-frame
+	*/
+    onCancel : function(){
+        FilesFrame.onShowUploader();
+    },
+	
+    // ////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	* Delete a image
+	*/
+    onDeleteImage : function(media_id){
+    	
+    	var media_id = FilesFrame.m_currentImageID;	
+    	
+        AthenaDialog.confirm("Are you sure you want to delete this image? This can not be undone!", function(){
+            FilesFrame.onDoDelete(media_id);
+        });
+    },
+
+    onDoDelete : function(media_id){
+        MediaAPI.deleteMedia(DataStore.m_siteID, media_id, FilesFrame.onDeleted);
+    },
+
+    onDeleted : function(media_id){
+        // Update data store
+        DataStore.deleteMedia(media_id);
+        FilesFrame.repaint();
+        FilesFrame.onShowUploader();
+    },	
+		
+    // ////////////////////////////////////////////////////////////////////////
+    //
+    // File Uploader
+    //
+    // ////////////////////////////////////////////////////////////////////////
+	
+    onShowUploader : function(){        
+    
+        $('#imageEditContent').hide();
+        $('#flashUploderContent').show();		
+        $('#flashUploderContent').width(200);
+        
+		var prevMode = FilesFrame.m_mode;
+		FilesFrame.m_mode = 'upload'; 
+        
+		// If the mode has changed, we need to update the current images being
+		// dispalyed as the area used for painting images has changed size
+		if (prevMode != 'upload'){
+			FilesFrame.calcImagePages();
+			FilesFrame.paintImages();		
+		}
+        
+    },
+    	
+    // ////////////////////////////////////////////////////////////////////////
+    	
+    paintUploader : function(){
+
+        //FlashUploader.paint('#flashUploader');
+
+        var settings = {
+            flash_url : defines.code_url + "js/3rdparty/SWFUpload/Flash/swfupload.swf",
+            upload_url: defines.code_url + "php/ProcessUpload.php",
+            post_params: {
+                "PHPSESSID" : defines.session_id,
+                "folder_id": DataStore.m_currentFolderID,
+                "site_id": DataStore.m_siteID
+                },
+
+            // File Upload Settings
+            file_size_limit : "102400",	// 100MB
+            file_types : "*.jpg; *.gif; *.png; *.jpeg;",
+            file_types_description : "All Files",
+            file_upload_limit : "0",
+            file_queue_limit : "0",
+			
+            custom_settings : {
+                progressTarget : "flashUploaderProgress",
+                cancelButtonId : "flashUploadCancelButton"
+            },
+
+            debug: false,
+
+            // Button settings
+            button_image_url: defines.root_url + "images/FileUploadButton.png",
+            button_width: "61",
+            button_height: "22",
+            button_placeholder_id: "flashUploadButton",
+            //			button_text: '<span class="theFont">Hello</span>',
+            //			button_text_style: ".theFont { font-size: 16; }",
+            //			button_text_left_padding: 12,
+            //			button_text_top_padding: 3,
+			
+            // The event handler functions are defined in handlers.js
+            file_queued_handler 		: FlashUploader.fileQueued,
+            file_queue_error_handler 	: FlashUploader.fileQueueError,
+            file_dialog_complete_handler: FlashUploader.fileDialogComplete,
+            upload_start_handler 		: FlashUploader.uploadStart,
+            upload_progress_handler 	: FlashUploader.uploadProgress,
+            upload_error_handler 		: FlashUploader.uploadError,
+            upload_success_handler 		: FlashUploader.uploadSuccess,
+            upload_complete_handler 	: FlashUploader.uploadComplete,
+            queue_complete_handler 		: FlashUploader.queueComplete	// Queue plugin event
+        };
+				
+        var swfu = new SWFUpload(settings);
+		
+        $('#flashUploaderProgress').height( $('#FilesFrame').outerHeight() - $('.uploadControls').outerHeight() - 60 );
+    },
+
+    // ////////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Calculate number of images to display per page, we divide the images into 'pages' 
+	* so we don't oveflow the display
+	*/
+	calcImagePages : function(){
+
+    	var h = $(window).height() - 150;
+    	var w = 0;
+
+        if (FilesFrame.m_mode == 'edit_image'){
+	  		w = $('#FilesFrame').width() - 500;
+        }
+        else {
+	  		w = $('#FilesFrame').width() - 300;
+        }
+        
+    	// images per row = w / thumb_width
+    	// images per col = h / thumb_height
+    	// so.. images per page = (w/60) * (h/60) = (w*h)/(thumb_width*thumb_height)
+    	//    = (w*h) / (50*50) = (w*h) / 2500
+    	
+    	FilesFrame.m_imagesPerPage = Math.floor((w*h) / 4900);    
+        
+        
+		FilesFrame.m_numberImagePages = Math.ceil(FilesFrame.m_imageList.length / FilesFrame.m_imagesPerPage);
+        
+        if (FilesFrame.m_numberImagePages <= 1){
+        	$('.more_link').hide();
+        }
+        else {
+        	$('.more_link').show();
+        }
+                
+        //Logger.show();
+		//Logger.debug("Width: " + w + " Height: " + h);
+		//Logger.debug("Images per row: " + (w/70) + " per col: " + (h/70) + " per page: " + FilesFrame.m_imagesPerPage);
+	},
 			
     // ////////////////////////////////////////////////////////////////////////////
+    
+    paintImages : function(){
+		
+        $(".thumb").draggable('destroy');
+				
+		if (FilesFrame.m_imageList == ''){
+	        if (SidebarFrame.m_folderTagMode){
+				FilesFrame.m_imageList = DataStore.getImagesForCurrentTag();
+	        }
+	        else {
+				FilesFrame.m_imageList = DataStore.getImagesForCurrentFolder();
+	        }        
+			FilesFrame.calcImagePages();
+		}		
+				
+		var startIndex = FilesFrame.m_imagesPerPage * FilesFrame.m_currentImagePage;
+		var endIndex = Math.min(startIndex + FilesFrame.m_imagesPerPage, FilesFrame.m_imageList.length);
+		
+		//Logger.debug("Image page: " + FilesFrame.m_currentImagePage);
+				
+        var txt = "";
+    	
+		// Get the html for the selected images...
+        for (var i=startIndex; i<endIndex; i++){
+
+            var thumb_url = FilesFrame.m_imageList[i].thumb_url;
+            var post_id = FilesFrame.m_imageList[i].id;
+            var title = FilesFrame.m_imageList[i].title;
+            var thumb_width = FilesFrame.m_imageList[i].thumb_width;
+            var thumb_height = FilesFrame.m_imageList[i].thumb_height;
+            var width = FilesFrame.m_imageList[i].width;
+            var height = FilesFrame.m_imageList[i].height;
+
+        	txt += FilesFrame.getImageHTML(post_id, thumb_url, title, width, height, thumb_width, thumb_height);
+		}
+	
+	
+        if (txt == ""){
+            txt += "<div style='color:#444444;'>This folder is empty</div>";
+        }
+		
+        $('#apollo_folder_contents').html(txt);
+        $('#apollo_folder_contents').disableSelection();
+        $('#apollo_folder_contents').noContext();
+
+        //$(".thumb").rightClick( function(e) {FilesFrame.onRightClickImage(e, this);});
+				
+        // Make draggable
+        $(".thumb").draggable({
+            revert: true,
+            zIndex: 300
+        });		
+		
+    },
+
+    // ////////////////////////////////////////////////////////////////////////////
+	
+    getImageHTML : function(post_id, thumb_url, title, width, height, thumb_width, thumb_height){
+
+        var txt = "";
+        //var ph = (60 - height - 8)/2;
+		
+        var titleText = title + " (" + width + "px by " + height + "px)";
+
+        var onclick = "FilesFrame.onSelectImage('"+post_id+"')";
+       	var mt = 0;
+        if (thumb_height < 50){
+        	mt = (50 - thumb_height)/2;
+	        //alert(thumb_height + ", " + mt);
+        }
+        
+		
+        txt += "<div class='thumbwrapper' align='center' onclick=\""+onclick+"\">";
+        txt += "<span></span>"; // hacky-IE7 fix for vertical alignment
+        txt += "<img id='img_"+post_id+"' src='"+thumb_url+"' class='thumb' width='"+thumb_width+"px' height='"+thumb_height+"px' title='"+titleText+"' style='margin-top:"+mt+"px'/>";
+        txt += "</div>";
+        
+//        txt += "<div class="wraptocenter"><span></span><img src="..." alt="..."></div>";
+//        txt += "<div class='thumbwrapper'><span></span><img src="..." alt="..."></div>";
+
+
+        return txt;
+    }
+    
+    // ////////////////////////////////////////////////////////////////////////////
+	
 }

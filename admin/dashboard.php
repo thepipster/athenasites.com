@@ -39,7 +39,7 @@ Logger::debug("$domain has site_id = $site_id");
 	<?php
 	
 	
-		if (strpos("_" . $_SERVER['HTTP_HOST'], "apollo.local") > 0){
+		if (DEV_MODE){
 		
 			$base_dir = FILE_ROOT . "admin";
 			
@@ -49,6 +49,7 @@ Logger::debug("$domain has site_id = $site_id");
 				"$base_dir/code/js/3rdparty/jquery.advancedClick.js",				
 				"$base_dir/code/js/3rdparty/flot/jquery.flot.min.js",
 				"$base_dir/code/js/3rdparty/flot/jquery.flot.crosshair.js",
+				"$base_dir/code/js/3rdparty/jquery.typing-0.2.0.min.js",
 
 				// Settings...
 				"$base_dir/code/js/defines.js",
@@ -85,8 +86,8 @@ Logger::debug("$domain has site_id = $site_id");
 				"$base_dir/code/css/Dashboard.css"			
 			);
 			
-			ProductionBuilder::buildProductionJS($js_list, "$base_dir/code/js/prod_dashboard.js", true);
-			ProductionBuilder::buildProductionCSS($css_list, "$base_dir/code/css/prod_dashboard.css", true);
+			ProductionBuilder::buildProductionJS($js_list, "$base_dir/code/js/prod_dashboard.js", DO_MINIFY);
+			ProductionBuilder::buildProductionCSS($css_list, "$base_dir/code/css/prod_dashboard.css", DO_MINIFY);
 			
 		}	
 
@@ -118,8 +119,10 @@ Logger::debug("$domain has site_id = $site_id");
 <div id='apollo_loading_dialog'></div>
 <div id='apollo_loading_display' class='transparent_50' align="center"></div>
 
-<!-- Logo -->
+<div id='apollo_image_picker'></div>
+<div id='apollo_color_picker'></div>
 
+<!-- Logo -->
 <img id='apollo_logo' src='images/logo.png' height='35px'/>
 
 <!-- SideBar -->

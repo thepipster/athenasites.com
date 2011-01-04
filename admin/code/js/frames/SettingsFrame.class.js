@@ -307,14 +307,14 @@ var SettingsFrame = {
 	
     selectColorPara : function(themeParaID, paraVal){
         SettingsFrame.m_themeParaID = themeParaID;
-        ColorPickerDialog.show('#PagesFrameColorPicker', paraVal, SettingsFrame.onParaSelected)
+        ColorPickerDialog.show('#apollo_color_picker', paraVal, SettingsFrame.onParaSelected)
     },
 	
     // ////////////////////////////////////////////////////////////////////////////
 	
     selectImagePara : function(themeParaID){
         SettingsFrame.m_themeParaID = themeParaID;
-        ImagePickerDialog.show('#PagesFrameImagePicker', SettingsFrame.onParaSelected)
+        ImagePickerDialog.show('#apollo_image_picker', SettingsFrame.onParaSelected)
     },    
 	
   	// ////////////////////////////////////////////////////////////////////////////
