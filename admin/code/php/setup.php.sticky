@@ -8,5 +8,5 @@ define("database_verbose", false);
 //define("slave_host_2", "localhost");
 
 define("DEV_MODE", true);
-define("DO_MINIFY", false);
+define("DO_MINIFY", true);
 ?>
