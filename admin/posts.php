@@ -71,6 +71,7 @@ Logger::debug("$domain has site_id = $site_id");
 				"$base_dir/code/js/pages/Posts.class.js",
 				
 				// Remote API's...
+				"$base_dir/code/js/remoteapi/SystemAPI.class.js",
 				"$base_dir/code/js/remoteapi/BlogAPI.class.js",
 				"$base_dir/code/js/remoteapi/MediaAPI.class.js",
 				"$base_dir/code/js/remoteapi/GalleryAPI.class.js",

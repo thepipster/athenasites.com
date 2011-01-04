@@ -12,10 +12,6 @@ var Galleries = {
                 
         $('#GalleriesFrame').show();
                 
-        // Initialize the remote API's
-        MediaAPI.init();
-        GalleryAPI.init();
-
         // Setup the data store for the site
         DataStore.init(siteID);
 

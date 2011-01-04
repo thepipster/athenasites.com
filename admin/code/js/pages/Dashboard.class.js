@@ -12,11 +12,6 @@ var Dashboard = {
                 
         $('#DashboardFrame').show();
                 
-        // Initialize the remote API's
-        BlogAPI.init();
-        MediaAPI.init();
-        GalleryAPI.init();
-
         // Setup the data store for the site
         DataStore.init(siteID);
 

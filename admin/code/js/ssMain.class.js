@@ -25,6 +25,12 @@ var ssMain = {
         Logger.init('#debug_txt');
         //Logger.showOnError();
 
+        // Initialize the remote API's
+        SystemAPI.init();
+        BlogAPI.init();
+        MediaAPI.init();
+        GalleryAPI.init();
+
         // Start auto-save timer....
         setInterval ( "DataStore.save()", 5000 );
 
