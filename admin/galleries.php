@@ -36,63 +36,8 @@ Logger::debug("$domain has site_id = $site_id");
     <script src="code/js/3rdparty/jquery-1.4.2.min.js" type="text/javascript"></script>
     <script src="code/js/3rdparty/jquery-ui/jquery-ui-1.8.4.custom.min.js" type="text/javascript"></script>
 
-	<?php
-	
-	
-		if (DEV_MODE){
-		
-			$base_dir = FILE_ROOT . "admin";
-			
-			$js_list = array(
-			
-				// 3rd Party...
-				"$base_dir/code/js/3rdparty/jquery.advancedClick.js",				
-				"$base_dir/code/js/3rdparty/jquery.typing-0.2.0.min.js",
-
-				// Settings...
-				"$base_dir/code/js/defines.js",
-								
-				// Utils...
-				"$base_dir/code/js/utils/Logger.class.js",
-				"$base_dir/code/js/utils/AthenaDialog.class.js",
-				"$base_dir/code/js/utils/AthenaUtils.class.js",
-				
-				// Core....
-				"$base_dir/code/js/ssMain.class.js",
-				"$base_dir/code/js/DataStore.class.js",
-				
-				"$base_dir/code/js/pages/Galleries.class.js",
-				
-				// Remote API's...
-				"$base_dir/code/js/remoteapi/SystemAPI.class.js",
-				"$base_dir/code/js/remoteapi/BlogAPI.class.js",
-				"$base_dir/code/js/remoteapi/MediaAPI.class.js",
-				"$base_dir/code/js/remoteapi/GalleryAPI.class.js",
-				
-				// Dialogs...
-				"$base_dir/code/js/dialogs/AccountDialog.class.js",
-				
-				// Sub-Frames....
-				"$base_dir/code/js/subframes/FolderSidebarFrame.class.js",
-				"$base_dir/code/js/subframes/TagsSidebarFrame.class.js",	
-				"$base_dir/code/js/subframes/GalleriesSidebarFrame.class.js",
-				
-				// Frames....
-				"$base_dir/code/js/frames/SidebarFrame.class.js",
-				"$base_dir/code/js/frames/GalleriesFrame.class.js"
-			);
-	
-			$css_list = array(
-				"$base_dir/code/css/Athena.css",
-				"$base_dir/code/css/SideBar.css",
-				"$base_dir/code/css/GalleryFrame.css"			
-			);
-			
-			ProductionBuilder::buildProductionJS($js_list, "$base_dir/code/js/prod_galleries.js", DO_MINIFY);
-			ProductionBuilder::buildProductionCSS($css_list, "$base_dir/code/css/prod_galleries.css", DO_MINIFY);
-			
-		}	
-
+	<?php	
+		if (DEV_MODE) require_once("code/php/scripts/build_production.php");	
 	?>
 	
     <script src="code/js/prod_galleries.js?ver=1.0" type="text/javascript"></script>
