@@ -16,7 +16,7 @@ Logger::debug("$domain has site_id = $site_id");
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-    <title>ApolloSites Admin 1.0 | Blog</title>
+    <title>ApolloSites Admin 1.0 | Posts</title>
 
     <meta name="Description" content="" />
     <meta name="Keywords" content="" />
@@ -36,16 +36,18 @@ Logger::debug("$domain has site_id = $site_id");
     <script src="code/js/3rdparty/jquery-1.4.2.min.js" type="text/javascript"></script>
     <script src="code/js/3rdparty/jquery-ui/jquery-ui-1.8.4.custom.min.js" type="text/javascript"></script>
 
-        <!-- InnovaStudio -->
-        <script src="code/3rdparty/InnovaStudio/scripts/innovaeditor.js" type="text/javascript"></script>
+    <!-- InnovaStudio -->
+    <script src="code/3rdparty/InnovaStudio/scripts/innovaeditor.js" type="text/javascript"></script>
 
 	<?php	
-		if (DEV_MODE) require_once("code/php/scripts/build_production.php");	
-	?>
-	
-    <script src="code/js/prod_posts.js?ver=1.0" type="text/javascript"></script>
+		if (DEV_MODE) {
+			define('BUILD_MODE', 'posts');
+			require_once("code/php/scripts/build_production.php");	
+		}
+	?>	
 
-    <link rel="stylesheet" href="code/css/prod_posts.css?ver=1.0" type="text/css"/>
+	<script src='code/js/prod_posts.js?ver=1.0' type='text/javascript'></script>
+	<link rel='stylesheet' href='code/css/prod_posts.css?ver=1.0' type='text/css'/>
 
     <!-- Inline Style ////////////////////////////////////////////////////////////////// -->
 

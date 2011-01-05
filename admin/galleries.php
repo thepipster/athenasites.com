@@ -38,16 +38,13 @@ Logger::debug("$domain has site_id = $site_id");
 
 	<?php	
 		if (DEV_MODE) {
+			define('BUILD_MODE', 'galleries');
 			require_once("code/php/scripts/build_production.php");	
 		}
-		else {
 	?>
 	
-    <script src="code/js/prod_galleries.js?ver=1.0" type="text/javascript"></script>
-
-    <link rel="stylesheet" href="code/css/prod_galleries.css?ver=1.0" type="text/css"/>
-
-	<?php } ?>
+	<script src='code/js/prod_galleries.js?ver=1.0' type='text/javascript'></script>
+	<link rel='stylesheet' href='code/css/prod_galleries.css?ver=1.0' type='text/css'/>
 	
     <!-- Inline Style ////////////////////////////////////////////////////////////////// -->
 

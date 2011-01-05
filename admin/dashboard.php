@@ -37,12 +37,14 @@ Logger::debug("$domain has site_id = $site_id");
     <script src="code/js/3rdparty/jquery-ui/jquery-ui-1.8.4.custom.min.js" type="text/javascript"></script>
 
 	<?php	
-		if (DEV_MODE) require_once("code/php/scripts/build_production.php");	
+		if (DEV_MODE) {
+			define('BUILD_MODE', 'dashboard');
+			require_once("code/php/scripts/build_production.php");	
+		}
 	?>
-	
-    <script src="code/js/prod_dashboard.js?ver=1.0" type="text/javascript"></script>
 
-    <link rel="stylesheet" href="code/css/prod_dashboard.css?ver=1.0" type="text/css"/>
+	<script src='code/js/prod_dashboard.js?ver=1.0' type='text/javascript'></script>
+	<link rel='stylesheet' href='code/css/prod_dashboard.css?ver=1.0' type='text/css'/>
 
     <!-- Inline Style ////////////////////////////////////////////////////////////////// -->
 

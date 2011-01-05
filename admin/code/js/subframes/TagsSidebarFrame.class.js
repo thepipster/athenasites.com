@@ -95,12 +95,13 @@ var TagsSidebarFrame = {
 		for (var i=start_i; i<end_i; i++){
 
 			var tag = tagList[i];
+			var safe_tag = tagList[i].replace(/ /g, "--");
 						
 			if (tag == DataStore.m_currentTag){
-				txt += "<div onclick=\"TagsSidebarFrame.onSelectTag('"+tag+"')\" class='tag droppable_tag' id='tag_"+tag+"' title='' class='apollo_tag tag_with_menu'><img class='tag_icon' src='images/tag_icon_blue.png'><span class='tag_name selected'>"+tag+"</span></div>";
+				txt += "<div onclick=\"TagsSidebarFrame.onSelectTag('"+tag+"')\" class='tag droppable_tag' id='tag_"+safe_tag+"' title='' class='apollo_tag tag_with_menu'><img class='tag_icon' src='images/tag_icon_blue.png'><span class='tag_name selected'>"+tag+"</span></div>";
 			}
 			else {
-				txt += "<div onclick=\"TagsSidebarFrame.onSelectTag('"+tag+"')\" class='tag droppable_tag' id='tag_"+tag+"' title='' class='apollo_tag tag_with_menu'><img class='tag_icon' src='images/tag_icon_blue.png'><span class='tag_name'>"+tag+"</span></div>";
+				txt += "<div onclick=\"TagsSidebarFrame.onSelectTag('"+tag+"')\" class='tag droppable_tag' id='tag_"+safe_tag+"' title='' class='apollo_tag tag_with_menu'><img class='tag_icon' src='images/tag_icon_blue.png'><span class='tag_name'>"+tag+"</span></div>";
 			}	
 			
 		}
@@ -226,7 +227,7 @@ var TagsSidebarFrame = {
 	// ////////////////////////////////////////////////////////////////////////////
 
 	makeTagNameEditable : function(tag){
-		
+
 		var divID = '#tag_' + tag;
 		var name = $(divID + ' .tag_name').html();
 		
@@ -236,7 +237,9 @@ var TagsSidebarFrame = {
 		
 		$("#tag_name_edit").keypress(function (e) {
 			if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
-				TagsSidebarFrame.renameTag(tag, $("#tag_name_edit").val());
+				var tagStr = tag.replace(/--/g, " ");
+				var newTag = $("#tag_name_edit").val();
+				TagsSidebarFrame.renameTag(tagStr, newTag);
 			}
 	    });
 		
@@ -293,6 +296,7 @@ var TagsSidebarFrame = {
 		}
 		
 		TagsSidebarFrame.m_newTag = newTagName;
+		alert(oldTagName + ", " + newTagName);
 		MediaAPI.renameMediaTag(DataStore.m_siteID, oldTagName, newTagName, TagsSidebarFrame.onTagRenamed);
 	},
 	

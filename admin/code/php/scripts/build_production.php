@@ -6,8 +6,12 @@ require_once($discRoot . "/../setup.php");
 
 $base_dir = FILE_ROOT . "admin";
 
-if (!defined(DO_MINIFY)){
-	define(DO_MINIFY, true);
+if (!defined('DO_MINIFY')){
+	define('DO_MINIFY', true);
+}
+
+if (!defined('BUILD_MODE')){
+	define('BUILD_MODE', 'all');
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -53,27 +57,29 @@ $css_common_list = array(
 //
 // ////////////////////////////////////////////////////////////////////////////
 
+if (BUILD_MODE == 'dashboard' || BUILD_MODE == 'all'){
 
-$js_list = array(
-	// 3rd Party...
-	"$base_dir/code/js/3rdparty/flot/excanvas.min.js",
-	"$base_dir/code/js/3rdparty/flot/jquery.flot.min.js",
-	"$base_dir/code/js/3rdparty/flot/jquery.flot.crosshair.js",
-	// Utils...
-	"$base_dir/code/js/utils/StatViewer.class.js",			
-	// Frames....
-	"$base_dir/code/js/frames/DashboardFrame.class.js",
-	// Page
-	"$base_dir/code/js/pages/Dashboard.class.js"
-);
-
-$css_list = array(
-	"$base_dir/code/css/StatsFrame.css",			
-	"$base_dir/code/css/Dashboard.css"			
-);
-
-ProductionBuilder::buildProductionJS(array_merge($js_common_list, $js_list), "$base_dir/code/js/prod_dashboard.js", DO_MINIFY);
-ProductionBuilder::buildProductionCSS(array_merge($css_common_list, $css_list), "$base_dir/code/css/prod_dashboard.css", DO_MINIFY);
+	$js_list = array(
+		// 3rd Party...
+		"$base_dir/code/js/3rdparty/flot/excanvas.min.js",
+		"$base_dir/code/js/3rdparty/flot/jquery.flot.min.js",
+		"$base_dir/code/js/3rdparty/flot/jquery.flot.crosshair.js",
+		// Utils...
+		"$base_dir/code/js/utils/StatViewer.class.js",			
+		// Frames....
+		"$base_dir/code/js/frames/DashboardFrame.class.js",
+		// Page
+		"$base_dir/code/js/pages/Dashboard.class.js"
+	);
+	
+	$css_list = array(
+		"$base_dir/code/css/StatsFrame.css",			
+		"$base_dir/code/css/Dashboard.css"			
+	);
+	
+	ProductionBuilder::buildProductionJS(array_merge($js_common_list, $js_list), "$base_dir/code/js/prod_dashboard.js", DO_MINIFY);
+	ProductionBuilder::buildProductionCSS(array_merge($css_common_list, $css_list), "$base_dir/code/css/prod_dashboard.css", DO_MINIFY);
+}
 		
 // ////////////////////////////////////////////////////////////////////////////
 //
@@ -81,40 +87,43 @@ ProductionBuilder::buildProductionCSS(array_merge($css_common_list, $css_list), 
 //
 // ////////////////////////////////////////////////////////////////////////////
 	
+if (BUILD_MODE == 'posts' || BUILD_MODE == 'all'){
+	
+	$js_list = array(
+		// 3rd Party...
+	//	"$base_dir/code/3rdparty/InnovaStudio/scripts/innovaeditor.js",
+		"$base_dir/code/js/3rdparty/date.format.js",
+		"$base_dir/code/js/3rdparty/date.js",
+		"$base_dir/code/js/3rdparty/jquery.datePicker.js",
+		// Dialogs...
+		"$base_dir/code/js/dialogs/ImagePickerDialog.class.js",
+		"$base_dir/code/js/dialogs/ColorPickerDialog.class.js",
+		"$base_dir/code/js/dialogs/CommentsEditDialog.class.js",
+		// Sub-Frames....
+		"$base_dir/code/js/subframes/PostsSidebarFrame.class.js",
+		"$base_dir/code/js/subframes/ImageSelector.class.js",	
+		"$base_dir/code/js/subframes/ImageEditFrame.class.js",	
+		// Frames....
+		"$base_dir/code/js/frames/PostsFrame.class.js",
+		// Page
+		"$base_dir/code/js/pages/Posts.class.js"
+	);
+	
+	$css_list = array(			
+		"$base_dir/code/css/PagesFrame.css",
+		// "$base_dir/code/css/PostsFrame.css", Merged posts and pages, so no need of this style sheet
+		"$base_dir/code/colorpicker/css/colorpicker.css",
+		"$base_dir/code/css/datePicker.css",
+		"$base_dir/code/css/ImageEditDialog.css",
+		"$base_dir/code/css/ImagePickerDialog.css",
+		"$base_dir/code/css/CommentDialog.css",
+		"$base_dir/code/css/ImageEditFrame.css"
+	);
+	
+	ProductionBuilder::buildProductionJS(array_merge($js_common_list, $js_list), "$base_dir/code/js/prod_posts.js", DO_MINIFY);
+	ProductionBuilder::buildProductionCSS(array_merge($css_common_list, $css_list), "$base_dir/code/css/prod_posts.css", DO_MINIFY);		
 
-$js_list = array(
-	// 3rd Party...
-//	"$base_dir/code/3rdparty/InnovaStudio/scripts/innovaeditor.js",
-	"$base_dir/code/js/3rdparty/date.format.js",
-	"$base_dir/code/js/3rdparty/date.js",
-	"$base_dir/code/js/3rdparty/jquery.datePicker.js",
-	// Dialogs...
-	"$base_dir/code/js/dialogs/ImagePickerDialog.class.js",
-	"$base_dir/code/js/dialogs/ColorPickerDialog.class.js",
-	"$base_dir/code/js/dialogs/CommentsEditDialog.class.js",
-	// Sub-Frames....
-	"$base_dir/code/js/subframes/PostsSidebarFrame.class.js",
-	"$base_dir/code/js/subframes/ImageSelector.class.js",	
-	"$base_dir/code/js/subframes/ImageEditFrame.class.js",	
-	// Frames....
-	"$base_dir/code/js/frames/PostsFrame.class.js",
-	// Page
-	"$base_dir/code/js/pages/Posts.class.js"
-);
-
-$css_list = array(			
-	"$base_dir/code/css/PagesFrame.css",
-	// "$base_dir/code/css/PostsFrame.css", Merged posts and pages, so no need of this style sheet
-	"$base_dir/code/colorpicker/css/colorpicker.css",
-	"$base_dir/code/css/datePicker.css",
-	"$base_dir/code/css/ImageEditDialog.css",
-	"$base_dir/code/css/ImagePickerDialog.css",
-	"$base_dir/code/css/CommentDialog.css",
-	"$base_dir/code/css/ImageEditFrame.css"
-);
-
-ProductionBuilder::buildProductionJS(array_merge($js_common_list, $js_list), "$base_dir/code/js/prod_posts.js", DO_MINIFY);
-ProductionBuilder::buildProductionCSS(array_merge($css_common_list, $css_list), "$base_dir/code/css/prod_posts.css", DO_MINIFY);		
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 //
@@ -122,39 +131,43 @@ ProductionBuilder::buildProductionCSS(array_merge($css_common_list, $css_list), 
 //
 // ////////////////////////////////////////////////////////////////////////////
 
-$js_list = array(
-	// 3rd Party...
-//	"$base_dir/code/3rdparty/InnovaStudio/scripts/innovaeditor.js",
-	"$base_dir/code/js/3rdparty/date.format.js",
-	"$base_dir/code/js/3rdparty/date.js",
-	"$base_dir/code/js/3rdparty/jquery.datePicker.js",
-	// Dialogs...
-	"$base_dir/code/js/dialogs/ImagePickerDialog.class.js",
-	"$base_dir/code/js/dialogs/ColorPickerDialog.class.js",
-	"$base_dir/code/js/dialogs/CommentsEditDialog.class.js",
-	// Sub-Frames....
-	"$base_dir/code/js/subframes/PagesSidebarFrame.class.js",
-	"$base_dir/code/js/subframes/ImageSelector.class.js",	
-	"$base_dir/code/js/subframes/ImageEditFrame.class.js",	
-	// Frames....
-	"$base_dir/code/js/frames/PagesFrame.class.js",
-	// Page
-	"$base_dir/code/js/pages/Pages.class.js"
-);
+if (BUILD_MODE == 'pages' || BUILD_MODE == 'all'){
 
-$css_list = array(			
-	"$base_dir/code/css/PagesFrame.css",
-	// "$base_dir/code/css/PostsFrame.css", Merged posts and pages, so no need of this style sheet
-	"$base_dir/code/colorpicker/css/colorpicker.css",
-	"$base_dir/code/css/datePicker.css",
-	"$base_dir/code/css/ImageEditDialog.css",
-	"$base_dir/code/css/ImagePickerDialog.css",
-	"$base_dir/code/css/CommentDialog.css",
-	"$base_dir/code/css/ImageEditFrame.css"
-);
-
-ProductionBuilder::buildProductionJS(array_merge($js_common_list, $js_list), "$base_dir/code/js/prod_pages.js", DO_MINIFY);
-ProductionBuilder::buildProductionCSS(array_merge($css_common_list, $css_list), "$base_dir/code/css/prod_pages.css", DO_MINIFY);
+	$js_list = array(
+		// 3rd Party...
+	//	"$base_dir/code/3rdparty/InnovaStudio/scripts/innovaeditor.js",
+		"$base_dir/code/js/3rdparty/date.format.js",
+		"$base_dir/code/js/3rdparty/date.js",
+		"$base_dir/code/js/3rdparty/jquery.datePicker.js",
+		// Dialogs...
+		"$base_dir/code/js/dialogs/ImagePickerDialog.class.js",
+		"$base_dir/code/js/dialogs/ColorPickerDialog.class.js",
+		"$base_dir/code/js/dialogs/CommentsEditDialog.class.js",
+		// Sub-Frames....
+		"$base_dir/code/js/subframes/PagesSidebarFrame.class.js",
+		"$base_dir/code/js/subframes/ImageSelector.class.js",	
+		"$base_dir/code/js/subframes/ImageEditFrame.class.js",	
+		// Frames....
+		"$base_dir/code/js/frames/PagesFrame.class.js",
+		// Page
+		"$base_dir/code/js/pages/Pages.class.js"
+	);
+	
+	$css_list = array(			
+		"$base_dir/code/css/PagesFrame.css",
+		// "$base_dir/code/css/PostsFrame.css", Merged posts and pages, so no need of this style sheet
+		"$base_dir/code/colorpicker/css/colorpicker.css",
+		"$base_dir/code/css/datePicker.css",
+		"$base_dir/code/css/ImageEditDialog.css",
+		"$base_dir/code/css/ImagePickerDialog.css",
+		"$base_dir/code/css/CommentDialog.css",
+		"$base_dir/code/css/ImageEditFrame.css"
+	);
+	
+	ProductionBuilder::buildProductionJS(array_merge($js_common_list, $js_list), "$base_dir/code/js/prod_pages.js", DO_MINIFY);
+	ProductionBuilder::buildProductionCSS(array_merge($css_common_list, $css_list), "$base_dir/code/css/prod_pages.css", DO_MINIFY);
+	
+}
 		
 // ////////////////////////////////////////////////////////////////////////////
 //
@@ -162,63 +175,71 @@ ProductionBuilder::buildProductionCSS(array_merge($css_common_list, $css_list), 
 //
 // ////////////////////////////////////////////////////////////////////////////
 
-$js_list = array(
-	// 3rd Party...
-	"$base_dir/code/js/3rdparty/date.format.js",
-	"$base_dir/code/js/3rdparty/date.js",
-	"$base_dir/code/js/3rdparty/jquery.datePicker.js",
-	"$base_dir/code/js/3rdparty/swfobject.js",
-	"$base_dir/code/js/3rdparty/SWFUpload/swfupload.js",
-	"$base_dir/code/js/3rdparty/SWFUpload/plugins/swfupload.queue.js",
-	"$base_dir/code/js/flashuploader/FileProgress.class.js",
-	"$base_dir/code/js/flashuploader/FlashUploader.class.js",
-	 // Dialogs...
-	"$base_dir/code/js/dialogs/ImagePickerDialog.class.js",
-	"$base_dir/code/js/dialogs/ColorPickerDialog.class.js",
-	"$base_dir/code/js/dialogs/CommentsEditDialog.class.js",
-	// Sub-Frames....
-	"$base_dir/code/js/subframes/FolderSidebarFrame.class.js",
-	"$base_dir/code/js/subframes/TagsSidebarFrame.class.js",	
-	"$base_dir/code/js/subframes/ImageSelector.class.js",	
-	"$base_dir/code/js/subframes/ImageEditFrame.class.js",
-	// Frames....
-	"$base_dir/code/js/frames/FilesFrame.class.js",
-	// Page
-	"$base_dir/code/js/pages/Files.class.js"
-);
-
-$css_list = array(			
-	"$base_dir/code/css/FilesFrame.css",
-	"$base_dir/code/css/ImageEditDialog.css",
-	"$base_dir/code/css/ImageEditFrame.css"
-);
-
-ProductionBuilder::buildProductionJS(array_merge($js_common_list, $js_list), "$base_dir/code/js/prod_files.js", DO_MINIFY);
-ProductionBuilder::buildProductionCSS(array_merge($css_common_list, $css_list), "$base_dir/code/css/prod_files.css", DO_MINIFY);
+if (BUILD_MODE == 'files' || BUILD_MODE == 'all'){
+	
+	$js_list = array(
+		// 3rd Party...
+		"$base_dir/code/js/3rdparty/date.format.js",
+		"$base_dir/code/js/3rdparty/date.js",
+		"$base_dir/code/js/3rdparty/jquery.datePicker.js",
+		"$base_dir/code/js/3rdparty/swfobject.js",
+		"$base_dir/code/js/3rdparty/SWFUpload/swfupload.js",
+		"$base_dir/code/js/3rdparty/SWFUpload/plugins/swfupload.queue.js",
+		"$base_dir/code/js/flashuploader/FileProgress.class.js",
+		"$base_dir/code/js/flashuploader/FlashUploader.class.js",
+		 // Dialogs...
+		"$base_dir/code/js/dialogs/ImagePickerDialog.class.js",
+		"$base_dir/code/js/dialogs/ColorPickerDialog.class.js",
+		"$base_dir/code/js/dialogs/CommentsEditDialog.class.js",
+		// Sub-Frames....
+		"$base_dir/code/js/subframes/FolderSidebarFrame.class.js",
+		"$base_dir/code/js/subframes/TagsSidebarFrame.class.js",	
+		"$base_dir/code/js/subframes/ImageSelector.class.js",	
+		"$base_dir/code/js/subframes/ImageEditFrame.class.js",
+		// Frames....
+		"$base_dir/code/js/frames/FilesFrame.class.js",
+		// Page
+		"$base_dir/code/js/pages/Files.class.js"
+	);
+	
+	$css_list = array(			
+		"$base_dir/code/css/FilesFrame.css",
+		"$base_dir/code/css/ImageEditDialog.css",
+		"$base_dir/code/css/ImageEditFrame.css"
+	);
+	
+	ProductionBuilder::buildProductionJS(array_merge($js_common_list, $js_list), "$base_dir/code/js/prod_files.js", DO_MINIFY);
+	ProductionBuilder::buildProductionCSS(array_merge($css_common_list, $css_list), "$base_dir/code/css/prod_files.css", DO_MINIFY);
+		
+}
 			
 // ////////////////////////////////////////////////////////////////////////////
 //
 // Build Galleries page...........
 //
 // ////////////////////////////////////////////////////////////////////////////
+		
+if (BUILD_MODE == 'galleries' || BUILD_MODE == 'all'){
 			
-$js_list = array(
-	// Sub-Frames....
-	"$base_dir/code/js/subframes/FolderSidebarFrame.class.js",
-	"$base_dir/code/js/subframes/TagsSidebarFrame.class.js",	
-	"$base_dir/code/js/subframes/GalleriesSidebarFrame.class.js",	
-	// Frames....
-	"$base_dir/code/js/frames/GalleriesFrame.class.js",
-	// Page
-	"$base_dir/code/js/pages/Galleries.class.js"		
-);
-
-$css_list = array(
-	"$base_dir/code/css/GalleryFrame.css"			
-);
-
-ProductionBuilder::buildProductionJS(array_merge($js_common_list, $js_list), "$base_dir/code/js/prod_galleries.js", DO_MINIFY);
-ProductionBuilder::buildProductionCSS(array_merge($css_common_list, $css_list), "$base_dir/code/css/prod_galleries.css", DO_MINIFY);
+	$js_list = array(
+		// Sub-Frames....
+		"$base_dir/code/js/subframes/FolderSidebarFrame.class.js",
+		"$base_dir/code/js/subframes/TagsSidebarFrame.class.js",	
+		"$base_dir/code/js/subframes/GalleriesSidebarFrame.class.js",	
+		// Frames....
+		"$base_dir/code/js/frames/GalleriesFrame.class.js",
+		// Page
+		"$base_dir/code/js/pages/Galleries.class.js"		
+	);
+	
+	$css_list = array(
+		"$base_dir/code/css/GalleryFrame.css"			
+	);
+	
+	ProductionBuilder::buildProductionJS(array_merge($js_common_list, $js_list), "$base_dir/code/js/prod_galleries.js", DO_MINIFY);
+	ProductionBuilder::buildProductionCSS(array_merge($css_common_list, $css_list), "$base_dir/code/css/prod_galleries.css", DO_MINIFY);
+	
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 //
@@ -226,29 +247,31 @@ ProductionBuilder::buildProductionCSS(array_merge($css_common_list, $css_list), 
 //
 // ////////////////////////////////////////////////////////////////////////////
 	
-$js_list = array(
-	// Dialogs...
-	"$base_dir/code/js/dialogs/AccountDialog.class.js",
-	"$base_dir/code/js/dialogs/ImagePickerDialog.class.js",
-	"$base_dir/code/js/dialogs/ColorPickerDialog.class.js",	
-	// Sub-Frames....
-	"$base_dir/code/js/subframes/ImageSelector.class.js",		
-	// Frames....
-	"$base_dir/code/js/frames/SettingsFrame.class.js",
-	// Page
-	"$base_dir/code/js/pages/Settings.class.js"
-);
+if (BUILD_MODE == 'settings' || BUILD_MODE == 'all'){
+		
+	$js_list = array(
+		// Dialogs...
+		"$base_dir/code/js/dialogs/AccountDialog.class.js",
+		"$base_dir/code/js/dialogs/ImagePickerDialog.class.js",
+		"$base_dir/code/js/dialogs/ColorPickerDialog.class.js",	
+		// Sub-Frames....
+		"$base_dir/code/js/subframes/ImageSelector.class.js",		
+		// Frames....
+		"$base_dir/code/js/frames/SettingsFrame.class.js",
+		// Page
+		"$base_dir/code/js/pages/Settings.class.js"
+	);
+	
+	$css_list = array(
+		"$base_dir/code/css/ImagePickerDialog.css",
+		"$base_dir/code/css/ImageEditFrame.css",
+		"$base_dir/code/css/SettingsFrame.css"			
+	);
+	
+	ProductionBuilder::buildProductionJS(array_merge($js_common_list, $js_list), "$base_dir/code/js/prod_settings.js", DO_MINIFY);
+	ProductionBuilder::buildProductionCSS(array_merge($css_common_list, $css_list), "$base_dir/code/css/prod_settings.css", DO_MINIFY);
 
-$css_list = array(
-	"$base_dir/code/css/ImagePickerDialog.css",
-	"$base_dir/code/css/ImageEditFrame.css",
-	"$base_dir/code/css/SettingsFrame.css"			
-);
-
-ProductionBuilder::buildProductionJS(array_merge($js_common_list, $js_list), "$base_dir/code/js/prod_settings.js", DO_MINIFY);
-ProductionBuilder::buildProductionCSS(array_merge($css_common_list, $css_list), "$base_dir/code/css/prod_settings.css", DO_MINIFY);
-
-
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 //
@@ -256,7 +279,7 @@ ProductionBuilder::buildProductionCSS(array_merge($css_common_list, $css_list), 
 //
 // ////////////////////////////////////////////////////////////////////////////
 
-
+/*
 $js_all_list = array(
 
 
@@ -361,5 +384,5 @@ $css_all_list = array(
 
 // ProductionBuilder::buildProductionJS($js_all_list, "$base_dir/code/js/prod_apollo.js", DO_MINIFY);
 // ProductionBuilder::buildProductionCSS($css_all_list, "$base_dir/code/css/prod_apollo.js.css", DO_MINIFY);
-
+*/
 ?>

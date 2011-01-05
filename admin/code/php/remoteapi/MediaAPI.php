@@ -1098,6 +1098,8 @@ function deleteMediaTag($site_id, $tag) {
 */
 function renameMediaTag($site_id, $tag, $new_tag) {
 
+	//Logger::debug("renameMediaTag($site_id, $tag, $new_tag)");
+	
 	// Make sure the new name is not already in use
 	$tagCheck = MediaTable::getTagByName($site_id, $new_tag);
 

@@ -56,6 +56,22 @@ $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id
 		
 <script type="text/javascript">
 
+	/** List of images */
+	imgList : [
+		"images/test3.jpg", 
+		"images/test1.jpg", 
+		"images/test2.jpg", 
+		"images/test4.jpg", 
+		"images/test5.jpg", 
+		"images/test6.jpg", 
+		"images/test7.jpg", 
+		"images/test8.jpg", 
+		"images/test9.jpg"
+	],
+	
+apolloXfader.imgList = imgList;
+
+/*
 // Major version of Flash required
 var requiredMajorVersion = 8;
 
@@ -78,14 +94,14 @@ if (hasFlash){
 	txt += "	<param name='allowScriptAccess' value='sameDomain' />";
 	txt += "	<param name='movie' value='<?= PageManager::$theme_url_root; ?>flash/gal500x500.swf' /> ";
 	txt += "	<param name='quality' value='high' />";
-	txt += "	<param name='wmode' value='transparent' />";
-	txt += "	<param name='bgcolor' value='#ffffff' />"; 
+	txt += "	<param name='wmode' value='opaque' />";
+	txt += "	<param name='bgcolor' value='#aaa' />"; 
 	txt += "	<param name='salign' value='t' />";
 	txt += "	<param name='FlashVars' value='xmlFile=<?= PageManager::$theme_url_root; ?>/code/php/getUserGalleryXML.php?pageid=<?=$page_id ?>' /> ";
-	txt += "	<embed FlashVars='xmlFile=<?= $xml_url ?>' src='<?= PageManager::$theme_url_root; ?>flash/HomeGallery.swf' quality='high' bgcolor='#ffffff' wmode='transparent' width='100%' height='100%' name='infoGalFlashObj' align='top' salign='t' allowScriptAccess='sameDomain' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' />";
+	txt += "	<embed FlashVars='xmlFile=<?= $xml_url ?>' src='<?= PageManager::$theme_url_root; ?>flash/HomeGallery.swf' quality='high' bgcolor='#aaa' wmode='opaque' width='100%' height='100%' name='infoGalFlashObj' align='top' salign='t' allowScriptAccess='sameDomain' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' />";
 	txt += "</object>";
 	
 	document.getElementById('miniGallery').innerHTML = txt;
 }	
-
+*/
 </script>						
