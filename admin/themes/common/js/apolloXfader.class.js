@@ -21,6 +21,11 @@ var apolloXfader = {
 	
 	noScaleUp : false,
 	
+	paddingTop : 0,
+	paddingBottom : 0,
+	paddingLeft : 0,
+	paddingTop : 0,
+	
 	// ///////////////////////////////////////////////////////////////////
 	
 	/**
@@ -46,6 +51,11 @@ var apolloXfader = {
 		if (options.fullscreen != undefined) apolloXfader.isFullScreen = options.fullscreen;
 		if (options.fadeTime != undefined) apolloXfader.fadeTime = options.fadeTime;
 		if (options.timeBetweenFades != undefined) apolloXfader.timeBetweenFades = options.timeBetweenFades;
+
+		if (options.paddingTop != undefined) apolloXfader.paddingTop = options.paddingTop;
+		if (options.paddingBottom != undefined) apolloXfader.paddingBottom = options.paddingBottom;
+		if (options.paddingLeft != undefined) apolloXfader.paddingLeft = options.paddingLeft;
+		if (options.paddingTop != undefined) apolloXfader.paddingTop = options.paddingTop;
 				
 		if (apolloXfader.isFullScreen){
 			$("body").css("overflow","hidden");					
@@ -171,8 +181,8 @@ var apolloXfader = {
 			
 			$('.xFadeImage').css({
 				"position":"absolute",
-				"top": (pos.top + parseInt($(apolloXfader.targetDiv).css('padding-top'))) + "px",
-				"left": (pos.left + parseInt($(apolloXfader.targetDiv).css('padding-left'))) + "px",
+				"top": (pos.top + apolloXfader.paddingTop) + "px",
+				"left": (pos.left + apolloXfader.paddingLeft) + "px",
 				"z-index":"-1",
 				"overflow":"hidden"
 			});
@@ -180,22 +190,22 @@ var apolloXfader = {
 			$('#xFadeImage1').css("z-index", 1);
 			$('#xFadeImage2').css("z-index", 0);
 	
-			if (apolloXfader.isFullScreen){
-				$('.xFadeImage').css("height", divObj.height() + "px");
-				$('.xFadeImage').css("width", divObj.width() + "px");
-			}
-			else {
-				if (apolloXfader.noScaleUp){
-					if ($('.xFadeImage').width() > 0){
-						$('.xFadeImage').css("width", Math.min(divObj.width(), $('.xFadeImage').width())  + "px");				
-					}
-					else {
-						$('.xFadeImage').css("width", divObj.width() + "px");				
-					}
+			var w = divObj.width() - apolloXfader.paddingLeft - apolloXfader.paddingRight;
+			var h = divObj.height() - apolloXfader.paddingTop - apolloXfader.paddingBottom;
+			
+			if (apolloXfader.noScaleUp){
+				if ($('.xFadeImage').width() > 0){
+					$('.xFadeImage').width(Math.min(w, $('.xFadeImage').width()));				
+					$('.xFadeImage').height(h);				
 				}
 				else {
-					$('.xFadeImage').css("width", divObj.width() + "px");				
+					$('.xFadeImage').width(w);				
+					$('.xFadeImage').height(h);				
 				}
+			}
+			else {
+				$('.xFadeImage').width(w);				
+				$('.xFadeImage').height(h);				
 			}
 					
 		}

@@ -14,8 +14,8 @@ $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id
 ?>
 
 	<div id='galleryContent' class='pageContents' style="padding:0px; padding-left:25px; width:100%; height:100%">
+		<noscript>
 		<?php
-		
 			foreach($gallery_image_list as $gal_mapping){
 			
 				$image_id = $gal_mapping['image_id'];
@@ -38,11 +38,38 @@ $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id
 			}
 		
 		?>
+		</noscript>
 	</div>
 
 		
 <script type="text/javascript">
 
+$('#galleryContent').html('');
+
+var imgList = new Array();
+var altTxtList = new Array();
+
+<?php
+
+if (isset($gallery_image_list) && count($gallery_image_list) > 0){
+
+	foreach($gallery_image_list as $gal_mapping){
+	
+		$image_id = $gal_mapping['image_id'];
+		$image = MediaTable::getMedia(PageManager::$site_id, $image_id);
+		
+		$image_url = PageManager::$media_root_url . $image['filepath'] . $image['filename'];
+		//$thumb_url = PageManager::$media_root_url . $image['filepath'] . $image['thumb_filename'];
+		//$title =  $image['title'];
+		//$description = $image['description'];										
+		$alt_text = $image['tags'];
+		
+		echo "imgList.push(\"$image_url\");";	
+		echo "altTxtList.push(\"$alt_text\");";	
+										
+	}
+}
+?>
 
 // Major version of Flash required
 var requiredMajorVersion = 9;
@@ -95,12 +122,17 @@ var cgpHome = {
 		cgpHome.onResize();
 		
 		setTimeout("cgpHome.onResize()", 200);
+		
+		// If the client doesn't have flash, use the JS image gallery
+		if (!hasFlash){
+			apolloXfader.start('#galleryContent', {images:imgList, altText: altTxtList, paddingTop: 3, paddingBottom: 3, paddingLeft: 30, paddingRight: 0});
+		}				
 								
 	},
 	
 	onResize : function(){
 
-		if (hasFlash){
+		//if (hasFlash){
 				
 			$("#menuContainer").width(200);
 			
@@ -120,7 +152,7 @@ var cgpHome = {
 			//alert( $('#galleryContent').width() + ", " + $('#galleryContent').height() );
 			
 			//alert("galW = " + galW + " galH = " + galH);
-		}
+		//}
 		
 	}
 
