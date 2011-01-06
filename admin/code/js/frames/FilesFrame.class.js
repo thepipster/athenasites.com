@@ -176,6 +176,11 @@ var FilesFrame = {
                 
 		FilesFrame.m_currentImageID = image_id;  
         
+        if (FilesFrame.m_imageList == undefined || FilesFrame.m_imageList.length == 0){
+        	FilesFrame.onShowUploader();
+        	return;
+        }
+        
         // If this image id does not exist, then select the first image for
         // the current image list
         if (!DataStore.getImage(image_id)){

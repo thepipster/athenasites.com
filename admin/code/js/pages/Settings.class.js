@@ -25,6 +25,15 @@ var Settings = {
 
     // ////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Force a refresh by reloading all the data and then repaint
+	*/    
+    refresh : function() {
+        DataStore.load(Settings.onDataLoaded);
+    },
+
+    // ////////////////////////////////////////////////////////////////////////
+    
     onDataLoaded : function(){
         SettingsFrame.repaint();
     }

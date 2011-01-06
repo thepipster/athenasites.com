@@ -26,6 +26,15 @@ var Galleries = {
 
     // ////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Force a refresh by reloading all the data and then repaint
+	*/    
+    refresh : function() {
+        DataStore.load(Galleries.onDataLoaded);
+    },
+    
+    // ////////////////////////////////////////////////////////////////////////
+
     onDataLoaded : function(){
 
         if (DataStore.m_currentFolderID > 0){

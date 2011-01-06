@@ -1,162 +1,258 @@
-/**
-* Class for a cross-fading image gallery
-*/	
 var apolloXfader = {
 
-	/** List of images */
-	imgList : [
-		"images/test3.jpg", 
-		"images/test1.jpg", 
-		"images/test2.jpg", 
-		"images/test4.jpg", 
-		"images/test5.jpg", 
-		"images/test6.jpg", 
-		"images/test7.jpg", 
-		"images/test8.jpg", 
-		"images/test9.jpg"
-	],
-		
-	/** Current image index */
-	currentImage : 0,
-
-	/** Prev image index */
-	prevImage : 0,
+	center : 0,
 	
-	/** Set to true if image1 is top */
-	topLayer : true,
-
-	/** Time between images */
-	showTime : 4000,
+	imageList : '',
+	altTextList : '',
 	
-	/** Fade time */
+	currentImage : 0,			
+	img1 : 0,
+	img2 : -1,
+	
+	timeBetweenFades : 2000,
 	fadeTime : 1000,
 	
-	/** 
-	* Initialize fader
+	isPaused : false,
+	isFullScreen : false,
+	
+	nextImg : 1,
+	
+	targetDiv : '',
+	
+	noScaleUp : true,
+	
+	// ///////////////////////////////////////////////////////////////////
+	
+	/**
+	* @param targetDiv - the target div for the gallery
+	* @param options; 
+	*   images - array of image url's
+	*   altText - array of image alt text
+	*   altText - array of image alt text
+	*   fadeTime - fade time (ms)
+	*   timeBetweenFades - time between fades (ms)
 	*/
-	init : function(topOffset){
-						
-		var text = "";
-		text += "<img id='image2' src=''>";
-		text += "<img id='image1' src=''>";
+	start : function(targetDiv, options){
+			
+		if (options.images == undefined){
+			alert("apolloXfader has not been given any images!!!");
+			return;
+		}
 		
-		$('#galleryContainer').html(text);	
-												
-		// Position the gallery...
-		var pos = $('#galleryContainer').position();
+		apolloXfader.targetDiv = targetDiv;
+		
+		if (options.images != undefined) apolloXfader.imageList = options.images;
+		if (options.altText != undefined) apolloXfader.altTextList = options.altText;
+		if (options.fullscreen != undefined) apolloXfader.isFullScreen = options.fullscreen;
+		if (options.fadeTime != undefined) apolloXfader.fadeTime = options.fadeTime;
+		if (options.timeBetweenFades != undefined) apolloXfader.timeBetweenFades = options.timeBetweenFades;
+				
+		if (apolloXfader.isFullScreen){
+			$("body").css("overflow","hidden");					
+		}		
+
+		$(window).load(function() {
+			apolloXfader.resizeImage();
+			apolloXfader.nextImage();
+		});
+
+		$(window).resize(apolloXfader.resizeImage);
+								
+		$(targetDiv).html("<img id='xFadeImage1' class='xFadeImage' src='"+apolloXfader.imageList[apolloXfader.img1]+"'><img id='xFadeImage2' class='xFadeImage'  src='"+apolloXfader.imageList[apolloXfader.img2]+"'>");
+		
+		apolloXfader.resizeImage();
+	},
+
+	// ///////////////////////////////////////////////////////////////////
+
+	img1Front : false,
+	toHandle : '',
+
+	nextImage : function(){
+	
+		$('.xFadeImage').stop();
+		
+		if (apolloXfader.toHandle != ''){
+			clearTimeout(apolloXfader.toHandle);
+		}
+		
+		apolloXfader.img1Front = !apolloXfader.img1Front;
+
+		apolloXfader.img1++;				
+		apolloXfader.img2++;
+
+		if (apolloXfader.img1 >= apolloXfader.imageList.length) apolloXfader.img1 = 0;
+		if (apolloXfader.img2 >= apolloXfader.imageList.length) apolloXfader.img2 = 0;
+		
+		apolloXfader.doTransition();		
+	},
+	
+	// ///////////////////////////////////////////////////////////////////
+
+	prevImage : function(){
+	
+		$('.xFadeImage').stop();
+	
+		if (apolloXfader.toHandle != ''){
+			clearTimeout(apolloXfader.toHandle);
+		}
+		
+		apolloXfader.img1Front = !apolloXfader.img1Front;
+		
+		apolloXfader.img1--;				
+		apolloXfader.img2--;
+		
+		if (apolloXfader.img1 < 0) apolloXfader.img1 = apolloXfader.imageList.length - 1;
+		if (apolloXfader.img2 < 0) apolloXfader.img2 = apolloXfader.imageList.length - 1;
+		
+		apolloXfader.doTransition();		
 					
-		apolloXfader.setImage(0);
-		
-		$('#image1').css('top',pos.top + topOffset);
-		$('#image1').css('left',pos.left);
-
-		$('#image2').css('top',pos.top + topOffset);
-		$('#image2').css('left',pos.left);		
-		
-		//setTimeout('apolloXfader.start()', apolloXfader.showTime);
 	},
 	
-	
-	/**
-	* Set the current image
-	*/
-	setImage : function(imgNo){
+	// ///////////////////////////////////////////////////////////////////
+
+	togglePlay : function(){
 		
-		apolloXfader.prevImage = apolloXfader.currentImage;
-		apolloXfader.currentImage = imgNo;
+		apolloXfader.isPaused = !apolloXfader.isPaused;
 		
-		var img1 = apolloXfader.currentImage;
-		var img2 = apolloXfader.prevImage;
-
-		if (!apolloXfader.topLayer){
-			img1 = apolloXfader.prevImage;
-			img2 = apolloXfader.currentImage;
-		}
-		
-		$('#image1').attr('src',gl_imgSrcList[img1]);
-		$('#image2').attr('src',gl_imgSrcList[img2]);
-
-		$('#image1').attr('alt',gl_altTxtList[img1]);
-		$('#image2').attr('alt',gl_altTxtList[img2]);
-
-		// Mark image layer as flipped...			
-		apolloXfader.topLayer = !apolloXfader.topLayer;
-
-	},
-	
-	
-	timerHandle : '',
-	
-	
-	start : function(){
-		apolloXfader.doFade();
-		apolloXfader.timerHandle = setInterval("apolloXfader.fadeToNext()", apolloXfader.showTime);
-	},
-	
-	
-	stop : function(){
-		clearTimeout(apolloXfader.timerHandle);
-	},
-	
-	
-	fadeToNext : function(){
-
-		var next = apolloXfader.currentImage + 1;
-
-		if (next > gl_imgSrcList.length) {
-			next = 0;
-		}
-		
-		//alert(next);
-		apolloXfader.setImage(next);
-		apolloXfader.doFade();
-	},
-	
-	
-	/**
-	* Do that fade
-	*/
-	doFade : function(){
-
-		if (apolloXfader.topLayer){
-	      $("#image1").fadeTo(apolloXfader.fadeTime, 0.0);
-//		      $("#image2").fadeTo(apolloXfader.fadeTime, 1.0, apolloXfader.onFadeComplete);
-	      $("#image2").fadeTo(apolloXfader.fadeTime, 1.0);
+		if (apolloXfader.isPaused){
+			clearTimeout(apolloXfader.toHandle);
 		}
 		else {
-//		      $("#image1").fadeTo(apolloXfader.fadeTime, 1.0, apolloXfader.onFadeComplete);
-	      $("#image1").fadeTo(apolloXfader.fadeTime, 1.0);
-	      $("#image2").fadeTo(apolloXfader.fadeTime, 0.0);
+			apolloXfader.doTransition();					
 		}
-		
 	},
-	
-	
-	/**
-	* Update after fade has completed...
-	*/
-	onFadeComplete : function(){
-	
-		// Update image index...
-		
-		apolloXfader.currentImage++;
 
-		if (apolloXfader.currentImage > gl_imgSrcList.length) {
-			apolloXfader.currentImage = 0;
-		}
-		
-		// Switch out faded image to next in sequence...
-		
-		if (apolloXfader.topLayer){
-			// image2 is now top, so change image1 to next image in sequence
-			$('#image1').attr('src',gl_imgSrcList[apolloXfader.currentImage]);
+	// ///////////////////////////////////////////////////////////////////
+				
+	doTransition : function(){
+	
+		// Swap out image src for whatever imnage is currently 'behind'
+		if (apolloXfader.img1Front){
+			// Image 1 is in front
+			$("#xFadeImage2").attr('src', apolloXfader.imageList[apolloXfader.img2]);
 		}
 		else {
-			// image1 is now top, so change image2 to next image in sequence
-			$('#image2').attr('src',gl_imgSrcList[apolloXfader.currentImage]);
+			// Image 2 is in front
+			$("#xFadeImage1").attr('src', apolloXfader.imageList[apolloXfader.img2]);
 		}
 		
-		// Mark image layer as flipped...			
-		apolloXfader.topLayer = !apolloXfader.topLayer;
+					
+		if (apolloXfader.img1Front){
+			$("#xFadeImage1").fadeOut(apolloXfader.fadeTime, apolloXfader.transistionComplete);
+			$("#xFadeImage2").fadeIn(apolloXfader.fadeTime);					
+		}
+		else {
+			$("#xFadeImage1").fadeIn(apolloXfader.fadeTime);
+			$("#xFadeImage2").fadeOut(apolloXfader.fadeTime, apolloXfader.transistionComplete);					
+		}			
+						
+	},
+	
+	transistionComplete : function(){
+								
+		if (!apolloXfader.isPaused){
+			apolloXfader.toHandle = setTimeout(apolloXfader.nextImage, apolloXfader.timeBetweenFades);
+		}											
+	},
+	
+	// ///////////////////////////////////////////////////////////////////
+			
+	resizeImage : function() {
+		
+				
+		if (!apolloXfader.isFullScreen){
+
+			var divObj = $(apolloXfader.targetDiv);		
+			var pos = divObj.position();
+			
+			//$("body").css({
+			//	"overflow":"hidden"
+			//});
+			
+			$('.xFadeImage').css({
+				"position":"absolute",
+				"top": pos.top + "px",
+				"left": pos.left + "px",
+				"z-index":"-1",
+				"overflow":"hidden"
+			});
+			
+			$('#xFadeImage1').css("z-index", 1);
+			$('#xFadeImage2').css("z-index", 0);
+	
+			if (apolloXfader.isFullScreen){
+				$('.xFadeImage').css({"height":divObj.height() + "px"});
+				$('.xFadeImage').css({"width":divObj.width() + "px"});
+			}
+			else {
+				if (apolloXfader.noScaleUp){
+					$('.xFadeImage').css({"width": Math.min(divObj.width(), $('.xFadeImage').width())  + "px"});				
+				}
+				else {
+					$('.xFadeImage').css({"width": divObj.width() + "px"});				
+				}
+			}
+		
+		}
+		else {
+		
+			$('.xFadeImage').css({
+				"position":"absolute",
+				"top":"0px",
+				"left":"0px",
+				"z-index":"-1",
+				"overflow":"hidden",
+				"width":$(window).width() + "px",
+				"height":$(window).height() + "px"
+			});
+			
+			$('#xFadeImage1').css("z-index", 1);
+			$('#xFadeImage2').css("z-index", 0);
+			
+			var containerObj = $('.xFadeImage');
+			
+			// Resize the img object to the proper ratio of the window.
+			var iw = containerObj.children('img').width();
+			var ih = containerObj.children('img').height();
+			
+			if ($(window).width() > $(window).height()) {
+				if (iw > ih) {
+					var fRatio = iw/ih;
+					containerObj.children('img').css("width",$(window).width() + "px");
+					containerObj.children('img').css("height",Math.round($(window).width() * (1/fRatio)));
+	
+					var newIh = Math.round($(window).width() * (1/fRatio));
+	
+					if(newIh < $(window).height()) {
+						var fRatio = ih/iw;
+						containerObj.children('img').css("height",$(window).height());
+						containerObj.children('img').css("width",Math.round($(window).height() * (1/fRatio)));
+					}
+				} else {
+					var fRatio = ih/iw;
+					containerObj.children('img').css("height",$(window).height());
+					containerObj.children('img').css("width",Math.round($(window).height() * (1/fRatio)));
+				}
+			} else {
+				var fRatio = ih/iw;
+				containerObj.children('img').css("height",$(window).height());
+				containerObj.children('img').css("width",Math.round($(window).height() * (1/fRatio)));
+			}
+			
+			containerObj.css("visibility","visible");
+			
+			// Center BG Image
+			if (apolloFullScreenXfader.center) {
+				
+				containerObj.children('img').css("position","relative");
+				
+				if (containerObj.children('img').width() > containerObj.width()) {
+					var wDiff = (containerObj.children('img').width() - containerObj.width()) / 2;
+					containerObj.children('img').css("left", "-" + wDiff + "px");
+				}
+			}
+			
+		}
 	}
 }

@@ -45,7 +45,27 @@ var ssMain = {
 		$('.apolloDataInput').typing({ stop: ssMain.onDataChange, delay: 400});
 		$('.apolloDataInput').change(ssMain.onDataChange);        
 	},
-	
+
+    // ////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Pipe refresh requests depending on the current page
+	*/
+	refresh : function(){
+
+        switch(ssMain.view){
+            case ssMain.VIEW_PAGES : Pages.refresh(); break;
+            case ssMain.VIEW_POSTS : Posts.refresh(); break;
+            case ssMain.VIEW_FILES: Files.refresh(); break;
+            case ssMain.VIEW_DASHBOARD: Dashboard.refresh(); break;
+            case ssMain.VIEW_GALLERIES: Galleries.refresh(); break;
+            case ssMain.VIEW_SETTINGS: Settings.refresh(); break;
+             /* case ssMain.VIEW_STATS: Pages.refresh(); break; */
+        }	
+        
+		DataStore.load(ssMain.onDataLoaded);
+	},
+		
     // ////////////////////////////////////////////////////////////////////////
 
     onResize : function(){

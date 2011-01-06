@@ -25,6 +25,16 @@ var Files = {
 
     // ////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Force a refresh by reloading all the data and then repaint
+	*/    
+    refresh : function() {
+        DataStore.load(Files.onDataLoaded);
+    },
+    
+    
+    // ////////////////////////////////////////////////////////////////////////
+
     onDataLoaded : function(){    
         FilesFrame.repaint();
         SidebarFrame.repaint();

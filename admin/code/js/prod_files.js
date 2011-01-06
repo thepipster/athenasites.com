@@ -1334,7 +1334,27 @@ var ssMain = {
 		$('.apolloDataInput').typing({ stop: ssMain.onDataChange, delay: 400});
 		$('.apolloDataInput').change(ssMain.onDataChange);        
 	},
-	
+
+    // ////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Pipe refresh requests depending on the current page
+	*/
+	refresh : function(){
+
+        switch(ssMain.view){
+            case ssMain.VIEW_PAGES : Pages.refresh(); break;
+            case ssMain.VIEW_POSTS : Posts.refresh(); break;
+            case ssMain.VIEW_FILES: Files.refresh(); break;
+            case ssMain.VIEW_DASHBOARD: Dashboard.refresh(); break;
+            case ssMain.VIEW_GALLERIES: Galleries.refresh(); break;
+            case ssMain.VIEW_SETTINGS: Settings.refresh(); break;
+             /* case ssMain.VIEW_STATS: Pages.refresh(); break; */
+        }	
+        
+		DataStore.load(ssMain.onDataLoaded);
+	},
+		
     // ////////////////////////////////////////////////////////////////////////
 
     onResize : function(){
@@ -2130,7 +2150,9 @@ var DataStore = {
         if (DataStore.m_categories == undefined) DataStore.m_categories = new Array();
         if (DataStore.m_tags == undefined) DataStore.m_tags = new Array();
 
-        callback();
+		if (callback != undefined){
+	        callback();
+		}
     },
     
     // //////////////////////////////////////////////////////////////////////////////////
@@ -9812,6 +9834,11 @@ var FilesFrame = {
                 
 		FilesFrame.m_currentImageID = image_id;  
         
+        if (FilesFrame.m_imageList == undefined || FilesFrame.m_imageList.length == 0){
+        	FilesFrame.onShowUploader();
+        	return;
+        }
+        
         // If this image id does not exist, then select the first image for
         // the current image list
         if (!DataStore.getImage(image_id)){
@@ -10198,6 +10225,16 @@ var Files = {
         
     },
 
+    // ////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Force a refresh by reloading all the data and then repaint
+	*/    
+    refresh : function() {
+        DataStore.load(Files.onDataLoaded);
+    },
+    
+    
     // ////////////////////////////////////////////////////////////////////////
 
     onDataLoaded : function(){    

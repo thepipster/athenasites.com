@@ -28,6 +28,15 @@ var Pages = {
 
     // ////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Force a refresh by reloading all the data and then repaint
+	*/    
+    refresh : function() {
+        DataStore.load(Pages.onDataLoaded);
+    },
+    
+    // ////////////////////////////////////////////////////////////////////////
+
     onDataLoaded : function(){    
         PagesFrame.repaint();
         SidebarFrame.repaint();

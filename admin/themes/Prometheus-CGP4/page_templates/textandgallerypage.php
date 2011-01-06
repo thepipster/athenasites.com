@@ -14,16 +14,16 @@ $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id
 
 <div class='pageContents'>
 
-	<table border='0' width="100%" height="100%" border="0">
-		<tr>
-			<td width="50%" valign="top">
+	<table width="100%" height="100%" border="0" style='width:100%; height:100%;'>
+		<tr height="100%">
+			<td width="50%" height="100%" valign="top">
 				<div class='infoPageText'>
 					<?php echo PageManager::getCurrentPageContent(); ?>
 				</div>
 			</td>
-			<td valign="top" height="100%">
-				<div id='miniGallery' style='width:95%; height:100%;'>
-			
+			<td valign="top" height="100%" style='height: 100%;'>
+				<div id='miniGallery' style="width:95%; height: 100%; background-color:transparent">
+					<noscript>
 					<?php
 						foreach($gallery_image_list as $gal_mapping){
 						
@@ -45,7 +45,7 @@ $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id
 							
 						}
 					?>
-						
+					</noscript>
 				</div>
 			</td>
 		</tr>
@@ -56,52 +56,37 @@ $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id
 		
 <script type="text/javascript">
 
-	/** List of images */
-	imgList : [
-		"images/test3.jpg", 
-		"images/test1.jpg", 
-		"images/test2.jpg", 
-		"images/test4.jpg", 
-		"images/test5.jpg", 
-		"images/test6.jpg", 
-		"images/test7.jpg", 
-		"images/test8.jpg", 
-		"images/test9.jpg"
-	],
+$('#miniGallery').html('');
+
+var imgList = new Array();
+var altTxtList = new Array();
+
+<?php
+
+if (isset($gallery_image_list) && count($gallery_image_list) > 0){
+
+	foreach($gallery_image_list as $gal_mapping){
 	
-apolloXfader.imgList = imgList;
+		$image_id = $gal_mapping['image_id'];
+		$image = MediaTable::getMedia(PageManager::$site_id, $image_id);
+		
+		$image_url = PageManager::$media_root_url . $image['filepath'] . $image['filename'];
+		//$thumb_url = PageManager::$media_root_url . $image['filepath'] . $image['thumb_filename'];
+		//$title =  $image['title'];
+		//$description = $image['description'];										
+		$alt_text = $image['tags'];
+		
+		echo "imgList.push(\"$image_url\");";	
+		echo "altTxtList.push(\"$alt_text\");";	
+										
+	}
+}
+?>
 
-/*
-// Major version of Flash required
-var requiredMajorVersion = 8;
+//apolloXfader.start('#miniGallery', {images:imgList, altText: altTxtList});
 
-// Minor version of Flash required
-var requiredMinorVersion = 0;
+$(document).ready(function(){
+	apolloXfader.start('#miniGallery', {images:imgList, altText: altTxtList});
+});
 
-// Minor version of Flash required
-var requiredRevision = 0;
-
-var hasFlash = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
-
-if (hasFlash){
-				
-	// Clear the div as fast as possible			
-	document.getElementById('miniGallery').innerHTML = "";
-
-	var txt = "";
-
-	txt += "<object classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000' codebase='http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0' width='100%' height='100%' id='infoGalFlashObj' align='top' salign='t'>";
-	txt += "	<param name='allowScriptAccess' value='sameDomain' />";
-	txt += "	<param name='movie' value='<?= PageManager::$theme_url_root; ?>flash/gal500x500.swf' /> ";
-	txt += "	<param name='quality' value='high' />";
-	txt += "	<param name='wmode' value='opaque' />";
-	txt += "	<param name='bgcolor' value='#aaa' />"; 
-	txt += "	<param name='salign' value='t' />";
-	txt += "	<param name='FlashVars' value='xmlFile=<?= PageManager::$theme_url_root; ?>/code/php/getUserGalleryXML.php?pageid=<?=$page_id ?>' /> ";
-	txt += "	<embed FlashVars='xmlFile=<?= $xml_url ?>' src='<?= PageManager::$theme_url_root; ?>flash/HomeGallery.swf' quality='high' bgcolor='#aaa' wmode='opaque' width='100%' height='100%' name='infoGalFlashObj' align='top' salign='t' allowScriptAccess='sameDomain' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' />";
-	txt += "</object>";
-	
-	document.getElementById('miniGallery').innerHTML = txt;
-}	
-*/
 </script>						

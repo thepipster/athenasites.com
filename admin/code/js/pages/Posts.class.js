@@ -28,6 +28,15 @@ var Posts = {
 
     // ////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Force a refresh by reloading all the data and then repaint
+	*/    
+    refresh : function() {
+        DataStore.load(Posts.onDataLoaded);
+    },
+    
+    // ////////////////////////////////////////////////////////////////////////
+
     onDataLoaded : function(){    
         PostsFrame.repaint();
         SidebarFrame.repaint();

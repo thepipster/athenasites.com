@@ -18,7 +18,7 @@ var cgpCommon = {
 		    header: '.menuHead', 
 		    fillSpace: false,
 		    autoHeight: false,
-		    navigation: true,
+		    navigation: true
 		   // event: 'mouseover'
 		});		
 		

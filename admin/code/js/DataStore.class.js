@@ -757,7 +757,9 @@ var DataStore = {
         if (DataStore.m_categories == undefined) DataStore.m_categories = new Array();
         if (DataStore.m_tags == undefined) DataStore.m_tags = new Array();
 
-        callback();
+		if (callback != undefined){
+	        callback();
+		}
     },
     
     // //////////////////////////////////////////////////////////////////////////////////

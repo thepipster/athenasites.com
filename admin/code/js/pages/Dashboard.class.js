@@ -25,6 +25,15 @@ var Dashboard = {
 
     // ////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Force a refresh by reloading all the data and then repaint
+	*/    
+    refresh : function() {
+        DataStore.load(Dashboard.onDataLoaded);
+    },
+    
+    // ////////////////////////////////////////////////////////////////////////
+
     onDataLoaded : function(){
         DashboardFrame.repaint();
     }
