@@ -14,6 +14,40 @@ $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id
 
 <div class='pageContents'>
 
+	<div id='miniGallerWrapper' style="background-color:transparent; float:right; width:500px; height:500px; padding-right:35px; padding-left: 35px; padding-bottom:25px; padding-top: 0px; ">
+		<div id='miniGallery'>
+			<noscript>
+			<?php
+				foreach($gallery_image_list as $gal_mapping){
+				
+					$image_id = $gal_mapping['image_id'];
+					$image = MediaTable::getMedia(PageManager::$site_id, $image_id);
+					
+					$image_url = PageManager::$media_root_url . $image['filepath'] . $image['filename'];
+					$thumb_url = PageManager::$media_root_url . $image['filepath'] . $image['thumb_filename'];
+					$title =  $image['title'];
+					$description = $image['description'];										
+					$tags = $image['tags'];
+										
+					echo "<div id='noFlashImage'>";
+					echo "    <img src='$image_url' title='$title' alt='$alt_text' width='100%'/>";   
+					echo "    <span class='title'>$title</span>";
+					echo "    <span class='caption'>$caption</span>"; 
+					echo "</div>";
+					echo "<br/>";
+					
+				}
+			?>
+			</noscript>
+		</div>
+	</div>
+	
+	<?php echo PageManager::getCurrentPageContent(); ?>
+
+
+
+<!--
+
 	<table width="100%" height="100%" border="0" style='width:100%; height:100%;'>
 		<tr height="100%">
 			<td width="50%" height="100%" valign="top">
@@ -23,33 +57,12 @@ $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id
 			</td>
 			<td valign="top" height="100%" style='height: 100%;'>
 				<div id='miniGallery' style="width:95%; height: 100%; background-color:transparent">
-					<noscript>
-					<?php
-						foreach($gallery_image_list as $gal_mapping){
-						
-							$image_id = $gal_mapping['image_id'];
-							$image = MediaTable::getMedia(PageManager::$site_id, $image_id);
-							
-							$image_url = PageManager::$media_root_url . $image['filepath'] . $image['filename'];
-							$thumb_url = PageManager::$media_root_url . $image['filepath'] . $image['thumb_filename'];
-							$title =  $image['title'];
-							$description = $image['description'];										
-							$tags = $image['tags'];
-												
-							echo "<div id='noFlashImage'>";
-							echo "    <img src='$image_url' title='$title' alt='$alt_text' width='100%'/>";   
-							echo "    <span class='title'>$title</span>";
-							echo "    <span class='caption'>$caption</span>"; 
-							echo "</div>";
-							echo "<br/>";
-							
-						}
-					?>
-					</noscript>
+
 				</div>
 			</td>
 		</tr>
 	</table>
+-->
 		
 </div><!-- infoPage -->
 						

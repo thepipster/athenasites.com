@@ -171,8 +171,8 @@ var apolloXfader = {
 			
 			$('.xFadeImage').css({
 				"position":"absolute",
-				"top": pos.top + "px",
-				"left": pos.left + "px",
+				"top": (pos.top + parseInt($(apolloXfader.targetDiv).css('padding-top'))) + "px",
+				"left": (pos.left + parseInt($(apolloXfader.targetDiv).css('padding-left'))) + "px",
 				"z-index":"-1",
 				"overflow":"hidden"
 			});
