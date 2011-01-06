@@ -22,7 +22,7 @@ global $tracker_code;
 		<br>
 		
 		<div class="info" align="left">
-			<?= ThemeTable::getGlobalParaValue(PageManager::$site_id, 309) ?>
+			<?= ThemeTable::getGlobalParaValue(PageManager::$site_id, 310) ?>
 		</div>
 		
 	</div> <!-- footer -->

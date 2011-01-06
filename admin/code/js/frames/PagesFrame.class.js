@@ -248,6 +248,15 @@ var PagesFrame = {
 	                    noParas++;
 	
 	                    break;
+
+	                case 'gallery':
+
+	                    txt += "        <span class='paraTitle'>"+theme_para_list[i].description+"</span>";
+	                    txt += "        <span class='paraDesc'>"+theme_para_list[i].help_text+"</span>";
+
+	                    noParas++;
+
+	                    break;
 	
 	                case 'email':
 	                    break;
