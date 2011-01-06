@@ -53,8 +53,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 // Extract query string from referal url
 $query_string = "";
 if (isset($referer) && $referer != ''){
-	$parts = parse_url($url);
-	$query_string = $parts['query'];
+	$parts = parse_url($referer);
+	if (isset($parts['query'])){
+		$query_string = $parts['query'];
+	}
 }
 
 $user_agent = $_SERVER['HTTP_USER_AGENT'];
@@ -94,8 +96,6 @@ $sql = DatabaseManager::prepare("INSERT INTO stats_PageViews (
      $is_bot, 
      ip2long($server_ip));
      
-Logger::debug($sql);     
-
 DatabaseManager::insert($sql);
     
 ?>

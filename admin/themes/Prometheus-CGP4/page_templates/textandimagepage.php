@@ -20,23 +20,24 @@ else {
 	$image_alt = $image['tags'];
 }
 
+$img_width = $image['width'];
+$img_height = $image['height'];
+
+if ($img_width > 500) $img_width = 500;
+if ($img_height > 500) $img_height = 500;
+
 ?>
 
 <!-- INFO PAGE /////////////////////////// -->
 
 <div class='pageContents'>
 
-	<table width="100%" height="100%" border="0">
-		<tr>
-			<td width="50%" valign="top">
-				<div class='infoPageText'>
-					<?php echo PageManager::getCurrentPageContent(); ?>
-				</div>
-			</td>
-			<td valign="top">
-				<?php echo "<img src='$image_url' title='$image_title' alt='$image_alt' width='95%'/>"; ?>						
-			</td>
-		</tr>
-	</table>
-
+	<div id='miniGallerWrapper' style="background-color:transparent; float:right; width:<?=$img_width?>px; height:<?=$img_height?>px; padding-right:35px; padding-left: 35px; padding-bottom:25px; padding-top: 0px; ">
+		<div id='miniGallery'>
+			<?php echo "<img src='$image_url' title='$image_title' alt='$image_alt' width='95%'/>"; ?>
+		</div>
+	</div>
+	
+	<?php echo PageManager::getCurrentPageContent(); ?>
+		
 </div><!-- infoPage -->
