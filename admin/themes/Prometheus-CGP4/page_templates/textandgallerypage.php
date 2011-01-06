@@ -62,7 +62,7 @@ if ($max_height > 500) $max_height = 500;
 					echo "    <span class='title'>$title</span>";
 					echo "    <span class='caption'>$caption</span>"; 
 					echo "</div>";
-					echo "<br/>";
+					echo "<br/>\n";
 					
 				}
 			?>

@@ -200,12 +200,14 @@ var apolloXfader = {
 				}
 				else {
 					$('.xFadeImage').width(w);				
-					$('.xFadeImage').height(h);				
+					if (h > 0)
+						$('.xFadeImage').height(h);				
 				}
 			}
 			else {
 				$('.xFadeImage').width(w);				
-				$('.xFadeImage').height(h);				
+				if (h > 0)
+					$('.xFadeImage').height(h);				
 			}
 					
 		}
