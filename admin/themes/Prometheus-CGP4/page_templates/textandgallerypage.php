@@ -37,7 +37,7 @@ foreach($image_list as $image){
 }
 
 if ($max_width > 500) $max_width = 500;
-if ($max_height > 500) $max_height = 500;
+//if ($max_height > 500) $max_height = 500;
 
 
 ?>

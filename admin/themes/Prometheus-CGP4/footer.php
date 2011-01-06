@@ -18,6 +18,13 @@ global $tracker_code;
 	<div id='footer'>
 		<span class='left '><?= ThemeTable::getGlobalParaValue(PageManager::$site_id, 307) ?></span>
 		<span class='right '><?= ThemeTable::getGlobalParaValue(PageManager::$site_id, 308) ?></span>		
+		
+		<br>
+		
+		<div class="info" align="left">
+			<?= ThemeTable::getGlobalParaValue(PageManager::$site_id, 309) ?>
+		</div>
+		
 	</div> <!-- footer -->
 
 	<br />

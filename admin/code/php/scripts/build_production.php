@@ -254,6 +254,9 @@ if (BUILD_MODE == 'settings' || BUILD_MODE == 'all'){
 		"$base_dir/code/js/dialogs/AccountDialog.class.js",
 		"$base_dir/code/js/dialogs/ImagePickerDialog.class.js",
 		"$base_dir/code/js/dialogs/ColorPickerDialog.class.js",	
+		"$base_dir/code/js/dialogs/WordpressImporter.class.js",
+		"$base_dir/code/js/dialogs/LiveJournalImporter.class.js",
+		"$base_dir/code/js/dialogs/BloggerImporter.class.js",
 		// Sub-Frames....
 		"$base_dir/code/js/subframes/ImageSelector.class.js",		
 		// Frames....

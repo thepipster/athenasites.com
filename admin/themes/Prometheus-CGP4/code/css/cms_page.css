@@ -12,20 +12,39 @@ This is the blog theme for the integrated blog on Charlotte Geary Photography v3
 */
 
 
+html {
+    height: 100%;
+    width:100%;
+    margin: 0;
+    padding: 0;
+}
+
 html, body {
     font-family: century gothic, optima, Lucida Sans Unicode, Verdana, Tahoma, Trebuchet MS, Helvetica, Arial;
-    font-size: 12px !important;
-    color: #404040;
+    font-size: 11px;
+    height: 100%;
+    width:100%;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    padding-top: 25px;
+    padding-top: 30px;
     margin-right: 10px;
     padding-bottom: 10px;
-    height: auto;
-    width: 100%;
 }
 
+a {
+    font-size: 11px !important;
+    text-decoration: none !important;
+    outline:none !important;
+    color: #516B9E !important;
+}
+
+
+a:link { color: #516b9e; }
+a:hover { color: #4b59e0;}
+a:visited { color: #68728d;}
 
 h1 {
     font-family: century gothic, optima, Lucida Sans Unicode, Verdana, Tahoma, Trebuchet MS, Helvetica, Arial;
@@ -77,16 +96,4 @@ p {
     padding-left: 15px;
     padding-right: 15px;
     z-index: 10;
-}
-
-a:link {
-    color: #516b9e;
-}
-
-a:hover {
-    color: #4b59e0;
-}
-
-a:visited {
-    color: #68728d;
 }
