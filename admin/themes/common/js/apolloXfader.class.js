@@ -19,7 +19,7 @@ var apolloXfader = {
 	
 	targetDiv : '',
 	
-	noScaleUp : true,
+	noScaleUp : false,
 	
 	// ///////////////////////////////////////////////////////////////////
 	
@@ -159,8 +159,7 @@ var apolloXfader = {
 	// ///////////////////////////////////////////////////////////////////
 			
 	resizeImage : function() {
-		
-				
+						
 		if (!apolloXfader.isFullScreen){
 
 			var divObj = $(apolloXfader.targetDiv);		
@@ -182,18 +181,23 @@ var apolloXfader = {
 			$('#xFadeImage2').css("z-index", 0);
 	
 			if (apolloXfader.isFullScreen){
-				$('.xFadeImage').css({"height":divObj.height() + "px"});
-				$('.xFadeImage').css({"width":divObj.width() + "px"});
+				$('.xFadeImage').css("height", divObj.height() + "px");
+				$('.xFadeImage').css("width", divObj.width() + "px");
 			}
 			else {
 				if (apolloXfader.noScaleUp){
-					$('.xFadeImage').css({"width": Math.min(divObj.width(), $('.xFadeImage').width())  + "px"});				
+					if ($('.xFadeImage').width() > 0){
+						$('.xFadeImage').css("width", Math.min(divObj.width(), $('.xFadeImage').width())  + "px");				
+					}
+					else {
+						$('.xFadeImage').css("width", divObj.width() + "px");				
+					}
 				}
 				else {
-					$('.xFadeImage').css({"width": divObj.width() + "px"});				
+					$('.xFadeImage').css("width", divObj.width() + "px");				
 				}
 			}
-		
+					
 		}
 		else {
 		
