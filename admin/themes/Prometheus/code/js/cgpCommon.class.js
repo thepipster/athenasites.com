@@ -32,8 +32,6 @@ var cgpCommon = {
 			$('.pageContents').css('background-image', "url('')");
 		}
 		
-		cgpCommon.roundCorners();
-
 		// Setup debugger		
 		Logger.init('#debug_txt');
 		

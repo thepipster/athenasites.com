@@ -24,6 +24,8 @@ html {
     min-height: 400px;
     z-index: 1;
     background-color: white;
+	-moz-border-radius: 8px;
+	border-radius: 8px;	
     /*
 	filter: alpha(opacity=40);-moz-opacity:.40;opacity:.40;
 	*/
@@ -215,6 +217,12 @@ a {
     padding: 0px;
     margin: 0px;
 }
+
+#navigation .selected {
+	color: #9097b2;
+	font-weight: bold !important;
+}
+
 #navigation .menuItem:hover {color: #9097b2;}
 
 #navigation .menuTagItem {
@@ -224,6 +232,22 @@ a {
     margin: 0px;
 }
 #navigation .menuTagItem:hover {color: #9097b2;}
+
+/* Sub-Item (like mediatags/blogtags */
+
+#navigation .menuSubItem {
+    font-size: 10px;
+    color: #404040;
+    padding: 0px;
+    margin: 0px;
+}
+
+#navigation .menuSubItem:hover {color: #9097b2;}
+
+#navigation .subItemSelected {
+	color: #9097b2;
+	font-weight: bold !important;
+}
 
 #menuContainer ul li {
     list-style: none;

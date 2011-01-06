@@ -6,6 +6,14 @@
 // Do default actions
 PageManager::doHeader();
 
+$media_tag_list = MediaTable::getTags(PageManager::$site_id);
+
+if (!defined('VIRTUAL_PAGE_ID')){
+	define('VIRTUAL_PAGE_ID', 0);
+}
+
+$WEDDING_IDEAS_PAGE_ID = 33;
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" <?= PageManager::getLanguageAttributes(); ?>>
@@ -23,31 +31,79 @@ PageManager::doHeader();
 	<!-- Favicon ///////////////////////////////////////////////////// -->
 
 	<link rel="shortcut icon" type="image/png" href="<?= PageManager::getFavIconURL() ?>">
-	
+
+	<?php
+	/*
 	<!-- Style sheets ///////////////////////////////////////////////////// -->
 
 	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>style.css" type="text/css" media="screen" />
 	
 	<!-- JS Includes ///////////////////////////////////////////////////// -->
 
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js?key=ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
+    <script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/swfobject.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/AC_OETags.js"></script>	
+	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/date.js"></script>	
+	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/jquery.datePicker.min-2.1.2.js"></script>	
 
 	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/apolloXfader.class.js"></script>	
+	<script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/utils/Logger.class.js"></script>
 	
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/AC_OETags.js"></script>	
-	<!--
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/jquery_plugins/jquery.dimensions.min.js"></script>
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/jquery_plugins/jquery.accordion.js"></script>
-	-->
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/jquery_plugins/jquery.corners.min.js"></script>
-	
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/jquery_plugins/date.js"></script>
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/3rdparty/jquery_plugins/jquery.datePicker.min-2.1.2.js"></script>
-
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/Logger-min.class.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/cgpCommon.class.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/cgpBlog.class.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/cgpContact.class.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/cgpGallery.class.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/cgpHome.class.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/cgpProduct.class.js"></script>
+		
+	@import url("code/css/main.css");
+	@import url("code/css/blog.css");
+	@import url("code/css/contact.css");
+	@import url("code/css/datePicker.css");	
+	*/	
+	if (DEV_MODE) {
+			
+		$common_base_dir = FILE_ROOT . "admin/themes/common/";
+		$theme_base_dir = FILE_ROOT . "admin/themes/Prometheus-CGP4/code";
+				
+		$js_list = array(
+			//"$common_base_dir/js/3rdparty/jquery-1.4.2.min.js",
+			//"$common_base_dir/js/3rdparty/jquery-ui/jquery-ui-1.8.4.custom.min.js",
+			"$common_base_dir/js/3rdparty/swfobject.js",
+			"$common_base_dir/js/3rdparty/AC_OETags.js",
+			"$common_base_dir/js/3rdparty/jquery.datePicker.min-2.1.2.js",
+			
+			"$common_base_dir/js/apolloXfader.class.js",
+			"$common_base_dir/js/utils/Logger.class.js",
+			
+			"$theme_base_dir/js/cgpCommon.class.js",
+			"$theme_base_dir/js/cgpBlog.class.js",
+			"$theme_base_dir/js/cgpCommon.class.js",
+			"$theme_base_dir/js/cgpContact.class.js",
+			"$theme_base_dir/js/cgpGallery.class.js",
+			"$theme_base_dir/js/cgpHome.class.js",
+			"$theme_base_dir/js/cgpProduct"
+		);
+		
+		$css_list = array(
+			"$theme_base_dir/css/main.css",
+			"$theme_base_dir/css/blog.css",
+			"$theme_base_dir/css/contact.css",
+			"$theme_base_dir/css/datePicker.css"
+		);
+		
+		ProductionBuilder::buildProductionJS($js_list, "$theme_base_dir/js/prod_cgp.js", true);
+		ProductionBuilder::buildProductionCSS($css_list, "$theme_base_dir/css/prod_cgp.css", false);
+		
+	}
+	
+	?>
+		
+	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>code/css/prod_cgp.css" type="text/css" media="screen" />
+
+    <script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/jquery-ui/jquery-ui-1.8.4.custom.min.js"></script>
+		
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/prod_cgp.js"></script>
 
 	<!-- Page Styles  //////////////////////////////////////////////////// -->
 
@@ -127,7 +183,7 @@ PageManager::doHeader();
 												foreach($catList as $cat){
 													$cat_slug = StringUtils::encodeSlug($cat, '');
 													$link = PageManager::$blog_url . "?category=" . $cat_slug;
-													echo "<li><a href='{$link}'><span class='menuItem' id='blogMenuItem_{$cat_slug}'>{$cat_slug}</span></a></li>";
+													echo "<li style='padding:0; margin:0'><a href='{$link}'><span class='menuItem' id='blogMenuItem_{$cat_slug}'>{$cat_slug}</span></a></li>";
 												}											
 												print("</ul>");	
 												
@@ -138,7 +194,7 @@ PageManager::doHeader();
 												foreach($tagList as $tag){
 													$tag_slug = StringUtils::encodeSlug($tag, '');
 													$link = PageManager::$blog_url . "?tag=" . $tag_slug;
-													echo "<li><a href='{$link}'><span class='menuTagItem' id='blogMenuItem_{$tag_slug}'>{$tag_slug}</span></a></li>";
+													echo "<li style='padding:0; margin:0'><a href='{$link}'><span class='menuTagItem' id='blogMenuItem_{$tag_slug}'>{$tag_slug}</span></a></li>";
 													// <li><a href='/blog/?tag=air-force-academy'><span class='menuTagItem' id='blogMenuItem_air-force-academy'>air force academy</span></a></li>
 												}											
 												
@@ -147,7 +203,7 @@ PageManager::doHeader();
 											}								
 										}
 										else {
-											print("    <span class='menuHead'>".strtoupper($title)."</span>");									
+											print("    <span class='menuHead' id='page_$child_id'>".strtoupper($title)."</span>");									
 										}
 										
 										
@@ -164,12 +220,31 @@ PageManager::doHeader();
 														
 												//Logger::debug(">> Child Page: $child_title Link: $child_link");
 																					
-												if ($child['id'] == $page_id){
-													print("<li><a href='$child_link' onclick=''><span class='menuItem' id='$child_id'><b>$child_title</b></span></a></li>");
+												if ($child['id'] == PageManager::$page_id){
+													print("<li><a href='$child_link' onclick=''><span class='menuItem selected' id='page_$child_id'>$child_title</span></a></li>");
 												}
 												else {											
-													print("<li><a href='$child_link' onclick=''><span class='menuItem' id='$child_id'>$child_title</span></a></li>");
+													print("<li><a href='$child_link' onclick=''><span class='menuItem' id='page_$child_id'>$child_title</span></a></li>");
 												}											
+												
+													
+												if ($child['id'] == $WEDDING_IDEAS_PAGE_ID && (PageManager::$page_id == $WEDDING_IDEAS_PAGE_ID || VIRTUAL_PAGE_ID == $WEDDING_IDEAS_PAGE_ID)){
+												
+													foreach($media_tag_list as $tag){
+														$tag_slug = StringUtils::encodeSlug($tag, '');
+														$link = "/wedding-ideas/$tag_slug";
+																												
+														if (strpos($_SERVER['REQUEST_URI'], $link) === false){
+															echo "<li style='padding:0; margin:0'><a href='{$link}'><span class='menuSubItem' id='mediaTagMenuItem_{$tag_slug}'>{$tag}</span></a></li>";
+														}
+														else {
+															echo "<li style='padding:0; margin:0'><a href='{$link}'><span class='menuSubItem subItemSelected' id='mediaTagMenuItem_{$tag_slug}'>{$tag}</span></a></li>";
+														}
+														// <li><a href='/blog/?tag=air-force-academy'><span class='menuTagItem' id='blogMenuItem_air-force-academy'>air force academy</span></a></li>
+													}	
+													
+												}
+												
 											}
 										}																			
 										print("    </ul>");		
