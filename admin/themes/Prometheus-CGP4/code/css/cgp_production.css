@@ -1,0 +1,684 @@
+html, body {
+    font-family: century gothic, optima, Lucida Sans Unicode, Verdana, Tahoma, Trebuchet MS, Helvetica, Arial;
+    font-size: 11px;
+    height: 100%;
+    width:100%;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    height: 100%;
+    width:100%;
+    margin: 0;
+    padding: 0;
+    background-color: #262636;
+    background-image: url('../imgs/background.png');
+    background-repeat: repeat;
+}
+
+
+#container {
+    width: 80%;
+    min-width: 800px;
+    min-height: 400px;
+    z-index: 1;
+    background-color: white;
+	-moz-border-radius: 8px;
+	border-radius: 8px;	
+    /*
+	filter: alpha(opacity=40);-moz-opacity:.40;opacity:.40;
+	*/
+}
+
+a {
+    text-decoration: none;
+    outline:none;
+}
+
+#debug_txt {
+    display: none;
+    position: absolute;
+    padding: 5px;
+    overflow: auto;
+    top: 20px;
+    left: 400px;
+    width: 250px;
+    height: 500px;
+    background-color: black;
+    z-index: 9999;
+    border: medium double gray;
+    filter: alpha(opacity=60);-moz-opacity:.60;opacity:.60;
+}
+
+/* Style for images when no flash present //////////////////////// */
+
+#noFlashImage {
+    width: 90%;
+    padding-left: 15px;
+    margin: 20px;
+}
+
+#noFlashImage .title{
+    font-size: 15px !important;
+    color: #404040;
+    display: block;
+    font-weight: normal;
+}
+
+#noFlashImage .caption{
+    font-size: 13px !important;
+    color: #404040;
+    display: block;
+    font-weight: normal;
+}
+
+/* Global page styles ///////////////////////////////////////////////////// */
+
+.pageContents {
+    padding-top: 30px;
+    margin-right: 10px;
+    padding-bottom: 10px;
+    height: auto;
+    width: 100%;
+}
+
+.pageContents h1 {
+    font-size: 15px !important;
+    color: #404040;
+    display: block;
+    padding-top: 0px;
+    padding-left: 15px;
+    margin: 20px;
+    margin-top: 0px;
+    z-index: 10;
+    font-weight: normal;
+}
+
+.pageContents h2 {
+    font-size: 13px !important;
+    color: #404040;
+    display: block;
+    padding-top: 0px;
+    padding-left: 35px;
+    margin: 0px;
+    margin-top: 0px;
+    z-index: 10;
+    font-weight: bold;
+}
+
+
+.pageContents h3 {
+    font-size: 11.5px !important;
+    color: #404040;
+    display: block;
+    padding-top: 25px;
+    padding-left: 35px;
+    margin-top: 0px;
+    z-index: 10;
+    font-weight: normal;
+}
+
+
+.pageContents p {
+    font-size: 11.5px !important;
+    line-height: 19px;
+    color: #404040;
+    display: block;
+    margin: 10px 20px 20px 20px;
+    padding-left: 15px;
+    padding-right: 15px;
+    z-index: 10;
+}
+
+.pageContents table {
+    font-size: 11.5px !important;
+    line-height: 19px;
+    color: #404040;
+    display: block;
+    margin: 10px 20px 20px 20px;
+    padding-left: 15px;
+    padding-right: 15px;
+    z-index: 10;
+}
+
+.pageContents a:link {
+    color: #516b9e;
+}
+
+.pageContents a:hover {
+    color: #4b59e0;
+}
+
+.pageContents a:visited {
+    color: #68728d;
+}
+
+/* Menu Container ///////////////////////////////////////////////////// */
+
+.treeMenuLogo {
+    background-image: url("../imgs/tree_whitebg2.jpg");
+    background-position: bottom left;
+    background-repeat: no-repeat;
+    background-color: red;
+}
+
+#treeMenuLogo {
+	position: absolute;
+	bottom: 38px;
+	padding-left: 50px;
+	z-index: 0;
+}
+
+#menuContainer {
+    width: 100%;
+    height: 100%;
+    min-width:180px;
+    padding: 0px;
+    margin: 0px;
+    margin-top: 30px;
+    overflow: hidden;
+}
+
+#menuContainer .spacer {
+    height: 20px;
+    display: block;
+}
+
+#navigation {
+    /* display: none; */
+    padding: 0px;
+    margin: 0px;
+}
+
+#navigation .menuHead_NonAccordian {
+    font-size: 15px !important;
+    color: #404040;
+    /*margin-top: 25px;
+	margin-bottom: 10px;*/
+    cursor: pointer;
+    padding: 0px;
+    margin: 0px;
+}
+
+#navigation .menuHead {
+    font-size: 15px !important;
+    color: #404040;
+    /*margin-top: 25px;
+	margin-bottom: 10px;*/
+    cursor: pointer;
+    padding: 0px;
+    margin: 0px;
+}
+
+#navigation .menuItem {
+    font-size: 13px;
+    color: #404040;
+    padding: 0px;
+    margin: 0px;
+}
+
+#navigation .selected {
+	color: #9097b2;
+	font-weight: bold !important;
+}
+
+#navigation .menuItem:hover {color: #9097b2;}
+
+#navigation .menuTagItem {
+    font-size: 10px;
+    color: #404040;
+    padding: 0px;
+    margin: 0px;
+}
+#navigation .menuTagItem:hover {color: #9097b2;}
+
+/* Sub-Item (like mediatags/blogtags */
+
+#navigation .menuSubItem {
+    font-size: 10px;
+    color: #404040;
+    padding: 0px;
+    margin: 0px;
+}
+
+#navigation .menuSubItem:hover {color: #9097b2;}
+
+#navigation .subItemSelected {
+	color: #9097b2;
+	font-weight: bold !important;
+}
+
+#menuContainer ul li {
+    list-style: none;
+    margin-left: 0;
+    padding-left: 1em;
+    text-indent: -1em;
+}
+
+#menuContainer li li{
+    display: block;
+    text-align: right;
+    margin-top: 3px;
+    /* margin-bottom: 5px; */
+    padding-bottom: 5px;
+    cursor: pointer;
+}
+
+/* Logo ////////////////////////////////////////////////////////////// */
+
+#logo {
+    width: 80%; /* Same width as #container */
+    height: 67px;
+    background-image: url("../imgs/logo.png");
+    background-repeat: no-repeat;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+/* Footer /////////////////////////////////////////////////////////// */
+
+#footer {
+    width: 80%; /* Same width as #container */
+    padding-top: 10px;
+    color: #8383a6;
+    font-size: 10px !important;
+}
+
+#footer .left {
+    float: left;
+}
+
+#footer .right {
+    float: right;
+}
+
+#footer .info {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 10px !important;
+    color: #8383a6;
+
+}
+/*
+Theme Name: CGP3
+Theme URI: http://wordpress.org/
+Description: Wordpress theme for Charlotte Geary Photography v3
+Version: 1.0
+Author: Mike Pritchard
+Tags: cgp3, photography
+
+Wordpress theme for Charlotte Geary Photography v3 by Dave Shea || http://mezzoblue.com
+Modifications by Mike Pritchard || http://blog.thepipster.com
+This is the blog theme for the integrated blog on Charlotte Geary Photography v3
+*/
+
+#blogPage {
+	font-family: century gothic, optima, Lucida Sans Unicode, Verdana, Tahoma, Trebuchet MS, Helvetica, Arial;
+	font-size: 12px !important;
+	color: #404040;
+	width: 90%;
+	height: 100%;
+	margin-right: 50px;
+	margin-left: 50px;
+}
+
+#blogPage .post {
+	/*margin-left: 15px;*/
+}
+
+#blogPage .blogDate{
+	font-size: 13px !important;
+	display: block;
+	padding-top: 0px;
+	padding-left: 0px;
+	margin: 20px;
+	margin-top: 0px;
+	margin-left: 0px;
+}
+
+#blogPage .meta{
+	display: block;
+	padding-top: 0px;
+	padding-left: 0px;
+	margin: 20px;
+	margin-top: 0px;
+	margin-left: 0px;
+}
+
+#blogPage .storycontent{
+	width: 90%;
+	margin: 0px;
+	padding: 0px;
+}
+
+#blogPage h1 {
+	padding-left: 0px;
+	margin-left: 0px;
+}
+
+#blogPage h2 {
+	font-family: century gothic, optima, Lucida Sans Unicode, Verdana, Tahoma, Trebuchet MS, Helvetica, Arial;
+	font-size: 16px !important;
+	color: #404040;
+	display: block;
+	padding: 0px;
+	padding-top: 20px;
+	margin: 0px;
+	margin-top: 0px;
+	z-index: 10;
+	font-weight: bold;
+}
+
+#blogPage p {
+	font-size: 11.5px !important;
+	line-height: 15px;
+	color: #404040;
+	display: block;	
+	margin: 0px;
+	margin-top: 10px;
+	margin-right: 20px;
+	padding-left: 0px;
+	padding-right: 15px;
+	padding-bottom: 15px;
+	text-align: left;
+}
+
+#blogPage .feedback {
+	font-size: 11.5px !important;
+	line-height: 19px;
+	color: #404040;
+	display: block;
+	margin: 10px 20px 20px 20px;
+	padding-left: 0px;
+	padding-right: 15px;
+	text-align: left;
+}
+
+#blogPage .more-link {
+	font-weight: bold;
+	font-size: 12px !important;
+	text-decoration: underline;
+}
+
+#blogPage .apolloPageBreak {
+	font-weight: bold;
+	font-size: 12px !important;
+	text-decoration: underline;
+}
+
+
+/* Spacer between blog posts (horizontal dotted line) */
+#blogPage .post_spacer_outer {
+	width: auto;
+	padding-left: 0px;
+	padding-right: 35px;
+}
+
+#blogPage .post_spacer {
+	border-bottom-color: #e6e6e6;
+	border-style: none;
+	border-bottom-style: solid;
+	border-width: 5px;
+	padding: 0px;
+	margin: 0px;
+	margin-right: 35px;	
+	width: 100%;
+	height: 5px;
+}
+
+
+/* Comment List //////////////////////////////////////////////// */
+
+#blogPage .comment_author {
+	font-weight: bold;
+}
+
+#blogPage .comment_time {
+}
+
+$blogPage .comment_wrapper {
+	width: auto;
+	padding-left: 0px;
+	padding-right: 35px;
+	height: 50px;
+	background-color: green;
+}
+
+
+#blogPage .comment {
+	border-width: 2px;
+	padding: 0px;
+	margin: 0px;
+	margin-right: 35px;	
+	width: 100%;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	margin-top: 5px;
+	margin-bottom: 7px;
+}
+
+
+#blogPage .odd {
+	background-color: #efeef5;
+}
+
+#blogPage .even {
+	background-color: #ebf0f6;
+}
+
+/*
+#commentlist .comment  {
+	padding-left: 20px;
+	padding-bottom: 10px;
+	padding-right: 5px;
+	padding-top: 5px;
+	margin: 15px 0 10px;
+	background-color: red;
+}
+
+#commentlist li ul li { 
+	margin-right: -5px;
+	margin-left: 10px;
+	background-color: red;
+}
+
+#commentlist p {
+	margin: 10px 5px 10px 0;
+}
+
+#commentlist .odd {
+	background-color: #d3d8f3;
+}
+
+#commentlist .even {
+	background-color: #e2e3f3;
+}
+*/
+
+
+
+/* Contact Form Table /////////////////////////////////// */
+
+#contactForm table {
+	background-color: #99a1b4; 
+	width: 90%;
+}
+
+#contactForm .spacer {
+	height: 30px;
+}
+
+#contactForm .tableTitle {
+	color: black;
+	padding-bottom: 15px;
+	text-align: center;
+	font-size: 14px;
+	font-weight: normal;
+}
+
+#contactForm .fieldName {
+	color: black;
+	padding-right: 5px;
+	text-align: right;
+}
+
+#contactForm .fieldInput {
+	color: white;
+	text-align: left;
+}
+
+#contactForm .spacerCol {
+}
+
+
+#contactForm textArea {
+	width:91%; 
+	height:125px;
+}
+
+#contactForm input {
+	width:90%; 
+}
+
+#contactForm select {
+	width:91%; 
+}
+
+#contactForm .button {
+	width: 50px;
+	border: 1px solid #006; 
+}
+
+#contactForm .button:hover {
+	background-color: #cccccc;
+}
+
+
+table.jCalendar {
+	border: 1px solid #000;
+	background: #aaa;
+    border-collapse: separate;
+    border-spacing: 2px;
+}
+table.jCalendar th {
+	background: #333;
+	color: #fff;
+	font-weight: bold;
+	padding: 3px 5px;
+}
+
+table.jCalendar td {
+	background: #ccc;
+	color: #000;
+	padding: 3px 5px;
+	text-align: center;
+}
+table.jCalendar td.other-month {
+	background: #ddd;
+	color: #aaa;
+}
+table.jCalendar td.today {
+	background: #666;
+	color: #fff;
+}
+table.jCalendar td.selected {
+	background: #f66;
+	color: #fff;
+}
+table.jCalendar td.selected.dp-hover {
+	background: #f33;
+	color: #fff;
+}
+table.jCalendar td.dp-hover,
+table.jCalendar tr.activeWeekHover td {
+	background: #fff;
+	color: #000;
+}
+table.jCalendar tr.selectedWeek td {
+	background: #f66;
+	color: #fff;
+}
+table.jCalendar td.disabled, table.jCalendar td.disabled.dp-hover {
+	background: #bbb;
+	color: #888;
+}
+table.jCalendar td.unselectable,
+table.jCalendar td.unselectable:hover,
+table.jCalendar td.unselectable.dp-hover {
+	background: #bbb;
+	color: #888;
+}
+
+/* For the popup */
+
+/* NOTE - you will probably want to style a.dp-choose-date - see how I did it in demo.css */
+
+div.dp-popup {
+	position: relative;
+	background: #ccc;
+	font-size: 10px;
+	font-family: arial, sans-serif;
+	padding: 2px;
+	width: 171px;
+	line-height: 1.2em;
+}
+div#dp-popup {
+	position: absolute;
+	z-index: 199;
+}
+div.dp-popup h2 {
+	font-size: 12px;
+	text-align: center;
+	margin: 2px 0;
+	padding: 0;
+}
+a#dp-close {
+	font-size: 11px;
+	padding: 4px 0;
+	text-align: center;
+	display: block;
+}
+a#dp-close:hover {
+	text-decoration: underline;
+}
+div.dp-popup a {
+	color: #000;
+	text-decoration: none;
+	padding: 3px 2px 0;
+}
+div.dp-popup div.dp-nav-prev {
+	position: absolute;
+	top: 2px;
+	left: 4px;
+	width: 100px;
+}
+div.dp-popup div.dp-nav-prev a {
+	float: left;
+}
+/* Opera needs the rules to be this specific otherwise it doesn't change the cursor back to pointer after you have disabled and re-enabled a link */
+div.dp-popup div.dp-nav-prev a, div.dp-popup div.dp-nav-next a {
+	cursor: pointer;
+}
+div.dp-popup div.dp-nav-prev a.disabled, div.dp-popup div.dp-nav-next a.disabled {
+	cursor: default;
+}
+div.dp-popup div.dp-nav-next {
+	position: absolute;
+	top: 2px;
+	right: 4px;
+	width: 100px;
+}
+div.dp-popup div.dp-nav-next a {
+	float: right;
+}
+div.dp-popup a.disabled {
+	cursor: default;
+	color: #aaa;
+}
+div.dp-popup td {
+	cursor: pointer;
+}
+div.dp-popup td.disabled {
+	cursor: default;
+}

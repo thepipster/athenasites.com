@@ -91,19 +91,19 @@ $WEDDING_IDEAS_PAGE_ID = 33;
 			"$theme_base_dir/css/datePicker.css"
 		);
 		
-		ProductionBuilder::buildProductionJS($js_list, "$theme_base_dir/js/prod_cgp.js", true);
-		ProductionBuilder::buildProductionCSS($css_list, "$theme_base_dir/css/prod_cgp.css", false);
+		ProductionBuilder::buildProductionJS($js_list, "$theme_base_dir/js/cgp_production.js", true);
+		ProductionBuilder::buildProductionCSS($css_list, "$theme_base_dir/css/cgp_production.css", false);
 		
 	}
 	
 	?>
 		
-	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>code/css/prod_cgp.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="<?= PageManager::$theme_url_root; ?>code/css/cgp_production.css" type="text/css" media="screen" />
 
     <script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="<?= PageManager::$common_url_root; ?>js/3rdparty/jquery-ui/jquery-ui-1.8.4.custom.min.js"></script>
 		
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/prod_cgp.js"></script>
+	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>code/js/cgp_production.js"></script>
 
 	<!-- Page Styles  //////////////////////////////////////////////////// -->
 
