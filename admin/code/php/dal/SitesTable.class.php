@@ -44,10 +44,17 @@ class SitesTable {
     
 	// /////////////////////////////////////////////////////////////////////////////////
 
-	public static function getNumberSites(){return DatabaseManager::getVar("SELECT COUNT(id) AS no FROM apollo_Sites");}
+	public static function getNumberSites(){return DatabaseManager::getVar("SELECT count(distinct(id)) AS no FROM apollo_Sites;");}
     
 	// /////////////////////////////////////////////////////////////////////////////////
 
+	public static function getUniqueSites(){
+		$sql = DatabaseManager::prepare("SELECT * FROM apollo_Sites GROUP BY id");			
+		return DatabaseManager::getResults($sql);				
+	}
+	
+	// /////////////////////////////////////////////////////////////////////////////////
+	
 	public static function getSite($id){
 		$sql = DatabaseManager::prepare("SELECT * FROM apollo_Sites WHERE id = %d ", $id);			
 		return DatabaseManager::getSingleResult($sql);				

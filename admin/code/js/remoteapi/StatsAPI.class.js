@@ -23,11 +23,11 @@ var StatsAPI = {
     /**
     * Get the server stats (for s-users only)
     */
-    getServerStats : function(callback){
+    getServerStats : function(noDays, callback){
 
         AthenaDialog.showLoading("Loading stats");
 
-        var paras = { cmd : 'getServerStats', site_id: 1};
+        var paras = { cmd : 'getServerStats', days: noDays, site_id: 1};
 
         $.ajax({
             url: StatsAPI.m_url,

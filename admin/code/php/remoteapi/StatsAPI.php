@@ -19,11 +19,13 @@ Logger::debug("Command = " . $cmd);
 switch ($cmd) {
 
     case "getServerStats":
-        getServerStats();
+		$no_days = CommandHelper::getPara('days', true, CommandHelper::$PARA_TYPE_NUMERIC);
+        getServerStats($no_days);
         break;
 
     case "getSiteSummaryStats":
-        getSiteSummaryStats($site_id);
+        getSiteSummaryStats($site_id)
+        ;
         break;
         
     default :
@@ -36,7 +38,7 @@ switch ($cmd) {
 //
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-function getServerStats(){
+function getServerStats($no_days){
 
     $msg['cmd'] = 'getSummary';
     $msg['result'] = 'fail';
@@ -45,11 +47,12 @@ function getServerStats(){
 	if (!SecurityUtils::isSuperUser()) {
 	    CommandHelper::sendMessage($msg);
     	$msg['data'] = 'you are not authorized to get this data!';
+    	Logger::error('Unauthorized access to stats page');
 	    CommandHelper::sendMessage($msg);
 		return;
 	}
 	
-	$sites_list = SitesTable::getSites();
+	$sites_list = SitesTable::getUniqueSites();
 	
 	$disc_usage = 0;
 	foreach($sites_list as $site){
@@ -62,7 +65,7 @@ function getServerStats(){
     
     for($i=0; $i<=2; $i++){
     
-	    $page_views = StatsRollupTables::getGlobalPageViewsForServer($i, 90);
+	    $page_views = StatsRollupTables::getGlobalPageViewsForServer($i, $no_days);
 	    $views = array();
 	
 	    if (isset($page_views)) {
@@ -70,18 +73,17 @@ function getServerStats(){
                 $temp = array();
                 $temp['dt'] = $view['rollup_date'];
                 $temp['pv'] = $view['page_views'];
-                $views[] = $temp;
+                $views[] = $temp;                
 	        }
 	    }
 	    
 	    $server_views[] = $views;
     }
 
-
-
     $msg['getStats'] = "getStats";
     $msg['result'] = 'ok';
     $msg['data'] = array('disc_usage' => $disc_usage . "", 'server_page_views' => $server_views);
+        
     CommandHelper::sendMessage($msg);
 }
 

@@ -81,7 +81,7 @@ class StatsRollupTables {
 
         $date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $no_days, date("Y")));
 
-        $sql = DatabaseManager::prepare("SELECT * FROM stats_RollupServer WHERE rollup_date > %s AND server_no = %d ORDER BY rollup_date DESC", $site_id, $server_no, $date_from);
+        $sql = DatabaseManager::prepare("SELECT * FROM stats_RollupServer WHERE rollup_date > %s AND server_no = %d ORDER BY rollup_date DESC", $date_from, $server_no);
         return DatabaseManager::getResults($sql);
     }
     
