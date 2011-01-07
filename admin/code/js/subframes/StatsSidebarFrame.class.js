@@ -145,7 +145,7 @@ var StatsSidebarFrame = {
         var txt = '';
         var selected = '';
         
-        if (page_id == StatsStore.m_currentPageID){
+        if (page_id == StatsStore.m_currentPageID && post_id == StatsStore.m_currentPostID){
             selected = 'selected';
         }
 
