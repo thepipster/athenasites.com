@@ -12,10 +12,11 @@ $server_list = array(
     array('no' => 99, 'iplong' => ip2long('127.0.0.1'), 'ip' => '127.0.0.1')
 );
 
-$NO_SITES = 7;
-
 // FOR DEBUGGING, CLEAR TABLES!!!
 /*
+
+$NO_SITES = 7;
+
 DatabaseManager::submitQuery("TRUNCATE stats_RollupServer");
 
 // Create/clear rollup tables
@@ -42,6 +43,8 @@ if (!isset($last_date)) {
 }
 
 Logger::debug("Last Date: $last_date, which was $no_days days ago");
+
+$no_days = 5;
 
 // Get a list of all the sites
 $site_list = SitesTable::getUniqueSites();
@@ -100,7 +103,7 @@ foreach ($site_list AS $site) {
                 $server_ip = $data['server_ip'];
 
 				if (isset($post_id) && $post_id > 0){
-					$page_title = DatabaseManager::getVar("SELECT title FROM athena_{$site_id}_Pages WHERE id = $post_id");					
+					$page_title = DatabaseManager::getVar("SELECT title FROM athena_{$site_id}_Posts WHERE id = $post_id");					
 				}
 				
 				if (!isset($post_id)){
@@ -115,13 +118,9 @@ foreach ($site_list AS $site) {
                 // Get keywords
                 $key_str = getKeywordString($site_id, $date_from, $date_end);
 
-                // Remove any "
-                $tags = array("\"");
-                $replace = "";
-                $key_str = str_ireplace($tags, $replace, $key_str);
-
-                DatabaseManager::insert("INSERT INTO stats_{$site_id}_RollupPageViews (rollup_date, page_views, unique_visitors, page_title, keywords, page_id, post_id)
-                		VALUES ('$day_date', $page_views, $unique_views, '$page_title', \"$key_str\", $page_id, $post_id)");
+				$sql = DatabaseManager::prepare("INSERT INTO stats_{$site_id}_RollupPageViews (rollup_date, page_views, unique_visitors, page_title, keywords, page_id, post_id) VALUES (%s, %d, %d, %s, %s, %d, %d)",
+                	$day_date, $page_views, $unique_views, $page_title, $key_str, $page_id, $post_id);
+                DatabaseManager::insert($sql);
             }
 
         }
