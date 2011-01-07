@@ -194,6 +194,13 @@ function getSiteSummaryStats($site_id, $no_days) {
 function getPageStats($site_id, $page_id, $post_id, $no_days){
 
     $date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $no_days, date("Y")));
+    $no_days = floor(TimeUtils::getElapsedDays($date_from));
+    
+    $views = array($no_days);
+    for($i=1; $i<=$no_days; $i++){
+    	$date = date("Y-m-d", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $i, date("Y")));
+    	$views[$i] = array("dt" => $date, "uv" => 0, "pv" => 0);
+    }
     
 	if (isset($post_id) && $post_id > 0){
         $sql = DatabaseManager::prepare("SELECT * FROM stats_%d_RollupPageViews WHERE post_id = %d AND rollup_date > %s ORDER BY rollup_date DESC, unique_visitors DESC", $site_id, $post_id, $date_from);
@@ -203,21 +210,32 @@ function getPageStats($site_id, $page_id, $post_id, $no_days){
 	}
 	
     $page_views = DatabaseManager::getResults($sql);
-
-	Logger::dump($page_views);
-
-    $views = array();
-
+	
     if (isset($page_views)) {
-        foreach ($page_views as $view) {
-                $temp = array();
-                $temp['dt'] = $view['rollup_date'];
-                $temp['uv'] = $view['unique_visitors'];
-                $temp['pv'] = $view['page_views'];
-                $views[] = $temp;
-        }
-    }
 
+		$uv_list = array();
+		$pv_list = array();
+		
+	    foreach ($page_views as $view) {
+	    	$uv_list[$view['rollup_date']] = $view['unique_visitors'];
+	    	$pv_list[$view['rollup_date']] = $view['page_views'];
+		}
+
+		for($i=0; $i<$no_days; $i++){
+	    	$date = date("Y-m-d", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $i, date("Y")));
+	    	Logger::debug($date);
+	    	if (isset($uv_list[$date])){
+	    		$views[$i]['uv'] = $uv_list[$date];
+	    	}
+	    	if (isset($pv_list[$date])){
+	    		$views[$i]['pv'] = $pv_list[$date];
+	    	}
+		}
+						
+    }
+    
+    Logger::dump($views);
+    
     $msg['cmd'] = "getPageStats";
     $msg['result'] = 'ok';
     $msg['data'] = array('page_views' => $views);

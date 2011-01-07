@@ -113,8 +113,8 @@ Logger::debug("$domain has site_id = $site_id");
 				<div align="center">
 	                <div class="apolloStatsGraphWrapper" style='height:400px; width:90%; margin-top:40px'>
 	                    <div id="apollo_stats_graph" class="" style='height:100%; width:100%;'></div>
-	                </div>
-	                <p>Site traffic for last 30 days</p>                                                   
+	                </div>	                
+	                <p><span id='apollo_stats_graph_title'>Site traffic for last 30 days</span></p>                                                   
 					<!--
 	                <div class="apolloStatsGraphWrapper" style='height:250px; width:90%; margin-top:10px'>
 	                    <div id="apollo_crawler_graph_small" class="" style='height:100%; width:100%;'></div>

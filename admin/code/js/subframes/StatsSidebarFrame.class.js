@@ -145,6 +145,10 @@ var StatsSidebarFrame = {
         var txt = '';
         var selected = '';
         
+        if (post_id == undefined || post_id == null){
+        	post_id = 0;
+        }
+        
         if (page_id == StatsStore.m_currentPageID && post_id == StatsStore.m_currentPostID){
             selected = 'selected';
         }
@@ -156,7 +160,7 @@ var StatsSidebarFrame = {
 			var icon = "images/web_page2.png";
 		}
 		
-        txt += "<div onclick=\"StatsSidebarFrame.onSelectPage('"+page_id+"','"+post_id+"')\" class='page page_depth_0' id='page_"+page_id+"' title=''>";
+        txt += "<div onclick=\"StatsSidebarFrame.onSelectPage('"+page_id+"','"+post_id+"')\" class='page page_depth_0' id='page_"+page_id+"' title='This page has had "+AthenaUtils.addCommas(page_views,0)+" page views over this time period, page id = "+page_id+", post id = "+post_id+"'>";
         txt += "    <img class='page_icon' src='"+icon+"'>";
         txt += "    <span class='page_name "+selected+"'>"+page_title+"</span>";
 //        txt += "    <span class='page_name "+selected+"'>"+page_title+"&nbsp;"+page_views+"</span>";

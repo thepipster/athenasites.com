@@ -19,10 +19,15 @@ foreach ($site_list AS $site) {
 
 		$post_id = $stat['post_id'];
 		$id = $stat['id'];
-		
+		/*
 		if (isset($post_id) && $post_id > 0){
 			$page_title = DatabaseManager::getVar("SELECT title FROM athena_{$site_id}_Posts WHERE id = $post_id");					
 			$sql = DatabaseManager::prepare("UPDATE stats_%d_RollupPageViews SET page_title = %s WHERE id = %d", $site_id, $page_title, $id);
+			DatabaseManager::update($sql);
+		}
+		*/
+		if (!isset($post_id)){
+			$sql = DatabaseManager::prepare("UPDATE stats_%d_RollupPageViews SET post_id = 0 WHERE id = %d", $site_id, $id);
 			DatabaseManager::update($sql);
 		}
 

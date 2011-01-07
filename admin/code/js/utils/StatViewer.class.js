@@ -242,18 +242,6 @@ var StatViewer = {
 			maxTime = new Date();
 		}
 		
-        //for (var i=1; i<31; i++){
-		//	var d = new Date(googleStats[i][0]);
-		//	Logger.error(d.toString() + " - " + googleStats[i][1]);
-		//}
-		
-        now = new Date();
-        now.setDate(now.getDate()-30);
-
-        var startTime = now.getTime();
-        var endTime = maxTime.getTime();
-        
-        //Logger.debug(now.toString() + " " + maxTime.toString());
 
         var plot = jQuery.plot(jQuery(div), [
         {
@@ -306,9 +294,7 @@ var StatViewer = {
         		position: "nw"
         	},        
             xaxis: {
-                mode: "time",
-                min: startTime,
-                max: endTime
+                mode: "time"
             },
             grid: {
                 hoverable: true,
@@ -374,13 +360,10 @@ var StatViewer = {
 				pageViews.push(pageViewData[i].pv);
 				dateList.push(pageViewData[i].dt);
 			}
-		}
-		
+		}		
 		
         var graphdata1 = new Array();
         var graphdata2 = new Array();
-	    	    
-        var maxTime = new Date('1/1/1970');
 	    	    
         for (var i=0; i<uniqueViews.length; i++){
             var t = new Date(dateList[i]);
@@ -390,18 +373,8 @@ var StatViewer = {
         for (var i=0; i<pageViews.length; i++){
             var t = new Date(dateList[i]);
             graphdata2.push([t.getTime(), pageViews[i]]);
-			
-            if (t.getTime() > maxTime.getTime()){
-                maxTime = new Date(t.getTime());
-            }
         }
-	    
-	    	    
-        var now = new Date();
-        now.setDate(now.getDate()-30);
-
-        var startTime = now.getTime();
-        var endTime = maxTime.getTime();
+	       	  
 	    
         var plot = jQuery.plot(jQuery(div), [
         {
@@ -426,9 +399,7 @@ var StatViewer = {
         		position: "nw"
         	},
             xaxis: {
-                mode: "time",
-                min: startTime,
-                max: endTime
+                mode: "time"
             },
             grid: {
                 hoverable: true,
