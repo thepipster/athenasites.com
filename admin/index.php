@@ -20,7 +20,6 @@ require_once('themes/ApolloSites/header.php');
 <script src="code/js/utils/AthenaDialog.class.js" type="text/javascript"></script>
 <script src="code/js/remoteapi/SystemAPI.class.js" type="text/javascript"></script>
 
-
 <div id='leftCol'>
 	<?php
 	$post = PostsTable::getLatestPostFromCategory(PageManager::$site_id, 'news');	

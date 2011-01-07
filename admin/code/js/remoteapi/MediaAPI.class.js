@@ -50,45 +50,7 @@ var MediaAPI = {
         });
 		
     },
-			
-    // ////////////////////////////////////////////////////////////////////////
-
-    /**
-    * Get the list of folders and media for this site
-    */
-    getStats : function(siteID, callback){
-
-        AthenaDialog.showLoading("Loading stats data");
-
-        var paras = {
-            cmd : 'getStats',
-            site_id: siteID
-        };
-
-        $.ajax({
-            url: MediaAPI.m_url,
-            dataType: "json",
-            data: paras,
-            success: 
-            	function(ret){
-			       AthenaDialog.clearLoading();
-			
-					if (!ret || ret == undefined){
-			            callback(0);
-			            return;
-					}
-					
-			        if (ret.result == 'ok'){
-			            callback(ret.data.disc_usage, ret.data.page_views, ret.data.crawler_views);
-			        }
-			        else {
-			            AthenaDialog.showAjaxError(ret);
-			        }
-               	}
-        });
-
-    },
-				
+							
     // ////////////////////////////////////////////////////////////////////////
 	
     setPagePara : function(themeParaID, paraValue, pageID, callback){

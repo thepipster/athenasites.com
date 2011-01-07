@@ -37,10 +37,6 @@ switch ($cmd) {
         getImages($site_id);
         break;
 
-    case "getStats":
-        getStats($site_id);
-        break;
-
     case "getDetailedStats":
         $no_days = CommandHelper::getPara('dys', false, CommandHelper::$PARA_TYPE_NUMERIC);
         if (!isset($no_days) || $no_days == "") $no_days = 30;
@@ -1114,58 +1110,6 @@ function renameMediaTag($site_id, $tag, $new_tag) {
     CommandHelper::sendMessage($msg);
 }
 
-
-// ///////////////////////////////////////////////////////////////////////////////////////
-//
-// Stats
-//
-// ///////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Get the stats summary for the given site
- * @param int $site_id
- */
-function getStats($site_id) {
-
-    //$disc_usage = du(SecurityUtils::getMediaFolder($site_id)) + du(SecurityUtils::getSitesFolder($site_id));
-    $disc_usage = MediaTable::getDiscUsage($site_id) / (1024*1024);
-
-    // Get page views for the whole site for each day
-    $page_views = StatsRollupTables::getAllPageViewsRollup($site_id, 30);
-    $views = array();
-
-    if (isset($page_views)) {
-        foreach ($page_views as $view) {
-            if ($view['page_title'] == 'all') {
-                $temp = array();
-                $temp['dt'] = $view['rollup_date'];
-                $temp['uv'] = $view['unique_visitors'];
-                $temp['pv'] = $view['page_views'];
-                $views[] = $temp;
-            }
-        }
-    }
-
-    // Get the hits from search engines
-    $page_views = StatsRollupTables::getCrawlerViewsLastNDays($site_id, 30);
-    $crawler_views = array();
-
-    if (isset($page_views)) {
-        foreach ($page_views as $view) {
-            $temp = array();
-            $temp['dt'] = $view['rollup_date'];
-            $temp['crw'] = $view['crawler'];
-            $temp['pv'] = $view['hits'];
-            $crawler_views[] = $temp;
-        }
-    }
-
-
-    $msg['getStats'] = "getStats";
-    $msg['result'] = 'ok';
-    $msg['data'] = array('disc_usage' => $disc_usage . "", 'page_views' => $views, 'crawler_views' => $crawler_views);
-    CommandHelper::sendMessage($msg);
-}
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 

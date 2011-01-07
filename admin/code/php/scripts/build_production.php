@@ -35,6 +35,7 @@ $js_common_list = array(
 	"$base_dir/code/js/ssMain.class.js",
 	"$base_dir/code/js/DataStore.class.js",	
 	// Remote API's...
+	"$base_dir/code/js/remoteapi/StatsAPI.class.js",
 	"$base_dir/code/js/remoteapi/SystemAPI.class.js",
 	"$base_dir/code/js/remoteapi/BlogAPI.class.js",
 	"$base_dir/code/js/remoteapi/MediaAPI.class.js",

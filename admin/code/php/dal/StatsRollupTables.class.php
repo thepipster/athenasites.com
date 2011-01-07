@@ -75,6 +75,18 @@ class StatsRollupTables {
         return DatabaseManager::getResults($sql);
     }
 
+    public static function getGlobalPageViewsForServer($server_no, $no_days) {
+
+        date_default_timezone_set('UTC');
+
+        $date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $no_days, date("Y")));
+
+        $sql = DatabaseManager::prepare("SELECT * FROM stats_RollupServer WHERE rollup_date > %s AND server_no = %d ORDER BY rollup_date DESC", $site_id, $server_no, $date_from);
+        return DatabaseManager::getResults($sql);
+    }
+    
+    // //////////////////////////////////////////////////////////////////////////////////////
+
 	/**
 	* Get the number of page views across all sites.
 	* @param int (optional) specify the last N days to get, or omit to get ALL page views
@@ -97,6 +109,31 @@ class StatsRollupTables {
         }
         return $no;
     }
+    
+    // //////////////////////////////////////////////////////////////////////////////////////
+    
+	/**
+	* Get the number of page views across all sites.
+	* @param int (optional) specify the last N days to get, or omit to get ALL page views
+	*/
+    public static function getGlobalNumberPageViewsForServer($server_no, $no_days=null) {
+
+        date_default_timezone_set('UTC');
+
+		if (isset($no_days)){
+        	$date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $no_days, date("Y")));
+        	$sql = DatabaseManager::prepare("SELECT sum(page_views) FROM stats_RollupServer WHERE rollup_date > %s AND server_no = %d", $date_from, $server_no);
+        }
+        else {
+        	$sql = DatabaseManager::prepare("SELECT sum(page_views) FROM stats_RollupServer WHERE server_no = %d", $server_no);
+        }
+	
+        $no = DatabaseManager::getVar($sql);
+        if (!isset($no)) {
+            $no = 0;
+        }
+        return $no;
+    }    
 
     // //////////////////////////////////////////////////////////////////////////////////////
     //
