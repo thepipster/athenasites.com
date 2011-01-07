@@ -110,17 +110,30 @@ Logger::debug("$domain has site_id = $site_id");
 	
 			<div id='StatsFrame' class='ViewFrame'> 				
 			
-				<div align="center">
-	                <div class="apolloStatsGraphWrapper" style='height:400px; width:90%; margin-top:40px'>
-	                    <div id="apollo_stats_graph" class="" style='height:100%; width:100%;'></div>
-	                </div>	                
-	                <p><span id='apollo_stats_graph_title'>Site traffic for last 30 days</span></p>                                                   
-					<!--
-	                <div class="apolloStatsGraphWrapper" style='height:250px; width:90%; margin-top:10px'>
-	                    <div id="apollo_crawler_graph_small" class="" style='height:100%; width:100%;'></div>
-	                </div>
-	                <p>Search engine activity for last 30 days</p>
-	                -->                                                   
+				<div class="frameContents">
+				
+					<p>
+					Time Period
+					<select id='stats_date_range' onchange="StatsFrame.onSelectRange()">
+						<option value='30' selected>Last month (trailing 30 days)</option>
+						<option value='91'>Last 3 months (trailing 91 days)</option>
+						<option value='182'>Last 6 months (trailing 182 days)</option>
+						<option value='365'>Last year (trailing 365 days)</option>
+					</select>
+					</p>
+				
+					<div align="center">
+		                <div class="apolloStatsGraphWrapper" style='height:400px; width:90%; margin-top:40px'>
+		                    <div id="apollo_stats_graph" class="" style='height:100%; width:100%;'></div>
+		                </div>	                
+		                <p><span id='apollo_stats_graph_title'>Site traffic for last 30 days</span></p>                                                   
+						<!--
+		                <div class="apolloStatsGraphWrapper" style='height:250px; width:90%; margin-top:10px'>
+		                    <div id="apollo_crawler_graph_small" class="" style='height:100%; width:100%;'></div>
+		                </div>
+		                <p>Search engine activity for last 30 days</p>
+		                -->                                                   
+					</div>
 				</div>
 
 			</div> <!-- StatsFrame -->	

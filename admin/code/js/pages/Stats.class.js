@@ -19,7 +19,7 @@ var Stats = {
         StatsFrame.init();
 
         // Start loading data
-        StatsStore.loadPages(90, Stats.onDataLoaded);
+        StatsStore.loadPages(StatsFrame.noDays, Stats.onDataLoaded);
     },
 
     // ////////////////////////////////////////////////////////////////////////

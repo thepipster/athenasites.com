@@ -80,6 +80,23 @@ var StatsSidebarFrame = {
         if (StatsSidebarFrame.m_numberPages == 1){
         	$('#pagesSidebarControls').hide();
         }
+               
+        if (StatsSidebarFrame.m_currentPage == 0){
+	        // Hard coded 'site' icon
+			var selected = "";
+	        if (StatsStore.m_currentPageID == 0){
+	            selected = 'selected';
+	        }
+	
+	        txt += "<div onclick=\"StatsSidebarFrame.onSelectPage(0,0)\" class='page page_depth_0' id='page_0' title='This shows the site-wide statistics'>";
+	        txt += "    <img class='page_icon' src='images/web_page2.png'>";
+	        txt += "    <span class='page_name "+selected+"'>Site-wide Stats</span>";
+	        txt += "</div>";
+	        
+	        // Take into account this hard coded page
+	        end_i--;
+        }
+               
                 
         for (var i=start_i; i< end_i; i++){
             txt += StatsSidebarFrame.getPageHtml(pageList[i].post_id, pageList[i].page_id, pageList[i].title, pageList[i].page_views);
@@ -160,7 +177,7 @@ var StatsSidebarFrame = {
 			var icon = "images/web_page2.png";
 		}
 		
-        txt += "<div onclick=\"StatsSidebarFrame.onSelectPage('"+page_id+"','"+post_id+"')\" class='page page_depth_0' id='page_"+page_id+"' title='This page has had "+AthenaUtils.addCommas(page_views,0)+" page views over this time period, page id = "+page_id+", post id = "+post_id+"'>";
+        txt += "<div onclick=\"StatsSidebarFrame.onSelectPage('"+page_id+"','"+post_id+"')\" class='page page_depth_0' id='page_"+page_id+"' title='This page has had "+AthenaUtils.addCommas(page_views,0)+" page views over the last "+StatsFrame.noDays+" days'>";
         txt += "    <img class='page_icon' src='"+icon+"'>";
         txt += "    <span class='page_name "+selected+"'>"+page_title+"</span>";
 //        txt += "    <span class='page_name "+selected+"'>"+page_title+"&nbsp;"+page_views+"</span>";

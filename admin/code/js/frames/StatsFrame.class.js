@@ -5,7 +5,7 @@
 */
 var StatsFrame = {
 
-	noDays : 120,
+	noDays : 30,
 	
     // ////////////////////////////////////////////////////////////////////////////
 
@@ -37,6 +37,13 @@ var StatsFrame = {
     gotPageStats : function(page_views){
         StatViewer.paintStatGraph("#apollo_stats_graph", page_views);  
         $('#apollo_stats_graph_title').html("Page traffic for last " + StatsFrame.noDays + " days");      
+    },
+
+    // ////////////////////////////////////////////////////////////////////////////
+    
+    onSelectRange : function(){
+    	StatsFrame.noDays = $('#stats_date_range').val();
+        StatsStore.loadPages(StatsFrame.noDays, Stats.onDataLoaded);
     }
 	
 }
