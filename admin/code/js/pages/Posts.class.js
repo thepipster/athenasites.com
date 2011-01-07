@@ -96,21 +96,20 @@ var Posts = {
 	* typing before we submit changes
 	*/
 	setEditorChangeListener : function(){
-								
+	
 		// Get content
 		var content = oUtil.obj.getXHTMLBody();
-		if (Posts.m_prevContent == '') Posts.m_prevContent = content;
-				
-		if (content != Posts.m_prevContent){
-			
-	        switch(Posts.view){
-    	        case ssMain.VIEW_PAGES : PagesFrame.onChange(); break;
-	            case ssMain.VIEW_POSTS : PostsFrame.onChange(); break;
-			}		
-			
-		}		
 
-		Posts.m_prevContent = content;
+		if (Posts.m_prevContent == '') {
+			Posts.m_prevContent = content;
+		}
+		
+		// If its changed, save it
+		if (content != Posts.m_prevContent){
+	    	PostsFrame.onChange(); 								
+		}		
+				
+    	Posts.m_prevContent = content;   
 		
 	},	
 

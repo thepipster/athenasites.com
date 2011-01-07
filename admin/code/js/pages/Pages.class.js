@@ -99,19 +99,17 @@ var Pages = {
 								
 		// Get content
 		var content = oUtil.obj.getXHTMLBody();
-		if (Pages.m_prevContent == '') Pages.m_prevContent = content;
-				
-		if (content != Pages.m_prevContent){
-			
-	        switch(Pages.view){
-    	        case ssMain.VIEW_PAGES : PagesFrame.onChange(); break;
-	            case ssMain.VIEW_Pages : PagesFrame.onChange(); break;
-			}		
-			
-		}		
 
-		Pages.m_prevContent = content;
+		if (Pages.m_prevContent == '') {
+			Pages.m_prevContent = content;
+		}
 		
+		// If its changed, save it
+		if (content != Pages.m_prevContent){
+	    	PagesFrame.onChange(); 								
+		}		
+				
+    	Pages.m_prevContent = content;    	
 	},	
 
     // ////////////////////////////////////////////////////////////////////////
