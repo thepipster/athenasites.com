@@ -35,11 +35,11 @@ var ssMain = {
         setInterval ( "DataStore.save()", 5000 );
 
         // Save when browser quits
-        $(window).unload( function () {DataStore.save();} );
+        $(window).unload(ssMain.onDataChange);
 
 		// Force resize, and setup resize event
 		setTimeout("ssMain.onResize()", 100);
-        $(window).resize( function(){ssMain.onResize()});
+        $(window).resize(ssMain.onResize());
         
 		// Change listeners
 		$('.apolloDataInput').typing({ stop: ssMain.onDataChange, delay: 400});
@@ -99,6 +99,7 @@ var ssMain = {
             case ssMain.VIEW_DASHBOARD:
             case ssMain.VIEW_GALLERIES:
             case ssMain.VIEW_STATS: break;
-        }		
+        }	
+        DataStore.save();	
 	}		
 }
