@@ -87,9 +87,7 @@ Logger::debug("$domain has site_id = $site_id");
 	        <a class='menu_item' href='/admin/pages.php'>Pages</a>
 	        <a class='menu_item selected' href='#'>Files</a>
 	        <a class='menu_item' href='/admin/galleries.php''>Galleries</a>
-	        <!--
 	        <a class='menu_item' href='/admin/stats.php'>Stats</a>
-	        -->
 	        <a class='menu_item' href='/admin/settings.php'>Settings</a>
 	
 	        <?php

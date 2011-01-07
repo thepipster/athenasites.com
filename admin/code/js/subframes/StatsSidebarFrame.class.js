@@ -9,6 +9,11 @@ var StatsSidebarFrame = {
 	
     m_targetDiv : '',
 	
+    /** Number of tags per 'page' */
+    m_tagsPerPage : 25,    
+    m_currentPage : 0,    
+    m_numberPages : 0,
+	
     // ////////////////////////////////////////////////////////////////////////////
 	
     /**
@@ -20,22 +25,37 @@ var StatsSidebarFrame = {
 		
         var txt = "";
 
-        txt += "<div id='apollo_page_list'></div>";
+        txt += "<div id='apollo_stats_page_list'></div>";
 		
-        /*
-		// Right click pop-up menu....
-		txt += "<ul id='pagesMenu' class='rightClickMenu'>";
-		txt += "	<li class='edit'><a href='#edit'>Rename</a></li>";
-		txt += "	<li class='duplicate'><a href='#edit'>Duplicate</a></li>";
-		txt += "	<li class='delete'><a href='#delete'>Delete</a></li>";
-		txt += "	<li class='quit separator'><a href='#quit'>Cancel</a></li>";
-		txt += "</ul>";
-		*/
+        txt += "<div id='pagesSidebarControls' class='sidebar_page_controls'>";        
+        txt += "<table border='0'>";
+        txt += "    <tr>";
+        txt += "        <td width='33%' align='left'><span class='more_posts_link' id='prev_pages_link' style='padding-left:15px' onclick='StatsSidebarFrame.showPrevPage()' title='Display previous page'>&laquo; prev</span></td>";
+        txt += "        <td width='33%' align='center'><span class='more_posts_pages' id='pages_sideframe_page_no' style=''>1 of 2</span></td>";                
+        txt += "        <td width='33%' align='right'><span class='more_posts_link' id='next_pages_link' style='padding-right:15px' onclick='StatsSidebarFrame.showNextPage()' title='Display next page'>next &raquo;</span></td>";
+        txt += "    </tr>";
+        txt += "</table>";        
+        txt += "</div>";
+        		
+		var pos = $(targetDiv).position();
 
+		var offset = pos.top;
+		var lineht = 25;				
+		var h = $('.ViewFrame').height() - offset - $('#pagesSidebarControls').height(); 
+				    		    	    		
+		StatsSidebarFrame.m_tagsPerPage = Math.floor(h / lineht);		
+        StatsSidebarFrame.m_numberPages = Math.ceil( StatsStore.m_pageSummaryList.length / StatsSidebarFrame.m_tagsPerPage);
+                        
+        if (StatsSidebarFrame.m_numberPages == 1){
+        	$('#pagesSidebarControls').hide();
+        }
+                                
         $(targetDiv).html(txt);
 		
         StatsSidebarFrame.paintPages();
 		
+        $('#apollo_stats_page_list').height(h);
+        
         $(targetDiv).disableSelection();
         $(targetDiv).noContext();
 		
@@ -49,185 +69,101 @@ var StatsSidebarFrame = {
 	
     // ////////////////////////////////////////////////////////////////////////////
 	
+	m_pageNodes : '',
+	
     paintPages : function(){
 		
-        var pageList = DataStore.m_pageList;
-				
+        var pageList = StatsStore.m_pageSummaryList;
+								
         var txt = "";
-		
-	
-        for (var i=0; i<pageList.length; i++){
-						
-            if (pageList[i].parent_page_id == 0){
 
-                txt += StatsSidebarFrame.getPageHtml(pageList[i].id, pageList[i].title, pageList[i].status, 0);
-				
-                // Paint children...
-				
-                for (var k=0; k<pageList.length; k++){
-
-                    if (pageList[k].parent_page_id == pageList[i].id){
-						
-                        txt += StatsSidebarFrame.getPageHtml(pageList[k].id, pageList[k].title, pageList[k].status, 1);
-						
-                        // Paint grand-children....
-                        for (var m=0; m<pageList.length; m++){
-
-                            if (pageList[m].parent_page_id == pageList[k].id){
-                                txt += StatsSidebarFrame.getPageHtml(pageList[m].id, pageList[m].title, pageList[m].status, 2);
-                            }
-                        }
-                    }
-					
-                }
-
-            }
-							
+        var start_i = StatsSidebarFrame.m_currentPage * StatsSidebarFrame.m_tagsPerPage;
+        var end_i = Math.min(pageList.length, start_i+StatsSidebarFrame.m_tagsPerPage);
+        $('#page_no').html((StatsSidebarFrame.m_currentPage+1) + " of " + StatsSidebarFrame.m_numberPages);
+                
+        for (var i=start_i; i< end_i; i++){
+            txt += StatsSidebarFrame.getPageHtml(pageList[i].post_id, pageList[i].page_id, pageList[i].title, pageList[i].page_views);
         }
 		
-        $('#apollo_page_list').html(txt);
-		
-        //$(".folder").rightClick( function(e) {StatsSidebarFrame.onRightClickFolder(e, this);});
+        if (StatsSidebarFrame.m_currentPage < StatsSidebarFrame.m_numberPages-1){
+            $('#prev_posts_link').show();
+        }
+        else {
+            $('#prev_posts_link').hide();
+        }
 
-        $("#apollo_page_list").disableSelection();
-				
+        if (StatsSidebarFrame.m_currentPage > 0){
+            $('#next_posts_link').show();
+        }
+        else {
+            $('#next_posts_link').hide();
+        }
+                
+        $('#apollo_stats_page_list').html(txt);
+        $("#apollo_stats_page_list").disableSelection();
+					
     },
 
     // ////////////////////////////////////////////////////////////////////////////
 
-    getPageHtml : function(page_id, page_title, page_status, page_depth){
+    showNextPage : function(){
+		
+        $('#prev_pages_link').show();
+        	
+        if (StatsSidebarFrame.m_currentPage < StatsSidebarFrame.m_numberPages-1){
+            StatsSidebarFrame.m_currentPage += 1;
+        }
+        
+        if (StatsSidebarFrame.m_currentPage == StatsSidebarFrame.m_numberPages-1){
+        	$('#next_pages_link').hide();
+        }
+        
+        StatsSidebarFrame.paintPages();
+    },
+
+    // ////////////////////////////////////////////////////////////////////////////
+
+    showPrevPage : function(){
+
+        $('#next_pages_link').show();
+
+        if (StatsSidebarFrame.m_currentPage > 0){
+            StatsSidebarFrame.m_currentPage -= 1;
+        }
+        
+        if (StatsSidebarFrame.m_currentPage == 0){
+        	$('#prev_pages_link').hide();
+        }
+        
+        StatsSidebarFrame.paintPages();
+    },
+    
+    // ////////////////////////////////////////////////////////////////////////////
+
+    getPageHtml : function(post_id, page_id, page_title, page_views){
 
         var txt = '';
-
-        var status_class = "";
-        var icon = "images/post.png";
-
-        if (page_status == 'Draft'){
-            status_class = 'status_draft';
-            //icon = "images/webpage_draft.png";
-        }
-        else if (page_status == 'Private'){
-            //icon = "images/webpage_private.png";
-            status_class = 'status_private';
-        }
-        else if (page_status == 'Published'){
-            //icon = "images/webpage_published.png";
-            status_class = 'status_public';
-        }
-
-        //var nodeIcon = "images/FileTreeIcons/collapsed.png";
-
         var selected = '';
-        if (page_id == DataStore.m_currentPageID){
+        
+        if (page_id == StatsStore.m_currentPageID){
             selected = 'selected';
         }
 
-        txt += "<div onclick=\"StatsSidebarFrame.onSelectPage('"+page_id+"')\" class='page page_depth_"+page_depth+"' id='page_"+page_id+"' title=''>";
-        //txt += "    <img class='node_icon' src='"+nodeIcon+"'>";
-        txt += "    <img class='page_icon' src='"+icon+"'>";
-        txt += "    <span class='page_name "+status_class+" "+selected+"'>"+page_title+"</span>";
+        txt += "<div onclick=\"StatsSidebarFrame.onSelectPage('"+page_id+"','"+post_id+"')\" class='page page_depth_0' id='page_"+page_id+"' title=''>";
+        txt += "    <img class='page_icon' src='images/web_page2.png'>";
+        txt += "    <span class='page_name "+selected+"'>"+page_title+"&nbsp;"+page_views+"</span>";
         txt += "</div>";
-
+		
         return txt;
     },
-	
-    // ////////////////////////////////////////////////////////////////////////////
-
-    addPage : function(){
-        var title = 'New page ' + (DataStore.m_pageList.length+1);
-        var pageSlug = AthenaUtils.encodeSlug(title);
-        var order = 0;
-        var isHome = 0;
-        MediaAPI.addPage(DataStore.m_siteID, title, '', 'Draft', 0, 0, pageSlug, order, isHome, StatsSidebarFrame.onPageAdded);
-    },
-	
-    onPageAdded : function(pageObj){
-
-        DataStore.addPage(pageObj);
-
-        StatsSidebarFrame.onSelectPage(pageObj.id);
-    },
-	
-    /**
-	* Encode the page slug based on the title
-	*/
-    encodeSlug : function(title){
-	
-        var slug = title.replace(/ /g, ""); // Remove spaces
-        slug = slug.replace(/'/g, ""); // Remove single quotes
-        slug = slug.replace(/\"/g, ""); // Remove double quotes
-
-        slug = escape(slug);
-        slug = slug.replace(/\//g,"%2F");
-        slug = slug.replace(/\?/g,"%3F");
-        slug = slug.replace(/=/g,"%3D");
-        slug = slug.replace(/&/g,"%26");
-        slug = slug.replace(/@/g,"%40");
-		
-        return slug;
-    },
 		
     // ////////////////////////////////////////////////////////////////////////////
-
-    onRightClickFolder : function(e, obj){
-
-        e.stopPropagation();
 		
-        //var x = e.pageX - $('#adminmenu').width() - 30;
-        //var y = e.pageY - $('#wphead').height() - $('#update-nag').height();
-        var x = e.pageX;
-        var y = e.pageY;
-
-        $('#folderMenu').css('top',y);
-        $('#folderMenu').css('left',x);
-        $('#folderMenu').show();
-
-        $('#folderMenu .edit').unbind('click');
-        $('#folderMenu .delete').unbind('click');
-        $('#folderMenu .quit').unbind('click');
-
-        $('#folderMenu .edit').click(function(){
-            StatsSidebarFrame.onMenuItem('rename_folder', obj)
-            });
-        $('#folderMenu .delete').click(function(){
-            StatsSidebarFrame.onMenuItem('delete_folder', obj)
-            });
-        $('#folderMenu .quit').click(function(){
-            StatsSidebarFrame.onMenuItem('quit', obj)
-            });
-		
-    },
-
-    // ////////////////////////////////////////////////////////////////////////////
-	
-    /**
-	* Respond to the user selecting a menu item
-	*/
-    onMenuItem : function(item, selectedElement){
-    /*
-		$('#imageMenu').hide();
-		$('#folderMenu').hide();
-		
-		var divID = $(selectedElement).attr('id');		
-		var name = $('#'+divID + ' .folder_name').html();		
-		var folder_id = parseInt(divID.substr(7));		
-				
-		// Process events related to folders...					
-		if (item == 'rename_folder'){
-			StatsSidebarFrame.makeFolderNameEditable(folder_id);
-		}
-		else if (item == 'delete_folder'){		
-			AthenaDialog.confirm("Are you sure you want to delete this folder? This can not be undone.", function(){StatsSidebarFrame.deleteFolder(folder_id);});
-		}
-		*/		
-    },
-
-    // ////////////////////////////////////////////////////////////////////////////
-		
-    onSelectPage : function(page_id){
-        DataStore.m_currentPageID = parseInt(page_id);
-        PagesFrame.repaint();
-        StatsSidebarFrame.paintPages();
+    onSelectPage : function(page_id, post_id){
+        StatsStore.m_currentPageID = parseInt(page_id);
+        StatsStore.m_currentPostID = parseInt(post_id);
+        StatsFrame.repaint();
+        StatsSidebarFrame.repaint();
     }
 			
 // ////////////////////////////////////////////////////////////////////////////

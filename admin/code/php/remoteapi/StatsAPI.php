@@ -23,9 +23,21 @@ switch ($cmd) {
         getServerStats($no_days);
         break;
 
+    case "getPageStatsList":
+		$no_days = CommandHelper::getPara('days', true, CommandHelper::$PARA_TYPE_NUMERIC);
+        getPageStatsList($site_id, $no_days);
+        break;
+
+    case "getPageStats":
+		$page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
+		$no_days = CommandHelper::getPara('days', true, CommandHelper::$PARA_TYPE_NUMERIC);
+        getPageStats($site_id, $page_id, $post_id, $no_days);
+        break;
+
     case "getSiteSummaryStats":
-        getSiteSummaryStats($site_id)
-        ;
+		$no_days = CommandHelper::getPara('days', true, CommandHelper::$PARA_TYPE_NUMERIC);
+        getSiteSummaryStats($site_id, $no_days);
         break;
         
     default :
@@ -38,9 +50,27 @@ switch ($cmd) {
 //
 // ///////////////////////////////////////////////////////////////////////////////////////
 
+/**
+* Get a list of all the pages and posts, together with their total page views over
+* the time period given
+*/
+function getPageStatsList($site_id, $no_days){
+
+    $date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $no_days, date("Y")));
+	$sql = DatabaseManager::prepare("SELECT page_title, post_id, page_id, sum(page_views) as page_views FROM stats_%d_RollupPageViews WHERE rollup_date > %s AND page_title != 'all' GROUP BY page_id, post_id ORDER BY page_views DESC", $site_id, $date_from);
+	$page_list = DatabaseManager::getResults($sql);
+	
+    $msg['cmd'] = "getPageStatsList";
+    $msg['result'] = 'ok';
+    $msg['data'] = array('pages' => $page_list);
+    CommandHelper::sendMessage($msg);
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
 function getServerStats($no_days){
 
-    $msg['cmd'] = 'getSummary';
+    $msg['cmd'] = 'getServerStats';
     $msg['result'] = 'fail';
 
 	// Only super-users are allowed this data!
@@ -61,9 +91,29 @@ function getServerStats($no_days){
 	}
 
     // Get page views for the whole site for each day for server 0
+
     $server_views = array();
+
+	// Get the combined stats
+	$page_views = StatsRollupTables::getGlobalPageViews($no_days);
+	
+    $views = array();
+
+    if (isset($page_views)) {
+        foreach ($page_views as $view) {
+            $temp = array();
+            $temp['dt'] = $view['rollup_date'];
+            $temp['pv'] = $view['page_views'];
+            $views[] = $temp;                
+        }
+    }
     
-    for($i=0; $i<=2; $i++){
+    $server_views[] = $views;
+    
+    // Get page views for the whole site for each day for server 0
+ 	$no_servers = StatsRollupTables::getNoServers();
+ 	
+    for($i=0; $i<=$no_servers; $i++){
     
 	    $page_views = StatsRollupTables::getGlobalPageViewsForServer($i, $no_days);
 	    $views = array();
@@ -79,7 +129,7 @@ function getServerStats($no_days){
 	    
 	    $server_views[] = $views;
     }
-
+    	
     $msg['getStats'] = "getStats";
     $msg['result'] = 'ok';
     $msg['data'] = array('disc_usage' => $disc_usage . "", 'server_page_views' => $server_views);
@@ -87,19 +137,20 @@ function getServerStats($no_days){
     CommandHelper::sendMessage($msg);
 }
 
+
 // ///////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Get the stats summary for the given site
  * @param int $site_id
  */
-function getSiteSummaryStats($site_id) {
+function getSiteSummaryStats($site_id, $no_days) {
 
     //$disc_usage = du(SecurityUtils::getMediaFolder($site_id)) + du(SecurityUtils::getSitesFolder($site_id));
     $disc_usage = MediaTable::getDiscUsage($site_id) / (1024*1024);
 
     // Get page views for the whole site for each day
-    $page_views = StatsRollupTables::getAllPageViewsRollup($site_id, 30);
+    $page_views = StatsRollupTables::getAllPageViewsRollup($site_id, $no_days);
     $views = array();
 
     if (isset($page_views)) {
@@ -115,7 +166,7 @@ function getSiteSummaryStats($site_id) {
     }
 
     // Get the hits from search engines
-    $page_views = StatsRollupTables::getCrawlerViewsLastNDays($site_id, 30);
+    $page_views = StatsRollupTables::getCrawlerViewsLastNDays($site_id, $no_days);
     $crawler_views = array();
 
     if (isset($page_views)) {
@@ -129,9 +180,48 @@ function getSiteSummaryStats($site_id) {
     }
 
 
-    $msg['getStats'] = "getStats";
+    $msg['cmd'] = "getSiteSummaryStats";
     $msg['result'] = 'ok';
     $msg['data'] = array('disc_usage' => $disc_usage . "", 'page_views' => $views, 'crawler_views' => $crawler_views);
     CommandHelper::sendMessage($msg);
 }
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+* Get stats for the specified page/blog
+*/ 
+function getPageStats($site_id, $page_id, $post_id, $no_days){
+
+    $date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $no_days, date("Y")));
+    
+	if (isset($post_id) && $post_id > 0){
+        $sql = DatabaseManager::prepare("SELECT * FROM stats_%d_RollupPageViews WHERE post_id = %d AND rollup_date > %s ORDER BY rollup_date DESC, unique_visitors DESC", $site_id, $post_id, $date_from);
+	}
+	else {
+        $sql = DatabaseManager::prepare("SELECT * FROM stats_%d_RollupPageViews WHERE page_id = %d AND rollup_date > %s ORDER BY rollup_date DESC, unique_visitors DESC", $site_id, $page_id, $date_from);
+	}
+	
+    $page_views = DatabaseManager::getResults($sql);
+
+	Logger::dump($page_views);
+
+    $views = array();
+
+    if (isset($page_views)) {
+        foreach ($page_views as $view) {
+                $temp = array();
+                $temp['dt'] = $view['rollup_date'];
+                $temp['uv'] = $view['unique_visitors'];
+                $temp['pv'] = $view['page_views'];
+                $views[] = $temp;
+        }
+    }
+
+    $msg['cmd'] = "getPageStats";
+    $msg['result'] = 'ok';
+    $msg['data'] = array('page_views' => $views);
+    CommandHelper::sendMessage($msg);
+}
+
 ?>

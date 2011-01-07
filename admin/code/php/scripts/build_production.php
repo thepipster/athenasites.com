@@ -244,6 +244,40 @@ if (BUILD_MODE == 'galleries' || BUILD_MODE == 'all'){
 
 // ////////////////////////////////////////////////////////////////////////////
 //
+// Build Stats page...........
+//
+// ////////////////////////////////////////////////////////////////////////////
+	
+if (BUILD_MODE == 'stats' || BUILD_MODE == 'all'){
+		
+	$js_list = array(
+		// 3rd Party...
+		"$base_dir/code/js/3rdparty/flot/excanvas.min.js",
+		"$base_dir/code/js/3rdparty/flot/jquery.flot.min.js",
+		"$base_dir/code/js/3rdparty/flot/jquery.flot.crosshair.js",
+		// Sub-Frames....
+		"$base_dir/code/js/subframes/StatsSidebarFrame.class.js",
+		// Utils...
+		"$base_dir/code/js/data/StatsStore.class.js",			
+		"$base_dir/code/js/utils/StatViewer.class.js",			
+		// Frames....
+		"$base_dir/code/js/frames/StatsFrame.class.js",
+		// Page
+		"$base_dir/code/js/pages/Stats.class.js"
+	);
+	
+	$css_list = array(
+		"$base_dir/code/css/PagesFrame.css",
+		"$base_dir/code/css/StatsFrame.css"
+	);
+	
+	ProductionBuilder::buildProductionJS(array_merge($js_common_list, $js_list), "$base_dir/code/js/prod_stats.js", DO_MINIFY);
+	ProductionBuilder::buildProductionCSS(array_merge($css_common_list, $css_list), "$base_dir/code/css/prod_stats.css", DO_MINIFY);
+
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+//
 // Build Settings page...........
 //
 // ////////////////////////////////////////////////////////////////////////////

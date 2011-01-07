@@ -1,203 +1,150 @@
 <?php
-
 require_once("code/php/setup.php");
 
 $domain = str_replace('www.', '', $_SERVER['HTTP_HOST']);
-$site_id = 1;
+$site_id = SitesTable::getSiteIDFromDomain($domain);
+$user = UserTable::getUser(SecurityUtils::getCurrentUserLevel());
 
-if (!SecurityUtils::isSuperUser()) {
+if (!SecurityUtils::isLoggedInForSite($site_id)) {
     SecurityUtils::logOut();
     header("Location: index.php");
 }
-
-PageManager::init(1);
-PageManager::$page_title = 'ApolloSites | Stats';
-
-// Echo header
-require_once('themes/ApolloSites/header.php');
+    
+Logger::debug("$domain has site_id = $site_id");
 
 ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <title>ApolloSites Admin 1.0 | Stats</title>
 
-<style type="text/css">
+    <meta name="Description" content="" />
+    <meta name="Keywords" content="" />
 
-.stats_graph {
-	width: 100%;
-	height: 400px;
-	background-color: #f1f1f1;
-}
+    <!-- Favicon ///////////////////////////////////////////////////// -->
 
-</style>
-        
-<!-- Javascript includes //////////////////////////////////////////////////////////// -->
+    <link rel="shortcut icon" type="image/png" href="favicon.png">
 
-<script src="code/js/3rdparty/jquery-1.4.2.min.js" type="text/javascript" ></script>
-<script src="code/js/3rdparty/jquery-ui/jquery-ui-1.8.4.custom.min.js" type="text/javascript"></script>
+    <!--[if IE]>
+    <link rel="shortcut icon" href="favicon.ico">
+    <![endif]-->
 
-<!--[if IE]><script src="code/js/3rdparty/flot/excanvas.min.js" type="text/javascript"></script><![endif]-->  
-<script src="code/js/3rdparty/flot/jquery.flot.min.js" type="text/javascript"></script>
-<script src="code/js/3rdparty/flot/jquery.flot.crosshair.js" type="text/javascript"></script>
- 
-<script src="code/js/3rdparty/date.format.js" type="text/javascript"></script>
+    <!-- PRODUCTION INCLUDES /////////////////////////////////////////////////////////// -->
 
-<script src="code/js/defines.js" type="text/javascript"></script>
-<script src="code/js/utils/AthenaDialog.class.js" type="text/javascript"></script>
-<script src="code/js/utils/AthenaUtils.class.js" type="text/javascript"></script>
-<script src="code/js/remoteapi/StatsAPI.class.js" type="text/javascript"></script>
- 
+    <link rel="stylesheet" href="code/js/3rdparty/jquery-ui/overcast/jquery-ui-1.8.4.custom.css" type="text/css"/>
 
+    <script src="code/js/3rdparty/jquery-1.4.2.min.js" type="text/javascript"></script>
+    <script src="code/js/3rdparty/jquery-ui/jquery-ui-1.8.4.custom.min.js" type="text/javascript"></script>
+
+	<?php	
+		if (DEV_MODE) {
+			define('BUILD_MODE', 'stats');
+			require_once("code/php/scripts/build_production.php");	
+		}
+	?>
+
+	<script src='code/js/prod_stats.js?ver=1.0' type='text/javascript'></script>
+	<link rel='stylesheet' href='code/css/prod_stats.css?ver=1.0' type='text/css'/>
+
+    <!-- Inline Style ////////////////////////////////////////////////////////////////// -->
+
+    <style type="text/css">
+
+        /* Hide the datepicker 'choose date' link */
+        a.dp-choose-date {
+            display: none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- Dialogs -->
+
+<div id='debug_txt'></div>
+<div id='apollo_dialog'></div>
 <div id='apollo_loading_dialog'></div>
- 
-Disc Usage: <span id='disc_usage'></span> MB 
+<div id='apollo_loading_display' class='transparent_50' align="center"></div>
 
-<br/>
-<br/>
+<div id='apollo_image_picker'></div>
+<div id='apollo_color_picker'></div>
 
+<!-- Logo -->
+<img id='apollo_logo' src='images/logo.png' height='35px'/>
 
-<div id='server_views_graph' class='stats_graph'></div>
- 
+<!-- SideBar -->
+<div id='SideBar' align="left"></div>
+
+<!-- Content -->
+
+<div id='ContentWrapper'>
+	<div id='Content'>
+	
+	    <div id='menu_container'>
+	        
+	        <a class='menu_item' href='/admin/dashboard.php'>Dashboard</a>
+	        <a class='menu_item' href='/admin/posts.php'>Blog</a>
+	        <a class='menu_item' href='/admin/pages.php'>Pages</a>
+	        <a class='menu_item' href='/admin/files.php'>Files</a>
+	        <a class='menu_item' href='/admin/galleries.php'>Galleries</a>
+	        <a class='menu_item selected' href='#'>Stats</a>
+	        <a class='menu_item' href='/admin/settings.php'>Settings</a>
+	        	
+	        <?php
+	        if ($user['service_client_gallery'] == 1) {
+	            echo "<div id='' class='menu_item client_gallery_title' onclick=''>Client Gallery</div>";
+	            echo "<div id='' class='menu_item' onclick=''>eStore</div>";
+	        } 
+	        ?>
+	
+	        <div class='menu_link' onclick='ssMain.onLogout()'>Logout</div>
+	        <div id='account_menu' class='menu_link' onclick='AccountDialog.show()'>Account</div>
+	        
+	        <div class='user_message'></div>
+	        
+	    </div><!-- menu_container -->
+					
+		<div id='MainContents'>
+	
+			<div id='StatsFrame' class='ViewFrame'> 				
+			
+				<div align="center">
+	                <div class="apolloStatsGraphWrapper" style='height:400px; width:90%; margin-top:40px'>
+	                    <div id="apollo_stats_graph" class="" style='height:100%; width:100%;'></div>
+	                </div>
+	                <p>Site traffic for last 30 days</p>                                                   
+					<!--
+	                <div class="apolloStatsGraphWrapper" style='height:250px; width:90%; margin-top:10px'>
+	                    <div id="apollo_crawler_graph_small" class="" style='height:100%; width:100%;'></div>
+	                </div>
+	                <p>Search engine activity for last 30 days</p>
+	                -->                                                   
+				</div>
+
+			</div> <!-- StatsFrame -->	
+			
+			<?php //echo file_get_contents("code/html/StatsFrame.html") ?>		
+
+		</div>	
+	
+	</div> <!-- Content -->
+</div> <!-- ContentWrapper -->
+
+</body>
+</html>
+
+<!-- Javascript code /////////////////////////////////////////////////////////////// -->
+
 <script type="text/javascript">
 
-
-var apStats = {
-
-	// ////////////////////////////////////////////////////////////////////////
-
-	init : function(){		
-        StatsAPI.getServerStats(90, apStats.gotStats);		
-	},
+    defines.session_id = '<?php echo session_id(); ?>';
+    defines.domain = '<?php echo $domain; ?>';
 	
-    // ////////////////////////////////////////////////////////////////////////////
-
-    gotStats : function(disc_usage, server_page_views){
-    
-    	$('#disc_usage').html(AthenaUtils.addCommas(disc_usage,2));
-    	        	
-     	apStats.paintStatGraph("#server_views_graph", server_page_views);
-
-    },
-    
-    // ////////////////////////////////////////////////////////////////////////////
-    
-    paintStatGraph : function(div, serverViews){
-          
-        var graphData = new Array();
-          
-        for (var i=0; i<serverViews.length; i++){
-        
-        	var temp = new Object();
-        	temp.data = new Array();
-        	temp.label = 'Server ' + i;
-        	temp.lines = {show: true, fill: true}
-        	
-        	for (var j=0; j<serverViews[i].length; j++){
-	            var t = new Date(serverViews[i][j].dt);
-        		temp.data.push([t.getTime(), serverViews[i][j].pv]);
-        	}
-        	
-        	graphData.push(temp);
-        }      
-        
-        var plot = jQuery.plot(jQuery(div), graphData,
-        {
-        	legend: {
-        		show: true,
-        		position: "nw"
-        	},
-            xaxis: {
-                mode: "time"
-            },
-            grid: {
-                hoverable: true,
-                clickable: true,
-                markings: apStats.weekendAreas
-            },
-            series: {
-                lines: {
-                    show: true
-                },
-                points: {
-                    show: true
-                }
-            }
-        });
-                        	 
-        	
-	    var previousPoint = null;
-	    jQuery(div).bind("plothover", function (event, pos, item) {
-		
-	        jQuery("#x").text(pos.x.toFixed(2));
-	        jQuery("#y").text(pos.y.toFixed(2));
-		
-	        if (item) {
-	            if (previousPoint != item.datapoint) {
-	                    
-	                previousPoint = item.datapoint;
-	                    
-	                jQuery("#tooltip").remove();
-	                var x = new Date(item.datapoint[0] + 18000000); // Convert from UTC to EST
-	                var dateStr = $.datepicker.formatDate('mm/dd/yy', x);
-	                var y = item.datapoint[1].toFixed(2);
-	                apStats.showTooltip(item.pageX, item.pageY, item.series.label + " = " + y + " on " + dateStr);
-	            }
-	        }
-	        else {
-	            jQuery("#tooltip").remove();
-	            previousPoint = null;
-	        }
-	    });
-			        		
-	},
-	
-    // ////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	* helper for returning the weekends in a period
-	*/
-	weekendAreas : function(axes) {
-	    var markings = [];
-	    var d = new Date(axes.xaxis.min);
-	    // go to the first Saturday
-	    d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 1) % 7))
-	    d.setUTCSeconds(0);
-	    d.setUTCMinutes(0);
-	    d.setUTCHours(0);
-	    var i = d.getTime();
-	    do {
-	        // when we don't set yaxis, the rectangle automatically
-	        // extends to infinity upwards and downwards
-	        markings.push({ xaxis: { from: i, to: i + 2 * 24 * 60 * 60 * 1000 }, color: "#d7dcdc" });
-	        i += 7 * 24 * 60 * 60 * 1000;
-	    } while (i < axes.xaxis.max);
-	
-	    return markings;
-	},
-		
-    // ////////////////////////////////////////////////////////////////////////////
-	
-	showTooltip : function(x, y, contents) {
-	    jQuery('<div id="tooltip">' + contents + '</div>').css( {
-	        position: 'absolute',
-	        display: 'none',
-	        fontSize: '10px',
-	        top: y + 5,
-	        left: x + 5,
-	        border: '1px solid #fdd',
-	        padding: '2px',
-	        'background-color': '#fee',
-	        opacity: 0.80
-	    }).appendTo("body").fadeIn(200);
-	}	
-    	
-	
-}
-
-$(document).ready(apStats.init());
+    $(document).ready(function(){
+    	ssMain.init(<?= $site_id ?>, ssMain.VIEW_STATS);
+    	Stats.init(<?= $site_id ?>);
+    });
 
 </script>
- 
-
-<?php
-// Echo footer
-PageManager::$page_title = 'Stats';
-require_once('themes/ApolloSites/footer.php');
-?>

@@ -48,7 +48,7 @@ var DashboardFrame = {
 
     gotSummary : function(data){
         DashboardFrame.m_summaryData = data;
-        StatsAPI.getSiteSummaryStats(DataStore.m_siteID, DashboardFrame.gotStats);
+        StatsAPI.getSiteSummaryStats(DataStore.m_siteID, 30, DashboardFrame.gotStats);
     },
     
     // ////////////////////////////////////////////////////////////////////////////

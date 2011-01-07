@@ -25,6 +25,9 @@ global $apollo_root_url;
 					<p><a href='<?=$apollo_root_url?>/privacy.html'>Check out our privacy policy</a></p>
 					<p><a href='<?=$apollo_root_url?>/contact.html'>Contact us</a><span class='coming_soon'>(coming soon)</span></p>
 					<p><a href='<?=$apollo_root_url?>/privacy-policy-faq.html'>Privacy FAQs</a></p>
+					<?php if (SecurityUtils::isSuperUser()) { ?>
+						<p><a href='<?=$apollo_root_url?>/admin/server_stats.php'>Server statistics</a></p>
+					<?php } ?>
 				</td>
 				
 				<td width="33%">

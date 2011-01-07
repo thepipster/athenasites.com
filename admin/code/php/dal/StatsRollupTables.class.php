@@ -65,22 +65,20 @@ class StatsRollupTables {
     //
     // //////////////////////////////////////////////////////////////////////////////////////
 
+	public static function getNoServers(){
+        return DatabaseManager::getVar("SELECT max(server_no) FROM stats_RollupServer");	
+	}
+	
+    // //////////////////////////////////////////////////////////////////////////////////////
+
     public static function getGlobalPageViews($no_days) {
-
-        date_default_timezone_set('UTC');
-
         $date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $no_days, date("Y")));
-
-        $sql = DatabaseManager::prepare("SELECT * FROM stats_RollupServer WHERE rollup_date > %s ORDER BY rollup_date DESC", $site_id, $date_from);
+        $sql = DatabaseManager::prepare("SELECT sum(page_views) as page_views, rollup_date FROM stats_RollupServer WHERE rollup_date > %s GROUP BY rollup_date DESC", $date_from);
         return DatabaseManager::getResults($sql);
     }
 
     public static function getGlobalPageViewsForServer($server_no, $no_days) {
-
-        date_default_timezone_set('UTC');
-
         $date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $no_days, date("Y")));
-
         $sql = DatabaseManager::prepare("SELECT * FROM stats_RollupServer WHERE rollup_date > %s AND server_no = %d ORDER BY rollup_date DESC", $date_from, $server_no);
         return DatabaseManager::getResults($sql);
     }
@@ -92,8 +90,6 @@ class StatsRollupTables {
 	* @param int (optional) specify the last N days to get, or omit to get ALL page views
 	*/
     public static function getGlobalNumberPageViews($no_days=null) {
-
-        date_default_timezone_set('UTC');
 
 		if (isset($no_days)){
         	$date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $no_days, date("Y")));
@@ -118,8 +114,6 @@ class StatsRollupTables {
 	*/
     public static function getGlobalNumberPageViewsForServer($server_no, $no_days=null) {
 
-        date_default_timezone_set('UTC');
-
 		if (isset($no_days)){
         	$date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $no_days, date("Y")));
         	$sql = DatabaseManager::prepare("SELECT sum(page_views) FROM stats_RollupServer WHERE rollup_date > %s AND server_no = %d", $date_from, $server_no);
@@ -143,8 +137,6 @@ class StatsRollupTables {
 
     public static function getPageViewsRollup($site_id, $no_days) {
 
-        date_default_timezone_set('UTC');
-
         $date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $no_days, date("Y")));
 
         $sql = DatabaseManager::prepare("SELECT * FROM stats_%d_RollupPageViews WHERE page_title != 'all' AND rollup_date > %s ORDER BY rollup_date DESC, unique_visitors DESC", $site_id, $date_from);
@@ -154,8 +146,6 @@ class StatsRollupTables {
     // //////////////////////////////////////////////////////////////////////////////////////
 
     public static function getAllPageViewsRollup($site_id, $no_days) {
-
-        date_default_timezone_set('UTC');
 
         $date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $no_days, date("Y")));
 
@@ -172,8 +162,6 @@ class StatsRollupTables {
 
         $data = array($no_days);
 
-        date_default_timezone_set('UTC');
-
         $date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $no_days, date("Y")));
         $date_end = date("Y-m-d 23:59:59", mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
 
@@ -189,8 +177,6 @@ class StatsRollupTables {
     public static function getCrawlerViewsLastNDays($site_id, $no_days) {
 
         $data = array($no_days);
-
-        date_default_timezone_set('UTC');
 
         $date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $no_days, date("Y")));
         $date_end = date("Y-m-d 23:59:59", mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
@@ -211,8 +197,6 @@ class StatsRollupTables {
 
         $data = array($no_days);
 
-        date_default_timezone_set('UTC');
-
         $date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $no_days, date("Y")));
         $date_end = date("Y-m-d 23:59:59", mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));
 
@@ -228,8 +212,6 @@ class StatsRollupTables {
     public static function getOSViewsLastNDays($site_id, $no_days) {
 
         $data = array($no_days);
-
-        date_default_timezone_set('UTC');
 
         $date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $no_days, date("Y")));
         $date_end = date("Y-m-d 23:59:59", mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")));

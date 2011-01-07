@@ -27,8 +27,6 @@ for ($i = 1; $i <= $NO_SITES; $i++) {
     StatsRollupTables::createTableForSite($i);
 }
 */
-// Set the deafault time zone
-date_default_timezone_set('UTC');
 
 // Get the most recent day in the rollup table
 $last_date = DatabaseManager::getVar("SELECT max(rollup_date) FROM stats_1_RollupPageViews");
@@ -46,11 +44,13 @@ if (!isset($last_date)) {
 Logger::debug("Last Date: $last_date, which was $no_days days ago");
 
 // Get a list of all the sites
-$site_list = SitesTable::getSites();
+$site_list = SitesTable::getUniqueSites();
 
 foreach ($site_list AS $site) {
 
     $site_id = $site['id'];
+    
+    Logger::debug("Processing site id $site_id");    
 
     for ($i = 1; $i < $no_days; $i++) {
 
@@ -99,6 +99,14 @@ foreach ($site_list AS $site) {
                 $page_views = $data['page_views'];
                 $server_ip = $data['server_ip'];
 
+				if (isset($post_id) && $post_id > 0){
+					$page_title = DatabaseManager::getVar("SELECT title FROM athena_{$site_id}_Pages WHERE id = $post_id");					
+				}
+				
+				if (!isset($post_id)){
+					$post_id = 0;
+				}
+				
                 if ($site_id == 2 && $page_views > 100) {
                     Logger::debug("[$day_date] Page views: " . $page_views . " >>> $sql1");
                 }

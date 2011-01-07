@@ -54,7 +54,7 @@
 						</tr>
 						<tr>
 							<td align="right" class='fieldName'>Email</td>
-							<td align="left" class='fieldInput'><input type="text" name="strEmail"></td>
+							<td align="left" class='fieldInput'><input class='required_email' type="text" name="strEmail"></td>
 						</tr>
 						<tr>
 							<td align="right" class='fieldName'>Type of event</td>
@@ -100,5 +100,83 @@
 </div><!-- infoPage -->
 
 <script type="text/javascript">
-$(document).ready(cgpContact.init);
+
+//$(document).ready(cgpContact.init);
+/*
+var cgpContact = {
+		
+	page_id : <?=PageManager::$page_id?>,
+	
+	site_id : <?=PageManager::$site_id?>,
+        
+    nonce : '<?= SecurityUtils::createNonce('email-link') ?>',
+
+	init : function(){
+									
+		// Validation
+		$("#contactForm").validate();
+						
+		$.validator.addMethod(
+			"required_email", function(value, element) { 
+		  		if (value == '') return false; 
+		  		return cgpContact.checkEmail(value);
+			}, 
+			" ");
+
+		$.validator.addMethod(
+			"required_name", function(value, element) { 			
+		  		if (value == '') return false; 		  		
+		  		return true;
+			}, 
+			" ");
+						
+		// Setup date picker...
+		Date.firstDayOfWeek = 0;
+		Date.format = 'mm/dd/yyyy';
+		$('.datepicker').datePicker({clickInput:true, startDate:'01/01/2009'});
+								
+	},
+	
+	checkEmail : function(email) {
+		var filter = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/;
+		if (!filter.test(email)) {
+			return false;
+		}
+		return true;
+	},
+		
+	onSubmit : function(){
+		
+		if ($("#contactForm").valid()){
+			
+			var aName = $("#name").val();
+			var aEmail = $("#email").val();
+			var aPhone = $("#phone").val();
+			var aLocation = $("#location").val();
+			var aDatetime = $("#datetime").val();
+			var aComments = $("#comments").val();
+			
+			apolloContactRequest.submitRequest(cgpContact.site_id, cgpContact.page_id, cgpContact.nonce, aName, aEmail, aPhone, aLocation, aDatetime, aComments, cgpContact.onSentForm);
+			
+		}	
+		
+		return false;
+	},
+	
+	onSentForm : function(isSuccess, isSpam, message){
+	
+		if (isSuccess){
+			$('.formMessage').html("Request sent!");
+		}
+		else if (isSpam) {
+			$('.formMessage').html("Sorry, this comment looks like spam?");
+		}
+		else {
+			$('.formMessage').html(message);
+		}	
+		
+	}
+
+}
+*/
 </script>

@@ -15,7 +15,6 @@ var StatsAPI = {
     * Initialize the API
     */
     init : function(){
-//        StatsAPI.m_url = defines.root_url + StatsAPI.m_url;
     },
 
     // ////////////////////////////////////////////////////////////////////////
@@ -58,14 +57,11 @@ var StatsAPI = {
     /**
     * Get the stat summary for this site
     */
-    getSiteSummaryStats : function(siteID, callback){
+    getSiteSummaryStats : function(siteID, noDays, callback){
 
         AthenaDialog.showLoading("Loading stats");
 
-        var paras = {
-            cmd : 'getSiteSummaryStats',
-            site_id: siteID
-        };
+        var paras = {cmd : 'getSiteSummaryStats', days: noDays, site_id: siteID};
 
         $.ajax({
             url: StatsAPI.m_url,
@@ -89,5 +85,76 @@ var StatsAPI = {
                	}
         });
 
+    },
+    
+    // ////////////////////////////////////////////////////////////////////////
+    
+    /**
+    * Get stats for the given page/post
+    */
+    getPageStats : function(siteID, noDays, pageID, postID, callback){
+
+        AthenaDialog.showLoading("Loading stats");
+
+        var paras = {cmd : 'getPageStats', days: noDays, site_id: siteID, post_id: postID, page_id: pageID};
+
+        $.ajax({
+            url: StatsAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: 
+            	function(ret){
+			       AthenaDialog.clearLoading();
+			
+					if (!ret || ret == undefined){
+			            callback(0);
+			            return;
+					}
+					
+			        if (ret.result == 'ok'){
+			            callback(ret.data.page_views);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+               	}
+        });
+    },
+    
+    // ////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Get a list of all the pages and posts, together with their total page views over
+	* the time period given
+	*/    
+    getPageStatsList : function(siteID, noDays, callback){
+
+        AthenaDialog.showLoading("Loading stats");
+
+        var paras = {cmd : 'getPageStatsList', days: noDays, site_id: siteID};
+
+        $.ajax({
+            url: StatsAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: 
+            	function(ret){
+			       AthenaDialog.clearLoading();
+			
+					if (!ret || ret == undefined){
+			            callback(0);
+			            return;
+					}
+					
+			        if (ret.result == 'ok'){
+			            callback(ret.data.pages);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+               	}
+        });
+
     }
+    
 }

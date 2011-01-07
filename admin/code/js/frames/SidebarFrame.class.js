@@ -116,7 +116,7 @@ var SidebarFrame = {
 	paintStatsSidebar : function(){
 
         var txt = SidebarFrame.getHeader();
-        txt += "<p>Pages<span class='add_new_project' onclick='PagesSidebarFrame.addPage()' title='Add a new blank page to you site.'>&nbsp;(add)</span></p>";
+        txt += "<p>Pages / Posts</p>";
         txt += "<div id='SideBar_Pages'></div>";
 		
         $('#SideBar').append(txt);
