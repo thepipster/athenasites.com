@@ -44,8 +44,6 @@ if (!isset($last_date)) {
 
 Logger::debug("Last Date: $last_date, which was $no_days days ago");
 
-$no_days = 5;
-
 // Get a list of all the sites
 $site_list = SitesTable::getUniqueSites();
 
