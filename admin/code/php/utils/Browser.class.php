@@ -175,9 +175,12 @@
 		const BROWSER_NOKIA_S60 = 'Nokia S60 OSS Browser';        // http://en.wikipedia.org/wiki/Web_Browser_for_S60
 		const BROWSER_NOKIA = 'Nokia Browser';                    // * all other WAP-based browsers on the Nokia Platform
 		const BROWSER_MSN = 'MSN Browser';                        // http://explorer.msn.com/
-		const BROWSER_MSNBOT = 'MSN Bot';                         // http://search.msn.com/msnbot.htm
-		                                                          // http://en.wikipedia.org/wiki/Msnbot  (used for Bing as well)
-		
+		const BROWSER_MSNBOT = 'MSN Bot';                         // http://search.msn.com/msnbot.htm, http://en.wikipedia.org/wiki/Msnbot  (used for Bing as well)
+		const BROWSER_SITE24x7 = 'Site 24 X 7';                   // User agent of site 24x7
+		const BROWSER_BAIDUBOT = 'BaiduBot';                      // User agent for Baidu spider, http://www.baidu.com/search/spider.htm
+		const BROWSER_SOSOBOT = 'SoSoBot';                   	  // User agent for soso spider, http://help.soso.com/webspider.htm
+		const BROWSER_APPLEPUBSUB = 'Apple PubSub';               // Mac OSX RSS reader
+				
 		const BROWSER_NETSCAPE_NAVIGATOR = 'Netscape Navigator';  // http://browser.netscape.com/ (DEPRECATED)
 		const BROWSER_GALEON = 'Galeon';                          // http://galeon.sourceforge.net/ (DEPRECATED)
 		const BROWSER_NETPOSITIVE = 'NetPositive';                // http://en.wikipedia.org/wiki/NetPositive (DEPRECATED)
@@ -385,9 +388,16 @@
 				$this->checkBrowserGoogleBot() ||
 				$this->checkBrowserMSNBot() ||
 				$this->checkBrowserSlurp() ||
+				$this->checkBrowserBaiduBot() ||
+				$this->checkBrowserSoSoBot() ||
+				$this->checkBrowserPubSub() ||
+				
 
 				// WebKit base check (post mobile and others)
 				$this->checkBrowserSafari() ||
+				
+				// Site 24x7
+				$this->checkForSite24x7() ||
 				
 				// everyone else
 				$this->checkBrowserNetPositive() ||
@@ -400,7 +410,7 @@
 				$this->checkBrowserShiretoko() ||
 				$this->checkBrowserIceCat() ||
 				$this->checkBrowserW3CValidator() ||
-				$this->checkBrowserMozilla() /* Mozilla is such an open standard that you must check it last */
+				$this->checkBrowserMozilla() // Mozilla is such an open standard that you must check it last
 			);
 	    }
 
@@ -420,6 +430,20 @@
 		    return false;
 	    }
 
+	    /**
+	     * Determine if the user is using an AOL User Agent (last updated 1.7)
+	     * @return boolean True if the browser is from AOL otherwise false
+	     */
+	    protected function checkForSite24x7() {
+
+			if( stripos($this->_agent,'Site 24 X 7') !== false ) {
+				$this->_browser_name = self::BROWSER_SITE24x7;
+				$this->setRobot(true);
+			    return true;
+		    }
+		    return false;
+	    }
+	    
 	    /**
 	     * Determine if the user is using an AOL User Agent (last updated 1.7)
 	     * @return boolean True if the browser is from AOL otherwise false
@@ -453,6 +477,49 @@
 		    return false;
 	    }
 
+	    /**
+	     * Determine if the browser is the Apples PubSub RSS reader or not (last updated 1.7)
+	     * @return boolean True if the browser is the BaiduBot otherwise false
+	     */ 
+	    protected function checkBrowserPubSub() {
+	    	// Apple-PubSub/65.20
+		    if( stripos($this->_agent,'Apple-PubSub') !== false ) {
+				$aresult = explode('/',stristr($this->_agent,'Apple-PubSub'));
+				$aversion = explode(' ',$aresult[1]);
+				$this->setVersion(str_replace(';','',$aversion[0]));
+				$this->_browser_name = self::BROWSER_APPLEPUBSUB;
+				$this->setRobot(true);
+				return true;
+		    }
+		    return false;
+	    }
+
+	    /**
+	     * Determine if the browser is the BaiduBot or not (last updated 1.7)
+	     * @return boolean True if the browser is the BaiduBot otherwise false
+	     */
+	    protected function checkBrowserBaiduBot() {
+		    if( stripos($this->_agent,'Baiduspider') !== false ) {
+				$this->_browser_name = self::BROWSER_BAIDUBOT;
+				$this->setRobot(true);
+				return true;
+		    }
+		    return false;
+	    }
+
+	    /**
+	     * Determine if the browser is the SoSoBot or not (last updated 1.7)
+	     * @return boolean True if the browser is the SoSoBot otherwise false
+	     */
+	    protected function checkBrowserSoSoBot() {
+		    if( stripos($this->_agent,'Sosospider') !== false ) {
+				$this->_browser_name = self::BROWSER_SOSOBOT;
+				$this->setRobot(true);
+				return true;
+		    }
+		    return false;
+	    }
+	    
 		/**
 	     * Determine if the browser is the MSNBot or not (last updated 1.9)
 	     * @return boolean True if the browser is the MSNBot otherwise false
