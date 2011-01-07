@@ -339,8 +339,10 @@ var StatViewer = {
                     previousPoint = item.datapoint;
                     
                     jQuery("#tooltip").remove();
-                    var x = item.datapoint[0].toFixed(2), y = item.datapoint[1].toFixed(2);                    
-                    StatViewer.showTooltip(item.pageX, item.pageY, item.series.label + " = " + y);
+	                var x = new Date(item.datapoint[0] + 18000000); // Convert from UTC to EST
+	                var dateStr = $.datepicker.formatDate('mm/dd/yy', x);
+	                var y = item.datapoint[1].toFixed(2);
+	                StatViewer.showTooltip(item.pageX, item.pageY, item.series.label + " = " + y + " on " + dateStr);
                 }
             }
             else {
@@ -349,12 +351,6 @@ var StatViewer = {
             }
         });
 	
-        jQuery(div).bind("plotclick", function (event, pos, item) {
-            if (item) {
-                jQuery("#clickdata").text("You clicked point " + item.dataIndex + " in " + item.series.label + ".");
-                plot.highlight(item.series, item.datapoint);
-            }
-        });
     },
 
     // ////////////////////////////////////////////////////////////////////////////
@@ -474,13 +470,6 @@ var StatViewer = {
 	        }
 	    });
 		
-	    jQuery(div).bind("plotclick", function (event, pos, item) {
-	        if (item) {
-	            jQuery("#clickdata").text("You clicked point " + item.dataIndex + " in " + item.series.label + ".");
-	            plot.highlight(item.series, item.datapoint);
-	        }
-	    });
-	        		
 	},
 	
     // ////////////////////////////////////////////////////////////////////////////
