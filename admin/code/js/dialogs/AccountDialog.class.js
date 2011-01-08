@@ -11,7 +11,28 @@ var AccountDialog = {
 
         var txt = "";
         txt += "<div id='apolloAccountSettings'>";
-        txt += "    <div id='commentList'></div>"
+
+		txt += "<h3>Account Settings</h3>";
+
+		txt += "<div class='dataWrapper'>";
+		txt += "<span class='dataLabel'>Domain</span><input class='dataValue' type='text' />";
+		txt += "</div>";
+
+		txt += "<div class='dataWrapper'>";
+		txt += "<span class='dataLabel'>Email</span><input class='dataValue' type='text' />";
+		txt += "</div>";
+
+		txt += "<div class='dataWrapper'>";
+		txt += "<span class='dataLabel'>Address</span><input class='dataValue' type='text' />";
+		txt += "</div>";
+
+		txt += "<h3>Billing</h3>";
+		
+		txt += "<div class='dataWrapper'>";
+		txt += "<span class='dataLabel'>Domain</span><input class='dataValue' type='text' />";
+		txt += "</div>";
+
+		        
         txt += "</div>";
 
 		// Change password
