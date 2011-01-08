@@ -77,7 +77,7 @@ var StatsAPI = {
 					}
 					
 			        if (ret.result == 'ok'){
-			            callback(ret.data.disc_usage, ret.data.page_views, ret.data.crawler_views);
+			            callback(ret.data.disc_usage, ret.data.page_views);
 			        }
 			        else {
 			            AthenaDialog.showAjaxError(ret);

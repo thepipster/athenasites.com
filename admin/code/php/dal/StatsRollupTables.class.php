@@ -22,7 +22,7 @@ class StatsRollupTables {
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
         DatabaseManager::submitQuery($sql);
-
+/*
         $sql = "CREATE TABLE `stats_{$site_id}_RollupCrawler` (
 		  `id` int(11) NOT NULL auto_increment,
 		  `rollup_date` date default NULL,
@@ -32,7 +32,7 @@ class StatsRollupTables {
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
         DatabaseManager::submitQuery($sql);
-
+*/
         $sql = "CREATE TABLE `stats_{$site_id}_RollupOS` (
 		  `id` int(11) NOT NULL auto_increment,
 		  `rollup_date` date default NULL,

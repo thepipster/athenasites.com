@@ -18,7 +18,6 @@ var DashboardFrame = {
     m_summaryData : '',
 
     /** Stats data */
-    m_crawlerViews : '',
     m_pageViews : '',
     m_discUsage : '',
     
@@ -53,10 +52,9 @@ var DashboardFrame = {
     
     // ////////////////////////////////////////////////////////////////////////////
 
-    gotStats : function(disc_usage, page_views, crawler_views){
+    gotStats : function(disc_usage, page_views){
         DashboardFrame.m_discUsage = disc_usage;
         DashboardFrame.m_pageViews = page_views;
-        DashboardFrame.m_crawlerViews = crawler_views;
         DashboardFrame.paintSnapshotTab();
     },
 
@@ -130,7 +128,6 @@ var DashboardFrame = {
         
         */
             
-        StatViewer.paintCrawlerGraph("#apollo_crawler_graph_small", DashboardFrame.m_crawlerViews);
         StatViewer.paintStatGraph("#apollo_stats_graph_small", DashboardFrame.m_pageViews);        
     },
     

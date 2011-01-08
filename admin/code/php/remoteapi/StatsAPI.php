@@ -165,24 +165,9 @@ function getSiteSummaryStats($site_id, $no_days) {
         }
     }
 
-    // Get the hits from search engines
-    $page_views = StatsRollupTables::getCrawlerViewsLastNDays($site_id, $no_days);
-    $crawler_views = array();
-
-    if (isset($page_views)) {
-        foreach ($page_views as $view) {
-            $temp = array();
-            $temp['dt'] = $view['rollup_date'];
-            $temp['crw'] = $view['crawler'];
-            $temp['pv'] = $view['hits'];
-            $crawler_views[] = $temp;
-        }
-    }
-
-
     $msg['cmd'] = "getSiteSummaryStats";
     $msg['result'] = 'ok';
-    $msg['data'] = array('disc_usage' => $disc_usage . "", 'page_views' => $views, 'crawler_views' => $crawler_views);
+    $msg['data'] = array('disc_usage' => $disc_usage . "", 'page_views' => $views);
     CommandHelper::sendMessage($msg);
 }
 

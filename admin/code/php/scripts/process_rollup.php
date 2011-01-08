@@ -47,6 +47,7 @@ Logger::debug("Last Date: $last_date, which was $no_days days ago");
 // Get a list of all the sites
 $site_list = SitesTable::getUniqueSites();
 
+
 foreach ($site_list AS $site) {
 
     $site_id = $site['id'];
@@ -129,7 +130,7 @@ foreach ($site_list AS $site) {
         getBrowserHits($site_id, $date_from, $date_end, $day_date);
 
         // Get the crawler info
-        getSearchBots($site_id, $date_from, $date_end, $day_date);
+        //getSearchBots($site_id, $date_from, $date_end, $day_date);
     }
 }
 
@@ -190,7 +191,7 @@ function serverLoadRollup($date_from, $date_end, $day_date) {
 }
 
 // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+/*
 function getSearchBots($site_id, $date_from, $date_end, $day_date) {
 
     $data_list = DatabaseManager::getResults("SELECT browser, count(*) AS hits FROM stats_PageViews
@@ -206,7 +207,7 @@ function getSearchBots($site_id, $date_from, $date_end, $day_date) {
         DatabaseManager::insert("INSERT INTO stats_{$site_id}_RollupCrawler (rollup_date, crawler, hits) VALUES ('$day_date', '$botname', $hits)");
     }
 }
-
+*/
 // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function getOSHits($site_id, $date_from, $date_end, $day_date) {
