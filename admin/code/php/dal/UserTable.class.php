@@ -47,6 +47,14 @@ class UserTable {
         return DatabaseManager::getSingleResult($sql);
 	}
 	
+	
+    // ///////////////////////////////////////////////////////////////////////////////////////
+
+	public static function get($user_id){
+        $sql = DatabaseManager::prepare("SELECT * FROM apollo_Users WHERE id = %d", $user_id);
+        return DatabaseManager::getSingleResult($sql);
+	}
+		
     // ///////////////////////////////////////////////////////////////////////////////////////
 
     /**

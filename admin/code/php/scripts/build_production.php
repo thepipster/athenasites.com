@@ -31,10 +31,12 @@ $js_common_list = array(
 	"$base_dir/code/js/utils/Logger.class.js",
 	"$base_dir/code/js/utils/AthenaDialog.class.js",
 	"$base_dir/code/js/utils/AthenaUtils.class.js",	
+	"$base_dir/code/js/utils/isoCountry.class.js",	
 	// Core....
 	"$base_dir/code/js/ssMain.class.js",
 	"$base_dir/code/js/DataStore.class.js",	
 	// Remote API's...
+	"$base_dir/code/js/remoteapi/BillingAPI.class.js",
 	"$base_dir/code/js/remoteapi/StatsAPI.class.js",
 	"$base_dir/code/js/remoteapi/SystemAPI.class.js",
 	"$base_dir/code/js/remoteapi/BlogAPI.class.js",
@@ -47,6 +49,7 @@ $js_common_list = array(
 );
 
 $css_common_list = array(
+	"$base_dir/code/css/AccountDialog.css",
 	"$base_dir/code/css/Athena.css",
 	"$base_dir/code/css/SideBar.css"
 );

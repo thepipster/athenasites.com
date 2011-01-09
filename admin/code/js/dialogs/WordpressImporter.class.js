@@ -108,7 +108,7 @@ var WordpressImporter = {
             //var pubdate = post.date_gmt;
 						
             var paras = {cmd: 'importPost',
-                site_id: DataStore.m_siteID,
+                site_id: ssMain.siteID,
                 title: unescape(post.title),
                 content: unescape(post.content),
                 status: post.status,
@@ -185,7 +185,7 @@ var WordpressImporter = {
             if (WordpressImporter.comments.length > 0){
 			
                 var paras = {cmd: 'importComments',
-                    site_id: DataStore.m_siteID,
+                    site_id: ssMain.siteID,
                     pid: post_id,
                     com: $.toJSON(WordpressImporter.comments),
                     ims: 'wordpress'
@@ -202,7 +202,7 @@ var WordpressImporter = {
 		for (var i=0; i<comments.length; i++){
 															
 			var paras = {cmd: 'importComment', 
-						site_id: DataStore.m_siteID, 
+						site_id: ssMain.siteID, 
 						arn: unescape(comments[i].author), 
 						aem: unescape(comments[i].author_email), 
 						aip: comments[i].author_ip, 
@@ -261,11 +261,11 @@ var WordpressImporter = {
         WordpressImporter.noPosts = noItems;
 
         // Add tags
-        var paras = {cmd: 'addTags', site_id: DataStore.m_siteID, csvtags: tags};
+        var paras = {cmd: 'addTags', site_id: ssMain.siteID, csvtags: tags};
         $.ajax({url: MediaAPI.m_url, dataType: "json", data: paras});
 
         // Add categories
-        var paras = {cmd: 'addCategories', site_id: DataStore.m_siteID, csvcats: categories};
+        var paras = {cmd: 'addCategories', site_id: ssMain.siteID, csvcats: categories};
         $.ajax({url: MediaAPI.m_url, dataType: "json", data: paras});
 				
         // Start getting posts

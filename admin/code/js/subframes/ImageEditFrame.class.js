@@ -128,7 +128,7 @@ var ImageEditFrame = {
         var newDesc = $('#apollo_image_desc').val();
         var newTags = $('#apollo_image_tags').val();
 
-        MediaAPI.updateMediaInfo(DataStore.m_siteID, media_id, newTitle, newDesc, newTags, ImageEditFrame.onSaved);
+        MediaAPI.updateMediaInfo(ssMain.siteID, media_id, newTitle, newDesc, newTags, ImageEditFrame.onSaved);
 
     },
 	
@@ -145,7 +145,7 @@ var ImageEditFrame = {
     },
 
     onDoDelete : function(media_id){
-        MediaAPI.deleteMedia(DataStore.m_siteID, media_id, ImageEditFrame.onDeleted);
+        MediaAPI.deleteMedia(ssMain.siteID, media_id, ImageEditFrame.onDeleted);
     },
 
     onDeleted : function(media_id){

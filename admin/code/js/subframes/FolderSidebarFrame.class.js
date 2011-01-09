@@ -245,7 +245,7 @@ var FolderSidebarFrame = {
 		var folderID = parseInt($(this).attr('id').substring(7));	// format folder_xxx
 				
 		if (folderID == FolderSidebarFrame.ID_UNASSIGNED || folderID > 9){		
-			MediaAPI.addMediaToFolder(DataStore.m_siteID, imgID, folderID, FolderSidebarFrame.onAddedToFolder)
+			MediaAPI.addMediaToFolder(ssMain.siteID, imgID, folderID, FolderSidebarFrame.onAddedToFolder)
 		}	
 		
 		$(this).removeClass( 'folder_name_hover' );
@@ -335,7 +335,7 @@ var FolderSidebarFrame = {
 	// ////////////////////////////////////////////////////////////////////////////
 
 	deleteFolder : function(folderId){
-		MediaAPI.deleteFolder(DataStore.m_siteID, folderId, FolderSidebarFrame.onFolderDeleted);
+		MediaAPI.deleteFolder(ssMain.siteID, folderId, FolderSidebarFrame.onFolderDeleted);
 	},
 	
 	onFolderDeleted : function(folder_id){
@@ -358,7 +358,7 @@ var FolderSidebarFrame = {
 	// ////////////////////////////////////////////////////////////////////////////
 
 	addFolder : function(){		
-		MediaAPI.addFolder(DataStore.m_siteID, 'new folder', FolderSidebarFrame.onAddedFolder);
+		MediaAPI.addFolder(ssMain.siteID, 'new folder', FolderSidebarFrame.onAddedFolder);
 	},
 	
 	onAddedFolder : function(folderName, folderID){
@@ -411,7 +411,7 @@ var FolderSidebarFrame = {
 	* Rename a folder
 	*/
 	renameFolder : function(folderId, folderName){
-		MediaAPI.renameFolder(DataStore.m_siteID, folderId, folderName, FolderSidebarFrame.onFolderRenamed);
+		MediaAPI.renameFolder(ssMain.siteID, folderId, folderName, FolderSidebarFrame.onFolderRenamed);
 	},
 	
 	onFolderRenamed : function(folderId, folderName){

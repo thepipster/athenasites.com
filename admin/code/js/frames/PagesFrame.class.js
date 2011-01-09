@@ -335,7 +335,7 @@ var PagesFrame = {
     },
 	
     onDoDelete : function(){
-        MediaAPI.deletePage(DataStore.m_siteID, DataStore.m_currentPageID, PagesFrame.onPageDeleted);
+        MediaAPI.deletePage(ssMain.siteID, DataStore.m_currentPageID, PagesFrame.onPageDeleted);
     },
 	
     onPageDeleted : function(page_id){
@@ -474,7 +474,7 @@ var PagesFrame = {
             return;
         }
 						
-        MediaAPI.updatePage(DataStore.m_siteID, DataStore.m_currentPageID, title, content, status, template, parent_id, slug, order, ishome, desc, PagesFrame.onPageSaved)
+        MediaAPI.updatePage(ssMain.siteID, DataStore.m_currentPageID, title, content, status, template, parent_id, slug, order, ishome, desc, PagesFrame.onPageSaved)
 				
     },
 	

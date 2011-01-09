@@ -10,21 +10,19 @@ var StatsStore = {
     
     m_currentPostID : 0, 
     
-    m_siteID : 0,
-    
     /** List of pages & posts with their summary stats */
     m_pageSummaryList : '',
 
     // //////////////////////////////////////////////////////////////////////////////////
 
     init : function(siteID){
-        StatsStore.m_siteID = siteID;
+        ssMain.siteID = siteID;
     },
 
     // //////////////////////////////////////////////////////////////////////////////////
 
     loadPages : function(noDays, callback){
-    	StatsAPI.getPageStatsList(StatsStore.m_siteID, noDays, function(pages){StatsStore.onGotPages(pages, callback)});
+    	StatsAPI.getPageStatsList(ssMain.siteID, noDays, function(pages){StatsStore.onGotPages(pages, callback)});
     },
 
     // //////////////////////////////////////////////////////////////////////////////////

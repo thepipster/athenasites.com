@@ -16,11 +16,11 @@ var StatsFrame = {
 
 	repaint : function(){
 		if (StatsStore.m_currentPageID == 0){
-	        StatsAPI.getSiteSummaryStats(StatsStore.m_siteID, StatsFrame.noDays, StatsFrame.gotStats);
+	        StatsAPI.getSiteSummaryStats(ssMain.siteID, StatsFrame.noDays, StatsFrame.gotStats);
 		}
 		else {
 			//alert(StatsStore.m_currentPageID + ", " + StatsStore.m_currentPostID);
-	        StatsAPI.getPageStats(StatsStore.m_siteID, StatsFrame.noDays, StatsStore.m_currentPageID, StatsStore.m_currentPostID, StatsFrame.gotPageStats);	
+	        StatsAPI.getPageStats(ssMain.siteID, StatsFrame.noDays, StatsStore.m_currentPageID, StatsStore.m_currentPostID, StatsFrame.gotPageStats);	
 		}
     },
     

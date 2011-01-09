@@ -340,7 +340,7 @@ var GalleriesFrame = {
         img_id = parseInt($(ui.draggable).attr('id').substring(7));
         prev_slot_id = $(ui.draggable).attr('slot');        
         //slot_id = parseInt($(this).attr('id').substring(5));
-        GalleryAPI.onRemoveImage(DataStore.m_siteID,
+        GalleryAPI.onRemoveImage(ssMain.siteID,
 					            DataStore.m_currentPageID,
 					            img_id,
 					            DataStore.m_currentGalleryNo,
@@ -372,7 +372,7 @@ var GalleriesFrame = {
             url = $('#galimg_'+img_id).attr('src');
             prev_slot_id = $(ui.draggable).attr('slot');
 			
-            GalleryAPI.onMoveImage( DataStore.m_siteID,
+            GalleryAPI.onMoveImage( ssMain.siteID,
                 DataStore.m_currentPageID,
                 img_id,
                 prev_slot_id,
@@ -390,7 +390,7 @@ var GalleriesFrame = {
             slot_id = parseInt($(this).attr('id').substring(5));
             url = $('#img_'+img_id).attr('src');
 			
-            GalleryAPI.onAddImage(	DataStore.m_siteID,
+            GalleryAPI.onAddImage(	ssMain.siteID,
                 DataStore.m_currentPageID,
                 img_id,
                 slot_id,

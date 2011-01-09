@@ -56,7 +56,7 @@ class SitesTable {
 	// /////////////////////////////////////////////////////////////////////////////////
 	
 	public static function getSite($id){
-		$sql = DatabaseManager::prepare("SELECT * FROM apollo_Sites WHERE id = %d ", $id);			
+		$sql = DatabaseManager::prepare("SELECT * FROM apollo_Sites WHERE id = %d", $id);			
 		return DatabaseManager::getSingleResult($sql);				
 	}
 
@@ -65,6 +65,13 @@ class SitesTable {
 	public static function getSites(){
 		$sql = DatabaseManager::prepare("SELECT * FROM apollo_Sites ORDER BY id");			
 		return DatabaseManager::getResults($sql);				
+	}
+
+	// /////////////////////////////////////////////////////////////////////////////////
+	
+	public static function getDomain($site_id){
+		$sql = DatabaseManager::prepare("SELECT domain FROM apollo_Sites WHERE id = %d", $site_id);	
+		return DatabaseManager::getVar($sql);				
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////////////

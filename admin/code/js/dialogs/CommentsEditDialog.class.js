@@ -29,31 +29,31 @@ var CommentsEditDialog = {
             },
             title: 'Edit Post Comments'});
 
-        BlogAPI.getComments(DataStore.m_siteID, DataStore.m_currentPostID, CommentsEditDialog.onGotComments)
+        BlogAPI.getComments(ssMain.siteID, DataStore.m_currentPostID, CommentsEditDialog.onGotComments)
     },
 
     // ////////////////////////////////////////////////////////////////////////
 
     unapproveComment : function(comment_id){
-        MediaAPI.updateCommentStatus(DataStore.m_siteID, comment_id, 'Pending', CommentsEditDialog.onUpdate);
+        MediaAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Pending', CommentsEditDialog.onUpdate);
     },
 
     // ////////////////////////////////////////////////////////////////////////
 
     approveComment : function(comment_id){
-        MediaAPI.updateCommentStatus(DataStore.m_siteID, comment_id, 'Approved', CommentsEditDialog.onUpdate);
+        MediaAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Approved', CommentsEditDialog.onUpdate);
     },
 
     // ////////////////////////////////////////////////////////////////////////
 
     deleteComment : function(comment_id){
-        MediaAPI.updateCommentStatus(DataStore.m_siteID, comment_id, 'Trash', CommentsEditDialog.onUpdate);
+        MediaAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Trash', CommentsEditDialog.onUpdate);
     },
 
     // ////////////////////////////////////////////////////////////////////////
 
     undeleteComment : function(comment_id){
-        MediaAPI.updateCommentStatus(DataStore.m_siteID, comment_id, 'Pending', CommentsEditDialog.onUpdate);
+        MediaAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Pending', CommentsEditDialog.onUpdate);
     },
 
     // ////////////////////////////////////////////////////////////////////////

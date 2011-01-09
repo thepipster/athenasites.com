@@ -57,7 +57,7 @@ var MediaAPI = {
 			
         var paras = {
             cmd: 'setPagePara',
-            site_id: DataStore.m_siteID,
+            site_id: ssMain.siteID,
             page_id: pageID,
             theme_para_id: themeParaID,
             para_value: paraValue
@@ -85,7 +85,7 @@ var MediaAPI = {
 	
         var paras = {
             cmd: 'setGlobalPara',
-            site_id: DataStore.m_siteID,
+            site_id: ssMain.siteID,
             theme_para_id: themeParaID,
             para_value: paraValue
         };

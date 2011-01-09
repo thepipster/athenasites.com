@@ -12,9 +12,6 @@ var DataStore = {
     m_currentPostID : 0,
     m_currentTag : '',
 
-    /** Currently selected site id (if the user has more than 1 site!) */
-    m_siteID : 0,
-
     /** List of folders for the site with fields; id, site_id, name */
     m_folderList : '',
 
@@ -57,7 +54,7 @@ var DataStore = {
     // //////////////////////////////////////////////////////////////////////////////////
 
     init : function(siteID){
-        DataStore.m_siteID = siteID;
+        ssMain.siteID = siteID;
     },
 
     // //////////////////////////////////////////////////////////////////////////////////
@@ -626,7 +623,7 @@ var DataStore = {
     // //////////////////////////////////////////////////////////////////////////////////
 
 	saveMedia : function(mediaObj){
-        MediaAPI.updateMediaInfo(DataStore.m_siteID, mediaObj.id, mediaObj.title, mediaObj.description, mediaObj.tags, DataStore.onMediaSaved);
+        MediaAPI.updateMediaInfo(ssMain.siteID, mediaObj.id, mediaObj.title, mediaObj.description, mediaObj.tags, DataStore.onMediaSaved);
 	},
 	
 	onMediaSaved : function(mediaObj){
@@ -648,7 +645,7 @@ var DataStore = {
 	*/ 
 	savePage : function(pageObj){
 			
-        MediaAPI.updatePage(DataStore.m_siteID, 
+        MediaAPI.updatePage(ssMain.siteID, 
         					pageObj.id, 
         					pageObj.title, 
         					pageObj.content, 
@@ -689,7 +686,7 @@ var DataStore = {
 	*/
 	savePost : function(postObj, callback){
 	
-        MediaAPI.updatePost(DataStore.m_siteID, 
+        MediaAPI.updatePost(ssMain.siteID, 
         					postObj.id, 
         					postObj.title, 
         					postObj.content, 
@@ -724,11 +721,11 @@ var DataStore = {
 
     load : function(callback){
 
-        GalleryAPI.getAll(DataStore.m_siteID, function(gallery_images, gallery_meta){
+        GalleryAPI.getAll(ssMain.siteID, function(gallery_images, gallery_meta){
             DataStore.onGotGalleryData(gallery_images, gallery_meta);
         });
 
-        MediaAPI.getAll(DataStore.m_siteID,
+        MediaAPI.getAll(ssMain.siteID,
             function(folders, media, pages, theme, page_templates, theme_paras, page_paras, posts, tags, categories, media_tag_list){
                 DataStore.onGotData(folders, media, pages, theme, page_templates, theme_paras, page_paras, posts, tags, categories, media_tag_list, callback);
             });
@@ -934,7 +931,7 @@ var DataStore = {
 		
         for(var i=0; i<media_list.length; i++){
 
-            var files_root = defines.user_files_root_url + DataStore.m_siteID + "/";
+            var files_root = defines.user_files_root_url + ssMain.siteID + "/";
             var temp = new Object();
 
             temp.thumb_url = files_root + media_list[i].filepath + media_list[i].thumb_filename;
@@ -973,7 +970,7 @@ var DataStore = {
         for (var i=0; i<DataStore.m_mediaList.length; i++){
             if (DataStore.m_mediaList[i].id == mediaObj.id){
 
-                var files_root = defines.user_files_root_url + DataStore.m_siteID + "/";
+                var files_root = defines.user_files_root_url + ssMain.siteID + "/";
 
                 DataStore.m_mediaList[i].id = mediaObj.id;
                 

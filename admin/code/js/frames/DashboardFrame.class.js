@@ -37,8 +37,8 @@ var DashboardFrame = {
         else {
             $('#apollo_followers_summary').hide();
             $('#apollo_site_stats_summary').hide();
-            BlogAPI.getComments(DataStore.m_siteID, 0, DashboardFrame.gotComments);
-            BlogAPI.getSummary(DataStore.m_siteID, DashboardFrame.gotSummary);
+            BlogAPI.getComments(ssMain.siteID, 0, DashboardFrame.gotComments);
+            BlogAPI.getSummary(ssMain.siteID, DashboardFrame.gotSummary);
             DashboardFrame.m_painted = true;
         }
     },
@@ -47,7 +47,7 @@ var DashboardFrame = {
 
     gotSummary : function(data){
         DashboardFrame.m_summaryData = data;
-        StatsAPI.getSiteSummaryStats(DataStore.m_siteID, 30, DashboardFrame.gotStats);
+        StatsAPI.getSiteSummaryStats(ssMain.siteID, 30, DashboardFrame.gotStats);
     },
     
     // ////////////////////////////////////////////////////////////////////////////
@@ -314,27 +314,27 @@ var DashboardFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 
     unspamComment : function(comment_id){
-        MediaAPI.updateCommentStatus(DataStore.m_siteID, comment_id, 'Approved', DashboardFrame.onCommentUpdate);
+        MediaAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Approved', DashboardFrame.onCommentUpdate);
     },
 
     spamComment : function(comment_id){
-        MediaAPI.updateCommentStatus(DataStore.m_siteID, comment_id, 'Spam', DashboardFrame.onCommentUpdate);
+        MediaAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Spam', DashboardFrame.onCommentUpdate);
     },
 
     unapproveComment : function(comment_id){
-        MediaAPI.updateCommentStatus(DataStore.m_siteID, comment_id, 'Pending', DashboardFrame.onCommentUpdate);
+        MediaAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Pending', DashboardFrame.onCommentUpdate);
     },
 
     approveComment : function(comment_id){
-        MediaAPI.updateCommentStatus(DataStore.m_siteID, comment_id, 'Approved', DashboardFrame.onCommentUpdate);
+        MediaAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Approved', DashboardFrame.onCommentUpdate);
     },
 
     deleteComment : function(comment_id){
-        MediaAPI.updateCommentStatus(DataStore.m_siteID, comment_id, 'Trash', DashboardFrame.onCommentUpdate);
+        MediaAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Trash', DashboardFrame.onCommentUpdate);
     },
 
     undeleteComment : function(comment_id){
-        MediaAPI.updateCommentStatus(DataStore.m_siteID, comment_id, 'Pending', DashboardFrame.onCommentUpdate);
+        MediaAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Pending', DashboardFrame.onCommentUpdate);
     },
 
     onCommentUpdate : function(commentID, newStatus){

@@ -283,14 +283,14 @@ var FilesFrame = {
 	// ////////////////////////////////////////////////////////////////////////////
 
 	deleteImageTag : function(tag){
-		MediaAPI.removeMediaTag(DataStore.m_siteID, FilesFrame.m_currentImageID, tag, FilesFrame.onMediaTagChanged)
+		MediaAPI.removeMediaTag(ssMain.siteID, FilesFrame.m_currentImageID, tag, FilesFrame.onMediaTagChanged)
 	},
 		
 	// ////////////////////////////////////////////////////////////////////////////
 
 	addMediaTag : function(){
 		var csvtags = $('#apollo_image_custom_tags').val();
-        MediaAPI.addMediaCSVTags(DataStore.m_siteID, FilesFrame.m_currentImageID, csvtags, FilesFrame.onMediaTagChanged);
+        MediaAPI.addMediaCSVTags(ssMain.siteID, FilesFrame.m_currentImageID, csvtags, FilesFrame.onMediaTagChanged);
 	},
 			
     onMediaTagChanged : function(mediaObj, tags){        
@@ -324,7 +324,7 @@ var FilesFrame = {
     },
 
     onDoDelete : function(media_id){
-        MediaAPI.deleteMedia(DataStore.m_siteID, media_id, FilesFrame.onDeleted);
+        MediaAPI.deleteMedia(ssMain.siteID, media_id, FilesFrame.onDeleted);
     },
 
     onDeleted : function(media_id){
@@ -370,7 +370,7 @@ var FilesFrame = {
             post_params: {
                 "PHPSESSID" : defines.session_id,
                 "folder_id": DataStore.m_currentFolderID,
-                "site_id": DataStore.m_siteID
+                "site_id": ssMain.siteID
                 },
 
             // File Upload Settings

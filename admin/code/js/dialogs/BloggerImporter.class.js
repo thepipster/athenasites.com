@@ -242,7 +242,7 @@ var BloggerImporter = {
                     
         var paras = {
             cmd: 'importPost',
-            site_id: DataStore.m_siteID,
+            site_id: ssMain.siteID,
             title: unescape(post.title),
             content: unescape(post.content),
             status: post.status,
@@ -379,7 +379,7 @@ var BloggerImporter = {
             // Import comments into Apollo
             var paras = {
                 cmd: 'importComments',
-                site_id: DataStore.m_siteID,
+                site_id: ssMain.siteID,
                 pid: BloggerImporter.m_apolloPostID,
                 com: $.toJSON(commentList),
                 ims: 'blogger'

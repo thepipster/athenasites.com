@@ -207,7 +207,7 @@ var PagesSidebarFrame = {
         var pageSlug = AthenaUtils.encodeSlug(title);
         var order = 0;
         var isHome = 0;
-        MediaAPI.addPage(DataStore.m_siteID, title, '', 'Draft', 0, 0, pageSlug, order, isHome, PagesSidebarFrame.onPageAdded);
+        MediaAPI.addPage(ssMain.siteID, title, '', 'Draft', 0, 0, pageSlug, order, isHome, PagesSidebarFrame.onPageAdded);
     },
 	
     onPageAdded : function(pageObj){

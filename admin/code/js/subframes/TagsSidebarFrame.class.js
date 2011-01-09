@@ -191,7 +191,7 @@ var TagsSidebarFrame = {
 		var imgID = parseInt($(ui.draggable).attr('id').substring(4));						
 		var tag = $(this).attr('id').substring(4);	// format tag_xxx
 
-        MediaAPI.addMediaCSVTags(DataStore.m_siteID, imgID, tag, TagsSidebarFrame.onAddedToTag);
+        MediaAPI.addMediaCSVTags(ssMain.siteID, imgID, tag, TagsSidebarFrame.onAddedToTag);
 		
 	},
 			
@@ -263,7 +263,7 @@ var TagsSidebarFrame = {
 	// ////////////////////////////////////////////////////////////////////////////
 
 	deleteTag : function(tag){
-		MediaAPI.deleteMediaTag(DataStore.m_siteID, tag, TagsSidebarFrame.onTagDeleted)
+		MediaAPI.deleteMediaTag(ssMain.siteID, tag, TagsSidebarFrame.onTagDeleted)
 	},
 	
 	onTagDeleted : function(newTagList){
@@ -297,7 +297,7 @@ var TagsSidebarFrame = {
 		
 		TagsSidebarFrame.m_newTag = newTagName;
 		alert(oldTagName + ", " + newTagName);
-		MediaAPI.renameMediaTag(DataStore.m_siteID, oldTagName, newTagName, TagsSidebarFrame.onTagRenamed);
+		MediaAPI.renameMediaTag(ssMain.siteID, oldTagName, newTagName, TagsSidebarFrame.onTagRenamed);
 	},
 	
 	onTagRenamed : function(tags){

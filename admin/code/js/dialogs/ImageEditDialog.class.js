@@ -123,7 +123,7 @@ var ImageEditDialog = {
 		var newDesc = $('#apollo_image_desc').val();
 		var newTags = $('#apollo_image_tags').val();
 
-		MediaAPI.saveMediaInfo(DataStore.m_siteID, newTitle, newDesc, newTags, ImageEditDialog.onSaved)
+		MediaAPI.saveMediaInfo(ssMain.siteID, newTitle, newDesc, newTags, ImageEditDialog.onSaved)
 
 	},
 	

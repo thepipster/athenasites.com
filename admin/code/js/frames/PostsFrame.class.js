@@ -44,7 +44,7 @@ var PostsFrame = {
 
 		//oUtil.obj.onKeyPress = PostsFrame.onContentKeyPress;
 
-        MediaAPI.getPostDetails(DataStore.m_siteID, DataStore.m_currentPostID, PostsFrame.repaintData);
+        MediaAPI.getPostDetails(ssMain.siteID, DataStore.m_currentPostID, PostsFrame.repaintData);
 								
     },
 	
@@ -188,7 +188,7 @@ var PostsFrame = {
     },
 	
     onDoDelete : function(){
-        MediaAPI.deletePost(DataStore.m_siteID, DataStore.m_currentPostID, PostsFrame.onPostDeleted);
+        MediaAPI.deletePost(ssMain.siteID, DataStore.m_currentPostID, PostsFrame.onPostDeleted);
     },
 	
     onPostDeleted : function(post_id){
@@ -257,7 +257,7 @@ var PostsFrame = {
 
         DataStore.updatePost(postObj);
         
-        //MediaAPI.updatePost(DataStore.m_siteID, DataStore.m_currentPostID, title, content, status, canComment, slug, PostsFrame.onPostSaved)
+        //MediaAPI.updatePost(ssMain.siteID, DataStore.m_currentPostID, title, content, status, canComment, slug, PostsFrame.onPostSaved)
 				
     },
 	
@@ -272,7 +272,7 @@ var PostsFrame = {
     addTag : function(){
         var tag = $('#postTag').val();
         $('#postTag').val('');
-        MediaAPI.addTag(DataStore.m_siteID, DataStore.m_currentPostID, tag, PostsFrame.onTagAdded);
+        MediaAPI.addTag(ssMain.siteID, DataStore.m_currentPostID, tag, PostsFrame.onTagAdded);
     },
 
     onTagAdded : function(postObj, tags){		
@@ -286,7 +286,7 @@ var PostsFrame = {
     addCategory : function(){
         var cat = $('#postCategory').val();
         $('#postCategory').val('');
-        MediaAPI.addCategory(DataStore.m_siteID, DataStore.m_currentPostID, cat, PostsFrame.onCategoryAdded);
+        MediaAPI.addCategory(ssMain.siteID, DataStore.m_currentPostID, cat, PostsFrame.onCategoryAdded);
     },
 	
     onCategoryAdded : function(postObj, categories){	
@@ -299,7 +299,7 @@ var PostsFrame = {
 	
     deleteCategory : function(cat){
         AthenaDialog.confirm("Are you sure you want to remove this tag from this post?", function(){
-            MediaAPI.removeCategory(DataStore.m_siteID, DataStore.m_currentPostID, cat, PostsFrame.onCategoryDeleted);
+            MediaAPI.removeCategory(ssMain.siteID, DataStore.m_currentPostID, cat, PostsFrame.onCategoryDeleted);
         });
     },
 	
@@ -324,7 +324,7 @@ var PostsFrame = {
 	
     deleteTag : function(tag){
         AthenaDialog.confirm("Are you sure you want to remove this tag from this post?", function(){
-            MediaAPI.removeTag(DataStore.m_siteID, DataStore.m_currentPostID, tag, PostsFrame.onTagDeleted);
+            MediaAPI.removeTag(ssMain.siteID, DataStore.m_currentPostID, tag, PostsFrame.onTagDeleted);
         });
     },
 
@@ -384,7 +384,7 @@ var PostsFrame = {
     },
 
     onDoDeleteGlobalTag : function(tagIndex){
-        MediaAPI.deleteTag(DataStore.m_siteID, DataStore.m_tags[tagIndex], PostsFrame.onGlobalTagDeleted);
+        MediaAPI.deleteTag(ssMain.siteID, DataStore.m_tags[tagIndex], PostsFrame.onGlobalTagDeleted);
     },
 
     onGlobalTagDeleted : function(tag){
@@ -442,7 +442,7 @@ var PostsFrame = {
     },
 
     onDoDeleteGlobalCategory : function(catIndex){
-        MediaAPI.deleteCategory(DataStore.m_siteID, DataStore.m_categories[catIndex], PostsFrame.onGlobalCategoryDeleted);
+        MediaAPI.deleteCategory(ssMain.siteID, DataStore.m_categories[catIndex], PostsFrame.onGlobalCategoryDeleted);
     },
 
     onGlobalCategoryDeleted : function(category){

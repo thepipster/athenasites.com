@@ -32,7 +32,7 @@ var ssMain = {
         //Logger.showOnError();
 
         // Setup the data store for the site
-        DataStore.m_siteID = currentSiteID;;
+        ssMain.siteID = currentSiteID;;
         DataStore.init();
 
         // Setup date picker...

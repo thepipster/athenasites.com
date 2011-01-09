@@ -71,7 +71,7 @@ var LiveJournalImporter = {
 
         var paras = {
             cmd: 'importLJ',
-            site_id: DataStore.m_siteID,
+            site_id: ssMain.siteID,
             us: $('#ljuser').val(),
             ps: $('#ljpass').val()
             };

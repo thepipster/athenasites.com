@@ -15,10 +15,14 @@ var ssMain = {
 
     view : 1,
     
+    /** Currently selected site id (if the user has more than 1 site!) */
+    siteID : 0,
+    
     // ////////////////////////////////////////////////////////////////////////
 
     init : function(siteID, view){
-
+		
+		ssMain.siteID = siteID;
 		ssMain.view = view;
 		
         // Setup the JS logger
@@ -44,6 +48,8 @@ var ssMain = {
 		// Change listeners
 		$('.apolloDataInput').typing({ stop: ssMain.onDataChange, delay: 400});
 		$('.apolloDataInput').change(ssMain.onDataChange);        
+		
+		AccountDialog.show();
 	},
 
     // ////////////////////////////////////////////////////////////////////////
