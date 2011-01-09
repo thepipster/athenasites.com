@@ -117,6 +117,22 @@ class UserTable {
 
     // ///////////////////////////////////////////////////////////////////////////////////////
 
+    public static function updateEmail($id, $email){
+		$sql = DatabaseManager::prepare("UPDATE apollo_Users SET email = %s WHERE id = %d", $email, $id);
+		Logger::debug($sql);
+		return DatabaseManager::update($sql);
+    }
+
+	// /////////////////////////////////////////////////////////////////////////////////
+
+    public static function updatePassword($id, $password_hash){
+		$sql = DatabaseManager::prepare("UPDATE apollo_Users SET password_hash = %s WHERE id = %d", $password_hash, $id);
+		Logger::debug($sql);
+		return DatabaseManager::update($sql);
+    }
+    
+	// /////////////////////////////////////////////////////////////////////////////////
+
     public static function updateLastLogin($id) {
         $target_date = mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y"));
         $date_str = date('Y-m-d H:i:s', $target_date);

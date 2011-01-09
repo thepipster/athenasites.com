@@ -176,7 +176,7 @@ var AccountDialog = {
 		
 		txt += isoCountry.getHTML();
 		
-		txt += "    <button class='basic_button' onclick='AccountDialog.setEmail()'>Update</button>"
+		txt += "    <button class='basic_button' onclick='AccountDialog.changeCard()'>Update</button>"
 		txt += "</div>";
 				
 		txt += "</td>";
@@ -284,6 +284,7 @@ var AccountDialog = {
     // ////////////////////////////////////////////////////////////////////////
 
 	changeCard : function(){
+		AthenaDialog.alert('Coming soon!');	
 	},
 	
     // ////////////////////////////////////////////////////////////////////////

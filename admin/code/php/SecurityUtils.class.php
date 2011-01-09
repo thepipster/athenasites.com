@@ -21,10 +21,10 @@ class SecurityUtils {
     public static function checkNonce($nonce, $action = '', $user=''){
 	// Nonce generated 0-12 hours ago
         $nonceCheck = substr(self::generateNonceHash( $action . $user ), -self::$salt_length, 10);
-	if ( $nonceCheck == trim($nonce) ){
-            return true;
-	}
-	return false;
+		if ( $nonceCheck == trim($nonce) ){
+	            return true;
+		}
+		return false;
     }
     
     // //////////////////////////////////////////////////////////////
@@ -36,7 +36,7 @@ class SecurityUtils {
      * @return <type>
      */
     public static function createNonce($action = '', $user=''){
-	return substr( self::generateNonceHash( $action . $user ), -self::$salt_length, 10);
+		return substr( self::generateNonceHash( $action . $user ), -self::$salt_length, 10);
     }
     
     // //////////////////////////////////////////////////////////////
@@ -48,8 +48,8 @@ class SecurityUtils {
      * @return <type>
      */
     private static function generateNonceHash($action='', $user=''){
-	$i = ceil( time() / ( self::$nonce_duration / 2 ) );
-	return md5( $i . $action . $user . $action );
+		$i = ceil( time() / ( self::$nonce_duration / 2 ) );
+		return md5( $i . $action . $user . $action );
     }
 
     // //////////////////////////////////////////////////////////////
@@ -124,7 +124,7 @@ class SecurityUtils {
      */
     public static function isLoggedInForSite($site_id) {
 
-        if (Session::get('user_valid')) {
+        if (isset($site_id) && Session::get('user_valid')) {
 
             $user_level = SecurityUtils::getCurrentUserLevel();
             $user_id = SecurityUtils::getCurrentUserID();

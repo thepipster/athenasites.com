@@ -49,7 +49,6 @@ var ssMain = {
 		$('.apolloDataInput').typing({ stop: ssMain.onDataChange, delay: 400});
 		$('.apolloDataInput').change(ssMain.onDataChange);        
 		
-		AccountDialog.show();
 	},
 
     // ////////////////////////////////////////////////////////////////////////

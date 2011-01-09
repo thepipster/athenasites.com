@@ -107,6 +107,8 @@ function login($email, $plain_password){
 			
 	$user_id = UserTable::checkValid($email, $password_hash);
 			
+	//Logger::debug("Email: $email Pass: $plain_password");
+				
 	if ($user_id){
 		$msg['data'] = 'true';		
 		// Setup user session

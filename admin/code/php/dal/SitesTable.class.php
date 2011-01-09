@@ -41,9 +41,9 @@ class SitesTable {
 		$sql = DatabaseManager::prepare("UPDATE apollo_Sites SET domain = %s, path = %s, theme_id = %d WHERE id = %d", $domain, $path, $theme_id, $id);
 		return DatabaseManager::update($sql);
     }
-    
-	// /////////////////////////////////////////////////////////////////////////////////
 
+	// /////////////////////////////////////////////////////////////////////////////////
+	
 	public static function getNumberSites(){return DatabaseManager::getVar("SELECT count(distinct(id)) AS no FROM apollo_Sites;");}
     
 	// /////////////////////////////////////////////////////////////////////////////////
@@ -126,6 +126,15 @@ class SitesTable {
 		return DatabaseManager::getSingleResult($sql);				
 	}
 	
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	public static function updateDomain($site_id, $domain){
+		$sql = DatabaseManager::prepare("UPDATE apollo_Sites SET domain = %s WHERE id = %d AND is_live = 1", $domain, $site_id);			
+		return DatabaseManager::update($sql);				
+	}
+	
+
+
 	// /////////////////////////////////////////////////////////////////////////////////
 }
 ?>
