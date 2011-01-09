@@ -25,9 +25,26 @@ $user_id = SecurityUtils::getCurrentUserID();
 // Get the command type, and process
 switch ($cmd) {
 
+    // Acount Management...........
 
 	case "getAccountInfo":
 		getAccountInfo($site_id, $user_id);
+		break;
+		
+    case "changeEmail":
+        $newEmail = CommandHelper::getPara('email', true, CommandHelper::$PARA_TYPE_STRING);
+		changeEmail($user_id, $newEmail);
+		break;
+
+    case "changeDomain":
+        $newDomain = CommandHelper::getPara('domain', true, CommandHelper::$PARA_TYPE_STRING);
+		changeDomain($site_id, $newDomain);
+		break;
+
+    case "changePassword":
+        $new_password = CommandHelper::getPara('new_pswd', true, CommandHelper::$PARA_TYPE_STRING);
+        $old_password = CommandHelper::getPara('old_pswd', true, CommandHelper::$PARA_TYPE_STRING);
+		changePassword($user_id, $new_password, $old_password);
 		break;
 		
     // Credit Card Management (Payment Profiles)...........
@@ -133,8 +150,79 @@ function getPaymentProfileID_OrDie($card_id){
 
 // ///////////////////////////////////////////////////////////////////////////////////////
 //
-// Account info
+// Acount Management
 //
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function changeEmail($user_id, $newEmail){
+
+    $msg['cmd'] = 'changeEmail';
+    $msg['result'] = 'ok';
+	
+	$user_info = UserTable::get($user_id);
+	
+	// Send an email with a verify this email link
+	
+	$activation_key = sha1( ceil(time()) . 'update_email' . $user_info['name']);	
+	//$activation_key = SecurityUtils::generateNonceHash('email_verify');
+	
+    $date_str = date('Y-m-d H:i:s', time());
+	
+	$sql = DatabaseManager::prepare("INSERT INTO apollo_EmailActivationTable (user_id, email, activation_key, created_date) VALUES (%d, %s, %s, %s)", $user_id, $newEmail, $activation_key, $date_str);
+	DatabaseManager::insert($sql);
+	
+	EmailMessaging::sendEmailActivateLink($newEmail, $user_info['name'], $activation_key);
+	
+    CommandHelper::sendMessage($msg);
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function changeDomain($site_id, $newDomain){
+
+    $msg['cmd'] = 'changeDomain';
+    $msg['result'] = 'ok';
+
+	SitesTable::updateDomain($site_id, $newDomain);
+
+    $msg['data'] = array('domain' => $newDomain);
+		
+    CommandHelper::sendMessage($msg);
+}
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
+function changePassword($user_id, $new_password, $old_password){
+
+    $msg['cmd'] = 'changePassword';
+	
+	$user_info = UserTable::get($user_id);
+	$email = $user_info['email'];
+	
+	Logger::debug("$email - $old_password");
+	
+	// Check to see if the old password is correct
+	$db_pass = UserTable::getPasswordFromEmail($email);			
+	$password_hash = SecurityUtils::generatePassHash($old_password, $db_pass);
+			
+	$user_id = UserTable::checkValid($email, $password_hash);
+	
+	Logger::debug("User id = $user_id Password Hash = $password_hash");
+	
+	if ($user_id){
+		// Old password is valid, so update to new password
+	    $msg['result'] = 'ok';
+		$new_password_hash = SecurityUtils::generatePassHash($new_password, $db_pass);
+		UserTable::updatePassword($user_id, $new_password_hash);
+	}
+	else {
+	    $msg['result'] = 'fail';
+	}
+	
+    CommandHelper::sendMessage($msg);
+
+}
+
 // ///////////////////////////////////////////////////////////////////////////////////////
 
 function getAccountInfo($site_id, $user_id){

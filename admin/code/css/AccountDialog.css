@@ -1,6 +1,10 @@
 #apolloAccountSettings {
 }
 
+#apolloAccountSettings a { color: #435e80; }
+#apolloAccountSettings a:visited { color: #435e80; }
+#apolloAccountSettings a:hover { color: #638abf; }
+
 #apolloAccountSettings .dataWrapper {
 	width: 100%;
 	margin-bottom: 5px;
@@ -17,10 +21,27 @@
 	color: #435e80;
 }
 
+#apolloAccountSettings .instructions {
+	width: 380px;
+	color: #435e80;
+	display: block;
+	font-size: 11px;
+	padding-bottom: 5px;
+}
+
+
 #apolloAccountSettings .dataValueDisabled {
+	border-color: #b0b0b0;
+	border-width: 1px;
+	border-style: solid;
 	width: 180px;
 	margin-right: 10px;
 	background-color: #c1c4c4 !important;
+	display: inline-block;
+	height: 15px;
+	padding-left: 3px;
+	color: #435e80;
+	padding-top: 1px;
 }
 
 

@@ -5,6 +5,13 @@
  */
 var AccountDialog = {
 
+	userEmail : '',
+	userDomain : '',
+
+	apolloIP : '173.203.122.229',
+	
+    // ////////////////////////////////////////////////////////////////////////
+
 	show : function(){
 		AccountDialog.paint();
 		
@@ -16,11 +23,19 @@ var AccountDialog = {
 
 	onGotData : function(user_info){
 	
-		$('#memberSince').val($.datepicker.formatDate('mm/dd/yy', new Date(user_info.account_created)));
-		$('#paymentPlan').val(user_info.payment_plan);
-		$('#hostingFee').val('$' + user_info.monthly_fee);
-		$('#lastPayment').val($.datepicker.formatDate('mm/dd/yy', new Date(user_info.last_payment)));
-		$('#nextPayment').val($.datepicker.formatDate('mm/dd/yy', new Date(user_info.next_payment_due)));
+		AccountDialog.userEmail = user_info.email;
+		AccountDialog.userDomain = user_info.domain;
+				
+		var fee_due = user_info.monthly_fee;
+		if (user_info.payment_plan != 'Monthly'){
+			fee_due = user_info.monthly_fee*12;
+		}
+
+		$('#memberSince').html($.datepicker.formatDate('mm/dd/yy', new Date(user_info.account_created)));
+		$('#paymentPlan').html(user_info.payment_plan);
+		$('#lastPayment').html($.datepicker.formatDate('mm/dd/yy', new Date(user_info.last_payment)));
+		$('#hostingFee').html('$' + user_info.monthly_fee + ' per month');
+		$('#nextPayment').html('$' + fee_due + ' on ' + $.datepicker.formatDate('mm/dd/yy', new Date(user_info.next_payment_due)));
 				
 		$('#userDomain').val(user_info.domain);
 		$('#userEmail').val(user_info.email);
@@ -36,39 +51,47 @@ var AccountDialog = {
 		txt += "<table width='100%'><tr valign='top'>";
 		txt += "<td>";
 		
-		txt += "    <h3>Account Settings</h3>";
+		txt += "    <h3>Site Settings</h3>";
+
+		
+		txt += "    <div class='dataWrapper'>";
+		txt += "    <span class='instructions'>To change the domain name of your site, you'll need to edit your domain's DNS settings.";
+		txt += "    Make sure you set the A-RECORD to ApolloSites IP address (<b>"+AccountDialog.apolloIP+"</b>).";
+		txt += "    See this <a href='http://apollosites.com/custom-domain-name.html'>Custom Domain Name</a> page for more information.</span>";
+		txt += "    </div>";
 
 		txt += "    <div class='dataWrapper'>";
 		txt += "    <span class='dataLabel'>Domain</span><input id='userDomain' class='dataValue' type='text' />";
-		txt += "    <button class='basic_button' onclick='AccountDialog.setDomain()'>Update</button>"
-		txt += "    </div>";
-
-		txt += "    <div class='dataWrapper'>";
-		txt += "    <span class='dataLabel'>Email</span><input id='userEmail' class='dataValue' type='text' />";
-		txt += "    <button class='basic_button' onclick='AccountDialog.setEmail()'>Update</button>"
+		txt += "    <button class='basic_button' onclick='AccountDialog.changeDomain()'>Change</button>"
 		txt += "    </div>";
 		
+		txt += "    <div class='dataWrapper'>";
+		txt += "    <span class='dataLabel'>Email</span><input id='userEmail' class='dataValue' type='text' />";
+		txt += "    <button class='basic_button' onclick='AccountDialog.changeEmail()'>Change</button>"
+		txt += "    </div>";
+		
+		txt += "<br/>";
 		
 		txt += "    <h3>Billing</h3>";
 		
 		txt += "    <div class='dataWrapper'>";
-		txt += "    <span class='dataLabel'>Member Since</span><input id='memberSince' class='dataValueDisabled' type='text' disabled />";
+		txt += "    <span class='dataLabel'>Member Since</span><span id='memberSince' class='dataValueDisabled'></span>";
 		txt += "    </div>";
 
 		txt += "    <div class='dataWrapper'>";
-		txt += "    <span class='dataLabel'>Payment Plan</span><input id='paymentPlan' class='dataValueDisabled' type='text' disabled value='Monthly'/>";
+		txt += "    <span class='dataLabel'>Payment Plan</span><span id='paymentPlan' class='dataValueDisabled'></span>";
 		txt += "    </div>";
 
 		txt += "    <div class='dataWrapper'>";
-		txt += "    <span class='dataLabel'>Hosting Fee</span><input id='hostingFee' class='dataValueDisabled' type='text' disabled value='$8.00'/>";
+		txt += "    <span class='dataLabel'>Hosting Fee</span><span id='hostingFee' class='dataValueDisabled'></span>";
 		txt += "    </div>";
 
 		txt += "    <div class='dataWrapper'>";
-		txt += "    <span class='dataLabel'>Last Payment</span><input id='lastPayment' class='dataValueDisabled' type='text' disabled />";
+		txt += "    <span class='dataLabel'>Last Payment</span><span id='lastPayment' class='dataValueDisabled'></span>";
 		txt += "    </div>";
 
 		txt += "    <div class='dataWrapper'>";
-		txt += "    <span class='dataLabel'>Next Payment</span><input id='nextPayment' class='dataValueDisabled' type='text' disabled />";
+		txt += "    <span class='dataLabel'>Next Payment</span><span id='nextPayment' class='dataValueDisabled'></span>";
 		txt += "    </div>";
 		
 		txt += "</td>";
@@ -79,14 +102,19 @@ var AccountDialog = {
 		txt += "    <h3>Change Password</h3>";
 
 		txt += "    <div class='dataWrapper'>";
-		txt += "    <span class='dataLabel'>Old Password</span><input class='dataValue' type='password' />";
+		txt += "    <span class='dataLabel'>Old Password</span><input id='oldPassword' class='dataValue' type='password' />";
 		txt += "    </div>";
 
 		txt += "    <div class='dataWrapper'>";
-		txt += "    <span class='dataLabel'>New Password</span><input class='dataValue' type='password' />";
-		txt += "    <button class='basic_button' onclick='AccountDialog.setEmail()'>Change</button>"
+		txt += "    <span class='dataLabel'>New Password</span><input id='newPassword' class='dataValue' type='password' />";
 		txt += "    </div>";
 
+		txt += "    <div class='dataWrapper'>";
+		txt += "    <span class='dataLabel'>Confirm Password</span><input id='newPassword2' class='dataValue' type='password' />";
+		txt += "    <button class='basic_button' onclick='AccountDialog.changePassword()'>Change</button>"
+		txt += "    </div>";
+
+		txt += "<br/>";
 
 		txt += "    <h3>Credit Card</h3>";
 		
@@ -115,6 +143,10 @@ var AccountDialog = {
 		}
 		txt += "        </select>";
 		txt += "    </span>";		
+		txt += "    </div>";
+		
+		txt += "    <div class='dataWrapper'>";
+		txt += "    <span class='dataLabel'>Security Code</span><input class='dataValue' type='text' />";
 		txt += "    </div>";
 		
 		txt += "    <br/>";
@@ -157,10 +189,10 @@ var AccountDialog = {
 
 		// Create dialog.......
 				
-        $('#apollo_dialog').html(txt);
+        $('#apollo_account_dialog').html(txt);
         
-        $('#apollo_dialog').dialog( 'destroy' );
-        $('#apollo_dialog').dialog({
+        $('#apollo_account_dialog').dialog( 'destroy' );
+        $('#apollo_account_dialog').dialog({
             modal: false,
             width:800,
             height: 550,
@@ -178,6 +210,82 @@ var AccountDialog = {
 
     },
 
+    // ////////////////////////////////////////////////////////////////////////
+
+	changePassword : function(){
+	
+		var oldPassword = $('#oldPassword').val();
+		var newPassword = $('#newPassword').val();
+		var newPassword2 = $('#newPassword2').val();
+		
+		if (newPassword != newPassword2){
+			$('#newPassword2').val('');
+			AthenaDialog.alert("Your new password, and the new password confirmation do not match!", "New Passwords Mismatch");		
+			return;
+		}
+		
+		BillingAPI.changePassword(ssMain.siteID, oldPassword, newPassword, AccountDialog.onPasswordChanged);
+		
+		
+	},
+
+	onPasswordChanged : function(isChanged){
+		if (isChanged){
+			AthenaDialog.alert("Your password has been changed!", "Password Changed");		
+			$('#oldPassword').val('');
+			$('#newPassword').val('');
+			$('#newPassword2').val('');
+		}
+		else {
+			AthenaDialog.alert("Your old password is not correct, please try again", "Incorrect Password");		
+		}
+	},
+	
+    // ////////////////////////////////////////////////////////////////////////
+
+	changeEmail : function(){
+
+		var newEmail = $('#userEmail').val();
+
+		if (AccountDialog.userEmail == newEmail){
+			AthenaDialog.alert("This is the same as your current email address!", "Error");		
+			return;
+		}
+		
+		AthenaDialog.alert("You will be sent an email to confirm and activate this new email address before this change is adopted.", "Email Validation");		
+		BillingAPI.changeEmail(ssMain.siteID, newEmail);
+	},
+
+    // ////////////////////////////////////////////////////////////////////////
+
+	changeDomain : function(){
+	
+		var ip = AccountDialog.apolloIP;
+		var newDomain = $('#userDomain').val();
+		
+		if (AccountDialog.userDomain == newDomain){
+			AthenaDialog.alert("This is the same as your current domain!", "Error");		
+			return;
+		}
+		
+		var msg = "Make sure the A-Record of this domain is set to ApolloSites IP address ("+ip+"). If you have not made these changes";
+		msg += " or these changes haven't taken effect yet (it can take up to 24 hours for DNS changes to take effect) then this change ";
+		msg += "WILL BREAK YOUR SITE. If this happens, email support at support@apollosites.com and we'll be able to fix it for you!";
+		
+		AthenaDialog.confirm(msg, AccountDialog.doChangeDomain);
+	},
+
+	doChangeDomain : function(){
+		var newDomain = $('#userDomain').val();
+		var msg = "Your domain has been changed! To administer your site, you'll need to use the new url http://"+newDomain+"/admin";		
+		BillingAPI.changeDomain(ssMain.siteID, newDomain, function(newDomain){AthenaDialog.alert(msg, "Domain Changed")});
+	},
+	
+    // ////////////////////////////////////////////////////////////////////////
+
+	changeCard : function(){
+	},
+	
     // ////////////////////////////////////////////////////////////////////////
 
 	onCardNumber : function(){

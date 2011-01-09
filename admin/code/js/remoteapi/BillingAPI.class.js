@@ -35,7 +35,62 @@ var BillingAPI = {
         });
 
 	},
+
+    // /////////////////////////////////////////////////////////////////////////////
+
+	changeEmail : function(siteID, newEmail, callback){
+
+       var paras = { cmd : 'changeEmail', site_id: siteID, email: newEmail };
+
+        $.ajax({
+            url: BillingAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: function(ret){ if (callback != undefined) callback();}
+        });
 	
+	},
+
+    // /////////////////////////////////////////////////////////////////////////////
+
+	changeDomain : function(siteID, newDomain, callback){
+
+       var paras = { cmd : 'changeDomain', site_id: siteID, domain: newDomain };
+
+        $.ajax({
+            url: BillingAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: function(ret){ if (callback != undefined) callback(ret.data.domain);}
+        });
+
+	},
+
+    // /////////////////////////////////////////////////////////////////////////////
+
+	changePassword : function(siteID, oldPassword, newPassword, callback){
+		// changePassword($user_id, $new_password, $old_password
+		
+       var paras = { cmd : 'changePassword', site_id: siteID, new_pswd: newPassword, old_pswd: oldPassword };
+
+        $.ajax({
+            url: BillingAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: function(ret){ 
+            	if (callback != undefined){
+	            	if (ret.result == 'ok'){
+		            	callback(true);
+	            	}
+	            	else {
+		            	callback(false);
+	            	}
+            	}            	
+            }
+        });
+		
+	},
+		
     // /////////////////////////////////////////////////////////////////////////////
 
     /**

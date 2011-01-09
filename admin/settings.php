@@ -65,6 +65,7 @@ Logger::debug("$domain has site_id = $site_id");
 
 <div id='debug_txt'></div>
 <div id='apollo_dialog'></div>
+<div id='apollo_account_dialog'></div>
 <div id='apollo_loading_dialog'></div>
 <div id='apollo_loading_display' class='transparent_50' align="center"></div>
 
