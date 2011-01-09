@@ -35,6 +35,7 @@ var AccountDialog = {
 		$('#paymentPlan').html(user_info.payment_plan);
 		$('#lastPayment').html($.datepicker.formatDate('mm/dd/yy', new Date(user_info.last_payment)));
 		$('#hostingFee').html('$' + user_info.monthly_fee + ' per month');
+
 		$('#nextPayment').html('$' + fee_due + ' on ' + $.datepicker.formatDate('mm/dd/yy', new Date(user_info.next_payment_due)));
 				
 		$('#userDomain').val(user_info.domain);

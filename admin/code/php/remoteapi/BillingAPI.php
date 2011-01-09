@@ -198,17 +198,13 @@ function changePassword($user_id, $new_password, $old_password){
 	
 	$user_info = UserTable::get($user_id);
 	$email = $user_info['email'];
-	
-	Logger::debug("$email - $old_password");
-	
+		
 	// Check to see if the old password is correct
 	$db_pass = UserTable::getPasswordFromEmail($email);			
 	$password_hash = SecurityUtils::generatePassHash($old_password, $db_pass);
 			
 	$user_id = UserTable::checkValid($email, $password_hash);
-	
-	Logger::debug("User id = $user_id Password Hash = $password_hash");
-	
+		
 	if ($user_id){
 		// Old password is valid, so update to new password
 	    $msg['result'] = 'ok';
@@ -228,11 +224,21 @@ function changePassword($user_id, $new_password, $old_password){
 function getAccountInfo($site_id, $user_id){
 
 	$user_info = UserTable::get($user_id);
-	
+    
+    if ($user_info['payment_plan'] == 'Monthly'){
+		$due_date = strtotime($user_info['last_payment'] . ' +1 month');
+    }
+    else {
+		$due_date = strtotime($user_info['last_payment'] . ' +1 year');
+    }
+    	
 	$user_info['last_payment'] = date("m/d/Y H:i", strtotime($user_info['last_payment'])); // Convert to JS compatible date
-	$user_info['next_payment_due'] = date("m/d/Y H:i", strtotime($user_info['next_payment_due'])); // Convert to JS compatible date
+//	$user_info['next_payment_due'] = date("m/d/Y H:i", strtotime($user_info['next_payment_due'])); // Convert to JS compatible date
+	$user_info['next_payment_due'] = date("m/d/Y H:i", $due_date); // Convert to JS compatible date
 	$user_info['account_created'] = date("m/d/Y H:i", strtotime($user_info['account_created'])); // Convert to JS compatible date
 	$user_info['domain'] = SitesTable::getDomain($site_id);
+	
+	Logger::debug(">>>>>>> " . $user_info['next_payment_due']);
 	
     $msg['cmd'] = 'getAccountInfo';
     $msg['result'] = 'ok';
