@@ -153,6 +153,8 @@ var CommentsEditDialog = {
         // For formats, see http://www.opengroup.org/onlinepubs/007908799/xsh/strftime.html
         var dateStr = dt.toLocaleFormat("%I:%M%p, %a, %b %e, %Y");
 
+	    //var dateStr = $.datepicker.formatDate('mm/dd/yy', dt);
+
         var classStr = "";
         switch (commentObj.status){
             case 'Pending':classStr = "pending_comment";break;

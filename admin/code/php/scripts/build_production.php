@@ -32,6 +32,8 @@ $js_common_list = array(
 	"$base_dir/code/js/utils/AthenaDialog.class.js",
 	"$base_dir/code/js/utils/AthenaUtils.class.js",	
 	"$base_dir/code/js/utils/isoCountry.class.js",	
+	"$base_dir/code/js/3rdparty/date.format.js",
+	"$base_dir/code/js/3rdparty/date.js",	
 	// Core....
 	"$base_dir/code/js/ssMain.class.js",
 	"$base_dir/code/js/DataStore.class.js",	
@@ -96,8 +98,6 @@ if (BUILD_MODE == 'posts' || BUILD_MODE == 'all'){
 	$js_list = array(
 		// 3rd Party...
 	//	"$base_dir/code/3rdparty/InnovaStudio/scripts/innovaeditor.js",
-		"$base_dir/code/js/3rdparty/date.format.js",
-		"$base_dir/code/js/3rdparty/date.js",
 		"$base_dir/code/js/3rdparty/jquery.datePicker.js",
 		// Dialogs...
 		"$base_dir/code/js/dialogs/ImagePickerDialog.class.js",
@@ -140,8 +140,6 @@ if (BUILD_MODE == 'pages' || BUILD_MODE == 'all'){
 	$js_list = array(
 		// 3rd Party...
 	//	"$base_dir/code/3rdparty/InnovaStudio/scripts/innovaeditor.js",
-		"$base_dir/code/js/3rdparty/date.format.js",
-		"$base_dir/code/js/3rdparty/date.js",
 		"$base_dir/code/js/3rdparty/jquery.datePicker.js",
 		// Dialogs...
 		"$base_dir/code/js/dialogs/ImagePickerDialog.class.js",
@@ -183,8 +181,6 @@ if (BUILD_MODE == 'files' || BUILD_MODE == 'all'){
 	
 	$js_list = array(
 		// 3rd Party...
-		"$base_dir/code/js/3rdparty/date.format.js",
-		"$base_dir/code/js/3rdparty/date.js",
 		"$base_dir/code/js/3rdparty/jquery.datePicker.js",
 		"$base_dir/code/js/3rdparty/swfobject.js",
 		"$base_dir/code/js/3rdparty/SWFUpload/swfupload.js",
