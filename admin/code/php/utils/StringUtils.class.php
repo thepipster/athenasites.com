@@ -16,8 +16,28 @@ class StringUtils {
 	*/
 	public static function sanitizeDomain($domain){
 	
-		$new_domain = preg_replace("/http(s)?:\/\/(.*?)\s/i", "[ADDRESS REMOVED]", $domain);	
-		return $domain;
+		Logger::debug($domain);
+		
+		$new_domain = $domain;
+		
+		// Remove 'http://' if it is included
+		if (stripos($new_domain, 'http://') !== false){
+			$new_domain = substr($new_domain, strlen('http://'));	
+		}
+
+		// Remove 'https://' if it is included
+		if (stripos($new_domain, 'https://') !== false){
+			$new_domain = substr($new_domain, strlen('https://'));	
+		}
+	
+		// Remove any www		
+		if (stripos($new_domain, 'www.') !== false){
+			$new_domain = substr($new_domain, strlen('www.'));	
+		}
+
+		Logger::debug($new_domain);
+		
+		return $new_domain;
 	}
 	
     // ////////////////////////////////////////////////////////////////////

@@ -277,9 +277,13 @@ var AccountDialog = {
 	},
 
 	doChangeDomain : function(){
-		var newDomain = $('#userDomain').val();
-		var msg = "Your domain has been changed! To administer your site, you'll need to use the new url http://"+newDomain+"/admin";		
-		BillingAPI.changeDomain(ssMain.siteID, newDomain, function(newDomain){AthenaDialog.alert(msg, "Domain Changed")});
+		
+		var reqDomain = $('#userDomain').val();
+		
+		BillingAPI.changeDomain(ssMain.siteID, reqDomain, function(newDomain){
+			var msg = "Your domain has been changed! To administer your site, you'll need to use the new url http://"+newDomain+"/admin";		
+			AthenaDialog.alert(msg, "Domain Changed")
+		});
 	},
 	
     // ////////////////////////////////////////////////////////////////////////
