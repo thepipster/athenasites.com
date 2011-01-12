@@ -182,8 +182,8 @@ function changeDomain($site_id, $newDomain){
 
     $msg['cmd'] = 'changeDomain';
     $msg['result'] = 'ok';
-
-	SitesTable::updateDomain($site_id, $newDomain);
+	
+	SitesTable::updateDomain($site_id, StringUtils::sanitizeDomain($newDomain));
 
     $msg['data'] = array('domain' => $newDomain);
 		

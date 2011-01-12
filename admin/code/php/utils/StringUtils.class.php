@@ -11,6 +11,17 @@ class StringUtils {
 	
     // ////////////////////////////////////////////////////////////////////
 
+	/**
+	* Remove 'http://' and www from domains
+	*/
+	public static function sanitizeDomain($domain){
+	
+		$new_domain = preg_replace("/http(s)?:\/\/(.*?)\s/i", "[ADDRESS REMOVED]", $domain);	
+		return $domain;
+	}
+	
+    // ////////////////////////////////////////////////////////////////////
+
     /**
      * Make basic text safe, strip out anything that isn't (e.g. for tags and categories)
      */
