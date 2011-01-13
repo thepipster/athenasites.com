@@ -138,14 +138,18 @@ PageManager::doHeader();
 			background-image: url("<?= PageManager::$common_url_root; ?>/imgs/white80.png"); 
 			background-repeat: repeat;
 			color: black;
-			-moz-border-radius: 20px;
-			-webkit-border-radius: 20px;
-			-khtml-border-radius: 20px;
-			border-radius: 20px;
-			/* filter: alpha(opacity=60);-moz-opacity:.60;opacity:.60; */
-			behavior:url("<?= PageManager::$theme_url_root; ?>border-radius.htc");
+			
+			-moz-border-radius: 25px;
+			-webkit-border-radius: 25px;
+			-khtml-border-radius: 25px;			
+			border-radius: 25px;
+			
 			z-index: 2005;
 			padding: 25px;
+			
+			/*
+			behavior:url("<?= PageManager::$theme_url_root; ?>border-radius.htc");
+			*/
 		}
 		
 	</style>
