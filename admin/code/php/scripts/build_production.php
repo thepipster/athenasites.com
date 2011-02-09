@@ -290,6 +290,8 @@ if (BUILD_MODE == 'stats' || BUILD_MODE == 'all'){
 if (BUILD_MODE == 'settings' || BUILD_MODE == 'all'){
 		
 	$js_list = array(
+		// 3rd Party...
+		"$base_dir/code/js/3rdparty/swfobject.js",
 		// Dialogs...
 		"$base_dir/code/js/dialogs/AccountDialog.class.js",
 		"$base_dir/code/js/dialogs/ImagePickerDialog.class.js",

@@ -234,7 +234,7 @@ class ImportHelper {
 		        $post_link = $post['path'] . $post['slug'];
 	        }
 	        
-	        $link_tag .= "<p><a href='$post_link' class=\"apolloPageBreak\">$more_text</a></p>";
+	        $link_tag = "<p><a href='$post_link' class=\"apolloPageBreak\">$more_text</a></p>";
 	
 	        $s_pos = strpos($content, $tag);
 	

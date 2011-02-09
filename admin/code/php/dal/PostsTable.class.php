@@ -123,7 +123,6 @@ class PostsTable {
 	public static function updateExcerpt($site_id, $post_id, $excerpt){
 		//Logger::debug("updateExcerpt($site_id, $post_id, $excerpt)");
         $sql = DatabaseManager::prepare("UPDATE athena_%d_Posts SET excerpt = %s WHERE id = %d", $site_id, $excerpt, $post_id);                        
-        Logger::debug($sql);
         return DatabaseManager::update($sql);
 	}
 	
