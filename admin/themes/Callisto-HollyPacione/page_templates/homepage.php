@@ -10,6 +10,8 @@ $xml_url = "http://" . $_SERVER['HTTP_HOST'] ."/admin/code/php/getUserGalleryXML
 
 $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id, PageManager::$page_id);
 
+Logger::dump($gallery_image_list);
+
 ?>
 <script type="text/javascript">
 

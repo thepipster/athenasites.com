@@ -107,7 +107,69 @@
 
         </p>
 
-<?php //comments_template(); // Get wp-comments.php template  ?>
+
+		<?php if (PageManager::$blog_mode == PageManager::$BLOGMODE_SINGLEPOST){ ?>
+		<!-- Comments wrapper -->
+		<div id='commentsWrapper'>						
+				
+			<div id="comments"><h2>Comments</h2></div>																					
+			
+			<p>No comments yet.</p>
+			
+			<!--
+			<p>
+				<a href='<?=$post_link?>/feed/'>
+					<abbr title="Really Simple Syndication">RSS</abbr> feed for comments on this post.
+				</a>			
+				
+				<a href="<?=$post_link?>/trackback/" rel="trackback">
+					TrackBack <abbr title="Universal Resource Locator">URL</abbr>
+				</a>
+			</p>
+			-->
+			
+			<h2 id="postcomment">Leave a comment</h2>
+			
+			<div class='commentStatus'></div>
+			
+			<form id='commentForm' method='post' action='' onsubmit="cgpBlog.onPostComment(); return false;">
+										
+				<p><input type="text" name="author" id="author" size="22" tabindex="1" class="required_name" value=""/>
+			
+				<label for="author"><small>Name (required)</small></label></p>
+			
+				<p>
+					<input type="text" name="email" id="email" size="22" tabindex="2" class="required_email" value="" />
+					<label for="email"><small>Email (will not be published) (required)</small></label>
+				</p>
+				
+				<p>
+					<input type="text" name="url" id="url" size="22" tabindex="3" value="" />
+					<label for="url"><small>Website</small></label>
+				</p>
+										
+				<p><textarea name="comment" id="comment" cols="70%" rows="10" tabindex="4" class='required'></textarea></p>
+										
+				<p>
+					<input name="submit" type="submit" id="submit" tabindex="5" value="Submit Comment" />							
+				</p>
+			
+			</form>
+														
+		</div><!-- commentsWrapper-->			
+					
+		<?php } else { ?>
+					
+		<!-- Next/Prev links (will only show up if the blog is showing all posts! -->
+        <div style='padding-bottom:30px;' id='blogSidebar'>
+            <span style='float:left; padding-left:35px;'><?= PageManager::getOlderPostsLink('&laquo; Older posts'); ?></span>
+            <span style='float:right; padding-right:35px;'><?=  PageManager::getNewerPostsLink('Newer posts &raquo;'); ?></span>
+        </div>
+        
+		<?php } ?>
+
+
+
 
 <?php } ?>
 
