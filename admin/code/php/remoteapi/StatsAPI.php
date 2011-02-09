@@ -11,7 +11,7 @@ require_once("../setup.php");
 $cmd = CommandHelper::getPara('cmd', true, CommandHelper::$PARA_TYPE_STRING);
 
 // Grab global parameters that all commands must have
-$site_id = CommandHelper::getPara('site_id', true, CommandHelper::$PARA_TYPE_STRING);
+$site_id = CommandHelper::getPara('site_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
 
 Logger::debug("Command = " . $cmd);
 

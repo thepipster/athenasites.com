@@ -22,7 +22,6 @@ class ClientGalleryTable {
 			AND gt.page_id = %d 
 			ORDER BY gt.slot_number ASC", $site_id, $site_id, $page_id); 	
 			
-		Logger::debug($sql);	
 		return DatabaseManager::getResults($sql);		
 	}
 
