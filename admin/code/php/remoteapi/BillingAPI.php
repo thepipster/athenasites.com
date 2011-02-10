@@ -185,7 +185,7 @@ function changeDomain($site_id, $newDomain){
 	
 	$safeNewDomain = StringUtils::sanitizeDomain($newDomain);
 	
-	//SitesTable::updateDomain($site_id, $safeNewDomain);
+	SitesTable::updateDomain($site_id, $safeNewDomain);
 
     $msg['data'] = array('domain' => $safeNewDomain);
 		
