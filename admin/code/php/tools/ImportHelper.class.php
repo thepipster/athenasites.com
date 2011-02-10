@@ -16,7 +16,7 @@ class ImportHelper {
         if ($title == "") {
             $slug = "post";
         } else {
-            $slug = StringUtils::encodeSlug($title);
+            $slug = StringUtils::encodeSlug($title, '');
         }
 
         // Check to see if this post already exists, if so then we over-write it

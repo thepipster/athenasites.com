@@ -359,7 +359,7 @@ var cgp3Main = {
 	// //////////////////////////////////////////////////////////////////////////////
 	
 	onFlashError : function(msg, src){
-		Logger.showDebugWindow();
+		Logger.show();
 		Logger.error(src + ": " + msg);
 	}
 	

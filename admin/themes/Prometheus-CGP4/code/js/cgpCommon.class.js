@@ -32,7 +32,7 @@ var cgpCommon = {
 		// Setup debugger		
 		Logger.init('#debug_txt');
 		
-		if (showLogger) Logger.showDebugWindow();
+		if (showLogger) Logger.show();
 		
 	},
 			

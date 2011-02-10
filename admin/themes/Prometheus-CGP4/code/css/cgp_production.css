@@ -427,6 +427,12 @@ This is the blog theme for the integrated blog on Charlotte Geary Photography v3
 	height: 5px;
 }
 
+#blogPage .commentStatus {
+	color: #7e8fa6;
+	font-size: 15px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
 
 /* Comment List //////////////////////////////////////////////// */
 

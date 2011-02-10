@@ -53,7 +53,7 @@ var cgpCommon = {
         cgpCommon.roundCorners();
         Logger.init("#debug_txt");
         if (a) {
-            Logger.showDebugWindow()
+            Logger.show()
         }
     },
     setPage: function (b, a) {

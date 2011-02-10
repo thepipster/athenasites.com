@@ -48,6 +48,12 @@ if (!isset(PageManager::$site_id) || PageManager::$site_id == 0){
 	die();
 }
 
+// Check to see if this is a single blog entry
+if (strpos($_SERVER['REQUEST_URI'], "/".PageManager::$blog_base_url."/") !== false){
+	Logger::debug("Single blog post requested!");
+	$ext = "html";
+}
+
 // The blog is a special case, as convention is to use just 'blog' rather than a real page like 'blog.html'
 if ($page == PageManager::$blog_base_url || ($page."/") == PageManager::$blog_base_url){
 	$ext = "html";
@@ -78,6 +84,8 @@ else {
 
     // Try to get a site id, if we can fint one then hit its 404 page!
     $site = SitesTable::getSiteFromDomain($domain);
+
+	if ($DEBUG) die();
 
     if (isset($site)){
 

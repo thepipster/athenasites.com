@@ -6,6 +6,7 @@
  * @author Mike Pritcard (mike@apollosites.com)
  */
 class PostsTable {
+
     // ///////////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -160,6 +161,14 @@ class PostsTable {
 
     // /////////////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Get the N most recent posts for the given site
+	*/
+    public static function getRecentPosts($site_id, $max_no) {
+        $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts ORDER BY created LIMIT %d", $site_id, $max_no);
+        return DatabaseManager::getResults($sql);
+    }
+
     public static function getPostsFromYear($site_id, $year) {    
         $date_from = date("Y-01-01 00:00:00", strtotime("01/01/$year 00:00:00"));
         $date_end = date("Y-12-31 23:59:59", strtotime("12/31/$year 23:59:59"));    
@@ -243,6 +252,11 @@ class PostsTable {
     }
 
     // /////////////////////////////////////////////////////////////////////////////////
+
+    public static function updateSlug($post_id, $site_id, $slug) {
+        $sql = DatabaseManager::prepare("UPDATE athena_%d_Posts SET slug=%s WHERE id = %d", $site_id, $slug, $post_id);
+        return DatabaseManager::update($sql);
+    }
 
     public static function updatePath($post_id, $site_id, $path) {
         $sql = DatabaseManager::prepare("UPDATE athena_%d_Posts SET path=%s WHERE id = %d", $site_id, $path, $post_id);

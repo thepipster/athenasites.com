@@ -696,7 +696,7 @@ class PageManager {
         $cat_str = '';
         for ($i = 0; $i < count($cats); $i++) {
             if ($i != 0) {
-                $cat_str .= $seperator;
+                $cat_str .= $seperator . "&nbsp;";
             }
             $link = self::$blog_url . "?category=" . StringUtils::encodeSlug($cats[$i], '');
             $cat_str .= "<a href='$link'>" . $cats[$i] . "</a>";
@@ -719,7 +719,7 @@ class PageManager {
         $tag_str = '';
         for ($i = 0; $i < count($tags); $i++) {
             if ($i != 0) {
-                $tag_str .= $seperator;
+                $tag_str .= $seperator . "&nbsp;";
             }
             $link = self::$blog_url . "?tag=" . StringUtils::encodeSlug($tags[$i], '');
             $tag_str .= "<a href='$link'>" . $tags[$i] . "</a>";

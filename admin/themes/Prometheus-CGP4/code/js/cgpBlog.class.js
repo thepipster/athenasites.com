@@ -178,6 +178,7 @@ var cgpBlog = {
         $('#author').val('');
         $('#email').val('');
         $('#comment').val('');    	
+        $('#url').val('');    	
     }
 
 }

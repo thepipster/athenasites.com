@@ -70,8 +70,11 @@ $WEDDING_IDEAS_PAGE_ID = 33;
 			//"$common_base_dir/js/3rdparty/jquery-ui/jquery-ui-1.8.4.custom.min.js",
 			"$common_base_dir/js/3rdparty/swfobject.js",
 			"$common_base_dir/js/3rdparty/AC_OETags.js",
+			"$common_base_dir/js/3rdparty/date.js",
+			"$common_base_dir/js/3rdparty/date.format.js",
 			"$common_base_dir/js/3rdparty/jquery.datePicker.min-2.1.2.js",
-			
+			"$common_base_dir/js/3rdparty/jquery.validate.min.js",
+									
 			"$common_base_dir/js/apolloXfader.class.js",
 			"$common_base_dir/js/utils/Logger.class.js",
 			
@@ -91,7 +94,7 @@ $WEDDING_IDEAS_PAGE_ID = 33;
 			"$theme_base_dir/css/datePicker.css"
 		);
 		
-		ProductionBuilder::buildProductionJS($js_list, "$theme_base_dir/js/cgp_production.js", true);
+		ProductionBuilder::buildProductionJS($js_list, "$theme_base_dir/js/cgp_production.js", false);
 		ProductionBuilder::buildProductionCSS($css_list, "$theme_base_dir/css/cgp_production.css", false);
 		
 	}
@@ -120,7 +123,14 @@ $WEDDING_IDEAS_PAGE_ID = 33;
 			$image_url = PageManager::$media_root_url . $background_image['filepath'] . $background_image['filename'];
 			echo "html {background-image: url('$image_url');}\n";			
 		}
-		?>				
+		?>			
+		
+		.error {
+			color: red;
+			padding-left: 5px;
+			padding-right: 4px;
+		}
+			
 	</style>
 
 	<!-- Pingback ////////////////////////////////////////////////////////////// -->
@@ -203,7 +213,7 @@ $WEDDING_IDEAS_PAGE_ID = 33;
 											}								
 										}
 										else {
-											print("    <span class='menuHead' id='page_$child_id'>".strtoupper($title)."</span>");									
+											print("    <span class='menuHead' id='page_$page_id'>".strtoupper($title)."</span>");									
 										}
 										
 										

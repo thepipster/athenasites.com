@@ -60,8 +60,8 @@ class StringUtils {
         $tags = array("\'", "\"");
         $safe_content = str_ireplace($tags, $replace, $safe_content);
 
-        Logger::debug(">>> content = $content");
-        Logger::debug(">>> safe content = $safe_content");
+        //Logger::debug(">>> content = $content");
+        //Logger::debug(">>> safe content = $safe_content");
 
         return $safe_content;
     }
@@ -107,10 +107,10 @@ class StringUtils {
         $safe_slug = str_ireplace($tags, $replace, $safe_slug);
 
         // Strip any special characters
-        $tags = array('!', '*', "'", "(", ")", ";", ":", "@", "&", "=", "+", "$", ",", "/", "?", "%", "#", "[", "]");
+        $tags = array('!', '*', "'", "(", ")", ";", ":", "@", "&", "=", "+", "$", ".", ",", "/", "?", "%", "#", "[", "]");
         //$entities = array('%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F', '%25', '%23', '%5B', '%5D');
         $replace = '';
-        $safe_slug = str_replace($tags, $replace, $safe_slug);
+        $safe_slug = str_ireplace($tags, $replace, $safe_slug);
 
         // Encode anyting thats left
         $safe_slug = urlencode($safe_slug);
