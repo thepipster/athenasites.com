@@ -40,9 +40,7 @@
         <p>
 				Categories: <?= PageManager::getCategories($post); ?><br/>
 				Tags: <?= PageManager::getTags($post); ?><br/>
-            <?php //wp_link_pages(); ?>
-            <?php //comments_popup_link(__('Comments (0)'), __('Comments (1)'), __('Comments (%)')); ?><br/>
-            <?php //edit_post_link(__('Edit This')); ?><br/>
+                <?= PageManager::getCommentsLink($post); ?><br/>
         </p>
 
     </div>
@@ -53,20 +51,24 @@
 		<br/>
 		<br/>
 			<!-- Add links to add this post to one of a handful of services. -->
-				<a href="<?php echo $postObj->add_to_blinklist(); ?>" title="Add post to Blinklist"><img style='border:none' src="/admin/images/SocialNetworksFavIcons/blinklist.png" alt="Blinklist" /></a>
-				<a href="<?php echo $postObj->add_to_blogmarks(); ?>" title="Add post to Blogmarks"><img style='border:none' src="/admin/images/SocialNetworksFavIcons/blogmarks.png" alt="Blogmarks" /></a>
-				<a href="<?php echo $postObj->add_to_delicious(); ?>" title="Add post to del.icio.us"><img style='border:none' src="/admin/images/SocialNetworksFavIcons/delicious.png" alt="del.icio.us" /></a>
-				<a href="<?php echo $postObj->add_to_digg(); ?>" title="Digg this!"><img style='border:none' src="/admin/images/SocialNetworksFavIcons/digg.png" alt="Digg" /></a>
-				<a href="<?php echo $postObj->add_to_magnolia(); ?>" title="Add post to Ma.gnolia"><img style='border:none' src="/admin/images/SocialNetworksFavIcons/magnolia.png" alt="Ma.gnolia" /></a>
-				<a href="<?php echo $postObj->add_to_myweb20(); ?>" title="Add post to My Web 2.0"><img style='border:none' src="/admin/images/SocialNetworksFavIcons/myweb2.png" alt="My Web 2.0" /></a>
-				<a href="<?php echo $postObj->add_to_newsvine(); ?>" title="Add post to Newsvine"><img style='border:none' src="/admin/images/SocialNetworksFavIcons/newsvine.png" alt="Newsvine" /></a>
-				<a href="<?php echo $postObj->add_to_reddit(); ?>" title="Add post to Reddit"><img style='border:none' src="/admin/images/SocialNetworksFavIcons/reddit.png" alt="Reddit" /></a>
-				<a href="<?php echo $postObj->add_to_segnalo(); ?>" title="Add post to Segnalo"><img style='border:none' src="/admin/images/SocialNetworksFavIcons/segnalo.png" alt="Segnalo" /></a>
-				<a href="<?php echo $postObj->add_to_simpy(); ?>" title="Add post to Simpy"><img style='border:none' src="/admin/images/SocialNetworksFavIcons/simpy.png" alt="Simpy" /></a>
-				<a href="<?php echo $postObj->add_to_spurl(); ?>" title="Add post to Spurl"><img style='border:none' src="/admin/images/SocialNetworksFavIcons/spurl.png" alt="Spurl" /></a>
-				<a href="<?php echo $postObj->add_to_wists(); ?>" title="Add post to Wists"><img style='border:none' src="/admin/images/SocialNetworksFavIcons/wists.png" alt="Wists" /></a>
-				<a href="<?php echo $postObj->search_technorati(); ?>" title="Who's linking to this post?"><img style='border:none' src="/admin/images/SocialNetworksFavIcons/technorati.png" alt="Technorati" /></a>
-			
+				<?php echo $postObj->like_facebook(); ?>
+				<br/><br/>
+								
+				<?php echo $postObj->add_to_delicious(); ?>
+				&nbsp;&nbsp;																							
+				<?php echo $postObj->add_to_digg(); ?>
+				&nbsp;&nbsp;																							
+				<?php echo $postObj->add_to_facebook(); ?>				
+				&nbsp;&nbsp;				
+				<?php echo $postObj->add_to_stumble_upon(); ?>
+				&nbsp;&nbsp;				
+				<!--
+				<?php echo $postObj->search_technorati(); ?>
+				&nbsp;&nbsp;
+				-->				
+				<?php echo $postObj->add_to_twitter(); ?>
+				&nbsp;&nbsp;
+
         </p>
 
 <?php } ?>

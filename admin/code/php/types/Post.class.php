@@ -204,7 +204,77 @@ class Post {
 	//
 	// Methods to get links to add this post to various social networks
 	//
-	// /////////////////////////////////////////////////////////////////////////////////
+	// /////////////////////////////////////////////////////////////////////////////////	
+
+	function like_facebook()
+	{	
+		return '<script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script><fb:like show_faces="true" width="450"></fb:like>';
+	}
+	
+	function add_to_twitter(){
+	
+		$link = $this->getPermalink();
+		
+		return "<a href='http://twitter.com/home/?status=Currently reading:$link' target='_blank' title='Twitter'>
+					<img alt='Twitter' border='0' height='16' src='/admin/images/SocialNetworksFavIcons/twitter.png' width='16'/>
+				</a> 
+				<a href='http://twitter.com/home/?status=Currently reading:$link' target='_blank' title='Twitter'>Twitter</a>";
+	}
+	
+	function search_technorati() {
+	
+		$link = $this->getPermalink();
+		
+		return "<a href='http://technorati.com/cosmos/search.html?url=$link' target='_blank' title='Technorati'>
+					<img alt='Technorati' border='0' height='16' src='/admin/images/SocialNetworksFavIcons/technorati.png' width='14'/>
+				</a>							
+				<a href='http://technorati.com/cosmos/search.html?url=$link' target='_blank' title='Technorati'>Technorati</a>";				
+	}
+	
+	function add_to_delicious()
+	{
+
+		$link = $this->getPermalink();
+		$title = $this->getTitle();
+	
+		return "<a href='http://del.icio.us/post?url=$link&title=$title' target='_blank' title='Del.icio.us'>
+					<img alt='Del.icio.us' border='0' height='16' src='/admin/images/SocialNetworksFavIcons/delicious.png' width='16'/>
+				</a> 
+				<a href='http://del.icio.us/post?url=$link&title=$title' target='_blank' title='Del.icio.us'>Del.icio.us</a>";
+	}
+	
+	function add_to_stumble_upon(){
+	
+		$link = $this->getPermalink();
+		$title = $this->getTitle();
+
+		return "<a href='http://www.stumbleupon.com/submit?url=$link&title=$title' target='_blank' title='StumbleUpon'>
+					<img alt='StumbleUpon' border='0' height='16' src='/admin/images/SocialNetworksFavIcons/stumble_upon.png' width='16'/>
+				</a> 
+				<a href='http://www.stumbleupon.com/submit?url=$link&title=$title' target='_blank' title='StumbleUpon'>StumbleUpon</a>";
+	}
+	
+	function add_to_facebook(){
+
+		$link = $this->getPermalink();
+
+		return "<a href='http://www.facebook.com/share.php?u=$link' target='_blank' title='Facebook'>
+					<img alt='Facebook' border='0' height='16' src='/admin/images/SocialNetworksFavIcons/facebook.png' width='14'/>
+				</a> 
+				<a href='http://www.facebook.com/share.php?u=$link' target='_blank' title='Facebook'>Facebook</a>";
+	}
+	
+	function add_to_digg(){
+	
+		$link = $this->getPermalink();
+		$title = $this->getTitle();
+	
+		return "<a href='http://www.digg.com/submit?url=$link&title=$title&phase=2' target='_blank' title='Digg'>
+					<img alt='Digg' border='0' height='14' src='/admin/images/SocialNetworksFavIcons/digg.png' width='16'/>
+				</a> 							
+				<a href='http://www.digg.com/submit?url=$link&title=$title&phase=2' target='_blank' title='Digg'>Digg</a>";
+	}
+	
 	
 	/**
 	 * Creates the add_to_* methods' return data
@@ -215,6 +285,7 @@ class Post {
 	 * (and suffix to the item permalink)
 	 * @return mixed URL if feed exists, false otherwise
 	 */
+	 /*
 	private function add_to_service($item_url, $title_url = null, $summary_url = null)
 	{
 		if ($this->getPermalink() !== null)
@@ -235,7 +306,7 @@ class Post {
 			return null;
 		}
 	}
-
+		
 	function add_to_blinklist()
 	{
 		return $this->add_to_service('http://www.blinklist.com/index.php?Action=Blink/addblink.php&Description=&Url=', '&Title=');
@@ -244,16 +315,6 @@ class Post {
 	function add_to_blogmarks()
 	{
 		return $this->add_to_service('http://blogmarks.net/my/new.php?mini=1&simple=1&url=', '&title=');
-	}
-
-	function add_to_delicious()
-	{
-		return $this->add_to_service('http://del.icio.us/post/?v=4&url=', '&title=');
-	}
-
-	function add_to_digg()
-	{
-		return $this->add_to_service('http://digg.com/submit?url=', '&title=', '&bodytext=');
 	}
 
 	function add_to_furl()
@@ -300,11 +361,7 @@ class Post {
 	{
 		return $this->add_to_service('http://wists.com/r.php?c=&r=', '&title=');
 	}
-
-	function search_technorati() {
-		return $this->add_to_service('http://www.technorati.com/search/');
-	}
-	
+*/
 	
 }
 ?>
