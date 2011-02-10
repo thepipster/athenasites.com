@@ -8,13 +8,7 @@
 
 <div id='blogPage' class='pageContents' style="background-image:url('')">
 
-<?php echo PageManager::getCurrentPageContent(); ?>
-
-    <h1>BLOG</h1>
-
-    <p>Hello! I'm a Colorado Springs wedding photographer and portrait photographer. I travel all over the country to document the
-		important moments in people's lives. My blog showcases some of my favorite photos of my clients and adventures. I update this 
-		blog several times a week, so please visit frequently to see my latest images.</p>
+	<?php echo PageManager::getCurrentPageContent(); ?>
 
     <?php
     $post_list = PageManager::getPosts();
