@@ -378,7 +378,7 @@ var PostsFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 
     onDeleteGlobalTag : function(tagIndex){
-        AthenaDialog.confirm("Are you sure you want to delete the tag '"+DataStore.m_tags[i]+"' for all your posts? This can not be undone!", function(){
+        AthenaDialog.confirm("Are you sure you want to delete the tag '"+DataStore.m_tags[tagIndex]+"' for all your posts? This can not be undone!", function(){
             PostsFrame.onDoDeleteGlobalTag(tagIndex);
         });
     },
