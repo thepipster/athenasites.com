@@ -94,6 +94,15 @@ class StringUtils {
 
     // ////////////////////////////////////////////////////////////////////
 
+	public static function decodeSlug($slug){
+        // Replace dashes with spaces
+        $tags = array("-");
+        $replace = " ";
+        return str_ireplace($tags, $replace, $slug);		
+	}
+	
+    // ////////////////////////////////////////////////////////////////////
+
     public static function encodeSlug($slug, $extenstion='.html') {
 
         // Strip any new lines, just in case

@@ -193,7 +193,7 @@ $WEDDING_IDEAS_PAGE_ID = 33;
 												foreach($catList as $cat){
 													$cat_slug = StringUtils::encodeSlug($cat, '');
 													$link = PageManager::$blog_url . "?category=" . $cat_slug;
-													echo "<li style='padding:0; margin:0'><a href='{$link}'><span class='menuItem' id='blogMenuItem_{$cat_slug}'>{$cat_slug}</span></a></li>";
+													echo "<li style='padding:0; margin:0'><a href='{$link}'><span class='menuItem' id='blogMenuItem_{$cat_slug}'>{$cat}</span></a></li>";
 												}											
 												print("</ul>");	
 												
@@ -204,7 +204,7 @@ $WEDDING_IDEAS_PAGE_ID = 33;
 												foreach($tagList as $tag){
 													$tag_slug = StringUtils::encodeSlug($tag, '');
 													$link = PageManager::$blog_url . "?tag=" . $tag_slug;
-													echo "<li style='padding:0; margin:0'><a href='{$link}'><span class='menuTagItem' id='blogMenuItem_{$tag_slug}'>{$tag_slug}</span></a></li>";
+													echo "<li style='padding:0; margin:0'><a href='{$link}'><span class='menuTagItem' id='blogMenuItem_{$tag_slug}'>{$tag}</span></a></li>";
 													// <li><a href='/blog/?tag=air-force-academy'><span class='menuTagItem' id='blogMenuItem_air-force-academy'>air force academy</span></a></li>
 												}											
 												

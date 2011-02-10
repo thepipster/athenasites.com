@@ -559,11 +559,13 @@ class PageManager {
                 break;
 
             case self::$BLOGMODE_CATEGORY :
-                $temp_list = PostsTable::getPostsFromCategory(self::$site_id, self::$blog_category);
+            	Logger::debug("%%% Blog Category: " . self::$blog_category);
+                $temp_list = PostsTable::getPostsFromCategory(self::$site_id, StringUtils::decodeSlug(self::$blog_category));
+                Logger::dump($temp_list);
                 break;
 
             case self::$BLOGMODE_TAG :
-                $temp_list = PostsTable::getPostsFromTag(self::$site_id, self::$blog_tag);
+                $temp_list = PostsTable::getPostsFromTag(self::$site_id, StringUtils::decodeSlug(self::$blog_tag));
                 break;
                 
             case self::$BLOGMODE_YEAR :
