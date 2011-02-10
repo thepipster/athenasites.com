@@ -495,6 +495,18 @@ class PageManager {
 		echo "    <meta name='geo.country' content='$country' />\n";
 		echo "    <meta name='geo.region' content='$country-$state' />\n";
 		echo "    <meta name='geo.placename' content='$city, $state $zip, $country' />\n";
+		
+		//echo "    <meta property='og:title' content=\"$meta_desc\" />";
+		//echo "    <meta property='og:site_name' content='Ryan Brenizer -- New York City Wedding Photographer' />";
+		//echo "    <meta property='og:url' content='http://www.ryanbrenizer.com/blog/2011/02/coming-soon-ginger-and-donald/' />";
+		//echo "    <meta property='og:type' content='article' />";
+		
+		/*
+App ID:	198788660131189
+App Secret:	108d6edf24da8f33eb16cec440c198bc		
+		*/
+		echo "    <meta property='fb:app_id' content='198788660131189' />";
+				
 /*		
 		echo "<meta name='ICBM' content='38.8333, -104.8167' />\n";
 		echo "<meta name='DC.title' content='DC wedding photographer' />\n";
