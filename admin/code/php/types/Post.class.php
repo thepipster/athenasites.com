@@ -208,10 +208,9 @@ class Post {
 
 	function like_facebook()
 	{	
-		$title = $this->getTitle();
 		$link = $this->getPermalink();
 	
-		return "<script src='http://connect.facebook.net/en_US/all.js#xfbml=1'></script><fb:like show_faces='true' width='450' href='$link' ref='$title'></fb:like>";
+		return "<script src='http://connect.facebook.net/en_US/all.js#xfbml=1'></script><fb:like show_faces='true' width='450' href='$link'></fb:like>";
 	}
 	
 	function add_to_twitter(){

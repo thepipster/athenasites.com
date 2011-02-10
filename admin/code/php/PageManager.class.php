@@ -381,10 +381,17 @@ class PageManager {
     public static function getPageTitle() {
 
         if (isset(self::$page_browser_title) && self::$page_browser_title != "") {
-            return self::$page_browser_title;
+            $title = self::$page_browser_title;
+        }
+        else {
+            $title = self::$page_title;
         }
 
-        return self::$page_title;
+	    if (PageManager::$blog_mode == PageManager::$BLOGMODE_SINGLEPOST){	
+			$title .= " | " . self::$current_post['title'];
+		}
+
+        return $title;
     }
 
     // ///////////////////////////////////////////////////////////////////////////////////////
