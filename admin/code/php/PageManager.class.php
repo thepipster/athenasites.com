@@ -195,7 +195,7 @@ class PageManager {
 
 		Logger::debug(">>>>>>>>>>>> PageManager - Loading.... <<<<<<<<<<<<<<<<<<<<");
 		Logger::debug("load(page_name=$page_name, page_path=$page_path, tag=$tag, category=$category, blog_month=$blog_month, blog_year=$blog_year, blog_page_no=$blog_page_no)");
-		
+				
         // If we don't have the site id yet, get it
         if (self::$site_id == 0){
             self::init();
@@ -559,9 +559,7 @@ class PageManager {
                 break;
 
             case self::$BLOGMODE_CATEGORY :
-            	Logger::debug("%%% Blog Category: " . self::$blog_category);
                 $temp_list = PostsTable::getPostsFromCategory(self::$site_id, StringUtils::decodeSlug(self::$blog_category));
-                Logger::dump($temp_list);
                 break;
 
             case self::$BLOGMODE_TAG :

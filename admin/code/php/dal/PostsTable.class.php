@@ -146,6 +146,11 @@ class PostsTable {
         return DatabaseManager::getVar($sql);
     }
 
+    public static function getMaxID($site_id) {
+        $sql = DatabaseManager::prepare("SELECT max(id) FROM athena_%d_Posts", $site_id);
+        return DatabaseManager::getVar($sql);
+    }
+
     // /////////////////////////////////////////////////////////////////////////////////
 
 

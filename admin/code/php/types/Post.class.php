@@ -144,7 +144,62 @@ class Post {
 			return $this->excerpt;
 		}
 	}
+
+    // ////////////////////////////////////////////////////////////////////
+
+	public static function generatePath($created){
 	
+	    $day = date("d", strtotime($created));
+	    $month = date("m", strtotime($created));
+	    $year = date("Y", strtotime($created));
+
+	    $path = "/$year/$month/$day/";
+	    
+	    return $path;
+	    
+	}
+	
+    // ////////////////////////////////////////////////////////////////////
+
+	public static function encodeSlug($title){
+		return StringUtils::encodeSlug($title, '');
+	}	
+	
+    // ////////////////////////////////////////////////////////////////////
+
+	public static function decodeTag($slug){
+        // Replace dashes with spaces
+        $tags = array("-");
+        $replace = " ";
+        return str_ireplace($tags, $replace, $slug);		
+	}
+	
+    // ////////////////////////////////////////////////////////////////////
+
+    public static function encodeTag($slug) {
+
+        // Strip any new lines, just in case
+        $tags = array("\\n", "\\r");
+        $replace = '';
+        $safe_slug = str_ireplace($tags, $replace, $slug);
+
+        // Replace space with dashes
+        $tags = array(" ");
+        $replace = '-';
+        $safe_slug = str_ireplace($tags, $replace, $safe_slug);
+
+        // Strip any special characters
+        $tags = array('!', '*', "'", "(", ")", ";", ":", "@", "&", "=", "+", "$", ".", ",", "/", "?", "%", "#", "[", "]");
+        //$entities = array('%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F', '%25', '%23', '%5B', '%5D');
+        $replace = '';
+        $safe_slug = str_ireplace($tags, $replace, $safe_slug);
+
+        // Encode anyting thats left
+        $safe_slug = urlencode($safe_slug);
+
+        return $safe_slug;
+    }
+    		
 	// /////////////////////////////////////////////////////////////////////////////////
 	//
 	// Methods to get links to add this post to various social networks

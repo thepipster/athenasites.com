@@ -14,9 +14,9 @@ class ImportHelper {
         $date_str = date('Y-m-d H:i:s', strtotime($created_date));
 
         if ($title == "") {
-            $slug = "post";
+            $slug = "post_" . PostsTable::getMaxID($site_id) + 1;
         } else {
-            $slug = StringUtils::encodeSlug($title, '');
+            $slug = Post::encodeSlug($title);
         }
 
         // Check to see if this post already exists, if so then we over-write it
@@ -30,14 +30,8 @@ class ImportHelper {
 //        }
 
         // Get path
+	    PostsTable::updatePath($post_id, $site_id, Post::generatePath($created_date));
 
-        $day = date("d", strtotime($created_date));
-        $month = date("n", strtotime($created_date));
-        $year = date("Y", strtotime($created_date));
-
-        $path = "/$year/$month/$day/";
-
-        PostsTable::updatePath($post_id, $site_id, $path);
         PostsTable::updateCreatedDate($post_id, $site_id, $date_str);
         PostsTable::updateSource($post_id, $site_id, $import_source);
         if (isset($source_id)) {

@@ -501,18 +501,13 @@ function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_c
     $safe_title = str_ireplace($tags, $replace, $title);
     $safe_title = stripslashes($safe_title);
 
-    PostsTable::update($site_id, $post_id, $safe_content, $status, $safe_title, $can_comment, StringUtils::encodeSlug($title, ''), 'apollo');
+    PostsTable::update($site_id, $post_id, $safe_content, $status, $safe_title, $can_comment, Post::encodeSlug($title), 'apollo');
 	
     $post = getPostComplete($site_id, $post_id);
 
 	ImportHelper::processPostContent($site_id, $post);
 
-    $day = date("d", strtotime($post['created']));
-    $month = date("n", strtotime($post['created']));
-    $year = date("Y", strtotime($post['created']));
-
-    $path = "/$year/$month/$day/";
-    PostsTable::updatePath($post_id, $site_id, $path);
+    PostsTable::updatePath($post_id, $site_id, Post::generatePath($post['created']));
 
     $msg['cmd'] = "updatePost";
     $msg['result'] = 'ok';
@@ -532,16 +527,11 @@ function addPost($site_id, $title, $content, $status, $slug, $can_comment) {
     //$path = getPath($site_id, $page_id);
     $path = '';
 
-    $post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, StringUtils::encodeSlug($title, ''), 'apollo');
+    $post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, Post::encodeSlug($title), 'apollo');
 
     $post = getPostComplete($site_id, $post_id);
 
-    $day = date("d", strtotime($post['created']));
-    $month = date("n", strtotime($post['created']));
-    $year = date("Y", strtotime($post['created']));
-
-    $path = "/$year/$month/$day/";
-    PostsTable::updatePath($post_id, $site_id, $path);
+    PostsTable::updatePath($post_id, $site_id, Post::generatePath($post['created']));
 
     $msg['cmd'] = "addPost";
     $msg['result'] = $post_id > 0 ? 'ok' : 'fail';

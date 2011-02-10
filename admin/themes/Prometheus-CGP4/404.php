@@ -1,22 +1,11 @@
 <?php
-/**
- * @package WordPress
- * @subpackage CGP4 Theme
- */
-
-get_header();
 ?>
 
 
-	<div id='page_contents' align='left' style="height:400px; padding-left:20px">
+<div class='pageContents'>
 
-		<h1 class="center">Error 404 - Not Found</h2>
-	
-		<h2>Sorry, the page you were looking for can't be found on this server</h2>
+	<h1>Sorry, page not found!</h2>
 
-	</div>
-		
+	<p>Sorry, the page you were looking for can't be found on this site!</p>
 
-</div><!-- contents -->
-
-<?php get_footer(); ?>
+</div>
