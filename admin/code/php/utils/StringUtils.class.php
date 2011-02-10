@@ -120,7 +120,7 @@ class StringUtils {
             $safe_slug = $safe_slug . $extenstion;
         }
 
-        $safe_slug = strtolower($safe_slug);
+        //$safe_slug = strtolower($safe_slug);
 
         return $safe_slug;
     }
