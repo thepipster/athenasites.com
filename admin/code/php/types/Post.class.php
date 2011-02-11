@@ -146,7 +146,14 @@ class Post {
 	}
 
     // ////////////////////////////////////////////////////////////////////
+    //
+    // Static methods
+    //
+    // ////////////////////////////////////////////////////////////////////
 
+	/**
+	* Generate the post path, based on the date in the form /year/month/day/
+	*/
 	public static function generatePath($created){
 	
 	    $day = date("d", strtotime($created));

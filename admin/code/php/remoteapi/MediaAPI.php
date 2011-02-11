@@ -489,7 +489,8 @@ function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_c
 
     //Logger::debug($content);
 
-
+	Logger::debug("Updating post!!");
+	
     $user_id = SecurityUtils::getCurrentUserID();
 
     $tags = array("\\n", "\\r");
@@ -501,7 +502,7 @@ function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_c
     $safe_title = str_ireplace($tags, $replace, $title);
     $safe_title = stripslashes($safe_title);
 
-    PostsTable::update($site_id, $post_id, $safe_content, $status, $safe_title, $can_comment, Post::encodeSlug($title), 'apollo');
+    PostsTable::update($site_id, $post_id, $safe_content, $status, $safe_title, $can_comment, Post::encodeSlug($safe_title), 'apollo');
 	
     $post = getPostComplete($site_id, $post_id);
 
@@ -513,6 +514,8 @@ function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_c
     $msg['result'] = 'ok';
     $msg['data'] = array('post' => $post);
 
+	Logger::dump(PostsTable::getPost($site_id, $post_id));
+	
     CommandHelper::sendMessage($msg);
 }
 
@@ -527,7 +530,7 @@ function addPost($site_id, $title, $content, $status, $slug, $can_comment) {
     //$path = getPath($site_id, $page_id);
     $path = '';
 
-    $post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, Post::encodeSlug($title), 'apollo');
+    $post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, Post::encodeSlug($safe_title), 'apollo');
 
     $post = getPostComplete($site_id, $post_id);
 
@@ -859,7 +862,7 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
 //		$slug = "blog";
 //	}
 //	else {
-		$slug = StringUtils::encodeSlug($title);
+		$slug = Page::encodeSlug($safe_title);
 //	}
 	 
     PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $safe_title, $tamplate_name, $slug, $path, $order, $ishome, $description, $browser_title);
@@ -900,7 +903,7 @@ function addPage($site_id, $title, $parent_page_id, $content, $status, $tamplate
     $safe_content = str_ireplace($tags, $replace, $content);
     $safe_title = str_ireplace($tags, $replace, $title);
 
-    $page_id = PagesTable::create($user_id, $site_id, $parent_page_id, $safe_content, $status, $safe_title, $tamplate_name, StringUtils::encodeSlug($title), $path, $order, $ishome);
+    $page_id = PagesTable::create($user_id, $site_id, $parent_page_id, $safe_content, $status, $safe_title, $tamplate_name, Page::encodeSlug($safe_title), $path, $order, $ishome);
 
     $page = PagesTable::getPage($site_id, $page_id);
     if (isset($page_data)) {

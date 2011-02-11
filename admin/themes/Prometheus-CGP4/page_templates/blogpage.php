@@ -52,6 +52,7 @@
 		<br/>
 			<!-- Add links to add this post to one of a handful of services. -->
 				<?php echo $postObj->like_facebook(); ?>
+				
 				<br/><br/>
 								
 				<?php echo $postObj->add_to_delicious(); ?>
@@ -77,10 +78,8 @@
 <!-- Comments wrapper -->
 <div id='commentsWrapper'>						
 		
-	<div id="comments"><h2>Comments</h2></div>																					
-	
-	<p>No comments yet.</p>
-	
+	<div id="comments"><h2>Comments</h2><p>No comments yet.</p></div>																					
+			
 	<!--
 	<p>
 		<a href='<?=$post_link?>/feed/'>
