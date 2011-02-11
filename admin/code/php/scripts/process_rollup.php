@@ -230,7 +230,7 @@ function getOSHits($site_id, $date_from, $date_end, $day_date) {
 function getBrowserHits($site_id, $date_from, $date_end, $day_date) {
 
     $data_list = DatabaseManager::getResults("SELECT browser_ver, browser, count(distinct(ip_long)) AS hits FROM stats_PageViews
-        WHERE is_bot = 0 AND site_id = $site_id AND view_date > '$date_from' AND view_date <= '$date_end' GROUP BY os");
+        WHERE is_bot = 0 AND site_id = $site_id AND view_date > '$date_from' AND view_date <= '$date_end' GROUP BY browser, browser_ver");
 
     if (!isset($data_list)) {
         return;
