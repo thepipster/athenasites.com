@@ -71,7 +71,7 @@ Logger::debug("$domain has site_id = $site_id");
 
 <!-- Logo -->
 
-<img id='apollo_logo' src='images/logo.png' height='35px'/>
+<a href="http://apollosites.com" id='apollo_logo'><img src='images/logo.png' height='35px'/></a>
 
 <!-- SideBar -->
 <div id='SideBar' align="left"></div>

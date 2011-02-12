@@ -29,7 +29,7 @@ for ($i = 1; $i <= $NO_SITES; $i++) {
 */
 
 // Get the most recent day in the rollup table
-$last_date = DatabaseManager::getVar("SELECT max(rollup_date) FROM stats_1_RollupPageViews");
+$last_date = DatabaseManager::getVar("SELECT max(rollup_date) FROM stats_8_RollupPageViews");
 
 // If the rollup table it empty, need to start at the earliest date in the page views table
 if (!isset($last_date)) {
@@ -46,6 +46,8 @@ Logger::debug("Last Date: $last_date, which was $no_days days ago");
 // Get a list of all the sites
 $site_list = SitesTable::getUniqueSites();
 
+//$sql = DatabaseManager::prepare("SELECT * FROM apollo_Sites WHERE id > 4 GROUP BY id");			
+//$site_list = DatabaseManager::getResults($sql);				
 
 foreach ($site_list AS $site) {
 
@@ -92,12 +94,14 @@ foreach ($site_list AS $site) {
         
 		$data = array();
 		$data['title'] = '404 Page';
-		$data['page_id'] = 0;
+		$data['page_id'] = -1;
 		$data['post_id'] = 0;
 		$data['unique_views'] = $data_list['unique_views'];
 		$data['page_views'] = $data_list['page_views'];
 		
-		insertPageView($site_id, $date_from, $date_end, $day_date, $data);
+		if ($data['unique_views'] > 0 && $data['page_views'] > 0){
+			insertPageView($site_id, $date_from, $date_end, $day_date, $data);
+		}
         
 		//
 		// Add page views.....

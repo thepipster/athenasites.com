@@ -120,6 +120,14 @@ html, body {
 	top: 5px;
 	left: 10px;
 	background-color: transparent;
+	cursor: pointer;
+	text-decoration: none !important;
+	border: none !important;	
+	z-index: 9999;
+}
+
+#apollo_logo img {
+	border: none !important;
 }
 
 .status_draft { color: #2c6c11;}

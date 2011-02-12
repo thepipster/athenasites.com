@@ -435,13 +435,13 @@ class PageManager {
 	    if (PageManager::$blog_mode == PageManager::$BLOGMODE_SINGLEPOST){	    	
 	    	$post_id = self::$current_post['id'];	    	
 			echo "<script type='text/javascript'>\n
-					$.get('/admin/tracker.php?pid=$page_id&bid=$post_id&ref='+document.referrer);\n
+					$.get('/admin/tracker.php?pid=$page_id&bid=$post_id&req='+location.pathname+'&ref='+document.referrer);\n
 				</script>\n";
 				
 		}
 		else {
 			echo "<script type='text/javascript'>\n
-					$.get('/admin/tracker.php?pid=$page_id&bid=&ref='+document.referrer);\n
+					$.get('/admin/tracker.php?pid=$page_id&bid=&req='+location.pathname+'&ref='+document.referrer);\n
 				</script>\n";
 		}
 			

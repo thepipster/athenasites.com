@@ -10,13 +10,21 @@ $site_id = SitesTable::getSiteIDFromDomain($domain);
 $page_id = CommandHelper::getPara('pid', false, CommandHelper::$PARA_TYPE_NUMERIC);
 $post_id = CommandHelper::getPara('bid', false, CommandHelper::$PARA_TYPE_NUMERIC);
 $referer = CommandHelper::getPara('ref', false, CommandHelper::$PARA_TYPE_STRING);
+$request_page = CommandHelper::getPara('req', false, CommandHelper::$PARA_TYPE_STRING);
 
 // logView($site_id, $page_id, $post_id, $page, $path, $query_string)
 // m=post&sid=$site_id&pid=$post_id&pth=$page_path&qs='+window.location.search.substr(1)
 
 $page = PagesTable::getPage($site_id, $page_id);
-$slug = $page['slug'];
-$path = $page['path'];
+
+if (!isset($page)){
+	$slug = basename($request_page);
+	$path = dirname($request_page) . "/";
+}
+else {
+	$slug = $page['slug'];
+	$path = $page['path'];
+}
 
 if (!isset($post_id) || !$post_id) $post_id = 0;
 
