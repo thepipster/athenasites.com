@@ -91,19 +91,20 @@ foreach($user_list as $user){
 
     $target_email = $user['email'];
    
-    Logger::debug("Target email: $target_email");
+	EmailQueueTable::add($site_id, $user['email'], $user['name'], $client_email, $name, $subject, $message, $message);
 
-    //Logger::debug("mail($target_email, $subject, $message, $headers)");
-
+    echo "TRUE";
+/*
     if (mail($target_email, $subject, $message, $headers)) {
         Logger::debug("Email sent OK!");
-        // Log the request with the CRM!
-        ContactRequestTable::create($site_id, $client_email, $name, $phone, $location, $datetime, $comments);      
         echo "TRUE";
     } else {
         Logger::error("Error sending email");
         echo "FALSE";
     }
+*/
+    // Log the request with the CRM!
+    ContactRequestTable::create($site_id, $client_email, $name, $phone, $location, $datetime, $comments);      
 
 }
 

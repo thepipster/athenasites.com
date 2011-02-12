@@ -64,7 +64,7 @@ $WEDDING_IDEAS_PAGE_ID = 33;
 			
 		$common_base_dir = FILE_ROOT . "admin/themes/common/";
 		$theme_base_dir = FILE_ROOT . "admin/themes/Prometheus-CGP4/code";
-				
+								
 		$js_list = array(
 			//"$common_base_dir/js/3rdparty/jquery-1.4.2.min.js",
 			//"$common_base_dir/js/3rdparty/jquery-ui/jquery-ui-1.8.4.custom.min.js",
@@ -75,6 +75,7 @@ $WEDDING_IDEAS_PAGE_ID = 33;
 			"$common_base_dir/js/3rdparty/jquery.datePicker.min-2.1.2.js",
 			"$common_base_dir/js/3rdparty/jquery.validate.min.js",
 									
+			"$common_base_dir/js/apolloContactRequest.class.js",
 			"$common_base_dir/js/apolloXfader.class.js",
 			"$common_base_dir/js/utils/Logger.class.js",
 			

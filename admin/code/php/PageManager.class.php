@@ -376,6 +376,7 @@ class PageManager {
         }
         return null;
     }
+    
     // ///////////////////////////////////////////////////////////////////////////////////////
 
     public static function getPageTitle() {

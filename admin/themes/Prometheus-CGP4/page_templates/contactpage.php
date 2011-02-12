@@ -20,7 +20,7 @@
 			</td>
 			<td width='50%' valign="top">
 			
-				<form id='contactForm' name="date" method="post" action="http://www.shootq.com/public/contactus_action.php">
+				<form id='contactForm' name="date" method="post" action="http://www.shootq.com/public/contactus_action.php" onsubmit="return cgpContact.onSubmit()">
 			
 				
 					<table width="100%" cellpadding="1" cellspacing="1" border="0">
@@ -38,23 +38,23 @@
 						</tr>
 						<tr>
 							<td align="right" class='fieldName'>First Name</td>
-							<td align="left" class='fieldInput'><input type="text" name='strFirstName' value=""/></td>
+							<td align="left" class='fieldInput'><input type="text" name='strFirstName' id='strFirstName' value=""/></td>
 						</tr>
 						<tr>
 							<td align="right" class='fieldName'>Last Name</td>
-							<td align="left" class='fieldInput'><input type="text" name='strLastName' value=""/></td>
+							<td align="left" class='fieldInput'><input type="text" name='strLastName' id='strLastName' value=""/></td>
 						</tr>
 						<tr>
 							<td align="right" class='fieldName'>Cell Phone</td>
-							<td align="left" class='fieldInput'><input type="text" name='strPhoneCell' value=""/></td>
+							<td align="left" class='fieldInput'><input type="text" name='strPhoneCell' id='strPhoneCell' value=""/></td>
 						</tr>
 						<tr>
 							<td align="right" class='fieldName'>Home Phone</td>
-							<td align="left" class='fieldInput'><input type="text" name='strPhoneHome' value=""/></td>
+							<td align="left" class='fieldInput'><input type="text" name='strPhoneHome' id='strPhoneHome' value=""/></td>
 						</tr>
 						<tr>
 							<td align="right" class='fieldName'>Email</td>
-							<td align="left" class='fieldInput'><input class='required_email' type="text" name="strEmail"></td>
+							<td align="left" class='fieldInput'><input class='required_email' type="text" name="strEmail" id="strEmail"></td>
 						</tr>
 						<tr>
 							<td align="right" class='fieldName'>Type of event</td>
@@ -77,7 +77,7 @@
 						</tr>
 						<tr>
 							<td align="right" class='fieldName'>Message</td>
-							<td align="left" class='fieldInput'><textarea name='blobComments' rows='10' value="test"></textarea></td>
+							<td align="left" class='fieldInput'><textarea name='blobComments' id='blobComments' rows='10' value="test"></textarea></td>
 						</tr>
 						<tr>
 							<td></td>
@@ -101,8 +101,8 @@
 
 <script type="text/javascript">
 
-//$(document).ready(cgpContact.init);
-/*
+$(document).ready(cgpContact.init);
+
 var cgpContact = {
 		
 	page_id : <?=PageManager::$page_id?>,
@@ -112,7 +112,8 @@ var cgpContact = {
     nonce : '<?= SecurityUtils::createNonce('email-link') ?>',
 
 	init : function(){
-									
+		
+		/*							
 		// Validation
 		$("#contactForm").validate();
 						
@@ -134,7 +135,7 @@ var cgpContact = {
 		Date.firstDayOfWeek = 0;
 		Date.format = 'mm/dd/yyyy';
 		$('.datepicker').datePicker({clickInput:true, startDate:'01/01/2009'});
-								
+		*/						
 	},
 	
 	checkEmail : function(email) {
@@ -147,36 +148,34 @@ var cgpContact = {
 		
 	onSubmit : function(){
 		
-		if ($("#contactForm").valid()){
+		alert('dsgsdg');
+		
+		//if ($("#contactForm").valid()){
 			
-			var aName = $("#name").val();
-			var aEmail = $("#email").val();
-			var aPhone = $("#phone").val();
-			var aLocation = $("#location").val();
-			var aDatetime = $("#datetime").val();
-			var aComments = $("#comments").val();
+			var aName = $("#strFirstName").val() + ' ' + $("#strLastName").val();
+			var aEmail = $("#strEmail").val();
+			
+			var aPhone = $("#strPhoneHome").val();			
+			if (aPhone == ''){
+				aPhone = $("#strPhoneCell").val();			
+			}
+			
+			var aLocation = '';
+			var aDatetime = $("#weddingdate").val();
+			var aComments = $("#blobComments").val();
 			
 			apolloContactRequest.submitRequest(cgpContact.site_id, cgpContact.page_id, cgpContact.nonce, aName, aEmail, aPhone, aLocation, aDatetime, aComments, cgpContact.onSentForm);
 			
-		}	
+		//}	
 		
-		return false;
+		alert('dsgsd');
+		
+		return false;		
 	},
 	
-	onSentForm : function(isSuccess, isSpam, message){
-	
-		if (isSuccess){
-			$('.formMessage').html("Request sent!");
-		}
-		else if (isSpam) {
-			$('.formMessage').html("Sorry, this comment looks like spam?");
-		}
-		else {
-			$('.formMessage').html(message);
-		}	
-		
+	onSentForm : function(isSuccess, isSpam, message){			
 	}
 
 }
-*/
+
 </script>

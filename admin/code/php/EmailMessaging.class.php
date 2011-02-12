@@ -14,23 +14,11 @@ class EmailMessaging {
 	*/
     public static function sendEmailActivateLink($target_email, $user_name, $activation_key) {
 
-        require_once("Swift-4.0.6/lib/swift_required.php");
-
-        // TRANSPORT
-        $transport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl');        
-        $transport->setUsername('mike@apollosites.com');
-        $transport->setPassword('Ally.Dog');
-
-        // MAILER
-        $mailer = Swift_Mailer::newInstance($transport);
-
-        // MESSAGE
-        $message = Swift_Message::newInstance();
-        $message->setSubject('Email Activation');
-
+		$subject = 'Email Activation';
+				
 		$link = "http://apollosites.com/admin/activateEmail.php?key=".$activation_key;
 		
-        $message->setBody("Hi $user_name <br />
+        $content_html = "Hi $user_name <br />
             <br />
             You requested that we associate the email address <b>$target_email</b> with your ApolloSites account.<br />
             <br />
@@ -45,10 +33,9 @@ class EmailMessaging {
             ApolloSites, LLC
             <br />
             <a href='mailto:mike@apollosites.com'>mike@apollosites.com</a>
-        ", 'text/html');
+        ";
 
-       //Add alternative parts with addPart()
-        $message->addPart("Hi $user_name
+        $content_basic = "Hi $user_name
             
             You requested that we associate the email address $target_email with your ApolloSites account.
             
@@ -61,17 +48,18 @@ class EmailMessaging {
             Mike Pritchard, President
             
             ApolloSites, LLC
-            mike@apollosites.com", 'text/plain');
+            mike@apollosites.com";
 
 
-        $message->setFrom(array('mike@apollosites.com' => 'Mike Pritchard | ApolloSites'));
-        $message->setTo(array($target_email => $user_name));
+		$from_email = 'mike@apollosites.com';
+		$from_name = 'Mike Pritchard | ApolloSites';
 
-        //Send Message
-        $result = $mailer->send($message);
-        
-	    return $result;
-
+		$to_email = $target_email;
+		$to_name = $user_name;
+		
+//		EmailQueueTable::add($site_id, $to_email, $to_name, $from_email, $from_name, $subject, $content_html, $content_basic='');
+		EmailQueueTable::add(PageManager::$site_id, $to_email, $to_name, $from_email, $from_name, $subject, $content_html, $content_basic);
+		
     }
     
     // /////////////////////////////////////////////////////////////////////////////////

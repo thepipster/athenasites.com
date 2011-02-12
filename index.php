@@ -75,6 +75,7 @@ if ($page == '' || (($ext == 'html') || ($ext == 'htm') || ($ext == 'php'))) {
     else {
         $page404 = PageManager::$theme_file_root . '404.php';
         require_once($page404);
+        Log404Table::create(PageManager::$site_id, $_SERVER['REQUEST_URI'], getRealIPAddr());
     }
 
     // Echo footer
@@ -99,6 +100,7 @@ else {
 
             // Get the contents..
             require_once($page404);
+	        Log404Table::create(PageManager::$site_id, $_SERVER['REQUEST_URI'], getRealIPAddr());
 
             // Echo footer
             require_once(PageManager::$theme_file_root . 'footer.php');

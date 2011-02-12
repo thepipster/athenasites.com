@@ -47,7 +47,6 @@ class CustomerTable {
 	        $date_str = date('Y-m-d H:i:s', time());	
 			$true_ip = PageViewsTable::getRealIPAddr();	        
 	        $sql = DatabaseManager::prepare("INSERT INTO crm_%d_Customers (name, email, phone, created_date, last_activity, ip) VALUES (%s, %s, %s, '$date_str', '$date_str', %d)", $site_id, $name, $email, $phone, ip2long($true_ip));
-	        Logger::debug($sql);
         	$customer_id = DatabaseManager::insert($sql);
 		}
 		
