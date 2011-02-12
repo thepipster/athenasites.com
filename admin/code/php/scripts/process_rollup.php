@@ -14,8 +14,7 @@ $server_list = array(
 
 // FOR DEBUGGING, CLEAR TABLES!!!
 /*
-
-$NO_SITES = 7;
+$NO_SITES = 8;
 
 DatabaseManager::submitQuery("TRUNCATE stats_RollupServer");
 
@@ -66,64 +65,89 @@ foreach ($site_list AS $site) {
         // Get the combined stats across all pages...
         //
 
-        $all_page_views = DatabaseManager::getVar("SELECT count(site_id) FROM stats_PageViews WHERE site_id = $site_id AND view_date > '$date_from' AND view_date <= '$date_end'");
+        $all_page_views = DatabaseManager::getVar("SELECT count(site_id) FROM stats_PageViews WHERE site_id = $site_id AND view_date > '$date_from' AND view_date <= '$date_end' AND is_bot = 0");
 
-        $all_unique_views = DatabaseManager::getVar("SELECT count(distinct(ip_long)) FROM stats_PageViews WHERE site_id = $site_id AND view_date > '$date_from' AND view_date <= '$date_end'");
+        $all_unique_views = DatabaseManager::getVar("SELECT count(distinct(ip_long)) FROM stats_PageViews WHERE site_id = $site_id AND view_date > '$date_from' AND view_date <= '$date_end' AND is_bot = 0");
 
         DatabaseManager::insert("INSERT INTO stats_{$site_id}_RollupPageViews (rollup_date, page_views, unique_visitors, page_title, keywords, page_id)
-                            VALUES ('$day_date', $all_page_views, $all_unique_views, 'all', '', 0)",
+                            VALUES ('$day_date', $all_page_views, $all_unique_views, 'all', '', 0)");
 
         //
         // Now get the stats per page
         //
-        
-        // Get the page views
 
-        $sql = "SELECT pages.title as title, views.page_id as page_id, views.post_id as post_id, count(distinct(ip_long)) as unique_views, count(site_id) as page_views, server_ip
+		//
+		// Add 404 page views (page_id = 0 AND post_id = 0).....
+		//	
+        
+        $sql = "SELECT count(distinct(ip_long)) as unique_views, count(site_id) as page_views
+            FROM stats_PageViews views
+            WHERE views.site_id = $site_id
+            AND views.page_id = 0 AND views.post_id = 0
+            AND views.view_date > '$date_from'
+            AND views.view_date <= '$date_end'
+            AND views.is_bot = 0";
+
+        $data_list = DatabaseManager::getSingleResult($sql);
+        
+		$data = array();
+		$data['title'] = '404 Page';
+		$data['page_id'] = 0;
+		$data['post_id'] = 0;
+		$data['unique_views'] = $data_list['unique_views'];
+		$data['page_views'] = $data_list['page_views'];
+		
+		insertPageView($site_id, $date_from, $date_end, $day_date, $data);
+        
+		//
+		// Add page views.....
+		//	
+        $sql = "SELECT pages.title as title, views.page_id as page_id, views.post_id as post_id, count(distinct(ip_long)) as unique_views, count(site_id) as page_views
             FROM stats_PageViews views
             INNER JOIN athena_{$site_id}_Pages pages
             WHERE views.site_id = $site_id
             AND views.page_id = pages.id
+            AND views.post_id = 0
             AND views.view_date > '$date_from'
             AND views.view_date <= '$date_end'
-            GROUP BY pages.title");
-
+            AND views.is_bot = 0
+            GROUP BY pages.title ORDER BY page_views DESC";
+			
         $data_list = DatabaseManager::getResults($sql);
 
         if (isset($data_list)){
-
             foreach ($data_list as $data) {
-
-                $page_title = $data['title'];
-                $page_id = $data['page_id'];
-                $post_id = $data['post_id'];
-                $unique_views = $data['unique_views'];
-                $page_views = $data['page_views'];
-                $server_ip = $data['server_ip'];
-
-				if (isset($post_id) && $post_id > 0){
-					$page_title = DatabaseManager::getVar("SELECT title FROM athena_{$site_id}_Posts WHERE id = $post_id");					
-				}
-				
-				if (!isset($post_id)){
-					$post_id = 0;
-				}
-				
-                if ($site_id == 2 && $page_views > 100) {
-                    Logger::debug("[$day_date] Page views: " . $page_views . " >>> $sql1");
-                }
-
-                //error_log(">>> Server IP: $server_ip");
-                // Get keywords
-                $key_str = getKeywordString($site_id, $date_from, $date_end);
-
-				$sql = DatabaseManager::prepare("INSERT INTO stats_{$site_id}_RollupPageViews (rollup_date, page_views, unique_visitors, page_title, keywords, page_id, post_id) VALUES (%s, %d, %d, %s, %s, %d, %d)",
-                	$day_date, $page_views, $unique_views, $page_title, $key_str, $page_id, $post_id);
-                DatabaseManager::insert($sql);
+				 insertPageView($site_id, $date_from, $date_end, $day_date, $data);
             }
-
         }
 
+		//
+		// Get post views
+		//
+		
+		//
+		// Add page views.....
+		//
+		
+		$sql = "SELECT posts.title as title, views.page_id as page_id, views.post_id as post_id, count(distinct(ip_long)) as unique_views, count(site_id) as page_views
+            FROM stats_PageViews views
+            INNER JOIN athena_{$site_id}_Posts posts
+            WHERE views.site_id = $site_id
+            AND views.post_id = posts.id
+            AND views.post_id != 0
+            AND views.view_date > '$date_from'
+            AND views.view_date <= '$date_end'
+            AND views.is_bot = 0
+            GROUP BY posts.title ORDER BY page_views DESC";
+				
+        $data_list = DatabaseManager::getResults($sql);
+
+        if (isset($data_list)){
+            foreach ($data_list as $data) {
+				 insertPageView($site_id, $date_from, $date_end,$day_date,  $data);
+            }
+        }		
+				
         //error_log($key_str);
         // Get browser & OS
         getOSHits($site_id, $date_from, $date_end, $day_date);
@@ -142,6 +166,35 @@ for ($i = 1; $i < $no_days; $i++) {
     $day_date = date("Y-m-d", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $i, date("Y")));
 
     serverLoadRollup($date_from, $date_end, $day_date);
+}
+
+Logger::debug("Done!");
+
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function insertPageView($site_id, $date_from, $date_end, $day_date, $data){
+
+    $page_title = $data['title'];
+    $page_id = $data['page_id'];
+    $post_id = $data['post_id'];
+    $unique_views = $data['unique_views'];
+    $page_views = $data['page_views'];
+
+	if (isset($post_id) && $post_id > 0){
+		$page_title = DatabaseManager::getVar("SELECT title FROM athena_{$site_id}_Posts WHERE id = $post_id");					
+	}
+	
+	if (!isset($post_id)){
+		$post_id = 0;
+	}
+	
+    //error_log(">>> Server IP: $server_ip");
+    // Get keywords
+    $key_str = getKeywordString($site_id, $date_from, $date_end);
+
+	$sql = DatabaseManager::prepare("INSERT INTO stats_{$site_id}_RollupPageViews (rollup_date, page_views, unique_visitors, page_title, keywords, page_id, post_id) VALUES (%s, %d, %d, %s, %s, %d, %d)",
+    	$day_date, $page_views, $unique_views, $page_title, $key_str, $page_id, $post_id);
+    DatabaseManager::insert($sql);
 }
 
 // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

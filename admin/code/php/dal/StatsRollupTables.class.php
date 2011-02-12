@@ -50,8 +50,8 @@ class StatsRollupTables {
 		  `page_views` int(11) default NULL,
 		  `unique_visitors` int(11) default NULL,
 		  `keywords` text,
-		  `page_id` int(11) default NULL,
-		  `post_id` int(11) default NULL,
+		  `page_id` int(11) default 0,
+		  `post_id` int(11) default 0,
 		  `page_title` varchar(125) default NULL,
 		  PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
