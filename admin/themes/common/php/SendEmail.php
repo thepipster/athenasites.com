@@ -1,6 +1,6 @@
 <?php
 
-$DEBUG = 1;
+$DEBUG = 0;
 
 // Figure out the location of this file
 $discRoot = realpath(dirname(__FILE__)) . "/";
@@ -70,11 +70,6 @@ if ($DEBUG == 0){
 }
 
 
-// Construct email
-//$headers = "From: " . $client_email;
-//$headers = "From: $client_email\r\nX-Mailer: php";
-//$replyto = $client_email;
-
 $subject = "Customer Request";
 
 $message = "Message from contact form;\n";
@@ -89,31 +84,46 @@ $message .= "\n";
 $comments = stripslashes($comments);
 $message .= "Comments: ". $comments . "\n";
 
+
 // Get the owner id(s)for this site
 $user_list = UserTable::getUsersFromSiteID($site_id);
-
-Logger::debug("Site = $site_id");
-
-// Log requests in CRM
 
 // Send email (Email includes breaks Apollo setup, so do last)
 foreach($user_list as $user){
 
+
+	$message_html = "Hi " . $user['name'] . "<br/><br/>";
+	$message_html = "You have received an inquiry from $name, using your website's contact form;<br/>";
+	$message_html .= "<br/>";
+	
+	if (isset($phone) && $phone != ''){
+		$message_html .= "Their phone number is: <b>$phone</b><br/>";
+	}
+	if (isset($location) && $location != ''){
+		$message_html .= "They are interested in the following location: <b>$location</b><br/>";
+	}
+	if (isset($datetime) && $datetime != ''){
+		$message_html .= "And they are interested in the following date: <b>$datetime</b><br/>";
+	}
+	if (isset($comments) && $comments != ''){
+		$message_html .= "They also add the following comment: <br/><b>" . stripslashes($comments) . "</b><br/><br/>";
+	}
+	
+	//$message_html .= "This request has been logged in our CRM, so you can access this message later.<br/><br/>";
+	$message_html .= "Good luck with this lead!<br/><br/>";
+	$message_html .= "<a href='http://apollosites.com' id='apollo_logo'><img src='http://apollosites.com/admin/images/logo.png' height='35px'/></a>";
+
     $target_email = $user['email'];
-   
-//	EmailQueueTable::add($site_id, $user['email'], $user['name'], $client_email, $name, $subject, $message, $message);
-	EmailQueueTable::add($site_id, 'mikep76@gmail.com', $user['name'], $client_email, $name, $subject, $message, $message);
+ 
+ 	if ($DEBUG == 0){
+		EmailQueueTable::add($site_id, $user['email'], $user['name'], $client_email, $name, $subject, $message, $message);
+ 	}
+ 	else {
+		EmailQueueTable::add($site_id, 'mikep76@gmail.com', $user['name'], $client_email, $name, $subject, $message_html, $message);
+ 	}
 
     echo "TRUE";
-/*
-    if (mail($target_email, $subject, $message, $headers)) {
-        Logger::debug("Email sent OK!");
-        echo "TRUE";
-    } else {
-        Logger::error("Error sending email");
-        echo "FALSE";
-    }
-*/
+    
     // Log the request with the CRM!
     ContactRequestTable::create($site_id, $client_email, $name, $phone, $location, $datetime, $comments);      
 
