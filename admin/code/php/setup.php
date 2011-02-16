@@ -24,6 +24,10 @@ define("CODE_ROOT", $code_root); // The root for the code tree
 define("AKISMET_API_KEY", "07d55b1f2e1b");
 define("AKISMET_USER", "apollosites");
 define("AKISMET_PASS", "k9G18ReR");
+
+// Register autloader, but place nice with other autoloaders
+//spl_autoload_register(array('Apollo', 'apollo_autoloader'));
+spl_autoload_register('apollo_autoloader');
     
 // Server-specific passwords kept in sticky file
 // see setup.php.sticky_example
@@ -85,7 +89,7 @@ function onShutdown(){
  * @uses classFolder()
  * @param $className string
  */
-function __autoload($className) {
+function apollo_autoloader($className) {
 	
 //	 error_log("Looking for $className");
 	
