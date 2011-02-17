@@ -115,13 +115,15 @@ foreach($user_list as $user){
 
     $target_email = $user['email'];
  
+	EmailQueueTable::add($site_id, 'mikep76@gmail.com', $user['name'], $client_email, $name, $subject, $message_html, $message);
+/*
  	if ($DEBUG == 0){
 		EmailQueueTable::add($site_id, $user['email'], $user['name'], $client_email, $name, $subject, $message, $message);
  	}
  	else {
 		EmailQueueTable::add($site_id, 'mikep76@gmail.com', $user['name'], $client_email, $name, $subject, $message_html, $message);
  	}
-
+*/
     echo "TRUE";
     
     // Log the request with the CRM!
