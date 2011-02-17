@@ -1,8 +1,34 @@
 RewriteEngine On
 #RewriteBase /
 
+# Hard coding for CGP - LEAVE ALONE!
 RewriteRule ^mediatag/([^/\.]+)/?$ /admin/getimages.php?tag=$1 [L]
-RewriteRule ^wedding-ideas/([^/\.]+)/?$ /admin/themes/Prometheus-CGP4/getimages.php?tag=$1 [L]
+RewriteRule ^wedding-ideas/([^/\.]+)/?.html$ /admin/themes/Prometheus-CGP4/getimages.php?tag=$1 [L]
+
+# http://example.com/feed/ - defaults to rss
+# http://example.com/feed/rss/
+# http://example.com/feed/rss2/
+# http://example.com/feed/rdf/
+# http://example.com/feed/atom/
+
+# Blog feeds....
+RewriteCond $1 ^(.*)/feed/rss$ [OR]
+RewriteCond $1 ^(.*)/feed/rss/$
+RewriteRule ^(.*)$ /admin/feed.php?type=rss [L]
+
+RewriteCond $1 ^(.*)/feed/rss2$ [OR]
+RewriteCond $1 ^(.*)/feed/rss2/$
+RewriteRule ^(.*)$ /admin/feed.php?type=rss2 [L]
+
+RewriteCond $1 ^(.*)/feed/atom$ [OR]
+RewriteCond $1 ^(.*)/feed/atom/$
+RewriteRule ^(.*)$ /admin/feed.php?type=atom [L]
+
+RewriteCond $1 ^(.*)/feed$ [OR]
+RewriteCond $1 ^(.*)/feed/$ 
+RewriteRule ^(.*)$ /admin/feed.php?type=rss [L]
+
+
 
 
 # Sitemap.xml redirect

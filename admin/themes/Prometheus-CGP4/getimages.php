@@ -6,6 +6,9 @@ require_once("../../code/php/setup.php");
 define("VIRTUAL_PAGE_ID", 33);
 
 $csv_tags = CommandHelper::getPara('tag', false, CommandHelper::$PARA_TYPE_STRING);
+$csv_tags = str_replace('.html', '', $csv_tags);
+
+Logger::debug("Tags = $csv_tags");
 
 // Get the site id from the URL
 $domain = str_replace('www.', '', $_SERVER['HTTP_HOST']);

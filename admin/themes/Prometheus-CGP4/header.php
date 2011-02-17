@@ -84,8 +84,7 @@ $WEDDING_IDEAS_PAGE_ID = 33;
 			"$theme_base_dir/js/cgpCommon.class.js",
 			"$theme_base_dir/js/cgpContact.class.js",
 			"$theme_base_dir/js/cgpGallery.class.js",
-			"$theme_base_dir/js/cgpHome.class.js",
-			"$theme_base_dir/js/cgpProduct"
+			"$theme_base_dir/js/cgpHome.class.js"
 		);
 		
 		$css_list = array(
