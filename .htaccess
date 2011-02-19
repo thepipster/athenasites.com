@@ -7,10 +7,17 @@ RewriteEngine On
 # Hard coding for CGP - LEAVE ALONE!
 RewriteRule ^mediatag/([^/\.]+)/?$ /admin/getimages.php?tag=$1 [L]
 
-RewriteRule ^charlottegeary.com/wedding-ideas/([^/\.]+)/?$ /admin/themes/Prometheus-CGP4/getimages.php?tag=$1 [L]
-RewriteRule ^charlottegeary.com/weddingideas/([^/\.]+)/?$ /admin/themes/Prometheus-CGP4/getimages.php?tag=$1 [L]
-RewriteRule ^charlottegeary.com/wedding-ideas/([^/\.]+)/?.html$ /admin/themes/Prometheus-CGP4/getimages.php?tag=$1 [L]
-RewriteRule ^charlottegeary.com/weddingideas/([^/\.]+)/?.html$ /admin/themes/Prometheus-CGP4/getimages.php?tag=$1 [L]
+RewriteCond %{HTTP_HOST} ^charlottegeary.com
+RewriteRule ^wedding-ideas/([^/\.]+)/?$ /admin/themes/Prometheus-CGP4/getimages.php?tag=$1 [L]
+
+RewriteCond %{HTTP_HOST} ^charlottegeary.com
+RewriteRule ^weddingideas/([^/\.]+)/?$ /admin/themes/Prometheus-CGP4/getimages.php?tag=$1 [L]
+
+RewriteCond %{HTTP_HOST} ^charlottegeary.com
+RewriteRule ^wedding-ideas/([^/\.]+)/?.html$ /admin/themes/Prometheus-CGP4/getimages.php?tag=$1 [L]
+
+RewriteCond %{HTTP_HOST} ^charlottegeary.com
+RewriteRule ^weddingideas/([^/\.]+)/?.html$ /admin/themes/Prometheus-CGP4/getimages.php?tag=$1 [L]
 
 # http://example.com/feed/ - defaults to rss
 # http://example.com/feed/rss/

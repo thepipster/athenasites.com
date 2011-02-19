@@ -112,7 +112,7 @@ class Logger {
 		$msg .= "}";		
 					
 		if (self::$echoLog){
-			echo $msg;						
+			echo $html_msg;						
 			flush();			
 		}
 		else {
@@ -169,7 +169,7 @@ class Logger {
 		// Build basic message...
 		
         if (self::$echoLog){
-			echo $msg;			
+			echo $html_msg;			
 			flush();
         }
         else {
