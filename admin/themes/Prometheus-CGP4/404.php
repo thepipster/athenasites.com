@@ -4,13 +4,11 @@
 
 <div class='pageContents'>
 
-	<h1>Sorry, page not found!</h2>
+	<h1>Sorry, page not found. Try one of the links below</h2>
 
-	<p>We could not find the page you were looking...</p>
+	<p id="results" style='min-height:600px'>Loading...</p>
 
-	<p id="results" style=''>Loading...</p>
-
-	<script src="https://www.google.com/jsapi?ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
+	<script src="https://www.google.com/jsapi"></script>
 
 	<script type="text/javascript">
 		
@@ -45,15 +43,14 @@
         	function(){
 				//new google.search.CustomSearchControl().draw('results');
 				// Create a custom search element
-				var customSearchControl = new google.search.CustomSearchControl();
+				var customSearchControl = new google.search.CustomSearchControl('ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg');
 				
 				customSearchControl.draw('results');
-				customSearchControl.execute("<?php echo $path?>"); 
+				customSearchControl.execute("<?php echo $page?>"); 
 				
 				// mikep76@gmail.com id pub-1988280901434851
-				//customSearchControl.enableAds('pub-1988280901434851')
-				         
-				
+				customSearchControl.enableAds('pub-1988280901434851')
+				         				
         	}, true);
 		
 
