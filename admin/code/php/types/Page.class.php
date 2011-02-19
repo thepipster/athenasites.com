@@ -99,7 +99,7 @@ class Page {
     // ////////////////////////////////////////////////////////////////////
 
 	public static function encodeSlug($title){
-		return StringUtils::encodeSlug($title, '');
+		return StringUtils::encodeSlug($title, '.html');
 	}	
 		
 }
