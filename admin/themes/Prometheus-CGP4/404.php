@@ -20,9 +20,7 @@
 			$page = strtolower(basename($parts['path']));
 			$path = strtolower(dirname($parts['path']));	
 			
-			//$path_parts = explode($path);
-			
-			//Logger::dump($path_parts);		
+			$page = str_ireplace("-", " ", $page);	
 		?>
 		
 		google.load('search', '1');
@@ -53,32 +51,7 @@
 				         				
         	}, true);
 		
-
-		
-		/*
-	$(document).ready(function() {
- // Draw the control in content div
-        customSearchControl.draw('results');
-        
-        
- // Run a query
-        customSearchControl.execute(getQuery());
-	});		
-                
-	function getQuery() {
-        var url = '' + window.location;
-        var queryStart = url.indexOf('?') + 1;
-        if (queryStart > 0) {
-          var parts = url.substr(queryStart).split('&');
-          for (var i = 0; i < parts.length; i++) {
-            if (parts[i].substr(0, 1) == 'q') {
-              return unescape(parts[i].split('=')[1].replace(/\+/g, ' '));
-            }
-          }
-        }
-        return '';
-      }
-           */   		
+ 		
 	</script>
                                 
 </div>
