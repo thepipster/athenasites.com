@@ -4,7 +4,7 @@
 
 <div class='pageContents'>
 
-	<h1>Sorry, page not found. Try one of the links below</h2>
+	<h1>Sorry, we can't fine the page you were looking for. Try one of the links below</h2>
 
 	<p id="results" style='min-height:600px'>Loading...</p>
 
@@ -47,7 +47,7 @@
 				customSearchControl.execute("<?php echo $page?>"); 
 				
 				// mikep76@gmail.com id pub-1988280901434851
-				customSearchControl.enableAds('pub-1988280901434851')
+				//customSearchControl.enableAds('pub-1988280901434851')
 				         				
         	}, true);
 		

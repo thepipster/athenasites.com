@@ -10,7 +10,7 @@
 
 <h3>Sorry, we could not find the page you are looking for. Try one of the links below.</h3>
 
-<div id="results">Loading...</div>
+<div id="results" style='padding-bottom:20px'>Loading...</div>
 
 <script src="https://www.google.com/jsapi"></script>
 
