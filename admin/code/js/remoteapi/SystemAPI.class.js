@@ -7,7 +7,7 @@
 var SystemAPI = {
 	
 	/** Command url */
-	m_url : '/code/php/remoteapi/SystemAPI.php',
+	m_url : 'code/php/remoteapi/SystemAPI.php',
 							
 	// ////////////////////////////////////////////////////////////////////////
 	
@@ -59,7 +59,7 @@ var SystemAPI = {
 	checkUser : function(email, pass, callback){
 			
 		var paras = {cmd : 'checkUser', em: email, ps: pass};
-
+				
 		$.ajax({
 			url: SystemAPI.m_url,
 			dataType: "json",
@@ -75,7 +75,7 @@ var SystemAPI = {
 	* Check the response from the server, and load data if login is good
 	*/
 	onUserChecked : function(ret, callback){
-				
+								
 		if (ret.result == 'ok'){	
 			if (ret.data == 'true'){
 				callback(true);

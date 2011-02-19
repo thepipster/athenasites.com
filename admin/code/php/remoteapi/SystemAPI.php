@@ -5,8 +5,9 @@
 * Author: Mike Pritchard
 * Date: 27th July, 2010
 */
-
 require_once("../setup.php");
+
+Logger::debug(">>>> ");
 
 $cmd = CommandHelper::getPara('cmd', true, CommandHelper::$PARA_TYPE_STRING);
 
