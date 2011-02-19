@@ -12,14 +12,14 @@
 
 <div id="results" style='padding-bottom:20px'>Loading...</div>
 
-<script src="https://www.google.com/jsapi"></script>
+<script src="https://www.google.com/jsapi?ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
 
 <script type="text/javascript">
 	
 	<?php 
-		// See http://code.google.com/apis/customsearch/docs/js/cselement-devguide.html 		
+		// See http://code.google.com/apis/customsearch/docs/js/cselement-devguide.html 			
 		$parts = parse_url($url);	
-		$page = strtolower(basename($parts['path']));		
+		$page = strtolower(basename($parts['path']));			
 		$page = str_ireplace("-", " ", $page);	
 	?>
 	
@@ -41,7 +41,7 @@
     	function(){
 			//new google.search.CustomSearchControl().draw('results');
 			// Create a custom search element
-			var customSearchControl = new google.search.CustomSearchControl('ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg');
+			var customSearchControl = new google.search.CustomSearchControl();
 			
 			customSearchControl.draw('results');
 			customSearchControl.execute("<?php echo $page?>"); 
