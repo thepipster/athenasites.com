@@ -112,6 +112,9 @@ class PageManager {
     public static $PARA_GOOGLE_TRACKER  	= 3;
     public static $PARA_FAV_ICON  			= 4;
     
+	private static $GOOGLE_API_KEY = 'ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg';
+    private static $GOOGLE_AD_SENSE_KEY = 'pub-9166352829000298';
+    
     // ///////////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -489,7 +492,44 @@ class PageManager {
 		
  
     }
+	
+	/**
+	* Echo a Google Custom Search search result page
+	* @param $resultsDiv This is the div where the results will be rendered
+	* @param $query optional, if set this will exectute a search query from this term and load the results
+	*/
+	public static function echoSERP($resultsDiv, $query=''){
 
+		echo "<script src='https://www.google.com/jsapi?".self::$GOOGLE_API_KEY."'></script>";
+	
+		echo "<script type='text/javascript'>
+						
+			google.load('search', '1');
+			//google.load('search', '1', {style: google.loader.themes.BUBBLEGUM});
+
+			
+	        google.setOnLoadCallback(
+	        
+	        	function(){
+					//new google.search.CustomSearchControl().draw('results');
+					// Create a custom search element
+					var customSearchControl = new google.search.CustomSearchControl();
+					
+					customSearchControl.draw('$resultsDiv');
+		";
+					
+			if ($query != ""){
+				echo "customSearchControl.execute(\"$query\");"; 
+			}					
+		
+		echo "			
+					customSearchControl.enableAds('".self::$GOOGLE_AD_SENSE_KEY."')
+					         				
+	        	}, true);
+				 		
+		</script>";
+	}
+		
     // ///////////////////////////////////////////////////////////////////////////////////////
 
 	public static function doSiteMetaTags(){
