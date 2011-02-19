@@ -84,7 +84,7 @@ if ($page == '' || (($ext == 'html') || ($ext == 'htm') || ($ext == 'php'))) {
 else {
 
     // Try to get a site id, if we can fint one then hit its 404 page!
-	self::$domain = str_replace('www.', '', $domain);
+	$domain = str_replace('www.', '', $domain);
     $site = SitesTable::getSiteFromDomain($domain);
 
 	if ($DEBUG) die();
