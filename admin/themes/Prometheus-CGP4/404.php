@@ -8,7 +8,7 @@
 
 	<p id="results" style='min-height:600px'>Loading...</p>
 
-	<script src="https://www.google.com/jsapi"></script>
+	<script src="https://www.google.com/jsapi?ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg"></script>
 
 	<script type="text/javascript">
 		
@@ -41,7 +41,7 @@
         	function(){
 				//new google.search.CustomSearchControl().draw('results');
 				// Create a custom search element
-				var customSearchControl = new google.search.CustomSearchControl('ABQIAAAApd3TaflLK-nGV6GT_CxTqhSdm2A-7rwoGsE41YlBtCPOmvFDPxRCd_p-ugGZEcWT4iPDE9N7Rn-KXg');
+				var customSearchControl = new google.search.CustomSearchControl();
 				
 				customSearchControl.draw('results');
 				customSearchControl.execute("<?php echo $page?>"); 
