@@ -13,13 +13,9 @@
 	<script type="text/javascript">
 		
 		<?php 
-			// See http://code.google.com/apis/customsearch/docs/js/cselement-devguide.html 
-			
+			// See http://code.google.com/apis/customsearch/docs/js/cselement-devguide.html 			
 			$parts = parse_url($url);	
-			$domain = $parts['host'];
-			$page = strtolower(basename($parts['path']));
-			$path = strtolower(dirname($parts['path']));	
-			
+			$page = strtolower(basename($parts['path']));			
 			$page = str_ireplace("-", " ", $page);	
 		?>
 		

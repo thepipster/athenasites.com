@@ -241,7 +241,7 @@ $WEDDING_IDEAS_PAGE_ID = 33;
 												if ($child['id'] == $WEDDING_IDEAS_PAGE_ID && (PageManager::$page_id == $WEDDING_IDEAS_PAGE_ID || VIRTUAL_PAGE_ID == $WEDDING_IDEAS_PAGE_ID)){
 												
 													foreach($media_tag_list as $tag){
-														$tag_slug = StringUtils::encodeSlug($tag, '');
+														$tag_slug = Page::encodeSlug($tag);
 														$link = "/wedding-ideas/$tag_slug";
 																												
 														if (strpos($_SERVER['REQUEST_URI'], $link) === false){
