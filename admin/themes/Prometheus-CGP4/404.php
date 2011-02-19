@@ -4,7 +4,7 @@
 
 <div class='pageContents'>
 
-	<h1>Sorry, we can't find the page you were looking for. Try one of the links below</h2>
+	<h1>Sorry, we could not find the page you were looking for. Try one of the links below</h2>
 
 	<p id="results" style='min-height:600px'>Loading...</p>
 

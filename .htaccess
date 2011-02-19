@@ -1,6 +1,9 @@
 RewriteEngine On
 #RewriteBase /
 
+RewriteCond %{HTTP_HOST} ^www\.(.*) [NC]
+RewriteRule (.*) //%1/$1 [L,R=301]
+
 # Hard coding for CGP - LEAVE ALONE!
 RewriteRule ^mediatag/([^/\.]+)/?$ /admin/getimages.php?tag=$1 [L]
 

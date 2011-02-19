@@ -84,6 +84,7 @@ if ($page == '' || (($ext == 'html') || ($ext == 'htm') || ($ext == 'php'))) {
 else {
 
     // Try to get a site id, if we can fint one then hit its 404 page!
+	self::$domain = str_replace('www.', '', $domain);
     $site = SitesTable::getSiteFromDomain($domain);
 
 	if ($DEBUG) die();
@@ -107,12 +108,13 @@ else {
             
         }
         else {
-        	Logger::error("Could not find 404 page for site $site_id for requested url $url");
+        	//Logger::error("Could not find 404 page for site $site_id for requested url $url");
+	        Log404Table::create(PageManager::$site_id, $_SERVER['REQUEST_URI'], getRealIPAddr());
             echo "Oops, 404 ERROR!";
         }
     }
     else {
-        Logger::error("Could not find page or site for requested url $url");
+        //Logger::error("Could not find page or site for requested url $url");
         echo "Oops, 404 ERROR!";
     }
 }
