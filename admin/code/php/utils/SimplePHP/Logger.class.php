@@ -14,6 +14,7 @@ class Logger {
 	private static $debugLevel = 0;
 	
 	private static $echoLog = false;
+	private static $emailLog = true;
 							
 	// //////////////////////////////////////////////////////////////////////////////////////
 
@@ -69,7 +70,7 @@ class Logger {
 		$file_name = basename($file);
 					
 					
-		if (self::$echoLog){
+		if (self::$echoLog || self::$emailLog){
 
 			switch($level){
 				case self::$DEBUG: 	$levMsg = "<span style='color:009900'>debug</span>"; break;
@@ -87,7 +88,13 @@ class Logger {
 			}
 			$msg .= "<br>\n";
 
-			echo $msg;
+			if (self::$echoLog){
+				echo $msg;
+			}
+			
+			if (self::$emailLog && ($level == self::$ERROR || $level == self::$FATAL)){
+				EmailQueueTable::add(PageManager::$site_id, "mike@apollosites.com", "Mike", "logger@apollosites.com", "Apollo Logger", "Logger", $msg, "");
+			}
 			
 			flush();
 			
@@ -150,7 +157,7 @@ class Logger {
         }
 
 
-        if (self::$echoLog){
+        if (self::$echoLog || self::$emailLog){
             
 			switch($errno){
 				case E_USER_NOTICE:  $levMsg = "<span style='color:0000FF'>info</span>"; break;
@@ -163,7 +170,13 @@ class Logger {
 			$msg .= "<span style='color: #444; font-style: italic;'> on line $errline of ".basename($errfile)."</span>";
 			$msg .= "<br>\n";
 
-			echo $msg;
+			if (self::$echoLog){
+				echo $msg;
+			}
+			
+			if (self::$emailLog && ($level == self::$ERROR || $level == self::$FATAL)){
+				EmailQueueTable::add(PageManager::$site_id, "mike@apollosites.com", "Mike", "logger@apollosites.com", "Apollo Logger", "Logger", $msg, "");
+			}
 
 			flush();
 

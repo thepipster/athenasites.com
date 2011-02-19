@@ -107,10 +107,12 @@ else {
             
         }
         else {
+        	Logger::error("Could not find 404 page for site $site_id for requested url $url");
             echo "Oops, 404 ERROR!";
         }
     }
     else {
+        Logger::error("Could not find page or site for requested url $url");
         echo "Oops, 404 ERROR!";
     }
 }

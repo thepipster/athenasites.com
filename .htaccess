@@ -3,6 +3,9 @@ RewriteEngine On
 
 # Hard coding for CGP - LEAVE ALONE!
 RewriteRule ^mediatag/([^/\.]+)/?$ /admin/getimages.php?tag=$1 [L]
+
+RewriteRule ^wedding-ideas/([^/\.]+)/?$ /admin/themes/Prometheus-CGP4/getimages.php?tag=$1 [L]
+RewriteRule ^weddingideas/([^/\.]+)/?$ /admin/themes/Prometheus-CGP4/getimages.php?tag=$1 [L]
 RewriteRule ^wedding-ideas/([^/\.]+)/?.html$ /admin/themes/Prometheus-CGP4/getimages.php?tag=$1 [L]
 RewriteRule ^weddingideas/([^/\.]+)/?.html$ /admin/themes/Prometheus-CGP4/getimages.php?tag=$1 [L]
 
