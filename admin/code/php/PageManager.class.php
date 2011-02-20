@@ -630,23 +630,23 @@ App Secret:	108d6edf24da8f33eb16cec440c198bc
             case self::$BLOGMODE_ALL :
             	$start_n = (self::$blog_page_no-1) * self::$MAX_POSTS_PER_PAGE;
             	$end_n = self::$blog_page_no * self::$MAX_POSTS_PER_PAGE;        
-                $temp_list = PostsTable::getNPosts(self::$site_id, $start_n, $end_n);
+                $temp_list = PostsTable::getNPublishedPosts(self::$site_id, $start_n, $end_n);
                 break;
 
             case self::$BLOGMODE_CATEGORY :
-                $temp_list = PostsTable::getPostsFromCategory(self::$site_id, StringUtils::decodeSlug(self::$blog_category));
+                $temp_list = PostsTable::getPublishedPostsFromCategory(self::$site_id, StringUtils::decodeSlug(self::$blog_category));
                 break;
 
             case self::$BLOGMODE_TAG :
-                $temp_list = PostsTable::getPostsFromTag(self::$site_id, StringUtils::decodeSlug(self::$blog_tag));
+                $temp_list = PostsTable::getPublishedPostsFromTag(self::$site_id, StringUtils::decodeSlug(self::$blog_tag));
                 break;
                 
             case self::$BLOGMODE_YEAR :
-                $temp_list = PostsTable::getPostsFromYear(self::$site_id, self::$blog_year);
+                $temp_list = PostsTable::getPublishedPostsFromYear(self::$site_id, self::$blog_year);
                 break;
 
             case self::$BLOGMODE_MONTH :
-                $temp_list = PostsTable::getPostsFromMonthAndYear(self::$site_id, self::$blog_month, self::$blog_year);
+                $temp_list = PostsTable::getPublishedPostsFromMonthAndYear(self::$site_id, self::$blog_month, self::$blog_year);
                 break;
                 
         }

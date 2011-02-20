@@ -167,6 +167,16 @@ class Logger {
 		$html_msg .= "<br>\n";
 
 		// Build basic message...
+
+		switch($errno){
+			case E_USER_NOTICE:  $levMsg = "INFO"; break;
+			case E_USER_WARNING:$levMsg = "WARNING"; break;
+			case E_USER_ERROR: 	$levMsg = "ERROR"; break;
+			default: $levMsg = "DEBUG"; break;
+		}
+
+        $msg = "[$levMsg] No: $errno Msg: $errstr";
+        $msg .= " {on line $errline of " . basename($errfile) . "}";
 		
         if (self::$echoLog){
 			echo $html_msg;			
@@ -177,7 +187,7 @@ class Logger {
         }
 
 		// If set, email ERRORs or FATAL message...		
-		if (self::$emailLog && ($level == self::$ERROR || $level == self::$FATAL)){
+		if (self::$emailLog && $errno == E_USER_ERROR){
 			EmailQueueTable::add(PageManager::$site_id, "mike@apollosites.com", "Mike", "logger@apollosites.com", "Apollo Logger", "Logger", $html_msg, $msg);
 		}
 

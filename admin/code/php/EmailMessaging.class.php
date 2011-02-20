@@ -56,12 +56,82 @@ class EmailMessaging {
 
 		$to_email = $target_email;
 		$to_name = $user_name;
-		
+				
 //		EmailQueueTable::add($site_id, $to_email, $to_name, $from_email, $from_name, $subject, $content_html, $content_basic='');
 		EmailQueueTable::add(PageManager::$site_id, $to_email, $to_name, $from_email, $from_name, $subject, $content_html, $content_basic);
 		
     }
     
+    // /////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	* Send a email activation email
+	*/
+    public static function sendGotCommentEmail($site_id, $comment_id) {
+
+		$comment = CommentsTable::getComment($site_id, $comment_id);
+		$follower = SiteFollowersTable::getFollower($comment['site_follower_id']);
+		
+		$subject = 'Approve Comment';
+		
+		$key = '';
+				
+		$approve_link = "http://apollosites.com/admin/updateComment.php?act=approve&cid=$comment_id&sid=$site_id&key=$key";
+		$spam_link = "http://apollosites.com/admin/updateComment.php?act=spam&cid=$comment_id&sid=$site_id&key=$key";
+		$delete_link = "http://apollosites.com/admin/updateComment.php?act=delete&cid=$comment_id&sid=$site_id&key=$key";
+		
+		if ($follower['name'] != '' && $follower['email'] != ''){
+			$follower_name = $follower['name'] . " (" . $follower['email'] . ")";
+		}
+		else if ($follower['name'] == '' && $follower['email'] != ''){
+			$follower_name = $follower['email'];
+		}
+		else {
+			$follower_name = 'unknown';
+		}
+		
+		if ($follower['url'] != ''){
+			$follower_name .= "&nbsp;&nbsp;" . urldecode($follower['url']);
+		}
+		
+		$comment_content = $comment['content'];
+				
+        $content_html = "Hi $user_name <br />
+            <br />
+            You received a comment from $follower_name.<br />
+            <br />
+            &ldquo;<i>$comment_content</i>&rdquo;<br />
+            <br />
+            To <b style='color:green'>approve</b> this comment, click <a href='$approve_link'>this link</a>.<br />
+            To <b style='color:red'>delete</b> this comment, click <a href='$delete_link'>this link</a>.<br />
+            To mark this comment as <b style='color:red'>spam</b>, click <a href='$spam_link'>this link</a>.<br />
+            <br />
+            Thank you!<br />
+            <br />
+            Mike Pritchard, President
+            <br />
+            ApolloSites, LLC
+            <br />
+            <a href='mailto:mike@apollosites.com'>mike@apollosites.com</a>
+        ";
+
+		$content_basic = "";
+
+
+		$from_email = 'mike@apollosites.com';
+		$from_name = 'Mike Pritchard | ApolloSites';
+
+		$users = UserTable::getUsersFromSiteID($site_id);
+		
+		foreach($users as $user){
+			//$to_email = $user['email'];
+			$to_email = 'mikep76@gmail.com';
+			$to_name = $user['name'];
+			EmailQueueTable::add($site_id, $to_email, $to_name, $from_email, $from_name, "You've got a new comment", $content_html, $content_basic);
+		}
+		
+    }
+        
     // /////////////////////////////////////////////////////////////////////////////////
     
     /**

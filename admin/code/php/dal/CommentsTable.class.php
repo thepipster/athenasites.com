@@ -6,6 +6,7 @@
  * @author Mike Pritcard (mike@apollosites.com)
  */
 class CommentsTable {
+
     // ///////////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -27,6 +28,7 @@ class CommentsTable {
 		  `source_id` varchar(30) default NULL,
 		  `source_post_id` varchar(30) default NULL,
 		  `site_follower_id` int(11) NOT NULL,
+		  `activation_key` varchar(50) NOT NULL,		  
 		  PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;";
 
@@ -44,6 +46,9 @@ class CommentsTable {
         $target_date = mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y"));
         $date_str = date('Y-m-d H:i:s', $target_date);
 
+		// Create a unique key for this comment, used to email out approve/delete links
+		$key = sha1( ceil(time()) . '_comment_');	
+
         // Is there a comment for this date/time from a different author?
         $comment_id = CommentsTable::getCommentIDFromDate($site_id, $date_str);
 
@@ -53,9 +58,9 @@ class CommentsTable {
             return self::create($site_id, $post_id, $parent_comment_id, $content, $status, $author_ip, $author_id);
         }
 
-        $sql = DatabaseManager::prepare("INSERT INTO athena_%d_Comments (post_id, parent_id, content, status, created, author_ip, site_follower_id)
-			VALUES (%d, %d, %s, %s, '$date_str', %d, %d)",
-                        $site_id, $post_id, $parent_comment_id, $content, $status, ip2long($author_ip), $author_id);
+        $sql = DatabaseManager::prepare("INSERT INTO athena_%d_Comments (post_id, parent_id, content, status, created, author_ip, site_follower_id, activation_key)
+			VALUES (%d, %d, %s, %s, '$date_str', %d, %d, %s)",
+                        $site_id, $post_id, $parent_comment_id, $content, $status, ip2long($author_ip), $author_id, $key);
 
         return DatabaseManager::insert($sql);
     }

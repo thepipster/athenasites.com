@@ -45,10 +45,10 @@ switch ($cmd) {
         $post_id = CommandHelper::getPara('post_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
         $author_name = CommandHelper::getPara('name', true, CommandHelper::$PARA_TYPE_STRING);
         $author_email = CommandHelper::getPara('email', true, CommandHelper::$PARA_TYPE_STRING);
-        $post_url = CommandHelper::getPara('post_url', true, CommandHelper::$PARA_TYPE_STRING);
+        $author_url = CommandHelper::getPara('author_url', true, CommandHelper::$PARA_TYPE_STRING);
         $comment = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
         $parent_comment_id = CommandHelper::getPara('pid', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        addComment($site_id, $post_id, $parent_comment_id, $comment, $author_name, $author_email, $post_url);
+        addComment($site_id, $post_id, $parent_comment_id, $comment, $author_name, $author_email, $author_url);
         break;
 
     default :
@@ -105,17 +105,14 @@ function getStats($site_id){
 // ///////////////////////////////////////////////////////////////////////////////////////
 
 function addComment($site_id, $post_id, $parent_comment_id, $content, $author_name, $author_email, $author_url){
-
-	//Logger::debug("addComment($site_id, $post_id, $parent_comment_id, $content, $author_name, $author_email, $author_url)");	
-	Logger::debug("Adding comment - site id = $site_id post id = $post_id");
 	
-
+	Logger::debug("addComment($site_id, $post_id, $parent_comment_id, $content, $author_name, $author_email, $author_url)");
+	
     //$site = SitesTable::getSite($site_id);
     $page = PagesTable::getBlogpage($site_id);
 
     // Get the current date and time
     $date_str = date('Y-m-d H:i:s');
-    Logger::debug(">>> $date_str");
 
     $author_ip = PageViewsTable::getRealIPAddr();
 
@@ -185,12 +182,14 @@ function addComment($site_id, $post_id, $parent_comment_id, $content, $author_na
         SiteFollowersTable::flagSpammer($follower_id);
     }
 
-
     //
     // Create the comment....
     //
     $comment_id = CommentsTable::create($site_id, $post_id, $parent_comment_id, $content, $status, $author_ip, $follower_id);
-
+	
+	// Send email to client
+	EmailMessaging::sendGotCommentEmail($site_id, $comment_id);
+	
     $msg['cmd'] = 'addComment';
     $msg['result'] = 'ok';
     
@@ -245,11 +244,14 @@ function getApprovedComments($post_id, $site_id) {
     $msg['cmd'] = 'getComments';
     $msg['result'] = 'ok';
 
-       $comment_list = CommentsTable::getCommentsForPostForStatus($site_id, $post_id, 'Approved');
+    $comment_list = CommentsTable::getCommentsForPostForStatus($site_id, $post_id, 'Approved');
+    
     $comments = array();
-    foreach($comment_list as $comment){
-        $comment['created'] = date("m/d/Y H:i", strtotime($comment['created'])); // Convert to JS compatible date
-        $comments[] = $comment;
+    if (isset($comment_list)){
+	    foreach($comment_list as $comment){
+	        $comment['created'] = date("m/d/Y H:i", strtotime($comment['created'])); // Convert to JS compatible date
+	        $comments[] = $comment;
+	    }
     }
 
     $msg['data'] = array('post_id' => $post_id, 'comments' => $comments);

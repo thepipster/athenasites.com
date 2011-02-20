@@ -135,7 +135,7 @@ var hpBlog = {
         	var authorName = $('#author').val();
         	var authorEmail = $('#email').val();
         	var commentContent = $('#comment').val();
-        	var postURL = window.location;
+        	var authorURL = $('#url').val();
         	var parentCommentID = 0;
         		        	
 	        var paras = {
@@ -144,7 +144,7 @@ var hpBlog = {
 	            post_id: hpBlog.m_postID,
 	            name: authorName, 
 	            email: authorEmail,
-	            post_url: escape(postURL),
+	            author_url: escape(authorURL),
 	            content: commentContent,
 	            pid: parentCommentID
 	        };

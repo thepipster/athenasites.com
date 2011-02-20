@@ -180,11 +180,25 @@ class PostsTable {
         $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts WHERE created >= %s AND created <= %s", $site_id, $date_from, $date_end);
         return DatabaseManager::getResults($sql);
     }
+
+    public static function getPublishedPostsFromYear($site_id, $year) {    
+        $date_from = date("Y-01-01 00:00:00", strtotime("01/01/$year 00:00:00"));
+        $date_end = date("Y-12-31 23:59:59", strtotime("12/31/$year 23:59:59"));    
+        $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts WHERE status = 'Published' AND created >= %s AND created <= %s", $site_id, $date_from, $date_end);
+        return DatabaseManager::getResults($sql);
+    }
 	
     public static function getPostsFromMonthAndYear($site_id, $month, $year) {
         $date_from = date("Y-m-01 00:00:00", strtotime("$month/01/$year 00:00:00"));
         $date_end = date("Y-m-d 23:59:59", strtotime('-1 day',strtotime('+1 month',strtotime($date_from))));
         $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts WHERE created >= %s AND created <= %s", $site_id, $date_from, $date_end);
+        return DatabaseManager::getResults($sql);
+    }
+
+    public static function getPublishedPostsFromMonthAndYear($site_id, $month, $year) {
+        $date_from = date("Y-m-01 00:00:00", strtotime("$month/01/$year 00:00:00"));
+        $date_end = date("Y-m-d 23:59:59", strtotime('-1 day',strtotime('+1 month',strtotime($date_from))));
+        $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts WHERE status = 'Published' created >= %s AND created <= %s", $site_id, $date_from, $date_end);
         return DatabaseManager::getResults($sql);
     }
 				
@@ -220,11 +234,24 @@ class PostsTable {
         return DatabaseManager::getResults($sql);
     }
 
+    public static function getPublishedPostsFromTag($site_id, $tag) {
+        //Logger::debug("getPostsFromTag($site_id, $tag)");
+        $tag_id = self::getTagID($site_id, $tag);
+        $sql = DatabaseManager::prepare("SELECT p.* FROM athena_%d_Posts p INNER JOIN athena_%d_PostToTags pt WHERE pt.tag_id = %d AND pt.post_id = p.id AND p.status = 'Published' ORDER BY created DESC", $site_id, $site_id, $tag_id);
+        return DatabaseManager::getResults($sql);
+    }
+
     // /////////////////////////////////////////////////////////////////////////////////
 
     public static function getPostsFromCategory($site_id, $category) {
         $cat_id = self::getCategoryID($site_id, $category);
         $sql = DatabaseManager::prepare("SELECT p.* FROM athena_%d_Posts p INNER JOIN athena_%d_PostToCategories pc WHERE pc.category_id = %d AND pc.post_id = p.id ORDER BY created DESC", $site_id, $site_id, $cat_id);
+        return DatabaseManager::getResults($sql);
+    }
+
+    public static function getPublishedPostsFromCategory($site_id, $category) {
+        $cat_id = self::getCategoryID($site_id, $category);
+        $sql = DatabaseManager::prepare("SELECT p.* FROM athena_%d_Posts p INNER JOIN athena_%d_PostToCategories pc WHERE pc.category_id = %d AND pc.post_id = p.id AND p.status = 'Published' ORDER BY created DESC", $site_id, $site_id, $cat_id);
         return DatabaseManager::getResults($sql);
     }
 
@@ -565,8 +592,13 @@ class PostsTable {
      public static function getNPosts($site_id, $start_n, $end_n) {
         $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts ORDER BY created DESC LIMIT %d, %d", $site_id, $start_n, ($end_n-$start_n));
         return DatabaseManager::getResults($sql);
-    }
+     }
 
+     public static function getNPublishedPosts($site_id, $start_n, $end_n) {
+        $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts WHERE status = 'Published' ORDER BY created DESC LIMIT %d, %d", $site_id, $start_n, ($end_n-$start_n));
+        return DatabaseManager::getResults($sql);
+     }
+     
     // /////////////////////////////////////////////////////////////////////////////////
 
     public static function getPost($site_id, $post_id) {

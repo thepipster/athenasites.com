@@ -23,7 +23,7 @@ var BlogAPI = {
     /**
     * Get the list of folders and media for this site
     */
-    addComment : function(siteID, postID, authorName, authorEmail, postURL, parentCommentID, commentContent, callback){
+    addComment : function(siteID, postID, authorName, authorEmail, authorURL, parentCommentID, commentContent, callback){
 			
         var paras = {
             cmd : 'addComment',
@@ -31,7 +31,7 @@ var BlogAPI = {
             post_id: postID,
             name: authorName,
             email: authorEmail,
-            post_url: postURL,
+            author_url: authorURL,
             content: commentContent,
             pid: parentCommentID
         };
