@@ -24,11 +24,8 @@ class Post {
 	public $canComment = 0;
 	
 	public $postLink;
-	
-	/** The blog URL, <path>/<blog slug> e.g. '/info-pages/blog/' */
-	public static $blog_url = '';
-	
-	/** The blog base URL (slug), e.g. 'blog/' */
+		
+	/** The blog base URL, e.g. 'http://charlottegeary.com/blog/' */
 	public static $blog_base_url = '';
 	
 	// /////////////////////////////////////////////////////////////////////////////////
@@ -45,7 +42,7 @@ class Post {
 	// /////////////////////////////////////////////////////////////////////////////////
 	
 	public function get($site_id, $post_id){	
-		$this->fromDB(PostsTable::getPost($site_id, $post_id));
+		$this->fromArray(PostsTable::getPost($site_id, $post_id));
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////////////
@@ -108,20 +105,33 @@ class Post {
 	
 	// /////////////////////////////////////////////////////////////////////////////////
 	
-	function getPermalink(){
-		/*
-		if (self::$blog_url == ''){
-			global $site_id;
-			Logger::debug("Blog base url not set! Site id = " . $site_id);
-	        $blogPage = PagesTable::getBlogpage($site_id);
-        	self::$blog_url = $blogPage['path'] . $blogPage['slug'];
-	        self::$blog_base_url = $blogPage['slug'];			
-		}
-		*/
-		return "http://" . $_SERVER['HTTP_HOST'] . "/". PageManager::$blog_base_url . $this->getPath() . $this->getSlug();
+	function getLink(){
+		return self::getBlogBaseURL() . $this->getPath() . $this->getSlug();
 	}
 	
+	// /////////////////////////////////////////////////////////////////////////////////
 	
+	/**
+	* Get the base blog URL for this site
+	*/ 
+	public static function getBlogBaseURL(){
+	
+		if (self::$blog_base_url == ''){
+			
+			$domain = str_replace('www.', '', $_SERVER['HTTP_HOST']);
+		    $site = SitesTable::getSiteFromDomain($domain);
+			$site_id = $site['id'];
+
+	        // Get blog info....
+	        $blogPage = PagesTable::getBlogpage($site_id);
+		        
+	        self::$blog_base_url = "http://" . $site['domain'] . $blogPage['path'] . $blogPage['slug'];
+			
+		}
+		
+		return self::$blog_base_url;
+	}
+		
 	// /////////////////////////////////////////////////////////////////////////////////
 
 	public function getID(){ return $this->id; }
@@ -215,14 +225,14 @@ class Post {
 
 	function like_facebook()
 	{	
-		$link = $this->getPermalink();
+		$link = $this->getLink();
 	
 		return "<script src='http://connect.facebook.net/en_US/all.js#xfbml=1'></script><fb:like show_faces='true' width='450' href='$link'></fb:like>";
 	}
 	
 	function add_to_twitter(){
 	
-		$link = $this->getPermalink();
+		$link = $this->getLink();
 		
 		return "<a href='http://twitter.com/home/?status=Currently reading:$link' target='_blank' title='Twitter'>
 					<img alt='Twitter' border='0' height='16' src='/admin/images/SocialNetworksFavIcons/twitter.png' width='16'/>
@@ -232,7 +242,7 @@ class Post {
 	
 	function search_technorati() {
 	
-		$link = $this->getPermalink();
+		$link = $this->getLink();
 		
 		return "<a href='http://technorati.com/cosmos/search.html?url=$link' target='_blank' title='Technorati'>
 					<img alt='Technorati' border='0' height='16' src='/admin/images/SocialNetworksFavIcons/technorati.png' width='14'/>
@@ -243,7 +253,7 @@ class Post {
 	function add_to_delicious()
 	{
 
-		$link = $this->getPermalink();
+		$link = $this->getLink();
 		$title = $this->getTitle();
 	
 		return "<a href='http://del.icio.us/post?url=$link&title=$title' target='_blank' title='Del.icio.us'>
@@ -254,7 +264,7 @@ class Post {
 	
 	function add_to_stumble_upon(){
 	
-		$link = $this->getPermalink();
+		$link = $this->getLink();
 		$title = $this->getTitle();
 
 		return "<a href='http://www.stumbleupon.com/submit?url=$link&title=$title' target='_blank' title='StumbleUpon'>
@@ -265,7 +275,7 @@ class Post {
 	
 	function add_to_facebook(){
 
-		$link = $this->getPermalink();
+		$link = $this->getLink();
 
 		return "<a href='http://www.facebook.com/share.php?u=$link' target='_blank' title='Facebook'>
 					<img alt='Facebook' border='0' height='16' src='/admin/images/SocialNetworksFavIcons/facebook.png' width='14'/>
@@ -275,7 +285,7 @@ class Post {
 	
 	function add_to_digg(){
 	
-		$link = $this->getPermalink();
+		$link = $this->getLink();
 		$title = $this->getTitle();
 	
 		return "<a href='http://www.digg.com/submit?url=$link&title=$title&phase=2' target='_blank' title='Digg'>
@@ -297,9 +307,9 @@ class Post {
 	 /*
 	private function add_to_service($item_url, $title_url = null, $summary_url = null)
 	{
-		if ($this->getPermalink() !== null)
+		if ($this->getLink() !== null)
 		{
-			$return = $item_url . rawurlencode($this->getPermalink());
+			$return = $item_url . rawurlencode($this->getLink());
 			if ($title_url !== null && $this->getTitle() !== null)
 			{
 				$return .= $title_url . rawurlencode($this->getTitle());

@@ -514,6 +514,13 @@ class PostsTable {
 
     // /////////////////////////////////////////////////////////////////////////////////
 
+    public static function getTitle($site_id, $post_id) {
+        $sql = DatabaseManager::prepare("SELECT title FROM athena_%d_Posts WHERE id = %d", $site_id, $post_id);
+        return DatabaseManager::getVar($sql);
+    }
+
+    // /////////////////////////////////////////////////////////////////////////////////
+
     public static function getPostTags($site_id, $post_id) {
         $sql = DatabaseManager::prepare("SELECT t.tag FROM athena_%d_PostTags t INNER JOIN athena_%d_PostToTags pt WHERE pt.post_id = %d AND pt.tag_id = t.id", $site_id, $site_id, $post_id);
         return DatabaseManager::getColumn($sql);

@@ -106,9 +106,15 @@ class CommentsTable {
     // /////////////////////////////////////////////////////////////////////////////////
 
     public static function updateStatus($comment_id, $site_id, $status) {
+		// Clear activation key
+        $sql = DatabaseManager::prepare("UPDATE athena_%d_Comments SET activation_key = '' WHERE id = %d", $site_id, $comment_id);
+        DatabaseManager::update($sql);
+    
         $sql = DatabaseManager::prepare("UPDATE athena_%d_Comments SET status=%s WHERE id = %d", $site_id, $status, $comment_id);
         return DatabaseManager::update($sql);
     }
+
+    // /////////////////////////////////////////////////////////////////////////////////
 
     public static function updateCreatedDate($comment_id, $site_id, $created_date) {
         $sql = DatabaseManager::prepare("UPDATE athena_%d_Comments SET created=%s WHERE id = %d", $site_id, $created_date, $comment_id);
