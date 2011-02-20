@@ -169,7 +169,8 @@ function addComment($site_id, $post_id, $parent_comment_id, $content, $author_na
     if (!isset($follower_id)) {
         $follower_id = SiteFollowersTable::addFollower($author_name, $author_email, $author_ip, $author_url);
         SiteFollowersTable::updateCreatedDate($follower_id, $date_str); // Force the imported comment date as the create date for this follower
-    } else {
+    } 
+    else {
         SiteFollowersTable::updateFollower($follower_id, $author_ip, $author_url);
         SiteFollowersTable::updateLastActivityDate($follower_id, $date_str); // Force the imported comment date as the last activity date for this follower
     }

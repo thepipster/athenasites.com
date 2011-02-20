@@ -1,11 +1,3 @@
-<style type="text/css">
-
-test {
-	
-	color: #e6e6e6;
-}
-
-</style>
 <?php
 
 require_once("code/php/setup.php");
