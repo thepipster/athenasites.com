@@ -99,10 +99,8 @@ class EmailMessaging {
 		
 		foreach($users as $user){
 		
-			//$to_email = $user['email'];
-			$to_email = 'mikep76@gmail.com';
+			$to_email = $user['email'];
 			$to_name = $user['name'];
-
 			
 	        $content_html = "Hi $to_name <br /><br />";
 	        
