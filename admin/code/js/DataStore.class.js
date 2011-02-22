@@ -396,6 +396,7 @@ var DataStore = {
                 DataStore.m_pageList[i].is_blogpage = pageObj.is_blogpage;
                 DataStore.m_pageList[i].page_order = pageObj.page_order;
                 DataStore.m_pageList[i].description = pageObj.description;
+                DataStore.m_pageList[i].url = pageObj.url;
 
 				// Flag as changed 
                 DataStore.m_pageList[i].isChanged = 1;
@@ -453,6 +454,7 @@ var DataStore = {
         temp.page_order = pageObj.page_order;
         temp.description = pageObj.description;
         temp.browser_title = pageObj.browser_title;
+        temp.url = pageObj.url;
 
         DataStore.m_pageList.push(temp);
     },
@@ -481,6 +483,7 @@ var DataStore = {
         temp.canComment = postObj.canComment;
         temp.tags = postObj.tags;
         temp.categories = postObj.categories;
+        temp.url = postObj.url;
 
         if (temp.tags == undefined){
             temp.tags = new Array();
@@ -519,6 +522,7 @@ var DataStore = {
                 DataStore.m_postList[i].canComment = postObj.canComment;
                 DataStore.m_postList[i].tags = postObj.tags;
                 DataStore.m_postList[i].categories = postObj.categories;
+                DataStore.m_postList[i].url = postObj.url;
 
                 if (DataStore.m_postList[i].tags == undefined){
                     DataStore.m_postList[i].tags = new Array();
@@ -645,7 +649,7 @@ var DataStore = {
 	*/ 
 	savePage : function(pageObj){
 			
-        MediaAPI.updatePage(ssMain.siteID, 
+        PagesAPI.updatePage(ssMain.siteID, 
         					pageObj.id, 
         					pageObj.title, 
         					pageObj.content, 
@@ -663,20 +667,26 @@ var DataStore = {
 	onPageSaved : function(pageObj){
 		
 		DataStore.updatePage(pageObj);
-				
-		// Mark as saved...
-    	for (var i=0; i<DataStore.m_pageList.length; i++){
-    		if (DataStore.m_pageList[i].id == pageObj.id){
-    			DataStore.m_pageList[i].isChanged = 0;
-    		}
-		}		
-		
+						
 		// Is this page being displayed? If so, update the last edit display
 		if (pageObj.id == DataStore.m_currentPageID && ssMain.view == ssMain.VIEW_PAGES){
 			$('#pageLastEdit').html(pageObj.last_edit);
 			//$('#pageLastEdit').effect("highlight", {color: 'white'}, 2000);
 			$('#pageLastEdit').effect("pulsate", { times:1 }, 2000);
+
+			// Update the page link			
+			PagesFrame.updateViewPageLink(pageObj.url);
+			
 		}
+		
+		// Mark as saved...
+    	for (var i=0; i<DataStore.m_pageList.length; i++){
+    		if (DataStore.m_pageList[i].id == pageObj.id){
+    			DataStore.m_pageList[i].isChanged = 0;
+    			return;
+    		}
+		}		
+		
 	},
 	
     // //////////////////////////////////////////////////////////////////////////////////
@@ -711,6 +721,9 @@ var DataStore = {
 		if (postObj.id == DataStore.m_currentPostID && ssMain.view == ssMain.VIEW_POSTS){
 			$('#postLastEdit').html(postObj.last_edit);
 			$('#postLastEdit').effect("pulsate", { times:1 }, 2000);
+			
+			// Update the page link			
+			PostsFrame.updateViewPageLink(postObj.url);			
 		}
 			
 	},

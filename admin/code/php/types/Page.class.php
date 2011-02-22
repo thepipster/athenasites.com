@@ -89,8 +89,9 @@ class Page {
 		    $site = SitesTable::getSiteFromDomain($domain);
 			$site_id = $site['id'];
 		        
-	        self::$base_url = "http://" . $site['domain'] . "/";
+	        self::$base_url = "http://" . $site['domain'] ;
 			
+			Logger::debug("Updating base url = " . self::$base_url);
 		}
 		
 		return self::$base_url;

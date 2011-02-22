@@ -136,6 +136,10 @@ html, body {
 .status_spam { color: #233c57;}
 .status_trash { color: #233c57;}
 
+.apolloDataInput[disabled] {
+	background-color: #e6e6e6;
+}
+
 /*
 .select_option_public { background-color: #233c57 !important; color: white !important}
 .select_option_private { background-color: #990000 !important; color: white !important}
@@ -461,6 +465,22 @@ html, body {
 	cursor: pointer;
 }
 .basic_button:hover { color: white; background-color: #0358b1 }
+
+/** Basic button, but for links */
+.basic_link_button {
+	border-color: #a9b1bc;
+	border-width: 1px;
+	border-style: solid;
+	color: white;
+	background-color: #032f5d;
+	font-size: 12px;
+	cursor: pointer;
+	padding: 1px;
+	padding-left: 6px;
+	padding-right: 6px;
+	text-decoration: none;
+}
+.basic_link_button:hover { color: white; background-color: #0358b1 }
 
 /*
 .subframebox button {

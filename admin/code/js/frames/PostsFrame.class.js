@@ -35,9 +35,6 @@ var PostsFrame = {
 
     repaint : function(){
 			
-		$('#postTitle').show();
-		$('#pageTitle').hide();
-			
         if (DataStore.m_postList.length == 0){
             AthenaDialog.backgroundMessage("You currently have no posts, you can add a post using the side-bar");
         }
@@ -62,6 +59,16 @@ var PostsFrame = {
         
         if (postObj != undefined){
         
+			if (postObj.status != 'Published'){
+				$('#postTitleWrapper').html("<input id='postTitle' type='text' value='"+postObj.title+"' class='apolloDataInput'/>");
+				$('#postTitle').typing({ stop: ssMain.onDataChange, delay: 400});
+			}
+			else {
+				var txt = "<span id='pageTitleDisplay'>" +postObj.title + "</span>";
+				txt += "<button class='basic_button' onclick='PostsFrame.onToggleTitle()' title='Allows you to edit the title of a post that has already been published.'>Edit Title</button>";
+				$('#postTitleWrapper').html(txt);
+			}
+        
 	        oUtil.obj.loadHTML(postObj.content);
 	        
 	        //PostsFrame.oEdit.loadHTML(postObj.content);
@@ -74,7 +81,7 @@ var PostsFrame = {
 	        $('#postStatusSelector').val(postObj.status);
 	        //PostsFrame.refreshStatusSelectBox();
 					
-	        PostsFrame.updatePostLink(postObj);
+	        PostsFrame.updateViewPageLink(postObj.url);
 	        
 	        PostsFrame.updateTagsAndCategoris();
         }
@@ -83,6 +90,12 @@ var PostsFrame = {
 
     // ////////////////////////////////////////////////////////////////////////////
 
+	updateViewPageLink : function(url){
+		$('#pageLink').attr('href', url);
+	},
+
+    // ////////////////////////////////////////////////////////////////////////////
+/*	
     updatePostLink : function(postObj){
 
         var blogPage = DataStore.getBlogPage();
@@ -109,7 +122,7 @@ var PostsFrame = {
         }
 			
     },
-	
+*/	
     // ////////////////////////////////////////////////////////////////////////////
 
     refreshStatusSelectBox : function(){
@@ -214,12 +227,16 @@ var PostsFrame = {
 						
         //var content = CKEDITOR.instances.postContentEditor.getData();
         postObj.content = oUtil.obj.getXHTMLBody();
-        postObj.title = $('#postTitle').val();
+        postObj.title = $('#postTitle').val() || $('#pageTitleDisplay').html();
         postObj.status = $('#postStatusSelector').val();
         postObj.canComment = $('#postCanCommentSelector').val();
         postObj.slug = AthenaUtils.encodeSlug(postObj.title);
 		
         DataStore.updatePost(postObj);
+
+	    // Force an immediate save
+	    DataStore.save();
+        
         PostsSidebarFrame.repaint();
 	
 	},
@@ -239,34 +256,7 @@ var PostsFrame = {
 		
 		PostsFrame.m_contentChangedTO = setTimeout(PostsFrame.onChange, 500);
 	},	
-	
-    /**
-	* Save all the users changes to the site
-	*/
-	/*
-    onSavePost : function(){
 
-        var postObj = DataStore.getPost(DataStore.m_currentPostID);
-						
-        //var content = CKEDITOR.instances.postContentEditor.getData();
-        postObj.content = oUtil.obj.getXHTMLBody();
-        postObj.title = $('#pageTitle').val();
-        postObj.status = $('#postStatusSelector').val();
-        postObj.canComment = $('#postCanCommentSelector').val();
-        postObj.slug = AthenaUtils.encodeSlug(title);
-
-        DataStore.updatePost(postObj);
-        
-        //MediaAPI.updatePost(ssMain.siteID, DataStore.m_currentPostID, title, content, status, canComment, slug, PostsFrame.onPostSaved)
-				
-    },
-	
-    onPostSaved : function(postObj){
-        DataStore.updatePost(postObj);
-        PostsFrame.repaint();
-        PostsSidebarFrame.repaint();
-    },
-*/
     // ////////////////////////////////////////////////////////////////////////////
 
     addTag : function(){
@@ -458,8 +448,17 @@ var PostsFrame = {
 
         // Repaint frame
         PostsFrame.repaint();
-    }
+    },
 
     // ////////////////////////////////////////////////////////////////////////////
-
+	
+	onToggleTitle : function(){			
+		var title = $('#pageTitleDisplay').html();
+		AthenaDialog.confirm("As this post has been published, if you change the post title you will change the post's URL which can have a bad effect on the SEO for this post. This is really only an issue for posts that have been live for a while.<br/> <br/>By clicking ok, you will be able to edit the title and it will be saved automatically.", 
+			function(){
+				$('#postTitleWrapper').html("<input id='postTitle' type='text' value='"+title+"' class='apolloDataInput'/>");
+				$('#postTitle').typing({ stop: ssMain.onDataChange, delay: 400});
+			}
+			);	
+	}
 }

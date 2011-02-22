@@ -33,6 +33,7 @@ var ssMain = {
         SystemAPI.init();
         BlogAPI.init();
         MediaAPI.init();
+        PagesAPI.init();
         GalleryAPI.init();
 
         // Start auto-save timer....
@@ -80,6 +81,7 @@ var ssMain = {
     // ////////////////////////////////////////////////////////////////////////
 
     onLogout : function(){
+    	DataStore.save();
         AthenaDialog.confirm("Are you sure you want to log out?", ssMain.startLogout);
     },
 
@@ -97,6 +99,7 @@ var ssMain = {
 	* Listen for changes in data input fields (that have the class 'apolloDataInput'), and pipe to the correct frame
 	*/	
 	onDataChange : function(){
+	
         switch(ssMain.view){
             case ssMain.VIEW_PAGES : PagesFrame.onChange(); break;
             case ssMain.VIEW_POSTS : PostsFrame.onChange(); break;
@@ -105,6 +108,7 @@ var ssMain = {
             case ssMain.VIEW_GALLERIES:
             case ssMain.VIEW_STATS: break;
         }	
+        
         DataStore.save();	
 	}		
 }
