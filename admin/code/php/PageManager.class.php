@@ -478,7 +478,6 @@ class PageManager {
 		  _gaq.push(['_setAccount', 'UA-21458669-1']);
 		  _gaq.push(['_setDomainName', 'none']);
 		  _gaq.push(['_trackPageview', '$page_title']);
-		  _gaq.push(['_setAllowLinker', true]);
 		  _gaq.push(['_setAllowHash', false]);
 				
 		  (function() {
