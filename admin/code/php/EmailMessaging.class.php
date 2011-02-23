@@ -104,7 +104,7 @@ class EmailMessaging {
 			
 	        $content_html = "Hi $to_name <br /><br />";
 	        
-	        $content_html .= "You received a comment from ".$follower['name']." on your post titled &ldquo;<a href='".$post->getLink()."'><i>".$post->getTitle()."</i></a>&rdquo;<br /><br />";
+	        $content_html .= "You've received a comment from ".$follower['name']." on your post titled &ldquo;<a href='".$post->getLink()."'><i>".$post->getTitle()."</i></a>&rdquo;<br /><br />";
 	        
 	        $content_html .= "&ldquo;<i>$comment_content</i>&rdquo;<br />";
 	        
