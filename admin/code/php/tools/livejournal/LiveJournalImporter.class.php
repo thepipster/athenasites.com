@@ -48,14 +48,15 @@ class LiveJournalImporter {
 
 		self::getCommentMeta($site_id);
 		self::getComments($site_id);
-					
+				
+		LogImport::create($site_id, $user_id, 'Livejournal');					
 	}
 				
 	// /////////////////////////////////////////////////////////////////////////////////
 
 	public static function setLastSyncTime($site_id){
-		self::$last_sync_time = PostsTable::getLastPostDate($site_id);
-		if (!isset(self::$last_sync_time)) self::$last_sync_time = "2000-01-01 00:00:01";
+		self::$last_sync_time = LogImport::getLastImport($site_id, 'Livejournal');
+		if (!isset(self::$last_sync_time)) self::$last_sync_time = "2011-01-01 00:00:01";
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////////////
