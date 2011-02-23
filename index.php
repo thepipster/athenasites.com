@@ -26,6 +26,8 @@ $year = '';
 $page_no = '';
 
 $domain = $parts['host'];
+$domain = str_replace('www.', '', $domain);
+
 $page = strtolower(basename($parts['path']));
 $path = strtolower(dirname($parts['path']));
 if ($path != "/")
@@ -84,7 +86,6 @@ if ($page == '' || (($ext == 'html') || ($ext == 'htm') || ($ext == 'php'))) {
 else {
 
     // Try to get a site id, if we can fint one then hit its 404 page!
-	$domain = str_replace('www.', '', $domain);
     $site = SitesTable::getSiteFromDomain($domain);
 
 	if ($DEBUG) die();
