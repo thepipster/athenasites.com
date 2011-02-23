@@ -20,18 +20,8 @@ require_once('themes/ApolloSites/header.php');
 <script src="code/js/utils/AthenaDialog.class.js" type="text/javascript"></script>
 <script src="code/js/remoteapi/SystemAPI.class.js" type="text/javascript"></script>
 
-<div id='leftCol'>
-	<?php
-	$post = PostsTable::getLatestPostFromCategory(PageManager::$site_id, 'news');	
-	?>
-	<h3><?= $post['title'] ?></h3>
-	<div id='leftColContents'>
-		<?= $post['content'] ?>
-	</div>
-</div><!-- leftCol -->
+<div align="left">
 
-
-<div id='rightCol'>
 	<div align='center' id='loginBox' style='padding-top:30px;'>
 		
 		<h3>Sign in to your site</h3>
@@ -50,6 +40,7 @@ require_once('themes/ApolloSites/header.php');
 			</table>				
 				
 			<br/>
+			
 			<div align='center'>				
 				<input type="submit" value="Login" onclick='ssLogin.onLogin()'>
 				<br/>
@@ -62,8 +53,19 @@ require_once('themes/ApolloSites/header.php');
 				
 		</form>
 		
+	</div><!-- loginBox -->
+
+
+
+	<?php
+	$post = PostsTable::getLatestPostFromCategory(PageManager::$site_id, 'news');	
+	?>
+	<h3><?= $post['title'] ?></h3>
+	<div id='newsContents' align="left">
+		<?= $post['content'] ?>
 	</div>
-</div><!-- rightCol -->
+	
+</div>
 
 <!-- Javascript code /////////////////////////////////////////////////////////////// -->
 
