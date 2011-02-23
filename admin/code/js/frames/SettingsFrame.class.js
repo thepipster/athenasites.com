@@ -90,7 +90,7 @@ var SettingsFrame = {
         AthenaDialog.backgroundMessage("Saving new value");
     	var para_id = parseInt(obj.attr('id').substr(7));
     	//DataStore.updateSitePara(para_id, DataStore.m_currentPageID, obj.val());
-        MediaAPI.setPagePara(para_id, obj.val(), 0, SettingsFrame.onTextInputParaSaved);
+        PagesAPI.setPagePara(para_id, obj.val(), 0, SettingsFrame.onTextInputParaSaved);
     },
         
     onTextInputParaSaved : function(theme_para_id, new_value, page_id){
@@ -322,7 +322,7 @@ var SettingsFrame = {
     onParaSelected : function(newParaVal){
         AthenaDialog.backgroundMessage("Saving new value");
         page_id = 0;
-        MediaAPI.setPagePara(SettingsFrame.m_themeParaID, newParaVal, page_id, SettingsFrame.onPagesParaChanged);
+        PagesAPI.setPagePara(SettingsFrame.m_themeParaID, newParaVal, page_id, SettingsFrame.onPagesParaChanged);
     },
 	
     // ////////////////////////////////////////////////////////////////////////////

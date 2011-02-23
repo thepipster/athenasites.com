@@ -15,10 +15,7 @@ var PagesFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 
     repaint : function(){
-		
-		$('#postTitle').hide();
-		$('#pageTitle').show();
-		
+				
         if (DataStore.m_pageList.length == 0){
             AthenaDialog.backgroundMessage("You currently have no pages, you can add a post using the side-bar");
             return;
@@ -32,15 +29,29 @@ var PagesFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 
     repaintData : function(pageObj){
+				
+		if (pageObj.status != 'Published'){
+			$('#pageTitleWrapper').html("<input id='pageTitle' type='text' value='"+pageObj.title+"' class='apolloDataInput'/>");
+			$('#pageTitle').typing({ stop: ssMain.onDataChange, delay: 400});
+		}
+		else {
+			var txt = "<span id='pageTitleDisplay'>" +pageObj.title + "</span>";
+			txt += "<button class='basic_button' onclick='PagesFrame.onToggleTitle()' title='Allows you to edit the title of a page that has already been published.'>Edit Title</button>";
+			$('#pageTitleWrapper').html(txt);
+		}
 		
-         $('#postSettings').hide();
-         $('#pageSettings').show();
+		//$('#pageTitle').html(pageObj.title);
 
+//        $('#pageTitle').val(pageObj.title);
+		
+        // Set prev content so we don't autosave before content actually changes
+        Pages.m_prevContent = '';
+
+		// Paint editor....
         oUtil.obj.css = DataStore.m_theme.cms_page_css;
         oUtil.obj.loadHTML(pageObj.content);
-
+        
         //$('#pageContentEditor').html(pageObj.content);
-        $('#pageTitle').val(pageObj.title);
         $('#pageBrowserTitle').val(pageObj.browser_title)
         $('#pageSlug').html(pageObj.slug);
         $('#pageLastEdit').html(pageObj.last_edit);
@@ -51,7 +62,7 @@ var PagesFrame = {
         $('#pageOrder').val(pageObj.page_order);
         $('#pageDesc').val(pageObj.description);
 
-        var txt = "<select id='pageTemplate' onchange=\"PagesFrame.onChange(); PagesFrame.paintThemeParas();\">";
+        txt = "<select id='pageTemplate' onchange=\"PagesFrame.onChange(); PagesFrame.paintThemeParas();\">";
         for (var i=0; i<DataStore.m_templateList.length; i++){
             if (DataStore.m_templateList[i].template_file == pageObj.template){
                 txt += "<option value='"+DataStore.m_templateList[i].template_file+"' selected>"+DataStore.m_templateList[i].template_name+"</option>";
@@ -70,18 +81,17 @@ var PagesFrame = {
         PagesFrame.paintParentPages(pageObj);
 					
         PagesFrame.paintThemeParas();
-        PagesFrame.updatePageLink(pageObj);
-						
+        
+        // Update page link
+        PagesFrame.updateViewPageLink(pageObj.url);
     },
-	
+		
     // ////////////////////////////////////////////////////////////////////////////
 
-    updatePageLink : function(pageObj){
-        $('#pageLink').html("View Page");
-        if (pageObj.path == "") pageObj.path = "/";
-        $('#pageLink').attr('href', 'http://' + defines.domain + pageObj.path + pageObj.slug);
-    },
-	
+	updateViewPageLink : function(url){
+		$('#pageLink').attr('href', url);
+	},
+			
     // ////////////////////////////////////////////////////////////////////////////
 	
     updateStatusColor : function(){
@@ -137,7 +147,7 @@ var PagesFrame = {
 
     onParaSelected : function(newParaVal){
         var page_id = DataStore.m_currentPageID;        
-        MediaAPI.setPagePara(PagesFrame.m_themeParaID, newParaVal, page_id, PagesFrame.onPagesParaChanged);
+        PagesAPI.setPagePara(PagesFrame.m_themeParaID, newParaVal, page_id, PagesFrame.onPagesParaChanged);
     },
 	
     // ////////////////////////////////////////////////////////////////////////////
@@ -335,7 +345,7 @@ var PagesFrame = {
     },
 	
     onDoDelete : function(){
-        MediaAPI.deletePage(ssMain.siteID, DataStore.m_currentPageID, PagesFrame.onPageDeleted);
+        PagesAPI.deletePage(ssMain.siteID, DataStore.m_currentPageID, PagesFrame.onPageDeleted);
     },
 	
     onPageDeleted : function(page_id){
@@ -355,7 +365,7 @@ var PagesFrame = {
 	/**
 	* Called whenever any page information is changed
 	*/	
-	onChange : function(){
+	onChange : function(callback){
 
 		//Logger.error('onchange!');
 
@@ -392,19 +402,20 @@ var PagesFrame = {
         
         // Update the page
         originalPage.content = oUtil.obj.getXHTMLBody();		
-        originalPage.title = $('#pageTitle').val();
+        originalPage.title = $('#pageTitle').val() || $('#pageTitleDisplay').html();
         originalPage.browser_title = $('#pageBrowserTitle').val();        
         originalPage.status = $('#pageStatusSelector').val();
         originalPage.parent_page_id = $('#pageParent').val();
         originalPage.template = $('#pageTemplate').val();
         originalPage.page_order = $('#pageOrder').val();
         originalPage.description = $('#pageDesc').val();
-        originalPage.slug = AthenaUtils.encodeSlug(originalPage.title);
-        originalPage.is_homepage = 0;
-        
+        //originalPage.slug = AthenaUtils.encodeSlug(originalPage.title);
+                
 	    DataStore.updatePage(originalPage);
-        PagesSidebarFrame.repaint();        
-        	
+	    // Force an immediate save
+	    DataStore.save();
+	    // Repaint side-bar
+        PagesSidebarFrame.repaint();                       	
 	},
 	
 	m_contentChangedTO : '',
@@ -474,7 +485,7 @@ var PagesFrame = {
             return;
         }
 						
-        MediaAPI.updatePage(ssMain.siteID, DataStore.m_currentPageID, title, content, status, template, parent_id, slug, order, ishome, desc, PagesFrame.onPageSaved)
+        PagesAPI.updatePage(ssMain.siteID, DataStore.m_currentPageID, title, content, status, template, parent_id, slug, order, ishome, desc, PagesFrame.onPageSaved)
 				
     },
 	
@@ -484,6 +495,17 @@ var PagesFrame = {
         PagesSidebarFrame.repaint();
     },
 */
+
+	onToggleTitle : function(){			
+		var title = $('#pageTitleDisplay').html();
+		AthenaDialog.confirm("As this page has been published, if you change the page title you will change the page's URL which can have a bad effect on the SEO for this page. This is really only an issue for pages that have been live for a while.<br/> <br/>By clicking ok, you will be able to edit the title and it will be saved automatically.", 
+			function(){
+				$('#pageTitleWrapper').html("<input id='pageTitle' type='text' value='"+title+"' class='apolloDataInput'/>");
+				$('#pageTitle').typing({ stop: ssMain.onDataChange, delay: 400});
+			}
+			);	
+	},
+	
     // ////////////////////////////////////////////////////////////////////////////
 
     saveChildPages : function(){

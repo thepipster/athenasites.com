@@ -198,7 +198,7 @@ class PostsTable {
     public static function getPublishedPostsFromMonthAndYear($site_id, $month, $year) {
         $date_from = date("Y-m-01 00:00:00", strtotime("$month/01/$year 00:00:00"));
         $date_end = date("Y-m-d 23:59:59", strtotime('-1 day',strtotime('+1 month',strtotime($date_from))));
-        $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts WHERE status = 'Published' created >= %s AND created <= %s", $site_id, $date_from, $date_end);
+        $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts WHERE status = 'Published' AND created >= %s AND created <= %s", $site_id, $date_from, $date_end);
         return DatabaseManager::getResults($sql);
     }
 				

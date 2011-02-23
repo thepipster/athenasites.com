@@ -211,11 +211,16 @@ var PostsSidebarFrame = {
     onSelectPost : function(post_id){
     	// Store the current content first!
 		PostsFrame.onChange();		
+        setTimeout(function(){PostsSidebarFrame.onDoChangePost(post_id)}, 200)
+        
+    },
+		    
+    onDoChangePost : function(post_id){
         DataStore.m_currentPostID = parseInt(post_id);
         PostsFrame.repaint();
         PostsSidebarFrame.paintPosts();
     }
-			
-// ////////////////////////////////////////////////////////////////////////////
+    			
+	// ////////////////////////////////////////////////////////////////////////////
 
 }

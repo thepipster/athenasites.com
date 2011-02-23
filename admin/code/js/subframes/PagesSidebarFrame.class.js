@@ -207,7 +207,7 @@ var PagesSidebarFrame = {
         var pageSlug = AthenaUtils.encodeSlug(title);
         var order = 0;
         var isHome = 0;
-        MediaAPI.addPage(ssMain.siteID, title, '', 'Draft', 0, 0, pageSlug, order, isHome, PagesSidebarFrame.onPageAdded);
+        PagesAPI.addPage(ssMain.siteID, title, '', 'Draft', 0, 0, pageSlug, order, isHome, PagesSidebarFrame.onPageAdded);
     },
 	
     onPageAdded : function(pageObj){
@@ -300,13 +300,17 @@ var PagesSidebarFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 		
     onSelectPage : function(page_id){
-    	// Store the current content first!
 		PagesFrame.onChange();		
+		// Load the new page, but have a small delay to make sure outgoing requests go out to server
+        setTimeout(function(){PagesSidebarFrame.onDoChangePage(page_id)}, 200)
+    },
+    
+    onDoChangePage : function(page_id){
         DataStore.m_currentPageID = parseInt(page_id);
         PagesFrame.repaint();
         PagesSidebarFrame.repaint();
     }
 			
-// ////////////////////////////////////////////////////////////////////////////
+	// ////////////////////////////////////////////////////////////////////////////
 
 }

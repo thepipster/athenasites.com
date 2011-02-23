@@ -4,114 +4,20 @@
 
         <td height='30px'>
             <div class='frameControlsBar'>
+
                 <span class='label'>Title:</span>
-                <input id='pageTitle' type='text' value='' class='apolloDataInput'/>
-                <input id='postTitle' type='text' value='' class='apolloDataInput'/>
-                <!--
-                <button class='basic_button' style='' onclick="ImagePickerDialog.show('#apollo_image_picker', PagesFrame.onImageSelected);">Insert Image</button>
-                -->
-                <a id='pageLink' href='' target='_blank' style='font-size:10px'>View Page</a>
+
+				<span id='pageTitleWrapper'></span>                				
+                <a class='basic_link_button' id='pageLink' href='' target='_blank'>View Page</a>
+                
             </div>
         </td>
 
         <td rowspan='2' width='250px' style='height:100%; padding:5px'>
 
-            <!-- Post settings sub-frame ////////////////////////////////////////////// -->
-
-            <div class='subframebox' id="postSettings" style="height:100%;width:255px;display:none">
-
-                <span class='title'>Post Settings</span>
-
-                <fieldset>
-                    <legend></legend>
-                    <!--
-                    <div class='postInfoLine'>
-                                            <span class='postLabel'>Slug:</span>
-                                            <span class='postData' id='postSlug'></span>
-                    </div>
-                    -->
-
-                    <div class='pageInfoLine'>
-                        <span class='pageLabel'>Status:</span>
-                        <span class='pageData' class='apolloDataInput'>
-                            <select id='postStatusSelector' class='apolloDataInput'>
-                                <option value='Published' class=''>Published</option>
-                                <option value='Draft' class=''>Draft</option>
-                                <!--
-                                <option value='Private' class=''>Private</option>
-                                -->
-                            </select>
-                        </span>
-                    </div>
-
-                    <div class='pageInfoLine'>
-                        <span class='pageLabel'>Last Edit:</span>
-                        <span class='pageData' id='postLastEdit'></span>
-                    </div>
-
-                    <div class='pageInfoLine'>
-                        <span class='pageLabel'>Created:</span>
-                        <span class='pageData' id='postCreated'></span>
-                    </div>
-
-                    <div class='pageInfoLine'>
-                        <span class='pageLabel'>Allow Comments:</span>
-                        <span class='pageData'>
-                            <select id='postCanCommentSelector' class='apolloDataInput'>
-                                <option value='1' selected>Yes</option>
-                                <option value='0'>No</option>
-                            </select>
-                        </span>
-                    </div>
-
-					<!--
-                    <div class='pageInfoLine'>
-                        <span class='pageLabel'>Import:</span>
-                        <a href='#' onclick="PostsFrame.paintTools()">Import Posts</a>
-                    </div>
-					-->
-					
-                    <div class='pageInfoLine'>
-                        <span class='pageLabel'>Comments:</span>
-                        <!-- <button class='basic_button' onclick="PostsFrame.paintTools()">Import Posts</button> -->
-                        <a href='#' onclick="CommentsEditDialog.show()">Edit Comments</a>
-                    </div>
-
-
-                    <div class='pageInfoLine'>
-                        <span class='pageLabel'>Controls:</span>
-                        <!--<button class='save_button' onclick="PostsFrame.onSavePost()">Save</button>-->
-                        <button class='delete_button' onclick="PostsFrame.onDeletePost()">Delete Post</button>
-                    </div>
-
-
-                </fieldset>
-
-                <fieldset>
-                    <legend></legend>
-
-                    <p><strong>Tags</strong><span class='subFrameCommand' onclick='PostsFrame.viewTags()' title='View and edit your tags'>&nbsp;(view all)</span></p>
-                    <div class='pageInfoLine'>
-                        <span class='pageData' id='postTags'><input id='postTag' type='text' value=''/></span>
-                        <span class='pageLabel'><button class='basic_button' onclick='PostsFrame.addTag();'>Add</button></span>
-                    </div>
-                    <div id='apollo_post_tags'></div>
-
-                    <p><strong>Categories</strong>
-                        <span class='subFrameCommand' onclick='PostsFrame.viewCategories()' title='View and edit your categories'>&nbsp;(view all)</span></p>
-                    <div class='pageInfoLine'>
-                        <span class='pageData' id='postCategories'><input id='postCategory' type='text' value=''/></span>
-                        <span class='pageLabel'><button class='basic_button' onclick='PostsFrame.addCategory()';>Add</button></span>
-                    </div>
-                    <div id='apollo_post_categories'></div>
-
-                </fieldset>
-
-            </div>
-
             <!-- Page settings sub-frame ////////////////////////////////////////////// -->
 
-            <div class='subframebox' id="pageSettings" style="height:100%;width:255px;display:none">
+            <div class='subframebox' id="pageSettings" style="height:100%;width:255px;">
 
                 <span class='title'>Page Settings</span>
 

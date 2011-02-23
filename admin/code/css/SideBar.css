@@ -84,10 +84,10 @@
     cursor: pointer;
 }
 
-#SideBar .page_depth_0 { padding-left: 10px;}
-#SideBar .page_depth_1 { padding-left: 25px; }
-#SideBar .page_depth_2 { padding-left: 40px; }
-#SideBar .page_depth_3 { padding-left: 55px; }
+#SideBar .page_depth_0 { padding-left: 10px; width:160px; !important}
+#SideBar .page_depth_1 { padding-left: 25px; width:150px; !important}
+#SideBar .page_depth_2 { padding-left: 40px; width:140px; !important}
+#SideBar .page_depth_3 { padding-left: 55px; width:130px; !important}
 
 #SideBar .page_name {
     padding: 0;

@@ -168,41 +168,6 @@ switch ($cmd) {
         deleteCategory($site_id, $category);
         break;
 
-
-    // PAGES /////////////////////////////////////////////////////////////////////////
-
-    case "deletePage":
-        $page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        deletePage($site_id, $page_id);
-        break;
-
-    case "updatePage":
-        $page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        $title = CommandHelper::getPara('title', true, CommandHelper::$PARA_TYPE_STRING);
-        $browser_title = CommandHelper::getPara('browser_title', true, CommandHelper::$PARA_TYPE_STRING);
-        $slug = CommandHelper::getPara('slug', true, CommandHelper::$PARA_TYPE_STRING);
-        $parent_page_id = CommandHelper::getPara('parent_page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        $content = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
-        $status = CommandHelper::getPara('status', true, CommandHelper::$PARA_TYPE_STRING);
-        $template = CommandHelper::getPara('template_id', true, CommandHelper::$PARA_TYPE_STRING);
-        $order = CommandHelper::getPara('order', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        $ishome = CommandHelper::getPara('ishome', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        $description = CommandHelper::getPara('desc', true, CommandHelper::$PARA_TYPE_STRING);
-        updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $template, $slug, $order, $ishome, $description, $browser_title);
-        break;
-
-    case "addPage":
-        $title = CommandHelper::getPara('title', true, CommandHelper::$PARA_TYPE_STRING);
-        $slug = CommandHelper::getPara('slug', true, CommandHelper::$PARA_TYPE_STRING);
-        $parent_page_id = CommandHelper::getPara('parent_page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        $content = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
-        $status = CommandHelper::getPara('status', true, CommandHelper::$PARA_TYPE_STRING);
-        $template = CommandHelper::getPara('template_id', true, CommandHelper::$PARA_TYPE_STRING);
-        $order = CommandHelper::getPara('order', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        $ishome = CommandHelper::getPara('ishome', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        addPage($site_id, $title, $parent_page_id, $content, $status, $template, $slug, $order, $ishome, $desc);
-        break;
-
     // MEDIA /////////////////////////////////////////////////////////////////////////
 
     case "addFolder":
@@ -269,15 +234,6 @@ switch ($cmd) {
         deleteMediaTag($site_id,  $tag);
         break;
 
-    // Para management..............
-
-    case "setPagePara" :
-        $page_id = CommandHelper::getPara('page_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        $theme_para_id = CommandHelper::getPara('theme_para_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
-        $new_value = CommandHelper::getPara('para_value', true, CommandHelper::$PARA_TYPE_STRING);
-        assignPagePara($site_id, $page_id, $theme_para_id, $new_value);
-        break;
-
     default :
         CommandHelper::sendTextMessage("Undefined command '$cmd'");
 }
@@ -302,9 +258,11 @@ function getAll($site_id) {
 
     $page_data = array();
     foreach ($page_list as $page) {
+    	$pageObj = new Page($page);
         $temp = $page;
         $temp['last_edit'] = date("m/d/Y H:i", strtotime($page['last_edit'])); // Convert to JS compatible date
         $temp['created'] = date("m/d/Y H:i", strtotime($page['created'])); // Convert to JS compatible date
+        $temp['url'] = $pageObj->getLink();
         $page_data[] = $temp;
     }
 
@@ -370,84 +328,18 @@ function getPostComplete($site_id, $post_id){
     $post = PostsTable::getPost($site_id, $post_id);
 
     if (isset($post)) {
+    	$postObj = new Post($post);
         $post['last_edit'] = date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
         $post['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
         $post['tags'] = PostsTable::getPostTags($site_id, $post['id']);
         $post['categories'] = PostsTable::getPostCategories($site_id, $post['id']);
         $post['content'] = ImportHelper::convertContent($post['content'], $post['source']);
+        $post['url'] = $postObj->getLink();
     }
     
     return $post;
 }
 
-// ///////////////////////////////////////////////////////////////////////////////////////
-//
-// Support functions
-//
-// ///////////////////////////////////////////////////////////////////////////////////////
-
-
-/**
- * If a page title has changed, then we need to update its path and all of its children
- */
-function updatePageAndChildPaths($site_id, $page_id) {
-
-    // Update this page's path
-    $path = getPath($site_id, $page_id);
-    PagesTable::updatePath($page_id, $site_id, $path);
-
-    // Update its kids
-    $children = PagesTable::getChildPages($site_id, $page_id);
-
-    if (isset($children)) {
-        foreach ($children as $child) {
-            updatePageAndChildPaths($site_id, $child['id']);
-        }
-    }
-}
-
-/**
- * Get the path for the given page
- */
-function getPath($site_id, $page_id) {
-
-    $path_array = array();
-    $path_array = buildPagePath($page_id, $site_id, $path_array);
-
-    $path = "/";
-    for ($i = count($path_array) - 1; $i >= 0; $i--) {
-        if ($path_array[$i] != '') {
-            $path .= $path_array[$i] . "/";
-        }
-    }
-
-    return $path;
-}
-
-function buildPagePath($page_id, $site_id, $path_array) {
-
-    $page = PagesTable::getPage($site_id, $page_id);
-
-    if ($page['parent_page_id'] == 0) {
-        return $path_array;
-    } else {
-        $parentPage = PagesTable::getPage($site_id, $page['parent_page_id']);
-        $path = substr($parentPage['slug'], 0, strrpos($parentPage['slug'], '.'));
-        //$path = $parentPage['slug'];
-        $path_array[] = strtolower($path);
-
-        if ($parentPage['parent_page_id'] == 0) {
-            return $path_array;
-        } else {
-            return buildPagePath($parentPage['id'], $site_id, $path_array);
-        }
-    }
-}
-
-// ///////////////////////////////////////////////////////////////////////////////////////
-// ///////////////////////////////////////////////////////////////////////////////////////
-// ///////////////////////////////////////////////////////////////////////////////////////
-// ///////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////
 //
 // Posts....
@@ -527,7 +419,6 @@ function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_c
 function addPost($site_id, $title, $content, $status, $slug, $can_comment) {
 
     $user_id = SecurityUtils::getCurrentUserID();
-    //$path = getPath($site_id, $page_id);
     $path = '';
 
     $post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, Post::encodeSlug($safe_title), 'apollo');
@@ -807,113 +698,6 @@ function deleteTag($site_id, $tag) {
     $msg['cmd'] = "deleteTag";
     $msg['result'] = 'ok';
     $msg['data'] = array('tag' => $tag);
-
-    CommandHelper::sendMessage($msg);
-}
-
-// ///////////////////////////////////////////////////////////////////////////////////////
-//
-// Pages....
-//
-// ///////////////////////////////////////////////////////////////////////////////////////
-
-function deletePage($site_id, $page_id) {
-
-    //Logger::debug("deletePage($site_id, $page_id)");
-
-    PagesTable::delete($site_id, $page_id);
-
-    $msg['cmd'] = "deletePage";
-    $msg['result'] = 'ok';
-    $msg['data'] = array('page_id' => $page_id);
-
-    CommandHelper::sendMessage($msg);
-}
-
-// ///////////////////////////////////////////////////////////////////////////////////////
-
-function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $status, $tamplate_name, $slug, $order, $ishome, $description, $browser_title) {
-
-    //Logger::debug("updatePage(page_id=$page_id, site_id=$site_id, title=$title, parent_page_id=$parent_page_id, content=$content, status=$status, tamplate_name=$tamplate_name, slug=$slug, path=$path)");
-
-    $user_id = SecurityUtils::getCurrentUserID();
-    $path = ''; //getPath($site_id, $page_id);
-	
-    $tags = array("\\n", "\\r");
-    $replace = '';
-    
-    $safe_content = str_ireplace($tags, $replace, $content);
-	$safe_content = stripslashes($safe_content);
-
-    $safe_title = str_ireplace($tags, $replace, $title);
-	$safe_title = stripslashes($safe_title);
-
-	Logger::debug(">>>> $tamplate_name - " . stripos($tamplate_name, 'home'));
-	
-//	if (stripos('_'.$tamplate_name, 'home')){
-//		Logger::debug("This is the home page!!");
-//		$ishome = 1;
-//		$slug = "index.html";
-//	}
-// TODO: is_blogpage being set inside PagesTable::update - should probably pull out to here?	
-//	else if (stripos('_'.$tamplate_name, 'blog')){
-//		Logger::debug("This is the blog page!!");
-//		$isblog = 1;
-//		$slug = "blog";
-//	}
-//	else {
-		$slug = Page::encodeSlug($safe_title);
-//	}
-	 
-    PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $safe_title, $tamplate_name, $slug, $path, $order, $ishome, $description, $browser_title);
-
-
-    $page = PagesTable::getPage($site_id, $page_id);
-
-    if (isset($page)) {
-        $page['last_edit'] = date("m/d/Y H:i", strtotime($page['last_edit'])); // Convert to JS compatible date
-        $page['created'] = date("m/d/Y H:i", strtotime($page['created'])); // Convert to JS compatible date
-    }
-
-    // Update the path for all the page children, as they may have changed
-    //updateChildrensPath($site_id, $page_id);
-    updatePageAndChildPaths($site_id, $page_id);
-
-    $page = PagesTable::getPage($site_id, $page_id);
-
-    $msg['cmd'] = "updatePage";
-    $msg['result'] = $page_id > 0 ? 'ok' : 'fail';
-    $msg['data'] = array('page' => $page);
-
-    CommandHelper::sendMessage($msg);
-}
-
-// ///////////////////////////////////////////////////////////////////////////////////////
-
-function addPage($site_id, $title, $parent_page_id, $content, $status, $tamplate_name, $slug, $order, $ishome) {
-
-    //Logger::debug("addPage(site_id=$site_id, title=$title, parent_page_id=$parent_page_id, content=$content, status=$status, tamplate_name=$tamplate_name, slug=$slug, path=$path)");
-
-    $user_id = SecurityUtils::getCurrentUserID();
-    //$path = getPath($site_id, $page_id);
-    $path = '';
-
-    $tags = array("\\n", "\\r");
-    $replace = '';
-    $safe_content = str_ireplace($tags, $replace, $content);
-    $safe_title = str_ireplace($tags, $replace, $title);
-
-    $page_id = PagesTable::create($user_id, $site_id, $parent_page_id, $safe_content, $status, $safe_title, $tamplate_name, Page::encodeSlug($safe_title), $path, $order, $ishome);
-
-    $page = PagesTable::getPage($site_id, $page_id);
-    if (isset($page_data)) {
-        $page['last_edit'] = date("m/d/Y H:i", strtotime($page['last_edit'])); // Convert to JS compatible date
-        $page['created'] = date("m/d/Y H:i", strtotime($page['created'])); // Convert to JS compatible date
-    }
-
-    $msg['cmd'] = "addPage";
-    $msg['result'] = $page_id > 0 ? 'ok' : 'fail';
-    $msg['data'] = array('page' => $page);
 
     CommandHelper::sendMessage($msg);
 }
@@ -1271,25 +1055,6 @@ function deleteMedia($site_id, $media_id) {
 
     $msg['data'] = array('media_id'=>$media_id);
     
-    CommandHelper::sendMessage($msg);
-}
-
-// ///////////////////////////////////////////////////////////////////////////////////////
-// ///////////////////////////////////////////////////////////////////////////////////////
-// ///////////////////////////////////////////////////////////////////////////////////////
-
-function assignPagePara($site_id, $page_id, $theme_para_id, $new_value) {
-
-    Logger::debug("assignPagePara($site_id, $page_id, $theme_para_id, $new_value)");
-
-    $id = PageParasTable::setParaValue($site_id, $page_id, $theme_para_id, $new_value);
-
-    $msg = array();
-
-    $msg['cmd'] = 6;
-    $msg['result'] = $id > 0 ? 'ok' : 'fail';
-    $msg['data'] = array('theme_para_id' => $theme_para_id, 'new_value' => $new_value, 'page_id' => $page_id);
-
     CommandHelper::sendMessage($msg);
 }
 

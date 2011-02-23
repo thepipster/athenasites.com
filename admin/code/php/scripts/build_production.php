@@ -41,6 +41,7 @@ $js_common_list = array(
 	"$base_dir/code/js/remoteapi/StatsAPI.class.js",
 	"$base_dir/code/js/remoteapi/SystemAPI.class.js",
 	"$base_dir/code/js/remoteapi/BlogAPI.class.js",
+	"$base_dir/code/js/remoteapi/PagesAPI.class.js",
 	"$base_dir/code/js/remoteapi/MediaAPI.class.js",
 	"$base_dir/code/js/remoteapi/GalleryAPI.class.js",	
 	// Dialogs...

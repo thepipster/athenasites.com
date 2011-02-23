@@ -398,6 +398,7 @@ var DataStore = {
                 DataStore.m_pageList[i].is_blogpage = pageObj.is_blogpage;
                 DataStore.m_pageList[i].page_order = pageObj.page_order;
                 DataStore.m_pageList[i].description = pageObj.description;
+                DataStore.m_pageList[i].url = pageObj.url;
 
 				// Flag as changed 
                 DataStore.m_pageList[i].isChanged = 1;
@@ -455,6 +456,7 @@ var DataStore = {
         temp.page_order = pageObj.page_order;
         temp.description = pageObj.description;
         temp.browser_title = pageObj.browser_title;
+        temp.url = pageObj.url;
 
         DataStore.m_pageList.push(temp);
     },
@@ -647,7 +649,7 @@ var DataStore = {
 	*/ 
 	savePage : function(pageObj){
 			
-        MediaAPI.updatePage(ssMain.siteID, 
+        PagesAPI.updatePage(ssMain.siteID, 
         					pageObj.id, 
         					pageObj.title, 
         					pageObj.content, 
