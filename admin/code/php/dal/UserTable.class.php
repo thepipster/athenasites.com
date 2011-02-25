@@ -93,6 +93,17 @@ class UserTable {
 
     // ///////////////////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Get a single user for the given site, if there are multiple users just return the first
+	*/
+    public static function getUserFromSiteID($site_id) {
+        $sql = DatabaseManager::prepare("SELECT * FROM apollo_UserToSite uts INNER JOIN apollo_Users u
+            WHERE uts.user_id = u.id AND uts.site_id = %d", $site_id);
+        return DatabaseManager::getSingleResult($sql);
+    }
+
+    // ///////////////////////////////////////////////////////////////////////////////////////
+
     /**
      * Get the list of users for this site
      * @param int $site_id

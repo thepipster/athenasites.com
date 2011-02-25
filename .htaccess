@@ -4,7 +4,10 @@ RewriteEngine On
 #RewriteCond %{HTTP_HOST} ^www\.(.*) [NC]
 #RewriteRule (.*) //%1/$1 [L,R=301]
 
+#
 # Hard coding for CGP - LEAVE ALONE!!!!!!!!!!!!
+#
+
 RewriteRule ^mediatag/([^/\.]+)/?$ /admin/getimages.php?tag=$1 [L]
 
 RewriteCond %{HTTP_HOST} ^charlottegeary.com
@@ -31,6 +34,7 @@ RewriteRule ^wedding-ideas/([^/\.]+)/?.html$ /admin/themes/Prometheus-CGP4/getim
 RewriteCond %{HTTP_HOST} ^www.charlottegeary.com
 RewriteRule ^weddingideas/([^/\.]+)/?.html$ /admin/themes/Prometheus-CGP4/getimages.php?tag=$1 [L]
 
+
 # http://example.com/feed/ - defaults to rss
 # http://example.com/feed/rss/
 # http://example.com/feed/rss2/
@@ -52,7 +56,7 @@ RewriteRule ^(.*)$ /admin/feed.php?type=atom [L]
 
 RewriteCond $1 ^(.*)/feed$ [OR]
 RewriteCond $1 ^(.*)/feed/$ 
-RewriteRule ^(.*)$ /admin/feed.php?type=rss [L]
+RewriteRule ^(.*)$ /admin/feed.php?type=rss2 [L]
 
 
 # robots.txt redirect

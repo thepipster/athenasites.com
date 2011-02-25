@@ -62,7 +62,14 @@ class SitesTable {
 
 	// /////////////////////////////////////////////////////////////////////////////////
 
-	public static function getSites(){
+	public static function getSites($id){
+		$sql = DatabaseManager::prepare("SELECT * FROM apollo_Sites WHERE id = %d", $id);			
+		return DatabaseManager::getResults($sql);				
+	}
+
+	// /////////////////////////////////////////////////////////////////////////////////
+
+	public static function getAllSites(){
 		$sql = DatabaseManager::prepare("SELECT * FROM apollo_Sites ORDER BY id");			
 		return DatabaseManager::getResults($sql);				
 	}
@@ -128,13 +135,17 @@ class SitesTable {
 	
 	// /////////////////////////////////////////////////////////////////////////////////
 
-	public static function updateDomain($site_id, $domain){
-		$sql = DatabaseManager::prepare("UPDATE apollo_Sites SET domain = %s WHERE id = %d AND is_live = 1", $domain, $site_id);			
+	public static function updateDomain($oldDomain, $newDomain){
+		$sql = DatabaseManager::prepare("UPDATE apollo_Sites SET domain = %s WHERE domain = %s", $newDomain, $oldDomain);			
+		Logger::debug($sql);
+		return DatabaseManager::update($sql);				
+	}
+
+	public static function updateLive($domain, $is_live){
+		$sql = DatabaseManager::prepare("UPDATE apollo_Sites SET is_live = %d WHERE domain = %s", $is_live, $domain);			
 		return DatabaseManager::update($sql);				
 	}
 	
-
-
 	// /////////////////////////////////////////////////////////////////////////////////
 }
 ?>

@@ -2,8 +2,6 @@
 
 require_once("code/php/setup.php");
 
-Logger::echoLog();
-
 PageManager::init();
 
 $type = CommandHelper::getPara('type', false, CommandHelper::$PARA_TYPE_STRING);
@@ -57,66 +55,43 @@ $no_posts = PostsTable::getNoPosts($site_id);
 // This is a minimum example of using the Universal Feed Generator Class
 //include("FeedWriter.php");
 
-//Creating an instance of FeedWriter class. 
-if ($type == 'rss'){
-	$TestFeed = new FeedWriter(RSS1);
-	$TestFeed->setLink($url.'/feed/rss');
-}
-elseif ($type == 'rss2'){
-	$TestFeed = new FeedWriter(RSS2);
-	$TestFeed->setLink($url.'/feed/rss2');
-}
-elseif ($type == 'atom'){
-	$TestFeed = new FeedWriter(ATOM);
-	$TestFeed->setLink($url.'/feed/atom');
-}
+Logger::debug("Feed Generator: Blog mode = $mode type = $type");
 
 if ($mode == 'BLOG'){
-	
-	$TestFeed->setTitle('Testing & Checking the RSS writer class');
-	$TestFeed->setDescription('This is test of creating a RSS 2.0 feed Universal Feed Writer');
-	
-	//Setting the channel elements
-	
-	//Use wrapper functions for common channel elements
-	
-	//Image title and link must match with the 'title' and 'link' channel elements for valid RSS 2.0
-	//$TestFeed->setImage('Testing the RSS writer class','http://www.ajaxray.com/projects/rss','http://www.rightbrainsolution.com/images/logo.gif');
-	
-	if (isset($post_id) && $post_id > 0){
-	
-		$posts = PostsTable::getRecentPosts($site_id, 20);
-		
-		foreach($posts as $post){
-	
-			$link = "http://" . $_SERVER['HTTP_HOST'] . "/". $blog_base_url . $post['path'] . $post['slug'];
-	
-		    //Create an empty FeedItem
-		    $newItem = $TestFeed->createNewItem();
-		
-		    //Add elements to the feed item    
-		    $newItem->setTitle($post['title']);
-		    $newItem->setLink($link);
-		    $newItem->setDate($post['created']);
-		    $newItem->setDescription($post['content']);
-			   	
-		    //Now add the feed item	
-		    $TestFeed->addItem($newItem);
-		    
-		    Logger::dump($post);
-			
-		}
-		
-	
-	
-	}
 
+	if ($blogPage['browser_title'] == ''){
+		$title = $blogPage['title'];
+	}
+	else {
+		$title = $blogPage['browser_title'];
+	}
+	
+	$description = PageParasTable::getParaValue(0, 1, $site_id);
+	
+	switch($type){
+		case 'rss': break;
+		case 'rss2': FeedGenerator::blogRSS2($site_id, $title, $description, $url); break;
+		case 'atom': FeedGenerator::blogAtom($site_id, $title, $description, $url); break;
+	}
+	//Creating an instance of FeedWriter class. 
+	/*
+	if ($type == 'rss'){
+		//$TestFeed = new FeedWriter(RSS1);
+		//$TestFeed->setLink($url.'/feed/rss');
+	}
+	elseif ($type == 'rss2'){
+		//$TestFeed = new FeedWriter(RSS2);
+		//$TestFeed->setLink($url.'/feed/rss2');
+		FeedGenerator::blogRSS2($site_id);
+	}
+	elseif ($type == 'atom'){
+		//$TestFeed = new FeedWriter(ATOM);
+		//$TestFeed->setLink($url.'/feed/atom');
+	}
+	*/
+	
 }
 
-
-//OK. Everything is done. Now genarate the feed.
-
-$TestFeed->genarateFeed();
 
 ?>
 

@@ -13,9 +13,9 @@ $user = UserTable::getUser($user_id);
 // Get the site id's for this user
 // If this is a super-user, then just get all the site id's
 if ($user_level == 1) {
-    $site_list = SitesTable::getSites();
+    $site_list = SitesTable::getAllSites();
 } else {
-    $site_list = SitesTable::getSitesForUser($user_id);
+    $site_list = SitesTable::getAllSitesForUser($user_id);
 }
 
 //Logger::debug("User has " . count($site_list) . " sites!");

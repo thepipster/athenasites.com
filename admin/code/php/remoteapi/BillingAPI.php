@@ -185,7 +185,38 @@ function changeDomain($site_id, $newDomain){
 	
 	$safeNewDomain = StringUtils::sanitizeDomain($newDomain);
 	
-	SitesTable::updateDomain($site_id, $safeNewDomain);
+	$baseDomain = SitesTable::getDomain(1);
+	$currentSites = SitesTable::getSites($site_id);
+	
+	Logger::debug("Base domain: $baseDomain");
+	
+	// They have not changed their site domain yet, so just add the new one and set the old one as not live
+	if (count($currentSites) == 1){
+	
+		$oldSite = $currentSites[0];
+		$new_site_id = SitesTable::create($oldSite['id'], $safeNewDomain, '', $oldSite['theme_id']);
+		
+		SitesTable::updateLive($new_site_id, 1);
+		
+		// Flip the old site to not live		
+		SitesTable::updateLive($oldSite['domain'], 0);
+	}
+	else {
+		foreach($currentSites as $oldSite){
+			// Check if this is not their base xxx.apollosites.com domain, and update if so
+			if (strpos($oldSite['domain'], $baseDomain) === false){
+				Logger::debug("Changing " . $oldSite['domain'] . " to $safeNewDomain"); 
+				SitesTable::updateDomain($oldSite['domain'], $safeNewDomain);
+				SitesTable::updateLive($oldSite['domain'], 1);
+			}
+			else {
+				Logger::debug("Setting " . $oldSite['domain'] . " as NOT live!"); 
+				// Flip the old site to not live		
+				SitesTable::updateLive($oldSite['domain'], 0);
+			}
+		}
+	}
+
 
     $msg['data'] = array('domain' => $safeNewDomain);
 		

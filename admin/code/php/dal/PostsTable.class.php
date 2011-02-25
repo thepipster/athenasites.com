@@ -170,7 +170,7 @@ class PostsTable {
 	* Get the N most recent posts for the given site
 	*/
     public static function getRecentPosts($site_id, $max_no) {
-        $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts ORDER BY created LIMIT %d", $site_id, $max_no);
+        $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts ORDER BY created DESC LIMIT %d", $site_id, $max_no);
         return DatabaseManager::getResults($sql);
     }
 
