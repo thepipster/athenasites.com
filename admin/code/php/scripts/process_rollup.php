@@ -67,9 +67,21 @@ foreach ($site_list AS $site) {
         // Get the combined stats across all pages...
         //
 
-        $all_page_views = DatabaseManager::getVar("SELECT count(site_id) FROM stats_PageViews WHERE site_id = $site_id AND view_date > '$date_from' AND view_date <= '$date_end' AND is_bot = 0");
+        $all_page_views = DatabaseManager::getVar("SELECT count(site_id) 
+        	FROM stats_PageViews 
+        	WHERE site_id = $site_id 
+            AND page_id != 0
+        	AND view_date > '$date_from' 
+        	AND view_date <= '$date_end' 
+        	AND is_bot = 0");
 
-        $all_unique_views = DatabaseManager::getVar("SELECT count(distinct(ip_long)) FROM stats_PageViews WHERE site_id = $site_id AND view_date > '$date_from' AND view_date <= '$date_end' AND is_bot = 0");
+        $all_unique_views = DatabaseManager::getVar("SELECT count(distinct(ip_long)) 
+	        FROM stats_PageViews 
+	        WHERE site_id = $site_id 
+            AND page_id != 0
+	        AND view_date > '$date_from' 
+	        AND view_date <= '$date_end' 
+	        AND is_bot = 0");
 
         DatabaseManager::insert("INSERT INTO stats_{$site_id}_RollupPageViews (rollup_date, page_views, unique_visitors, page_title, keywords, page_id)
                             VALUES ('$day_date', $all_page_views, $all_unique_views, 'all', '', 0)");
