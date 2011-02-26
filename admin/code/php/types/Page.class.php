@@ -24,10 +24,7 @@ class Page {
 	
 	public $isHome = 0;
 	public $isBlog = 0;
-			
-	/** The site base URL, e.g. 'http://charlottegeary.com/' */
-	private static $base_url = '';
-			
+						
 	// /////////////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -42,7 +39,7 @@ class Page {
 	// /////////////////////////////////////////////////////////////////////////////////
 	
 	public function get($site_id, $page_id){	
-		$this->fromDB(PagesTable::getPage($site_id, $ppage_id));
+		$this->fromArray(PagesTable::getPage($site_id, $ppage_id));
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////////////
@@ -73,28 +70,7 @@ class Page {
 	// /////////////////////////////////////////////////////////////////////////////////
 	
 	public function getLink(){	
-		return self::getBaseURL() . $this->getPath() . $this->getSlug();
-	}
-	
-	// /////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	* Get the base URL for this site
-	*/ 
-	public static function getBaseURL(){
-	
-		if (self::$base_url == ''){
-			
-			$domain = str_replace('www.', '', $_SERVER['HTTP_HOST']);
-		    $site = SitesTable::getSiteFromDomain($domain);
-			$site_id = $site['id'];
-		        
-	        self::$base_url = "http://" . $site['domain'] ;
-			
-			Logger::debug("Updating base url = " . self::$base_url);
-		}
-		
-		return self::$base_url;
+		return Site::getBaseURL() . $this->getPath() . $this->getSlug();
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////////////

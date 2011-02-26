@@ -23,6 +23,7 @@ $url = str_replace('/feed', '', $url);
 $parts = parse_url($url);
 $domain = $parts['host'];
 $page = strtolower(basename($parts['path']));
+$path = strtolower(dirname($parts['path']));
 
 $mode = 'BLOG';
 if (strpos($url, "/".PageManager::$blog_base_url."/") !== false){
@@ -69,27 +70,33 @@ if ($mode == 'BLOG'){
 	$description = PageParasTable::getParaValue(0, 1, $site_id);
 	
 	switch($type){
-		case 'rss': break;
+		//case 'rss': break;
 		case 'rss2': FeedGenerator::blogRSS2($site_id, $title, $description, $url); break;
-		case 'atom': FeedGenerator::blogAtom($site_id, $title, $description, $url); break;
+		//case 'atom': FeedGenerator::blogAtom($site_id, $title, $description, $url); break;
 	}
-	//Creating an instance of FeedWriter class. 
-	/*
-	if ($type == 'rss'){
-		//$TestFeed = new FeedWriter(RSS1);
-		//$TestFeed->setLink($url.'/feed/rss');
-	}
-	elseif ($type == 'rss2'){
-		//$TestFeed = new FeedWriter(RSS2);
-		//$TestFeed->setLink($url.'/feed/rss2');
-		FeedGenerator::blogRSS2($site_id);
-	}
-	elseif ($type == 'atom'){
-		//$TestFeed = new FeedWriter(ATOM);
-		//$TestFeed->setLink($url.'/feed/atom');
-	}
-	*/
 	
+}
+else {
+
+    $post_path = $blog_url . $path . "/";
+    $post_path = substr($path, (strlen($blog_url))) . "/";
+    // Match the page against all posts, to see if this is a request for a blog post page
+    $post = PostsTable::getPostFromSlug($site_id, $post_path, $page);
+	
+	//Logger::debug("Blog URL = $blog_url Post path = $post_path Page = $page");
+	
+    // If the post is set then we're hitting a single post. Otherwise, we see if we're hitting
+    // either the blog or a regular page
+    if (isset($post)) {
+	
+		$post_id = $post['id'];
+				
+		switch($type){
+			//case 'rss': break;
+			case 'rss2': FeedGenerator::postRSS2($site_id, $post_id); break;
+			//case 'atom': FeedGenerator::postAtom($site_id, $post_id); break;
+		}
+	}
 }
 
 

@@ -406,7 +406,7 @@ function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_c
     $msg['result'] = 'ok';
     $msg['data'] = array('post' => $post);
 
-	Logger::dump(PostsTable::getPost($site_id, $post_id));
+	//Logger::dump(PostsTable::getPost($site_id, $post_id));
 	
     CommandHelper::sendMessage($msg);
 }

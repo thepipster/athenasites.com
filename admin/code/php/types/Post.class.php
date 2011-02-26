@@ -24,10 +24,19 @@ class Post {
 	public $canComment = 0;
 	
 	public $postLink;
+	
+	/** List of category tags */
+	public $categories = '';
+
+	/** List of category tags */
+	public $tags = '';
+	
+	/** List of Comment objects of approved comments for this post */
+	private $approvedComments = '';
 		
 	/** The blog base URL, e.g. 'http://charlottegeary.com/blog/' */
 	public static $blog_base_url = '';
-	
+		
 	// /////////////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -118,19 +127,16 @@ class Post {
 	
 		if (self::$blog_base_url == ''){
 			
-			$domain = str_replace('www.', '', $_SERVER['HTTP_HOST']);
-		    $site = SitesTable::getSiteFromDomain($domain);
-			$site_id = $site['id'];
-
 	        // Get blog info....
-	        $blogPage = PagesTable::getBlogpage($site_id);
+	        $blogPage = PagesTable::getBlogpage(Site::getSiteID());
 		        
-	        self::$blog_base_url = "http://" . $site['domain'] . $blogPage['path'] . $blogPage['slug'];
+	        self::$blog_base_url = Site::getBaseURL() . $blogPage['path'] . $blogPage['slug'];
 			
 		}
 		
 		return self::$blog_base_url;
 	}
+
 		
 	// /////////////////////////////////////////////////////////////////////////////////
 
@@ -146,6 +152,8 @@ class Post {
 	public function getDateCreated(){ return $this->dateCreated; }	
 	public function getDateLastEdit(){ return $this->dateLastEdit; }	
 	
+    // ////////////////////////////////////////////////////////////////////
+
 	public function getDescription(){ 
 		if ($this->excerpt == '') {
 			return $this->content;
@@ -153,6 +161,48 @@ class Post {
 		else {
 			return $this->excerpt;
 		}
+	}
+
+    // ////////////////////////////////////////////////////////////////////
+
+	public function getCategories(){
+	
+		if ($this->categories == ''){
+			$this->categories = PostsTable::getPostCategories(Site::getSiteID(), $this->id);
+		}
+		
+		return $this->categories;
+	}
+
+    // ////////////////////////////////////////////////////////////////////
+
+	public function getTags(){
+
+		if ($this->tags == ''){
+			$this->tags = PostsTable::getPostTags(Site::getSiteID(), $this->id);
+		}
+		
+		return $this->tags;
+	}
+	
+    // ////////////////////////////////////////////////////////////////////
+
+	public function getApprovedComments(){
+
+		if ($this->approvedComments == ''){
+			
+			$this->approvedComments = array();
+			$comments = CommentsTable::getCommentsForPostForStatus(Site::getSiteID(), $this->id, 'Approved');
+			
+			if (isset($comments)){
+				foreach($comments as $comment){
+					$this->approvedComments[] = new Comment($comment);	
+				}
+				//$this->approvedComments = CommentsTable::getCommentsForPostForStatus(Site::getSiteID(), $this->id, 'Approved');
+			}
+		}
+		
+		return $this->approvedComments;
 	}
 
     // ////////////////////////////////////////////////////////////////////

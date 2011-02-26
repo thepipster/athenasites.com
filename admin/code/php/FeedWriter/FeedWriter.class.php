@@ -39,7 +39,7 @@
 		$this->channels['link']         = 'http://www.ajaxray.com/blog';
 				
 		//Tag names to encode in CDATA
-		$this->CDATAEncoding = array('description', 'content:encoded', 'summary');
+		$this->CDATAEncoding = array('description', 'content:encoded', 'summary', 'category');
 	}
 
 	// Start # public functions ---------------------------------------------

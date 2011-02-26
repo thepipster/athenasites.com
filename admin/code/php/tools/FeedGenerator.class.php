@@ -56,6 +56,14 @@ class FeedGenerator {
 			//Attributes have to passed as array in 3rd parameter
 			$newItem->addElement('guid', $postObj->getLink(), array('isPermaLink'=>'true'));
 			
+			// Add categories
+			$cats = $postObj->getCategories();
+			if (isset($cats)){			
+				foreach($cats as $cat){
+					$newItem->addElement('category', $cat);
+				}
+			}
+			
 			//Now add the feed item
 			$TestFeed->addItem($newItem);
 			  			
@@ -65,10 +73,70 @@ class FeedGenerator {
 		$TestFeed->genarateFeed();
 							
 	}
-	
-	
-	
+		
+	// ////////////////////////////////////////////////////////////////////////////////////////////////
 
+	/**
+	* Create a rss2 feed for a specific post
+	* @param $site_id
+	* @param $post_id
+	* @param $title The post title
+	* @param $description The site's description
+	* @param $url The blog URL
+	*/
+	public static function postRSS2($site_id, $post_id){
+	
+		// Get the post
+		$postObj = new Post();
+		$postObj->get($site_id, $post_id);
+
+
+		$TestFeed = new FeedWriter(RSS2);
+	
+		//Setting the channel elements
+		$TestFeed->setTitle($postObj->getTitle());
+		$TestFeed->setLink($postObj->getLink());
+		//$TestFeed->setDescription($post->getExcerpt());
+		$TestFeed->setDescription('');
+				
+		$TestFeed->setChannelElement('language', 'en-us');
+		$TestFeed->setChannelElement('pubDate', date(DATE_RSS, strtotime($postObj->getDateCreated())));
+		
+		// Get comments
+		$comments = $postObj->getApprovedComments();
+				
+		if (isset($comments)){
+			foreach($comments as $commentObj){
+			
+				$followerObj = $commentObj->getFollower();
+				
+				//Create an empty FeedItem
+				$newItem = $TestFeed->createNewItem();
+				
+				//Add elements to the feed item
+				//Use wrapper functions to add common feed elements
+				$newItem->setTitle("By: " . $followerObj->getName());
+				$newItem->setLink($postObj->getLink());
+				
+				//The parameter is a timestamp for setDate() function
+				$newItem->setDate( strtotime($commentObj->getDateCreated()) );
+				$newItem->setDescription($commentObj->getContent());
+								
+				$newItem->addElement('author', $followerObj->getEmail() . ' ('.$followerObj->getName().')');
+							
+				//Now add the feed item
+				$TestFeed->addItem($newItem);
+				  			
+			}
+		}							
+					
+		//OK. Everything is done. Now genarate the feed.
+		$TestFeed->genarateFeed();
+							
+	}
+		
+	// ////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	* Create a blog atom feed
 	* @param $site_id

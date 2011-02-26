@@ -120,7 +120,7 @@ class Logger {
 		}
 		
 		// If set, email ERRORs or FATAL message...		
-		if (self::$emailLog && ($level == self::$ERROR || $level == self::$FATAL)){
+		if (self::$emailLog && ($level == self::$ERROR || $level == self::$FATAL) && !DEV_MODE){
 			EmailQueueTable::add(PageManager::$site_id, "mike@apollosites.com", "Mike", "logger@apollosites.com", "Apollo Logger", "Logger", $html_msg, $msg);
 		}
 		
@@ -187,7 +187,7 @@ class Logger {
         }
 
 		// If set, email ERRORs or FATAL message...		
-		if (self::$emailLog && $errno == E_USER_ERROR){
+		if (self::$emailLog && $errno == E_USER_ERROR && !DEV_MODE){
 			EmailQueueTable::add(PageManager::$site_id, "mike@apollosites.com", "Mike", "logger@apollosites.com", "Apollo Logger", "Logger", $html_msg, $msg);
 		}
 
