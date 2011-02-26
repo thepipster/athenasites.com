@@ -57,7 +57,7 @@ switch ($cmd) {
 function getPageStatsList($site_id, $no_days){
 
     $date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $no_days, date("Y")));
-	$sql = DatabaseManager::prepare("SELECT page_title, post_id, page_id, sum(page_views) as page_views FROM stats_%d_RollupPageViews WHERE rollup_date > %s AND page_title != 'all' GROUP BY page_id, post_id ORDER BY page_views DESC", $site_id, $date_from);
+	$sql = DatabaseManager::prepare("SELECT page_title, post_id, page_id, sum(page_views) as page_views FROM stats_%d_RollupPageViews WHERE rollup_date > %s AND page_title != 'all' AND page_id > 0 GROUP BY page_id, post_id ORDER BY page_views DESC", $site_id, $date_from);
 	$page_list = DatabaseManager::getResults($sql);
 	
     $msg['cmd'] = "getPageStatsList";
@@ -155,7 +155,7 @@ function getSiteSummaryStats($site_id, $no_days) {
 
     if (isset($page_views)) {
         foreach ($page_views as $view) {
-            if ($view['page_title'] == 'all') {
+            if ($view['page_title'] == 'all' && $view['page_title'] != '404 Page') {
                 $temp = array();
                 $temp['dt'] = $view['rollup_date'];
                 $temp['uv'] = $view['unique_visitors'];
