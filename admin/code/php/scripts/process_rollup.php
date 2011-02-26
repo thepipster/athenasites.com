@@ -112,6 +112,7 @@ foreach ($site_list AS $site) {
             WHERE views.site_id = $site_id
             AND views.page_id = pages.id
             AND views.post_id = 0
+            AND views.page_id != 0
             AND views.view_date > '$date_from'
             AND views.view_date <= '$date_end'
             AND views.is_bot = 0
@@ -139,6 +140,7 @@ foreach ($site_list AS $site) {
             WHERE views.site_id = $site_id
             AND views.post_id = posts.id
             AND views.post_id != 0
+            AND views.page_id != 0
             AND views.view_date > '$date_from'
             AND views.view_date <= '$date_end'
             AND views.is_bot = 0
