@@ -106,13 +106,14 @@ foreach ($site_list AS $site) {
 		//
 		// Add page views.....
 		//	
+		
         $sql = "SELECT pages.title as title, views.page_id as page_id, views.post_id as post_id, count(distinct(ip_long)) as unique_views, count(site_id) as page_views
             FROM stats_PageViews views
             INNER JOIN athena_{$site_id}_Pages pages
             WHERE views.site_id = $site_id
             AND views.page_id = pages.id
             AND views.post_id = 0
-            AND views.page_id != 0
+            AND views.page_id > 0
             AND views.view_date > '$date_from'
             AND views.view_date <= '$date_end'
             AND views.is_bot = 0
@@ -130,17 +131,12 @@ foreach ($site_list AS $site) {
 		// Get post views
 		//
 		
-		//
-		// Add page views.....
-		//
-		
 		$sql = "SELECT posts.title as title, views.page_id as page_id, views.post_id as post_id, count(distinct(ip_long)) as unique_views, count(site_id) as page_views
             FROM stats_PageViews views
             INNER JOIN athena_{$site_id}_Posts posts
             WHERE views.site_id = $site_id
             AND views.post_id = posts.id
             AND views.post_id != 0
-            AND views.page_id != 0
             AND views.view_date > '$date_from'
             AND views.view_date <= '$date_end'
             AND views.is_bot = 0
