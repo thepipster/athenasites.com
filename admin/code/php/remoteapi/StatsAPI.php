@@ -188,10 +188,10 @@ function getPageStats($site_id, $page_id, $post_id, $no_days){
     }
     
 	if (isset($post_id) && $post_id > 0){
-        $sql = DatabaseManager::prepare("SELECT * FROM stats_%d_RollupPageViews WHERE post_id = %d AND rollup_date > %s ORDER BY rollup_date DESC, unique_visitors DESC", $site_id, $post_id, $date_from);
+        $sql = DatabaseManager::prepare("SELECT * FROM stats_%d_RollupPageViews WHERE post_id = %d AND page_id > 0 AND rollup_date > %s ORDER BY rollup_date DESC, unique_visitors DESC", $site_id, $post_id, $date_from);
 	}
 	else {
-        $sql = DatabaseManager::prepare("SELECT * FROM stats_%d_RollupPageViews WHERE page_id = %d AND rollup_date > %s ORDER BY rollup_date DESC, unique_visitors DESC", $site_id, $page_id, $date_from);
+        $sql = DatabaseManager::prepare("SELECT * FROM stats_%d_RollupPageViews WHERE page_id = %d AND page_id > 0 AND rollup_date > %s ORDER BY rollup_date DESC, unique_visitors DESC", $site_id, $page_id, $date_from);
 	}
 	
     $page_views = DatabaseManager::getResults($sql);
