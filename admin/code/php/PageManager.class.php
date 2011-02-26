@@ -468,7 +468,8 @@ class PageManager {
 			</script>";
 		}
 		
-		// Do Apollo's google tracker
+		// ApolloSites tracker: UA-21458669-1
+		// Ad Astra Systems tracker for apollo: UA-20462178-1
 		
 		echo "
 		<script type='text/javascript'>

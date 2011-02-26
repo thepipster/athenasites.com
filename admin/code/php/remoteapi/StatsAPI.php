@@ -60,6 +60,24 @@ function getPageStatsList($site_id, $no_days){
 	$sql = DatabaseManager::prepare("SELECT page_title, post_id, page_id, sum(page_views) as page_views FROM stats_%d_RollupPageViews WHERE rollup_date > %s AND page_title != 'all' AND page_id > 0 GROUP BY page_id, post_id ORDER BY page_views DESC", $site_id, $date_from);
 	$page_list = DatabaseManager::getResults($sql);
 	
+	// Get the blog page
+	$blog_page = PagesTable::getBlogpage($site_id);
+	Logger::dump($blog_page);
+	
+	if (isset($blog_page) && isset($page_list)){
+	
+		$no_pages = count($page_list);
+		
+		for ($i=0; $i<$no_pages; $i++){
+			if ($page_list[$i]['page_id'] == $blog_page['id']){
+				//Logger::dump($page_list[$i]);
+				$page_list[$i]['page_title'] .= ' (combined)';
+				Logger::debug($page_list[$i]['title']);
+			}
+			
+		}
+	}
+		
     $msg['cmd'] = "getPageStatsList";
     $msg['result'] = 'ok';
     $msg['data'] = array('pages' => $page_list);
@@ -178,6 +196,8 @@ function getSiteSummaryStats($site_id, $no_days) {
 */ 
 function getPageStats($site_id, $page_id, $post_id, $no_days){
 
+	//Logger::debug("getPageStats($site_id, $page_id, $post_id, $no_days)");
+
     $date_from = date("Y-m-d 00:00:00", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $no_days, date("Y")));
     $no_days = floor(TimeUtils::getElapsedDays($date_from));
     
@@ -191,7 +211,7 @@ function getPageStats($site_id, $page_id, $post_id, $no_days){
         $sql = DatabaseManager::prepare("SELECT * FROM stats_%d_RollupPageViews WHERE post_id = %d AND page_id > 0 AND rollup_date > %s ORDER BY rollup_date DESC, unique_visitors DESC", $site_id, $post_id, $date_from);
 	}
 	else {
-        $sql = DatabaseManager::prepare("SELECT * FROM stats_%d_RollupPageViews WHERE page_id = %d AND page_id > 0 AND rollup_date > %s ORDER BY rollup_date DESC, unique_visitors DESC", $site_id, $page_id, $date_from);
+        $sql = DatabaseManager::prepare("SELECT * FROM stats_%d_RollupPageViews WHERE page_id = %d AND page_id > 0 AND post_id = 0 AND rollup_date > %s ORDER BY rollup_date DESC, unique_visitors DESC", $site_id, $page_id, $date_from);
 	}
 	
     $page_views = DatabaseManager::getResults($sql);
@@ -208,7 +228,6 @@ function getPageStats($site_id, $page_id, $post_id, $no_days){
 
 		for($i=0; $i<$no_days; $i++){
 	    	$date = date("Y-m-d", mktime(date("H"), date("i"), date("s"), date("m"), date("d") - $i, date("Y")));
-	    	Logger::debug($date);
 	    	if (isset($uv_list[$date])){
 	    		$views[$i]['uv'] = $uv_list[$date];
 	    	}
@@ -219,7 +238,7 @@ function getPageStats($site_id, $page_id, $post_id, $no_days){
 						
     }
     
-    Logger::dump($views);
+    //Logger::dump($views);
     
     $msg['cmd'] = "getPageStats";
     $msg['result'] = 'ok';
