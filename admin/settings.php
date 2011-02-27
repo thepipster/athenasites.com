@@ -3,7 +3,7 @@ require_once("code/php/setup.php");
 
 $domain = str_replace('www.', '', $_SERVER['HTTP_HOST']);
 $site_id = SitesTable::getSiteIDFromDomain($domain);
-$user = UserTable::getUser(SecurityUtils::getCurrentUserLevel());
+$user = UserTable::getUser(SecurityUtils::getCurrentUserID());
 
 if (!SecurityUtils::isLoggedInForSite($site_id)) {
     SecurityUtils::logOut();
@@ -109,8 +109,35 @@ Logger::debug("$domain has site_id = $site_id");
 					
 		<div id='MainContents'>
 	
-			<?php echo file_get_contents("code/html/SettingsFrame.html") ?>		
-
+			<table id='SettingsFrame' class='ViewFrame' border='0' cellpadding='0' cellspacing='0' style='width:100%; height:100%;'>
+			
+			    <tr valign='top' width='100%'>
+			
+			        <td width="50%" height="70%" style='height:100%; padding:5px;'>
+			
+			            <div class="frameContents">
+			        	
+			            	<p><strong>Tools</strong></p>            	                                   	                                       
+			            	<button class='basic_button' style='' onclick="SettingsFrame.onPaintPostImporter()">Import Posts</button>
+					        <?php if ($user['service_lj_import'] == 1) { ?>
+							<button class='basic_button' onclick='LiveJournalImporter.show()'>LiveJournal</button>
+							<?php } ?>
+			            	<div align='left' id='apollo_site_settings_custom_paras_1'></div>
+			        	
+			        	</div>
+			        	
+			        </td>
+			
+			        <td width="50%" height="100%" style='height:100%; padding:5px;'>
+			            <div class="frameContents">
+			            	<div align='left' id='apollo_site_settings_custom_paras_2'></div>
+			            </div>
+			        </td>
+			
+				</tr>
+				
+			</table><!-- SettingsFrame -->			
+			
 		</div>	
 	
 	</div> <!-- Content -->

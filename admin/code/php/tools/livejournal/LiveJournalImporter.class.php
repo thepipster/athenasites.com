@@ -40,11 +40,11 @@ class LiveJournalImporter {
 		if (self::$errorCode != 0) return;
 			
 		// Get the posts since the last sync
-		self::getSyncItems($site_id);
-		self::getEvents($user_id, $site_id);
+		//self::getSyncItems($site_id);
+		//self::getEvents($user_id, $site_id);
 				
 		// Get the comments since the last sync		
-		if (self::$errorCode != 0) return;
+		//if (self::$errorCode != 0) return;
 
 		self::getCommentMeta($site_id);
 		self::getComments($site_id);

@@ -3,7 +3,7 @@ require_once("code/php/setup.php");
 
 $domain = str_replace('www.', '', $_SERVER['HTTP_HOST']);
 $site_id = SitesTable::getSiteIDFromDomain($domain);
-$user = UserTable::getUser(SecurityUtils::getCurrentUserLevel());
+$user = UserTable::getUser(SecurityUtils::getCurrentUserID());
 
 if (!SecurityUtils::isLoggedInForSite($site_id)) {
     SecurityUtils::logOut();

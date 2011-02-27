@@ -93,7 +93,7 @@ class StringUtils {
 	    
 		$config = HTMLPurifier_Config::createDefault();
 		$config->set('Core.Encoding', 'ISO-8859-1'); // replace with your encoding
-	    $config->set('Core.DefinitionCache', null);
+	    $config->set('Cache.DefinitionImpl', null);
 		$config->set('HTML.Doctype', 'HTML 4.01 Transitional'); // replace with your doctype
 
 		$purifier = new HTMLPurifier($config);
