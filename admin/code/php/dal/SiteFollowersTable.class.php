@@ -82,7 +82,7 @@ class SiteFollowersTable {
         $date_str = date('Y-m-d H:i:s', $target_date);
 
         if ($author_url != '') {
-            $sql = DatabaseManager::prepare("UPDATE apollo_SiteFollowers SET ip_long = %d, last_activity = %s, url = %s WHERE id = %d", ip2long($ip), $date_str, $follower_id, $author_url);
+            $sql = DatabaseManager::prepare("UPDATE apollo_SiteFollowers SET ip_long = %d, last_activity = %s, url = %s WHERE id = %d", ip2long($ip), $date_str, $author_url, $follower_id);
         } else {
             $sql = DatabaseManager::prepare("UPDATE apollo_SiteFollowers SET ip_long = %d, last_activity = %s WHERE id = %d", ip2long($ip), $date_str, $follower_id);
         }

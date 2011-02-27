@@ -178,7 +178,8 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
 
     $user_id = SecurityUtils::getCurrentUserID();
     $path = ""; // Update path *after* we update the page, as the parent page may have changed
-		
+		    
+    /*
     $tags = array("\\n", "\\r");
     $replace = '';
     
@@ -187,6 +188,10 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
 
     $safe_title = str_ireplace($tags, $replace, $title);
 	$safe_title = stripslashes($safe_title);
+	*/
+	
+    $safe_content = StringUtils::makeHtmlSafe($content);
+    $safe_title = StringUtils::makeHtmlSafe($title);
 
 	Logger::debug(">>>> $tamplate_name - " . stripos($tamplate_name, 'home'));
 	
@@ -237,10 +242,14 @@ function addPage($site_id, $title, $parent_page_id, $content, $status, $tamplate
     //$path = getPath($site_id, $page_id);
     $path = '';
 
+/*
     $tags = array("\\n", "\\r");
     $replace = '';
     $safe_content = str_ireplace($tags, $replace, $content);
     $safe_title = str_ireplace($tags, $replace, $title);
+*/
+    $safe_content = StringUtils::makeHtmlSafe($content);
+    $safe_title = StringUtils::makeHtmlSafe($title);
 
     $page_id = PagesTable::create($user_id, $site_id, $parent_page_id, $safe_content, $status, $safe_title, $tamplate_name, Page::encodeSlug($safe_title), $path, $order, $ishome);
 

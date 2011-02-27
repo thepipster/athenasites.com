@@ -204,7 +204,7 @@ class Post {
 		
 		return $this->approvedComments;
 	}
-
+	
     // ////////////////////////////////////////////////////////////////////
     //
     // Static methods

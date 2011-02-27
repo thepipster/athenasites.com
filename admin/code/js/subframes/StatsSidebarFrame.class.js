@@ -179,7 +179,7 @@ var StatsSidebarFrame = {
 		
         txt += "<div onclick=\"StatsSidebarFrame.onSelectPage('"+page_id+"','"+post_id+"')\" class='page page_depth_0' id='page_"+page_id+"' title='This page has had "+AthenaUtils.addCommas(page_views,0)+" page views over the last "+StatsFrame.noDays+" days'>";
         txt += "    <img class='page_icon' src='"+icon+"'>";
-        txt += "    <span class='page_name "+selected+"'>["+page_id+", " + post_id +"]&nbsp;"+page_title+"</span>";
+        txt += "    <span class='page_name "+selected+"'>"+page_title+"</span>";
 //        txt += "    <span class='page_name "+selected+"'>"+page_title+"&nbsp;"+page_views+"</span>";
         txt += "</div>";
 		

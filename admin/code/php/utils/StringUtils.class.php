@@ -73,23 +73,31 @@ class StringUtils {
      */
     public static function makeHtmlSafe($content) {
 
+		// HTML Purifier 
+		require_once("../../3rdparty/htmlpurifier-4.2.0-standalone/HTMLPurifier.standalone.php");
+
         $tags = array("\\r\\n");
-        $replace = '<br/>';
+        $replace = '';
         $safe_content = str_ireplace($tags, $replace, $content);
 
         $tags = array("\\n", "\\r");
-        $replace = '<br/>';
+        //$replace = '<br/>';
         $safe_content = str_ireplace($tags, $replace, $safe_content);
 
         $safe_content = stripslashes($safe_content);
 
+		// Use HTML Purifier for a final check to strip nasty stuff out....		
+	    //$pureConfig = HTMLPurifier_Config::createDefault();
+	    //$pureConfig->set('HTML.Doctype', 'XHTML 1.0 Strict');
+	    //$pureConfig->set('Core.DefinitionCache', null); // Disabled because it'll write files for caching
+	    
+		$config = HTMLPurifier_Config::createDefault();
+		$config->set('Core.Encoding', 'ISO-8859-1'); // replace with your encoding
+	    $config->set('Core.DefinitionCache', null);
+		$config->set('HTML.Doctype', 'HTML 4.01 Transitional'); // replace with your doctype
 
-        //$safe_content = htmlspecialchars($safe_content, ENT_QUOTES);
-        //$safe_content = nl2br($content);
-        //Logger::debug(">>> content = $content");
-        //Logger::debug(">>> safe content = $safe_content");
-
-        return $safe_content;
+		$purifier = new HTMLPurifier($config);
+	    return $purifier->purify($safe_content);
     }
 
     // ////////////////////////////////////////////////////////////////////

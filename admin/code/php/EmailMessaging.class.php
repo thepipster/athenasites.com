@@ -101,6 +101,10 @@ class EmailMessaging {
 		
 			$to_email = $user['email'];
 			$to_name = $user['name'];
+
+			if (DEV_MODE){
+				$to_email = 'mike@apollosites.com';
+			}
 			
 	        $content_html = "Hi $to_name <br /><br />";
 	        

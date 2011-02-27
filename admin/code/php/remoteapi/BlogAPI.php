@@ -125,28 +125,30 @@ function addComment($site_id, $post_id, $parent_comment_id, $content, $author_na
     // Innocent until proven guilty...
     $status = 'Pending';
     $isSpam = false;
-    
-    // Check from akismet..
-    try {
-    
-	    $akismet = new Akismet($blogURL , AKISMET_API_KEY);
-	    $akismet->setCommentAuthor($author_name);
-	    $akismet->setCommentAuthorEmail($author_email);
-	    $akismet->setCommentAuthorURL($author_url);
-	    $akismet->setCommentContent($content);
-	    $akismet->setPermalink($author_url);
-	
-	    //
-	    // Check to see if this is possible spam or not?
-	    //
 
-	    if($akismet->isCommentSpam()){
-	        $status = 'Spam';
-	        $isSpam = true;
+	if (!DEV_MODE){    
+	    // Check from akismet..
+	    try {
+	    
+		    $akismet = new Akismet($blogURL , AKISMET_API_KEY);
+		    $akismet->setCommentAuthor($author_name);
+		    $akismet->setCommentAuthorEmail($author_email);
+		    $akismet->setCommentAuthorURL($author_url);
+		    $akismet->setCommentContent($content);
+		    $akismet->setPermalink($author_url);
+		
+		    //
+		    // Check to see if this is possible spam or not?
+		    //
+	
+		    if($akismet->isCommentSpam()){
+		        $status = 'Spam';
+		        $isSpam = true;
+		    }
 	    }
-    }
-    catch(Exception $e){
-    	Logger::error("Could not reach Akismet!");
+	    catch(Exception $e){
+	    	Logger::error("Could not reach Akismet!");
+	    }
     }
     
     //
@@ -186,7 +188,7 @@ function addComment($site_id, $post_id, $parent_comment_id, $content, $author_na
     //
     // Create the comment....
     //
-    $comment_id = CommentsTable::create($site_id, $post_id, $parent_comment_id, $content, $status, $author_ip, $follower_id);
+    $comment_id = CommentsTable::create($site_id, $post_id, $parent_comment_id, StringUtils::makeHtmlSafe($content), $status, $author_ip, $follower_id);
 	
 	// Send email to client
 	EmailMessaging::sendGotCommentEmail($site_id, $comment_id);

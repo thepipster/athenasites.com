@@ -335,6 +335,7 @@ function getPostComplete($site_id, $post_id){
         $post['categories'] = PostsTable::getPostCategories($site_id, $post['id']);
         $post['content'] = ImportHelper::convertContent($post['content'], $post['source']);
         $post['url'] = $postObj->getLink();
+        $post['noComments'] = CommentsTable::getNoCommentsForPost($site_id, $post_id);
     }
     
     return $post;
@@ -384,7 +385,7 @@ function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_c
 	Logger::debug("Updating post!!");
 	
     $user_id = SecurityUtils::getCurrentUserID();
-
+/*
     $tags = array("\\n", "\\r");
     $replace = '';
     
@@ -393,6 +394,9 @@ function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_c
     
     $safe_title = str_ireplace($tags, $replace, $title);
     $safe_title = stripslashes($safe_title);
+*/
+    $safe_content = StringUtils::makeHtmlSafe($content);
+    $safe_title = StringUtils::makeHtmlSafe($title);
 
     PostsTable::update($site_id, $post_id, $safe_content, $status, $safe_title, $can_comment, Post::encodeSlug($safe_title), 'apollo');
 	

@@ -1611,7 +1611,7 @@ var cgpBlog = {
         	var commentContent = $('#comment').val();
         	var authorURL = $('#url').val();
         	var parentCommentID = 0;
-        		        	
+        		   
 	        var paras = {
 	            cmd : 'addComment',
 	            site_id: cgpBlog.m_siteID,
@@ -1631,15 +1631,19 @@ var cgpBlog = {
 	            error: function(ret){alert(ret);}
 	        });
 	     
+	     	// Hide comment form
+	     	$('#commentForm').fadeOut();
+	     	
+	    	$('.commentStatus').hide();
+	    	$('.commentStatus').html("Thank you for your comment. It will be displayed once approved.");
+	    	$('.commentStatus').fadeIn();
+	     	
         }                	
     },
     
 	// ////////////////////////////////////////////////////////////////
 
     onCommentPosted : function(ret){
-    	$('.commentStatus').hide();
-    	$('.commentStatus').html("Thank you for your comment. It will be displayed once approved.");
-    	$('.commentStatus').fadeIn();
         $('#author').val('');
         $('#email').val('');
         $('#comment').val('');    	

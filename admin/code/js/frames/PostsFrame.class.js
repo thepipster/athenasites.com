@@ -78,6 +78,8 @@ var PostsFrame = {
 	        $('#postLastEdit').html(postObj.last_edit);
 	        $('#postCreated').html(postObj.created);
 			
+			$('#number_comments').html("&nbsp;(" + postObj.noComments + ")");
+			
 	        $('#postStatusSelector').val(postObj.status);
 	        //PostsFrame.refreshStatusSelectBox();
 					

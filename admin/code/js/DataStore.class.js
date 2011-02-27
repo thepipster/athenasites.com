@@ -484,7 +484,8 @@ var DataStore = {
         temp.tags = postObj.tags;
         temp.categories = postObj.categories;
         temp.url = postObj.url;
-
+        temp.noComments = postObj.noComments;
+        
         if (temp.tags == undefined){
             temp.tags = new Array();
         }
@@ -523,6 +524,7 @@ var DataStore = {
                 DataStore.m_postList[i].tags = postObj.tags;
                 DataStore.m_postList[i].categories = postObj.categories;
                 DataStore.m_postList[i].url = postObj.url;
+                DataStore.m_postList[i].noComments = postObj.noComments;
 
                 if (DataStore.m_postList[i].tags == undefined){
                     DataStore.m_postList[i].tags = new Array();
