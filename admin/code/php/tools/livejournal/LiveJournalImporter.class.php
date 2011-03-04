@@ -41,10 +41,10 @@ class LiveJournalImporter {
 			
 		// Get the posts since the last sync
 		//self::getSyncItems($site_id);
-		//self::getEvents($user_id, $site_id);
+		self::getEvents($user_id, $site_id);
 				
 		// Get the comments since the last sync		
-		//if (self::$errorCode != 0) return;
+		if (self::$errorCode != 0) return;
 
 		self::getCommentMeta($site_id);
 		self::getComments($site_id);
@@ -56,7 +56,7 @@ class LiveJournalImporter {
 
 	public static function setLastSyncTime($site_id){
 		self::$last_sync_time = LogImport::getLastImport($site_id, 'Livejournal');
-		if (!isset(self::$last_sync_time)) self::$last_sync_time = "2011-01-01 00:00:01";
+		if (!isset(self::$last_sync_time)) self::$last_sync_time = "2010-01-01 00:00:01";
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////////////

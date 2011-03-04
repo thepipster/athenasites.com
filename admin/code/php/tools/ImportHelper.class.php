@@ -21,13 +21,14 @@ class ImportHelper {
 
         // Check to see if this post already exists, if so then we over-write it
         $post_id = PostsTable::getPostIDFromDate($site_id, $date_str);
+        
         if (!isset($post_id)) {
             $post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, $slug, $import_source);
 //      	$post_id = PostsTable::create($site_id, $user_id, $content, $status, $title, $can_comment, $slug);
         }
-//        else {
-//            PostsTable::update($site_id, $post_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, $slug, $import_source);
-//        }
+        else {
+            PostsTable::update($site_id, $post_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, $slug, $import_source);
+        }
 
         // Get path
 	    PostsTable::updatePath($post_id, $site_id, Post::generatePath($created_date));
@@ -206,7 +207,7 @@ class ImportHelper {
 	    	$result = preg_match("/<div class='apolloPageBreak'>(.*?)<\/div>/i", $content, $match);
 		}
 		
-		Logger::debug("Match result = $result");
+		//Logger::debug("Match result = $result");
 		
 	    if ($result) {
 	
