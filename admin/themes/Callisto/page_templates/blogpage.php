@@ -3,6 +3,7 @@
  * @Theme: HollyPacione
  * @Template: Blog Page
  * @Description: Blog Page
+ * @Data: Blog
  */
 
 
@@ -98,17 +99,17 @@ function stripImages($postContent){
 						<div id='commentsWrapper'>						
 						
 							<div id="comments"><h2>No comments yet.</h2></div>																					
-							
+							<!--
 							<p>
-								<a href='http://hollypacionephotography.com/2010/09/16/nate-and-christys-wedding-at-forestgate-presbyterian-church/feed/'>
+								<a href='<?=$post_link?>/feed/'>
 									<abbr title="Really Simple Syndication">RSS</abbr> feed for comments on this post.
 								</a>			
 								
-								<a href="http://hollypacionephotography.com/2010/09/16/nate-and-christys-wedding-at-forestgate-presbyterian-church/trackback/" rel="trackback">
+								<a href="<?=$post_link?>/trackback/" rel="trackback">
 									TrackBack <abbr title="Universal Resource Locator">URL</abbr>
 								</a>
 							</p>
-							
+							-->
 							<h2 id="postcomment">Leave a comment</h2>
 							
 							<div class='commentStatus'></div>

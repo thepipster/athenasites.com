@@ -25,8 +25,7 @@ var hollyInfoPage = {
 		// Optimize size for gallery
 		hollyInfoPage.imgRatio = hollyInfoPage.imgWidth / hollyInfoPage.imgHeight;
 
-		hollyInfoPage.onResize();
-				
+		hollyInfoPage.onResize();				
 		setTimeout("hollyInfoPage.onResize()", 200);
 						
 		// Set resize listener

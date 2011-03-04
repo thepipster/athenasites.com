@@ -3,6 +3,7 @@
 * @Theme: HollyPacione
 * @Template: Contact Page
 * @Description: Contact Page
+* @Data: Text
 */
 
 //$background_image = PageManager::getMediaURLFromThemePara(205); 

@@ -4,6 +4,7 @@
 * @Theme: HollyPacione
 * @Template: Content Left Page
 * @Description: Content Left Page
+* @Data: Text
 */
 $image = PageManager::getMediaFromThemePara(203); 
 

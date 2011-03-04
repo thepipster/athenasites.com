@@ -3,6 +3,7 @@
 * @Theme: HollyPacione
 * @Template: Gallery Page
 * @Description: Gallery Page
+* @Data: Gallery
 */
 
 $noflash = $_GET['noflash'];

@@ -3,6 +3,7 @@
 * @Theme: HollyPacione
 * @Template: Content Right Page
 * @Description: Content Right Page
+* @Data: Text
 */
 
 $image = PageManager::getMediaFromThemePara(204); 
