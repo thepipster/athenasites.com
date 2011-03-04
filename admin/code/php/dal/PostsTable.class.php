@@ -212,6 +212,12 @@ class PostsTable {
         return DatabaseManager::getVar($sql);
     }
 
+    public static function getPostIDFromTitle($site_id, $title) {
+        $sql = DatabaseManager::prepare("SELECT id FROM athena_%d_Posts WHERE title = %s", $site_id, $title);
+        return DatabaseManager::getVar($sql);
+    }
+
+
     public static function getPostFromSourceID($site_id, $source_id) {
         $sql = DatabaseManager::prepare("SELECT id FROM athena_%d_Posts WHERE source_id = %s", $site_id, $source_id);
         return DatabaseManager::getVar($sql);

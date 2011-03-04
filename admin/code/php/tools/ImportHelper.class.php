@@ -18,16 +18,25 @@ class ImportHelper {
         } else {
             $slug = Post::encodeSlug($title);
         }
+        
+        $safe_title = StringUtils::makeHtmlSafe($title);
+        $safe_content = StringUtils::makeHtmlSafe($content);
 
         // Check to see if this post already exists, if so then we over-write it
         $post_id = PostsTable::getPostIDFromDate($site_id, $date_str);
+
+        if (!isset($post_id)) {
+			// Try to match on title
+			$post_id = PostsTable::getPostIDFromTitle($site_id, $safe_title);
+        }
         
         if (!isset($post_id)) {
-            $post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, $slug, $import_source);
-//      	$post_id = PostsTable::create($site_id, $user_id, $content, $status, $title, $can_comment, $slug);
+        	Logger::debug(">>>> Adding new post $safe_title");
+            $post_id = PostsTable::create($site_id, $user_id, $safe_content, $status, $safe_title, $can_comment, $slug, $import_source);
         }
         else {
-            PostsTable::update($site_id, $post_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, $slug, $import_source);
+        	Logger::debug(">>>> Updating existing post [$post_id] $safe_title");
+            PostsTable::update($site_id, $post_id, $safe_content, $status, $safe_title, $can_comment, $slug, $import_source);
         }
 
         // Get path
@@ -194,7 +203,8 @@ class ImportHelper {
 	    // Do a one time conversion, if required
 	    if ($post['source'] != 'apollo'){
 	        $content = ImportHelper::convertContent($content, $post['source']);
-			PostsTable::updateSourceAndContent($site_id, $post['id'], $content, 'apollo');
+			PostsTable::updateSourceAndContent($site_id, $post['id'], $content, $post['source']);	        
+			//PostsTable::updateSourceAndContent($site_id, $post['id'], $content, 'apollo');
 	    }
 			
 		// Look for the more tag, of the form: <div class="apolloPageBreak">More...</div>

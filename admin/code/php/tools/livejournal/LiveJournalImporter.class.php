@@ -41,10 +41,11 @@ class LiveJournalImporter {
 			
 		// Get the posts since the last sync
 		//self::getSyncItems($site_id);
-		self::getEvents($user_id, $site_id);
-				
+		//self::getEvents($user_id, $site_id);
 		// Get the comments since the last sync		
-		if (self::$errorCode != 0) return;
+		//if (self::$errorCode != 0) return;
+
+		self::getPostsFromRSS($user_id, $site_id, "http://" . $lj_user . ".livejournal.com/data/rss");
 
 		self::getCommentMeta($site_id);
 		self::getComments($site_id);
@@ -56,7 +57,8 @@ class LiveJournalImporter {
 
 	public static function setLastSyncTime($site_id){
 		self::$last_sync_time = LogImport::getLastImport($site_id, 'Livejournal');
-		if (!isset(self::$last_sync_time)) self::$last_sync_time = "2010-01-01 00:00:01";
+		if (!isset(self::$last_sync_time)) self::$last_sync_time = "2011-02-01 00:01:01";
+		Logger::debug("Last sync time = " . self::$last_sync_time);
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////////////
@@ -313,6 +315,47 @@ class LiveJournalImporter {
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////////////
+
+	private static function getPostsFromRSS($user_id, $site_id, $feed_url){
+		
+		//require_once("../../SimplePie/simplepie.inc");
+		
+		$feed = new SimplePie();
+		
+		$feed->set_feed_url($feed_url);
+		$feed->enable_cache(false);
+		$feed->init();
+		$feed->handle_content_type();
+		
+		Logger::debug("Getting feed $feed_url");
+		Logger::debug("Feed title = " . $feed->get_title());
+		
+		foreach ($feed->get_items() as $item){
+			
+			//$author = $item->get_author();
+
+			$title = $item->get_title();
+			$content = $item->get_content();
+			$description = $item->get_description();
+			$status = 'Published';			
+			$created_date = $item->get_date();
+			$source_id = $item->get_id();
+			$csv_tags = "";								
+			$csv_categories = '';
+			$can_comment = 1;
+
+			// id in form; http://charlottegeary.livejournal.com/321842.html
+			// so extract int
+			$source_id = intval(substr($source_id, strrpos($source_id, "/")+1, -5));
+			Logger::debug("[$source_id] $title");
+			
+			$post_id = ImportHelper::importPost($user_id, $site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, 'LiveJournal', $source_id);
+			
+		}
+		
+	}
+	
+	// /////////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	* Returns a list of all the items that have been created or updated for a user. 
@@ -327,7 +370,7 @@ class LiveJournalImporter {
 			'username' => self::$username,
 			'hpassword' => md5(self::$password),
 			'ver' => 1,
-			'lastsync' => self::$last_sync_time
+			'lastsync' => $last_sync_time
 		);
 		
 		if (!$client->query('LJ.XMLRPC.syncitems', $args)) {
