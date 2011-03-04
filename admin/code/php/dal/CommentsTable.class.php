@@ -144,7 +144,9 @@ class CommentsTable {
     // /////////////////////////////////////////////////////////////////////////////////
 
     public static function getLastCommentSourceID($site_id, $source) {
-        $sql = DatabaseManager::prepare("SELECT max(source_id) FROM athena_%d_Comments WHERE source=%s", $site_id, strtolower($source));
+        //$sql = DatabaseManager::prepare("SELECT max(source_id) FROM athena_%d_Comments WHERE source=%s", $site_id, strtolower($source));
+        // NOTE: because source id is stored as a string, search by data
+        $sql = DatabaseManager::prepare("SELECT source_id FROM athena_%d_Comments WHERE source=%s ORDER BY created DESC LIMIT 1", $site_id, strtolower($source));
         return DatabaseManager::getVar($sql);
     }
 

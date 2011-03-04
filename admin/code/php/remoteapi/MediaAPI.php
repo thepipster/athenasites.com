@@ -61,7 +61,8 @@ switch ($cmd) {
         $slug = CommandHelper::getPara('slug', true, CommandHelper::$PARA_TYPE_STRING);
         $content = CommandHelper::getPara('content', true, CommandHelper::$PARA_TYPE_STRING);
         $status = CommandHelper::getPara('status', true, CommandHelper::$PARA_TYPE_STRING);
-        $can_comment = CommandHelper::getPara('can_comment', true, CommandHelper::$PARA_TYPE_NUMERIC);
+        $can_comment = CommandHelper::getPara('can_comment', false, CommandHelper::$PARA_TYPE_NUMERIC);
+        if (!isset($can_comment)) $can_comment = 1;
         updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_comment);
         break;
 

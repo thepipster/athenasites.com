@@ -258,7 +258,7 @@ class LiveJournalImporter {
 			$comments = array();
 			
 			foreach($comment_list as $comment){
-				
+								
 				$id = $comment->getAttribute('id');
 				$post_id = $comment->getAttribute('jitemid');
 				$poster_id = 0;
@@ -339,15 +339,19 @@ class LiveJournalImporter {
 			$description = $item->get_description();
 			$status = 'Published';			
 			$created_date = $item->get_date();
-			$source_id = $item->get_id();
+			$public_itemid = $item->get_id();
 			$csv_tags = "";								
 			$csv_categories = '';
 			$can_comment = 1;
 
 			// id in form; http://charlottegeary.livejournal.com/321842.html
 			// so extract int
-			$source_id = intval(substr($source_id, strrpos($source_id, "/")+1, -5));
-			Logger::debug("[$source_id] $title");
+			$public_itemid = intval(substr($public_itemid, strrpos($public_itemid, "/")+1, -5));
+			Logger::debug("[$public_itemid] $title");
+			
+			// Convert public item id into actual item id (see http://drumrock.skipitnow.org/livejournal-tools/itemid/)
+			$anum = $public_itemid - floor($public_itemid / 256) * 256;
+			$source_id = ($public_itemid - $anum) / 256;			
 			
 			$post_id = ImportHelper::importPost($user_id, $site_id, $content, $status, $title, $created_date, $can_comment, $csv_tags, $csv_categories, 'LiveJournal', $source_id);
 			
