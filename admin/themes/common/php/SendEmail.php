@@ -18,7 +18,7 @@ $nonce = CommandHelper::getPara('nonce', true, CommandHelper::$PARA_TYPE_STRING)
 // Verify this request came from a real page
 if ($DEBUG == 0){
 	if (!SecurityUtils::checkNonce($nonce, 'email-link')) {
-	    Logger::error("Not authorized!");
+	    Logger::error("Not authorized! NONCE failure.\n" . print_r($_REQUEST, true));
 	    echo "NA";
 	    die();
 	}
