@@ -3,6 +3,7 @@
 * @Theme: Pandora
 * @Template: Home Page
 * @Description: Home Page
+* @isHome: 1
 */
 
 global $blog_id;

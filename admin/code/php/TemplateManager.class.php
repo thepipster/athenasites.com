@@ -11,48 +11,55 @@ class TemplateManager {
 	public static function getThemePageTemplates($theme_name){	
 
 		$template_dir = FILE_ROOT . "admin/themes/" . $theme_name . "/page_templates/";
+		$template_url = Site::getBaseURL() . "/admin/themes/" . $theme_name . "/page_templates/";
 		
 		$template_list = array();
 		
-/**
-* @Theme: ApolloSites
-* @Template: Home Page
-* @Description: Home Page
-*/		
+		/**
+		* @Theme: ApolloSites
+		* @Template: Home Page
+		* @Description: Home Page
+		*/		
+		
 		if ($handle = opendir($template_dir)) {
 		
 		    while (false !== ($file = readdir($handle))) {
+		        		        		        
 		        if ($file != "." && $file != "..") {
 		        	
-		        	$temp = array();
-		        	$temp['template_file'] = $file;
-		        	
-		        	// @Theme: ApolloSites
-		        	// @Template: Home Page
-		        	// @Description: Home Page
+					$path_parts = pathinfo($file);
 
-					$content = file_get_contents($template_dir . "/" . $file);
+					if ($path_parts['extension'] == 'php'){
 					
-					$temp['template_name'] = self::getTemplatePara('@Template:', $content);
-					$temp['template_description'] = self::getTemplatePara('@Description:', $content);
-					
-					/*		        	
-					if (false !== ($file = fopen($template_dir . "/" . $file, "r"))){
-						while(!feof($file)){
+			        	$temp = array();
+			        	$temp['template_file'] = $file;
+			        	
+			        	if (file_exists($file . '.png')){
+				        	$temp['thumbnail'] = $template_url . $file . '.png';
+			        	}
+			        	else {
+			        		$temp['thumbnail'] = 'http://apollosites.com/admin/images/blank.gif';
+			        	}
+			        	
+			        	// @Theme: ApolloSites
+			        	// @Template: Home Page
+			        	// @Description: Home Page
+	
+						$content = file_get_contents($template_dir . "/" . $file);
 						
-							$line = fgets($file);
-							
-							// Search for template name
-							$temp['template_name'] = self::getTemplatePara('@Template:', $line);
-							$temp['template_description'] = self::getTemplatePara('@Description:', $line);
-														
-						}
-						fclose($file);		        	
-					}
-					*/
-					$template_list[] = $temp;
-		        	//$contents = file_get_contents($template_dir . "/" . $file);
+						$temp['template_name'] = self::getTemplatePara('@Template:', $content);
+						$temp['template_description'] = self::getTemplatePara('@Description:', $content);
+			        	//$temp['thumbnail'] = self::getTemplatePara('@Thumbnail:', $content);
+						$temp['is_homepage'] = self::getTemplatePara('@isHome:', $content);
+						$temp['is_blogpage'] = self::getTemplatePara('@isBlog:', $content);
+						
+						if ($temp['is_homepage'] == '') $temp['is_homepage'] = 0;
+						if ($temp['is_blogpage'] == '') $temp['is_blogpage'] = 0;
+						
+						$template_list[] = $temp;
+			        	//$contents = file_get_contents($template_dir . "/" . $file);
 		        	
+		        	}
 		        }
 		    }
 		    

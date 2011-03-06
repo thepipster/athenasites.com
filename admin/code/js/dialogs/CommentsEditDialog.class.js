@@ -35,25 +35,25 @@ var CommentsEditDialog = {
     // ////////////////////////////////////////////////////////////////////////
 
     unapproveComment : function(comment_id){
-        MediaAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Pending', CommentsEditDialog.onUpdate);
+        BlogAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Pending', CommentsEditDialog.onUpdate);
     },
 
     // ////////////////////////////////////////////////////////////////////////
 
     approveComment : function(comment_id){
-        MediaAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Approved', CommentsEditDialog.onUpdate);
+        BlogAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Approved', CommentsEditDialog.onUpdate);
     },
 
     // ////////////////////////////////////////////////////////////////////////
 
     deleteComment : function(comment_id){
-        MediaAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Trash', CommentsEditDialog.onUpdate);
+        BlogAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Trash', CommentsEditDialog.onUpdate);
     },
 
     // ////////////////////////////////////////////////////////////////////////
 
     undeleteComment : function(comment_id){
-        MediaAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Pending', CommentsEditDialog.onUpdate);
+        BlogAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Pending', CommentsEditDialog.onUpdate);
     },
 
     // ////////////////////////////////////////////////////////////////////////

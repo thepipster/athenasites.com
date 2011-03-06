@@ -203,11 +203,14 @@ var PagesSidebarFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 
     addPage : function(){
+    /*
         var title = 'New page ' + (DataStore.m_pageList.length+1);
         var pageSlug = AthenaUtils.encodeSlug(title);
         var order = 0;
         var isHome = 0;
         PagesAPI.addPage(ssMain.siteID, title, '', 'Draft', 0, 0, pageSlug, order, isHome, PagesSidebarFrame.onPageAdded);
+    */
+    	SelectPageDialog.show();
     },
 	
     onPageAdded : function(pageObj){

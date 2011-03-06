@@ -63,7 +63,7 @@ var BlogAPI = {
     // ////////////////////////////////////////////////////////////////////////
 
     /**
-    * Get the list of folders and media for this site
+    * Get the comments for this site
     */
     getComments : function(siteID, postID, callback){
 	
@@ -151,5 +151,348 @@ var BlogAPI = {
         else {
             AthenaDialog.showAjaxError(ret);
         }
-    }
+    },
+    
+    // ////////////////////////////////////////////////////////////////////////
+    //
+    // Secure methods, require a user to be logged in
+    //
+    // ////////////////////////////////////////////////////////////////////////
+
+    getPostDetails : function(siteID, postID, callback){
+		
+        AthenaDialog.showLoading("Getting post details");
+		
+        var paras = {
+            cmd: 'getPostDetails',
+            site_id: siteID,
+            post_id: postID
+        };
+				
+        $.ajax({
+            url: BlogAPI.m_url,
+            type: 'post',
+            dataType: "json",
+            data: paras,
+            success: function(ret){
+                BlogAPI.onGotPost(ret, callback)
+                }
+        });
+    },
+				
+    updatePost : function(siteID, postID, postTitle, postContent, postStatus, postCanComment, postSlug, callback){
+		
+        //AthenaDialog.showLoading("Updating post");
+				
+		if (postTitle == '' || postTitle == undefined || postTitle == null){
+			AthenaDialog.error("Error saving post!");
+			return;
+		}
+		
+        var paras = {
+            cmd: 'updatePost',
+            site_id: siteID,
+            post_id: postID,
+            title: postTitle,
+            content: postContent,
+            status: postStatus,
+            can_comment: postCanComment,
+            slug: postSlug
+        };
+				
+        $.ajax({
+            url: BlogAPI.m_url,
+            type: 'post',
+            dataType: "json",
+            data: paras,
+            success: function(ret){
+                BlogAPI.onGotPost(ret, callback)
+                }
+        });
+    },
+
+    addPost : function(siteID, postTitle, postContent, postStatus, postCanComment, postSlug, callback){
+		
+        AthenaDialog.showLoading("Adding post");
+		
+        var paras = {
+            cmd: 'addPost',
+            site_id: siteID,
+            title: postTitle,
+            content: postContent,
+            status: postStatus,
+            can_comment: postCanComment,
+            slug: postSlug
+        };
+						
+        $.ajax({
+            url: BlogAPI.m_url,
+            type: 'post',
+            dataType: "json",
+            data: paras,
+            success: function(ret){
+                BlogAPI.onGotPost(ret, callback)
+                }
+        });
+    },
+	
+    onGotPost : function(ret, callback){
+			
+        AthenaDialog.clearLoading();
+								
+        if (ret.result == "ok"){
+            callback(ret.data.post);
+        }
+        else {
+            AthenaDialog.showAjaxError(ret);
+        }
+    },
+
+    // ////////////////////////////////////////////////////////////////////////
+
+    deletePost : function(siteID, postID, callback){
+
+        AthenaDialog.showLoading("Deleting post");
+
+        var paras = {
+            cmd: 'deletePost',
+            site_id: siteID,
+            post_id: postID
+        };
+				
+        $.ajax({
+            url: BlogAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: 
+            	function(ret){
+			        AthenaDialog.clearLoading();
+			
+			        if (ret.result == "ok"){
+			            callback(ret.data.post_id);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+                }
+        });
+    },
+	
+    // ////////////////////////////////////////////////////////////////////////
+    //
+    // Post Tags and Categories
+    //
+    // ////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Add a tag to a post, can handle single tags or csv tags
+	*/
+    addTag : function(siteID, postID, csvPostTags, callback){
+
+        //AthenaDialog.showLoading("Adding tag");
+
+        var paras = {
+            cmd: 'addPostTags',
+            site_id: siteID,
+            post_id: postID,
+            csvtags: csvPostTags
+        };
+				
+        $.ajax({
+            url: BlogAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: 
+            	function(ret){
+			        //AthenaDialog.clearLoading();
+			
+			        if (ret.result == "ok"){
+			            callback(ret.data.post, ret.data.tags);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+                }
+        });
+    },	
+	
+    // ////////////////////////////////////////////////////////////////////////
+
+	/**
+	* Add a category to a post, can handle single category or csv category
+	*/
+    addCategory : function(siteID, postID, csvPostCategories, callback){
+
+        //AthenaDialog.showLoading("Adding category");
+
+        var paras = {
+            cmd: 'addPostCategories',
+            site_id: siteID,
+            post_id: postID,
+            csvcats: csvPostCategories
+        };
+				
+        $.ajax({
+            url: BlogAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: 
+            	function(ret){
+			        //AthenaDialog.clearLoading();
+			
+			        if (ret.result == "ok"){
+			            callback(ret.data.post, ret.data.categories);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+                }
+        });
+    },
+	
+    // ////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Delete a tag from the entire blog and every post
+     */
+    deleteTag : function(siteID, globalTag, callback){
+        var paras = {cmd: 'deleteTag', site_id: siteID, tag: globalTag};
+
+        $.ajax({
+            url: BlogAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: 
+            	function(ret){ 
+			        if (ret.result == "ok"){
+			            callback(ret.data.tag);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+            	}
+        });
+    },
+
+    // ////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Delete a category from the entire blog and every post
+     */
+    deleteCategory : function(siteID, globalCategory, callback){
+        var paras = {cmd: 'deleteCategory', site_id: siteID, category: globalCategory};
+
+        $.ajax({
+            url: BlogAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: 
+            	function(ret){ 
+			        if (ret.result == "ok"){
+			            callback(ret.data.category);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+            	}
+        });
+    },
+
+    // ////////////////////////////////////////////////////////////////////////
+
+    removeTag : function(siteID, postID, postTag, callback){
+
+        AthenaDialog.showLoading("Removing tag");
+
+        var paras = {
+            cmd: 'removeTag',
+            site_id: siteID,
+            post_id: postID,
+            tag: postTag
+        };
+				
+        $.ajax({
+            url: BlogAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: 
+            	function(ret){
+			        AthenaDialog.clearLoading();
+			
+			        if (ret.result == "ok"){
+			            callback(ret.data.post_id, ret.data.tag);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+                }
+        });
+    },
+		
+    // ////////////////////////////////////////////////////////////////////////
+
+    removeCategory : function(siteID, postID, postCategory, callback){
+
+        AthenaDialog.showLoading("Removing category");
+
+        var paras = {
+            cmd: 'removeCategory',
+            site_id: siteID,
+            post_id: postID,
+            category: postCategory
+        };
+				
+        $.ajax({
+            url: BlogAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: 
+            	function(ret){
+			        AthenaDialog.clearLoading();
+			
+			        if (ret.result == "ok"){
+			            callback(ret.data.post_id, ret.data.category);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+                }
+        });
+    },
+	
+    // ////////////////////////////////////////////////////////////////////////
+    //
+    // Comments
+    //
+    // ////////////////////////////////////////////////////////////////////////
+
+    updateCommentStatus : function(siteID, commentID, newStatus, callback){
+
+        AthenaDialog.showLoading("Updating comment");
+
+        var paras = {
+            cmd: 'updateCommentStatus',
+            site_id: siteID,
+            cid: commentID,
+            sts: newStatus
+        };
+
+        $.ajax({
+            url: BlogAPI.m_url,
+            dataType: "json",
+            data: paras,
+            success: 
+            	function(ret){
+			        AthenaDialog.clearLoading();
+			
+			        if (ret.result == "ok"){
+			            callback(ret.data.comment_id, ret.data.status);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+                }
+        });
+    },
+    
 }

@@ -314,27 +314,27 @@ var DashboardFrame = {
     // ////////////////////////////////////////////////////////////////////////////
 
     unspamComment : function(comment_id){
-        MediaAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Approved', DashboardFrame.onCommentUpdate);
+        BlogAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Approved', DashboardFrame.onCommentUpdate);
     },
 
     spamComment : function(comment_id){
-        MediaAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Spam', DashboardFrame.onCommentUpdate);
+        BlogAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Spam', DashboardFrame.onCommentUpdate);
     },
 
     unapproveComment : function(comment_id){
-        MediaAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Pending', DashboardFrame.onCommentUpdate);
+        BlogAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Pending', DashboardFrame.onCommentUpdate);
     },
 
     approveComment : function(comment_id){
-        MediaAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Approved', DashboardFrame.onCommentUpdate);
+        BlogAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Approved', DashboardFrame.onCommentUpdate);
     },
 
     deleteComment : function(comment_id){
-        MediaAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Trash', DashboardFrame.onCommentUpdate);
+        BlogAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Trash', DashboardFrame.onCommentUpdate);
     },
 
     undeleteComment : function(comment_id){
-        MediaAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Pending', DashboardFrame.onCommentUpdate);
+        BlogAPI.updateCommentStatus(ssMain.siteID, comment_id, 'Pending', DashboardFrame.onCommentUpdate);
     },
 
     onCommentUpdate : function(commentID, newStatus){

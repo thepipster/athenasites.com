@@ -148,6 +148,7 @@ if (BUILD_MODE == 'pages' || BUILD_MODE == 'all'){
 		"$base_dir/code/js/3rdparty/date.js",
 		"$base_dir/code/js/3rdparty/jquery.datePicker.js",
 		// Dialogs...
+		"$base_dir/code/js/dialogs/SelectPageDialog.class.js",
 		"$base_dir/code/js/dialogs/ImagePickerDialog.class.js",
 		"$base_dir/code/js/dialogs/ColorPickerDialog.class.js",
 		"$base_dir/code/js/dialogs/CommentsEditDialog.class.js",
@@ -166,6 +167,7 @@ if (BUILD_MODE == 'pages' || BUILD_MODE == 'all'){
 		// "$base_dir/code/css/PostsFrame.css", Merged posts and pages, so no need of this style sheet
 		"$base_dir/code/colorpicker/css/colorpicker.css",
 		"$base_dir/code/css/datePicker.css",
+		"$base_dir/code/css/SelectPageDialog.css",
 		"$base_dir/code/css/ImageEditDialog.css",
 		"$base_dir/code/css/ImagePickerDialog.css",
 		"$base_dir/code/css/CommentDialog.css",

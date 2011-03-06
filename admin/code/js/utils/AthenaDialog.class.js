@@ -67,7 +67,7 @@ var AthenaDialog = {
     // ////////////////////////////////////////////////////////////////////
 
     error : function(msg){
-		/*
+				
         $('#apollo_dialog').dialog("destroy");
 				
         $('#apollo_dialog').html(msg);
@@ -78,7 +78,8 @@ var AthenaDialog = {
             modal: true,
             title: "Error"
         });
-        */
+        
+        //Logger.show();
         //Logger.error(msg);
     },
 	

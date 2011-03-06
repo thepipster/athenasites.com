@@ -3,6 +3,7 @@
  * @Theme: Thebe
  * @Template: Blog Page
  * @Description: Blog Page
+ * @isBlog: 1
  */
 
 ?>

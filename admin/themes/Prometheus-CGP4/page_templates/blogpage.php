@@ -3,6 +3,7 @@
  * @Theme: CGP4
  * @Template: Blog Page
  * @Description: Blog Page
+ * @isBlog: 1
  */
 ?>
 

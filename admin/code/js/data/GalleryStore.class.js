@@ -658,7 +658,6 @@ var DataStore = {
         					pageObj.parent_page_id, 
         					pageObj.slug, 
         					pageObj.page_order, 
-        					pageObj.is_homepage, 
         					pageObj.description, 
         					pageObj.browser_title, 
         					DataStore.onPageSaved);
@@ -690,7 +689,7 @@ var DataStore = {
 	*/
 	savePost : function(postObj, callback){
 	
-        MediaAPI.updatePost(ssMain.siteID, 
+        BlogAPI.updatePost(ssMain.siteID, 
         					postObj.id, 
         					postObj.title, 
         					postObj.content, 

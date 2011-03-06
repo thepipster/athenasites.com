@@ -3,6 +3,7 @@
 * @Theme: HollyPacione
 * @Template: Home Page
 * @Description: Home Page
+* @isHome: 1
 */
 
 //$xml_url = "http://" . $_SERVER['HTTP_HOST'] ."/admin/code/php/getUserGalleryXML.php?site_id=".PageManager::$site_id."&page_id=".PageManager::$page_id."&cache=" . mt_rand();

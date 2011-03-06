@@ -3,6 +3,7 @@
 * @Theme: ApolloSites
 * @Template: Home Page
 * @Description: Home Page
+* @isHome: 1
 */
 
 ?>

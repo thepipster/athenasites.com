@@ -3,6 +3,7 @@
 * @Theme: CGP4
 * @Template: Home Page
 * @Description: Home Page
+* @isHome: 1
 */
 
 //$noflash = $_GET['noflash'];

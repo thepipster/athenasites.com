@@ -485,7 +485,7 @@ var PagesFrame = {
             return;
         }
 						
-        PagesAPI.updatePage(ssMain.siteID, DataStore.m_currentPageID, title, content, status, template, parent_id, slug, order, ishome, desc, PagesFrame.onPageSaved)
+        PagesAPI.updatePage(ssMain.siteID, DataStore.m_currentPageID, title, content, status, template, parent_id, slug, order, desc, PagesFrame.onPageSaved)
 				
     },
 	

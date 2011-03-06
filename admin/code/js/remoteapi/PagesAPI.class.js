@@ -48,7 +48,7 @@ var PagesAPI = {
 	
     // ////////////////////////////////////////////////////////////////////////
 
-    updatePage : function(siteID, pageID, pageTitle, pageContent, pageStatus, templateName, parentPageID, pageSlug, pageOrder, isHome, description, browserTitle ,callback){
+    updatePage : function(siteID, pageID, pageTitle, pageContent, pageStatus, templateName, parentPageID, pageSlug, pageOrder, description, browserTitle ,callback){
 		
         //AthenaDialog.showLoading("Updating page");
 		
@@ -63,7 +63,6 @@ var PagesAPI = {
             template_id: templateName,
             parent_page_id: parentPageID,
             slug: pageSlug,
-            ishome: isHome,
             order: pageOrder,
             desc: description
         };
@@ -88,7 +87,34 @@ var PagesAPI = {
 
     // ////////////////////////////////////////////////////////////////////////
 
-    addPage : function(siteID, pageTitle, pageContent, pageStatus, templateName, parentPageID, pageSlug, pageOrder, isHome, callback){
+    getPage : function(siteID, pageID, callback){
+		
+        AthenaDialog.showLoading("Getting page");
+		
+        var paras = { cmd: 'getPage', site_id: siteID, page_id: pageID};
+				
+        $.ajax({
+            url: PagesAPI.m_url,
+            type: 'post',
+            dataType: "json",
+            data: paras,
+            success: 
+            	function(ret){
+			        AthenaDialog.clearLoading();
+			
+			        if (ret.result == "ok"){
+			            callback(ret.data.page);
+			        }
+			        else {
+			            AthenaDialog.showAjaxError(ret);
+			        }
+                }
+        });
+    },	
+    
+    // ////////////////////////////////////////////////////////////////////////
+
+    addPage : function(siteID, pageTitle, pageContent, pageStatus, templateName, parentPageID, pageSlug, pageOrder, isHome, isBlog, callback){
 		
         AthenaDialog.showLoading("Adding page");
 		
@@ -102,6 +128,7 @@ var PagesAPI = {
             parent_page_id: parentPageID,
             slug: pageSlug,
             ishome: isHome,
+            isblog: isBlog,
             order: pageOrder
         };
 				

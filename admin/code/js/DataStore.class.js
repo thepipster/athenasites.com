@@ -660,7 +660,6 @@ var DataStore = {
         					pageObj.parent_page_id, 
         					pageObj.slug, 
         					pageObj.page_order, 
-        					pageObj.is_homepage, 
         					pageObj.description, 
         					pageObj.browser_title, 
         					DataStore.onPageSaved);
@@ -698,7 +697,7 @@ var DataStore = {
 	*/
 	savePost : function(postObj, callback){
 	
-        MediaAPI.updatePost(ssMain.siteID, 
+        BlogAPI.updatePost(ssMain.siteID, 
         					postObj.id, 
         					postObj.title, 
         					postObj.content, 
@@ -854,6 +853,9 @@ var DataStore = {
             temp.template_name = page_templates[i].template_name;
             temp.template_description = page_templates[i].template_description;
             temp.template_file = page_templates[i].template_file;
+            temp.thumbnail = page_templates[i].thumbnail;
+            temp.is_homepage = page_templates[i].is_homepage;
+            temp.is_blogpage = page_templates[i].is_blogpage;
 
             DataStore.m_templateList[i] = temp;
 

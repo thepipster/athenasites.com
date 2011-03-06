@@ -3,6 +3,7 @@
  * @Theme: HollyPacione
  * @Template: Blog Page
  * @Description: Blog Page
+ * @isBlog: 1
  * @Data: Blog
  */
 
