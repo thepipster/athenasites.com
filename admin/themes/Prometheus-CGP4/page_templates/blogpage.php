@@ -2,7 +2,7 @@
 /**
  * @Theme: CGP4
  * @Template: Blog Page
- * @Description: Blog Page
+ * @Description: This is your blog page
  * @isBlog: 1
  */
 ?>

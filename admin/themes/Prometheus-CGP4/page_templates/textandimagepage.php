@@ -2,7 +2,7 @@
 /**
 * @Theme: CGP4
 * @Template: Text & Image Page
-* @Description: Text & Image Page
+* @Description: A page that allows any content, but with an embedded image in the top right.
 */	
 
 $image = PageManager::getMediaFromThemePara(304); 

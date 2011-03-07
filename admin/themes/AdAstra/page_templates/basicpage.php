@@ -2,7 +2,7 @@
 /**
 * @Theme: AdAstra
 * @Template: Basic Page
-* @Description: Basic Page
+* @Description: A basic page which allows you to place any content you want into it.
 */
 
 ?>

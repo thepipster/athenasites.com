@@ -2,7 +2,7 @@
 /**
 * @Theme: HollyPacione
 * @Template: Gallery Page
-* @Description: Gallery Page
+* @Description: A gallery page that displays images. You can assign images to this page using Galleries tab.
 */
 
 $noflash = $_GET['noflash'];

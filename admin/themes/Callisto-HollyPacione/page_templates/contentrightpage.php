@@ -2,7 +2,7 @@
 /**
 * @Theme: HollyPacione
 * @Template: Content Right Page
-* @Description: Content Right Page
+* @Description: A page with a background image and page content to the right
 */
 
 $image = PageManager::getMediaFromThemePara(204); 

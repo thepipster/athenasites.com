@@ -2,7 +2,7 @@
 /**
 * @Theme: CGP4
 * @Template: Image List Page
-* @Description: A page the simply lists a bunch of images
+* @Description: Similar to a gallery page, but the images are displayed in a list.
 */
 
 $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id, PageManager::$page_id);

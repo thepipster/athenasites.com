@@ -2,7 +2,7 @@
 /**
 * @Theme: CGP4
 * @Template: Products Page
-* @Description: Products Page
+* @Description: Another gallery page with more focus on displaying the text you've associated with each image.
 */
 
 ?>

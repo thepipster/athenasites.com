@@ -2,7 +2,7 @@
 /**
 * @Theme: Thebe
 * @Template: Contact Page
-* @Description: Contact Page
+* @Description: A page that will allow your visitors to contact you and request information.
 */
 		
 $pre_gallery_page_id = Session::get('pre_gallery_page_id');

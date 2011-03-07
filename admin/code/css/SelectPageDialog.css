@@ -1,9 +1,11 @@
 #apolloSelectPage .templateThumbBox {
 	width: 60px;
 	height: 60px;
+	/*
 	border-width: 2px;
 	border-style: solid;
 	border-color: #e7e7e7;	
+	*/
 	cursor:pointer;
 	display: block;		
 }

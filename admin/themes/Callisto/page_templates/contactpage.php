@@ -2,7 +2,7 @@
 /**
 * @Theme: HollyPacione
 * @Template: Contact Page
-* @Description: Contact Page
+* @Description: A page that will allow your visitors to contact you and request information.
 * @Data: Text
 */
 

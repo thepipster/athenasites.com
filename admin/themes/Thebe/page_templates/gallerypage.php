@@ -2,7 +2,7 @@
 /**
 * @Theme: Thebe
 * @Template: Gallery Page
-* @Description: Gallery Page
+* @Description: A gallery page that displays images. You can assign images to this page using Galleries tab.
 */
 
 //$xml_url = "http://" . $_SERVER['HTTP_HOST'] ."/admin/code/php/getUserGalleryXML.php?site_id=".PageManager::$site_id."&page_id=".PageManager::$page_id."&cache=" . mt_rand();

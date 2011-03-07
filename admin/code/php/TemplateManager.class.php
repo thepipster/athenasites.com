@@ -34,7 +34,7 @@ class TemplateManager {
 			        	$temp = array();
 			        	$temp['template_file'] = $file;
 			        	
-			        	if (file_exists($file . '.png')){
+			        	if (file_exists($template_dir . $file . '.png')){
 				        	$temp['thumbnail'] = $template_url . $file . '.png';
 			        	}
 			        	else {

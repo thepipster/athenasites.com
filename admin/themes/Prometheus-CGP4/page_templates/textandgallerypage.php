@@ -2,7 +2,7 @@
 /**
 * @Theme: CGP4
 * @Template: Text & Gallery Page
-* @Description: Text & Gallery Page
+* @Description: A page that allows any content, but with an embedded gallery in the top right.
 */	
 
 $xml_url = "http://" . $_SERVER['HTTP_HOST'] ."/admin/code/php/getUserGalleryXML.php?p=".PageManager::$site_id.",".PageManager::$page_id."&cache=" . mt_rand();

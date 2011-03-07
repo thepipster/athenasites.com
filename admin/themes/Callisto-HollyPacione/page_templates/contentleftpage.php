@@ -3,7 +3,7 @@
 /**
 * @Theme: HollyPacione
 * @Template: Content Left Page
-* @Description: Content Left Page
+* @Description: A page with a background image and page content to the left
 */
 $image = PageManager::getMediaFromThemePara(203); 
 
