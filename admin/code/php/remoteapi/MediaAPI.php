@@ -157,7 +157,7 @@ function getAll($site_id) {
     $site = SitesTable::getSite($site_id);
     $theme = ThemeTable::getTheme($site['theme_id']);
     $page_templates = TemplateManager::getThemePageTemplates($theme['theme_name']);
-	Logger::dump($page_templates);
+	//Logger::dump($page_templates);
 
     // Get page theme variables
     $site_theme_paras = ThemeTable::getAllThemeParas($site['theme_id']);
