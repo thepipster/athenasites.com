@@ -4,6 +4,9 @@
 * @Template: Signup Page
 * @Description: Signup Page
 */
+
+$theme_id = CommandHelper::getPara('theme', false, CommandHelper::$PARA_TYPE_NUMERIC);
+
 /*
 require_once('/Users/mikep/Sites/apollosites.com/wp-admin/admin.php');
 
@@ -44,5 +47,7 @@ $wpdb->query($wpdb->prepare("UPDATE wp_".$blog_id."_options SET option_value = %
 <div id="content" class="widecolumn">
 				
 <h2>Signup Page</h2>
+
+<?=$theme_id?>
 
 </div>

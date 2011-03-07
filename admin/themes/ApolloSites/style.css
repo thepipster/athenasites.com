@@ -49,7 +49,7 @@ a img { border: none; }
 
 	position: relative;
 	top: 80px;
-	padding-top: 30px;
+	padding-top: 5px;
 	width: 100%;
 	background-color: #fefffe;
 	min-height: 500px;
@@ -184,4 +184,117 @@ a img { border: none; }
 #BlogPage .postDate {
 	font-size: 14px;
 	color: #389ceb;
+}
+
+/* Theme page ////////////////////////////////////////////// */
+
+.ApolloButton {
+	font-family:"Arial",verdana,helvetica,sans-serif;
+	font-size: 14px;
+	background-color: #1a5591;
+	color: white;
+	cursor: pointer;
+	display: inline-block;
+	border: 1px solid #0c2a48;
+	margin: 0px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 4px;
+	padding-bottom: 6px;
+	text-align: center;	
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+	behavior: url(border-radius.htc);	
+}
+
+.ApolloButton:hover {
+	background-color: #2880c1;
+}
+
+.themeWrapper {
+	height: 200px;
+}
+
+.themeText {
+	display: block;
+	width: 400px;
+	float: left;
+	padding-left: 15px;
+}
+
+.themeImage {
+	display: block;
+	width: 300px;
+	height: 200px;
+	float: left;
+	
+	border-width: 2px;
+	border-style: solid;
+	border-color: #e7e7e7;	
+}
+
+.templateWrapper {
+	display: inline-block;
+	background-color: #e6e6e6;
+	width: 380px;
+	padding: 5px;
+	margin: 3px;
+	
+	border: 1px solid #d7d7d7;
+
+	-moz-border-radius: 11px;
+	-webkit-border-radius: 11px;
+	border-radius: 11px;
+	behavior: url(border-radius.htc);
+	
+}
+
+.templateTextWrapper {
+	display: block;
+	float: left;
+	width: 315px;
+	height: 50px;
+}
+
+.templateImage {
+	display: block;
+	float: left;
+	width: 50px;
+	
+	border-width: 2px;
+	border-style: solid;
+	border-color: #e7e7e7;	
+	
+}
+
+.templateName {
+	color: #386b93;
+	padding-bottom: 3px;
+	padding-left: 5px;
+}
+
+.templateDescription {
+	color: #3f4040;
+	padding-bottom: 3px;
+	padding-left: 5px;
+}
+
+.colorBox {
+	width: 30px;
+	height: 30px;
+	border-width: 2px;
+	border-style: solid;
+	border-color: #e7e7e7;	
+	cursor:pointer
+}
+
+.thumbBox {
+	width: 30px;
+	height: 30px;
+	border-width: 2px;
+	border-style: solid;
+	border-color: #e7e7e7;	
+	cursor:pointer;
+	display: block;		
 }

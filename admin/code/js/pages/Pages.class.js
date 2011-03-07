@@ -50,10 +50,12 @@ var Pages = {
 		
         var ht = $('.ViewFrame').height() - 40;
 
+		// Removed: "FontName",
+		
         var groupsObj = [
             ["grpPage", "Page & View", ["FullScreen", "XHTMLSource", "Search", "BRK", "Undo", "Redo", "SpellCheck", "RemoveFormat"]],
             ["grpFont", "Font",
-                ["FontName", "FontSize", "Strikethrough", "Superscript", "Subscript", "BRK",
+                [ "FontSize", "Strikethrough", "Superscript", "Subscript", "BRK",
                     "Bold", "Italic", "Underline", "ForeColor", "BackColor"
                 ]
             ],
