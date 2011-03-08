@@ -32,42 +32,44 @@ if (PageManager::$blog_mode == PageManager::$BLOGMODE_SINGLEPOST){
 <div style='width:900px;'>
 
 <div class="coda-slider-wrapper">
-    <div class="coda-slider preload" id="coda-slider-9">
+    <div class="coda-slider preload" id="blog-coda-slider">
             
+
         
-<?php
-foreach ($post_list as $post) {
-
-    $post_link = PageManager::getPostLink($post);
-    $post_title = $post['title'];
-    $content = PageManager::getBlogContent($post);
-    $author = $post['author'] ;       
-      	                     
-?>
-    <div class="panel">
-        <div class="panel-wrapper">
-
-			<div class='postWrapper' align="left">
+		<?php
+		foreach ($post_list as $post) {
 		
-				<span class='postTitle'><a href='<?=$post_link?>' title='<?=$post_title?>'><?=$post_title?></a></span>	
-				&nbsp;				
-				<span class='postDate'><?= date("jS F Y", strtotime($post['created'])) ?></span>	
-				
-				<br/>
-				<br/>
+		    $post_link = PageManager::getPostLink($post);
+		    $post_title = $post['title'];
+		    $content = PageManager::getBlogContent($post);
+		    $author = $post['author'] ;       
+		      	                     
+		?>
+		    <div class="panel">
+		        <div class="panel-wrapper">
+		
+					<div class='postWrapper' align="left">
 					
-				<div class='postContents'>
-				<?= $content ?>
-				</div>	
+						<span class='postTitle'><a href='<?=$post_link?>' title='<?=$post_title?>'><?=$post_title?></a></span>	
+						&nbsp;				
+						<span class='postDate'><?= date("jS F Y", strtotime($post['created'])) ?></span>	
+						
+						<br/>
+						<br/>
+							
+						<div class='postContents'>
+						<?= $content ?>
+						</div>	
+						
+					</div>
+
 				
-			</div><!-- postWrapper -->
-		
-        </div>
-    </div>
-	
-<?php
-}
-?>
+		        </div>
+		    </div>
+			
+		<?php
+		}
+		?>
 
     </div><!-- .coda-slider -->
 </div><!-- .coda-slider-wrapper -->
@@ -79,8 +81,9 @@ foreach ($post_list as $post) {
 
     
 <script type="text/javascript">
+
 $(document).ready(function() {
-	$('#coda-slider-9').codaSlider({
+	$('#blog-coda-slider').codaSlider({
 		dynamicTabs:false,
 		dynamicArrows: true,
 //		dynamicArrowLeftText: '&#171; older',
@@ -90,4 +93,3 @@ $(document).ready(function() {
 	});
 });
 </script>
-
