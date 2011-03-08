@@ -202,6 +202,7 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
 //		$ishome = 1;
 //		$slug = "index.html";
 //	}
+
 // TODO: is_blogpage being set inside PagesTable::update - should probably pull out to here?	
 //	else if (stripos('_'.$tamplate_name, 'blog')){
 //		Logger::debug("This is the blog page!!");
@@ -209,8 +210,17 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
 //		$slug = "blog";
 //	}
 //	else {
-		$slug = Page::encodeSlug($safe_title);
+//		$slug = Page::encodeSlug($safe_title);
 //	}
+
+    $is_home = getIsHome($site_id, $page_id);
+
+	if ($is_home == 1){
+		$slug = "index.html";
+	}
+	else {
+		$slug = Page::encodeSlug($safe_title);
+	}
 	 
     PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $safe_title, $tamplate_name, $slug, $path, $order, $description, $browser_title);
 

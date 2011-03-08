@@ -139,6 +139,13 @@ class PagesTable {
 	
 	// /////////////////////////////////////////////////////////////////////////////////
 
+	public static function getIsHome($site_id, $page_id){
+		$sql = DatabaseManager::prepare("SELECT is_homepage FROM athena_%d_Pages WHERE id = %d", $site_id, $page_id);		
+		return DatabaseManager::getVar($sql);				
+	}
+
+	// /////////////////////////////////////////////////////////////////////////////////
+
 	public static function getHomepage($site_id){
 		//Logger::debug("getPage(site_id = $site_id, page_id = $page_id");	
 		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages WHERE is_homepage = 1", $site_id);		
