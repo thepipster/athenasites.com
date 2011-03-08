@@ -2,7 +2,7 @@
 /**
 * @Theme: HollyPacione
 * @Template: Basic Page
-* @Description: Basic Page
+* @Description: A basic page which allows you to place any content you want into it.
 */			
 $background_image = PageManager::getMediaURLFromThemePara(215); 
 

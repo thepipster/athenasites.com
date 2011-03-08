@@ -1,4 +1,4 @@
-var hollyGallery = {
+var callistoGallery = {
 
 	/** Width of flash gallery viewer */
 	imgWidth : 1350,
@@ -26,7 +26,7 @@ var hollyGallery = {
 	// /////////////////////////////////////////////////////////////////////////////////
 
 	preInit : function(){
-		hollyGallery.hasFlash = DetectFlashVer(hollyGallery.requiredMajorVersion, hollyGallery.requiredMinorVersion, hollyGallery.requiredRevision);
+		callistoGallery.hasFlash = DetectFlashVer(callistoGallery.requiredMajorVersion, callistoGallery.requiredMinorVersion, callistoGallery.requiredRevision);
 	},
 	
 	// /////////////////////////////////////////////////////////////////////////////////
@@ -36,16 +36,16 @@ var hollyGallery = {
 	
 	init : function(options){
 
-		hollyGallery.flashXML = options.xml;
-		hollyGallery.flashSWF = options.swf;		
-		hollyGallery.imgWidth = options.width;
-		hollyGallery.imgHeight = options.height;
-		hollyGallery.loadingSpinner = options.loadingSpinner;
+		callistoGallery.flashXML = options.xml;
+		callistoGallery.flashSWF = options.swf;		
+		callistoGallery.imgWidth = options.width;
+		callistoGallery.imgHeight = options.height;
+		callistoGallery.loadingSpinner = options.loadingSpinner;
 								
-		if (hollyGallery.hasFlash){				
+		if (callistoGallery.hasFlash){				
 			// Clear the div as fast as possible			
 			var txt = "";
-			if (hollyGallery.loadingSpinner){
+			if (callistoGallery.loadingSpinner){
 				txt += "<div class='flashGalWrapper'>";
 				txt += "</div>";
 			}
@@ -53,20 +53,20 @@ var hollyGallery = {
 			///$('#content').html("");
 		}		
 													
-		//$(document).ready(hollyGallery.doInit);
+		//$(document).ready(callistoGallery.doInit);
 		// Optimize size for gallery
-		hollyGallery.imgRatio = hollyGallery.imgWidth / hollyGallery.imgHeight;
+		callistoGallery.imgRatio = callistoGallery.imgWidth / callistoGallery.imgHeight;
 		
 		// Setup display dimensions			
-		hollyGallery.onResize();		
+		callistoGallery.onResize();		
 		
-		if (hollyGallery.hasFlash){				
-			setTimeout("hollyGallery.paintGallery()", 200);
+		if (callistoGallery.hasFlash){				
+			setTimeout("callistoGallery.paintGallery()", 200);
 		}
 			
 		// Set resize listener
 		// TODO: Should append listener to any existing
-		$(window).resize(hollyGallery.onResize);
+		$(window).resize(callistoGallery.onResize);
 		
 	},
 		
@@ -74,39 +74,39 @@ var hollyGallery = {
 	
 	paintGallery : function(){
 	
-		var id = hollyGallery.flashID;
+		var id = callistoGallery.flashID;
 		var align = "center";
 		//var wmode = "opaque";
 		var wmode = "transparent";
 		
 		var txt = "";
-		if (hollyGallery.loadingSpinner){
+		if (callistoGallery.loadingSpinner){
 			txt += "<div class='flashGalWrapper'>";
 		}
 		txt += "<object classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000' codebase='http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0' width='100%' height='100%' id='"+id+"' align='"+align+"'>";
 		txt += "	<param name='allowScriptAccess' value='sameDomain' /> ";
 		txt += "	<param name='wmode' value='"+wmode+"' /> ";
-		txt += "	<param name='movie' value='"+hollyGallery.flashSWF+"'/> ";
+		txt += "	<param name='movie' value='"+callistoGallery.flashSWF+"'/> ";
 		txt += "	<param name='quality' value='high' /> ";
 		txt += "	<param name='bgcolor' value='#cccccc' /> ";
-		txt += "	<param name='FlashVars' value='xmlFile="+hollyGallery.flashXML+"' /> ";
-		txt += "	<embed FlashVars='xmlFile="+hollyGallery.flashXML+"' src='"+hollyGallery.flashSWF+"' quality='high' bgcolor='#cccccc' wmode='"+wmode+"' width='100%' height='100%' name='"+id+"' align='"+align+"' allowScriptAccess='sameDomain' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' /> ";
+		txt += "	<param name='FlashVars' value='xmlFile="+callistoGallery.flashXML+"' /> ";
+		txt += "	<embed FlashVars='xmlFile="+callistoGallery.flashXML+"' src='"+callistoGallery.flashSWF+"' quality='high' bgcolor='#cccccc' wmode='"+wmode+"' width='100%' height='100%' name='"+id+"' align='"+align+"' allowScriptAccess='sameDomain' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' /> ";
 		txt += "</object>";
-		if (hollyGallery.loadingSpinner){
+		if (callistoGallery.loadingSpinner){
 			txt += "</div>";
 		}
 	
 		//document.getElementById('galleryWrapper').innerHTML = txt;
 		$('#content').html(txt);
-		//setTimeout("hollyGallery.onResize()", 2000);
-		hollyGallery.onResize();
+		//setTimeout("callistoGallery.onResize()", 2000);
+		callistoGallery.onResize();
 	},
 	
 	// /////////////////////////////////////////////////////////////////////////////////
 	
 	onResize : function(){
 
-		if (hollyGallery.hasFlash){
+		if (callistoGallery.hasFlash){
 			
 			var minH = parseInt($("#content").css("min-height"));
 			var maxH = parseInt($("#content").css("max-height"));
@@ -124,7 +124,7 @@ var hollyGallery = {
 				if (minH > galH) galH = minH;
 			}
 					
-			var galW = Math.floor(hollyGallery.imgRatio * galH);	
+			var galW = Math.floor(callistoGallery.imgRatio * galH);	
 							
 			//alert($("#wrapper").height() + ", " + $("#nav_container").height());
 			//alert("galW = " + galW + ", galH = " + galH);
@@ -133,21 +133,20 @@ var hollyGallery = {
 			$("#nav_container").width(galW);	
 			$("#container").width(galW);	
 								
-			$("#"+hollyGallery.flashID).width(galW);
-			$("#"+hollyGallery.flashID).height(galH);
+			$("#"+callistoGallery.flashID).width(galW);
+			$("#"+callistoGallery.flashID).height(galH);
 			
 			$("#content").height(galH);
 			$("#content").width(galW);
-								
-								
+																
 			/*
-			var flashH = $("#"+hollyGallery.flashID).height();			
+			var flashH = $("#"+callistoGallery.flashID).height();			
 			if (flashH != null && (flashH != $("#content").height())){
 				alert("Setting content height to " + flashH);
 				$("#content").height(flashH);
 			}
 			
-			alert("Flash height = " + $("#"+hollyGallery.flashID).height() + "  Content Height = " + $("#content").height());
+			alert("Flash height = " + $("#"+callistoGallery.flashID).height() + "  Content Height = " + $("#content").height());
 			*/
 		}
 		

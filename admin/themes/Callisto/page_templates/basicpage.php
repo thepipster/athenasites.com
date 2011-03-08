@@ -2,8 +2,7 @@
 /**
 * @Theme: Callisto
 * @Template: Basic Page
-* @Description: A basic page which allows you to place any content you want into it.
-* @Data: text
+* @Description: Basic Page
 */			
 $background_image = PageManager::getMediaURLFromThemePara(215); 
 
@@ -13,26 +12,16 @@ if (!isset($background_image) || $background_image == ""){
 
 ?>
 
-		<div id='content'>
-		<div id='scroller'>
+<div id='content' class='basicPage' align="left">
 
-			<div class='backgroundImage'>
-				<img src="<?=$background_image?>" width='100%' height='100%'/>
-			</div>
-			
-			<div class="singleCol" align="left">
-				<div class='contentText'>
-					<?php echo PageManager::getCurrentPageContent(); ?>
-				</div>
-			</div>
-			
-		</div>
-		</div><!-- content -->
+	<?php echo PageManager::getCurrentPageContent(); ?>
+	
+</div><!-- content -->
 
 		
 <script type="text/javascript">
 
-hollyInfoPage.init({
+callistoInfoPage.init({
 	width: 1350,
 	height: 800,
 	pageType: 'none'

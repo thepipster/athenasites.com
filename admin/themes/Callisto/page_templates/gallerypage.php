@@ -1,9 +1,8 @@
 <?php
 /**
-* @Theme: HollyPacione
+* @Theme: Callisto
 * @Template: Gallery Page
 * @Description: A gallery page that displays images. You can assign images to this page using Galleries tab.
-* @Data: Gallery
 */
 
 $noflash = $_GET['noflash'];
@@ -15,10 +14,10 @@ $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id
 ?>
 <script type="text/javascript">
 
-	hollyGallery.preInit();		
+	callistoGallery.preInit();		
 	<?php
 		if (isset($noflash) && $noflash == 1){
-			echo 'hollyGallery.hasFlash = false;';
+			echo 'callistoGallery.hasFlash = false;';
 		}
 	?>
 
@@ -50,7 +49,7 @@ $gallery_image_list = ClientGalleryTable::getImagesForPage(PageManager::$site_id
 		
 <script type="text/javascript">
 
-	hollyGallery.init({
+	callistoGallery.init({
 		swf:"<?= PageManager::$theme_url_root; ?>/flash/spGallery.swf", 
 		xml:"<?= $xml_url?>",
 		width: 1350,

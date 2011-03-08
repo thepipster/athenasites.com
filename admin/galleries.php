@@ -36,6 +36,10 @@ Logger::debug("$domain has site_id = $site_id");
     <script src="code/js/3rdparty/jquery-1.4.2.min.js" type="text/javascript"></script>
     <script src="code/js/3rdparty/jquery-ui/jquery-ui-1.8.4.custom.min.js" type="text/javascript"></script>
 
+    <!-- Color Picker -->
+    <script src="code/colorpicker/js/colorpicker.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="code/colorpicker/css/colorpicker.css" type="text/css" />
+
 	<?php	
 		if (DEV_MODE) {
 			define('BUILD_MODE', 'galleries');

@@ -20,8 +20,11 @@ if (!defined('BUILD_MODE')){
 //
 // ////////////////////////////////////////////////////////////////////////////
 
+//         <script src="code/colorpicker/js/colorpicker.js" type="text/javascript"></script>
+
+
 $js_common_list = array(
-	"$base_dir/code/colorpicker/js/colorpicker.js", // This needs to be first...
+	// "$base_dir/code/colorpicker/js/colorpicker.js", // This needs to be first...
 	// 3rd Party...
 	"$base_dir/code/js/3rdparty/jquery.advancedClick.js",				
 	"$base_dir/code/js/3rdparty/jquery.typing-0.2.0.min.js",	
@@ -46,11 +49,13 @@ $js_common_list = array(
 	"$base_dir/code/js/remoteapi/GalleryAPI.class.js",	
 	// Dialogs...
 	"$base_dir/code/js/dialogs/AccountDialog.class.js",	
+	"$base_dir/code/js/dialogs/ColorPickerDialog.class.js",
 	// Frames
 	"$base_dir/code/js/frames/SidebarFrame.class.js"	
 );
 
 $css_common_list = array(
+//	"$base_dir/code/colorpicker/css/colorpicker.css",
 	"$base_dir/code/css/AccountDialog.css",
 	"$base_dir/code/css/Athena.css",
 	"$base_dir/code/css/SideBar.css"
@@ -105,7 +110,6 @@ if (BUILD_MODE == 'posts' || BUILD_MODE == 'all'){
 		"$base_dir/code/js/3rdparty/jquery.datePicker.js",
 		// Dialogs...
 		"$base_dir/code/js/dialogs/ImagePickerDialog.class.js",
-		"$base_dir/code/js/dialogs/ColorPickerDialog.class.js",
 		"$base_dir/code/js/dialogs/CommentsEditDialog.class.js",
 		// Sub-Frames....
 		"$base_dir/code/js/subframes/PostsSidebarFrame.class.js",
@@ -120,7 +124,6 @@ if (BUILD_MODE == 'posts' || BUILD_MODE == 'all'){
 	$css_list = array(			
 		"$base_dir/code/css/PagesFrame.css",
 		// "$base_dir/code/css/PostsFrame.css", Merged posts and pages, so no need of this style sheet
-		"$base_dir/code/colorpicker/css/colorpicker.css",
 		"$base_dir/code/css/datePicker.css",
 		"$base_dir/code/css/ImageEditDialog.css",
 		"$base_dir/code/css/ImagePickerDialog.css",
@@ -150,7 +153,6 @@ if (BUILD_MODE == 'pages' || BUILD_MODE == 'all'){
 		// Dialogs...
 		"$base_dir/code/js/dialogs/SelectPageDialog.class.js",
 		"$base_dir/code/js/dialogs/ImagePickerDialog.class.js",
-		"$base_dir/code/js/dialogs/ColorPickerDialog.class.js",
 		"$base_dir/code/js/dialogs/CommentsEditDialog.class.js",
 		// Sub-Frames....
 		"$base_dir/code/js/subframes/PagesSidebarFrame.class.js",
@@ -165,7 +167,6 @@ if (BUILD_MODE == 'pages' || BUILD_MODE == 'all'){
 	$css_list = array(			
 		"$base_dir/code/css/PagesFrame.css",
 		// "$base_dir/code/css/PostsFrame.css", Merged posts and pages, so no need of this style sheet
-		"$base_dir/code/colorpicker/css/colorpicker.css",
 		"$base_dir/code/css/datePicker.css",
 		"$base_dir/code/css/SelectPageDialog.css",
 		"$base_dir/code/css/ImageEditDialog.css",
@@ -199,7 +200,6 @@ if (BUILD_MODE == 'files' || BUILD_MODE == 'all'){
 		"$base_dir/code/js/flashuploader/FlashUploader.class.js",
 		 // Dialogs...
 		"$base_dir/code/js/dialogs/ImagePickerDialog.class.js",
-		"$base_dir/code/js/dialogs/ColorPickerDialog.class.js",
 		"$base_dir/code/js/dialogs/CommentsEditDialog.class.js",
 		// Sub-Frames....
 		"$base_dir/code/js/subframes/FolderSidebarFrame.class.js",
@@ -299,7 +299,6 @@ if (BUILD_MODE == 'settings' || BUILD_MODE == 'all'){
 		// Dialogs...
 		"$base_dir/code/js/dialogs/AccountDialog.class.js",
 		"$base_dir/code/js/dialogs/ImagePickerDialog.class.js",
-		"$base_dir/code/js/dialogs/ColorPickerDialog.class.js",	
 		"$base_dir/code/js/dialogs/WordpressImporter.class.js",
 		"$base_dir/code/js/dialogs/LiveJournalImporter.class.js",
 		"$base_dir/code/js/dialogs/BloggerImporter.class.js",

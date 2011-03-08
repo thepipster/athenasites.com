@@ -1,7 +1,7 @@
 /**
 * Class to handle the blog interaction
 */
-var hpBlog = {
+var callistoBlog = {
 
     /** Minimum allowed width */
     minWidth : 800,
@@ -17,13 +17,13 @@ var hpBlog = {
 	
     init : function(){
         	
-        hpBlog.m_commandURL = 'http://' + location.host + '/admin/code/php/remoteapi/BlogAPI.php';
+        callistoBlog.m_commandURL = 'http://' + location.host + '/admin/code/php/remoteapi/BlogAPI.php';
     
-        hpBlog.onResize();
-        setTimeout("hpBlog.onResize()", 200);
+        callistoBlog.onResize();
+        setTimeout("callistoBlog.onResize()", 200);
     
         // Get the comments
-        hpBlog.getComments();
+        callistoBlog.getComments();
         
 		// Validation
 		$("#commentForm").validate();
@@ -35,7 +35,7 @@ var hpBlog = {
 		  		if (value == '') return false; 
 		  		
 		  		// Check to see if this group is complete
-		  		return hpBlog.checkEmail(value);
+		  		return callistoBlog.checkEmail(value);
 			}, 
 			"Enter a valid email");
 
@@ -82,15 +82,15 @@ var hpBlog = {
 
         var paras = {
             cmd : 'getApprovedComments',
-            site_id: hpBlog.m_siteID,
-            post_id: hpBlog.m_postID
+            site_id: callistoBlog.m_siteID,
+            post_id: callistoBlog.m_postID
         };
 
         $.ajax({
-            url: hpBlog.m_commandURL,
+            url: callistoBlog.m_commandURL,
             dataType: "json",
             data: paras,
-            success: hpBlog.onGotComments
+            success: callistoBlog.onGotComments
         });
            
     },
@@ -140,8 +140,8 @@ var hpBlog = {
         		        	
 	        var paras = {
 	            cmd : 'addComment',
-	            site_id: hpBlog.m_siteID,
-	            post_id: hpBlog.m_postID,
+	            site_id: callistoBlog.m_siteID,
+	            post_id: callistoBlog.m_postID,
 	            name: authorName, 
 	            email: authorEmail,
 	            post_url: escape(postURL),
@@ -150,10 +150,10 @@ var hpBlog = {
 	        };
 			     					     	
 	        $.ajax({
-	            url: hpBlog.m_commandURL,
+	            url: callistoBlog.m_commandURL,
 	            dataType: "json",
 	            data: paras,
-	            success:  hpBlog.onCommentPosted,
+	            success:  callistoBlog.onCommentPosted,
 	            error: function(ret){alert(ret);}
 	        });
 	     

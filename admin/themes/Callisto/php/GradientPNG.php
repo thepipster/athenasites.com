@@ -2,7 +2,7 @@
 /**
 * Create a gradient png dynamically, derived from http://www.xtremepccentral.com/forums/showthread.php?t=17981
 * 
-* Usage;  http://zip.local.com/test1/wp-content/themes/HollyPacione/php/GradientPNG.php?c1=afc3ff&c2=000000&w=100&h=50&d=1
+* Usage;  http://zip.local.com/test1/wp-content/themes/Callisto/php/GradientPNG.php?c1=afc3ff&c2=000000&w=100&h=50&d=1
 * 
 * Where
 * c1 = color 1 (in hex)

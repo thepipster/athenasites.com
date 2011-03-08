@@ -1,53 +1,59 @@
 <?php
 /**
-* @Theme: HollyPacione
+* @Theme: Callisto
 * @Template: Contact Page
 * @Description: A page that will allow your visitors to contact you and request information.
-* @Data: Text
 */
 
 //$background_image = PageManager::getMediaURLFromThemePara(205); 
 
-$image = PageManager::getMediaFromThemePara(205); 
+$contact_form_background_color = PageParasTable::getParaValue(PageManager::$page_id, 420, PageManager::$site_id);
 
-if (isset($image)){
-	$background_image = PageManager::getMediaURL($image['id']);
-	$width = $image['width'];
-	$height = $image['height'];
-}
-else {
-	$background_image = PageManager::$common_url_root . 'imgs/blank.png';
-	$width = 1350;
-	$height = 800;
+$style = '';
+if (isset($contact_form_background_color)){
+	$style = "background-color: #".$contact_form_background_color;
 }
 
-
-// Email = 206 
 ?>
 
 
-	<div id="content" style="border:none;">
+	<div id="content" class='basicPage' align="left">
 		
-		<table border="0" cellpadding="0" cellspacing="0" id='contentTable' width="100%" height="100%" style="width:100%; height:100%; background-image: url('<?=$background_image?>')">
+		<table border="0" cellpadding="0" cellspacing="0" id='contentTable' width="100%" height="100%" style="width:100%; height:100%;">
 			
 			<tr valign="top" align='left' height="100%">
 
 				<td width="55%" height="100%"> 
-					<!-- Empty -->
+					<?php echo PageManager::getCurrentPageContent(); ?>
 				</td>
 							
 				<td width="45%" height="100%" class='rightCol'>
-					<?php echo PageManager::getCurrentPageContent(); ?>
 					
-					<form id='contactForm' method='post' action='' onsubmit="hpContact.onSubmit(); return false;">
-						<input type="text" class='inputText required_name' id='name' name='name' value="Your Name" onfocus="if (this.value == 'Your Name'){this.value = '';}" onblur='hpContact.onChange()'>
-						<input type="text" class='inputText required_email' id='email' name='email' value="Your E-mail Address" onfocus="if (this.value == 'Your E-mail Address'){this.value = '';}" onblur='hpContact.onChange()'>
-						<input type="text" class='inputText required_phone' id='phone' name='phone' value="Your Phone" onfocus="if (this.value == 'Your Phone'){this.value = '';}" onblur='hpContact.onChange()'>
-						<input type="text" class='inputText' id='location' name='location' value="Event Location" onfocus="if (this.value == 'Event Location'){this.value = '';}" onblur='hpContact.onChange()'>
-						<input type="text" class='inputText datepicker' id='datetime' name='datetime' value="Requested Date">
-						<textarea class='inputTextArea' id='comments' name='comments' onfocus="if (this.value == 'How did you find out about us?'){this.value = '';}" rows="5">How did you find out about us?</textarea>
-						<input type="submit" value="Submit" onclick=""><span class='formMessage'></span>
-						<!-- <button onclick="hpContact.onSubmit()">Submit</button> -->
+					<form id='contactForm' method='post' action='' style='<?=$style?>' onsubmit="callistoContact.onSubmit(); return false;">
+
+						<span class='fieldName'>Your Name</span>
+						<input type="text" class='inputText required_name' id='name' name='name' value="" >
+
+						<span class='fieldName'>Your E-mail Address</span>
+						<input type="text" class='inputText required_email' id='email' name='email' value="" >
+
+						<span class='fieldName'>Your Phone</span>
+						<input type="text" class='inputText required_phone' id='phone' name='phone' value="" >
+
+						<span class='fieldName'>Event Location</span>
+						<input type="text" class='inputText' id='location' name='location' value="" >
+
+						<span class='fieldName'>Requested Date</span>
+						<input type="text" class='inputText datepicker' id='datetime' name='datetime' value="">
+
+						<span class='fieldName'>How did you find out about us?</span>
+						<textarea class='inputTextArea' id='comments' name='comments' rows="5"></textarea>
+
+						<input class='formButton' type="submit" value="Submit" onclick="">
+						<!-- <button onclick="callistoContact.onSubmit()">Submit</button> -->
+						
+						<span class='formMessage'></span>
+
 					</form>
 				</td>
 				
@@ -61,9 +67,9 @@ else {
 		
 <script type="text/javascript">
 
-hollyInfoPage.init({
-	width: <?= $width ?>,
-	height: <?= $height ?>,
+callistoInfoPage.init({
+	width: 1350,
+	height: 800,
 	pageType: 'right'
 });
 
@@ -78,7 +84,7 @@ var requiredRevision = 0;
 
 var hasFlash = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
 
-var hpContact = {
+var callistoContact = {
 		
 	page_id : <?=PageManager::$page_id?>,
 	
@@ -103,7 +109,7 @@ var hpContact = {
 		  		if (value == '') return false; 
 		  		
 		  		// Check to see if this group is complete
-		  		return hpContact.checkEmail(value);
+		  		return callistoContact.checkEmail(value);
 			}, 
 			"Enter a valid email");
 
@@ -150,7 +156,7 @@ var hpContact = {
 			
 			// submitRequest : function(siteID, pageID, reqName, reqEmail, reqPhone, reqLocation, reqDate, reqComments, callback)
 
-			apolloContactRequest.submitRequest(hpContact.site_id, hpContact.page_id, hpContact.nonce, aName, aEmail, aPhone, aLocation, aDatetime, aComments, hpContact.onSentForm);
+			apolloContactRequest.submitRequest(callistoContact.site_id, callistoContact.page_id, callistoContact.nonce, aName, aEmail, aPhone, aLocation, aDatetime, aComments, callistoContact.onSentForm);
 			
 		}	
 		
@@ -175,6 +181,6 @@ var hpContact = {
 
 // /////////////////////////////////////////////////////////////////////////////////
 
-$(document).ready(hpContact.init);
+$(document).ready(callistoContact.init);
 
 </script>

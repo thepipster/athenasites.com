@@ -1,8 +1,8 @@
 <?php
 /**
 * @Theme: Callisto
-* @Template: Home Page
-* @Description: Home Page
+* @Template: Collage home page
+* @Description: This is a special home page that has a collage of all your galleries, with each thumbnail linking to that gallery
 * @isHome: 1
 */
 

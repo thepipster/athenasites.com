@@ -1,10 +1,9 @@
 <?php
 
 /**
-* @Theme: HollyPacione
+* @Theme: Callisto
 * @Template: Content Left Page
-* @Description: Content Left Page
-* @Data: Text
+* @Description: A page with a background image and page content to the left
 */
 $image = PageManager::getMediaFromThemePara(203); 
 
@@ -51,7 +50,7 @@ if ($width < $height){
 		
 <script type="text/javascript">
 
-hollyInfoPage.init({
+callistoInfoPage.init({
 	width: <?= $width ?>,
 	height: <?= $height ?>,
 	pageType: 'left'

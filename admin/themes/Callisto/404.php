@@ -25,7 +25,7 @@
 
 <script type="text/javascript">
 
-hollyInfoPage.init({
+callistoInfoPage.init({
 	width: 1350,
 	height: 800,
 	pageType: 'none'
