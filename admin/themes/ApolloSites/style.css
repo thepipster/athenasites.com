@@ -186,6 +186,24 @@ a img { border: none; }
 	color: #389ceb;
 }
 
+/* Signup page ////////////////////////////////////////////// */
+
+.rightCol {
+	display: inline-block;
+	float: left;
+	width: 50%;
+	height: 400px;
+	background-color: green;
+}
+
+.leftCol {
+	display: inline-block;
+	float: left;
+	width: 50%;
+	height: 400px;
+	background-color: blue;
+}
+
 /* Theme page ////////////////////////////////////////////// */
 
 .ApolloButton {
