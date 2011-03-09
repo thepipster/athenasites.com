@@ -213,7 +213,7 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
 //		$slug = Page::encodeSlug($safe_title);
 //	}
 
-    $is_home = getIsHome($site_id, $page_id);
+    $is_home = PagesTable::getIsHome($site_id, $page_id);
 
 	if ($is_home == 1){
 		$slug = "index.html";
