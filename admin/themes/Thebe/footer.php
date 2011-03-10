@@ -161,8 +161,6 @@ var thebeMain = {
 	
 	doPopup : function(id){
 		
-		alert('doPopup');
-		
 		var txt = "";		
 		txt += "<div id='popupPage'>";
 		txt += "</div>";
