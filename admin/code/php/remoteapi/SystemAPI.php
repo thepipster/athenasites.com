@@ -142,10 +142,10 @@ function createUser($email, $name, $username, $theme_id, $nonce, $coupon){
 		foreach($template_list as $template){
 		
 			if ($template['is_homepage'] == 1){
-			    PagesTable::create($user_id, $site_id, 0, $safe_content, "Published", "Home", $template['template_name'], Page::encodeSlug("Home"), "", 1, 1, 0);
+			    PagesTable::create($user_id, $site_id, 0, $safe_content, "Published", "Home", $template['template_file'], Page::encodeSlug("Home"), "", 1, 1, 0);
 			}
 			else if ($template['is_blogpage'] == 1){
-			    PagesTable::create($user_id, $site_id, 0, $safe_content, "Published", "Blog", $template['template_name'], Page::encodeSlug("Blog"), "", 2, 0, 1);
+			    PagesTable::create($user_id, $site_id, 0, '', "Published", "Blog", $template['template_file'], Page::encodeSlug("Blog"), "", 2, 0, 1);
 			}
 			
 		}
@@ -156,12 +156,12 @@ function createUser($email, $name, $username, $theme_id, $nonce, $coupon){
 	    PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), 'Published', StringUtils::makeHtmlSafe($title), 1, Post::encodeSlug($title), 'apollo');
 
 		$msg['result'] = 'ok';			
+
+		// Send welcome email	
+		$site_url = 'http://' . $site_domain;
+		EmailMessaging::sendNewAccountEmail($site_id, $user_id, $name, $email, $site_url, $plain_password);
 		
 	}
-
-	// Send welcome email	
-	$site_url = 'http://' . $site_domain;
-	EmailMessaging::sendNewAccountEmail($site_id, $user_id, $email, $site_url, $plain_password);
 	
 	//
 	// Message that we are complete

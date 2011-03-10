@@ -15,10 +15,7 @@ $key = CommandHelper::getPara('key', false, CommandHelper::$PARA_TYPE_STRING);
 $valid_time_secs = 3600 * 12; // 12 hours
 
 $sql = DatabaseManager::prepare("SELECT * FROM apollo_EmailActivationTable WHERE activation_key = %s AND TIME_TO_SEC(TIMEDIFF(now(), created_date)) < %d", $key, $valid_time_secs);
-Logger::debug($sql);
-
 $data = DatabaseManager::getSingleResult($sql);
-$site = SitesTable::getSite($data['user_id']);
 
 if (isset($data)){
 
@@ -33,7 +30,7 @@ if (isset($data)){
 if (!isset($data)){
 ?>
 
-<h2 style='color:#d22'>Email Activation Failure!</h2>
+<h2 style='color:#d22'>Activation Failure!</h2>
 <img src='/admin/images/email_activation_failure.png'/>
 <p>Sorry, we could not find an activation code that matched the one you gave us? This could be because the activation code is either incorrect, 
 or it has expired. If you requested to change your existing email address, please try again.
@@ -44,18 +41,23 @@ or it has expired. If you requested to change your existing email address, pleas
 else {
 ?>
 
-<h2>Email Activation Successful!</h2>
-<img src='/admin/images/email_activation.png'/>
-
 <?php
 
 // Respond based on activation reason
 if ($data['reason'] == 'new_account'){	
-	SitesTable::updateLive($site['domain'], $is_live);	
-	echo "<p>Congratulations, we've activated your site <b>http://".$site['domain']."</b></p>";
+
+	$sql = DatabaseManager::prepare("SELECT * FROM apollo_Sites sites INNER JOIN apollo_UserToSite uts WHERE uts.user_id = %d AND sites.id = uts.site_id ORDER BY sites.id ASC LIMIT 1", $data['user_id']);			
+	$site = DatabaseManager::getSingleResult($sql);				
+
+	SitesTable::updateLive($site['domain'], 1);	
+	echo "<h2>Account Activation Successful!</h2>";
+	echo "<img src='/admin/images/email_activation.png'/>";
+	echo "<p>Congratulations, we've activated your account!</p>";
 }
 else {
-	echo "<p>Congratulations, we've activated your email address, <b>".$data['email']."</b>, for your site <b>http://".$site['domain']."</b></p>";
+	echo "<h2>Email Activation Successful!</h2>";
+	echo "<img src='/admin/images/email_activation.png'/>";
+	echo "<p>Congratulations, we've activated your email address, <b>".$data['email']."</b></p>";
 }
 ?>
 

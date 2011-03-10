@@ -76,10 +76,11 @@ PageManager::doHeader();
 
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/AC_OETags.js"></script>
 	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/apolloMiniGallery.js"></script>
-	<!--
-	<script type="text/javascript" src="<?= PageManager::$theme_url_root; ?>js/jquery_ui/ui/ui.core.js"></script>
 
-		<link rel="stylesheet" href="http://jquery-ui.googlecode.com/svn/tags/latest/themes/base/jquery-ui.css" type="text/css" media="all" />
+	<script src="http://jquery-ui.googlecode.com/svn/tags/latest/ui/minified/jquery-ui.min.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="http://jquery-ui.googlecode.com/svn/tags/latest/themes/base/jquery-ui.css" type="text/css" media="all" />
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/overcast/jquery-ui.css" type="text/css"/>
+	<!--
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
 		<script src="http://jquery-ui.googlecode.com/svn/tags/latest/ui/minified/jquery-ui.min.js" type="text/javascript"></script>
 	-->
@@ -121,6 +122,8 @@ PageManager::doHeader();
 </head>
 
 <body onload="preloader()">
+
+<div id='load_display'></div>
 
 <div align='center' style='width:100%; height:100%'>
     

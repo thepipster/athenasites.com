@@ -142,44 +142,37 @@ class EmailMessaging {
 	/**
 	* Send a email activation email
 	*/
-    public static function sendNewAccountEmail($site_id, $user_id, $userEmail, $site_url, $plain_password) {
+    public static function sendNewAccountEmail($site_id, $user_id, $userName, $userEmail, $site_url, $plain_password) {
+    
+    	Logger::debug("sendNewAccountEmail(site_id=$site_id, user_id=$user_id, userName=$userName, userEmail=$userEmail, siteURL=$site_url, password=$plain_password");
 
 		$subject = 'Welcome to ApolloSites!';
 									
-		$from_email = 'mike@apollosites.com';
-		$from_name = 'Mike Pritchard | ApolloSites';
-
-		$activation_key = self::generateUniqueKey();
+		$activation_key = SecurityUtils::generateUniqueKey();
     	$date_str = date('Y-m-d H:i:s', time());
     	
-		$link = "http://apollosites.com/admin/activateEmail.php?key=".$activation_key;
-		$sql = DatabaseManager::prepare("INSERT INTO apollo_EmailActivationTable (user_id, email, activation_key, created_date, reason) VALUES (%d, %s, %s, 'new_account')", $user_id, $userEmail, $activation_key, $date_str);
+		$approve_link = "http://apollosites.com/admin/activateEmail.php?key=".$activation_key;
+		$sql = DatabaseManager::prepare("INSERT INTO apollo_EmailActivationTable (user_id, email, activation_key, created_date, reason) VALUES (%d, %s, %s, %s, 'new_account')", $user_id, $userEmail, $activation_key, $date_str);
 		DatabaseManager::insert($sql);
 
-		$content_html = "
-		<h3>Thankyou and welcome to ApolloSites!</h3>
+		$content_html = "<h3>Thank you and welcome to ApolloSites!</h3>
 		
 		<h3>Account Activation</h3>
 		<p>
-		We need to confirm your email address before we can activate your account, please click this link to activate!
-		
+		We need to confirm your email address before we can activate your account, please click <a href='$approve_link'>this link</a> to activate your account!	<br/>
 		</p>
-		
-		<h3>Your Website</h3>		
-		<p><a id='sitelink' href='$site_url' target='_blank'><span class='siteLink'>$site_url</span></a></p>
 
 		<h3>Administer Your Site</h3>
 		
 		<p>		
-		We have randomly created the following password for you, we encourage you to change it as soon as you get a chance! You can change your password at anytime from your admin site by clicking the 'Account' link at the top right.
-		<b>$plain_password</b>
+			We have randomly created a password for you, we encourage you to change it as soon as you get a chance! You can change your password at anytime from your admin site by clicking the 'Account' link at the top right.
+			<br/><br/>
+			<b>View your site:</b> <a id='sitelink' href='$site_url' target='_blank'><span class='siteLink'>$site_url</span></a><br/>
+			<b>Customize your site:</b> <a id='sitelink' href='$site_url/admin' target='_blank'><span class='siteLink'>$site_url/admin</span></a><br/>
+			<b>Your username:</b> <span style='color:blue'>$userEmail</span> <br/>
+			<b>Your temporary password:</b> <span style='color:blue'>$plain_password</span><br/>
 		</p>
 		
-		<p>
-			This link will allow you to administer and customize your site.  
-			<a id='adminlink' href='$site_url/admin' target='_blank'><span class='siteLink'>$site_url/admin</span></a>
-		</p>
-
 		<h3>Support & Help</h3>
 		<p>Checkout our <a href='http://apollosites.com/support/quick-start-guide.html' target='_blank'><b>quick start guide</b></a>. You can also find more help and support on our Support pages, and email us with any questions you have at support@apollosites.com</p>
 
@@ -194,7 +187,10 @@ class EmailMessaging {
 
 		$content_html .= "<br /><a href='http://apollosites.com' id='apollo_logo'><img src='http://apollosites.com/admin/images/logo.png' height='35px'/></a>";
 
-		EmailQueueTable::add($site_id, $to_email, $to_name, $from_email, $from_name, "You've got a new comment", $content_html, $content_basic);
+		$from_email = 'mike@apollosites.com';
+		$from_name = 'Mike Pritchard | ApolloSites';
+
+		EmailQueueTable::add($site_id, $userEmail, $userName, $from_email, $from_name, $subject, $content_html, '');
 		
     }
             

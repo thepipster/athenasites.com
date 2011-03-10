@@ -37,8 +37,6 @@ $theme_title 		= $theme['theme_title'];
 $theme_url 			= $theme['thumb_url'];
 $theme_demo_url 	= $theme['demo_url'];
 
-Logger::dump($theme);
-
 ?>
 
 <div id='SignupPage' align="left">
@@ -168,7 +166,7 @@ Logger::dump($theme);
 	
 	<div id='completePanel' style='display:none'>
 		
-		<h3>Thankyou and welcome to ApolloSites!</h3>
+		<h3>Thank you and welcome to ApolloSites!</h3>
 		
 		<p>
 		We will shortly send you a confirmation email, you'll need to click the link to activate your account. As soon as you've activated your account your website will be live!
@@ -211,7 +209,7 @@ var apSignup = {
 	username : '',
 	name : '',
 	coupon : '',
-	
+		
 	// ///////////////////////////////////////////////////////////////
 
 	init : function(){
@@ -221,7 +219,8 @@ var apSignup = {
 		$('#cardNumber').typing({ stop: apSignup.onCardNumber, delay: 400});
 
 		$('.ApolloButton').hide();	
-		$('#create_button').show()
+		$('#create_button').show();
+		
 	},
 	
 	// ///////////////////////////////////////////////////////////////
@@ -302,11 +301,15 @@ var apSignup = {
 
 		var paras = {cmd : 'createUser', em: apSignup.email, us: apSignup.username, nm: apSignup.name, tid: <?= $theme_id ?>, nonce: '<?= SecurityUtils::createNonce('create-user') ?>', cp: apSignup.coupon};
 				
+		apSignup.showLoading("Creating account");
+						
 		$.ajax({
 			url: '/admin/code/php/remoteapi/SystemAPI.php',
 			dataType: "json",
 			data: paras,
 			success: function(ret){
+
+				apSignup.clearLoading();
 
 				$('#createAccountPanel').hide();			
 				$('#eulaPanel').hide();			
@@ -326,6 +329,26 @@ var apSignup = {
 		});	
 	},
 		
+	showLoading : function(msg){
+
+        $('#load_display').dialog("destroy");
+				
+        $('#load_display').html("<div align='center'><img src='http://static.apollosites.com/admin/images/spinner.gif'/></div>");
+		
+        $('#load_display').dialog({
+            resizable: true,
+            height:90,
+            width: 250,
+            closeOnEscape: false,
+            modal: true,
+            title: "<span style='font-size:14px'>"+msg+"</span>"
+        })
+	},
+	
+	clearLoading : function(){
+		$('#load_display').dialog('close');
+	},
+				
 	// ///////////////////////////////////////////////////////////////
 	
 	checkEmail : function(){

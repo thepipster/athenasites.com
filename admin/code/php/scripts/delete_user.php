@@ -11,7 +11,7 @@ if (!DEV_MODE){
 	die();
 }
 
-$user_id = 11;
+$user_id = 20;
 $site_id = 9;
 
 DatabaseManager::submitQuery("DELETE FROM apollo_Users WHERE id = $user_id");
