@@ -24,9 +24,12 @@
 	font-size: 14px;
 	color: black;
 	width: 360px;
-	height: 200px;	
+	height: 200px;
+	
 	-moz-border-radius: 8px;
-	border-radius: 8px;	
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+	behavior: url(border-radius.htc);		
 }
 
 #loginBox h3 {

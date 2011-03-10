@@ -5,7 +5,7 @@ class SecurityUtils {
     private static $salt_length = 12;
 
     /**
-     * The nonce (number used once) duration (in seconds)
+     * The nonce (number used once) duration (in seconds) 900 = 15 minutes, 600 = 10 minutes
      */
     private static $nonce_duration = 900; 
 
@@ -15,30 +15,47 @@ class SecurityUtils {
      * Check to see if the given nonce is still valid
      * @param string $nonce
      * @param string $action An action name: ie: ‘delete-post’
-     * @param string $user A user ID (optional – makes the NONCE only work with a specific user)
      * @return <type>
      */
-    public static function checkNonce($nonce, $action = '', $user=''){
-	// Nonce generated 0-12 hours ago
-        $nonceCheck = substr(self::generateNonceHash( $action . $user ), -self::$salt_length, 10);
+    public static function checkNonce($nonce, $action = ''){
+    	
+    	$nonce = DatabaseManager::getVar(DatabaseManager::prepare("SELECT nonce FROM log_Nonce WHERE nonce = %s AND action = %s", $nonce, $action));
+    	
+    	if (isset($nonce)){
+    		// Clear this nonce from the DB as its been used! 
+	    	$nonce = DatabaseManager::submitQuery(DatabaseManager::prepare("DELETE FROM log_Nonce WHERE nonce = %s AND action = %s", $nonce, $action));
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
+    	
+	    /*
+        $nonceCheck = substr(self::generateNonceHash( $action . $user ), self::$nonce_salt_length, 20);
 		if ( $nonceCheck == trim($nonce) ){
 	            return true;
 		}
 		return false;
+		*/
     }
     
     // //////////////////////////////////////////////////////////////
 
     /**
-     * Create a brand new nonce (number used once)
-     * @param string $action
-     * @param string $user
+     * Create a brand new nonce (number used once, i.e. a number that can be used one time only)
      * @return <type>
      */
-    public static function createNonce($action = '', $user=''){
-		return substr( self::generateNonceHash( $action . $user ), -self::$salt_length, 10);
-    }
-    
+    public static function createNonce($action){
+        
+		//return substr( self::generateNonceHash( $action . $user ), self::$nonce_salt_length, 20);
+
+        $date_str = date('Y-m-d H:i:s', time());        
+    	$key = self::generateUniqueKey();
+    	
+    	DatabaseManager::insert(DatabaseManager::prepare("INSERT INTO log_Nonce (nonce, date_created, action) VALUES (%s, %s, %s)", $key, $date_str, $action));
+		return $key;    		
+	}
+        
     // //////////////////////////////////////////////////////////////
 
     /**
@@ -47,11 +64,12 @@ class SecurityUtils {
      * @param string $user A user ID (optional – makes the NONCE only work with a specific user)
      * @return <type>
      */
+     /*
     private static function generateNonceHash($action='', $user=''){
 		$i = ceil( time() / ( self::$nonce_duration / 2 ) );
-		return md5( $i . $action . $user . $action );
+		return md5( $i . $action . $user . $action . 'aef1f252f1a');
     }
-
+*/
     // //////////////////////////////////////////////////////////////
 
     /**
@@ -81,7 +99,57 @@ class SecurityUtils {
 
         return $salt . sha1($salt . $plain_password);
     }
+    
+    // //////////////////////////////////////////////////////////////
 
+	/**
+	* Generate a unique alpha-numeric key
+	*/
+    public static function generateUniqueKey(){
+		$key = sha1( ceil(time()) . '_apollo_' . mt_rand());	
+		return $key;
+    }
+    
+    // //////////////////////////////////////////////////////////////
+/*
+
+	public static function sendEmailActivation($user_id, $newEmail, $userName, $reason){
+
+		$activation_key = self::generateUniqueKey();
+	
+    	$date_str = date('Y-m-d H:i:s', time());
+	
+		$sql = DatabaseManager::prepare("INSERT INTO apollo_EmailActivationTable (user_id, email, activation_key, created_date, reason) VALUES (%d, %s, %s, %s)", $user_id, $newEmail, $activation_key, $date_str, $reason);
+		DatabaseManager::insert($sql);
+	
+		EmailMessaging::sendEmailActivateLink($newEmail, $userName, $activation_key);
+	}
+
+*/
+    // //////////////////////////////////////////////////////////////
+	
+	/**
+	* Generate a random plain password, for new passwords and password resets
+	*/
+	public static function generateRandomPassword(){
+	
+		$length = 10;
+		//$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+		// remove vowels and added some specical characters
+		$chars = 'bcdfghjklmnpqrstvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@.?'; 
+		
+		$count = mb_strlen($chars);
+		
+		for ($i = 0, $result = ''; $i < $length; $i++) {
+		    $index = mt_rand(0, $count - 1);
+		    $result .= mb_substr($chars, $index, 1);
+		}
+		
+		return $result;
+	
+	}
+	
     // //////////////////////////////////////////////////////////////
 
     public static function logIn($user_id, $user_level, $user_name, $user_email) {
@@ -176,7 +244,8 @@ class SecurityUtils {
     /**
      * Create a new user, but check to see if that user exists already
      */
-    public static function createUser($email, $plain_password, $user_group, $name) {
+    public static function createUser($email, $plain_password, $user_group, $name, $coupon) {
+    
         // Create entry in user table
         $password_hash = SecurityUtils::generatePassHash($plain_password);
 
@@ -186,7 +255,7 @@ class SecurityUtils {
         $user_id = UserTable::checkValid($email, $password_hash);
 
         if (!isset($user_id)) {
-            $user_id = UserTable::create($email, $name, $password_hash, $user_group);
+            $user_id = UserTable::create($email, $name, $password_hash, $user_group, $coupon);
         }
 
         return $user_id;
@@ -197,20 +266,16 @@ class SecurityUtils {
     /**
      * Create a site, and assign a user to the site
      */
-    public static function createSite($user_id, $site_domain, $site_path, $site_theme) {
+    public static function createSite($user_id, $site_domain, $site_path, $site_theme_id) {
 
         // Create entry in site table
         $site_id = SitesTable::getNextSiteID();        
-        SitesTable::create($site_id, $site_domain, $site_path, $site_theme);
+        SitesTable::create($site_id, $site_domain, $site_path, $site_theme_id);
 
         Logger::debug("Created site $site_domain, id = $site_id");
 
         // Create entry in site table
         SitesTable::addUserToSite($user_id, $site_id);
-
-        // Create files directory
-        mkdir(self::getMediaFolder($site_id), 0777);
-        mkdir(self::getSitesFolder($site_id), 0777);
 
         // Create site's tables
         //PageParasTable::createTableForSite($site_id);
@@ -228,6 +293,8 @@ class SecurityUtils {
         //PageViewsTable::createTableForSite($site_id);
         //StatsRollupTables::createTableForSite($site_id);
         //BlogFollowersTable::createTableForSite($site_id);
+        
+        return $site_id;
     }
 
 }

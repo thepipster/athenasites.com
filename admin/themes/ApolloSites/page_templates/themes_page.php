@@ -20,6 +20,7 @@ $theme_list = DatabaseManager::getResults("SELECT * FROM apollo_Theme WHERE is_p
 		$theme_title = $theme['theme_title'];
 		//$theme_price = $theme['theme_price'];						
 		$theme_url = $theme['thumb_url'];
+		$theme_demo_url = $theme['demo_url'];
 		
 		$page_templates = TemplateManager::getThemePageTemplates($theme_name);
 						
@@ -37,7 +38,7 @@ $theme_list = DatabaseManager::getResults("SELECT * FROM apollo_Theme WHERE is_p
 							<br/>
 							
 							<a class='ApolloButton' style='margin-top:10px' href="/themes/signup.html?theme=<?=$theme_id?>">Select Theme</a>
-							<a class='ApolloButton' style='margin-top:10px' href=''>View Demo</a>
+							<a class='ApolloButton' style='margin-top:10px' href='<?=$theme_demo_url?>' target='_blank'>View Demo</a>
 							
 						</div>					
 					</div>

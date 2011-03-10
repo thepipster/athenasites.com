@@ -12,7 +12,7 @@ class SitesTable {
      * Create a new site
      */
 	public static function create($site_id, $domain, $path, $theme_id){	
-		$sql = DatabaseManager::prepare("INSERT INTO apollo_Sites (id, domain, path, theme_id) VALUES (%d, %s, %s, %d)", $site_id, $domain, $path, $theme_id);			
+		$sql = DatabaseManager::prepare("INSERT INTO apollo_Sites (id, domain, path, theme_id, is_live) VALUES (%d, %s, %s, %d, 0)", $site_id, $domain, $path, $theme_id);			
 		return DatabaseManager::insert($sql);
     }
 

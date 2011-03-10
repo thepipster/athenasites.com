@@ -508,7 +508,7 @@ function addPost($site_id, $title, $content, $status, $slug, $can_comment) {
     $user_id = SecurityUtils::getCurrentUserID();
     $path = '';
 
-    $post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, Post::encodeSlug($safe_title), 'apollo');
+    $post_id = PostsTable::create($site_id, $user_id, StringUtils::makeHtmlSafe($content), $status, StringUtils::makeHtmlSafe($title), $can_comment, Post::encodeSlug($title), 'apollo');
 
     $post = getPostComplete($site_id, $post_id);
 

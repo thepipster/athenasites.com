@@ -10,15 +10,15 @@ class UserTable {
     /**
      * Create a new user
      */
-    public static function create($email, $name, $password_hash, $user_level) {
+    public static function create($email, $name, $password_hash, $user_level, $coupon) {
 
         // Get data in correct locale (SQL's NOW() doesn't do that)
         $target_date = mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y"));
         $date_str = date('Y-m-d H:i:s', $target_date);
 
         $sql = DatabaseManager::prepare(
-                        "INSERT INTO apollo_Users (email, name, nice_name, password_hash, account_created, last_login, user_level) VALUES (%s, %s, %s, %s, %s, %s, %d)",
-                        $email, $name, $name, $password_hash, $date_str, $date_str, $user_level);
+                        "INSERT INTO apollo_Users (email, name, nice_name, password_hash, account_created, last_login, user_level, coupon_used) VALUES (%s, %s, %s, %s, %s, %s, %d, %s)",
+                        $email, $name, $name, $password_hash, $date_str, $date_str, $user_level, $coupon);
 
         DatabaseManager::insert($sql);
 

@@ -188,20 +188,258 @@ a img { border: none; }
 
 /* Signup page ////////////////////////////////////////////// */
 
-.rightCol {
-	display: inline-block;
-	float: left;
-	width: 50%;
-	height: 400px;
-	background-color: green;
+#SignupPage {
+	margin-left: auto;
+	margin-right: auto;
+	width: 500px;
+	background-color: #e1e1e1;
+	padding: 20px;
+	padding-top: 5px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	border: 2px solid #a4a4ae;
+	
+/* 	background-color: #d8d9e5; */
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+	behavior: url(border-radius.htc);
 }
 
-.leftCol {
-	display: inline-block;
+#SignupPage #eulaPanel {
+	height: 500px;
+	overflow: auto;
+}
+
+/*
+#SignupPage .rightCol {
 	float: left;
-	width: 50%;
+	width: 440px;
 	height: 400px;
-	background-color: blue;
+	padding-left: 10px;
+}
+
+#SignupPage .leftCol {
+	float: left;
+	width: 440px;
+	height: 400px;
+	padding-right: 10px;
+}
+*/
+
+#SignupPage .themeInfoWrapper {
+	height: 110px;
+	padding-left: 165px;
+}
+
+#SignupPage .themeTitle {
+	color: #032f5d;
+	font-weight: bold;
+}
+
+
+#SignupPage .price {
+	padding-left: 5px;
+	font-size: 16px;
+	color: #0b6a13;
+	font-weight: bold;
+}
+
+#SignupPage .siteLink {
+	font-size: 16px;
+	color: #0b6a13;
+	clear: both;
+	display: block;
+}
+
+#SignupPage .emailValidity {
+	width: 14px;
+	height: 14px;
+	display: inline-block;
+	margin-left: 10px;
+}
+#SignupPage .emailValid{ background-image: url('/admin/images/button_ok.png');	}
+#SignupPage .emailInvalid { background-image: url('/admin/images/button_cancel.png');}
+
+#SignupPage .accountAvailability {
+	width: 14px;
+	height: 14px;
+	display: inline-block;
+	margin-left: 10px;
+}
+#SignupPage .accountFree{ background-image: url('/admin/images/button_ok.png');	}
+#SignupPage .accountTaken { background-image: url('/admin/images/button_cancel.png');}
+
+
+#SignupPage .infoText {
+	font-size: 10px;
+}
+
+#SignupPage .dataWrapper {
+	width: 100%;
+	margin-bottom: 5px;
+}
+
+#SignupPage .dataLabel {
+	width: 150px;
+	display: inline-block;	
+	font-size: 15px; 
+	color: #555555;	
+}
+
+#SignupPage .dataValue {
+	width: 180px;
+	margin-right: 10px;
+	color: #435e80;
+}
+
+
+#SignupPage .dataValueDisabled {
+	border-color: #b0b0b0;
+	border-width: 1px;
+	border-style: solid;
+	width: 180px;
+	margin-right: 10px;
+	background-color: #c1c4c4 !important;
+	display: inline-block;
+	height: 15px;
+	padding-left: 3px;
+	color: #435e80;
+	padding-top: 1px;
+	
+}
+
+#SignupPage .countrySelect {
+	margin-left: 0 !important;
+	padding-left: 0 !important;
+}
+
+#SignupPage .cardTypeIcon {
+	display: inline-block;
+	width: 44px;
+	height: 23px;
+	float: right;
+	margin-right: 105px;	
+	background-repeat: no-repeat;
+}
+
+#SignupPage .visa {
+	background-image: url('/admin/images/creditcard_visa.png');
+}
+
+
+#SignupPage .mastercard {
+	background-image: url('/admin/images/creditcard_mastercard.png');
+}
+
+#SignupPage .amex {
+	background-image: url('/admin/images/creditcard_american_express.png');
+}
+
+
+#SignupPage .cardType {
+	width: auto;
+	display: inline-block;		
+	padding: 0;	
+	margin: 0;
+	margin-left: -4px;
+}
+
+#SignupPage .expMonth {
+	width: auto;
+	display: inline-block;		
+	padding: 0;	
+	margin: 0;
+	margin-left: -4px;
+}
+
+#SignupPage .expYear {
+	width:auto;
+	display: inline-block;	
+	padding: 0;	
+	margin: 0;
+}
+
+#SignupPage .cardType {
+}
+
+#SignupPage .cardTypeValue {
+	width: 50px;
+	margin-right: 10px;
+	color: #435e80;
+}
+
+#SignupPage .cardExpValue {
+	width: 50px;
+	margin-right: 10px;
+	color: #435e80;
+}
+
+#SignupPage select {
+	border-color: #b0b0b0;
+	border-width: 1px;
+	border-style: solid;
+	background-color: #d8d8d8;
+	width: 100%;
+	height: 18px;
+	padding-left: 3px;
+	/*max-width: 400px;*/
+	font-family: Arial, Arial, Helvetica, sans-serif;
+	color: #435e80;
+}
+
+#SignupPage input {
+	border-color: #b0b0b0;
+	border-width: 1px;
+	border-style: solid;
+	background-color: #d8d8d8;
+	width: 100%;
+	height: 16px;
+	padding-left: 3px;
+	/*max-width: 400px;*/
+	font-size: 12px;
+	font-family: Arial, Arial, Helvetica, sans-serif;
+	color: #435e80;
+}
+
+#SignupPage textarea {
+	width: 100%;
+	/*min-height:100px;*/
+	height: 50px;
+	/*max-width: 400px;*/
+	font-family: Arial, Arial, Helvetica, sans-serif;
+	color: #d8d8d8;
+	font-size: 12px;
+	padding-left: 5px;
+	cursor: text;
+}
+
+#SignupPage .themeImage {
+	display: block;
+	width: 150px;
+	height: 100px;
+	border-width: 2px;
+	border-style: solid;
+	border-color: #e7e7e7;	
+}
+
+#SignupPage .SignupButton {
+	font-size: 18px;
+	margin-top: 25px;
+	margin-left: 190px;
+}
+
+#SignupPage .domain {
+	padding-left: 0;
+	margin-left: 0;
+	font-size: 14px;
+	color: #435e80;
+}
+#SignupPage .usernameValue{
+	padding-right: 0;
+	margin-right: 0 !important;
+	/* text-align: right; */
+	background-color: #d8d8d8;
 }
 
 /* Theme page ////////////////////////////////////////////// */

@@ -86,7 +86,7 @@ var ssLogin = {
 	onLogin : function(){		
 		$('#loginForm').validate({messages: {email: "Enter valid email!", password: "Enter a password"}});
 		if ($('#loginForm').valid()){
-			SystemAPI.checkUser($('#email').val(), $('#password').val(), ssLogin.onPasswordChecked);
+			SystemAPI.login($('#email').val(), $('#password').val(), ssLogin.onPasswordChecked);
 		}
 	},
 		

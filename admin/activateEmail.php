@@ -46,7 +46,18 @@ else {
 
 <h2>Email Activation Successful!</h2>
 <img src='/admin/images/email_activation.png'/>
-<p>Congratulations, we've activated your email address, <b><?=$data['email']?></b>, for your site <b>http://<?= $site['domain'] ?></b></p>
+
+<?php
+
+// Respond based on activation reason
+if ($data['reason'] == 'new_account'){	
+	SitesTable::updateLive($site['domain'], $is_live);	
+	echo "<p>Congratulations, we've activated your site <b>http://".$site['domain']."</b></p>";
+}
+else {
+	echo "<p>Congratulations, we've activated your email address, <b>".$data['email']."</b>, for your site <b>http://".$site['domain']."</b></p>";
+}
+?>
 
 <?php
 }

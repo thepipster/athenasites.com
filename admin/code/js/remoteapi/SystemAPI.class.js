@@ -56,41 +56,63 @@ var SystemAPI = {
 	/**
 	* Check to see if the user exists, if so then log that user in
 	*/
-	checkUser : function(email, pass, callback){
+	login : function(email, pass, callback){
 			
-		var paras = {cmd : 'checkUser', em: email, ps: pass};
+		var paras = {cmd : 'login', em: email, ps: pass};
 				
 		$.ajax({
 			url: SystemAPI.m_url,
 			dataType: "json",
 			data: paras,
-			success: function(ret){SystemAPI.onUserChecked(ret, callback);}
+			success: function(ret){								
+				if (ret.result == 'ok'){	
+					if (ret.data == 'true'){
+						callback(true);
+					}
+					else {
+						callback(false);
+					}
+				}
+				else {
+					AthenaDialog.showAjaxError(ret);
+				}			
+			}
 		});			
 		
 	},
-		
+	
 	// ////////////////////////////////////////////////////////////////////////
 	
 	/**
-	* Check the response from the server, and load data if login is good
+	* Check to see if the user exists, if so then log that user in
 	*/
-	onUserChecked : function(ret, callback){
-								
-		if (ret.result == 'ok'){	
-			if (ret.data == 'true'){
-				callback(true);
+	checkUser : function(username, callback){
+			
+		var paras = {cmd : 'checkUser', us: username};
+				
+		$.ajax({
+			url: SystemAPI.m_url,
+			dataType: "json",
+			data: paras,
+			success: function(ret){
+				if (ret.result == 'ok'){	
+					if (ret.data == 'true'){
+						callback(true);
+					}
+					else {
+						callback(false);
+					}
+				}
+				else {
+					AthenaDialog.showAjaxError(ret);
+				}			
 			}
-			else {
-				callback(false);
-			}
-		}
-		else {
-			AthenaDialog.showAjaxError(ret);
-		}
-	},
-	
+		});			
+		
+	},	
+		
 	// ////////////////////////////////////////////////////////////////////////
-	
+		
 	/**
 	* Get high level stats (number of pages, number of posts, number of users, number of comments for the
 	* entire system!)

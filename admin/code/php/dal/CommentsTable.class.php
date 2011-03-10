@@ -47,7 +47,7 @@ class CommentsTable {
         $date_str = date('Y-m-d H:i:s', $target_date);
 
 		// Create a unique key for this comment, used to email out approve/delete links
-		$key = sha1( ceil(time()) . '_comment_' . mt_rand());	
+		$key = SecurityUtils::generateUniqueKey();
 
         // Is there a comment for this date/time from a different author?
         $comment_id = CommentsTable::getCommentIDFromDate($site_id, $date_str);

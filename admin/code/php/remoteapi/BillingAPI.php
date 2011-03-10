@@ -162,17 +162,15 @@ function changeEmail($user_id, $newEmail){
 	$user_info = UserTable::get($user_id);
 	
 	// Send an email with a verify this email link
-	
-	$activation_key = sha1( ceil(time()) . 'update_email' . $user_info['name']);	
-	//$activation_key = SecurityUtils::generateNonceHash('email_verify');
+	$activation_key = SecurityUtils::generateUniqueKey();
 	
     $date_str = date('Y-m-d H:i:s', time());
 	
-	$sql = DatabaseManager::prepare("INSERT INTO apollo_EmailActivationTable (user_id, email, activation_key, created_date) VALUES (%d, %s, %s, %s)", $user_id, $newEmail, $activation_key, $date_str);
+	$sql = DatabaseManager::prepare("INSERT INTO apollo_EmailActivationTable (user_id, email, activation_key, created_date, reason) VALUES (%d, %s, %s, %s, 'change_email')", $user_id, $newEmail, $activation_key, $date_str);
 	DatabaseManager::insert($sql);
 	
 	EmailMessaging::sendEmailActivateLink($newEmail, $user_info['name'], $activation_key);
-	
+
     CommandHelper::sendMessage($msg);
 }
 
