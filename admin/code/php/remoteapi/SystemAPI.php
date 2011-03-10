@@ -124,6 +124,10 @@ function createUser($email, $name, $username, $theme_id, $nonce, $coupon){
 		// Create some basic pages
 		//
 	
+		// TODO: clone from the demo site?
+		// Get the demo site for this theme
+		//$site_id = $theme['demo_url'];
+	
 		$template_list = TemplateManager::getThemePageTemplates($theme['theme_name']);
 		
 		// Fake Content

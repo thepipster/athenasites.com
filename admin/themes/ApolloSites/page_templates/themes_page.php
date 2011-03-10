@@ -20,7 +20,7 @@ $theme_list = DatabaseManager::getResults("SELECT * FROM apollo_Theme WHERE is_p
 		$theme_title = $theme['theme_title'];
 		//$theme_price = $theme['theme_price'];						
 		$theme_url = $theme['thumb_url'];
-		$theme_demo_url = $theme['demo_url'];
+		$theme_demo_url = 'http://' . $theme['demo_url'];
 		
 		$page_templates = TemplateManager::getThemePageTemplates($theme_name);
 						
