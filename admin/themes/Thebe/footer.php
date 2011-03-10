@@ -161,6 +161,8 @@ var thebeMain = {
 	
 	doPopup : function(id){
 		
+		alert('doPopup');
+		
 		var txt = "";		
 		txt += "<div id='popupPage'>";
 		txt += "</div>";
@@ -177,7 +179,7 @@ var thebeMain = {
         var paras = { cmd : 'getPage', site_id: siteID, page_id: id};
 
         $.ajax({
-            url: "/admin/code/php/remoteapi/BlogAPI.php",
+            url: "/admin/code/php/remoteapi/PagesAPI.php",
             dataType: "json",
             data: paras,
             success: thebeMain.gotPopupContent
@@ -198,7 +200,7 @@ var thebeMain = {
 	},
 		
 	gotPopupContent : function(ret){
-		
+				
 		if (ret.result == 'ok'){
 		
 			//var title = ret.data.page.title;

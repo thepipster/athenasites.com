@@ -13,12 +13,25 @@ $cmd = CommandHelper::getPara('cmd', true, CommandHelper::$PARA_TYPE_STRING);
 // Grab global parameters that all commands must have
 $site_id = CommandHelper::getPara('site_id', true, CommandHelper::$PARA_TYPE_NUMERIC);
 
-// Check that a user is logged in, and that they have access to this site
-if (!SecurityUtils::isLoggedInForSite($site_id)) {
-    error_log("You are not authorized for this site!");
-    CommandHelper::sendAuthorizationFailMessage("You are not authorized for this site!");
-    die();
+
+
+switch ($cmd) {
+	
+    case "getPage":
+    	// Non-secure
+        break;
+
+    default :
+    	// All other commands are secure, so authenticate....
+		// Check that a user is logged in, and that they have access to this site
+		if (!SecurityUtils::isLoggedInForSite($site_id)) {
+		    error_log("You are not authorized for this site!");
+		    CommandHelper::sendAuthorizationFailMessage("You are not authorized for this site!");
+		    die();
+		}
 }
+
+
 
 Logger::debug("Command = " . $cmd);
 
