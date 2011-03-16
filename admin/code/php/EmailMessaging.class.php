@@ -211,48 +211,73 @@ class EmailMessaging {
 		$transport->setPassword('Ally.Dog');
 		
 		foreach($email_list as $data){
-		
-			//Logger::dump($data);
-			
-			// MAILER
-			$mailer = Swift_Mailer::newInstance($transport);
-			
-			// MESSAGE
-			$message = Swift_Message::newInstance();
-			$message->setSubject($data['subject']);
-			
-			if ($data['content_html'] != ''){
-				$message->setBody($data['content_html'], 'text/html');
-			}
-			
-			//Add alternative parts with addPart()
-			if ($data['content_basic'] != ''){
-				$message->addPart($data['content_basic'], 'text/plain');
-			}
 				
-			if ($data['from_name'] != ''){
-				$message->setFrom(array($data['from_email'] => $data['from_name']));
-			}
-			else {
-				$message->setFrom($data['from_email']);
-			}
-		
-			if ($data['to_name'] != ''){
-				$message->setTo(array($data['to_email'] => $data['to_name']));
-			}
-			else {
-				$message->setTo($data['to_email']);
-			}
+			$do_send = true;
+						
+			try {
 				
-			//Send Message
-			$result = $mailer->send($message);
+				// MAILER
+				$mailer = Swift_Mailer::newInstance($transport);
+				
+				// MESSAGE
+				$message = Swift_Message::newInstance();
+				$message->setSubject($data['subject']);
+				
+				if ($data['content_html'] != ''){
+					$message->setBody($data['content_html'], 'text/html');
+				}
+				
+				//Add alternative parts with addPart()
+				if ($data['content_basic'] != ''){
+					$message->addPart($data['content_basic'], 'text/plain');
+				}
+					
+				if (isset($data['from_email']) && $data['from_email'] != ''){
+					if ($data['from_name']){
+						$message->setFrom(array($data['from_email'] => $data['from_name']));
+					}
+					else {
+						$message->setFrom($data['from_email']);
+					}
+				}	
+				else {
+					$do_send = false;
+				}
 			
-			if ($result){
-				EmailQueueTable::markSent($data['id']);
-			}
-			else {
+				if (isset($data['to_email'] ) && $data['to_email'] != ''){
+					if ($data['to_name'] != ''){
+						$message->setTo(array($data['to_email'] => $data['to_name']));
+					}
+					else {
+						$message->setTo($data['to_email']);
+					}
+				}
+				else {
+					$do_send = false;
+				}
+					
+				if ($do_send){
+					//Send Message
+					$result = $mailer->send($message);
+					
+					if ($result){
+						EmailQueueTable::markSent($data['id']);
+					}
+					else {
+						EmailQueueTable::markError($data['id']);
+					}	
+				}	
+				else {
+					EmailQueueTable::markError($data['id']);
+				}
+						
+            } 
+            catch (MyException $e) {
+            	// Mark email as having an error
 				EmailQueueTable::markError($data['id']);
-			}	
+            }						
+								
+
 		}
 		    
     }
