@@ -235,10 +235,13 @@ class EmailMessaging {
 				if (isset($data['from_email']) && $data['from_email'] != ''){
 					if ($data['from_name']){
 						$message->setFrom(array($data['from_email'] => $data['from_name']));
+						$message->setSender(array($data['from_email'] => $data['from_name']));
 					}
 					else {
 						$message->setFrom($data['from_email']);
+						$message->setSender($data['from_email']);
 					}
+					$message->setReplyTo($data['from_email']);
 				}	
 				else {
 					$do_send = false;
@@ -255,7 +258,7 @@ class EmailMessaging {
 				else {
 					$do_send = false;
 				}
-					
+										
 				if ($do_send){
 					//Send Message
 					$result = $mailer->send($message);
