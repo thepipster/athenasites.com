@@ -228,16 +228,25 @@ var PostsFrame = {
         var postObj = DataStore.getPost(DataStore.m_currentPostID);
 						
         //var content = CKEDITOR.instances.postContentEditor.getData();
-        postObj.content = oUtil.obj.getXHTMLBody();
-        postObj.title = $('#postTitle').val() || $('#pageTitleDisplay').html();
-        postObj.status = $('#postStatusSelector').val();
-        postObj.canComment = $('#postCanCommentSelector').val();
-        postObj.slug = AthenaUtils.encodeSlug(postObj.title);
+        var content = oUtil.obj.getHTMLBody();
+        var title = $('#postTitle').val() || $('#pageTitleDisplay').html();
+        var status = $('#postStatusSelector').val();
+        var canComment = $('#postCanCommentSelector').val();
+        var slug = AthenaUtils.encodeSlug(postObj.title);
 		
-        DataStore.updatePost(postObj);
+		// Check for changes, and only save if we detect a change
+		if ((postObj.content != content) || (postObj.title != title) ||  (postObj.status != status) ||  (postObj.canComment != canComment)){
 
-	    // Force an immediate save
-	    DataStore.save();
+	        postObj.content = content;
+	        postObj.title = title;
+	        postObj.status = status;
+	        postObj.canComment = canComment;
+	        postObj.slug = slug;
+
+	        DataStore.updatePost(postObj);
+		    // Force an immediate save
+		    DataStore.save();
+		}
         
         PostsSidebarFrame.repaint();
 	

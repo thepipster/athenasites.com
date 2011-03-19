@@ -400,20 +400,42 @@ var PagesFrame = {
             return;
         }
         
-        // Update the page
-        originalPage.content = oUtil.obj.getXHTMLBody();		
-        originalPage.title = $('#pageTitle').val() || $('#pageTitleDisplay').html();
-        originalPage.browser_title = $('#pageBrowserTitle').val();        
-        originalPage.status = $('#pageStatusSelector').val();
-        originalPage.parent_page_id = $('#pageParent').val();
-        originalPage.template = $('#pageTemplate').val();
-        originalPage.page_order = $('#pageOrder').val();
-        originalPage.description = $('#pageDesc').val();
+        // Update the page..
         //originalPage.slug = AthenaUtils.encodeSlug(originalPage.title);
+        var new_content = oUtil.obj.getHTMLBody();		
+        var new_title = $('#pageTitle').val() || $('#pageTitleDisplay').html();
+        var new_browser_title = $('#pageBrowserTitle').val();        
+        var new_status = $('#pageStatusSelector').val();
+        var new_parent_page_id = $('#pageParent').val();
+        var new_template = $('#pageTemplate').val();
+        var new_page_order = $('#pageOrder').val();
+        var new_description = $('#pageDesc').val();        
                 
-	    DataStore.updatePage(originalPage);
-	    // Force an immediate save
-	    DataStore.save();
+		// Check for changes, and only save if we detect a change
+		if ((originalPage.content 		!= new_content) || 
+			(originalPage.title 		!= new_title) ||  
+			(originalPage.browser_title != new_browser_title) ||  
+			(originalPage.status 		!= new_status) || 
+			(originalPage.parent_page_id!= new_parent_page_id) ||  
+			(originalPage.template 		!= new_template) ||  
+			(originalPage.page_order 	!= new_page_order) ||  
+			(originalPage.description 	!= new_description)){			
+
+	        originalPage.content = new_content;		
+	        originalPage.title = new_title;
+	        originalPage.browser_title = new_browser_title;        
+	        originalPage.status = new_status;
+	        originalPage.parent_page_id = new_parent_page_id;
+	        originalPage.template = new_template;
+	        originalPage.page_order = new_page_order;
+	        originalPage.description = new_description;        
+
+		    // Force an immediate save
+		    DataStore.updatePage(originalPage);
+		    DataStore.save();
+		}
+		        
+                
 	    // Repaint side-bar
         PagesSidebarFrame.repaint();                       	
 	},

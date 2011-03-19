@@ -76,7 +76,7 @@ var Posts = {
             btnSpellCheck:true,
             useTagSelector:false,
             toolbarMode: 2,
-            mode:"XHTML",
+            mode:"HTMLBody",
             useBR:true, // Force to use <br> for line breaks by default
             arrCustomButtons: [
                 ["InsertInternalImage","ImagePickerDialog.show('#apollo_image_picker', Posts.onInsertImage)","Insert an image from your media library", "btnInternalImage.gif"],
@@ -98,9 +98,10 @@ var Posts = {
 	* typing before we submit changes
 	*/
 	setEditorChangeListener : function(){
-	
+			
 		// Get content
-		var content = oUtil.obj.getXHTMLBody();
+		//var content = oUtil.obj.getXHTMLBody();
+		var content = oUtil.obj.getHTMLBody();
 
 		if (Posts.m_prevContent == '') {
 			Posts.m_prevContent = content;
@@ -108,6 +109,7 @@ var Posts = {
 		
 		// If its changed, save it
 		if (content != Posts.m_prevContent){
+			//alert('Posts.setEditorChangeListener - post changed!');
 	    	PostsFrame.onChange(); 								
 		}		
 				

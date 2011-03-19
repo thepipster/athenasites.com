@@ -193,40 +193,18 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
 
     //Logger::debug("updatePage(page_id=$page_id, site_id=$site_id, title=$title, parent_page_id=$parent_page_id, content=$content, status=$status, tamplate_name=$tamplate_name, slug=$slug, path=$path)");
 
+    $origPage = PagesTable::getPage($site_id, $page_id);
+
     $user_id = SecurityUtils::getCurrentUserID();
     $path = ""; // Update path *after* we update the page, as the parent page may have changed
-		    
-    /*
-    $tags = array("\\n", "\\r");
-    $replace = '';
-    
-    $safe_content = str_ireplace($tags, $replace, $content);
-	$safe_content = stripslashes($safe_content);
-
-    $safe_title = str_ireplace($tags, $replace, $title);
-	$safe_title = stripslashes($safe_title);
-	*/
-	
+		    	
     $safe_content = StringUtils::makeHtmlSafe($content);
     $safe_title = StringUtils::makeHtmlSafe($title);
+    $safe_browser_title = StringUtils::makeHtmlSafe($browser_title);
+    $safe_description = StringUtils::makeHtmlSafe($description);
 
-//	if (stripos('_'.$tamplate_name, 'home')){
-//		Logger::debug("This is the home page!!");
-//		$ishome = 1;
-//		$slug = "index.html";
-//	}
-
-// TODO: is_blogpage being set inside PagesTable::update - should probably pull out to here?	
-//	else if (stripos('_'.$tamplate_name, 'blog')){
-//		Logger::debug("This is the blog page!!");
-//		$isblog = 1;
-//		$slug = "blog";
-//	}
-//	else {
-//		$slug = Page::encodeSlug($safe_title);
-//	}
-
-    $is_home = PagesTable::getIsHome($site_id, $page_id);
+    //$is_home = PagesTable::getIsHome($site_id, $page_id);
+    $is_home = $origPage['is_homepage'];
 
 	if ($is_home == 1){
 		$slug = "index.html";
@@ -234,14 +212,50 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
 	else {
 		$slug = Page::encodeSlug($safe_title);
 	}
+
+
+	// Check content isn't null or has been wiped
+	$do_update = true;
+	
+	if ($content == 'null'){
+		$do_update = false;	
+	}
+	else if ($safe_content == "" && $origPage['content'] != ""){
+		$do_update = false;	
+	}
+	
+	// Check to make sure the page has actually changed...
+	$no_changes = 0;
+	if ($origPage['content'] != $safe_content){ $no_changes++; }
+	if ($origPage['status'] != $status){ $no_changes++; }
+	if ($origPage['parent_page_id'] != $parent_page_id){ $no_changes++; }
+	if ($origPage['title'] != $safe_title){ $no_changes++; }
+	if ($origPage['browser_title'] != $safe_browser_title){ $no_changes++; }
+	if ($origPage['description'] != $safe_description){ $no_changes++; }
+	if ($origPage['template'] != $tamplate_name){ $no_changes++; }
+	if ($origPage['page_order'] != $order){ $no_changes++; }
+	//if ($origPage['is_homepage'] != $can_comment){ $no_changes++; }
+	//if ($origPage['is_blogpage'] != $can_comment){ $no_changes++; }
+	
+	if ($no_changes == 0){
+		$do_update = false;
+	}
+	
+	if ($do_update){
 	 
-    PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $safe_title, $tamplate_name, $slug, $path, $order, $description, $browser_title);
-
-    // Update the path for all the page children, as they may have changed
-    //updateChildrensPath($site_id, $page_id);
-    updatePageAndChildPaths($site_id, $page_id);
-
-    $page = PagesTable::getPage($site_id, $page_id);
+		PagesTable::createRevision($site_id, $page_id); 
+	    PagesTable::update($page_id, $user_id, $site_id, $parent_page_id, $safe_content, $status, $safe_title, $tamplate_name, $slug, $path, $order, $safe_description, $safe_browser_title);
+	
+	    // Update the path for all the page children, as they may have changed
+	    //updateChildrensPath($site_id, $page_id);
+	    updatePageAndChildPaths($site_id, $page_id);
+	
+	    $page = PagesTable::getPage($site_id, $page_id);
+	}
+	else {
+		Logger::warn("Did not update page!");
+		$page = $origPage;
+	}
 
     if (isset($page)) {    
     	$pageObj = new Page($page);    

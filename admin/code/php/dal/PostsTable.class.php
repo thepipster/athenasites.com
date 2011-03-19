@@ -76,8 +76,7 @@ class PostsTable {
     public static function create($site_id, $user_id, $content, $status, $title, $canComment, $slug, $source) {
 
         // Get data in correct locale (SQL's NOW() doesn't do that)
-        $target_date = mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y"));
-        $date_str = date('Y-m-d H:i:s', $target_date);
+        $date_str = date('Y-m-d H:i:s', time());
 
         $sql = DatabaseManager::prepare("INSERT INTO athena_%d_Posts (user_id, content, status, title, last_edit, created, canComment, slug, source)
 			VALUES (%d, %s, %s, %s, '$date_str', '$date_str', %d, %s, %s)", $site_id, $user_id, $content, $status, $title, $canComment, $slug, $source);
@@ -85,13 +84,53 @@ class PostsTable {
     }
 
     // ///////////////////////////////////////////////////////////////////////////////////////
-/*
-	public static function createRevision($post_id){
-        $sql = DatabaseManager::prepare("INSERT INTO athena_%d_Posts (user_id, content, status, title, last_edit, created, canComment, slug, source)
-			VALUES (%d, %s, %s, %s, '$date_str', '$date_str', %d, %s, %s)", $site_id, $user_id, $content, $status, $title, $canComment, $slug, $source);
+
+	public static function createRevision($site_id, $post_id){
+
+		// How many revisions do we have for this post?
+		$no_revs = DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_%d_Posts WHERE source_id = %d AND status = 'Revision'", $site_id, $post_id);
+		
+		if ($no_revs >= 10){
+			// Delete the oldest revision
+			DatabaseManager::submitQuery(DatabaseManager::prepare("DELETE FROM athena_%d_Posts WHERE source_id = %d AND status = 'Revision' AND id = 
+			(SELECT id FROM athena_%d_Posts WHERE source_id = %d AND status = 'Revision' ORDER BY created LIMIT 1) ", $site_id, $post_id);
+		}
+		
+        // Get data in correct locale (SQL's NOW() doesn't do that)
+        $date_str = date('Y-m-d H:i:s', time());
+		
+		$post = self::getPost($site_id, $post_id);
+
+        $sql = DatabaseManager::prepare("INSERT INTO athena_%d_Posts (
+        	user_id, 
+        	content, 
+        	excerpt, 
+        	status, 
+        	last_edit, 
+        	created, 
+        	title, 
+        	slug, 
+        	path,
+        	source,
+        	source_id,
+        	canComment)
+			VALUES (%d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %d, %d)", 
+				$site_id, 
+				$post['user_id'],				 
+				$post['content'],				 
+				$post['excerpt'],				 
+				'Revision',				 
+				$date_str,				 
+				$post['created'],				 
+				$post['title'],				 
+				$post['slug'],				 
+				$post['path'],				 
+				'Revision',				 
+				$post_id,				 
+				$post['canComment']);				 
+		
         return DatabaseManager::insert($sql);
 	}
-	*/
 	
     // ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -130,6 +169,12 @@ class PostsTable {
     // /////////////////////////////////////////////////////////////////////////////////
 
     public static function delete($site_id, $post_id) {
+    
+		// Delete all revisions
+		$sql = DatabaseManager::prepare("DELETE FROM athena_%d_Posts WHERE source_id = %d AND status = 'Revision'", $site_id, $post_id);			
+		DatabaseManager::submitQuery($sql);
+    
+    	// Delete the post
         $sql = DatabaseManager::prepare("DELETE FROM athena_%d_Posts WHERE id = %d", $site_id, $post_id);
         return DatabaseManager::submitQuery($sql);
     }
@@ -582,14 +627,14 @@ class PostsTable {
     // /////////////////////////////////////////////////////////////////////////////////
 
     public static function getPostSummaries($site_id) {
-        $sql = DatabaseManager::prepare("SELECT id, user_id, title, status FROM athena_%d_Posts ORDER BY created DESC", $site_id);
+        $sql = DatabaseManager::prepare("SELECT id, user_id, title, status FROM athena_%d_Posts WHERE Status != 'Revision' ORDER BY created DESC", $site_id);
         return DatabaseManager::getResults($sql);
     }
 
     // /////////////////////////////////////////////////////////////////////////////////
 
     public static function getPosts($site_id) {
-        $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts ORDER BY created DESC", $site_id);
+        $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts WHERE status != 'Revision' ORDER BY created DESC", $site_id);
         return DatabaseManager::getResults($sql);
     }
 
@@ -603,7 +648,7 @@ class PostsTable {
      * @return <type>
      */
      public static function getNPosts($site_id, $start_n, $end_n) {
-        $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts ORDER BY created DESC LIMIT %d, %d", $site_id, $start_n, ($end_n-$start_n));
+        $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts WHERE status != 'Revision' ORDER BY created DESC LIMIT %d, %d", $site_id, $start_n, ($end_n-$start_n));
         return DatabaseManager::getResults($sql);
      }
 

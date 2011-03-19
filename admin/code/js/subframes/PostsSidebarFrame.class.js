@@ -211,7 +211,7 @@ var PostsSidebarFrame = {
     onSelectPost : function(post_id){
     	// Store the current content first!
 		PostsFrame.onChange();		
-        setTimeout(function(){PostsSidebarFrame.onDoChangePost(post_id)}, 200)
+        setTimeout(function(){PostsSidebarFrame.onDoChangePost(post_id)}, 500)
         
     },
 		    

@@ -466,35 +466,54 @@ function deletePost($site_id, $post_id) {
 
 function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_comment) {
 
-    //Logger::debug($content);
-
-	Logger::debug("Updating post!!");
+    $origPost = getPostComplete($site_id, $post_id);
 	
-    $user_id = SecurityUtils::getCurrentUserID();
-/*
-    $tags = array("\\n", "\\r");
-    $replace = '';
-    
-    $safe_content = str_ireplace($tags, $replace, $content);
-    $safe_content = stripslashes($safe_content);
-    
-    $safe_title = str_ireplace($tags, $replace, $title);
-    $safe_title = stripslashes($safe_title);
-*/
+    $user_id = SecurityUtils::getCurrentUserID();	
     $safe_content = StringUtils::makeHtmlSafe($content);
     $safe_title = StringUtils::makeHtmlSafe($title);
 
-    PostsTable::update($site_id, $post_id, $safe_content, $status, $safe_title, $can_comment, Post::encodeSlug($safe_title), 'apollo');
+	// Check content isn't null or has been wiped
+	$do_update = true;
 	
-    $post = getPostComplete($site_id, $post_id);
+	if ($content == 'null'){
+		$do_update = false;	
+	}
+	else if ($safe_content == "" && $origPost['content'] != ""){
+		$do_update = false;	
+	}
+	
+	// Check to make sure the post has actually changed...
+	$no_changes = 0;
+	if ($origPost['content'] != $safe_content){ $no_changes++; }
+	if ($origPost['status'] != $status){ $no_changes++; }
+	if ($origPost['title'] != $safe_title){ $no_changes++; }
+	if ($origPost['canComment'] != $can_comment){ $no_changes++; }
+	
+	if ($no_changes == 0){
+		$do_update = false;
+	}
+		
+	if ($do_update){
+		Logger::debug("Updating post!!");
+		// Create revision
+		PostsTable::createRevision($site_id, $post_id);
+	    PostsTable::update($site_id, $post_id, $safe_content, $status, $safe_title, $can_comment, Post::encodeSlug($safe_title), 'apollo');
 
-	ImportHelper::processPostContent($site_id, $post);
+	    $post = getPostComplete($site_id, $post_id);
+	
+		ImportHelper::processPostContent($site_id, $post);	
+	    PostsTable::updatePath($post_id, $site_id, Post::generatePath($post['created']));
 
-    PostsTable::updatePath($post_id, $site_id, Post::generatePath($post['created']));
+	    $msg['data'] = array('post' => $post);
+	}
+	else {
+		Logger::warn("Not updating content!");
+	    $msg['data'] = array('post' => $origPost);
+	}
+	
 
     $msg['cmd'] = "updatePost";
     $msg['result'] = 'ok';
-    $msg['data'] = array('post' => $post);
 
 	//Logger::dump(PostsTable::getPost($site_id, $post_id));
 	

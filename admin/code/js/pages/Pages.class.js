@@ -76,7 +76,7 @@ var Pages = {
             btnSpellCheck:true,
             useTagSelector:false,
             toolbarMode: 2,
-            mode:"XHTML",
+            mode:"HTMLBody",
             useBR:true, // Force to use <br> for line breaks by default
             arrCustomButtons: [
                 ["InsertInternalImage","ImagePickerDialog.show('#apollo_image_picker', Pages.onInsertImage)","Insert an image from your media library", "btnInternalImage.gif"],
@@ -132,7 +132,7 @@ var Pages = {
 		if (Pages.view != Pages.VIEW_Pages) return;
 		
         // Has the user already got a apollo page break in this page?
-        var content = oUtil.obj.getXHTMLBody();
+        var content = oUtil.obj.getHTMLBody();
         var myRegExp = /apolloPageBreak/;
         var pos = content.search(myRegExp);
 

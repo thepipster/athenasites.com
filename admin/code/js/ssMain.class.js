@@ -55,7 +55,7 @@ var ssMain = {
     // ////////////////////////////////////////////////////////////////////////
 
 	/**
-	* Pipe refresh requests depending on the current page
+	* Called whenever a page is refreshed or loaded, Pipe refresh requests depending on the current page
 	*/
 	refresh : function(){
 
@@ -110,5 +110,6 @@ var ssMain = {
         }	
         
         DataStore.save();	
+      
 	}		
 }

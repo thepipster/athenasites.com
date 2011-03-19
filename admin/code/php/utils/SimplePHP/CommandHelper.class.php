@@ -179,8 +179,13 @@ class CommandHelper {
 	
 		if (self::$ZIP_MESSAGE){
 			$msg = gzencode(json_encode($data));
-			header("Content-Encoding: gzip"); 
-			header("Content-Type: text/plain"); 		
+			if (isset($msg)){
+				header("Content-Encoding: gzip"); 
+				header("Content-Type: text/plain"); 		
+			}
+			else {
+				$msg = json_encode($data);
+			}
 		}
 		else {
 			$msg = json_encode($data);

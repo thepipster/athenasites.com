@@ -28,6 +28,8 @@ class PagesTable {
 		  `is_homepage` tinyint(1) default '0',
 		  `is_blogpage` tinyint(1) default '0',
 		  `page_order` tinyint(3) default '0',
+		  `source` varchar(20) default NULL,
+		  `source_id` varchar(30) default NULL,
 		  PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;";
 						
@@ -61,15 +63,71 @@ class PagesTable {
 
 	// ///////////////////////////////////////////////////////////////////////////////////////
 
+	public static function createRevision($site_id, $page_id){
+	
+        // Get data in correct locale (SQL's NOW() doesn't do that)
+        $date_str = date('Y-m-d H:i:s', time());
+		
+		$page = self::getPage($site_id, $page_id);
+
+        $sql = DatabaseManager::prepare("INSERT INTO athena_%d_Pages (
+        	user_id, 
+        	content, 
+        	status, 
+        	last_edit, 
+        	parent_page_id, 
+        	title, 
+        	browser_title, 
+        	description, 
+        	slug, 
+        	path,
+        	created, 
+        	template, 
+        	is_homepage, 
+        	is_blogpage, 
+        	page_order, 
+        	source,
+        	source_id)
+			VALUES (%d, %s, %s, %s, %d, %s, %s, %s, %s, %s, %s, %s, %d, %d, %d, %s, %d)", 
+				$site_id, 
+				$page['user_id'],				 
+				$page['content'],				 
+				'Revision',				 
+				$date_str,				 
+				$page['parent_page_id'],				 
+				$page['title'],				 
+				$page['browser_title'],				 
+				$page['description'],				 
+				$page['slug'],				 
+				$page['path'],				 
+				$page['created'],				 
+				$page['template'],				 
+				$page['is_homepage'],				 
+				$page['is_blogpage'],				 
+				$page['page_order'],				 
+				'Revision',				 
+				$page_id);				 
+		
+        return DatabaseManager::insert($sql);	
+	
+	}
+	
+	// ///////////////////////////////////////////////////////////////////////////////////////
+
 	public static function delete($site_id, $page_id){
 	
 		// Update any pages with this as the parent page id
 		$sql = DatabaseManager::prepare("UPDATE athena_%d_Pages SET parent_page_id = 0 WHERE parent_page_id = %d", $site_id, $page_id);			
 		DatabaseManager::update($sql);
 
+		// Delete all revisions
+		$sql = DatabaseManager::prepare("DELETE FROM athena_%d_Pages WHERE source_id = %d AND status = 'Revision'", $site_id, $page_id);			
+		DatabaseManager::submitQuery($sql);
+
 		// Delete the page	
 		$sql = DatabaseManager::prepare("DELETE FROM athena_%d_Pages WHERE id = %d", $site_id, $page_id);			
 		return DatabaseManager::submitQuery($sql);
+		
 		
 	}
 	
@@ -107,21 +165,21 @@ class PagesTable {
 	// /////////////////////////////////////////////////////////////////////////////////
     
 	public static function getChildPages($site_id, $parent_page_id){
-		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages WHERE parent_page_id=%d", $site_id, $parent_page_id);			
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages WHERE parent_page_id=%d AND status != 'Revision'", $site_id, $parent_page_id);			
 		return DatabaseManager::getResults($sql);				
 	}
 
 	// /////////////////////////////////////////////////////////////////////////////////
 
 	public static function getPageSummaries($site_id){
-		$sql = DatabaseManager::prepare("SELECT id, user_id, title, status FROM athena_%d_Pages ORDER BY created DESC", $site_id);			
+		$sql = DatabaseManager::prepare("SELECT id, user_id, title, status FROM athena_%d_Pages WHERE status != 'Revision' ORDER BY created DESC", $site_id);			
 		return DatabaseManager::getResults($sql);				
 	}
 
 	// /////////////////////////////////////////////////////////////////////////////////
 
 	public static function getPages($site_id){
-		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages ORDER BY page_order", $site_id);			
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages WHERE status != 'Revision' ORDER BY page_order", $site_id);			
 		return DatabaseManager::getResults($sql);				
 	}
 
@@ -148,7 +206,7 @@ class PagesTable {
 
 	public static function getHomepage($site_id){
 		//Logger::debug("getPage(site_id = $site_id, page_id = $page_id");	
-		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages WHERE is_homepage = 1", $site_id);		
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages WHERE is_homepage = 1 AND status != 'Revision'", $site_id);		
 		$data = DatabaseManager::getResults($sql);				
 		if (isset($data[0])){
 			return $data[0];
@@ -158,7 +216,7 @@ class PagesTable {
 
 	public static function getHomepageID($site_id){
 		//Logger::debug("getPage(site_id = $site_id, page_id = $page_id");	
-		$sql = DatabaseManager::prepare("SELECT id FROM athena_%d_Pages WHERE is_homepage = 1", $site_id);		
+		$sql = DatabaseManager::prepare("SELECT id FROM athena_%d_Pages WHERE is_homepage = 1 AND status != 'Revision'", $site_id);		
 		return DatabaseManager::getVar($sql);				
 	}
 
@@ -166,13 +224,13 @@ class PagesTable {
 
 	public static function getBlogpage($site_id){
 		//Logger::debug("getPage(site_id = $site_id, page_id = $page_id");	
-		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages WHERE is_blogpage = 1", $site_id);		
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages WHERE is_blogpage = 1 AND status != 'Revision'", $site_id);		
 		return DatabaseManager::getSingleResult($sql);				
 	}
 	
 	public static function getBlogpageSlug($site_id){
 		//Logger::debug("getPage(site_id = $site_id, page_id = $page_id");	
-		$sql = DatabaseManager::prepare("SELECT slug FROM athena_%d_Pages WHERE is_blogpage = 1", $site_id);		
+		$sql = DatabaseManager::prepare("SELECT slug FROM athena_%d_Pages WHERE is_blogpage = 1 AND status != 'Revision'", $site_id);		
 		return DatabaseManager::getVar($sql);				
 	}
 	
@@ -181,7 +239,7 @@ class PagesTable {
 
 	public static function getPageFromSlug($site_id, $page_slug){
 		//Logger::debug("getPageFromSlug(site_id = $site_id, page_slug = $page_slug");	
-		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages WHERE slug = %s", $site_id, $page_slug);		
+		$sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Pages WHERE slug = %s AND status != 'Revision'", $site_id, $page_slug);		
 		$data = DatabaseManager::getSingleResult($sql);				
 		if (isset($data)){
 			return $data;
