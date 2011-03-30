@@ -13,6 +13,8 @@ class ProductionBuilder {
 	 */
 	public static function buildProductionJS($js_files, $master_filename, $doMinify=true) {
 		
+		$doMinify = false;
+		
 		Logger::debug("Processing JS.. [$master_filename]");
 	 	 	
 	 	file_put_contents($master_filename, "");
@@ -58,6 +60,8 @@ class ProductionBuilder {
 	 * @return 
 	 */	
 	public static function buildProductionCSS($css_files, $master_filename, $doMinify=true) {
+		
+		$doMinify = false;
 		
 		Logger::debug("Processing CSS.. [$master_filename]");
 	 	 	
