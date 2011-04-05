@@ -41,14 +41,14 @@ function drawColorPicker()
         ["#ff4500","#ffa500","#808000","#4682b4","#1e90ff","#9400d3","#ff1493","#a9a9a9"],
         ["#ff6347","#ffd700","#32cd32","#87ceeb","#00bfff","#9370db","#ff69b4","#dcdcdc"],
         ["#ffdab9","#ffffe0","#98fb98","#e0ffff","#87cefa","#e6e6fa","#dda0dd","#ffffff"]]
-  var sHTMLColor="<table id=dropColor"+this.oRenderName+" style=\"z-index:1;display:none;position:absolute;border:#9b95a6 1px solid;cursor:default;background-color:#E9E8F2;padding:2px\" unselectable=on cellpadding=0 cellspacing=0 width=143 height=109><tr><td unselectable=on>"
-  sHTMLColor+="<table align=center cellpadding=0 cellspacing=0 border=0 unselectable=on>";
+  var sHTMLColor="<table id=dropColor"+this.oRenderName+" style=\"z-index:1;display:none;position:absolute;border:#9b95a6 1px solid;cursor:default;background-color:#f4f4f4;padding:2px\" unselectable=on cellpadding=0 cellspacing=0 width=143px height=109px><tr><td unselectable=on>"
+  sHTMLColor+="<table align=center cellpadding=0 cellspacing=0 style='border-collapse:separate' unselectable=on>";
   for(var i=0;i<arrColors.length;i++)
     {
     sHTMLColor+="<tr>";
     for(var j=0;j<arrColors[i].length;j++)
-      sHTMLColor+="<td onclick=\""+this.oName+".color='"+arrColors[i][j]+"';"+this.oName+".onPickColor();"+this.oName+".currColor='"+arrColors[i][j]+"';"+this.oName+".hideAll()\" onmouseover=\"this.style.border='#777777 1px solid'\" onmouseout=\"this.style.border='#E9E8F2 1px solid'\" style=\"cursor:default;padding:1px;border:#E9E8F2 1px solid;\" unselectable=on>"+
-        "<table style='margin:0;width:13px;height:13px;background:"+arrColors[i][j]+";border:white 1px solid' cellpadding=0 cellspacing=0 unselectable=on>"+
+      sHTMLColor+="<td onclick=\""+this.oName+".color='"+arrColors[i][j]+"';"+this.oName+".onPickColor();"+this.oName+".currColor='"+arrColors[i][j]+"';"+this.oName+".hideAll()\" onmouseover=\"this.style.border='#777777 1px solid'\" onmouseout=\"this.style.border='#f4f4f4 1px solid'\" style=\"cursor:default;padding:1px;border:#f4f4f4 1px solid;\" unselectable=on>"+
+        "<table style='margin:0px;width:13px;height:13px;background:"+arrColors[i][j]+";border:white 1px solid' cellpadding=0 cellspacing=0 unselectable=on>"+
         "<tr><td unselectable=on></td></tr>"+
         "</table></td>";
     sHTMLColor+="</tr>";    
@@ -60,12 +60,12 @@ function drawColorPicker()
   //~~~ remove color & more colors ~~~~
   sHTMLColor+= "<tr>";
   sHTMLColor+= "<td unselectable=on>"+
-    "<table style='margin-left:1px;width:14px;height:14px;background:#E9E8F2;' cellpadding=0 cellspacing=0 unselectable=on>"+
+    "<table style='margin-left:1px;width:14px;height:14px;background:#f4f4f4;' cellpadding=0 cellspacing=0 unselectable=on>"+
     "<tr><td onclick=\""+this.oName+".onRemoveColor();"+this.oName+".currColor='';"+this.oName+".hideAll()\" onmouseover=\"this.style.border='#777777 1px solid'\" onmouseout=\"this.style.border='white 1px solid'\" style=\"cursor:default;padding:1px;border:white 1px solid;font-family:verdana;font-size:10px;font-color:black;line-height:9px;\" align=center valign=top unselectable=on>x</td></tr>"+
     "</table></td>";
   sHTMLColor+= "<td colspan=7 unselectable=on>"+
-    "<table style='margin:1px;width:117px;height:16px;background:#E9E8F2;border:white 1px solid' cellpadding=0 cellspacing=0 unselectable=on>"+
-    "<tr><td onclick=\""+this.oName+".onMoreColor();"+this.oName+".hideAll();parent.modalDialogShow('"+this.url+"',430,430, window,{'oName':'"+this.oName+"'});\" onmouseover=\"this.style.border='#777777 1px solid';this.style.background='#8d9aa7';this.style.color='#ffffff'\" onmouseout=\"this.style.border='#E9E8F2 1px solid';this.style.background='#E9E8F2';this.style.color='#000000'\" style=\"cursor:default;padding:1px;border:#efefef 1px solid\" style=\"font-family:verdana;font-size:9px;font-color:black;line-height:9px;padding:1px\" align=center valign=top nowrap unselectable=on>"+this.txtMoreColors+"</td></tr>"+
+    "<table style='margin:1px;width:117px;height:16px;background:#f4f4f4;border:white 1px solid' cellpadding=0 cellspacing=0 unselectable=on>"+
+    "<tr><td onclick=\""+this.oName+".onMoreColor();"+this.oName+".hideAll();parent.modalDialogShow('"+this.url+"',460,440, window,{'oName':'"+this.oName+"'});\" onmouseover=\"this.style.border='#777777 1px solid';this.style.background='#444444';this.style.color='#ffffff'\" onmouseout=\"this.style.border='#f4f4f4 1px solid';this.style.background='#f4f4f4';this.style.color='#000000'\" style=\"cursor:default;padding:1px;border:#efefef 1px solid\" style=\"font-family:verdana;font-size:9px;font-color:black;line-height:9px;padding:1px\" align=center valign=top nowrap unselectable=on>"+this.txtMoreColors+"</td></tr>"+
     "</table></td>";
   sHTMLColor+= "</tr>";
   
@@ -87,15 +87,15 @@ function refreshCustomColor()
     eval("idCustomColor"+this.oRenderName).innerHTML="";
     return;
     }
-  sHTML="<table cellpadding=0 cellspacing=0 width=100%><tr><td colspan=8 style=\"font-family:verdana;font-size:9px;font-color:black;line-height:9px;padding:1\">"+this.txtCustomColors+":</td></tr></table>"
-  sHTML+="<table cellpadding=0 cellspacing=0><tr>"; 
+  sHTML="<table cellpadding='0' cellspacing='0' width=100%><tr><td colspan=8 style=\"font-family:verdana;font-size:9px;font-color:black;line-height:9px;padding:1px\">"+this.txtCustomColors+":</td></tr></table>"
+  sHTML+="<table cellpadding=0 cellspacing=0 style='border-collapse:separate'><tr>"; 
   for(var i=0;i<this.customColors.length;i++)
     {
     if(i<22)
       {
       if(i==8||i==16||i==24||i==32)sHTML+="</tr></table><table cellpadding=0 cellspacing=0><tr>"  
-      sHTML+="<td onclick=\""+this.oName+".color='"+this.customColors[i]+"';"+this.oName+".onPickColor()\" onmouseover=\"this.style.border='#777777 1px solid'\" onmouseout=\"this.style.border='#E9E8F2 1px solid'\" style=\"cursor:default;padding:1px;border:#E9E8F2 1px solid;\" unselectable=on>"+
-        " <table  style='margin:0;width:13;height:13;background:"+this.customColors[i]+";border:white 1px solid' cellpadding=0 cellspacing=0 unselectable=on>"+
+      sHTML+="<td onclick=\""+this.oName+".color='"+this.customColors[i]+"';"+this.oName+".onPickColor()\" onmouseover=\"this.style.border='#777777 1px solid'\" onmouseout=\"this.style.border='#f4f4f4 1px solid'\" style=\"cursor:default;padding:1px;border:#f4f4f4 1px solid;\" unselectable=on>"+
+        " <table  style='margin:0px;width:13px;height:13px;background:"+this.customColors[i]+";border:white 1px solid' cellpadding=0 cellspacing=0 unselectable=on>"+
         " <tr><td unselectable=on></td></tr>"+
         " </table>"+
         "</td>";
@@ -135,12 +135,12 @@ function showColorPicker(oEl)
     }
   
   if(this.align=="left")
-    box.style.left=nLeft;
+    box.style.left=nLeft + "px";
   else//right
-    box.style.left=nLeft-143+oEl.offsetWidth;
+    box.style.left=nLeft-143+oEl.offsetWidth + "px";
     
   //box.style.top=nTop+1;//[CUSTOM]
-  box.style.top=nTop+1+oEl.offsetHeight;//[CUSTOM]
+  box.style.top=nTop+1+oEl.offsetHeight + "px";//[CUSTOM]
 
   this.isActive=true;
   
@@ -163,3 +163,42 @@ function hideColorPickerAll()
     eval(arrColorPickerObjects[i]).isActive=false;
     }
   }
+  
+ function convertHexToDec(hex)
+    {
+    return parseInt(hex,16);
+    }
+    
+function convertDecToHex(dec)
+    {
+    var tmp = parseInt(dec).toString(16);
+    if(tmp.length == 1) tmp = ("0" +tmp);
+    return tmp;//.toUpperCase();
+    }
+    
+function convertDecToHex2(dec)
+    {
+    var tmp = parseInt(dec).toString(16);
+
+    if(tmp.length == 1) tmp = ("00000" +tmp);
+    if(tmp.length == 2) tmp = ("0000" +tmp);
+    if(tmp.length == 3) tmp = ("000" +tmp);
+    if(tmp.length == 4) tmp = ("00" +tmp);
+    if(tmp.length == 5) tmp = ("0" +tmp);
+
+    tmp = tmp.substr(4,1) + tmp.substr(5,1) + tmp.substr(2,1) + tmp.substr(3,1) + tmp.substr(0,1) + tmp.substr(1,1)
+    return tmp;//.toUpperCase();
+    }
+    
+//input color in format rgb(R,G,B)
+//ex, return by document.queryCommandValue(forcolor)
+function extractRGBColor(col) {
+    var re = /rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)/i;
+    if (re.test(col)) {
+        var result = re.exec(col);
+        return convertDecToHex(parseInt(result[1])) + 
+               convertDecToHex(parseInt(result[2])) + 
+               convertDecToHex(parseInt(result[3]));
+    }
+    return convertDecToHex2(0);
+}  

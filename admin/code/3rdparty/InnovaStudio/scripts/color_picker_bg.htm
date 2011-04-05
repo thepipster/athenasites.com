@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link href="style/editor.css" rel="stylesheet" type="text/css">
@@ -39,13 +40,11 @@ function realTime()
     {
     if(oEditor.document.queryCommandValue("BackColor")!=null)
       {
-      sHex=convertDecToHex2(oEditor.document.queryCommandValue("BackColor"))
-      //alert(sHex)//cccccc
+      var sHex="#"+convertDecToHex2(oEditor.document.queryCommandValue("BackColor"))
       idCurrent.style.backgroundColor=sHex;
-      //alert(idCurrent.style.backgroundColor)//#cccccc
-      nRed=convertHexToDec(idCurrent.style.backgroundColor.substr(1,2));
-      nGreen=convertHexToDec(idCurrent.style.backgroundColor.substr(3,2));
-      nBlue=convertHexToDec(idCurrent.style.backgroundColor.substr(5,2));
+      nRed=convertHexToDec(sHex.substr(1,2));
+      nGreen=convertHexToDec(sHex.substr(3,2));
+      nBlue=convertHexToDec(sHex.substr(5,2));
       if(idCurrent.style.backgroundColor=="")
         {
         nRed="";nGreen="";nBlue="";
@@ -65,7 +64,7 @@ function doApply()
   if(chkUseColorName.checked && idColorName.innerText!="")
     obj.applyColor("BackColor",idColorName.innerText);
   else
-    obj.applyColor("BackColor",inpHex.value);
+    obj.applyColor("BackColor","#"+inpHex.value);
   dialogArg.oUtil.obj.bookmarkSelection();
   }
 function doRemove()
@@ -103,8 +102,8 @@ function tabClick(n)
   if(!oActiveTab) oActiveTab=tab0;
   var oEl=eval("tab"+n);
   if(oActiveTab==oEl)return;
-  oEl.style.cssText="font-weight:bold;font-size:11px;color:gray;padding:5px;padding-left:7;padding-right:7;cursor:default;border:#e0e0e0 2 solid;border-bottom:#FCFCFC 2 solid;background:#FCFCFC";
-  oActiveTab.style.cssText="font-weight:bold;font-size:11px;color:gray;padding:5px;padding-left:7;padding-right:7;cursor:hand;border:#e0e0e0 2 solid;"
+  oEl.style.cssText="font-weight:bold;font-size:11px;color:gray;padding:5px;padding-left:7px;padding-right:7px;cursor:default;border:#e0e0e0 2px solid;border-bottom:#FCFCFC 2px solid;background:#FCFCFC";
+  oActiveTab.style.cssText="font-weight:bold;font-size:11px;color:gray;padding:5px;padding-left:7px;padding-right:7px;cursor:pointer;border:#e0e0e0 2px solid;"
   oActiveTab=oEl;
 
   if(n==0)
@@ -158,10 +157,12 @@ function updateRGB()
     }
   try
     {
-    idPreview.style.backgroundColor=inpHex.value;
-    inpRed.value=convertHexToDec(idPreview.style.backgroundColor.substr(1,2));
-    inpGreen.value=convertHexToDec(idPreview.style.backgroundColor.substr(3,2));
-    inpBlue.value=convertHexToDec(idPreview.style.backgroundColor.substr(5,2));
+    var hexVal = inpHex.value;
+
+    idPreview.style.backgroundColor="#"+hexVal;
+    inpRed.value=convertHexToDec(hexVal.substr(1,2));
+    inpGreen.value=convertHexToDec(hexVal.substr(3,2));
+    inpBlue.value=convertHexToDec(hexVal.substr(5,2));
     idColorName.innerText="";
     }
   catch(e){;}
@@ -189,6 +190,19 @@ function convertDecToHex2(dec)
   tmp = tmp.substr(4,1) + tmp.substr(5,1) + tmp.substr(2,1) + tmp.substr(3,1) + tmp.substr(0,1) + tmp.substr(1,1)
   return tmp;//.toUpperCase();
   }
+
+//input color in format rgb(R,G,B)
+//ex, return by document.queryCommandValue(forcolor)
+function extractRGBColor(col) {
+    var re = /rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)/i;
+    if (re.test(col)) {
+        var result = re.exec(col);
+        return convertDecToHex(parseInt(result[1])) +
+               convertDecToHex(parseInt(result[2])) +
+               convertDecToHex(parseInt(result[3]));
+    }
+    return convertDecToHex2(0);
+}
 
 //******* INIT *********
 function init()
@@ -225,7 +239,7 @@ function init()
     sHTML+="<tr>";
     for(var j=0;j<arrColors[i].length;j++)
       {
-      sHTML+="<td id=\"cell"+i+j+"\" onclick=\"setColor(this)\" style=\"cursor:hand;width:17px;height:12px;background:"+arrColors[i][j]+"\"></td>";
+      sHTML+="<td id=\"cell"+i+j+"\" onclick=\"setColor(this)\" style=\"cursor:pointer;width:17px;height:12px;background:"+arrColors[i][j]+"\"></td>";
       }
     sHTML+="</tr>";
     }
@@ -234,15 +248,15 @@ function init()
   idWebPallete.innerHTML=sHTML;
 
   //******* 22 Custom Colors *********
-  sHTML="<table cellpadding=0 cellspacing=0 border=0>";
+  sHTML="<table cellpadding=0 cellspacing=0 border=0 style='border-collapse:separate'>";
   sHTML+="<tr>";
   for(var i=0;i<22;i++)
     {
     sHTML+="<td style='border:white 1px solid;padding:1px'>";
     if(i<arrColCustoms.length)
-      sHTML+="<table cellpadding=0 cellspacing=0 id=\"cellCustom"+i+"\" onclick=\"setCustomColor(this)\" style=\"cursor:hand;width:12;height:12;background:"+arrColCustoms[i]+"\"><tr><td></td></tr></table>";
+      sHTML+="<table cellpadding=0 cellspacing=0 id=\"cellCustom"+i+"\" onclick=\"setCustomColor(this)\" style=\"cursor:pointer;width:12px;height:12px;background:"+arrColCustoms[i]+"\"><tr><td></td></tr></table>";
     else
-      sHTML+="<table cellpadding=0 cellspacing=0 id=\"cellCustom"+i+"\" onclick=\"setCustomColor(this)\" style=\"width:12;height:12;background-color:transparent\"><tr><td></td></tr></table>";
+      sHTML+="<table cellpadding=0 cellspacing=0 id=\"cellCustom"+i+"\" onclick=\"setCustomColor(this)\" style=\"width:12px;height:12px;background-color:transparent\"><tr><td></td></tr></table>";
     sHTML+="</td>";
     }
   sHTML+="</tr>";
@@ -283,7 +297,7 @@ function init()
       if(arrNamedColors[i][j]=="")
         sHTML+="<td></td>"
       else
-        sHTML+="<td id=\"cellNamed"+i+j+"\" onclick=\"setColor2(this,'"+arrNamedColors2[i][j]+"')\" style=\"cursor:hand;width:22px;height:20px;background:"+arrNamedColors[i][j]+";border:white 5px solid;\"></td>";
+        sHTML+="<td id=\"cellNamed"+i+j+"\" onclick=\"setColor2(this,'"+arrNamedColors2[i][j]+"')\" style=\"cursor:pointer;width:22px;height:20px;background:"+arrNamedColors[i][j]+";border:white 5px solid;\"></td>";
       }
     sHTML+="</tr>";
     }
@@ -303,14 +317,26 @@ function init()
 //******* SET COLOR *********
 function setColor(oEl)
   {
-  inpHex.value=oEl.style.backgroundColor.substring(1);
+
+  if(oEl.style.backgroundColor.indexOf("#")!=-1) {
+	inpHex.value=oEl.style.backgroundColor.substring(1);
+  } else {
+	inpHex.value=extractRGBColor(oEl.style.backgroundColor);
+  }
+
   updateRGB();//sekaligus preview
 
   idColorName.innerText="";
   }
 function setColor2(oEl,sColorName)
   {
-  inpHex.value=oEl.style.backgroundColor.substring(1);
+
+  if(oEl.style.backgroundColor.indexOf("#")!=-1) {
+	inpHex.value=oEl.style.backgroundColor.substring(1);
+  } else {
+	inpHex.value=extractRGBColor(oEl.style.backgroundColor);
+  }
+
   updateRGB();//sekaligus preview
 
   idColorName.innerText=sColorName;
@@ -357,7 +383,7 @@ function addToCustomColors()
     if(iActiveCustomColor==22)iActiveCustomColor=0;
     var cellCustom=eval("cellCustom"+iActiveCustomColor)
     cellCustom.style.backgroundColor=idPreview.style.backgroundColor;
-    cellCustom.style.cursor="hand";
+    cellCustom.style.cursor="pointer";
     iActiveCustomColor++;
     }
   }
@@ -369,8 +395,8 @@ function show()
   nLeftInt=15;
   nTopInt2=18;
   nLeftInt2=39;
-  nTop=100;
-  nLeft=100;
+  nTop=120;
+  nLeft=160;
 
   var sHTML="";
 
@@ -428,37 +454,37 @@ function drawPlate(C,nLeft,nTop,num)
   {
   var sHTML="";
   arrC = new Array("FF","CC","99","66","33","00");
-  sHTML+="<table id='id"+C+"' cellpadding=0 cellspacing=0 style='table-layout: fixed;position:absolute;top:"+nTop+";left:"+nLeft+"'>";
+  sHTML+="<table id='id"+C+"' cellpadding=0 cellspacing=0 style='border-collapse:separate;table-layout: fixed;position:absolute;top:"+nTop+"px;left:"+nLeft+"px'>";
   for(var i=0;i<arrC.length;i++)
     {
     if(C=="FF99"||C=="CC99"||C=="9999"||C=="99CC"||C=="99FF"|| C=="FFCC"||C=="CCCC"||C=="CCFF"||C=="FFFF")
-      sHTML+="<tr><td onclick=\"setColor(this)\" style='cursor:hand;width:25;height:8;background:#"+C+arrC[i]+";'>&nbsp;</td></tr>";
+      sHTML+="<tr><td onclick=\"setColor(this)\" style='cursor:pointer;width:25px;height:8px;background:#"+C+arrC[i]+";'>&nbsp;</td></tr>";
     else
-      sHTML+="<tr><td onclick=\"setColor(this)\" style='cursor:hand;width:25;height:8;background:#"+C+arrC[i]+";'>&nbsp;</td></tr>";
+      sHTML+="<tr><td onclick=\"setColor(this)\" style='cursor:pointer;width:25px;height:8px;background:#"+C+arrC[i]+";'>&nbsp;</td></tr>";
     }
   sHTML+="</table>";
   return sHTML;
   }
 </script>
 </head>
-<body style="margin:5;margin-top:11;margin-right:8">
+<body style="margin:5px;margin-top:11px;margin-right:8px">
 
-<table cellpadding=0 cellspacing=0 border=0>
+<table cellpadding=0 cellspacing=0 border=0 style="border-collapse:separate">
 <tr>
 <td></td>
 <td>
   <table align=right cellpadding=0 cellspacing=0 style="border-collapse:collapse">
   <tr>
-  <td width=100% style="border-bottom:#e0e0e0 2 solid;"></td>
-  <td id=tab0 onclick="tabClick(0)" nowrap style="font-weight:bold;font-size:11px;color:gray;padding:5px;padding-left:7;padding-right:7;cursor:default;border:#e0e0e0 2 solid;border-bottom:#FCFCFC 2 solid;background:#FCFCFC"><span id=txtLang name=txtLang>Web Pallete</span></td>
-  <td id=tab1 onclick="tabClick(1)" nowrap style="font-weight:bold;font-size:11px;color:gray;padding:5px;padding-left:7;padding-right:7;cursor:hand;border:#e0e0e0 2 solid;"><span id=txtLang name=txtLang>Named Colors</span></td>
-  <td id=tab2 onclick="tabClick(2)" nowrap style="font-weight:bold;font-size:11px;color:gray;padding:5px;padding-left:7;padding-right:7;cursor:hand;border:#e0e0e0 2 solid;"><span id=txtLang name=txtLang>216 Web Safe</span></td>
+  <td width=100% style="border-bottom:#e0e0e0 2px solid;"></td>
+  <td id=tab0 onclick="tabClick(0)" nowrap style="font-weight:bold;font-size:11px;color:gray;padding:5px;padding-left:7px;padding-right:7px;cursor:default;border:#e0e0e0 2px solid;border-bottom:#FCFCFC 2px solid;background:#FCFCFC"><span id=txtLang name=txtLang>Web Pallete</span></td>
+  <td id=tab1 onclick="tabClick(1)" nowrap style="font-weight:bold;font-size:11px;color:gray;padding:5px;padding-left:7px;padding-right:7px;cursor:pointer;border:#e0e0e0 2px solid;"><span id=txtLang name=txtLang>Named Colors</span></td>
+  <td id=tab2 onclick="tabClick(2)" nowrap style="font-weight:bold;font-size:11px;color:gray;padding:5px;padding-left:7px;padding-right:7px;cursor:pointer;border:#e0e0e0 2px solid;"><span id=txtLang name=txtLang>216 Web Safe</span></td>
   </tr>
   </table>
 </td>
 </tr>
 <tr>
-<td valign=top style="padding-right:2">
+<td valign=top style="padding-right:2px">
   <table>
   <tr><td align=right>R:<INPUT type="text" NAME="inpRed" class=inpTxt style="text-align:right" size=1 onblur="updateHex()"></td></tr>
   <tr><td align=right>G:<INPUT type="text" NAME="inpGreen" class=inpTxt style="text-align:right" size=1 onblur="updateHex()"></td></tr>
@@ -466,17 +492,17 @@ function drawPlate(C,nLeft,nTop,num)
   <tr><td nowrap># <INPUT type="text" NAME="inpHex" class=inpTxt style="text-align:right;width:37px" onblur="updateRGB()"></td></tr>
   <tr><td style="height:5px"></td></tr>
   <tr><td align=right><div style="width:40px" align=center id=txtLang name=txtLang>New</div></td></tr>
-  <tr><td align=right><div style="padding:3;background:white;width:40px;height:33px;padding:3"><span id=idPreview style="width:37px;height:30px;background-color:white"></span></div></td></tr>
-  <tr><td align=right><div style="padding:3;background:white;width:40px;height:33px;padding:3"><span id=idCurrent style="width:37px;height:30px;background-color:white"></span></div></td></tr>
+  <tr><td align=right><div style="padding:3px;background:white;width:40px;height:33px;padding:3px"><div id=idPreview style="width:100%;height:100%;background-color:white"></div></div></td></tr>
+  <tr><td align=right><div style="padding:3px;background:white;width:40px;height:33px;padding:3px"><div id=idCurrent style="width:100%;height:100%;background-color:white"></div></div></td></tr>
   <tr><td align=right><div style="width:40px" align=center id=txtLang name=txtLang>Current</div></td></tr>
   </table>
 </td>
 <td>
-  <div id="idWebPallete" style="padding:5;background:#FCFCFC;border:#e0e0e0 2 solid;border-top:none;width:354;height:252"></div>
+  <div id="idWebPallete" style="padding:5px;background:#FCFCFC;border:#e0e0e0 2px solid;border-top:none;width:354px;height:252px"></div>
 
-  <div id="idNamedColors" style="display:none;padding:5;background:#FCFCFC;border:#e0e0e0 2 solid;border-top:none;width:354;height:252"></div>
+  <div id="idNamedColors" style="display:none;padding:5px;background:#FCFCFC;border:#e0e0e0 2px solid;border-top:none;width:354px;height:252px"></div>
 
-  <div id="idWebSafe" style="display:none;overflow:auto;padding:5;background:#FCFCFC;border:#e0e0e0 2 solid;border-top:none;width:354;height:252"></div>
+  <div id="idWebSafe" style="display:none;overflow:auto;padding:5;background:#FCFCFC;border:#e0e0e0 2px solid;border-top:none;width:354px;height:252px"></div>
 </td>
 </tr>
 <tr>
@@ -484,8 +510,8 @@ function drawPlate(C,nLeft,nTop,num)
   <td>
     <table width=100% cellpadding=0 cellspacing=0>
     <tr>
-    <td style="padding:3;padding-bottom:4" valign=bottom><span id=txtLang name=txtLang>Custom colors</span>:</td>
-    <td style="padding:3;padding-right:0" align=right><INPUT type="button" style="width:240px" name=btnAddToCustom id=btnAddToCustom value="Add to Custom Colors" onclick="addToCustomColors()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'"></td>
+    <td style="padding:3px;padding-bottom:4px" valign=bottom><span id=txtLang name=txtLang>Custom colors</span>:</td>
+    <td style="padding:3px;padding-right:0px" align=right><INPUT type="button" style="width:240px" name=btnAddToCustom id=btnAddToCustom value="Add to Custom Colors" onclick="addToCustomColors()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'"></td>
     </tr>
     </table>
   </td>
@@ -493,17 +519,17 @@ function drawPlate(C,nLeft,nTop,num)
 <tr>
 <td>&nbsp;</td>
 <td>
-  <div style="padding:1;background:white">
+  <div style="padding:1px;background:white">
   <div id="idColorCustom"></div>
   </div>
 </td>
 </tr>
 <tr>
-<td colspan=2 style="padding-top:10" align=right>
-<INPUT type="button" name=btnCancel id=btnCancel onclick="self.close()" value=" cancel " class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
-<INPUT type="button" name=btnRemove id=btnRemove onclick="doRemove();self.close()" value=" remove color " class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+<td colspan=2 style="padding-top:10px" align=right>
+<INPUT type="button" name=btnCancel id=btnCancel onclick="self.closeWin()" value=" cancel " class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+<INPUT type="button" name=btnRemove id=btnRemove onclick="doRemove();self.closeWin()" value=" remove color " class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
 <INPUT type="button" name=btnApply id=btnApply onclick="applyCustomColor();doApply()" value=" apply " class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
-<INPUT type="button" name=btnOk id=btnOk onclick="applyCustomColor();doApply();self.close()" value=" ok " class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+<INPUT type="button" name=btnOk id=btnOk onclick="applyCustomColor();doApply();self.closeWin()" value=" ok " class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
 </td>
 </tr>
 </table>

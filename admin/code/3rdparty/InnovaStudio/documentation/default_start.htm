@@ -173,9 +173,9 @@ In the current version, please use our simple <span class="code">encodeHTML()</s
 <span class=tab1_bold>&lt;?</span><br>
 <span class=tab1_bold>function encodeHTML($sHTML)</span><br>
 <span class=tab2_bold>{</span><br>
-<span class=tab2_bold>$sHTML=ereg_replace("&","&amp;amp;",$sHTML);</span><br>
-<span class=tab2_bold>$sHTML=ereg_replace("&lt;","&amp;lt;",$sHTML);</span><br>
-<span class=tab2_bold>$sHTML=ereg_replace(">","&amp;gt;",$sHTML);</span><br>
+<span class=tab2_bold>$sHTML=preg_replace("/&/i","&amp;amp;",$sHTML);</span><br>
+<span class=tab2_bold>$sHTML=preg_replace("/&lt;/i","&amp;lt;",$sHTML);</span><br>
+<span class=tab2_bold>$sHTML=preg_replace("/>/i","&amp;gt;",$sHTML);</span><br>
 <span class=tab2_bold>return $sHTML;</span><br>
 <span class=tab2_bold>}</span><br><br>
 
@@ -270,7 +270,7 @@ This method available automatically when the page include the editor script.
 <br>
 <hr>
 <span style="font-size:10px">
-© 2010, INNOVA STUDIO (www.innovastudio.com). All rights reserved.</span>
+© 2011, INNOVA STUDIO (www.innovastudio.com). All rights reserved.</span>
 </body>
 </html>
 

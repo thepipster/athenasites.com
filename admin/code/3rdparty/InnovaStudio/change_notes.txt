@@ -1,6 +1,17 @@
-InnovaStudio WYSIWYG Editor 5.1
-Copyright © 2010, INNOVA STUDIO (www.InnovaStudio.com). All rights reserved.
+InnovaStudio WYSIWYG Editor 5.2
+Copyright © 2011, INNOVA STUDIO (www.InnovaStudio.com). All rights reserved.
 ____________________________________________________________________
+
+
+*** CHANGE NOTES  v5.1 - v5.2 ***
+1. Fix color picker positioning issue in floating/overflow element.
+2. Add rel attribute in Insert Hyperlink.
+3. New update to dll to fix issue with resize when using .NET dll.
+4. IE9 compatible
+5. New inContentChanged() function.
+6. New Insert Youtube video dialog.
+7. New Auto Table Format dialog.
+8. Clean word tag on paste (CTRL+V).
 
 *** CHANGE NOTES  v5.0 - v5.1 ***
 1. Fix fullscreen and some formatting issue in Firefox and Safari/Chrome

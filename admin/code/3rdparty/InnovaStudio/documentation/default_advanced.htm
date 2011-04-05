@@ -44,6 +44,8 @@ Developer's Guide  |
   <li>Spell-Checking Integration</li>
   <li>Setting the Editor Focus</li>
   <li>Adding Custom Color Selection</li>
+  <li>Dirty Flag</li>
+  <li>Table Auto Format</li>
   </ol>
 </li>
 <li><a href="default_extending.htm">Extending the Editor</a></li>
@@ -395,9 +397,124 @@ the custom colors. For example:
 &lt;/script>
 </p>
 
+<h3>IV.9. Dirty Flag</h3>
+
+<p>
+The editor provides a function to determine whether the content has been changed.
+</p>
+
+<p class="code2" style="width:630px;">
+&lt;script><br>
+<span class=tab1_bold>var changed = oEdit1.isContentChanged();</span><br>
+&lt;/script>
+</p>
+
+<h3>IV.10. Table Auto Format</h3>
+
+<p>
+Table Auto Format is a quick and easy way to format table. List of predefined table formats are available for user
+to choose. To use Table Auto Format:
+</p>
+
+<ol>
+  <li>Enable Table Auto Format button. Use <strong>'features'</strong> or <strong>tabs/groups</strong> property to enable the button.
+  Please check <a href="default_toolbar.htm">Toolbar</a> section for more information about toolbar configuration.
+  </li>
+  <li>
+  	Apply external stylesheet to the editor.<br /><br />
+	<div class="code2" style="margin-left:0;width:630px;">
+	&lt;script><br>
+	<span class=tab1>var oEdit1 = new InnovaEditor("oEdit1");</span><br>
+	<span class=tab1_bold>oEdit1.css="style/test.css";</span><br>
+	<span class=tab1>oEdit1.REPLACE("txtContent");</span><br>
+	&lt;/script>
+	</div><br />
+  </li>
+  <li>
+  	Define table format css rules in the stylesheet for examples (as used in example02):<br /><br />
+
+	<div class="code2" style="margin-left:0;width:800px;height:200px;overflow:auto;white-space:nowrap">
+
+	<span class=tab1>/* Table Format */</span><br />
+	<span class=tab1>table.Default {border-collapse:collapse;border:#4f81bd 1px solid;margin-bottom:15px;}</span><br />
+	<span class=tab1>table.Default td {border:#ccc 1px solid;padding:7px;}</span><br />
+	<span class=tab1>table.Default td.alt {border:#ccc 1px solid;padding:7px;}</span><br />
+	<span class=tab1>table.Default td.hd {border:#ccc 1px solid;padding:7px;}</span><br />
+	<span class=tab1>table.Default td.fc {border:#ccc 1px solid;padding:7px;}</span><br />
+	<span class=tab1>table.Default td.fcalt {border:#ccc 1px solid;padding:7px;}</span><br /><br />
+
+	<span class=tab1>table.Zebra {width:80%;border-collapse:collapse;margin-bottom:15px;}</span><br />
+	<span class=tab1>table.Zebra td {padding:7px;font-size:9pt;}</span><br />
+	<span class=tab1>table.Zebra td.alt {padding:7px;background:#eee;font-size:9pt;}</span><br />
+	<span class=tab1>table.Zebra td.hd {border-bottom:#4f81bd 1px solid;color:#365fa5;font-size:12pt;padding:7px;}</span><br />
+	<span class=tab1>table.Zebra td.fc {padding:7px;font-size:9pt;}</span><br />
+	<span class=tab1>table.Zebra td.fcalt {padding:7px;background:#eee;font-size:9pt;}</span><br /><br />
+
+	<span class=tab1>table.Zebra-2 {width:80%;border-collapse:collapse;margin-bottom:15px;border:#4f81bd 1px solid;}</span><br />
+	<span class=tab1>table.Zebra-2 td {padding:7px;background:#eee;font-size:9pt;}</span><br />
+	<span class=tab1>table.Zebra-2 td.alt {padding:7px;background:#fff;font-size:9pt;}</span><br />
+	<span class=tab1>table.Zebra-2 td.hd {background:#709ad1;border-bottom:#4f81bd 1px solid;color:#fff;font-size:12pt;padding:7px;}</span><br />
+	<span class=tab1>table.Zebra-2 td.fc {padding:7px;background:#eee;font-size:9pt;}</span><br />
+	<span class=tab1>table.Zebra-2 td.fcalt {padding:7px;background:#fff;font-size:9pt;}</span><br /><br />
+
+	<span class=tab1>table.Zebra-3 {width:80%;border-collapse:collapse;margin-bottom:15px;}</span><br />
+	<span class=tab1>table.Zebra-3 td {border:#4f81bd 1px solid;padding:7px;font-size:9pt;}</span><br />
+	<span class=tab1>table.Zebra-3 td.alt {background:#eee;padding:7px;font-size:9pt;}</span><br />
+	<span class=tab1>table.Zebra-3 td.hd {border:none;border-bottom:#4f81bd 3px solid;color:#365fa5;font-size:14pt;padding:7px;}</span><br />
+	<span class=tab1>table.Zebra-3 td.fc {padding:7px;font-size:9pt;}</span><br />
+	<span class=tab1>table.Zebra-3 td.fcalt {background:#eee;padding:7px;font-size:9pt;}</span><br /><br />
+
+	<span class=tab1>table.Vertical-Emphasis {width:80%;border-collapse:collapse;margin-bottom:15px;}</span><br />
+	<span class=tab1>table.Vertical-Emphasis td {padding:7px;font-size:9pt;}</span><br />
+	<span class=tab1>table.Vertical-Emphasis td.alt {padding:7px;font-size:9pt;}</span><br />
+	<span class=tab1>table.Vertical-Emphasis td.hd {border-bottom:#4f81bd 1px solid;color:#365fa5;font-size:12pt;padding:7px;}</span><br />
+	<span class=tab1>table.Vertical-Emphasis td.fc {padding:7px;font-size:9pt;background:#eee;}</span><br />
+	<span class=tab1>table.Vertical-Emphasis td.fcalt {padding:7px;font-size:9pt;background:#eee;}</span><br /><br />
+
+	<span class=tab1>table.Vertical-Emphasis-2 {width:80%;border-collapse:collapse;margin-bottom:15px;border:#4f81bd 1px solid;}</span><br />
+	<span class=tab1>table.Vertical-Emphasis-2 td {padding:7px;font-size:9pt;}</span><br />
+	<span class=tab1>table.Vertical-Emphasis-2 td.alt {padding:7px;font-size:9pt;}</span><br />
+	<span class=tab1>table.Vertical-Emphasis-2 td.hd {background:#709ad1;border-bottom:#4f81bd 1px solid;color:#fff;font-size:12pt;padding:7px;}</span><br />
+	<span class=tab1>table.Vertical-Emphasis-2 td.fc {padding:7px;background:#eee;font-size:9pt;}</span><br />
+	<span class=tab1>table.Vertical-Emphasis-2 td.fcalt {padding:7px;background:#eee;font-size:9pt;}</span><br /><br />
+
+	<span class=tab1>table.Vertical-Emphasis-3 {width:80%;border-collapse:collapse;margin-bottom:15px;}</span><br />
+	<span class=tab1>table.Vertical-Emphasis-3 td {padding:7px;font-size:9pt;}</span><br />
+	<span class=tab1>table.Vertical-Emphasis-3 td.alt {padding:7px;font-size:9pt;}</span><br />
+	<span class=tab1>table.Vertical-Emphasis-3 td.hd {border-bottom:#4f81bd 3px solid;color:#365fa5;font-size:14pt;padding:7px;background:#eee;}</span><br />
+	<span class=tab1>table.Vertical-Emphasis-3 td.fc {padding:7px;background:#4f81bd;font-size:9pt;color:#fff;}</span><br />
+	<span class=tab1>table.Vertical-Emphasis-3 td.fcalt {padding:7px;background:#4f81bd;font-size:9pt;color:#fff;}</span><br /><br />
+
+	<span class=tab1>table.Modern {width:80%;border-collapse:collapse;margin-bottom:15px;</span><br />
+	<span class=tab2>background-image:url(library/bulb3.jpg);</span><br />
+	<span class=tab2>background-position:bottom right;</span><br />
+	<span class=tab2>background-repeat:no-repeat;</span><br />
+	<span class=tab2>background-color:#ececf6;}</span><br />
+	<span class=tab1>table.Modern td {font-size:9pt;padding:12px;border-bottom:white 1px solid;color:#365f91}</span><br />
+	<span class=tab1>table.Modern td.alt {font-size:9pt;padding:12px;border-bottom:white 1px solid;color:#365f91}</span><br />
+	<span class=tab1>table.Modern td.hd {background:#fff;border-bottom:#4f81bd 1px solid;color:#365f91;font-size:14pt;padding:12px;padding-top:10px;padding-bottom:10px;}</span><br />
+	<span class=tab1>table.Modern td.fc {font-size:9pt;padding:12px;border-bottom:white 1px solid;color:#365f91}</span><br />
+	<span class=tab1>table.Modern td.fcalt {font-size:9pt;padding:12px;border-bottom:white 1px solid;color:#365f91}</span><br /><br />
+
+	<span class=tab1>table.Modern-Dark {width:80%;border-collapse:collapse;margin-bottom:15px;border-bottom:#5177bb 1px solid;</span><br />
+	<span class=tab2>background-image:url(library/bulb1.jpg);</span><br />
+	<span class=tab2>background-position:bottom right;</span><br />
+	<span class=tab2>background-repeat:no-repeat;</span><br />
+	<span class=tab2>background-color:#9caff1;}</span><br />
+	<span class=tab1>table.Modern-Dark td {font-size:9pt;padding:12px;border-bottom:#ececf6 1px solid;color:#fff}</span><br />
+	<span class=tab1>table.Modern-Dark td.alt {font-size:9pt;padding:12px;border-bottom:#ececf6 1px solid;color:#fff}</span><br />
+	<span class=tab1>table.Modern-Dark td.hd {background:#5177bb;border-bottom:#ececf6 1px solid;color:#fff;font-size:12pt;padding:12px;padding-top:10px;padding-bottom:10px;}</span><br />
+	<span class=tab1>table.Modern-Dark td.fc {font-size:9pt;padding:12px;border-bottom:#ececf6 1px solid;color:#fff}</span><br />
+	<span class=tab1>table.Modern-Dark td.fcalt {font-size:9pt;padding:12px;border-bottom:#ececf6 1px solid;color:#fff}</span><br />
+
+	</div><br />
+  </li>
+  <li>Note that the css rules must also be included in actual page when viewing edited content.</li>
+</ol>
+
 <br>
 
 <span style="font-size:10px">
-© 2010, INNOVA STUDIO (www.innovastudio.com). All rights reserved.</span>
+© 2011, INNOVA STUDIO (www.innovastudio.com). All rights reserved.</span>
 </body>
 </html>

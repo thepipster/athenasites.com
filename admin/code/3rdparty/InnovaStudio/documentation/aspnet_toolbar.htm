@@ -51,7 +51,7 @@ ASP.NET Developer's Guide
 
 <h2>VI. Toolbar</h2>
 
-<h3>VI.1. Configuring Toolbar Buttons</h3>
+<h3>VI.1. Toolbar Mode</h3>
 
 <p> The editor supports 3 toolbar modes: </p>
 
@@ -73,7 +73,9 @@ ASP.NET Developer's Guide
 </div>
 <br>
 
-<p>There are 2 options to show/hide toolbar buttons:</p>
+<h3>VI.2. Configuring STANDARD Toolbar Buttons</h3>
+
+<p>There are 2 options to show/hide standard toolbar buttons (toolbarMode=0):</p>
 
 <ol>
 <li>
@@ -435,6 +437,15 @@ For a list of button names, please refer to the button list below.
   <td>Yes</td>
   <td>Yes</td>
 </tr>
+<tr>
+  <td><img src="images/btnYoutubeVideo.jpg"></td>
+  <td>"Insert Youtube Video" button.</td>
+  <td>YoutubeVideo</td>
+  <td class="code">btnYoutubeVideo</td>
+  <td>true</td>
+  <td>Yes</td>
+  <td>Yes</td>
+</tr>
 <tr style="background:#f7f7fc">
   <td valign=top><img src="images/btnInternalLink.gif"></td>
   <td valign=top>"Internal Link" button.</td>
@@ -480,6 +491,15 @@ For a list of button names, please refer to the button list below.
   <td>true</td>
   <td>Yes</td>
   <td><b>No</b></td>
+</tr>
+<tr>
+  <td><img src="images/btnAutoTable.jpg"></td>
+  <td>"Auto Table Format" button.</td>
+  <td>AutoTable</td>
+  <td class="code">btnAutoTable</td>
+  <td>false</td>
+  <td>Yes</td>
+  <td>Yes</td>
 </tr>
 <tr style="background:#f7f7fc">
   <td><img src="images/btnAbsolute.gif"></td>
@@ -764,7 +784,7 @@ For a list of button names, please refer to the button list below.
 
 </p>
 
-<h3>VI.2. Adding Custom Buttons</h3>
+<h3>VI.3. Adding Custom Buttons</h3>
 
 <p>
 To add custom buttons on the Editor toolbar, use <span class=code>ToolbarCustomButtons</span> collection property
@@ -819,10 +839,10 @@ As seen on the above code, you need to set the <span class=code>CustomButtons</s
 You can re-arrange the custom buttons at any position on the toolbar by setting the <span class=code>ButtonFeatures</span> property.
 </p>
 
-<h3>VI.3. Using Tabbed Toolbar</h3>
+<h3>VI.4. Using Tabbed Toolbar</h3>
 <p>
 You can organize the toolbar into tabs and groups by specifying <span class=code>ToolbarTabs</span>
-collection property. In each tab there are groups of buttons. Below is the example:
+collection property. In each tab there are groups of buttons. Note that <strong>toolbarMode</strong> must set to 1 or 2. Below is the example:
 </p>
 <p class="code2" style="width:970px;">
 
@@ -892,7 +912,7 @@ The result is shown below:
 </p>
 <img src="images/tabtoolbar.gif" style="margin-left:30px;">
 <br>
-<h3>VI.4. Tag Selector Settings</h3>
+<h3>VI.5. Tag Selector Settings</h3>
 
 <p>
 You can move the Tag Selector at the top of the editing area (below the Editor toolbar)
@@ -930,7 +950,7 @@ To hide the Tag Selector, set <span class=code>UseTagSelector</span> property to
 <br>
 <hr>
 <span style="font-size:10px">
-© 2010, INNOVA STUDIO (www.innovastudio.com). All rights reserved.</span>
+© 2011, INNOVA STUDIO (www.innovastudio.com). All rights reserved.</span>
 </body>
 </html>
 

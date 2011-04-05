@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link href="style/editor.css" rel="stylesheet" type="text/css">
@@ -82,11 +83,11 @@ function realTime()
     {
     sBorderWidth = oElement.style.borderLeftWidth;
 
-    var oNodes=tblBorderWidth.childNodes(0).childNodes
+    var oNodes=tblBorderWidth.childNodes[0].childNodes
     for(var i=0;i<oNodes.length;i++)
       {
-      oNodes(i).childNodes(0).style.backgroundColor='#ffffff';
-      oNodes(i).childNodes(0).style.border='#ffffff 1 solid';
+      oNodes[i].childNodes[0].style.backgroundColor='#ffffff';
+      oNodes[i].childNodes[0].style.border='#ffffff 1px solid';
       }
     if(document.getElementById("idWidth_"+sBorderWidth))
       {
@@ -108,11 +109,11 @@ function realTime()
     var sBorderStyle = oElement.style.borderLeftStyle;
 
 
-    var oNodes=tblBorderStyle.childNodes(0).childNodes
+    var oNodes=tblBorderStyle.childNodes[0].childNodes
     for(var i=0;i<oNodes.length;i++)
       {
-      oNodes(i).childNodes(0).style.backgroundColor='#ffffff';
-      oNodes(i).childNodes(0).style.border='#ffffff 1 solid';
+      oNodes[i].childNodes[0].style.backgroundColor='#ffffff';
+      oNodes[i].childNodes[0].style.border='#ffffff 1px solid';
       }
     if(sBorderStyle!="")
       {
@@ -127,11 +128,11 @@ function realTime()
     }
 
   //Select ApplyTo
-  var oNodes=tblBorderApplyTo.childNodes(0).childNodes
+  var oNodes=tblBorderApplyTo.childNodes[0].childNodes
   for(var i=0;i<oNodes.length;i++)
     {
-    oNodes(i).childNodes(0).style.backgroundColor='#ffffff';
-    oNodes(i).childNodes(0).style.border='#ffffff 1 solid';
+    oNodes[i].childNodes[0].style.backgroundColor='#ffffff';
+    oNodes[i].childNodes[0].style.border='#ffffff 1 solid';
     }
   if((oElement.style.borderLeftWidth.substring(0,1)!="0") &&
     (oElement.style.borderTopWidth.substring(0,1)=="0") &&
@@ -205,10 +206,15 @@ function realTime()
     }
 
   //Select Border & Shading Color
-  oColor1.color=oElement.style.borderLeftColor;
-  idSelBorderColor.style.backgroundColor=oElement.style.borderLeftColor;
-  oColor2.color=oElement.style.backgroundColor;
-  idSelShadingColor.style.backgroundColor=oElement.style.backgroundColor;
+  var tmpcol = oElement.style.borderLeftColor;
+  if(tmpcol=="") tmpcol = "#000000";
+  oColor1.color=tmpcol;
+  idSelBorderColor.style.backgroundColor=tmpcol;
+
+  tmpcol = oElement.style.backgroundColor;
+  if(tmpcol=="") tmpcol="#ffffff";
+  oColor2.color=tmpcol;
+  idSelShadingColor.style.backgroundColor=tmpcol;
   }
 
 document.onclick=hideAll;
@@ -277,11 +283,11 @@ function doApply()
 
 function doApplyBorder(oElement)
   {
-  sStyle=idSelBorderStyle.value
-  sWidth=idSelBorderWidth.value
-  sApplyTo=idSelBorderApplyTo.value
-  sColor=idSelBorderColor.style.backgroundColor
-  sShadingColor=idSelShadingColor.style.backgroundColor
+  sStyle=idSelBorderStyle.value;
+  sWidth=idSelBorderWidth.value;
+  sApplyTo=idSelBorderApplyTo.value;
+  sColor=idSelBorderColor.style.backgroundColor;
+  sShadingColor=idSelShadingColor.style.backgroundColor;
 
   switch(sApplyTo)
     {
@@ -318,7 +324,7 @@ function doApplyBorder(oElement)
 *****************************/
 function doOver(me)
   {
-  if(me.style.backgroundColor!='#f1f1f1')
+  if(extractRGBColor(me.style.backgroundColor)!='f1f1f1' && me.style.backgroundColor!="#f1f1f1")
     {
     me.style.backgroundColor='#f0f0f0';
     me.style.border='#708090 1px solid';
@@ -326,203 +332,102 @@ function doOver(me)
   }
 function doOut(me)
   {
-  if(me.style.backgroundColor!='#f1f1f1')
+  if(extractRGBColor(me.style.backgroundColor)!='f1f1f1' && me.style.backgroundColor!="#f1f1f1")
     {
     me.style.backgroundColor='#ffffff';
-    me.style.border='#ffffff 1 solid';
+    me.style.border='#ffffff 1px solid';
     }
   }
 
 /*****************************
   Border Style
 *****************************/
-/*
-function drawBorderStyleSelection()
-  {
-  arrStyleOptions=[   ["idStyle_Solid","border-bottom:black 1 solid;height:10;"],
-            ["idStyle_Dotted","border-bottom:black dotted;height:10"],
-            ["idStyle_Dashed","border-bottom:black dashed;height:10"],
-            ["idStyle_Double","border-bottom:black double;height:10"],
-            ["idStyle_Groove","border-style:groove;height:18"],
-            ["idStyle_Ridge","border-style:ridge;height:18"],
-            ["idStyle_Inset","border-style:inset;height:18"],
-            ["idStyle_Outset","border-style:outset;height:18"]];
-  sHTML="<div style='overflow:auto;border:gray 1 solid;width:125;height:127;'>"
-  sHTML+="<table id=tblBorderStyle cellpadding=0 cellspacing=0 width=100% style='table-layout:fixed;background:white'>"
-  sHTML+="<tr>"
-  sHTML+="<td valign=middle onclick=\"doSelectBorderStyle(this)\" style=\"cursor:default;height:25;padding:4;\" onmouseover=\"doOver(this);\" onmouseout=\"doOut(this);\">"
-  sHTML+="  <table id=idStyle_None name=idStyle_None style='border:none' cellpadding=0 cellspacing=0 width=100%><tr><td valign=top>" + getTxt("No Border") + "</td></tr></table>"
-  sHTML+="</td>"
-  sHTML+="</tr>"
-  for(var i=0;i<arrStyleOptions.length;i++)
-    {
-    if(i==0) sDefaultSelected="border:#708090 1 solid;background-color:#f1f1f1;";
-    else sDefaultSelected="";
-    sHTML+="<tr>"
-    sHTML+="<td valign=top onclick=\"doSelectBorderStyle(this)\" style=\"height:25;padding:4;border:white 1 solid;"+sDefaultSelected+"\" onmouseover=\"doOver(this);\" onmouseout=\"doOut(this);\">"
-    sHTML+="  <table id="+arrStyleOptions[i][0]+" name="+arrStyleOptions[i][0]+" style='"+arrStyleOptions[i][1]+"' width=100%><tr><td></td></tr></table>"
-    sHTML+="</td>"
-    sHTML+="</tr>"
-    }
-  sHTML+="</table><input type=hidden name=idSelBorderStyle value='solid'>"
-  sHTML+="</div>"
-  document.write(sHTML)
-  }*/
 
 function drawBorderStyleSelection(idSelected)
   {
-  arrStyleOptions=[   ["idStyle_none","border:none;height:10;",getTxt("No Border")],
-            ["idStyle_solid","border-bottom:black 1 solid;height:10;",""],
-            ["idStyle_dotted","border-bottom:black dotted;height:10",""],
-            ["idStyle_dashed","border-bottom:black dashed;height:10",""],
-            ["idStyle_double","border-bottom:black double;height:10",""],
-            ["idStyle_groove","border-style:groove;height:18",""],
-            ["idStyle_ridge","border-style:ridge;height:18",""],
-            ["idStyle_inset","border-style:inset;height:18",""],
-            ["idStyle_outset","border-style:outset;height:18",""]];//[ID,CssText,Caption)
-  sHTML="<div style='overflow:auto;border:gray 1 solid;width:125;height:127;'>"
-  sHTML+="<table id=tblBorderStyle cellpadding=0 cellspacing=0 width=100% style='table-layout:fixed;background:white'>"
+  arrStyleOptions=[   ["idStyle_none","border:none;height:10px;",getTxt("No Border")],
+            ["idStyle_solid","border-bottom:black 1px solid;height:10px;",""],
+            ["idStyle_dotted","border-bottom:black dotted;height:10px",""],
+            ["idStyle_dashed","border-bottom:black dashed;height:10px",""],
+            ["idStyle_double","border-bottom:black double;height:10px",""],
+            ["idStyle_groove","border-style:groove;height:18px",""],
+            ["idStyle_ridge","border-style:ridge;height:18px",""],
+            ["idStyle_inset","border-style:inset;height:18px",""],
+            ["idStyle_outset","border-style:outset;height:18px",""]];//[ID,CssText,Caption)
+  sHTML="<div style='overflow:auto;border:gray 1px solid;width:125px;height:127px;'>"
+  sHTML+="<table id=tblBorderStyle cellpadding=0 cellspacing=0 width=100% style='border-collapse:separate;table-layout:fixed;background:white'>"
   for(var i=0;i<arrStyleOptions.length;i++)
     {
-    sHTML+="<tr>"
-    sHTML+="<td valign=top onclick=\"doSelectBorderStyle(this)\" style=\"cursor:default;height:25;padding:4;border:white 1 solid;\" onmouseover=\"doOver(this);\" onmouseout=\"doOut(this);\">"
-    sHTML+="  <table id="+arrStyleOptions[i][0]+" name="+arrStyleOptions[i][0]+" style='"+arrStyleOptions[i][1]+"' width=100%><tr><td>"+arrStyleOptions[i][2]+"</td></tr></table>"
-    sHTML+="</td>"
-    sHTML+="</tr>"
+    sHTML+="<tr>";
+    sHTML+="<td valign=top onclick=\"doSelectBorderStyle(this)\" style=\"cursor:default;height:25px;padding:4px;border:white 1px solid;\" onmouseover=\"doOver(this);\" onmouseout=\"doOut(this);\">";
+    sHTML+="<table id="+arrStyleOptions[i][0]+" name="+arrStyleOptions[i][0]+" style='"+arrStyleOptions[i][1]+"' width=100%><tr><td>"+arrStyleOptions[i][2]+"</td></tr></table>";
+    sHTML+="</td>";
+    sHTML+="</tr>";
     }
-  sHTML+="</table><input type=hidden name=idSelBorderStyle>"
-  sHTML+="</div>"
+  sHTML+="</table><input type=hidden name=idSelBorderStyle>";
+  sHTML+="</div>";
   document.write(sHTML)
   }
 
 function doSelectBorderStyle(me)
   {
-  oNodes=tblBorderStyle.childNodes(0).childNodes
+  oNodes=tblBorderStyle.childNodes[0].childNodes
   for(var i=0;i<oNodes.length;i++)
     {
-    oNodes(i).childNodes(0).style.backgroundColor='#ffffff';
-    oNodes(i).childNodes(0).style.border='#ffffff 1 solid';
+    oNodes[i].childNodes[0].style.backgroundColor='#ffffff';
+    oNodes[i].childNodes[0].style.border='#ffffff 1px solid';
     }
   me.style.backgroundColor='#f1f1f1';
   me.style.border='#708090 1px solid';
-  idSelBorderStyle.value=me.childNodes(0).style.borderBottomStyle;
+  idSelBorderStyle.value=me.childNodes[0].style.borderBottomStyle;
   }
 
 /*****************************
   Border Width
 *****************************/
-/*
-function drawBorderWidthSelection()
-  {
-  arrWidthOptions=[["idWidth_1","1px","border-bottom:black 1px solid;height:16;"],
-          ["idWidth_2","2px","border-bottom:black 2px solid;height:16;"],
-          ["idWidth_3","3px","border-bottom:black 3px solid;height:16;"],
-          ["idWidth_4","4px","border-bottom:black 4px solid;height:16;"],
-          ["idWidth_5","5px","border-bottom:black 5px solid;height:16;"],
-          ["idWidth_6","6px","border-bottom:black 6px solid;height:16;"],
-          ["idWidth_7","7px","border-bottom:black 7px solid;height:16;"]];
-  sHTML="<div style='overflow:auto;border:gray 1 solid;width:125;height:127'>"
-  sHTML+="<table id=tblBorderWidth cellpadding=0 cellspacing=0 width=100% style='table-layout:fixed;background:white'>"
-  for(var i=0;i<arrWidthOptions.length;i++)
-    {
-    if(i==0)
-      {//DEFAULT
-      sHTML+="<tr>"
-      sHTML+="<td id="+arrWidthOptions[i][0]+" name="+arrWidthOptions[i][0]+" style=\"height:25;padding:1;border:white 1 solid;border:#708090 1 solid;background-color:#f1f1f1\" onclick=\"doSelectBorderWidth(this)\" onmouseover=\"doOver(this);\" onmouseout=\"doOut(this);\">"
-      sHTML+="  <table width=100%><tr><td style=\"height:25\" >"+arrWidthOptions[i][1]+"</td><td valign=top width=100%> <table style='"+arrWidthOptions[i][2]+"' width=100%><tr><td></td></tr></table> </td></tr></table>"
-      sHTML+="</td>"
-      sHTML+="</tr>"
-      }
-    else
-      {
-      sHTML+="<tr>"
-      sHTML+="<td id="+arrWidthOptions[i][0]+" name="+arrWidthOptions[i][0]+" style=\"height:25;padding:1;border:white 1 solid;\" onclick=\"doSelectBorderWidth(this)\" onmouseover=\"doOver(this);\" onmouseout=\"doOut(this);\">"
-      sHTML+="  <table width=100%><tr><td style=\"height:25\" >"+arrWidthOptions[i][1]+"</td><td valign=top width=100%> <table style='"+arrWidthOptions[i][2]+"' width=100%><tr><td></td></tr></table> </td></tr></table>"
-      sHTML+="</td>"
-      sHTML+="</tr>"
-      }
-    }
-  sHTML+="</table><input type=hidden name=idSelBorderWidth value='1pt'>"
-  sHTML+="</div>"
-  document.write(sHTML)
-  }*/
 
 function drawBorderWidthSelection()
   {
-  arrWidthOptions=[["idWidth_1px","border-bottom:black 1px solid;height:16;","1px"],
-           ["idWidth_2px","border-bottom:black 2px solid;height:16;","2px"],
-           ["idWidth_3px","border-bottom:black 3px solid;height:16;","3px"],
-           ["idWidth_4px","border-bottom:black 4px solid;height:16;","4px"],
-           ["idWidth_5px","border-bottom:black 5px solid;height:16;","5px"],
-           ["idWidth_6px","border-bottom:black 6px solid;height:16;","6px"],
-           ["idWidth_7px","border-bottom:black 7px solid;height:16;","7px"]];
-  sHTML="<div style='overflow:auto;border:gray 1 solid;width:125;height:127'>"
-  sHTML+="<table id=tblBorderWidth cellpadding=0 cellspacing=0 width=100% style='table-layout:fixed;background:white'>"
+  arrWidthOptions=[["idWidth_1px","border-bottom:black 1px solid;height:16px;","1px"],
+           ["idWidth_2px","border-bottom:black 2px solid;height:16px;","2px"],
+           ["idWidth_3px","border-bottom:black 3px solid;height:16px;","3px"],
+           ["idWidth_4px","border-bottom:black 4px solid;height:16px;","4px"],
+           ["idWidth_5px","border-bottom:black 5px solid;height:16px;","5px"],
+           ["idWidth_6px","border-bottom:black 6px solid;height:16px;","6px"],
+           ["idWidth_7px","border-bottom:black 7px solid;height:16px;","7px"]];
+  sHTML="<div style='overflow:auto;border:gray 1px solid;width:125px;height:127px'>"
+  sHTML+="<table id=tblBorderWidth cellpadding=0 cellspacing=0 width=100% style='table-layout:fixed;background-color:white'>"
   for(var i=0;i<arrWidthOptions.length;i++)
     {
     sHTML+="<tr>"
-    sHTML+="<td id="+arrWidthOptions[i][0]+" name="+arrWidthOptions[i][0]+" style=\"height:25;padding:1;border:white 1 solid;\" onclick=\"doSelectBorderWidth(this)\" onmouseover=\"doOver(this);\" onmouseout=\"doOut(this);\">"
-    sHTML+="  <table width=100%><tr><td style=\"height:25\" >"+arrWidthOptions[i][2]+"</td><td valign=top width=100%> <table style='"+arrWidthOptions[i][1]+"' width=100%><tr><td></td></tr></table> </td></tr></table>"
-    sHTML+="</td>"
-    sHTML+="</tr>"
+    sHTML+="<td id="+arrWidthOptions[i][0]+" name="+arrWidthOptions[i][0]+" style=\"height:25px;padding:1px;border:white 1px solid;\" onclick=\"doSelectBorderWidth(this)\" onmouseover=\"doOver(this);\" onmouseout=\"doOut(this);\">";
+    sHTML+="<table width=100%><tr><td style=\"height:25px\" >"+arrWidthOptions[i][2]+"</td><td valign=top width=100%><table style='"+arrWidthOptions[i][1]+"' width=100%><tr><td></td></tr></table></td></tr></table>";
+    sHTML+="</td>";
+    sHTML+="</tr>";
     }
-  sHTML+="</table><input type=hidden name=idSelBorderWidth>"
-  sHTML+="</div>"
-  document.write(sHTML)
+  sHTML+="</table><input type=hidden name=idSelBorderWidth>";
+  sHTML+="</div>";
+  document.write(sHTML);
   }
 
 function doSelectBorderWidth(me)
   {
-  oNodes=tblBorderWidth.childNodes(0).childNodes
+  oNodes=tblBorderWidth.childNodes[0].childNodes
   for(var i=0;i<oNodes.length;i++)
     {
-    oNodes(i).childNodes(0).style.backgroundColor='#ffffff';
-    oNodes(i).childNodes(0).style.border='#ffffff 1 solid';
+    oNodes[i].childNodes[0].style.backgroundColor='#ffffff';
+    oNodes[i].childNodes[0].style.border='#ffffff 1px solid';
     }
   me.style.backgroundColor='#f1f1f1';
   me.style.border='#718191 1px solid';
 
-  idSelBorderWidth.value=me.childNodes(0).childNodes(0).childNodes(0).childNodes(1).childNodes(0).style.borderBottomWidth;
+  idSelBorderWidth.value=me.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].style.borderBottomWidth;
   }
 
 /*****************************
   Border Apply To
 *****************************/
-/*
-function drawBorderApplyToSelection()
-  {
-  arrApplyToOptions=[["idApplyTo_None",getTxt("No Border"),"border/border_none.gif"],
-          ["idApplyTo_Outside",getTxt("Outside Border"),"border/border_outside.gif"],
-          ["idApplyTo_Left",getTxt("Left Border"),"border/border_left.gif"],
-          ["idApplyTo_Top",getTxt("Top Border"),"border/border_top.gif"],
-          ["idApplyTo_Right",getTxt("Right Border"),"border/border_right.gif"],
-          ["idApplyTo_Bottom",getTxt("Bottom Border"),"border/border_bottom.gif"]];
-  sHTML="<div style='overflow:auto;border:gray 1 solid;width:60;height:127'>"
-  sHTML+="<table id=tblBorderApplyTo cellpadding=0 cellspacing=0 width=100% style='table-layout:fixed;background:white'>"
-  for(var i=0;i<arrApplyToOptions.length;i++)
-    {
-    if(i==1)
-      {//DEFAULT
-      sHTML+="<tr>"
-      sHTML+="<td id="+arrApplyToOptions[i][0]+" name="+arrApplyToOptions[i][0]+" valign=top style=\"height:30;padding:4;border:white 1 solid;border:#708090 1 solid;background-color:#f1f1f1\" onclick=\"doSelectBorderApplyTo(this)\" onmouseover=\"doOver(this);\" onmouseout=\"doOut(this);\">"
-      sHTML+="  <img src='"+arrApplyToOptions[i][2]+"' alt='"+arrApplyToOptions[i][1]+"'>"
-      sHTML+="</td>"
-      sHTML+="</tr>"
-      }
-    else
-      {
-      sHTML+="<tr>"
-      sHTML+="<td id="+arrApplyToOptions[i][0]+" name="+arrApplyToOptions[i][0]+" valign=top style=\"height:30;padding:4;border:white 1 solid;\" onclick=\"doSelectBorderApplyTo(this)\" onmouseover=\"doOver(this);\" onmouseout=\"doOut(this);\">"
-      sHTML+="  <img src='"+arrApplyToOptions[i][2]+"' alt='"+arrApplyToOptions[i][1]+"'>"
-      sHTML+="</td>"
-      sHTML+="</tr>"
-      }
-    }
-  sHTML+="</table><input type=hidden name=idSelBorderApplyTo value='idApplyTo_Outside'>"
-  sHTML+="</div>"
 
-  document.write(sHTML)
-  }*/
 function drawBorderApplyToSelection()
   {
   arrApplyToOptions=[ ["idApplyTo_None","border/border_none.gif",getTxt("No Border")],
@@ -531,13 +436,13 @@ function drawBorderApplyToSelection()
             ["idApplyTo_Top","border/border_top.gif",getTxt("Top Border")],
             ["idApplyTo_Right","border/border_right.gif",getTxt("Right Border")],
             ["idApplyTo_Bottom","border/border_bottom.gif",getTxt("Bottom Border")]];
-  sHTML="<div style='overflow:auto;border:gray 1 solid;width:60;height:127'>"
+  sHTML="<div style='overflow:auto;border:gray 1px solid;width:60px;height:127px'>"
   sHTML+="<table id=tblBorderApplyTo cellpadding=0 cellspacing=0 width=100% style='table-layout:fixed;background:white'>"
   for(var i=0;i<arrApplyToOptions.length;i++)
     {
     sHTML+="<tr>"
-    sHTML+="<td id="+arrApplyToOptions[i][0]+" name="+arrApplyToOptions[i][0]+" valign=top style=\"height:30;padding:4;border:white 1 solid;\" onclick=\"doSelectBorderApplyTo(this)\" onmouseover=\"doOver(this);\" onmouseout=\"doOut(this);\">"
-    sHTML+="  <img src='"+arrApplyToOptions[i][1]+"' alt='"+arrApplyToOptions[i][2]+"'>"
+    sHTML+="<td id="+arrApplyToOptions[i][0]+" name="+arrApplyToOptions[i][0]+" valign=top style=\"height:30px;padding:4px;border:white 1px solid;\" onclick=\"doSelectBorderApplyTo(this)\" onmouseover=\"doOver(this);\" onmouseout=\"doOut(this);\">"
+    sHTML+="<img src='"+arrApplyToOptions[i][1]+"' alt='"+arrApplyToOptions[i][2]+"'>"
     sHTML+="</td>"
     sHTML+="</tr>"
     }
@@ -548,11 +453,11 @@ function drawBorderApplyToSelection()
   }
 function doSelectBorderApplyTo(me)
   {
-  oNodes=tblBorderApplyTo.childNodes(0).childNodes
+  oNodes=tblBorderApplyTo.childNodes[0].childNodes
   for(var i=0;i<oNodes.length;i++)
     {
-    oNodes(i).childNodes(0).style.backgroundColor='#ffffff';
-    oNodes(i).childNodes(0).style.border='#ffffff 1 solid';
+    oNodes[i].childNodes[0].style.backgroundColor='#ffffff';
+    oNodes[i].childNodes[0].style.border='#ffffff 1px solid';
     }
   me.style.backgroundColor='#f1f1f1';
   me.style.border='#718191 1px solid';
@@ -564,33 +469,33 @@ function doSelectBorderApplyTo(me)
 
 <body style="overflow:hidden;">
 
-<table width=100% height=100% align=center cellpadding=0 cellspacing=0>
+<table width="100%" height="360px" align=center cellpadding=0 cellspacing=0>
 <tr>
-<td valign=top style="padding:5;padding-bottom:0;height:100%">
+<td valign=top style="padding:5px;padding-bottom:0px;">
 
   <table>
   <tr>
-  <td valign=top style="padding:3">
+  <td valign=top style="padding:3px">
     <script>
     drawBorderStyleSelection()
     </script>
   </td>
-  <td valign=top style="padding:3">
+  <td valign=top style="padding:3px">
     <script>
     drawBorderWidthSelection()
     </script>
   </td>
-  <td valign=top style="padding:3" nowrap>
+  <td valign=top style="padding:3px" nowrap>
     <script>
     drawBorderApplyToSelection()
     </script>
   </td>
-  <td valign=top style="padding:3" nowrap>
+  <td valign=top style="padding:3px" nowrap>
     <div><span id=txtLang name=txtLang>Color</span>:</div>
 
     <script>
-    document.write("<span style='background:white'>");
-    document.write("  <span id='idSelBorderColor' style='border:gray 1 solid;width:20;margin-right:3;background-color:#000000'></span>");
+    document.write("<span style=''>");
+    document.write("  <span id='idSelBorderColor' style='border:gray 1px solid;width:16px;height:16px;background-color:#000000'>&nbsp;&nbsp;&nbsp;&nbsp;</span>");
     document.write("</span>");
     document.write("<input type=button value='" + getTxt("Pick") + "' onclick=\"oColor1.show(this);event.cancelBubble=true;\" />");
 
@@ -608,8 +513,8 @@ function doSelectBorderApplyTo(me)
     <div style='margin-top:7'><span id=txtLang name=txtLang>Shading</span>:</div>
 
     <script>
-    document.write("<span style='background:white'>");
-    document.write("  <span id='idSelShadingColor' style='border:gray 1 solid;width:20;margin-right:3;'></span>");
+    document.write("<span style=''>");
+    document.write("  <span id='idSelShadingColor' style='border:gray 1px solid;width:16px;height:16px;background-color:#ffffff''>&nbsp;&nbsp;&nbsp;&nbsp;</span>");
     document.write("</span>");
     document.write("<input type=button value='" + getTxt("Pick") + "' onclick=\"oColor2.show(this);event.cancelBubble=true;\" />");
 
@@ -630,7 +535,7 @@ function doSelectBorderApplyTo(me)
 </td>
 </tr>
 <tr>
-<td nowrap style="padding-left:8">
+<td nowrap style="padding-left:8px">
 
   <table cellpadding=0 cellspacing=0>
   <tr>
@@ -659,7 +564,7 @@ function doSelectBorderApplyTo(me)
 
   </td>
   <td>
-  <div style="margin:5;height:55;border-left:lightgrey 1 solid"></div>
+  <div style="margin:5px;height:55px;border-left:lightgrey 1px solid"></div>
   </td>
   <td style="padding-bottom:5">
 
@@ -688,7 +593,7 @@ function doSelectBorderApplyTo(me)
   </td>
   </tr>
   <tr>
-  <td colspan=3 style="padding-top:3;padding-bottom:5;border-top:lightgrey 1 solid">
+  <td colspan=3 style="padding-top:3px;padding-bottom:5px;border-top:lightgrey 1px solid">
 
     <table cellpadding=2 cellspacing=0>
     <tr><td colspan=2 id=txtLang name=txtLang>Dimension</td></tr>
@@ -724,13 +629,13 @@ function doSelectBorderApplyTo(me)
   <table cellpadding=0 cellspacing=0>
   <tr>
   <td>
-    <input type="button" name=btnCancel id=btnCancel value="cancel" onclick="self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+    <input type="button" name=btnCancel id=btnCancel value="cancel" onclick="self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   <td>
     <input type="button" name=btnApply id=btnApply value="apply" onclick="doApply()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   <td>
-    <input type="button" name=btnOk id=btnOk value=" ok " onclick="doApply();self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+    <input type="button" name=btnOk id=btnOk value=" ok " onclick="doApply();self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   </tr>
   </table>

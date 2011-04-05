@@ -1,11 +1,12 @@
 /***********************************************************
-InnovaStudio WYSIWYG Editor 5.1
-© 2010, InnovaStudio (www.innovastudio.com). All rights reserved.
+InnovaStudio WYSIWYG Editor 5.2
+© 2011, InnovaStudio (www.innovastudio.com). All rights reserved.
 ************************************************************/
 
 var UA = navigator.userAgent.toLowerCase();
 var isIE = (UA.indexOf('msie') >= 0) ? true : false;
 var isNS = (UA.indexOf('mozilla') >= 0) ? true : false;
+var isIE9 = (UA.indexOf('msie 9.0') >= 0) ? true : false;
 
 /*** UTILITY OBJECT ***/
 var oUtil=new InnovaEditorUtil();
@@ -150,7 +151,7 @@ function iwe_focus()
   oEditor.focus();
   };
   
-function set_focus()
+function set_focus(type)
   {
   var oEditor=eval("idContent"+this.oName);
   oEditor.focus();
@@ -166,6 +167,17 @@ function set_focus()
           oRange.moveToElementText(bmRange.parentElement());
           oRange.setEndPoint("StarttoStart", bmRange);
           oRange.setEndPoint("EndToEnd", bmRange);
+          oRange.select();
+        }
+        
+        if(type) {
+          oRange.moveToElementText(oEditor.document.body);
+          oRange.select();
+          if(type=="start") {
+            oRange.collapse();
+          } else if(type=="end") {
+            oRange.collapse(false);
+          }
           oRange.select();
         }
 
@@ -301,24 +313,12 @@ function InnovaEditor(oName)
   this.getElm=iwe_getElm;
 
   this.features=[];
-  /*
-  this.buttonMap=["Save","FullScreen","Preview","Print","Search","SpellCheck","|",
-      "Cut","Copy","Paste","PasteWord","PasteText","|","Undo","Redo","|",
-      "ForeColor","BackColor","|","Bookmark","Hyperlink",
-      "Image","Flash","Media","ContentBlock","InternalLink","InternalImage","CustomObject","|",
-      "Table","Guidelines","Absolute","|","Characters","Line",
-      "Form","RemoveFormat","HTMLFullSource","HTMLSource","XHTMLFullSource",
-      "XHTMLSource","ClearAll","BRK",
-      "StyleAndFormatting","Styles","|","CustomTag","Paragraph","FontName","FontSize","|",
-      "Bold","Italic","Underline","Strikethrough","Superscript","Subscript","|",
-      "JustifyLeft","JustifyCenter","JustifyRight","JustifyFull","|",
-      "Numbering","Bullets","|","Indent","Outdent","LTR","RTL"];//complete, default
-  */
+  
   this.buttonMap=["Save","FullScreen","Preview","Print","Search","SpellCheck",
       "Cut","Copy","Paste","PasteWord","PasteText","Undo","Redo",
       "ForeColor","BackColor","Bookmark","Hyperlink",
-      "Image","Flash","Media","ContentBlock","InternalLink","InternalImage","CustomObject",
-      "Table","Guidelines","Absolute","Characters","Line",
+      "Image","Flash","Media","YoutubeVideo","ContentBlock","InternalLink","InternalImage","CustomObject",
+      "Table","AutoTable","Guidelines","Absolute","Characters","Line",
       "Form","RemoveFormat","HTMLFullSource","HTMLSource","XHTMLFullSource",
       "XHTMLSource","ClearAll","BRK",
       "StyleAndFormatting","Styles","CustomTag","Paragraph","FontName","FontSize",
@@ -343,7 +343,7 @@ function InnovaEditor(oName)
   this.btnForm=true;this.btnRemoveFormat=true;
   this.btnHTMLFullSource=false;this.btnHTMLSource=false;
   this.btnXHTMLFullSource=false;this.btnXHTMLSource=true;
-  this.btnClearAll=false;
+  this.btnClearAll=false;this.btnYoutubeVideo=true;this.btnAutoTable=false;
 
   this.tabs=[
   ["tabHome", "Home", ["grpEdit", "grpFont", "grpPara"]],
@@ -356,7 +356,7 @@ function InnovaEditor(oName)
   ["grpPara", "", ["Paragraph", "Indent", "Outdent", "Styles", "StyleAndFormatting", "BRK", "JustifyLeft", "JustifyCenter", "JustifyRight", "JustifyFull", "Numbering", "Bullets"]],
   ["grpInsert", "", ["Hyperlink", "Bookmark", "BRK", "Image"]],
   ["grpTables", "", ["Table", "BRK", "Guidelines"]],
-  ["grpMedia", "", ["Media", "Flash", "BRK", "Characters", "Line"]]
+  ["grpMedia", "", ["Media", "Flash", "YoutubeVideo", "BRK", "Characters", "Line"]]
   ];
   
   this.toolbarMode=1; //0:standard, 1:tab, 2:group
@@ -423,6 +423,8 @@ function InnovaEditor(oName)
   this.html="<html>";
   this.headContent="";
   this.preloadHTML="";
+  this.originalContent = "";
+  this.isContentChanged = isContentChanged;
 
   this.onSave=function(){document.getElementById("iwe_btnSubmit"+this.oName).click()};
   this.useBR=false;
@@ -452,6 +454,8 @@ function InnovaEditor(oName)
   this.encodeIO=false;
   this.changeHeight=changeHeight;
   
+  this.fixWord = fixWord;
+
   this.rangeBookmark = null;
   this.controlBookmark = null;
 
@@ -641,6 +645,21 @@ function REPLACE(idTextArea, dvId)
   
   this.RENDER(sContent, dvId);
   };
+  
+function isContentChanged() {
+    
+    var sContent = "";
+    if(this.mode=="HTMLBody") { sContent=this.getHTMLBody(); } else
+    if(this.mode=="HTML") { sContent=this.getHTML(); } else
+    if(this.mode=="XHTMLBody") { sContent=this.getXHTMLBody(); } else
+    if(this.mode=="XHTML") { sContent=this.getXHTML();}
+    
+    if(sContent != this.originalContent) {
+      return true;
+    }
+    return false;
+};
+
 function onsubmit_new()
   {
   var sContent;
@@ -657,12 +676,14 @@ function onsubmit_new()
         allSpans[j].innerHTML = "&nbsp;";
         }
       }
-
+      
     if(oEdit.mode=="HTMLBody")sContent=oEdit.getHTMLBody();
     if(oEdit.mode=="HTML")sContent=oEdit.getHTML();
     if(oEdit.mode=="XHTMLBody")sContent=oEdit.getXHTMLBody();
     if(oEdit.mode=="XHTML")sContent=oEdit.getXHTML();
+    
     document.getElementById(oEdit.idTextArea).value=sContent;
+    
     }
   if(onsubmit_original)return onsubmit_original();
   };
@@ -820,32 +841,32 @@ function RENDER(sPreloadHTML, dvId)
   }
   
   var sHTML="";
-
+  
   sHTML+="<iframe name=idFixZIndex"+this.oName+" id=idFixZIndex"+this.oName+"  frameBorder=0 style='display:none;position:absolute;filter:progid:DXImageTransform.Microsoft.Alpha(style=0,opacity=0)' src='"+this.scriptPath+"blank.gif' ></iframe>"; //src='javascript:;'
   sHTML+="<table id=idArea"+this.oName+" name=idArea"+this.oName+" border=0 "+
     "cellpadding=0 cellspacing=0 width='"+this.width+"' height='"+this.height+"' style='border-bottom:#cfcfcf 1px solid'>"+
     "<tr><td colspan=2 style=\"position:relative;padding:0px;padding-left:0px;border:#cfcfcf 0px solid;border-bottom:0;background:url('"+this.scriptPath+"icons/bg.gif')\">"+
-    "<table cellpadding=0 cellspacing=0 width='100%'><tr><td dir=ltr style='padding:0px'>"+
+    "<table cellpadding=0 cellspacing=0 width='100%' id='idToolbar"+this.oName+"'><tr><td dir=ltr style='padding:0px'>"+
     this.tbar.render()+
     "</td></tr></table>"+
     "</td></tr>"+
     "<tr id=idTagSelTopRow"+this.oName+"><td colspan=2 id=idTagSelTop"+this.oName+" height=0 style='padding:0px'></td></tr>";
 
-  sHTML+="<tr><td colspan=2 valign=top height=100% style='padding:0px;background:white;'>";
+  sHTML+="<tr style='width:100%;height:100%'><td colspan=2 valign=top height=100% style='padding:0px;background:white;'>";
 
   sHTML+="<table cellpadding=0 cellspacing=0 width=100% height=100%><tr><td width=100% height=100% style='padding:0px;border:#cfcfcf 1px solid;border-bottom:none'>";//StyleSelect
 
   if(this.IsSecurityRestricted)
-    sHTML+="<iframe security='restricted' style='width:100%;height:100%;' src='"+this.scriptPath+"blank.gif'"+
+    sHTML+="<iframe security='restricted' style='width:100%;height:100%;' frameborder='no' src='"+this.scriptPath+"blank.gif'"+
       " name=idContent"+ this.oName + " id=idContent"+this.oName+
       " contentEditable=true></iframe>";//prohibit running ActiveX controls
   else
-    sHTML+="<iframe style='width:100%;height:100%;' frameborder='no' style='' src='"+this.scriptPath+"blank.gif'"+
+    sHTML+="<iframe style='width:100%;height:100%;' frameborder='no' src='"+this.scriptPath+"blank.gif'"+
       " name=idContent"+ this.oName + " id=idContent"+this.oName+
       " contentEditable=true></iframe>";
 
   //Paste From Word
-  sHTML+="<iframe style='width:1px;height:1px;overflow:auto;' src='"+this.scriptPath+"blank.gif'"+
+  sHTML+="<iframe style='position:absolute;left:-1000px;top:-1000px;width:1px;height:1px;overflow:auto;' src='"+this.scriptPath+"blank.gif'"+
     " name=idContentWord"+ this.oName +" id=idContentWord"+ this.oName+
     " contentEditable=true onfocus='"+this.oName+".hide()'></iframe>";
 
@@ -876,13 +897,14 @@ function RENDER(sPreloadHTML, dvId)
     document.write(sHTML);
   }
   
+  /*
   var clPick=document.getElementById("isClPiker"+this.oName);
   if(!clPick) { 
     clPick = document.createElement("DIV");
     clPick.id="isClPiker"+this.oName;
     clPick.innerHTML=this.oColor1.generateHTML() + this.oColor2.generateHTML();
     document.body.insertBefore(clPick, document.body.childNodes[0]);
-  }
+  }*/
 
   this.init();
   };
@@ -942,17 +964,10 @@ function initISEditor() {
     this.moveTagSelector();
     }
 
-  //paste from word temp storage
-  /*var oWord=eval("idContentWord"+this.oName);
-  oWord.document.designMode="on";
-  oWord.document.open("text/html","replace");
-  oWord.document.write("<html><head></head><body></body></html>");
-  oWord.document.close();
-  oWord.document.body.contentEditable=true;*/
-
   oUtil.oName=this.oName;//default active editor
   oUtil.oEditor=eval("idContent"+this.oName);
-  oUtil.oEditor.document.designMode="on";
+  if(!isIE9) oUtil.oEditor.document.designMode="on";
+
   oUtil.obj=eval(this.oName);
 
   oUtil.arrEditor.push(this.oName);
@@ -975,6 +990,15 @@ function initISEditor() {
     {
     this.loadHTML(this.preloadHTML)
     }
+  
+  //get original editor content.
+  switch(this.mode) {
+    case "HTMLBody": this.originalContent=this.getHTMLBody(); break;
+    case "HTML":     this.originalContent=this.getHTML(); break;
+    case "XHTMLBody":this.originalContent=this.getXHTMLBody(); break;
+    case "XHTML":    this.originalContent=this.getXHTML(); break;
+  };
+  
   this.focus();
 };
 
@@ -1160,10 +1184,18 @@ function buildToolbar(tb, oEdt, btnMap) {
         if(oEdt.btnRTL)tb.addToggleButton("btnRTL"+oName,"dir",false,"btnRTL.gif",getTxt("Right To Left"));
         break;
       case "ForeColor":
-        if(oEdt.btnForeColor)tb.addButton("btnForeColor"+oName,"btnForeColor.gif",getTxt("Foreground Color"));
+        //if(oEdt.btnForeColor)tb.addButton("btnForeColor"+oName,"btnForeColor.gif",getTxt("Foreground Color"));
+        tb.addDropdownButton("btnForeColor"+oName,"ddForeColor"+oName,"btnForeColor.gif",getTxt("Foreground Color"));
+        var ddTable=new ISDropdown("ddForeColor"+oName);
+        ddTable.add(new ISCustomDDItem("btnInsertForeColor", oEdt.oColor1.generateHTML()));
+          
         break;
       case "BackColor":
-        if(oEdt.btnBackColor)tb.addButton("btnBackColor"+oName,"btnBackColor.gif",getTxt("Background Color"));
+        //if(oEdt.btnBackColor)tb.addButton("btnBackColor"+oName,"btnBackColor.gif",getTxt("Background Color"));
+        tb.addDropdownButton("btnBackColor"+oName,"ddBackColor"+oName,"btnBackColor.gif",getTxt("Background Color"));
+        var ddTable=new ISDropdown("ddBackColor"+oName);
+        ddTable.add(new ISCustomDDItem("btnInsertBackColor", oEdt.oColor2.generateHTML()));
+        
         break;
       case "Bookmark":
         if(oEdt.btnBookmark)tb.addButton("btnBookmark"+oName,"btnBookmark.gif",getTxt("Bookmark"));
@@ -1192,6 +1224,9 @@ function buildToolbar(tb, oEdt, btnMap) {
       case "Media":
         if(oEdt.btnMedia)tb.addButton("btnMedia"+oName,"btnMedia.gif",getTxt("Media"));
         break;
+      case "YoutubeVideo":
+        if(oEdt.btnYoutubeVideo)tb.addButton("btnYoutubeVideo"+oName,"btnYoutubeVideo.gif",getTxt("YoutubeVideo"));
+        break;
       case "ContentBlock":
         if(oEdt.btnContentBlock)tb.addButton("btnContentBlock"+oName,"btnContentBlock.gif",getTxt("Content Block"));
         break;
@@ -1218,7 +1253,7 @@ function buildToolbar(tb, oEdt, btnMap) {
               }
             sdd[sZ++]="</tr>";
             }
-          sdd[sZ++]="<tr><td colspan=8 onclick=\""+oName+".hide();modelessDialogShow('"+oEdt.scriptPath+"table_insert.htm',320,362);\" onmouseover=\"this.innerText='"+getTxt("Advanced Table Insert")+"';this.style.border='#777777 1px solid';this.style.backgroundColor='#444444';this.style.color='#ffffff'\" onmouseout=\"this.style.border='#f3f3f8 1px solid';this.style.backgroundColor='#f3f3f8';this.style.color='#000000'\" align=center style='font-family:verdana;font-size:10px;font-color:black;border:#f3f3f8 1px solid;' unselectable=on>"+getTxt("Advanced Table Insert")+"</td></tr>";
+          sdd[sZ++]="<tr><td colspan=8 onclick=\""+oName+".hide();modelessDialogShow('"+oEdt.scriptPath+"table_insert.htm',380,372);\" onmouseover=\"this.innerText='"+getTxt("Advanced Table Insert")+"';this.style.border='#777777 1px solid';this.style.backgroundColor='#444444';this.style.color='#ffffff'\" onmouseout=\"this.style.border='#f3f3f8 1px solid';this.style.backgroundColor='#f3f3f8';this.style.color='#000000'\" align=center style='font-family:verdana;font-size:10px;font-color:black;border:#f3f3f8 1px solid;' unselectable=on>"+getTxt("Advanced Table Insert")+"</td></tr>";
           sdd[sZ++]="</table>";
           
           tb.addDropdownButton("btnTable"+oName,"ddTable"+oName,"btnTable.gif",getTxt("Insert Table"));
@@ -1237,6 +1272,9 @@ function buildToolbar(tb, oEdt, btnMap) {
         break;
       case "Guidelines":
         if(oEdt.btnGuidelines)tb.addButton("btnGuidelines"+oName,"btnGuideline.gif",getTxt("Show/Hide Guidelines"));
+        break;
+      case "AutoTable":
+        if(oEdt.btnAutoTable)tb.addButton("btnAutoTable"+oName,"btnAutoTable.gif",getTxt("AutoTable"));
         break;
       case "Absolute":
         if(oEdt.btnAbsolute)tb.addButton("btnAbsolute"+oName,"btnAbsolute.gif",getTxt("Absolute"));
@@ -1355,14 +1393,14 @@ function generateHTML()
         ["#ff4500","#ffa500","#808000","#4682b4","#1e90ff","#9400d3","#ff1493","#a9a9a9"],
         ["#ff6347","#ffd700","#32cd32","#87ceeb","#00bfff","#9370db","#ff69b4","#dcdcdc"],
         ["#ffdab9","#ffffe0","#98fb98","#e0ffff","#87cefa","#e6e6fa","#dda0dd","#ffffff"]];
-  var sHTMLColor="<table id=dropColor"+this.oRenderName+" style=\"z-index:1;display:none;position:absolute;border:#9b95a6 1px solid;cursor:default;background-color:#f4f4f4;padding:2px\" unselectable=on cellpadding=0 cellspacing=0 width=143 height=109><tr><td unselectable=on style='padding:0px;'>";
+  var sHTMLColor="<table id=dropColor"+this.oRenderName+" style=\"z-index:2000;cursor:default;background-color:#f4f4f4;padding:2px\" unselectable=on cellpadding=0 cellspacing=0 width=143 height=109><tr><td unselectable=on style='padding:0px;'>";
   sHTMLColor+="<table align=center cellpadding=0 cellspacing=0 border=0 unselectable=on>";
   for(var i=0;i<arrColors.length;i++)
     {
     sHTMLColor+="<tr>";
     for(var j=0;j<arrColors[i].length;j++)
       sHTMLColor+="<td onclick=\""+this.oName+".color='"+arrColors[i][j]+"';"+this.oName+".onPickColor();"+this.oName+".currColor='"+arrColors[i][j]+"';"+this.oName+".hideAll()\" onmouseover=\"this.style.border='#777777 1px solid'\" onmouseout=\"this.style.border='#f4f4f4 1px solid'\" style=\"cursor:default;padding:1px;border:#f4f4f4 1px solid;\" unselectable=on>"+
-        "<table style='margin:0;width:13px;height:13px;background:"+arrColors[i][j]+";border:white 1px solid' cellpadding=0 cellspacing=0 unselectable=on>"+
+        "<table style='margin:0px;width:13px;height:13px;background:"+arrColors[i][j]+";border:white 1px solid' cellpadding=0 cellspacing=0 unselectable=on>"+
         "<tr><td unselectable=on></td></tr>"+
         "</table></td>";
     sHTMLColor+="</tr>";
@@ -1379,7 +1417,7 @@ function generateHTML()
     "</table></td>";
   sHTMLColor+= "<td colspan=7 unselectable=on style='padding:0px;'>"+
     "<table style='margin:1px;width:117px;height:16px;background:#f4f4f4;border:white 1px solid' cellpadding=0 cellspacing=0 unselectable=on>"+
-    "<tr><td onclick=\""+this.oName+".onMoreColor();"+this.oName+".hideAll();modelessDialogShow('"+this.url+"',428,420, window,{'oName':'"+this.oName+"'});\" onmouseover=\"this.style.border='#777777 1px solid';this.style.background='#444444';this.style.color='#ffffff'\" onmouseout=\"this.style.border='#f4f4f4 1px solid';this.style.background='#f4f4f4';this.style.color='#000000'\" style=\"cursor:default;padding:1px;border:#efefef 1px solid\" style=\"font-family:verdana;font-size:9px;font-color:black;line-height:9px;padding:1px\" align=center valign=top nowrap unselectable=on>"+this.txtMoreColors+"</td></tr>"+
+    "<tr><td onclick=\""+this.oName+".onMoreColor();"+this.oName+".hideAll();modelessDialogShow('"+this.url+"',448,440, window,{'oName':'"+this.oName+"'});\" onmouseover=\"this.style.border='#777777 1px solid';this.style.background='#444444';this.style.color='#ffffff'\" onmouseout=\"this.style.border='#f4f4f4 1px solid';this.style.background='#f4f4f4';this.style.color='#000000'\" style=\"cursor:default;padding:1px;border:#efefef 1px solid\" style=\"font-family:verdana;font-size:9px;font-color:black;line-height:9px;padding:1px\" align=center valign=top nowrap unselectable=on>"+this.txtMoreColors+"</td></tr>"+
     "</table></td>";
   sHTMLColor+= "</tr>";
 
@@ -1417,8 +1455,11 @@ function refreshCustomColor()
   sHTML+="</tr></table>";
   eval("idCustomColor"+this.oRenderName).innerHTML=sHTML;
   };
+
+//deprecated, this function is no longer use, since colorpicker is rendered inside toolbar.    
 function showColorPicker(oEl)
   {
+  /*
   this.onShow();
   this.hideAll();
   var box=eval("dropColor"+this.oRenderName);
@@ -1446,17 +1487,26 @@ function showColorPicker(oEl)
   box.style.zIndex=1000000;
 
   this.isActive=true;
+  */
   this.refreshCustomColor();
   };
 function hideColorPicker()
   {
   this.onHide();
+
+  //deprecated, this function is no longer use, since colorpicker is rendered inside toolbar.    
+  return;
+
   var box=eval("dropColor"+this.oRenderName);
   box.style.display="none";
   this.isActive=false;
   };
 function hideColorPickerAll()
   {
+  
+  //deprecated, this function is no longer use, since colorpicker is rendered inside toolbar.    
+  return;
+  
   for(var i=0;i<arrColorPickerObjects.length;i++)
     {
     var box=eval("dropColor"+eval(arrColorPickerObjects[i]).oRenderName);
@@ -1480,15 +1530,16 @@ function loadHTML(sHTML)//hanya utk first load.
     var arrA = String(this.preloadHTML).match(/<base[^>]*>/ig);
     if(!arrA)
       {//if no <base> found
-      sHTML=this.docType+"<HTML><HEAD><BASE HREF=\""+this.publishingPath+"\"/>"+this.headContent+sStyle+"</HEAD><BODY contentEditable=true>" + sHTML + "</BODY></HTML>";
-      //kalau cuma tambah <HTML><HEAD></HEAD><BODY.. tdk apa2.
+      sHTML=this.docType+"<html><head><base href=\""+this.publishingPath+"\"/>"+this.headContent+sStyle+"</head><body contenteditable=true>" + sHTML + "</body></html>";
+      //kalau cuma tambah <html><head></head><body.. tdk apa2.
       }
     }
   else
     {
-    sHTML=this.docType+"<HTML><HEAD>"+this.headContent+sStyle+"</HEAD><BODY contentEditable=true>"+sHTML+"</BODY></HTML>";
+    sHTML=this.docType+"<html><head>"+this.headContent+sStyle+"</head><body contentEditable='true'>"+sHTML+"</body></html>";
     }
-  oDoc.write(sHTML);
+  
+  oDoc.write(sHTML);  
   oDoc.close();
 
   oEditor.document.body.contentEditable=true;
@@ -1499,6 +1550,7 @@ function loadHTML(sHTML)//hanya utk first load.
   //RealTime
   oEditor.document.body.onkeyup = new Function("editorDoc_onkeyup('"+this.oName+"')");
   oEditor.document.body.onmouseup = new Function("editorDoc_onmouseup('"+this.oName+"')");
+  //oEditor.document.onmouseup = new Function("editorDoc_onmouseup('"+this.oName+"')");
 
   //<br> or <p>
   oEditor.document.body.onkeydown=new Function("doKeyPress(eval('idContent"+this.oName+"').event,'"+this.oName+"')");
@@ -1533,7 +1585,7 @@ function loadHTML(sHTML)//hanya utk first load.
       {
       selector=this.arrStyle[i][0];
       style=this.arrStyle[i][3];
-      oEditor.document.styleSheets(n).addRule(selector,style);
+      oEditor.document.styleSheets[n].addRule(selector,style);
       }
     }
 
@@ -1585,6 +1637,7 @@ function putHTML(sHTML)//used by source editor
   var oDoc=oEditor.document.open("text/html","replace");
   oDoc.write(sHTML);
   oDoc.close();
+
   oEditor.document.body.contentEditable=true;
   //oEditor.document.body.onload=new Function("eval('idContent"+this.oName+"').document.body.contentEditable=true");
   oEditor.document.execCommand("2D-Position",true,true);
@@ -1592,9 +1645,9 @@ function putHTML(sHTML)//used by source editor
   oEditor.document.execCommand("LiveResize",true,true);
 
   //RealTime
-  //oEditor.document.body.onkeydown=new Function("editorDoc_onkeydown('"+this.oName+"')");
   oEditor.document.body.onkeyup=new Function("editorDoc_onkeyup('"+this.oName+"')");
   oEditor.document.body.onmouseup=new Function("editorDoc_onmouseup('"+this.oName+"')");
+  //oEditor.document.onmouseup=new Function("editorDoc_onmouseup('"+this.oName+"')");
 
   //<br> or <p>
   oEditor.document.body.onkeydown=new Function("doKeyPress(eval('idContent"+this.oName+"').event,'"+this.oName+"')");
@@ -1710,7 +1763,7 @@ function ApplyExternalStyle(oName)
   var sTmp="";
   for(var j=0;j<oEditor.document.styleSheets.length;j++)
     {
-    var myStyle=oEditor.document.styleSheets(j);
+    var myStyle=oEditor.document.styleSheets[j];
 
     //In full HTML editing: this will parse linked & embedded stylesheet
     //In Body content editing: this will parse all embedded/applied css & arrStyle.
@@ -1718,6 +1771,11 @@ function ApplyExternalStyle(oName)
       {
       sSelector=myStyle.rules.item(i).selectorText; 
       sCssText=myStyle.rules.item(i).style.cssText.replace(/"/g,"&quot;");
+      
+      if(sSelector.match(/table\./gi)) {
+        continue;
+      }
+      
       var itemCount = sSelector.split(".").length;
       if(itemCount>1) 
         {
@@ -1849,10 +1907,7 @@ function openStyleSelect()
   };
   
 /**** REALTIME ***/
-/*function editorDoc_onkeydown(oName)
-  {
-  realTime(oName);
-  }*/
+
 function editorDoc_onkeyup(oName)
   {
   if(eval(oName).isAfterPaste)
@@ -2154,7 +2209,7 @@ function realTime(oName,bTagSel)
       {
       arrTmp2[i]=oElement;
       var sTagName = oElement.tagName;
-      sHTML = "&nbsp; &lt;<span id=tag"+oName+i+" unselectable=on style='text-decoration:underline;cursor:hand' onclick=\""+oName+".selectElement("+i+")\">" + sTagName + "</span>&gt;" + sHTML;
+      sHTML = "&nbsp; &lt;<span id=tag"+oName+i+" unselectable=on style='text-decoration:underline;cursor:pointer' onclick=\""+oName+".selectElement("+i+")\">" + sTagName + "</span>&gt;" + sHTML;
       oElement = oElement.parentElement;
       i++;
       }
@@ -2213,13 +2268,13 @@ function moveTagSelector()
   var sTagSelTop="<table unselectable=on ondblclick='"+this.oName+".moveTagSelector()' width='100%' cellpadding=0 cellspacing=0 style='border:#cfcfcf 1px solid;border-bottom:none'><tr style='background:#f8f8f8;font-family:arial;font-size:10px;color:black;'>"+
     "<td id=idElNavigate"+ this.oName +" style='padding:1px;width:100%;' valign=top>&nbsp;</td>"+
     "<td align=right valign='center' nowrap>"+
-    "<span id=idElCommand"+ this.oName +" unselectable=on style='vertical-align:middle;display:none;text-decoration:underline;cursor:hand;padding-right:5;' onclick='"+this.oName+".removeTag()'>"+getTxt("Remove Tag")+"</span>"+
+    "<span id=idElCommand"+ this.oName +" unselectable=on style='vertical-align:middle;display:none;text-decoration:underline;cursor:pointer;padding-right:5;' onclick='"+this.oName+".removeTag()'>"+getTxt("Remove Tag")+"</span>"+
     "</td></tr></table>";
 
   var sTagSelBottom="<table unselectable=on ondblclick='"+this.oName+".moveTagSelector()' width='100%' cellpadding=0 cellspacing=0 style='border-left:#cfcfcf 1px solid;border-right:#cfcfcf 1px solid;'><tr style='background-color:#f8f8f8;font-family:arial;font-size:10px;color:black;'>"+
     "<td id=idElNavigate"+ this.oName +" style='padding:1px;width:100%;' valign=top>&nbsp;</td>"+
     "<td align=right valign='center' nowrap>"+
-    "<span id=idElCommand"+ this.oName +" unselectable=on style='vertical-align:middle;display:none;text-decoration:underline;cursor:hand;padding-right:5;' onclick='"+this.oName+".removeTag()'>"+getTxt("Remove Tag")+"</span>"+
+    "<span id=idElCommand"+ this.oName +" unselectable=on style='vertical-align:middle;display:none;text-decoration:underline;cursor:pointer;padding-right:5;' onclick='"+this.oName+".removeTag()'>"+getTxt("Remove Tag")+"</span>"+
     "</td></tr></table>";
 
   if(this.TagSelectorPosition=="top")
@@ -3407,7 +3462,6 @@ function doPasteText()
 
   //paste from word temp storage
   var oWord=eval("idContentWord"+this.oName);
-  oWord.document.designMode="on";
   oWord.document.open("text/html","replace");
   oWord.document.write("<html><head></head><body></body></html>");
   oWord.document.close();
@@ -3504,7 +3558,7 @@ function insertHTML(sHTML)
     
   this.bookmarkSelection();  
   };
-function insertLink(url,title,target)
+function insertLink(url,title,target, rel)
   {
   this.setFocus();
   if(!this.checkFocus())return;//Focus stuff
@@ -3532,6 +3586,7 @@ function insertLink(url,title,target)
   if(oEl)
     {
     if(target!="" && target!=undefined)oEl.target=target;
+    if(rel!="" && rel!=undefined)oEl.setAttribute("rel", rel);
     }
   this.bookmarkSelection();
   };
@@ -3785,10 +3840,43 @@ function doClick_TabCreate()
 /*** doKeyPress ***/
 function doKeyPress(evt,oName)
   {
-  if(!eval(oName).arrUndoList[0]){eval(oName).saveForUndo();}//pengganti saveForUndo_First
+  var edt = eval(oName);
+  
+  if(!edt.arrUndoList[0]){edt.saveForUndo();}//pengganti saveForUndo_First
 
   if(evt.ctrlKey)
     {
+    
+    if(evt.keyCode==86)
+      {//CTRL-V (paste)
+      
+        edt.bookmarkSelection();
+        
+        //create text box
+        var pasteFrame = document.getElementById("pasteFrame");
+        if(!pasteFrame) {
+          pasteFrame = document.createElement("iframe");
+          pasteFrame.id = "pasteFrame";
+          pasteFrame.style.position="absolute";
+          pasteFrame.style.left="-500px";
+          pasteFrame.style.top="-500px";
+          document.body.appendChild(pasteFrame);
+        }
+            
+        var oDoc = pasteFrame.contentWindow.document;
+        var oHTML = oDoc.open("text/html", "replace");
+            
+        oHTML.close();
+        oDoc.body.contentEditable = true;
+            
+        pasteFrame.contentWindow.focus();
+            
+        window.setTimeout(function()  {
+          edt.setFocus();
+          edt.fixWord();
+        }, 50);        
+      
+      }
     if(evt.keyCode==89)
       {//CTRL-Y (Redo)
       if (!evt.altKey) eval(oName).doRedo();
@@ -3804,7 +3892,7 @@ function doKeyPress(evt,oName)
     if(evt.keyCode==66 || evt.keyCode==73 || evt.keyCode==85)
       {//CTRL-B (Bold, Italic, Underlined)
       if (!evt.altKey) eval(oName).saveForUndo();
-      }
+      }    
     }
 
   if(evt.keyCode==37||evt.keyCode==38||evt.keyCode==39||evt.keyCode==40)//Arrow
@@ -3876,13 +3964,24 @@ function fullScreen()
     {
     this.onNormalScreen();
     this.stateFullScreen=false;
-    //document.body.style.overflow="";
+    document.body.style.overflow="";
 
-    eval("idArea"+this.oName).style.position="";
-    eval("idArea"+this.oName).style.top=0;
-    eval("idArea"+this.oName).style.left=0;
-    eval("idArea"+this.oName).style.width=this.width;
-    eval("idArea"+this.oName).style.height=this.height;
+    var idArea = eval("idArea"+this.oName);
+    idArea.style.position="";
+    idArea.style.top=0;
+    idArea.style.left=0;    
+    
+    var w = new String(this.width);
+    if(w.indexOf("%")==-1) {
+      w = parseInt(w, 10) + "px";
+    }
+    idArea.style.width=w;
+    
+    var h = new String(this.height);
+    if(h.indexOf("%")==-1) {
+      h = parseInt(h, 10) + "px";
+    }
+    idArea.style.height=this.height;
     
     var ifrm=document.getElementById("idFixZIndex"+this.oName);
     ifrm.style.top=0;
@@ -3905,59 +4004,62 @@ function fullScreen()
     this.onFullScreen();
     this.stateFullScreen=true;
     scroll(0,0);
-    //document.body.style.overflow="hidden";
-
-    eval("idArea"+this.oName).style.position="absolute";
-    eval("idArea"+this.oName).style.top=0;
-    eval("idArea"+this.oName).style.left=0;
-    eval("idArea"+this.oName).style.zIndex=2000;
     
-    var numOfBrk=0;
-    for(var j=0;j<this.buttonMap.length;j++)if(this.buttonMap[j]=="BRK")numOfBrk++;
+    var idArea = eval("idArea"+this.oName);
+    idArea.style.position="absolute";
+    idArea.style.top=0;
+    idArea.style.left=0;
+    idArea.style.zIndex=2000;
 
-    nToolbarHeight=(numOfBrk+1)*27;
+    var tbPc = document.getElementById("idToolbar" + this.oName);
+    nToolbarHeight = tbPc.offsetHeight;
+   
+    if(this.useTagSelector) {
+      nToolbarHeight+=13;
+    }
+    
+    if(this.showResizeBar) {
+      nToolbarHeight+=8;
+    }
 
-    if (document.compatMode && document.compatMode!="BackCompat")
-      {
-      //using doctype
-      var html=document.documentElement;
-      try
-        {
-        w=(document.body.offsetWidth);
-        document.body.style.height="100%";
-        h=html.clientHeight-nToolbarHeight;
-        document.body.style.height="";
-        }
-      catch(e)
-        {
-        w=(document.body.offsetWidth+20);
-        document.body.style.height="100%";
-        h=html.clientHeight-nToolbarHeight;
-        document.body.style.height="";
-        }
-      }
-    else
-      {
-      if(document.body.style.overflow=="hidden")
-        {
-        w=document.body.offsetWidth;
-        }
-      else
-        {
-        w=document.body.offsetWidth-22;
-        }
-      h=document.body.offsetHeight-4;
-      }
+    var w=0, h=0;
+    if(isIE9) {
 
-    if (document.compatMode && document.compatMode!="BackCompat")
-      {
-      //using doctype => need adjustment. TODO: create as properties.
-      w=w;
-      h=h-13;
-      }
+      w=window.innerWidth;
+      h=window.innerHeight;
+      h=h-nToolbarHeight;
       
-    eval("idArea"+this.oName).style.width=w;
-    eval("idArea"+this.oName).style.height=h;
+    } else {
+
+      if (document.compatMode && document.compatMode!="BackCompat") {
+        //using doctype
+        var html=document.documentElement;
+        try {
+          w=(document.body.offsetWidth);
+          document.body.style.height="100%";
+          h=html.clientHeight-nToolbarHeight;          
+          document.body.style.height="";          
+        } catch(e) {
+          w=(document.body.offsetWidth+20);
+          document.body.style.height="100%";
+          h=html.clientHeight-nToolbarHeight;
+          document.body.style.height="";
+        }
+      } else {
+
+        if(document.body.style.overflow=="hidden") {
+          w=document.body.offsetWidth;
+        } else {
+          w=document.body.offsetWidth-22;
+        }
+        h=document.body.offsetHeight-4;
+
+      }
+
+    }
+    
+    idArea.style.width=w+"px";
+    idArea.style.height=h+"px";
     
     var ifrm=document.getElementById("idFixZIndex"+this.oName);
     ifrm.style.top=0;
@@ -4062,7 +4164,7 @@ function recur(oEl,sTab)
   var sHTML="";
   for(var i=0;i<oEl.childNodes.length;i++)
     {
-    var oNode=oEl.childNodes(i);
+    var oNode=oEl.childNodes[i];
     
     if(oNode.parentNode!=oEl)continue; //add this line
     
@@ -4152,7 +4254,7 @@ function recur(oEl,sTab)
             //tapi kalau &lt; , &gt; tdk (no problem) => default behaviour
 
         s=s.replace(/<([^ >]*)/ig,function(x){return x.toLowerCase()});   
-        s=s.replace(/ ([^=]+)=([^" >]+)/ig," $1=\"$2\"");
+        //s=s.replace(/ ([^=]+)=([^" >]+)/ig," $1=\"$2\"");
         s=s.replace(/ ([^=]+)=/ig,function(x){return x.toLowerCase()});
         s=s.replace(/#_#/ig," ");
 
@@ -4234,6 +4336,11 @@ function recur(oEl,sTab)
             else sHTML+=recur(oNode,sT+"\t");
             }
           else
+          if (sTagName == "STYLE" || sTagName=="SCRIPT")
+            {
+            //do nothing
+            }  
+          else
             {
             sHTML+=recur(oNode,sT+"\t");
             }
@@ -4258,7 +4365,7 @@ function recur(oEl,sTab)
       }
     else if(oNode.nodeType==3)//text
       {
-      sHTML+= fixVal(oNode.nodeValue);
+      sHTML+= fixVal(oNode.nodeValue).replace(/^\s*/, "").replace(/\s*$/, "");
       }
     else if(oNode.nodeType==8)
       {
@@ -4378,12 +4485,14 @@ function tbAction(tb, id, edt, sfx) {
     case "btnHyperlink": e.hide();modelessDialogShow(e.scriptPath+"hyperlink.htm",380,220); break;
     case "btnImage": e.hide();modelessDialogShow(e.scriptPath+"image.htm",440,351); break;
     case "btnFlash": e.hide();modelessDialogShow(e.scriptPath+"flash.htm",340,275); break;
+    case "btnYoutubeVideo": e.hide();modelessDialogShow(e.scriptPath+"youtube_video.htm",340,125); break;
     case "btnMedia": e.hide();modelessDialogShow(e.scriptPath+"media.htm",340,272); break;
     case "btnContentBlock": e.hide(); eval(e.cmdContentBlock); break;
     case "btnInternalLink": e.hide(); eval(e.cmdInternalLink); break;
     case "btnInternalImage": e.hide(); eval(e.cmdInternalImage); break;
     case "btnCustomObject": e.hide(); eval(e.cmdCustomObject); break;
     case "btnGuidelines": e.runtimeBorder(true); break;
+    case "btnAutoTable": e.hide();modelessDialogShow(e.scriptPath+"table_format.htm",320,225); break;
     case "btnAbsolute": e.makeAbsolute(); break;
     case "btnCharacters": e.hide();modelessDialogShow(e.scriptPath+"characters.htm",495,162); break;
     case "btnLine": e.doCmd("InsertHorizontalRule"); break;
@@ -4416,19 +4525,19 @@ function ddAction(tb, id, edt, sfx) {
   switch(btn) {
     case "btnPreview1":
       setActiveEditor(oN);
-      modalDialogShow(e.scriptPath+"preview.htm",640,480); 
+      modalDialogShow(e.scriptPath+"preview.htm?w=640&h=480",640,480); 
       break;
     case "btnPreview2": 
       setActiveEditor(oN);
-      modalDialogShow(e.scriptPath+"preview.htm",800,600); 
+      modalDialogShow(e.scriptPath+"preview.htm?w=800&h=600",800,600); 
       break;
     case "btnPreview3": 
       setActiveEditor(oN);
-      modalDialogShow(e.scriptPath+"preview.htm",1024,768); 
+      modalDialogShow(e.scriptPath+"preview.htm?w=1024&h=768",1024,768); 
       break;
-    case "btnTextFormatting": modelessDialogShow(e.scriptPath+"text1.htm",511,470); break;
+    case "btnTextFormatting": modelessDialogShow(e.scriptPath+"text1.htm",511,490); break;
     case "btnParagraphFormatting": modelessDialogShow(e.scriptPath+"paragraph.htm",460,284); break;
-    case "btnListFormatting": modelessDialogShow(e.scriptPath+"list.htm",270,335); break;
+    case "btnListFormatting": modelessDialogShow(e.scriptPath+"list.htm",320,335); break;
     case "btnBoxFormatting": modelessDialogShow(e.scriptPath+"box.htm",498,395); break;
     case "btnCssText": modelessDialogShow(e.scriptPath+"styles_cssText.htm",360,332); break;
     case "btnCssBuilder": modelessDialogShow(e.scriptPath+"styles_cssText2.htm",430,445); break;
@@ -4491,3 +4600,43 @@ function changeHeight(v) {
   edtObj.style.height = this.height;
 
 };
+
+function fixWord() {
+    
+    var pasteFrame = document.getElementById("pasteFrame");
+    var idSource = pasteFrame.contentWindow;
+    
+    for (var i=0;i<idSource.document.body.all.length;i++) {
+      idSource.document.body.all[i].removeAttribute("class","",0);
+      idSource.document.body.all[i].removeAttribute("style","",0);
+    }
+    var str=idSource.document.body.innerHTML;
+
+    str=String(str).replace(/<\\?\?xml[^>]*>/g,"");
+    str=String(str).replace(/<\/?o:p[^>]*>/g,"");
+    str=String(str).replace(/<\/?u1:p[^>]*>/gi,"");
+    str=String(str).replace(/<\/?v:[^>]*>/g,"");
+    str=String(str).replace(/<\/?o:[^>]*>/g,"");
+    str=String(str).replace(/<\/?st1:[^>]*>/g,"");
+    str=String(str).replace(/<\/?w:wrap[^>]*>/gi,"");
+    str=String(str).replace(/<\/?w:anchorlock[^>]*>/gi,"");
+
+    str=String(str).replace(/&nbsp;/g,"");//<p>&nbsp;</p>
+
+    str=String(str).replace(/<\/?SPAN[^>]*>/g,"");
+    str=String(str).replace(/<\/?FONT[^>]*>/g,"");
+    str=String(str).replace(/<\/?STRONG[^>]*>/g,"");
+
+    str=String(str).replace(/<\/?H1[^>]*>/g,"");
+    str=String(str).replace(/<\/?H2[^>]*>/g,"");
+    str=String(str).replace(/<\/?H3[^>]*>/g,"");
+    str=String(str).replace(/<\/?H4[^>]*>/g,"");
+    str=String(str).replace(/<\/?H5[^>]*>/g,"");
+    str=String(str).replace(/<\/?H6[^>]*>/g,"");
+
+    str=String(str).replace(/<\/?P[^>]*><\/P>/g,"");
+    var reg=new RegExp(String.fromCharCode(8217), "gi");
+    str=String(str).replace(reg,"'");
+    
+    this.insertHTML(str);
+}
