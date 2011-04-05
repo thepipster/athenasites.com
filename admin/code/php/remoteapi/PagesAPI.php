@@ -261,6 +261,9 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
     	$pageObj = new Page($page);    
         $page['last_edit'] = date("m/d/Y H:i", strtotime($page['last_edit'])); // Convert to JS compatible date
         $page['created'] = date("m/d/Y H:i", strtotime($page['created'])); // Convert to JS compatible date
+		$page['content'] = utf8_encode($page['content']);
+		$page['title'] = utf8_encode($page['title']);
+		$page['excerpt'] = utf8_encode($page['excerpt']);
         $page['url'] = $pageObj->getLink();
     }
 
@@ -297,6 +300,9 @@ function addPage($site_id, $title, $parent_page_id, $content, $status, $tamplate
     	$pageObj = new Page($page);    
         $page['last_edit'] = date("m/d/Y H:i", strtotime($page['last_edit'])); // Convert to JS compatible date
         $page['created'] = date("m/d/Y H:i", strtotime($page['created'])); // Convert to JS compatible date
+		$page['content'] = utf8_encode($page['content']);
+		$page['title'] = utf8_encode($page['title']);
+		$page['excerpt'] = utf8_encode($page['excerpt']);
         $page['url'] = $pageObj->getLink();
     }
 
@@ -318,6 +324,9 @@ function getPage($site_id, $page_id){
     if (isset($page)) {
         $page['last_edit'] = date("m/d/Y H:i", strtotime($page['last_edit'])); // Convert to JS compatible date
         $page['created'] = date("m/d/Y H:i", strtotime($page['created'])); // Convert to JS compatible date
+		$page['content'] = utf8_encode($page['content']);
+		$page['title'] = utf8_encode($page['title']);
+		$page['excerpt'] = utf8_encode($page['excerpt']);
 	    $msg['result'] = 'ok';
     }
 

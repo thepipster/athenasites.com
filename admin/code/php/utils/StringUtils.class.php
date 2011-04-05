@@ -63,7 +63,7 @@ class StringUtils {
         //Logger::debug(">>> content = $content");
         //Logger::debug(">>> safe content = $safe_content");
 
-        return $safe_content;
+        return utf8_encode($safe_content);
     }
 
     // ////////////////////////////////////////////////////////////////////
@@ -97,7 +97,10 @@ class StringUtils {
 		$config->set('HTML.Doctype', 'HTML 4.01 Transitional'); // replace with your doctype
 
 		$purifier = new HTMLPurifier($config);
-	    return $purifier->purify($safe_content);
+		
+	    $clean_html = $purifier->purify($safe_content);
+	    
+	    return utf8_encode($clean_html);
     }
 
     // ////////////////////////////////////////////////////////////////////

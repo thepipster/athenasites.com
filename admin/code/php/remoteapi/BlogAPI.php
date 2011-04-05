@@ -433,12 +433,12 @@ function getApprovedComments($post_id, $site_id) {
 //
 // ///////////////////////////////////////////////////////////////////////////////////////
 
-
 function getPostDetails($site_id, $post_id) {
 
     $post = getPostComplete($site_id, $post_id);
 
-    //Logger::dump($post);
+	$post['content'] = utf8_encode($post['content']);
+	$post['title'] = utf8_encode($post['title']);
 
     $msg['cmd'] = "getPostDetails";
     $msg['result'] = 'ok';
@@ -499,7 +499,8 @@ function updatePost($site_id, $post_id, $title, $content, $status, $slug, $can_c
 		PostsTable::createRevision($site_id, $post_id);
 	    PostsTable::update($site_id, $post_id, $safe_content, $status, $safe_title, $can_comment, Post::encodeSlug($safe_title), 'apollo');
 
-	    $post = getPostComplete($site_id, $post_id);
+	    $post = getPostComplete($site_id, $post_id);	
+		$post['content'] = utf8_encode($post['content']);
 	
 		ImportHelper::processPostContent($site_id, $post);	
 	    PostsTable::updatePath($post_id, $site_id, Post::generatePath($post['created']));
