@@ -48,7 +48,7 @@ function refresh()
   <table cellpadding="1" cellspacing="0">
     <tr>
     <td>
-      <input type="button" name="btnCloseAndRefresh" id="btnCloseAndRefresh" value="close & refresh" onclick="refresh();self.close();" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+      <input type="button" name="btnCloseAndRefresh" id="btnCloseAndRefresh" value="close & refresh" onclick="refresh();if(self.closeWin)self.closeWin();else self.close();" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
     </td>
     </tr>
   </table>

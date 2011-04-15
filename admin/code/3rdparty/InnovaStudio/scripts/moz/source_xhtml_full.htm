@@ -253,7 +253,7 @@ function recur(oEl,sTab)
         //if(oElement==oNode)sSelThis=" selThis='selThis'"
 
         /*** format ***/ //selThis
-        sHTML+="<span style='color:#555555;background:#f7f7f7'><xmp style='font-family:tahoma;margin-top:0px;margin-bottom:0px;'>"+s+"</xmp></span>";
+        sHTML+="<span style='color:#555555;background:#f7f7f7'><pre style='font-family:tahoma;margin-top:0px;margin-bottom:0px;'>"+s+"</pre></span>";
         /**************/
         }
       else if(sTagName=="TITLE")
@@ -358,7 +358,7 @@ function recur(oEl,sTab)
             s = s.replace(/<\/script>/ig,"");
             s = s.replace(/^\s+/,'').replace(/\s+$/,'');
             /*** format ***/
-            sHTML+="<div><span style='color:#828282;'>//&lt;![CDATA[<xmp style='font-family:tahoma;margin-top:0px;margin-bottom:0px;'>"+s+"</xmp>//]]&gt;</span></div>";
+            sHTML+="<div><span style='color:#828282;'>//&lt;![CDATA[<pre style='font-family:tahoma;margin-top:0px;margin-bottom:0px;'>"+s+"</pre>//]]&gt;</span></div>";
             /**************/
             }
           if(sTagName=="STYLE")
@@ -371,7 +371,7 @@ function recur(oEl,sTab)
             s = s.replace(/<\/style>/ig,"");
             s = s.replace(/^\s+/,"").replace(/\s+$/,"");
             /*** format ***/
-            sHTML+="<div><span style='color:#828282;'>&lt;!--<xmp style='font-family:tahoma;margin-top:0px;margin-bottom:0px;'>"+s+"</xmp>--&gt;</span></div>";
+            sHTML+="<div><span style='color:#828282;'>&lt;!--<pre style='font-family:tahoma;margin-top:0px;margin-bottom:0px;'>"+s+"</pre>--&gt;</span></div>";
             /**************/
             }
           if(sTagName=="DIV"||sTagName=="P")
@@ -414,13 +414,13 @@ function recur(oEl,sTab)
         sTmp=(parent.getOuterHTML(oNode).substring(2))
         sTmp=sTmp.substring(0,sTmp.length-2)
         sTmp=sTmp.replace(/^\s+/,"").replace(/\s+$/,"");
-        sHTML+= "<div><span style='background:yellow'>&lt;%<xmp style='font-family:tahoma;margin-top:0px;margin-bottom:0px;'>"+sTmp+"</xmp>%&gt;</span></div>";
+        sHTML+= "<div><span style='background:yellow'>&lt;%<pre style='font-family:tahoma;margin-top:0px;margin-bottom:0px;'>"+sTmp+"</pre>%&gt;</span></div>";
         }
       else
         {//comments
         sTmp=oNode.nodeValue;
         sTmp = sTmp.replace(/^\s+/,"").replace(/\s+$/,"");
-        sHTML+= "<div><span style='color:#828282;'>&lt;!--<xmp style='font-family:tahoma;margin-top:0px;margin-bottom:0px;'>"+sTmp+"</xmp>--&gt;</span></div>";
+        sHTML+= "<div><span style='color:#828282;'>&lt;!--<pre style='font-family:tahoma;margin-top:0px;margin-bottom:0px;'>"+sTmp+"</pre>--&gt;</span></div>";
         }
       }
     else

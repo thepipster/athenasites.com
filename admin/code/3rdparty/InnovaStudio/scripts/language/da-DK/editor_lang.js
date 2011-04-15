@@ -48,7 +48,8 @@ function getTxt(s)
     case "Special Characters":return "Inds&aelig;t symbol";
     case "Image":return "Billede";
     case "Flash":return "Flash";
-    case "Media":return "Medier";
+    case "YoutubeVideo":return "Insert Youtube Video";
+    case "Media":return "Medier";    
     case "Content Block":return "Indholds blok";    
     case "Internal Link":return "Internt link";
     case "Internal Image":return "Internt Billede";
@@ -58,6 +59,7 @@ function getTxt(s)
     case "Edit Table":return "Rediger tabel";
     case "Edit Cell":return "Rediger celle";
     case "Table":return "Tabel";
+    case "AutoTable":return "Table Auto Format";    
     case "Border & Shading":return "Rammer og skygge";
     case "Show/Hide Guidelines":return "Vis/skjul rammer";
     case "Absolute":return "Absolut placering";

@@ -5,6 +5,7 @@ function loadTxt()
     txtLang[1].innerHTML = "Bogm\u00E6rke";
     txtLang[2].innerHTML = "Ramme";
     txtLang[3].innerHTML = "Titel";
+    txtLang[4].innerHTML = "Rel";
 
     var optLang = document.getElementsByName("optLang");
     optLang[0].text = "Samme"

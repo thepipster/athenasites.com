@@ -1,5 +1,5 @@
-InnovaStudio WYSIWYG Editor 5.1
-Copyright © 2010, INNOVA STUDIO (www.InnovaStudio.com). All rights reserved.
+InnovaStudio WYSIWYG Editor 5.2
+Copyright © 2011, INNOVA STUDIO (www.InnovaStudio.com). All rights reserved.
 ____________________________________________________________________
 
 LICENSE AGREEMENT 

@@ -88,19 +88,15 @@ class PostsTable {
 	public static function createRevision($site_id, $post_id){
 
 		// How many revisions do we have for this post?
-		//$no_revs = DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_%d_Posts WHERE source_id = %d AND status = 'Revision'", $site_id, $post_id));
+		$no_revs = DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_%d_Posts WHERE source_id = %d AND status = 'Revision'", $site_id, $post_id));
 
 		//$last_date = DatabaseManager::getVar(DatabaseManager::prepare("SELECT last_edit FROM athena_%d_Posts WHERE source_id = %d AND status = 'Revision' ORDER BY last_edit DESC LIMIT 1", $site_id, $post_id));
 		
-		// SELECT last_edit FROM athena_1_Posts WHERE source_id = 2 AND status = 'Revision' ORDER BY last_edit DESC LIMIT 1
-		
-		/*
-		if ($no_revs >= 10){
-			// Delete the oldest revision
+		if ($no_revs >= 20){
+			// Delete the oldest revisions
 			DatabaseManager::submitQuery(DatabaseManager::prepare("DELETE FROM athena_%d_Posts WHERE source_id = %d AND status = 'Revision' AND id = 
-			(SELECT id FROM athena_%d_Posts WHERE source_id = %d AND status = 'Revision' ORDER BY created LIMIT 1) ", $site_id, $post_id);
+			(SELECT id FROM athena_%d_Posts WHERE source_id = %d AND status = 'Revision' ORDER BY created LIMIT 1) ", $site_id, $post_id));
 		}
-		*/
 		
         // Get data in correct locale (SQL's NOW() doesn't do that)
         $date_str = date('Y-m-d H:i:s', time());

@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link href="style/editor.css" rel="stylesheet" type="text/css">
@@ -195,7 +196,7 @@ function doInsert()
 
     if(bNoBorder) {
       //oElement.border=0;
-      oElement.style.border = "none";
+      //oElement.style.border="none";
      } else
       {
       oElement.style.borderTop=sImgBorderTop;
@@ -212,7 +213,7 @@ function doInsert()
     if(sImgLeft!="")oElement.style.marginLeft=sImgLeft;
     if(sImgRight!="")oElement.style.marginRight=sImgRight;
     }
-  self.close()
+  self.closeWin()
   }
 
 function doUpdate()
@@ -258,7 +259,7 @@ function doUpdate()
       (idImg.style.borderLeftStyle=="none"||idImg.style.borderLeft=="")&&
       (idImg.style.borderRightStyle=="none"||idImg.style.borderRight=="")) {
       //oElement.border=0;
-      oElement.style.border = "none";
+      oElement.style.border="none";
     }
 
     //clean
@@ -357,9 +358,9 @@ function openBorder() {
 </head>
 <body style="overflow:hidden;">
 
-<table width=100% height=100% align=center cellpadding=0 cellspacing=0>
+<table width="100%" height="320px" align=center cellpadding=0 cellspacing=0 style="border-collapse:separate">
 <tr>
-<td valign=top style="padding:5;height:100%">
+<td valign=top style="padding:5px;">
 
   <table width=100%>
   <tr>
@@ -370,7 +371,7 @@ function openBorder() {
         <table cellpadding="0" cellspacing="0" style="width:100%">
         <tr>
         <td style="width:100%"><input type="text" id="inpImgURL" name=inpImgURL style="width:100%" class="inpTxt"></td>
-        <td><input type="button" value="" onclick="openAsset()" id="btnAsset" name="btnAsset" style="display:none;background:url('openAsset.gif');width:23px;height:18px;border:#a5acb2 1px solid;margin-left:1px;"></td>
+        <td><input type="button" value="" onclick="openAsset()" id="btnAsset" name="btnAsset" style="display:none;background:url('openAsset.gif') no-repeat center center;width:23px;height:18px;border:#a5acb2 1px solid;margin-left:1px;"></td>
         </tr>
         </table>
     </td>
@@ -382,7 +383,7 @@ function openBorder() {
     <td width="100%">
         <input type="text" id="inpImgAlt" name=inpImgAlt style="width:150px" class="inpTxt" onkeyup="doPreview()">
     </td>
-    <td rowspan="5" style="padding-top:4;padding-right:7">
+    <td rowspan="5" style="padding-top:4px;padding-right:7px">
       <div style="height:112px;border-left:#c7c7c7 1 solid;width:1px"></div>
     </td>
     <td nowrap>
@@ -476,9 +477,9 @@ function openBorder() {
 
   <tr>
     <td colspan="5">
-      <div style="padding:3;"></div>
-      <div id="divPreview" style="padding:5;padding-left:5;overflow:auto;border:1 dimgray solid;width:100%;height:85;background:#ffffff">
-<img src="img.gif" id="idImg" align=left width="53" height="51">Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+      <div style="padding:3px;"></div>
+      <div id="divPreview" style="padding:5px;overflow:auto;border:1px dimgray solid;height:85px;background:#ffffff">
+<img src="img.gif" id="idImg" align=left width="53px" height="51px">Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
 sed diam nonumy eirmod tempor invidunt ut labore et
 dolore magna aliquyam erat,
 sed diam voluptua. At vero eos et accusam et justo
@@ -497,7 +498,7 @@ duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est 
   <table cellpadding=0 cellspacing=0>
   <tr>
   <td>
-  <input type="button" name=btnCancel id=btnCancel value="cancel" onclick="self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+  <input type="button" name=btnCancel id=btnCancel value="cancel" onclick="self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   <td>
   <input type="button" name=btnInsert id=btnInsert value="insert" onclick="doInsert()" style="display:block" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
@@ -506,7 +507,7 @@ duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est 
   <input type="button" name=btnApply id=btnApply value="apply" onclick="doUpdate()" style="display:none" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   <td>
-  <input type="button" name=btnOk id=btnOk value=" ok " onclick="doUpdate();self.close()" style="display:none;" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+  <input type="button" name=btnOk id=btnOk value=" ok " onclick="doUpdate();self.closeWin()" style="display:none;" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   </tr>
   </table>

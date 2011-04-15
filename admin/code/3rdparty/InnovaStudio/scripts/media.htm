@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link href="style/editor.css" rel="stylesheet" type="text/css">
@@ -257,16 +258,16 @@ function updateMedia()
 
   function windowClose() {
     parent.oUtil.onSelectionChanged=null;
-    self.close();
+    self.closeWin();
   };
 
 </script>
 </head>
 <body style="overflow:hidden;">
 
-<table width=100% height=100% align=center cellpadding=0 cellspacing=0>
+<table width="100%" height="230px" align=center cellpadding=0 cellspacing=0 style="border-collapse:separate">
 <tr>
-<td valign=top style="padding:5;height:100%">
+<td valign=top style="padding:5px;">
 
   <table cellpadding=2 cellspacing=0  style="width:100%">
   <tr>
@@ -274,8 +275,8 @@ function updateMedia()
     <td colspan="4" style="width:100%">
       <table cellpadding="0" cellspacing="0" style="width:100%">
       <tr>
-      <td style="width:100%"><input type="text" name=inpURL size=45 value="" style="width:100%" class="inpTxt"></td>
-      <td><input type="button" value="" onclick="openAsset()" id="btnAsset" name="btnAsset" style="display:none;background:url('openAsset.gif');width:23px;height:18px;border:#a5acb2 1px solid;margin-left:1px;"></td>
+      <td style="width:100%"><input type="text" name="inpURL" id="inpURL" size=45 value="" style="width:100%" class="inpTxt"></td>
+      <td><input type="button" value="" onclick="openAsset()" id="btnAsset" name="btnAsset" style="display:none;background:url('openAsset.gif') no-repeat center center;width:23px;height:18px;border:#a5acb2 1px solid;margin-left:1px;"></td>
       </tr>
       </table>
     </td>

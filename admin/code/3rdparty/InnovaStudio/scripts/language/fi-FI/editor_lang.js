@@ -48,6 +48,7 @@ function getTxt(s)
     case "Special Characters":return "Erikoismerkit";
     case "Image":return "Kuva";
     case "Flash":return "Flash";
+    case "YoutubeVideo":return "Insert Youtube Video";
     case "Media":return "Media";
     case "Content Block":return "Sis&auml;lt&ouml;kentt&auml;"; 
     case "Internal Link":return "Sis&auml;inen linkki";
@@ -58,6 +59,7 @@ function getTxt(s)
     case "Edit Table":return "Muokkaa taulukkoa";
     case "Edit Cell":return "Muokkaa solua";
     case "Table":return "Taulukko";
+    case "AutoTable":return "Table Auto Format";
     case "Border & Shading":return "Kehykset & varjostus";
     case "Show/Hide Guidelines":return "N&auml;yt&auml;/Piilota apulinjat";
     case "Absolute":return "Todellinen";

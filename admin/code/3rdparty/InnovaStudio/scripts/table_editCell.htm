@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link href="style/editor.css" rel="stylesheet" type="text/css">
@@ -29,20 +30,20 @@ function tabClick(n)
   switch(n)
     {
     case 1:
-      tab1.style.border="#e5e5e5 1 solid";
+      tab1.style.border="#e5e5e5 1px solid";
       tab1.style.borderBottom="none";
       tab1.style.background="#ffffff";
       tab1.style.cursor="";
 
-      tab2.style.border="#e5e5e5 1 solid";
+      tab2.style.border="#e5e5e5 1px solid";
       tab2.style.borderLeft="none";
       tab2.style.background="#e5e5e5";
-      tab2.style.cursor="hand";
+      tab2.style.cursor="pointer";
 
-      tab3.style.border="#e5e5e5 1 solid";
+      tab3.style.border="#e5e5e5 1px solid";
       tab3.style.borderLeft="none";
       tab3.style.background="#e5e5e5";
-      tab3.style.cursor="hand";
+      tab3.style.cursor="pointer";
 
 
       divAutoFit.style.display="block"
@@ -51,20 +52,20 @@ function tabClick(n)
 
       break;
     case 2:
-      tab1.style.border="#e5e5e5 1 solid";
+      tab1.style.border="#e5e5e5 1px solid";
       tab1.style.borderRight="none";
       tab1.style.background="#e5e5e5";
-      tab1.style.cursor="hand";
+      tab1.style.cursor="pointer";
 
-      tab2.style.border="#e5e5e5 1 solid";
+      tab2.style.border="#e5e5e5 1px solid";
       tab2.style.borderBottom="none";
       tab2.style.background="#ffffff";
       tab2.style.cursor="";
 
-      tab3.style.border="#e5e5e5 1 solid";
+      tab3.style.border="#e5e5e5 1px solid";
       tab3.style.borderLeft="none";
       tab3.style.background="#e5e5e5";
-      tab3.style.cursor="hand";
+      tab3.style.cursor="pointer";
 
       divAutoFit.style.display="none"
       divProperties.style.display="block"
@@ -72,17 +73,17 @@ function tabClick(n)
 
       break;
     case 3:
-      tab1.style.border="#e5e5e5 1 solid";
+      tab1.style.border="#e5e5e5 1px solid";
       tab1.style.borderRight="none";
       tab1.style.background="#e5e5e5";
-      tab1.style.cursor="hand";
+      tab1.style.cursor="pointer";
 
-      tab2.style.border="#e5e5e5 1 solid";
+      tab2.style.border="#e5e5e5 1px solid";
       tab2.style.borderRight="none";
       tab2.style.background="#e5e5e5";
-      tab2.style.cursor="hand";
+      tab2.style.cursor="pointer";
 
-      tab3.style.border="#e5e5e5 1 solid";
+      tab3.style.border="#e5e5e5 1px solid";
       tab3.style.borderBottom="none";
       tab3.style.background="#ffffff";
       tab3.style.cursor="";
@@ -236,7 +237,7 @@ function realTime()
     }
 
   /**** background ****/   //=>OK (harus lebih dulu dari background color)
-  if(oTD.style.background=="")
+  if(oTD.style.backgroundImage=="")
     {
     if(oTD.background)
       {
@@ -249,7 +250,9 @@ function realTime()
     }
   else
     {
-    divPreview.style.background=oTD.style.background;
+    divPreview.style.backgroundImage=oTD.style.backgroundImage;
+    divPreview.style.backgroundRepeat=oTD.style.backgroundRepeat;
+    divPreview.style.backgroundPosition=oTD.style.backgroundPosition;
     }
 
   /**** backgroundColor ****/   //=>OK
@@ -419,36 +422,10 @@ function format(oTD)
   if(inpPaddingTop.value!="na") oTD.style.paddingTop = inpPaddingTop.value;
   if(inpPaddingBottom.value!="na") oTD.style.paddingBottom = inpPaddingBottom.value;
 
-
-  if(divPreview.style.background=="none transparent scroll repeat 0% 0%"||
-    divPreview.style.background=="")
-    {
-    oTD.style.background="";
-
-    //Clean~~~
-    sTmpStyle=oTD.style.cssText
-
-    sTmpStyle=sTmpStyle.replace(/BACKGROUND: none transparent scroll repeat 0% 0%;/,"")
-    sTmpStyle=sTmpStyle.replace(/BACKGROUND: none transparent scroll repeat 0% 0%/,"")
-
-    sTmpStyle=sTmpStyle.replace(/BACKGROUND-POSITION: 0% 0%;/,"")
-    sTmpStyle=sTmpStyle.replace(/BACKGROUND-POSITION: 0% 0%/,"")
-    sTmpStyle=sTmpStyle.replace(/BACKGROUND-ATTACHMENT: scroll;/,"")
-    sTmpStyle=sTmpStyle.replace(/BACKGROUND-ATTACHMENT: scroll/,"")
-    sTmpStyle=sTmpStyle.replace(/BACKGROUND-IMAGE: none;/,"")
-    sTmpStyle=sTmpStyle.replace(/BACKGROUND-IMAGE: none/,"")
-    sTmpStyle=sTmpStyle.replace(/BACKGROUND-REPEAT: repeat;/,"")
-    sTmpStyle=sTmpStyle.replace(/BACKGROUND-REPEAT: repeat/,"")
-
-    oTD.style.cssText=sTmpStyle
-    //~~~~~~~
-    }
-  else
-    {
-    oTD.style.background=divPreview.style.background;//sudah termasuk backgroundColor
-    //oTD.style.backgroundColor=inpBackgroundColor.style.backgroundColor;
-    }
-  oTD.removeAttribute("bgColor",0);
+  oTD.style.backgroundImage=divPreview.style.backgroundImage;
+  oTD.style.backgroundRepeat=divPreview.style.backgroundRepeat;
+  oTD.style.backgroundPosition=divPreview.style.backgroundPosition;
+  oTD.style.backgroundColor=inpBackgroundColor.style.backgroundColor;
 
   //Border & Shading
   if(divPreview.style.borderLeftWidth=="" || divPreview.style.borderLeftWidth==0) oTD.style.borderLeft="";
@@ -517,27 +494,27 @@ function format(oTD)
 </head>
 <body style="overflow:hidden;">
 
-<table width=100% height=100% align=center cellpadding=0 cellspacing=0>
+<table width=100% align=center cellpadding=0 cellspacing=0>
 <tr>
-<td valign=top style="padding-top:15;padding-left:13;padding-right:13;padding-bottom:0;height:100%">
+<td valign=top style="padding-top:15;padding-left:13px;padding-right:13px;padding-bottom:0px;">
 
   <table cellpadding=0 cellspacing=0 style="border-collapse:collapse;width:100%;" ID="Table2">
   <tr>
-  <td id=tab1 style="cursor:hand;padding:8;" onclick="tabClick(1)" nowrap><b><span id=txtLang name=txtLang>AutoFit</span></b></td>
-  <td id=tab2 style="cursor:hand;padding:8;" onclick="tabClick(2)" nowrap><b><span id=txtLang name=txtLang>Properties</span></b></td>
-  <td id=tab3 style="cursor:hand;padding:8;" onclick="tabClick(3)" nowrap><b><span id=txtLang name=txtLang>Style</span></b></td>
-  <td style="border-bottom:#e5e5e5 1 solid;" width=100%></td>
+  <td id=tab1 style="cursor:default;padding:8px;" onclick="tabClick(1)" nowrap><b><span id=txtLang name=txtLang>AutoFit</span></b></td>
+  <td id=tab2 style="cursor:default;padding:8px;" onclick="tabClick(2)" nowrap><b><span id=txtLang name=txtLang>Properties</span></b></td>
+  <td id=tab3 style="cursor:default;padding:8px;" onclick="tabClick(3)" nowrap><b><span id=txtLang name=txtLang>Style</span></b></td>
+  <td style="border-bottom:#e5e5e5 1px solid;" width=100%></td>
   </tr>
   </table>
 
 
-  <table cellpadding=0 cellspacing=0 style="border:#e5e5e5 1 solid;border-top:none;border-collapse:collapse;width:100%;height:285;background:#ffffff;">
+  <table cellpadding=0 cellspacing=0 style="border:#e5e5e5 1px solid;border-top:none;border-collapse:collapse;width:100%;height:340px;background:#ffffff;">
   <tr>
-  <td style="padding:7;" valign=top height=100%>
+  <td style="padding:7px;" valign='top'>
 
   <!-- AUTOFIT -->
   <div id=divAutoFit style="display:block;">
-    <div style="margin-bottom:7;margin-top:3;"><span id=txtLang name=txtLang>Width</span>:</div>
+    <div style="margin-bottom:7px;margin-top:3px;"><span id=txtLang name=txtLang>Width</span>:</div>
     <input type="radio" class=inpRdo name="inpAutoFit1"><span id=txtLang name=txtLang>AutoFit to contents</span><br>
     <input type="radio" class=inpRdo name="inpAutoFit1"><span id=txtLang name=txtLang>Fixed cell width</span>:
     <input type="text" name="inpWidth" size=3 onblur="inpAutoFit1[1].checked=true" class="inpTxt">
@@ -548,7 +525,7 @@ function format(oTD)
 
     <br><br>
 
-    <div style="margin-bottom:7;margin-top:3;"><span id=txtLang name=txtLang>Height</span>:</div>
+    <div style="margin-bottom:7px;margin-top:3px;"><span id=txtLang name=txtLang>Height</span>:</div>
     <input type="radio" class=inpRdo name="inpAutoFit2"><span id=txtLang name=txtLang>AutoFit to contents</span><br>
     <input type="radio" class=inpRdo name="inpAutoFit2"><span id=txtLang name=txtLang>Fixed cell height</span>:
     <input type="text" name="inpHeight" size=3 onblur="inpAutoFit2[1].checked=true" class="inpTxt">
@@ -564,7 +541,7 @@ function format(oTD)
   <!-- PROPERTIES -->
   <div id="divProperties" style="display:none;">
 
-    <table border=0>
+    <table style="border-collapse:separate">
     <tr>
       <td nowrap>
         <span id=txtLang name=txtLang>Text Alignment</span>:&nbsp;
@@ -591,7 +568,7 @@ function format(oTD)
       </td>
     </tr>
     <tr>
-      <td style="padding-top:3">
+      <td style="padding-top:3px">
         <span id=txtLang name=txtLang>Padding</span>
       </td>
       <td nowrap>
@@ -638,8 +615,8 @@ function format(oTD)
         <span id=txtLang name=txtLang>Background</span>:&nbsp;
       </td>
       <td>
-        <span style="background:#ffffff"><span id="inpBackgroundColor" style="border:gray 1 solid;width:20;margin-right:3;"></span></span>
-        <input type=button name=btnPick value=Pick onclick="oColor1.show(this);event.cancelBubble=true;" />
+        <span style="background:#ffffff;"><span id="inpBackgroundColor" style="border:gray 1px solid;width:16px;height:16px;margin-right:3px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span>
+        <input type=button id="btnPick" name="btnPick" value=Pick onclick="oColor1.show(this);event.cancelBubble=true;" />
 
         <script>
         var oColor1 = new ColorPicker("oColor1");
@@ -651,21 +628,21 @@ function format(oTD)
         oColor1.url = parent.oUtil.obj.scriptPath + "color_picker.htm";
         oColor1.RENDER();
         </script>
-        <input type="button" name=btnImage id=btnImage value="Image" onclick="modalDialogShow('image_background.htm?divPreview', 380, 196);;refresh()" />
+        <input type="button" name="btnImage" id="btnImage" value="Image" onclick="modalDialogShow('image_background.htm?divPreview', 380, 196);;refresh()" />
       </td>
       <td>&nbsp;</td>
     </tr>
 
     <tr>
       <td colspan=3>
-        <div style="margin-bottom:5;margin-top:5;">
+        <div style="margin-bottom:5px;margin-top:5px;">
         <span id=txtLang name=txtLang>Preview</span>:</div>
         <table cellpadding=0 cellspacing=0>
         <tr>
-        <td valign=middle align=center>
-          <div style="overflow:auto;border:#999999 1 solid;width:360;height:70;background:#ffffff;padding:3px">
+        <td valign="middle" align="center">
+          <div style="overflow:auto;border:#999999 1px solid;width:360px;height:70px;background:#ffffff;padding:3px">
           <table style="border-collapse: collapse;" cellSpacing=0 cellPadding=0>
-          <tr><td id=divPreview style="border:#000000 1 solid;width:50;height:50;">Text 123</td></tr>
+          <tr><td id=divPreview style="border:#000000 1px solid;width:50px;height:50px;">Text 123</td></tr>
           </table>
           </div>
         </td>
@@ -675,9 +652,9 @@ function format(oTD)
     </tr>
     </table>
 
-    <input type="button" name=btnText id=btnText value=" Text Formatting " style="width:140px;margin-top:5;margin-bottom:5;"
+    <input type="button" name=btnText id=btnText value=" Text Formatting " style="width:140px;margin-top:5px;margin-bottom:5px;"
       onclick="dialogArgument=['parent', 'openerWin.document.getElementById(\'divPreview\')'];modalDialogShow('text2.htm', 511, 468)" />
-    <input type="button" name=btnBorder id=btnBorder value=" Border Style " style="width:140px;margin-top:5;margin-bottom:5;"
+    <input type="button" name=btnBorder id=btnBorder value=" Border Style " style="width:140px;margin-top:5px;margin-bottom:5px;"
       onclick="dialogArgument=['parent', 'openerWin.document.getElementById(\'divPreview\')'];modalDialogShow('border.htm', 460, 250)" />
 
   </div>
@@ -685,16 +662,16 @@ function format(oTD)
 
   <!-- CSS -->
   <div id="divStyle" style="display:none;">
-    <div style="margin-bottom:9;margin-top:3;">
+    <div style="margin:3px;margin-bottom:9px;">
     <span id=txtLang name=txtLang>CSS Text</span>: <br>
-    <textarea name="inpCSSText" style="width:100%;height:200;font-family:verdana;font-size:10px" class="inpTxt"></textarea>
+    <textarea name="inpCSSText" style="width:100%;height:200px;font-family:verdana;font-size:10px" class="inpTxt"></textarea>
     </div>
   </div>
 
   </td>
   </tr>
   <tr>
-  <td style="padding-right:8;padding-bottom:8">
+  <td style="padding-right:8px;padding-bottom:8px">
 
     <table align=right cellpadding=0 cellspacing=0>
     <tr>
@@ -725,13 +702,13 @@ function format(oTD)
   <table cellpadding=0 cellspacing=0>
   <tr>
   <td>
-    <input type="button" name=btnCancel id=btnCancel value="cancel" onclick="self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+    <input type="button" name=btnCancel id=btnCancel value="cancel" onclick="self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   <td>
     <input type="button" name=btnApply id=btnApply value="apply" onclick="doApply()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   <td>
-    <input type="button" name=btnOk id=btnOk value=" ok " onclick="doApply();self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+    <input type="button" name=btnOk id=btnOk value=" ok " onclick="doApply();self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   </tr>
   </table>

@@ -325,7 +325,7 @@ function writeFileSelections()
 
           echo "<tr style='background:".$sColorResult."'>";
           echo "<td><img src='images/".$sIcon."'></td>";
-          echo "<td valign=top width='100%'><div style='width:220px;overflow:hidden;white-space:nowrap'><u id=\"idFile".$nIndex."\" style='cursor:pointer;' onclick=\"selectFile(".$nIndex.")\">".$sItem."</u></div></td>";
+          echo "<td valign=top width='100%' align='left'><div style='width:220px;overflow:hidden;white-space:nowrap'><u id=\"idFile".$nIndex."\" style='cursor:pointer;' onclick=\"selectFile(".$nIndex.")\">".$sItem."</u></div></td>";
           echo "<td><img style='cursor:pointer;' onclick=\"downloadFile(".$nIndex.")\" src='download.gif'></td>";
           echo "<input type=hidden name=inpFile".$nIndex." id=inpFile".$nIndex." value=\"".$sCurrent_virtual."\">";
           echo "<td valign=top align=right nowrap>".round(filesize($sCurrent)/1024,1)." kb&nbsp;</td>";
@@ -564,7 +564,7 @@ function doOk()
   {
     (opener?opener:openerWin).setAssetValue(document.getElementById("inpSource").value);
     bOk=true;
-    self.close();
+    if(self.closeWin) self.closeWin(); else self.close();
   }
 function doUnload()
   {
@@ -583,7 +583,7 @@ function doUnload()
 <input type="hidden" name="inpAssetBaseFolder2" id="inpAssetBaseFolder2" value="<?php  echo $sBase2 ?>">
 <input type="hidden" name="inpAssetBaseFolder3" id="inpAssetBaseFolder3" value="<?php  echo $sBase3 ?>">
 
-<table width="100%" height="100%" align=center style="" cellpadding=0 cellspacing=0 border=0 >
+<table width="100%" height="430px" align=center style="" cellpadding=0 cellspacing=0 border=0 >
 <tr>
 <td valign=top style="height:100%;background:url('bg.gif') no-repeat right bottom;padding-top:5px;padding-left:5px;padding-right:5px;padding-bottom:0px;">
     <!--ffilter-->

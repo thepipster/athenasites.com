@@ -65,6 +65,15 @@ class PagesTable {
 
 	public static function createRevision($site_id, $page_id){
 	
+		// How many revisions do we have for this post?
+		$no_revs = DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_%d_Pages WHERE source_id = %d AND status = 'Revision'", $site_id, $page_id));
+
+		if ($no_revs >= 2){
+			// Delete the oldest revisions
+			DatabaseManager::submitQuery(DatabaseManager::prepare("DELETE FROM athena_%d_Pages WHERE source_id = %d AND status = 'Revision' AND id = 
+			(SELECT id FROM athena_%d_Pages WHERE source_id = %d AND status = 'Revision' ORDER BY created LIMIT 1) ", $site_id, $post_id));
+		}
+			
         // Get data in correct locale (SQL's NOW() doesn't do that)
         $date_str = date('Y-m-d H:i:s', time());
 		

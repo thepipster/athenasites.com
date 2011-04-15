@@ -18,19 +18,26 @@ function bodyOnLoad()
   oDoc.close();
 
   idPreview.document.body.style.border="none";
+
+  var UA = navigator.userAgent.toLowerCase();
+  var isIE9 = (UA.indexOf('msie 9.0') >= 0) ? true : false;
+
+  if(isIE9) {
+  	document.getElementById("content").height = (window.innerHeight) + "px";
+  }
   }
 </script>
 </head>
 <body style="overflow:hidden;">
 
-<table width="100%" height="100%" align="center" cellpadding="0" cellspacing="0">
+<table width="100%" height="100%" align="center" cellpadding="0" cellspacing="0" id="content">
 <td style="height:100%">
-  <iframe style="width:100%;height:100%;overflow:auto;" src="blank.gif" name="idPreview" id="idPreview"></iframe>
+  <iframe style="width:100%;height:100%;overflow:auto;" frameborder="no" src="blank.gif" name="idPreview" id="idPreview"></iframe>
 </td>
 </tr>
 <tr>
 <td class="dialogFooter" style="padding-top:10px;" align="right">
-  <input type="button" name="btnClose" id="btnClose" value="close" onclick="self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+  <input type="button" name="btnClose" id="btnClose" value="close" onclick="self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
 </td>
 </tr>
 </table>

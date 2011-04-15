@@ -13,6 +13,9 @@
 /*main toolbar style: for tabbed/grouped toolbar.*/
 .main_istoolbar{}
 
+/*fix toolbar issue in opera*/
+.main_istoolbar table {min-height:1px}
+
 .isdd_over, .isdd_norm, .isdd_sel, .isdd_disb {
     padding:2px;
     padding-top:1px;

@@ -1,6 +1,6 @@
 /***********************************************************
-InnovaStudio WYSIWYG Editor 5.1
-© 2010, InnovaStudio (www.innovastudio.com). All rights reserved.
+InnovaStudio WYSIWYG Editor 5.2
+© 2011, InnovaStudio (www.innovastudio.com). All rights reserved.
 ************************************************************/
 
 var editor = new Array();
@@ -155,11 +155,61 @@ function checkFocus()
     return true;
     };
 
-function iwe_focus()
-    {
+function iwe_focus(type) {
+
     var oEditor=document.getElementById("idContent"+this.oName);
-    if(oEditor) oEditor.contentWindow.focus();
-    };
+    if(oEditor) {
+      oEditor = oEditor.contentWindow; 
+      oEditor.focus();
+    }
+    
+    if(type && oEditor) {
+      var edtWin;
+      var range = oEditor.document.createRange();
+      if(oEditor.document.body.childNodes.length>0) {
+        var nd = null;
+        if(type=="start") {
+          nd = oEditor.document.body.childNodes[0];
+          range.selectNode(nd);
+          range.collapse(true);
+        } else {
+          nd = oEditor.document.body.childNodes[oEditor.document.body.childNodes.length-1];
+          range.selectNode(nd);
+          if(nd.nodeType==1 && nd.tagName=="BR") {
+            range.collapse(true);
+          } else {
+            range.collapse(false);
+          }
+        }
+        
+      } else {
+        range.selectNodeContents(oEditor.document.body);
+        range.collapse(false);
+      }
+
+      var sel = oEditor.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+
+      //workaround to scroll the editor to caret position.
+      // Trigger a space      
+      var evt = document.createEvent('TextEvent');
+      evt.initTextEvent('textInput', true, true, window, ' ');
+      oEditor.document.dispatchEvent(evt);
+      
+      range = sel.getRangeAt(0);
+      range.setStart(range.startContainer, range.startOffset-1);
+      range.deleteContents();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      
+    }
+    
+};
+
+function setFocus(type) {
+  this.focus(type);
+};
 
 /*** setEdit ***/
 function setEdit(oName) 
@@ -228,6 +278,7 @@ function InnovaEditor(oName)
     this.bInside=bInside;
     this.checkFocus=checkFocus;
     this.focus=iwe_focus;
+    this.setFocus = setFocus;
 
     this.doCmd=doCmd;
     this.applyParagraph=applyParagraph;
@@ -248,8 +299,6 @@ function InnovaEditor(oName)
     this.insertCustomTag=insertCustomTag;
     this.selectParagraph=selectParagraph;
     this.applyFormattingStyle=applyFormattingStyle;
-
-    this.useB=false;//not used
 
     this.hide=hide;
 
@@ -300,27 +349,12 @@ function InnovaEditor(oName)
     this.features=[];
     
     //diff: "Search","Cut","Copy","Paste","Guidelines" 
-
-    /*
-    this.buttonMap=["Save","FullScreen","Preview","Print","Search","SpellCheck",
-    "Cut","Copy","Paste","PasteWord","PasteText","|","Undo","Redo","|",
-    "ForeColor","BackColor","|","Bookmark","Hyperlink",
-    "Image","Flash","Media","ContentBlock","InternalLink","InternalImage","CustomObject","|",
-    "Table","Guidelines","Absolute","|","Characters","Line",
-    "Form","RemoveFormat","HTMLFullSource","HTMLSource","XHTMLFullSource",
-    "XHTMLSource","ClearAll","BRK", 
-    "StyleAndFormatting","Styles","|","CustomTag","Paragraph","FontName","FontSize","|",
-    "Bold","Italic",
-    "Underline","Strikethrough","Superscript","Subscript","|",
-    "JustifyLeft","JustifyCenter","JustifyRight","JustifyFull","|",
-    "Numbering","Bullets","|","Indent","Outdent","LTR","RTL"];//complete, default
-    */
     
     this.buttonMap=["Save","FullScreen","Preview","Print","Search","SpellCheck",
     "Cut","Copy","Paste","PasteWord","PasteText","Undo","Redo",
     "ForeColor","BackColor","Bookmark","Hyperlink",
-    "Image","Flash","Media","ContentBlock","InternalLink","InternalImage","CustomObject",
-    "Table","Guidelines","Absolute","Characters","Line",
+    "Image","Flash","Media","YoutubeVideo","ContentBlock","InternalLink","InternalImage","CustomObject",
+    "Table","AutoTable","Guidelines","Absolute","Characters","Line",
     "Form","RemoveFormat","HTMLFullSource","HTMLSource","XHTMLFullSource",
     "XHTMLSource","ClearAll","BRK", 
     "StyleAndFormatting","Styles","CustomTag","Paragraph","FontName","FontSize",
@@ -347,7 +381,7 @@ function InnovaEditor(oName)
     this.btnForm=true;this.btnRemoveFormat=true;
     this.btnHTMLFullSource=false;this.btnHTMLSource=false;
     this.btnXHTMLFullSource=false;this.btnXHTMLSource=true;
-    this.btnClearAll=false;
+    this.btnClearAll=false;this.btnYoutubeVideo=true;this.btnAutoTable=false;
 
     this.tabs=[
     ["tabHome", "Home", ["grpEdit", "grpFont", "grpPara"]],
@@ -360,7 +394,7 @@ function InnovaEditor(oName)
     ["grpPara", "", ["Paragraph", "Indent", "Outdent", "Styles", "StyleAndFormatting", "BRK", "JustifyLeft", "JustifyCenter", "JustifyRight", "JustifyFull", "Numbering", "Bullets"]],
     ["grpInsert", "", ["Hyperlink", "Bookmark", "BRK", "Image"]],
     ["grpTables", "", ["Table", "BRK", "Guidelines"]],
-    ["grpMedia", "", ["Media", "Flash", "BRK", "Characters", "Line"]]
+    ["grpMedia", "", ["Media", "Flash", "YoutubeVideo", "BRK", "Characters", "Line"]]
     ];
 
     this.toolbarMode=1; //0:standard, 1:tab, 2:group
@@ -426,6 +460,8 @@ function InnovaEditor(oName)
     this.html="<html>";
     this.headContent="";
     this.preloadHTML="";
+    this.originalContent = "";
+    this.isContentChanged = isContentChanged;
 
     this.onSave=function(){document.getElementById("iwe_btnSubmit"+this.oName).click()};
 
@@ -459,6 +495,8 @@ function InnovaEditor(oName)
     
     this.encodeIO=false;
     this.changeHeight = changeHeight;
+
+    this.fixWord = fixWord;
 
     this.REPLACE=REPLACE;
     this.mode="XHTMLBody";
@@ -551,6 +589,21 @@ function REPLACE(idTextArea, dvId)
 
   this.RENDER(sContent, dvId);
   };
+  
+function isContentChanged() {
+    
+    var sContent = "";
+    if(this.mode=="HTMLBody") { sContent=this.getHTMLBody(); } else
+    if(this.mode=="HTML") { sContent=this.getHTML(); } else
+    if(this.mode=="XHTMLBody") { sContent=this.getXHTMLBody(); } else
+    if(this.mode=="XHTML") { sContent=this.getXHTML();}
+    
+    if(sContent != this.originalContent) {
+      return true;
+    }
+    return false;
+};
+
 function onsubmit_new()
   {
   var sContent;
@@ -748,14 +801,14 @@ function RENDER(sPreloadHTML, dvId)
       document.write(sHTML);
     }
        
-    var clPick=document.getElementById("isClPiker"+this.oName);
+    /*var clPick=document.getElementById("isClPiker"+this.oName);
     if(!clPick) { 
       clPick = document.createElement("DIV");
       clPick.id="isClPiker"+this.oName;
       clPick.innerHTML=this.oColor1.generateHTML() + this.oColor2.generateHTML();
       document.body.insertBefore(clPick, document.body.childNodes[0]);
     }
-    
+    */
 
     this.init();
  
@@ -861,6 +914,14 @@ function initISEditor() {
       sel.addRange(range);      
       
     } catch (e) {}
+    
+    //get original editor content.
+    switch(this.mode) {
+      case "HTMLBody": this.originalContent=this.getHTMLBody(); break;
+      case "HTML":     this.originalContent=this.getHTML(); break;
+      case "XHTMLBody":this.originalContent=this.getXHTMLBody(); break;
+      case "XHTML":    this.originalContent=this.getXHTML(); break;
+    };
     
     this.focus();
     
@@ -1039,10 +1100,20 @@ function buildToolbar(tb, oEdt, btnMap) {
         if(oEdt.btnRTL)tb.addToggleButton("btnRTL"+oName,"dir",false,"btnRTL.gif",getTxt("Right To Left"));
         break;
       case "ForeColor":
-        if(oEdt.btnForeColor)tb.addButton("btnForeColor"+oName,"btnForeColor.gif",getTxt("Foreground Color"));
+        //if(oEdt.btnForeColor)tb.addButton("btnForeColor"+oName,"btnForeColor.gif",getTxt("Foreground Color"));
+
+        tb.addDropdownButton("btnForeColor"+oName,"ddForeColor"+oName,"btnForeColor.gif",getTxt("Foreground Color"));
+        var ddTable=new ISDropdown("ddForeColor"+oName);
+        ddTable.add(new ISCustomDDItem("btnInsertForeColor", oEdt.oColor1.generateHTML()));
+
         break;
       case "BackColor":
-        if(oEdt.btnBackColor)tb.addButton("btnBackColor"+oName,"btnBackColor.gif",getTxt("Background Color"));
+        //if(oEdt.btnBackColor)tb.addButton("btnBackColor"+oName,"btnBackColor.gif",getTxt("Background Color"));
+
+        tb.addDropdownButton("btnBackColor"+oName,"ddBackColor"+oName,"btnBackColor.gif",getTxt("Background Color"));
+        var ddTable=new ISDropdown("ddBackColor"+oName);
+        ddTable.add(new ISCustomDDItem("btnInsertBackColor", oEdt.oColor2.generateHTML()));
+
         break;
       case "Bookmark":
         if(oEdt.btnBookmark)tb.addButton("btnBookmark"+oName,"btnBookmark.gif",getTxt("Bookmark"));
@@ -1071,7 +1142,9 @@ function buildToolbar(tb, oEdt, btnMap) {
       case "Media":
         if(oEdt.btnMedia)tb.addButton("btnMedia"+oName,"btnMedia.gif",getTxt("Media"));
         break;
-        
+      case "YoutubeVideo":
+        if(oEdt.btnYoutubeVideo)tb.addButton("btnYoutubeVideo"+oName,"btnYoutubeVideo.gif",getTxt("YoutubeVideo"));
+        break;        
       case "ContentBlock":
         if(oEdt.btnContentBlock)tb.addButton("btnContentBlock"+oName,"btnContentBlock.gif",getTxt("Content Block"));
         break;
@@ -1114,6 +1187,9 @@ function buildToolbar(tb, oEdt, btnMap) {
           ddTblEdit.addItem("mnuCellEdit"+oName, getTxt("Edit Cell"), "btnEditCell.gif");
           }
         break;
+      case "AutoTable":
+        if(oEdt.btnAutoTable)tb.addButton("btnAutoTable"+oName,"btnAutoTable.gif",getTxt("AutoTable"));
+        break;        
       case "Absolute":
         if(oEdt.btnAbsolute)tb.addButton("btnAbsolute"+oName,"btnAbsolute.gif",getTxt("Absolute"));
         break;
@@ -1245,7 +1321,7 @@ function generateHTML()
                 ["#ff4500","#ffa500","#808000","#4682b4","#1e90ff","#9400d3","#ff1493","#a9a9a9"],
                 ["#ff6347","#ffd700","#32cd32","#87ceeb","#00bfff","#9370db","#ff69b4","#dcdcdc"],
                 ["#ffdab9","#ffffe0","#98fb98","#e0ffff","#87cefa","#e6e6fa","#dda0dd","#ffffff"]];
-    var sHTMLColor="<table id=dropColor"+this.oRenderName+" style=\"z-index:1;display:none;position:absolute;border:#9b95a6 1px solid;cursor:default;background-color:#f4f4f4;padding:2px\" unselectable=on cellpadding=0 cellspacing=0 width=145px><tr><td unselectable=on style='padding:0px;'>";
+    var sHTMLColor="<table id=dropColor"+this.oRenderName+" style=\"cursor:default;background-color:#f4f4f4;padding:2px\" unselectable=on cellpadding=0 cellspacing=0 width=145px><tr><td unselectable=on style='padding:0px;'>";
     sHTMLColor+="<table align=center cellpadding=0 cellspacing=0 border=0 unselectable=on>";
     for(var i=0;i<arrColors.length;i++)
         {
@@ -1307,8 +1383,12 @@ function refreshCustomColor()
     sHTML+="</tr></table>";
     document.getElementById("idCustomColor"+this.oRenderName).innerHTML=sHTML;
     };
+
+//deprecated, this function is no longer use, since colorpicker is rendered inside toolbar.    
 function showColorPicker(oEl)
     {
+    
+    /*
     this.onShow();
     
     this.hideAll();
@@ -1360,12 +1440,16 @@ function showColorPicker(oEl)
     box.style.zIndex=1000000;
     
     this.isActive=true;
+    */
     
     this.refreshCustomColor();
     };
 function hideColorPicker()
     {
     this.onHide();
+
+    //deprecated, this function is no longer use, since colorpicker is rendered inside toolbar.    
+    return;
     
     var box=document.getElementById("dropColor"+this.oRenderName);
     box.style.display="none";
@@ -1373,6 +1457,9 @@ function hideColorPicker()
     };
 function hideColorPickerAll()
     {
+    //deprecated, this function is no longer use, since colorpicker is rendered inside toolbar.    
+    return;
+
     for(var i=0;i<arrColorPickerObjects.length;i++)
         {
         var box=document.getElementById("dropColor"+eval(arrColorPickerObjects[i]).oRenderName);
@@ -1731,6 +1818,11 @@ function ApplyExternalStyle(oName)
       sSelector=myStyle.cssRules[i].selectorText;
       if(sSelector!=undefined)
         {
+        
+          if(sSelector.match(/table\./gi)) {
+            continue;
+          }        
+        
         sCssText=myStyle.cssRules[i].style.cssText.replace(/"/g,"&quot;");
         var itemCount = sSelector.split(".").length;
         if(itemCount>1) 
@@ -1821,7 +1913,7 @@ function openStyleSelect()
   var arrStyle=this.arrStyle;
   
   var sHTML="";
-  sHTML+="<div unselectable=on style='margin:5px;margin-top:0;margin-right:0' align=right>";
+  sHTML+="<div unselectable=on style='margin:5px;margin-top:0;margin-right:0' align='left'>";
   
   sHTML+="<table style='margin:1px;margin-top:2px;margin-bottom:3px;width:14px;height:14px;background:#f4f4f4;' cellpadding=0 cellspacing=0 unselectable=on>"+
     "<tr><td onclick=\""+this.oName+".openStyleSelect();\" onmouseover=\"this.style.border='#708090 1px solid';this.style.color='white';this.style.backgroundColor='9FA7BB'\" onmouseout=\"this.style.border='white 1px solid';this.style.color='black';this.style.backgroundColor=''\" style=\"cursor:default;padding:1px;border:white 1px solid;font-family:verdana;font-size:10px;color:#000000;line-height:9px;\" align=center valign=top unselectable=on>x</td></tr>"+
@@ -2218,12 +2310,7 @@ function replaceWithSpan(oEditor, arrStyles, sClassName, blockTag)
 /******** /NEW SPAN OPERATION *********/
 
 /*** REALTIME ***/
-/*
-function editorDoc_onkeydown(edtObj)
-    {
-  edtObj.onKeyPress();
-    realTime(edtObj);    
-    };*/
+
 function editorDoc_onkeyup(oEdt)
     {
     
@@ -2973,7 +3060,6 @@ function insertHTML(sHTML)
     range.collapse(true);
     var lastNode = docFrag.childNodes[docFrag.childNodes.length-1];
     range.insertNode(docFrag);
-    try { oEditor.document.designMode="on"; } catch (e) {}
     if (lastNode.nodeType==Node.TEXT_NODE) 
         {
         range = oEditor.document.createRange();
@@ -2990,7 +3076,7 @@ function insertHTML(sHTML)
         }
     };
     
-function insertLink(url,title,target)
+function insertLink(url,title,target,rel)
     {
     var oEditor=document.getElementById("idContent"+this.oName).contentWindow;
     var oSel=oEditor.getSelection();
@@ -3050,6 +3136,7 @@ function insertLink(url,title,target)
         var oEl = range.startContainer.childNodes[range.startOffset];
         if(oEl) {
             if(target!="" && target!=undefined)oEl.target=target;
+            if(rel!="" && rel!=undefined)oEl.setAttribute("rel", rel);
         }
     };
     
@@ -3228,12 +3315,57 @@ function doKeyPress(evt,obj)
             {
             //case 89: obj.doRedo(); break; //redo, CTRL-Y
             //case 90: obj.doUndo(); break; //undo, CTRL-Z
+            
             case 86: //CTRL-V
+              
               if(obj.pasteTextOnCtrlV) {
+                
                 evt.preventDefault();
                 modelessDialogShow(obj.scriptPath+"paste_text.htm",400,280);
+                
               } else {
-                window.setTimeout("eval('"+obj.oName+"').cleanDeprecated();",5);
+              
+              
+                var mainEditor = document.getElementById("idContent"+obj.oName).contentWindow;
+
+                //save selection
+                var oSel = mainEditor.getSelection();
+                var range = oSel.getRangeAt(0);
+
+                mainEditor.document.body.contentEditable=false;
+
+                var pasteArea = mainEditor.document.getElementById("pasteArea");
+                if(!pasteArea) {
+                  pasteArea = document.createElement("div");
+                  pasteArea.id = "pasteArea";
+                  pasteArea.style.position="absolute";
+                  pasteArea.style.left="-1000px";
+                  pasteArea.contentEditable=true;
+                  mainEditor.document.body.appendChild(pasteArea);
+                }
+                pasteArea.focus();
+
+                window.setTimeout(function() {
+
+                    var str = obj.fixWord(); 
+
+                    var mainEditor = document.getElementById("idContent"+obj.oName).contentWindow;
+                    mainEditor.document.body.contentEditable = true;
+                    mainEditor.document.body.focus();
+                    var oSel = mainEditor.getSelection();
+                    oSel.removeAllRanges();
+                    oSel.addRange(range);
+
+                    obj.insertHTML(str);
+
+                }, 100);              
+              
+                //window.setTimeout("eval('"+obj.oName+"').cleanDeprecated();",5);
+                //var me = obj;
+                //window.setTimeout(function() {
+                //  me.fixWord();                
+                //  me.cleanDeprecated();
+                //},5);
               }              
               break; 
             //case 88: obj.saveForUndo(); break; //CTRL-X
@@ -3725,15 +3857,17 @@ function tbAction(tb, id, edt, sfx) {
     case "btnForeColor": e.oColor1.show(document.getElementById(id)); break;
     case "btnBackColor": e.oColor2.show(document.getElementById(id)); break;
     case "btnBookmark": e.hide();modelessDialogShow(e.scriptPath+"bookmark.htm",245,216); break;
-    case "btnHyperlink": e.hide();modelessDialogShow(e.scriptPath+"hyperlink.htm",380,180); break;
+    case "btnHyperlink": e.hide();modelessDialogShow(e.scriptPath+"hyperlink.htm",380,220); break;
     case "btnImage": e.hide();modelessDialogShow(e.scriptPath+"image.htm",440,351); break;
     case "btnFlash": e.hide();modelessDialogShow(e.scriptPath+"flash.htm",340,275); break;
+    case "btnYoutubeVideo": e.hide();modelessDialogShow(e.scriptPath+"youtube_video.htm",340,125); break;
     case "btnMedia": e.hide();modelessDialogShow(e.scriptPath+"media.htm",340,272); break;
     case "btnContentBlock": e.hide(); eval(e.cmdContentBlock); break;
     case "btnInternalLink": e.hide(); eval(e.cmdInternalLink); break;
     case "btnInternalImage": e.hide(); eval(e.cmdInternalImage); break;
     case "btnCustomObject": e.hide(); eval(e.cmdCustomObject); break;
     case "btnGuidelines": e.runtimeBorder(true); break;
+    case "btnAutoTable": e.hide();modelessDialogShow(e.scriptPath+"table_format.htm",320,225); break;
     case "btnAbsolute": e.makeAbsolute(); break;
     case "btnCharacters": e.hide();modelessDialogShow(e.scriptPath+"characters.htm",495,160); break;
     case "btnLine": e.doCmd("InsertHorizontalRule"); break;
@@ -3841,3 +3975,53 @@ function changeHeight(v) {
   edtObj.style.height = this.height;
 
 };
+
+function fixWord()
+    {
+    
+    var oEditor = document.getElementById("idContent"+this.oName).contentWindow;
+    
+    var idSource = oEditor.document.getElementById("pasteArea");
+    
+    var allTags = idSource.getElementsByTagName("*");
+    for (var i=0;i<allTags.length;i++)
+        {
+          allTags[i].removeAttribute("class");
+          allTags[i].removeAttribute("style");
+        }    
+
+    var str=idSource.innerHTML;
+    
+    //remove the div
+    idSource.parentNode.removeChild(idSource);
+
+    str=String(str).replace(/<\\?\?xml[^>]*>/g,"");
+    str=String(str).replace(/<\/?o:p[^>]*>/g,"");
+    str=String(str).replace(/<\/?u1:p[^>]*>/gi,"");
+    str=String(str).replace(/<\/?v:[^>]*>/g,"");
+    str=String(str).replace(/<\/?o:[^>]*>/g,"");
+    str=String(str).replace(/<\/?st1:[^>]*>/g,"");
+    str=String(str).replace(/<\/?w:wrap[^>]*>/gi,"");
+    str=String(str).replace(/<\/?w:anchorlock[^>]*>/gi,"");
+
+    str=String(str).replace(/&nbsp;/g,"");//<p>&nbsp;</p>
+
+    str=String(str).replace(/<\/?SPAN[^>]*>/g,"");
+    str=String(str).replace(/<\/?FONT[^>]*>/g,"");
+    str=String(str).replace(/<\/?STRONG[^>]*>/g,"");
+
+    str=String(str).replace(/<\/?H1[^>]*>/g,"");
+    str=String(str).replace(/<\/?H2[^>]*>/g,"");
+    str=String(str).replace(/<\/?H3[^>]*>/g,"");
+    str=String(str).replace(/<\/?H4[^>]*>/g,"");
+    str=String(str).replace(/<\/?H5[^>]*>/g,"");
+    str=String(str).replace(/<\/?H6[^>]*>/g,"");
+
+    str=String(str).replace(/<\/?P[^>]*><\/P>/g,"");
+
+    str=String(str).replace(/<!--\[if[^>]*>/gi, "");
+    str=String(str).replace(/<!--\[endif\]-->/gi, "");
+    str=String(str).replace(/<!\[endif\]-->/gi, "");
+
+    return str;
+}

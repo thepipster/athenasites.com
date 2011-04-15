@@ -42,13 +42,13 @@ function drawColorPicker()
                 ["#ff4500","#ffa500","#808000","#4682b4","#1e90ff","#9400d3","#ff1493","#a9a9a9"],
                 ["#ff6347","#ffd700","#32cd32","#87ceeb","#00bfff","#9370db","#ff69b4","#dcdcdc"],
                 ["#ffdab9","#ffffe0","#98fb98","#e0ffff","#87cefa","#e6e6fa","#dda0dd","#ffffff"]]
-    var sHTMLColor="<table id=dropColor"+this.oRenderName+" style=\"z-index:1;display:none;position:absolute;border:#9b95a6 1px solid;cursor:default;background-color:#E9E8F2;padding:2px\" unselectable=on cellpadding=0 cellspacing=0 width=145px><tr><td unselectable=on>"
+    var sHTMLColor="<table id=dropColor"+this.oRenderName+" style=\"z-index:1;display:none;position:absolute;border:#9b95a6 1px solid;cursor:default;background-color:#f4f4f4;padding:2px\" unselectable=on cellpadding=0 cellspacing=0 width=145px><tr><td unselectable=on>"
     sHTMLColor+="<table align=center cellpadding=0 cellspacing=0 border=0 unselectable=on>";
     for(var i=0;i<arrColors.length;i++)
         {
         sHTMLColor+="<tr>";
         for(var j=0;j<arrColors[i].length;j++)
-            sHTMLColor+="<td onclick=\""+this.oName+".color='"+arrColors[i][j]+"';"+this.oName+".onPickColor();"+this.oName+".currColor='"+arrColors[i][j]+"';"+this.oName+".hideAll()\" onmouseover=\"this.style.border='#777777 1px solid'\" onmouseout=\"this.style.border='#E9E8F2 1px solid'\" style=\"cursor:default;padding:1px;border:#E9E8F2 1px solid;\" unselectable=on>"+
+            sHTMLColor+="<td onclick=\""+this.oName+".color='"+arrColors[i][j]+"';"+this.oName+".onPickColor();"+this.oName+".currColor='"+arrColors[i][j]+"';"+this.oName+".hideAll()\" onmouseover=\"this.style.border='#777777 1px solid'\" onmouseout=\"this.style.border='#f4f4f4 1px solid'\" style=\"cursor:default;padding:1px;border:#f4f4f4 1px solid;\" unselectable=on>"+
                 "<table style='margin:0px;width:13px;height:13px;background:"+arrColors[i][j]+";border:white 1px solid' cellpadding=0 cellspacing=0 unselectable=on>"+
                 "<tr><td unselectable=on></td></tr>"+
                 "</table></td>";
@@ -61,12 +61,12 @@ function drawColorPicker()
     //~~~ remove color & more colors ~~~~
     sHTMLColor+= "<tr>";
     sHTMLColor+= "<td unselectable=on>"+
-        "<table style='margin-left:1px;width:14px;height:14px;background:#E9E8F2;' cellpadding=0 cellspacing=0 unselectable=on>"+
+        "<table style='margin-left:1px;width:14px;height:14px;background:#f4f4f4;' cellpadding=0 cellspacing=0 unselectable=on>"+
         "<tr><td onclick=\""+this.oName+".onRemoveColor();"+this.oName+".currColor='';"+this.oName+".hideAll()\" onmouseover=\"this.style.border='#777777 1px solid'\" onmouseout=\"this.style.border='white 1px solid'\" style=\"cursor:default;padding:1px;border:white 1px solid;font-family:verdana;font-size:10px;color:black;line-height:9px;\" align=center valign=top unselectable=on>x</td></tr>"+
         "</table></td>";
     sHTMLColor+= "<td colspan=7 unselectable=on>"+
-        "<table style='margin:1px;width:117px;height:16px;background:#E9E8F2;border:white 1px solid' cellpadding=0 cellspacing=0 unselectable=on>"+
-        "<tr><td id='"+this.oName+"moreColTd' onclick=\""+this.oName+".onMoreColor();"+this.oName+".hideAll();parent.modalDialogShow('"+this.url+"?" +this.oName+ "', 440, 430, window,{'oName':'"+this.oName+"'})\" onmouseover=\"this.style.border='#777777 1px solid';this.style.background='#8d9aa7';this.style.color='#ffffff'\" onmouseout=\"this.style.border='#E9E8F2 1px solid';this.style.background='#E9E8F2';this.style.color='#000000'\" style=\"cursor:default;font-family:verdana;font-size:9px;color:black;line-height:9px;padding:1px\" align=center valign=top nowrap unselectable=on>"+this.txtMoreColors+"</td></tr>"+
+        "<table style='margin:1px;width:117px;height:16px;background:#f4f4f4;border:white 1px solid' cellpadding=0 cellspacing=0 unselectable=on>"+
+        "<tr><td id='"+this.oName+"moreColTd' onclick=\""+this.oName+".onMoreColor();"+this.oName+".hideAll();parent.modalDialogShow('"+this.url+"?" +this.oName+ "', 440, 430, window,{'oName':'"+this.oName+"'})\" onmouseover=\"this.style.border='#777777 1px solid';this.style.background='#444444';this.style.color='#ffffff'\" onmouseout=\"this.style.border='#f4f4f4 1px solid';this.style.background='#f4f4f4';this.style.color='#000000'\" style=\"cursor:default;font-family:verdana;font-size:9px;color:black;line-height:9px;padding:1px\" align=center valign=top nowrap unselectable=on>"+this.txtMoreColors+"</td></tr>"+
         "</table></td>";
     sHTMLColor+= "</tr>";
     
@@ -96,7 +96,7 @@ function refreshCustomColor()
         if(i<22)
             {
             if(i==8||i==16||i==24||i==32)sHTML+="</tr></table><table cellpadding=0 cellspacing=0><tr>"  
-            sHTML+="<td onclick=\""+this.oName+".color='"+this.customColors[i]+"';"+this.oName+".onPickColor()\" onmouseover=\"this.style.border='#777777 1px solid'\" onmouseout=\"this.style.border='#E9E8F2 1px solid'\" style=\"cursor:default;padding:1px;border:#E9E8F2 1px solid;\" unselectable=on>"+
+            sHTML+="<td onclick=\""+this.oName+".color='"+this.customColors[i]+"';"+this.oName+".onPickColor()\" onmouseover=\"this.style.border='#777777 1px solid'\" onmouseout=\"this.style.border='#f4f4f4 1px solid'\" style=\"cursor:default;padding:1px;border:#f4f4f4 1px solid;\" unselectable=on>"+
                 "   <table  style='margin:0;width:13;height:13;background:"+this.customColors[i]+";border:white 1px solid' cellpadding=0 cellspacing=0 unselectable=on>"+
                 "   <tr><td unselectable=on></td></tr>"+
                 "   </table>"+
@@ -117,10 +117,10 @@ function showColorPicker(oEl)
     //remove hilite
     var allTds = box.getElementsByTagName("TD");
     for (var i = 0; i<allTds.length; i++) {
-        allTds[i].style.border="#E9E8F2 1px solid";
+        allTds[i].style.border="#f4f4f4 1px solid";
         if (allTds[i].id==this.oName+"moreColTd") {
-            allTds[i].style.border="#E9E8F2 1px solid";
-            allTds[i].style.background="#E9E8F2";
+            allTds[i].style.border="#f4f4f4 1px solid";
+            allTds[i].style.background="#f4f4f4";
             allTds[i].style.color="#000000";
         }
     }

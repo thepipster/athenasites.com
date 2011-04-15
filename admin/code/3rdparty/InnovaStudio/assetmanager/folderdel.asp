@@ -36,7 +36,7 @@ function del()
   <table cellpadding="1" cellspacing="0">
     <tr>
     <td>
-      <input type="button" name="btnClose" id="btnClose" value="close" onclick="self.close();" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">&nbsp;<input type="button" name="btnDelete" id="btnDelete" value="delete" onclick="del()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+      <input type="button" name="btnClose" id="btnClose" value="close" onclick="if(self.closeWin)self.closeWin();else self.close();" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">&nbsp;<input type="button" name="btnDelete" id="btnDelete" value="delete" onclick="del()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
     </td>
     </tr>
   </table>

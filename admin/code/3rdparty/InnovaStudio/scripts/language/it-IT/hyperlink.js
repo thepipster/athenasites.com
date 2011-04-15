@@ -1,15 +1,16 @@
 function loadTxt()
     {
     var txtLang = document.getElementsByName("txtLang");
-	txtLang[0].innerHTML = "Fonte";
-	txtLang[1].innerHTML = "Segnalibro";
-	txtLang[2].innerHTML = "Obiettivo";
-	txtLang[3].innerHTML = "Titolo";
+  txtLang[0].innerHTML = "Fonte";
+  txtLang[1].innerHTML = "Segnalibro";
+  txtLang[2].innerHTML = "Obiettivo";
+  txtLang[3].innerHTML = "Titolo";
+    txtLang[4].innerHTML = "Rel";
 
     var optLang = document.getElementsByName("optLang");
-	optLang[0].text = "Finestra Corrente (Self)"
-	optLang[1].text = "Nuova Finestra (Blank)"
-	optLang[2].text = "Finestra Madre (Parent)"
+  optLang[0].text = "Finestra Corrente (Self)"
+  optLang[1].text = "Nuova Finestra (Blank)"
+  optLang[2].text = "Finestra Madre (Parent)"
     
     document.getElementById("btnCancel").value = "cancella";
     document.getElementById("btnInsert").value = "inserisci";

@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link href="style/editor.css" rel="stylesheet" type="text/css">
@@ -134,6 +135,8 @@ function realTime()
     inpTitle.value="";
     if(oEl.title!=null) inpTitle.value=oEl.title;//inpTitle //1.5.1
 
+	inpRel.value="";
+    if(oEl.rel!=null) inpRel.value=oEl.rel;
 
     if(sURL.substr(0,7)=="http://")
       {
@@ -237,6 +240,7 @@ function realTime()
     inpTarget.value="";
     inpTargetCustom.value="";
     inpTitle.value="";
+    inpRel.value="";
 
     inpType.value="";
     inpURL.value="";
@@ -300,6 +304,10 @@ function applyHyperlink()
 
       if(inpTitle.value=="") oEl.removeAttribute("title",0);//1.5.1
       else oEl.title=inpTitle.value;
+
+      if(inpRel.value=="") oEl.removeAttribute("rel",0);
+      else oEl.rel=inpRel.value;
+
       }
 
     parent.realTime(parent.oUtil.oName);
@@ -333,17 +341,17 @@ function changeLinkTo()
 
 function windowClose() {
   parent.oUtil.onSelectionChanged=null;
-  self.close();
+  self.closeWin();
 };
 
 </script>
 </head>
 <body style="overflow:hidden;">
 
-<table width=100% height=100% align=center cellpadding=0 cellspacing=0>
+<table width="100%" height="190px" align=center cellpadding=0 cellspacing=0 style="border-collapse:separate">
 <tr>
-<td valign=top style="padding:5;height:100%">
-  <table width=100%>
+<td valign=top style="padding:5px;">
+  <table width=100% style="border-collapse:separate">
   <tr>
     <td nowrap>
       <input type="radio" value="url" name="rdoLinkTo" class="inpRdo" checked onclick="changeLinkTo()">
@@ -363,8 +371,8 @@ function windowClose() {
         <option value="javascript:">javascript:</option>
       </select>
       </td>
-      <td width="100%"><INPUT type="text" ID="inpURL" NAME="inpURL" style="width:100%" class="inpTxt"></td>
-      <td><input type="button" value="" onclick="openAsset()" id="btnAsset" name="btnAsset" style="display:none;background:url('openAsset.gif');width:23px;height:18px;border:#a5acb2 1px solid;margin-left:1px;"></td>
+      <td width="100%"><INPUT type="text" id="inpURL" name="inpURL" style="width:100%" class="inpTxt"></td>
+      <td><input type="button" value="" onclick="openAsset()" id="btnAsset" name="btnAsset" style="display:none;background:url('openAsset.gif') no-repeat center center;width:23px;height:18px;border:#a5acb2 1px solid;margin-left:1px;"></td>
       </tr>
       </table>
     </td>
@@ -391,6 +399,10 @@ function windowClose() {
   <tr>
     <td nowrap>&nbsp;<span id="txtLang" name="txtLang">Title</span>:</td>
     <td><INPUT type="text" ID="inpTitle" NAME="inpTitle" style="width:160px" class="inpTxt"></td>
+  </tr>
+  <tr>
+    <td nowrap>&nbsp;<span id="txtLang" name="txtLang">Rel</span>:</td>
+    <td><INPUT type="text" ID="inpRel" NAME="inpRel" style="width:160px" class="inpTxt"></td>
   </tr>
   </table>
 </td>

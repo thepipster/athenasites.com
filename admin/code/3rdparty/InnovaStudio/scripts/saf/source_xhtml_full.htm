@@ -38,15 +38,15 @@ function bodyOnLoad()
   var oEditor=parent.oUtil.oEditor;
 
   //base handling
-  sHTML=parent.getOuterHTML(oEditor.document.documentElement);
-  var arrTmp=sHTML.match(/<BASE([^>]*)>/ig);
-  if(arrTmp!=null)sBaseHREF=arrTmp[0];
-  var arrBase = oEditor.document.getElementsByTagName("BASE");
-  if (arrBase.length != null) {
-    for(var i=0; i<arrBase.length; i++) {
-      arrBase[i].parentNode.removeChild(arrBase[i]);
-    }
-  }
+  //sHTML=parent.getOuterHTML(oEditor.document.documentElement);
+  //var arrTmp=sHTML.match(/<BASE([^>]*)>/ig);
+  //if(arrTmp!=null)sBaseHREF=arrTmp[0];
+  //var arrBase = oEditor.document.getElementsByTagName("BASE");
+  //if (arrBase.length != null) {
+  //  for(var i=0; i<arrBase.length; i++) {
+  //    arrBase[i].parentNode.removeChild(arrBase[i]);
+  //  }
+  //}
   //~~~~~~~~~~~~~
 
   sHTML=recur(oEditor.document.documentElement,"");

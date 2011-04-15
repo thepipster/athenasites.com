@@ -99,22 +99,13 @@ var Posts = {
 	*/
 	setEditorChangeListener : function(){
 			
-		// Get content
-		//var content = oUtil.obj.getXHTMLBody();
-		var content = oUtil.obj.getHTMLBody();
-
-		if (Posts.m_prevContent == '') {
-			Posts.m_prevContent = content;
-		}
+		var changed = oEdit1.isContentChanged();
 		
-		// If its changed, save it
-		if (content != Posts.m_prevContent){
-			//alert('Posts.setEditorChangeListener - post changed!');
+		if (changed){
+			alert('Posts.setEditorChangeListener - post changed!');
 	    	PostsFrame.onChange(); 								
-		}		
-				
-    	Posts.m_prevContent = content;   
-		
+		}
+			
 	},	
 
     // ////////////////////////////////////////////////////////////////////////

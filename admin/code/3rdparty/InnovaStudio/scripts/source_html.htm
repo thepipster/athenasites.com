@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link href="style/editor.css" rel="stylesheet" type="text/css">
@@ -41,13 +42,16 @@ function initSourceEditor()
 
   //Save sBodyHeader, sBodyFooter, sBodyTag
   var s=oEditor.document.documentElement.outerHTML;
-  var arrTmp=s.split("<BODY");
+  s = s.replace(/<body/gi, "<body");
+  s = s.replace(/<\/body>/gi, "</body>");
+
+  var arrTmp=s.split("<body");
   sBodyHeader=arrTmp[0];
   s=arrTmp[1];
-  arrTmp=s.split("</BODY>");
+  arrTmp=s.split("</body>");
   sBodyFooter=arrTmp[1];
   s=oEditor.document.documentElement.outerHTML;
-  s=s.substr(s.indexOf("<BODY"));
+  s=s.substr(s.indexOf("<body"));
   s=s.substr(0,s.indexOf(">")+1);
   sBodyTag=s;
 
@@ -62,8 +66,8 @@ function initSourceEditor()
 
   idSource.document.body.contentEditable=true;
   idSource.document.body.clearAttributes;
-  idSource.document.body.style.marginTop='4';
-  idSource.document.body.style.marginLeft='10';
+  idSource.document.body.style.marginTop='4px';
+  idSource.document.body.style.marginLeft='10px';
   idSource.document.body.style.fontFamily='Tahoma';
   idSource.document.body.style.fontSize='11px';
   idSource.document.body.style.color='black';
@@ -99,7 +103,7 @@ function doUpdate()
   var obj = parent.oUtil.obj;
 
   sBodyContent = idSource.document.body.innerText;
-  var sHTML = obj.docType + sBodyHeader + sBodyTag + sBodyContent + "</BODY>" + sBodyFooter;
+  var sHTML = obj.docType + sBodyHeader + sBodyTag + sBodyContent + "</body>" + sBodyFooter;
   obj.putHTML(sHTML);//tdk menggunakan loadHTML() krn loadHTML() hanya utk first load.
 
   //*** RUNTIME STYLES ***
@@ -162,9 +166,9 @@ function modelessDialogShow(url,width,height)
   }
 </script>
 </head>
-<body style="overflow:hidden;margin:0;background: #f4f4f4;">
+<body style="overflow:hidden;margin:0px;background: #f4f4f4;">
 
-<table width="100%" height="100%" align="center" cellpadding="0" cellspacing="0">
+<table width="100%" height="350px" align="center" cellpadding="0" cellspacing="0">
 <tr>
 <td id="idToolbar">
 
@@ -182,13 +186,13 @@ function modelessDialogShow(url,width,height)
     &nbsp;<input type="checkbox" ID="inpWrap" NAME="inpWrap" class="inpChk" onclick="doWrap()" checked> <span id="txtLang" name="txtLang">Wrap Text</span>
   </td>
   <td>
-    <input type="button" name="btnCancel" id="btnCancel" value="cancel" onclick="self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+    <input type="button" name="btnCancel" id="btnCancel" value="cancel" onclick="self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   <td>
     <input type="button" name="btnApply" id="btnApply" value="apply" onclick="doUpdate();initSourceEditor()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   <td>
-    <input type="button" name="btnOk" id="btnOk" value=" ok " onclick="doUpdate();self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+    <input type="button" name="btnOk" id="btnOk" value=" ok " onclick="doUpdate();self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   </table>
 </td>

@@ -48,6 +48,7 @@ function getTxt(s)
     case "Special Characters":return "Karakters";
     case "Image":return "Externe Afbeelding";
     case "Flash":return "Flash";
+    case "YoutubeVideo":return "Insert Youtube Video";
     case "Media":return "Media";
     case "Content Block":return "Inhoud Blok";  
     case "Internal Link":return "Interne Link";
@@ -58,6 +59,7 @@ function getTxt(s)
     case "Edit Table":return "Tabel Bewerken";
     case "Edit Cell":return "Cel Bewerken";
     case "Table":return "Tabel";
+    case "AutoTable":return "Table Auto Format";
     case "Border & Shading":return "Randen & Arcering";
     case "Show/Hide Guidelines":return "Hulplijnen Tonen/Verbergen";
     case "Absolute":return "Absoluut";

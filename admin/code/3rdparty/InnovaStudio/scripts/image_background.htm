@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link href="style/editor.css" rel="stylesheet" type="text/css">
@@ -127,18 +128,18 @@ function doApply()
 </head>
 <body style="overflow:hidden;">
 
-<table width=100% height=100% align=center cellpadding=0 cellspacing=0>
+<table width=100% height="160px" align=center cellpadding=0 cellspacing=0>
 <tr>
-<td valign=top style="padding:5;height:100%">
+<td valign=top style="padding:5px;">
 
   <table width=100%>
   <tr>
     <td nowrap><span id=txtLang name=txtLang>Image Source</span>: </td>
     <td style="width:100%">
-        <table cellpadding="0" cellspacing="0"  style="width:100%">
+        <table cellpadding="0" cellspacing="0"  style="width:100%" style="border-collapse:separate">
         <tr>
-        <td style="width:100%"><input type="text" id="inpCell_BgImgURL" name=inpCell_BgImgURL style="width:100%" class="inpTxt"></td>
-        <td><input type="button" value="" onclick="openAsset()" id="btnAsset" name="btnAsset" style="display:none;background:url('openAsset.gif');width:23px;height:18px;border:#a5acb2 1px solid;margin-left:1px;"></td>
+        <td style="width:100%;padding-right:5px;"><input type="text" id="inpCell_BgImgURL" name=inpCell_BgImgURL style="width:100%" class="inpTxt" /></td>
+        <td><input type="button" value="" onclick="openAsset()" id="btnAsset" name="btnAsset" style="display:none;background:url('openAsset.gif') center center no-repeat;width:23px;height:18px;border:#a5acb2 1px solid;margin-left:1px;"></td>
         </tr>
         </table>
     </td>
@@ -158,7 +159,7 @@ function doApply()
   <td nowrap><span id=txtLang name=txtLang>Horizontal Align</span>: &nbsp;</td>
   <td>
       <input type=radio name=inpCell_BgImgHAlign class=inpRdo checked>
-      <select name=inpCell_BgImgHAlignPos  style="width:70" class="inpSel">
+      <select name=inpCell_BgImgHAlignPos  style="width:70px" class="inpSel">
         <option value=left id="optLang" name="optLang" selected>left</option>
         <option value=center id="optLang" name="optLang">center</option>
         <option value=right id="optLang" name="optLang">right</option>
@@ -166,7 +167,7 @@ function doApply()
 
       <input type=radio name=inpCell_BgImgHAlign class=inpRdo>
       <input type=text name=inpCell_BgImgHAlignVal size=3 class="inpTxt">
-      <select name=inpCell_BgImgHAlignMeasure style="width:70" class="inpSel">
+      <select name=inpCell_BgImgHAlignMeasure style="width:70px" class="inpSel">
         <option value=px id="optLang" name="optLang">pixels</option>
         <option value="%" id="optLang" name="optLang">percent</option>
       </select>
@@ -176,7 +177,7 @@ function doApply()
   <td nowrap><span id=txtLang name=txtLang>Vertical Align</span>: </td>
   <td>
     <input type=radio name=inpCell_BgImgVAlign class=inpRdo checked>
-    <select name=inpCell_BgImgVAlignPos style="width:70" class="inpSel">
+    <select name=inpCell_BgImgVAlignPos style="width:70px" class="inpSel">
       <option value=top id="optLang" name="optLang" selected>top</option>
       <option value=middle id="optLang" name="optLang">middle</option>
       <option value=bottom id="optLang" name="optLang">bottom</option>
@@ -184,7 +185,7 @@ function doApply()
 
     <input type=radio name=inpCell_BgImgVAlign class=inpRdo>
     <input type=text name=inpCell_BgImgVAlignVal size=3 class="inpTxt">
-    <select name=inpCell_BgImgVAlignMeasure style="width:70" class="inpSel">
+    <select name=inpCell_BgImgVAlignMeasure style="width:70px" class="inpSel">
       <option value=px id="optLang" name="optLang">pixels</option>
       <option value="%" id="optLang" name="optLang">percent</option>
     </select>
@@ -199,10 +200,10 @@ function doApply()
   <table cellpadding=0 cellspacing=0>
   <tr>
   <td>
-    <input type="button" name=btnCancel id=btnCancel value="cancel" onclick="self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+    <input type="button" name=btnCancel id=btnCancel value="cancel" onclick="self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   <td>
-    <input type="button" name=btnOk id=btnOk value=" ok " onclick="doApply();self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+    <input type="button" name=btnOk id=btnOk value=" ok " onclick="doApply();self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   </tr>
   </table>

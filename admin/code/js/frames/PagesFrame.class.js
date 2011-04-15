@@ -49,7 +49,7 @@ var PagesFrame = {
 
 		// Paint editor....
         oUtil.obj.css = DataStore.m_theme.cms_page_css;
-        oUtil.obj.loadHTML(pageObj.content);
+        Pages.setContent(pageObj.content);
         
         //$('#pageContentEditor').html(pageObj.content);
         $('#pageBrowserTitle').val(pageObj.browser_title)
@@ -402,15 +402,24 @@ var PagesFrame = {
         
         // Update the page..
         //originalPage.slug = AthenaUtils.encodeSlug(originalPage.title);
-        var new_content = oUtil.obj.getHTMLBody();		
-        var new_title = $('#pageTitle').val() || $('#pageTitleDisplay').html();
-        var new_browser_title = $('#pageBrowserTitle').val();        
-        var new_status = $('#pageStatusSelector').val();
-        var new_parent_page_id = $('#pageParent').val();
-        var new_template = $('#pageTemplate').val();
-        var new_page_order = $('#pageOrder').val();
-        var new_description = $('#pageDesc').val();        
+        var new_content 		= oUtil.obj.getHTMLBody();		
+        var new_title 			= $('#pageTitle').val() || $('#pageTitleDisplay').html();
+        var new_browser_title 	= $('#pageBrowserTitle').val();        
+        var new_status 			= $('#pageStatusSelector').val();
+        var new_parent_page_id 	= $('#pageParent').val();
+        var new_template 		= $('#pageTemplate').val();
+        var new_page_order 		= $('#pageOrder').val();
+        var new_description 	= $('#pageDesc').val();        
                 
+        if (originalPage.content != new_content) alert('new content');
+		if (originalPage.title != new_title) alert('new title');
+		if (originalPage.browser_title != new_browser_title) alert('new browser title');
+		if (originalPage.status != new_status) alert('new status');
+		if (originalPage.parent_page_id!= new_parent_page_id) alert('new parent page'); 
+		if (originalPage.template != new_template) alert('new template');  
+		if (originalPage.page_order != new_page_order) alert('new order');
+		if (originalPage.description != new_description) alert('new description');		
+        
 		// Check for changes, and only save if we detect a change
 		if ((originalPage.content 		!= new_content) || 
 			(originalPage.title 		!= new_title) ||  
@@ -432,10 +441,10 @@ var PagesFrame = {
 
 		    // Force an immediate save
 		    DataStore.updatePage(originalPage);
+		    alert('saving');
 		    DataStore.save();
 		}
-		        
-                
+		                        
 	    // Repaint side-bar
         PagesSidebarFrame.repaint();                       	
 	},

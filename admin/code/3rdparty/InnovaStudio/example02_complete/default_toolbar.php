@@ -17,13 +17,14 @@
 
   <textarea id="txtContent" name="txtContent" rows=4 cols=30>
   <?php
-  function encodeHTML($sHTML)
+function encodeHTML($sHTML)
     {
-    $sHTML=ereg_replace("&","&amp;",$sHTML);
-    $sHTML=ereg_replace("<","&lt;",$sHTML);
-    $sHTML=ereg_replace(">","&gt;",$sHTML);
+    $sHTML=preg_replace('/&/i','&amp;',$sHTML);
+    $sHTML=preg_replace('/</i','&lt;',$sHTML);
+    $sHTML=preg_replace('/>/i','&gt;',$sHTML);
     return $sHTML;
     }
+
 
   if(isset($_POST["txtContent"]))
     {
@@ -57,7 +58,7 @@
     oEdit1.toolbarMode = 0;
 
     oEdit1.features=["Save","FullScreen","Preview","Print", "Search","SpellCheck",
-    "Table","Guidelines","Absolute", "Flash","Media","InternalLink","CustomObject",
+    "Table","AutoTable","Guidelines","Absolute", "Flash","Media","YoutubeVideo","InternalLink","CustomObject",
     "Form","Characters","ClearAll","XHTMLFullSource","XHTMLSource","BRK",
     "Cut","Copy","Paste","PasteWord","PasteText",
     "Undo","Redo","Hyperlink","Bookmark","Image",
@@ -75,7 +76,7 @@
     /***************************************************
     OTHER SETTINGS
     ***************************************************/
-    oEdit1.css="style/test.css";//Specify external css file here
+    oEdit1.css="style/test.css";//Specify external css file here. If Table Auto Format is enabled, the table autoformat css rules must be defined in the css file.
 
     oEdit1.cmdAssetManager = "modalDialogShow('/Editor/assetmanager/assetmanager.php',640,465)"; //Command to open the Asset Manager add-on.
     oEdit1.cmdInternalLink = "modelessDialogShow('links.htm',365,270)"; //Command to open your custom link lookup page.

@@ -5,6 +5,7 @@ function loadTxt()
     txtLang[1].innerHTML = "Bladwijzer";
     txtLang[2].innerHTML = "Doel";
     txtLang[3].innerHTML = "Titel";
+    txtLang[4].innerHTML = "Rel";
 
     var optLang = document.getElementsByName("optLang");
     optLang[0].text = "Zelfde frame"

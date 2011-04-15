@@ -5,6 +5,7 @@ function loadTxt()
     txtLang[1].innerHTML = "\u6a19\u97f1 ";
     txtLang[2].innerHTML = "\u76ee\u6a19 ";
     txtLang[3].innerHTML = "\u9023\u7d50\u6a19\u97f1 ";
+    txtLang[4].innerHTML = "Rel";
 
     var optLang = document.getElementsByName("optLang");
     optLang[0].text = "Self"

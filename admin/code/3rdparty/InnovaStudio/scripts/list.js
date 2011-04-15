@@ -58,22 +58,22 @@ function RUN()
   sHTML = "<input type=hidden name=inpObjName value='"+this.oName+"'>" +
       "<table width=100% cellpadding=0 cellspacing=0><tr><td>"
   
-  sHTML+= "<div style='border:1 #7F9DB9 solid;padding:1'>" +
-      "<div style='overflow:auto;width:120;height:80;border:1 #716F64 solid;border-bottom:1 #F1EFE2 solid;border-right:none;'>" +
-      "<table id=inpList1"+this.oName+" style='border-collapse:collapse;width:100;height:80;background:#ffffff' cellpadding=1 cellspacing=0>"
+  sHTML+= "<div style='border:1px #7F9DB9 solid;padding:1px'>" +
+      "<div style='overflow:auto;width:120px;height:80px;border:1px #716F64 solid;border-bottom:1px #F1EFE2 solid;border-right:none;'>" +
+      "<table id=inpList1"+this.oName+" style='border-collapse:collapse;width:100px;height:80px;background:#ffffff' cellpadding='1' cellspacing='0'>"
   for(var i=0;i<this.items.length;i++)
     {
     var arrItem = this.items[i]
     if(arrItem[0]=="-" && arrItem[1]=="-")
       {
-      sHTML+= "<tr><td style='height:2;border-bottom:1 silver dotted;'>" +
+      sHTML+= "<tr><td style='height:2px;border-bottom:1px silver dotted;'>" +
           " <span style='display:none'>-</span><span style='display:none'>-</span>" +
           "</td></tr>"
       }
     else
       {
       sHTML+= "<tr><td onclick=\""+this.oName+".listClick1(this,['"+arrItem[0]+"','"+arrItem[1]+"','"+arrItem[2]+"'])\" style='cursor:default'>" +
-          " <span style='display:none'>"+arrItem[0]+"</span><span style='"+ arrItem[2] +"'>" + arrItem[1] + "</span>" +
+          "<span style='display:none'>"+arrItem[0]+"</span><span style='"+ arrItem[2] +"'>" + arrItem[1] + "</span>" +
           "</td></tr>"
       }
     }
@@ -82,13 +82,13 @@ function RUN()
       "</td></tr>" +
       "</table></div></div>"
   
-  sHTML+= "</td><td style='padding-left:3;padding-right:3;' width=100% align=center>" +
-      " <input type=button style='width:100%' class=inpBtn value=' >> ' onclick='"+this.oName+".add()'><div style='padding:2'></div>" +
+  sHTML+= "</td><td style='padding-left:3px;padding-right:3px;' width='100%' align='center'>" +
+      " <input type=button style='width:100%' class=inpBtn value=' >> ' onclick='"+this.oName+".add()'><div style='padding:2px'></div>" +
       " <input type=button style='width:100%' class=inpBtn value=' << ' onclick='"+this.oName+".remove()'>" +
       "</td><td valign=top>" +
-      "<div style='border:1 #7F9DB9 solid;padding:1'>" +
-      "<div style='overflow:auto;width:120;height:80;border:1 #716F64 solid;border-bottom:1 #F1EFE2 solid;border-right:none;'>" +
-      " <table id=inpList2"+this.oName+" style='border-collapse:collapse;width:100;height:80;background:#ffffff' cellpadding=1 cellspacing=0>" +
+      "<div style='border:1px #7F9DB9 solid;padding:1px'>" +
+      "<div style='overflow:auto;width:120px;height:80px;border:1px #716F64 solid;border-bottom:1px #F1EFE2 solid;border-right:none;'>" +
+      " <table id=inpList2"+this.oName+" style='border-collapse:collapse;width:100px;height:80px;background:#ffffff' cellpadding=1 cellspacing=0>" +
       " <tr><td height=100%></td></tr></table></div></div>" +
       "</td></tr></table>"
 
@@ -108,7 +108,7 @@ function listClick1(e,arrItem)
       }
     }
   
-  this.row1 = e.parentElement //store selected row
+  this.row1 = e.parentElement; //store selected row
   }
 function listClick2()
   {
@@ -138,11 +138,11 @@ function add()
   {
   if(this.row1.style.display=="none") return;
   
-  val = this.row1.childNodes[0].childNodes[0].innerText
-  display = this.row1.childNodes[0].childNodes[1].innerText
-  style = this.row1.childNodes[0].childNodes[1].style.cssText
+  val = this.row1.childNodes[0].childNodes[0].innerText;
+  display = this.row1.childNodes[0].childNodes[1].innerText;
+  style = this.row1.childNodes[0].childNodes[1].style.cssText;
 
-  var eRow = eval("inpList2"+this.oName).insertRow(eval("inpList2"+this.oName).rows.length-1);
+  var eRow = document.getElementById("inpList2"+this.oName).insertRow(document.getElementById("inpList2"+this.oName).rows.length-1);
   var eCell = eRow.insertCell();
   eCell.innerHTML = "<span style='display:none'>"+val+"</span><span style='"+style+"'>"+display+"</span>";
   eCell.style.cursor = "default"
@@ -150,9 +150,9 @@ function add()
   
   this.row1.childNodes[0].style.background = "";
   this.row1.childNodes[0].style.color = "";
-  this.row1.style.display = "none"
+  this.row1.style.display = "none";
   
-  this.onEdit()
+  this.onEdit();
   }
 function remove()
   {

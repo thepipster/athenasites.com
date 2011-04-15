@@ -28,13 +28,14 @@ if(isset($_POST["txtContent"]))
 
   <textarea id="txtContent" name="txtContent" rows=4 cols=30>
   <?php
-  function encodeHTML($sHTML)
+function encodeHTML($sHTML)
     {
-    $sHTML=ereg_replace("&","&amp;",$sHTML);
-    $sHTML=ereg_replace("<","&lt;",$sHTML);
-    $sHTML=ereg_replace(">","&gt;",$sHTML);
+    $sHTML=preg_replace('/&/i','&amp;',$sHTML);
+    $sHTML=preg_replace('/</i','&lt;',$sHTML);
+    $sHTML=preg_replace('/>/i','&gt;',$sHTML);
     return $sHTML;
     }
+
 
   echo encodeHTML(file_get_contents($file));
   ?>

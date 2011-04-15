@@ -418,7 +418,7 @@
         if(sURL=="")return;
         
         (opener?opener:openerWin).setAssetValue(sURL);
-        self.close();
+        if(self.closeWin)self.closeWin(); else self.close();
         }
    </script>
 </head>
@@ -506,7 +506,7 @@
     
     <br/>
     <div align="right">
-    <asp:Button ID="btnClose" meta:resourcekey="btnClose" CssClass="inpBtn" runat="server" Text=" Close " OnClientClick="self.close();return false;" />
+    <asp:Button ID="btnClose" meta:resourcekey="btnClose" CssClass="inpBtn" runat="server" Text=" Close " OnClientClick="if(self.closeWin)self.closeWin(); else self.close();return false;" />
     <asp:Button ID="btnOk" meta:resourcekey="btnOk" CssClass="inpBtn" runat="server" Text="    OK    " OnClientClick="doOK();return false;" />
     </div>
 </asp:Panel>  

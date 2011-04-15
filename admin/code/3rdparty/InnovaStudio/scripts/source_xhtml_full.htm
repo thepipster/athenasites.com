@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link href="style/editor.css" rel="stylesheet" type="text/css">
@@ -214,7 +215,7 @@ function recur(oEl,sTab)
   var sHTML="";
   for(var i=0;i<oEl.childNodes.length;i++)
     {
-    var oNode=oEl.childNodes(i);
+    var oNode=oEl.childNodes[i];
 
     if(oNode.parentNode!=oEl)continue; //add this line
 
@@ -268,7 +269,7 @@ function recur(oEl,sTab)
         if(oElement==oNode)sSelThis=" selThis='selThis'"
 
         /*** format ***/ //selThis
-        sHTML+="<span style='color:#555555;background:#f7f7f7'><xmp"+sSelThis+" style='font-family:tahoma;margin-top:0px;margin-bottom:0px;'>"+s+"</xmp></span>";
+        sHTML+="<span style='color:#555555;background:#f7f7f7'><pre"+sSelThis+" style='font-family:tahoma;margin-top:0px;margin-bottom:0px;'>"+s+"</pre></span>";
         /**************/
         }
       else if(sTagName=="TITLE")
@@ -311,7 +312,7 @@ function recur(oEl,sTab)
             x=x.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\s+/ig,"#_#");
             return x});
         s=s.replace(/<([^ >]*)/ig,function(x){return x.toLowerCase()})
-        s=s.replace(/ ([^=]+)=([^" >]+)/ig," $1=\"$2\"");
+        //s=s.replace(/ ([^=]+)=([^" >]+)/ig," $1=\"$2\"");
         s=s.replace(/ ([^=]+)=/ig,function(x){return x.toLowerCase()});
         s=s.replace(/#_#/ig," ");
 
@@ -379,7 +380,7 @@ function recur(oEl,sTab)
             s = s.replace(/<\/script>/ig,"");
             s = s.replace(/^\s+/,'').replace(/\s+$/,'');
             /*** format ***/
-            sHTML+="<div><span style='color:#828282;'>//&lt;![CDATA[<xmp style='font-family:tahoma;margin-top:0px;margin-bottom:0px;'>"+s+"</xmp>//]]&gt;</span></div>";
+            sHTML+="<div><span style='color:#828282;'>//&lt;![CDATA[<pre style='font-family:tahoma;margin-top:0px;margin-bottom:0px;'>"+s+"</pre>//]]&gt;</span></div>";
             /**************/
             }
           if(sTagName=="STYLE")
@@ -392,7 +393,7 @@ function recur(oEl,sTab)
             s = s.replace(/<\/style>/ig,"");
             s = s.replace(/^\s+/,"").replace(/\s+$/,"");
             /*** format ***/
-            sHTML+="<div><span style='color:#828282;'>&lt;!--<xmp style='font-family:tahoma;margin-top:0px;margin-bottom:0px;'>"+s+"</xmp>--&gt;</span></div>";
+            sHTML+="<div><span style='color:#828282;'>&lt;!--<pre style='font-family:tahoma;margin-top:0px;margin-bottom:0px;'>"+s+"</pre>--&gt;</span></div>";
             /**************/
             }
           if(sTagName=="DIV"||sTagName=="P")
@@ -402,6 +403,11 @@ function recur(oEl,sTab)
               sHTML+="&amp;nbsp;";
               }
             else sHTML+=recur(oNode,sT+"&nbsp;&nbsp;");
+            }
+          else
+          if (sTagName == "STYLE" || sTagName=="SCRIPT")
+            {
+            //do nothing
             }
           else
             {
@@ -437,13 +443,13 @@ function recur(oEl,sTab)
         sTmp=(oNode.outerHTML.substring(2))
         sTmp=sTmp.substring(0,sTmp.length-2)
         sTmp=sTmp.replace(/^\s+/,"").replace(/\s+$/,"");
-        sHTML+= "<div><span style='background:yellow'>&lt;%<xmp style='font-family:tahoma;margin-top:0px;margin-bottom:0px;'>"+sTmp+"</xmp>%&gt;</span></div>";
+        sHTML+= "<div><span style='background:yellow'>&lt;%<pre style='font-family:tahoma;margin-top:0px;margin-bottom:0px;'>"+sTmp+"</pre>%&gt;</span></div>";
         }
       else
         {//comments
         sTmp=oNode.nodeValue;
         sTmp = sTmp.replace(/^\s+/,"").replace(/\s+$/,"");
-        sHTML+= "<div><span style='color:#828282;'>&lt;!--<xmp style='font-family:tahoma;margin-top:0px;margin-bottom:0px;'>"+sTmp+"</xmp>--&gt;</span></div>";
+        sHTML+= "<div><span style='color:#828282;'>&lt;!--<pre style='font-family:tahoma;margin-top:0px;margin-bottom:0px;'>"+sTmp+"</pre>--&gt;</span></div>";
         }
       }
     else
@@ -507,7 +513,7 @@ function modelessDialogShow(url,width,height)
   }
 </script>
 </head>
-<body onunload="bodyOnUnload()" style="overflow:hidden;margin:0;background: #f4f4f4;">
+<body style="overflow:hidden;margin:0;background: #f4f4f4;">
 
 <table width="100%" height="100%" align="center" cellpadding="0" cellspacing="0">
 <tr>
@@ -518,7 +524,7 @@ function modelessDialogShow(url,width,height)
 <tr>
 <tr>
 <td style="height:100%">
-  <iframe style="width:100%;height:100%;" frameborder="no" src="blank.gif" name="idSource" id="idSource" contentEditable="true"></iframe>
+  <iframe style="width:100%;height:350px;" frameborder="no" src="blank.gif" name="idSource" id="idSource" contentEditable="true"></iframe>
 </td>
 </tr>
 <tr>
@@ -528,13 +534,13 @@ function modelessDialogShow(url,width,height)
     &nbsp;<input type="checkbox" ID="inpWrap" NAME="inpWrap" onclick="doWrap()" checked> <span id="txtLang" name="txtLang">Wrap Text</span>
   </td>
   <td>
-    <input type="button" name="btnCancel" id="btnCancel" value="cancel" onclick="self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+    <input type="button" name="btnCancel" id="btnCancel" value="cancel" onclick="self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   <td>
     <input type="button" name="btnApply" id="btnApply" value="apply" onclick="doUpdate();initSourceEditor()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   <td>
-    <input type="button" name="btnOk" id="btnOk" value=" ok " onclick="doUpdate();self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+    <input type="button" name="btnOk" id="btnOk" value=" ok " onclick="doUpdate();self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   </table>
 </td>

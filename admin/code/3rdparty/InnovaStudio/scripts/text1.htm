@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link href="style/editor.css" rel="stylesheet" type="text/css">
@@ -163,6 +164,7 @@ function realTime()
     }
 
   inpText_LetterSpacing.value=oElement.style.letterSpacing;
+  preview();
   }
 
 function updateFont_Family()
@@ -173,7 +175,7 @@ function updateFont_Family()
   sVal = sVal.substring(0,sVal.length-2)
   inpFont_Family.value = sVal
 
-  preview()
+  preview();
   }
 
 function preview()
@@ -387,22 +389,22 @@ function doApply()
 </head>
 <body style="overflow:hidden;">
 
-<table width=100% height="100%" align=center cellpadding=0 cellspacing=0>
+<table width=100% height="435px" align=center cellpadding=0 cellspacing=0 style="border-collapse:separate">
 <tr>
-<td valign=top style="padding:5;height:100%">
+<td valign=top style="padding:5px;">
 
   <table width=100%>
   <tr>
-  <td valign=top style="padding-left:5;padding-right:5;">
+  <td valign=top style="padding-left:5px;padding-right:5px;">
 
-  <div style="margin-bottom:3;"><b><span id=txtLang name=txtLang>Font</span> :</b></div>
-  <input type=text name=inpFont_Family style="width:100%" onchange="preview()" class="inpTxt"><div style="padding:1;"></div>
+  <div style="margin-bottom:3px;"><b><span id=txtLang name=txtLang>Font</span> :</b></div>
+  <input type=text name=inpFont_Family style="width:100%" onchange="preview()" class="inpTxt"><div style="padding:1px;"></div>
   <div id=divFont_family></div>
 
   </td>
-  <td valign=top style="width:80">
+  <td valign=top style="width:80px">
 
-      <div style="margin-bottom:3;"><b><span id=txtLang name=txtLang>Style</span> :</b></div>
+      <div style="margin-bottom:3px;"><b><span id=txtLang name=txtLang>Style</span> :</b></div>
       <input type=text name=inpFont_StyleWeight style="width:100%" onchange="preview()" class="inpTxt"><div style="padding:1;"></div>
       <select size=6 style="width:100%" name="selFont_StyleWeight" onchange="inpFont_StyleWeight.value=selFont_StyleWeight.value; preview();" class="inpSel">
         <option id="optLang" name="optLang" selected>Regular</option>
@@ -412,9 +414,9 @@ function doApply()
       </select>
 
   </td>
-  <td valign=top style="padding-right:5;width:80">
+  <td valign=top style="padding-right:5px;width:80px">
 
-      <div style="margin-bottom:3;"><b><span id=txtLang name=txtLang>Size</span> :</b></div>
+      <div style="margin-bottom:3px;"><b><span id=txtLang name=txtLang>Size</span> :</b></div>
       <input type=text name=inpFont_Size style="width:100%" onchange="preview()" class="inpTxt"><div style="padding:1;"></div>
       <select size=6 style="width:100%" name="selFont_Size" onchange="inpFont_Size.value=selFont_Size.value+'pt'; preview();" class="inpSel">
         <option value="8">8</option>
@@ -438,13 +440,13 @@ function doApply()
   </td>
   </tr>
   <tr>
-  <td colspan=3 style="padding-left:5;padding-right:5;">
+  <td colspan=3 style="padding-left:5px;padding-right:5px;">
 
-      <div style="margin-bottom:5;margin-top:2;"><b><span id=txtLang name=txtLang>Foreground</span>:</b>
-      <span style="background:#ffffff">
-      <span id="inpText_ForegroundColor" style="margin-left:17;border:gray 1 solid;width:20;margin-right:3;"></span>
+      <div style="margin-bottom:5px;margin-top:2px;"><b><span id=txtLang name=txtLang>Foreground</span>:</b>
+      <span style="">
+      <span id="inpText_ForegroundColor" style="border:gray 1px solid;width:16px;height:16px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
       </span>
-      <input type=button name=btnPick1 value=Pick onclick="oColor1.show(this);event.cancelBubble=true;" />
+      <input type=button name="btnPick1" id="btnPick1" value=Pick onclick="oColor1.show(this);event.cancelBubble=true;" />
       <script>
       var oColor1 = new ColorPicker("oColor1");
       oColor1.onPickColor = new Function("inpText_ForegroundColor.style.backgroundColor=oColor1.color;preview()");
@@ -457,10 +459,10 @@ function doApply()
       </script>
 
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><span id=txtLang name=txtLang>Background</span>:</b>
-      <span style="background:#ffffff">
-      <span id="inpText_BackgroundColor" style="margin-left:17;border:gray 1 solid;width:20;margin-right:3;"></span>
+      <span style="">
+      <span id="inpText_BackgroundColor" style="border:gray 1px solid;width:16px;height:16px">&nbsp;&nbsp;&nbsp;&nbsp;</span>
       </span>
-      <input type=button name=btnPick2 value=Pick onclick="oColor2.show(this);event.cancelBubble=true;" />
+      <input type=button name="btnPick2" id="btnPick2" value=Pick onclick="oColor2.show(this);event.cancelBubble=true;" />
       <script>
       var oColor2 = new ColorPicker("oColor2");
       oColor2.onPickColor = new Function("inpText_BackgroundColor.style.backgroundColor=oColor2.color;preview()");
@@ -476,7 +478,7 @@ function doApply()
       </div>
 
 
-      <div style="margin-bottom:5;margin-top:5;">
+      <div style="margin-bottom:5px;margin-top:5px;">
       <table width=100% style="border:#CFCFCF 1px solid;background:#f0f0f0">
       <tr>
       <td><span id=txtLang name=txtLang>Decoration</span>:</td>
@@ -528,12 +530,12 @@ function doApply()
       </tr></table>
       </div>
 
-      <div style="margin-bottom:5;margin-top:5;">
+      <div style="margin-bottom:5px;margin-top:5px;">
       <b><span id=txtLang name=txtLang>Character Spacing</span> : </b><input type=text name=inpText_LetterSpacing size=3 value="" style="text-align:right" onblur="preview()" class="inpTxt">
       </div>
 
-      <div style="margin-bottom:2;">
-      <div id="divPreview" style="overflow:auto;border:1 dimgray solid;width:100%;height:70;background:#ffffff"></div>
+      <div style="margin-bottom:2px;">
+      <div id="divPreview" style="overflow:auto;border:1px dimgray solid;width:100%;height:70px;background:#ffffff"></div>
       </div>
   </td>
   </tr>
@@ -546,13 +548,13 @@ function doApply()
   <table cellpadding=0 cellspacing=0>
   <tr>
   <td>
-    <input type="button" name=btnCancel id=btnCancel value="cancel" onclick="self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+    <input type="button" name=btnCancel id=btnCancel value="cancel" onclick="self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   <td>
     <input type="button" name=btnApply id=btnApply value="apply" onclick="doApply()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   <td>
-    <input type="button" name=btnOk id=btnOk value=" ok " onclick="doApply();self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+    <input type="button" name=btnOk id=btnOk value=" ok " onclick="doApply();self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   </tr>
   </table>

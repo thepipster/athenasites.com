@@ -1,5 +1,5 @@
 /***********************************************************
-InnovaStudio WYSIWYG Editor 4.2
+InnovaStudio WYSIWYG Editor 5.2
 © 2010, InnovaStudio (www.innovastudio.com). All rights reserved.
 ************************************************************/
 var UA = navigator.userAgent.toLowerCase();
@@ -645,14 +645,20 @@ function ISWindow(id) {
           me.rt.frm.contentWindow.openerWin = opt.openerWin ? opt.openerWin : window;
           me.rt.frm.contentWindow.opener = opt.openerWin ? opt.openerWin : window;
           me.rt.frm.contentWindow.options = opt.options?opt.options:{};
+          me.rt.frm.contentWindow.closeWin=function() {
+            me.close();
+          };
           me.rt.frm.contentWindow.close=function() {
             me.close();
           };          
           if (typeof(me.rt.frm.contentWindow.bodyOnLoad) != "undefined") me.rt.frm.contentWindow.bodyOnLoad();
         } ;
     
-    if(this.rt.frm.attachEvent) this.rt.frm.attachEvent("onload", fn);
-    if(this.rt.frm.addEventListener) this.rt.frm.addEventListener("load", fn, true);
+    if(this.rt.frm.attachEvent) {
+      this.rt.frm.attachEvent("onload", fn);
+    } else {
+      this.rt.frm.addEventListener("load", fn, true);
+    }
     
     
     setTimeout(function() {me.rt.frm.src = opt.url;}, 0);
@@ -762,7 +768,7 @@ function ISWindow(id) {
     
     var s=[],j=0,ps=isIE6 || IEBackCompat ?"absolute":"fixed";
     s[j++] = "<div style='position:"+ps+";display:none;z-index:100000;background-color:#ffffff;filter:alpha(opacity=25);opacity:0.25;-moz-opacity:0.25;border:#999999 1px solid' id=\"dd$"+this.id+"\"></div>";
-    s[j++] = "<div unselectable='on' id=\""+this.id+"\" style='position:"+ps+";z-index:100000;border:#dfdfdf 6px solid;border-bottom:#dfdfdf 9px solid;display:none'>";
+    s[j++] = "<div unselectable='on' id=\""+this.id+"\" style='position:"+ps+";z-index:100000;border:#d4d4d4 6px solid;border-bottom:#d4d4d4 9px solid;display:none'>";
     s[j++] = "<div style='border:#d2d2d2 1px solid;'>";
     s[j++] = "  <div unselectable=\"on\" style=\"cursor:move;height:30px;background-image:url("+this.iconPath+"dialogbg.gif);\" onmousedown=\"ISWindow._ddMouseDown(event, '"+this.id+"');\"><span style=\"font-weight:bold;float:left;margin-top:7px;margin-left:11px;\" id=\"ttl$"+this.id+"\"></span><img src=\""+this.iconPath+"btnClose.gif\" onmousedown=\"event.cancelBubble=true;if(event.preventDefault) event.preventDefault();\" onclick=\"ISWindow.objs['" + this.id + "'].close();\" style='float:right;margin-top:5px;margin-right:5px;cursor:pointer' /></div>";
     s[j++] = "  <iframe id=\"frm$"+this.id+"\" style=\"width:100%;\" src=\""+ this.iconPath+"blank.gif" +"\" frameborder='no'></iframe>";

@@ -1,7 +1,8 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="style/editor.css" rel="stylesheet" type="text/css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="style/editor.css" rel="stylesheet" type="text/css" />
 <script>
   var sLangDir=parent.oUtil.langDir;
   document.write("<scr"+"ipt src='language/"+sLangDir+"/table_insert.js'></scr"+"ipt>");
@@ -32,10 +33,10 @@ function tableClick(oTD)
 
   for(var i=0;i<oTable.rows.length;i++)
     {
-    oCurrTR=oTable.rows(i)
+    oCurrTR=oTable.rows[i]
     for(var j=0;j<oCurrTR.cells.length;j++)
       {
-      oCurrTD=oCurrTR.cells(j)
+      oCurrTD=oCurrTR.cells[j]
       oCurrTD.style.backgroundColor="white";
       }
     }
@@ -71,9 +72,9 @@ function rowSpan()
   for(var k=1;k<oTable.rows.length-(selectedRow);k++)
     {
     var isExist=false;
-    for(var i=0;i<oTable.rows(selectedRow+k).childNodes.length;i++)
+    for(var i=0;i<oTable.rows[selectedRow+k].childNodes.length;i++)
       {
-      if(oTable.rows(selectedRow+k).childNodes(i).innerText.split(",")[1]*1==selectedCol)
+      if(oTable.rows[selectedRow+k].childNodes[i].innerText.split(",")[1]*1==selectedCol)
         {
         nActualToDelete=i
         isExist=true
@@ -83,8 +84,8 @@ function rowSpan()
       {
       if(!isFinish)
         {
-        oTD.rowSpan+=oTable.rows(selectedRow+k).childNodes(nActualToDelete).rowSpan
-        oTable.rows(selectedRow+k).deleteCell(nActualToDelete)
+        oTD.rowSpan+=oTable.rows[selectedRow+k].childNodes[nActualToDelete].rowSpan
+        oTable.rows[selectedRow+k].deleteCell(nActualToDelete)
         isFinish=true
         }
       }
@@ -94,7 +95,7 @@ function rowSpan()
 function doPreview()
   {
   if(inpCollapse.value=="Yes")
-    sTmp="BORDER-COLLAPSE: collapse"
+    sTmp="border-collapse: collapse"
   else
     sTmp="";
 
@@ -136,10 +137,10 @@ function doPreview2()
 
   for(var i=0;i<oTable.rows.length;i++)
     {
-    oCurrTR=oTable.rows(i)
+    oCurrTR=oTable.rows[i]
     for(var j=0;j<oCurrTR.cells.length;j++)
       {
-      oCurrTD=oCurrTR.cells(j)
+      oCurrTD=oCurrTR.cells[j]
       if(inpBorder.value==0)
         oCurrTD.style.border="black 1px dotted";
       else
@@ -157,7 +158,7 @@ function doInsert()
 
   parent.oUtil.obj.saveForUndo();
 
-  var oNodes=idPreview.childNodes(0).childNodes(0).childNodes
+  var oNodes=idPreview.childNodes[0].childNodes[0].childNodes
 
   if(inpCollapse.value=="Yes")
     sTmp="BORDER-COLLAPSE: collapse"
@@ -175,10 +176,10 @@ function doInsert()
   for(var i=0;i<oNodes.length;i++)
     {
     sHTML+="<tr>"
-    for(var j=0;j<oNodes(i).childNodes.length;j++)
+    for(var j=0;j<oNodes[i].childNodes.length;j++)
       {
-      nRowSpan=oNodes(i).childNodes(j).rowSpan
-      nColSpan=oNodes(i).childNodes(j).colSpan
+      nRowSpan=oNodes[i].childNodes[j].rowSpan
+      nColSpan=oNodes[i].childNodes[j].colSpan
       var sRowSpan=(nRowSpan>1 ? " rowspan="+nRowSpan+ " " : "");
       var sColSpan=(nColSpan>1 ? " colspan="+nColSpan+ " " : "");
       if(inpBorder.value==0)
@@ -223,12 +224,12 @@ function bodyOnLoad()
 <body style="overflow:hidden;">
 <!-- do not remove "filter" -->
 
-<table width=100% height="100%" align=center cellpadding=0 cellspacing=0>
+<table width=100% height="100%" align=center cellpadding=0 cellspacing=0 style="border-collapse:separate">
 <tr>
-<td valign=top style="padding:7;padding-left:10;padding-right:10">
+<td valign=top style="padding:7px;padding-left:10px;padding-right:10px">
 
 <!---->
-  <table style="margin-bottom:4">
+  <table style="margin-bottom:4px" style="border-collapse:separate">
   <tr>
     <td><span id=txtLang name=txtLang>Rows</span>:</td>
     <td><input type="text" ID="inpRows" NAME="inpRows" size=3 value=2 onchange="doPreview()" class="inpTxt"></td>
@@ -293,11 +294,10 @@ function bodyOnLoad()
   </tr>
   </table>
 
-
-  <table style="width:100%;height:140;" cellpadding=0 cellspacing=0 border=0>
+  <table style="width:100%;" cellpadding="0" cellspacing="0" style="border-collapse:separate">
   <tr>
-    <td style="background-color:ghostWhite; padding:0; border:2 inset;" height=100%>
-      <div id=idPreview style="overflow:auto;width:100%;height:97px;padding:10"></div>
+    <td style="background-color:ghostWhite; padding:0px; border:#000000 1px solid;" height="100%" width="100%">
+      <div id=idPreview style="overflow:auto;height:97px;padding:10px"></div>
     </td>
   </tr>
   <tr>
@@ -307,19 +307,18 @@ function bodyOnLoad()
     </td>
   </tr>
   </table>
-
-
 </td>
 </tr>
 <tr>
 <td class="dialogFooter" style="padding-top:10px;" align="right">
+  <br />
   <table cellpadding=0 cellspacing=0>
   <tr>
   <td>
-    <input type="button" name=btnCancel id=btnCancel value="cancel" onclick="self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+    <input type="button" name=btnCancel id=btnCancel value="cancel" onclick="self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   <td>
-    <input type="button" name=btnInsert id=btnInsert value="insert" onclick="doInsert();self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+    <input type="button" name=btnInsert id=btnInsert value="insert" onclick="doInsert();self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   </tr>
   </table>

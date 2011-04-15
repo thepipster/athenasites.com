@@ -221,14 +221,14 @@ function realTime()
     //background (harus lebih dulu dari background color)
     if(oTable.style.backgroundImage=="")
         {
-        if(oTable.style.background)
-            {
-            divPreviewTable.style.background="url('"+oTable.background+"')";
-            }
-        else
-            {
-            divPreviewTable.style.background="";
-            }
+        //if(oTable.style.background)
+        //    {
+        //    divPreviewTable.style.background="url('"+oTable.background+"')";
+        //    }
+        //else
+        //    {
+        //    divPreviewTable.style.background="";
+        //    }
         }
     else
         {
@@ -435,20 +435,20 @@ function doApply()
 
     if(inpAutoFit1[0].checked)//AutoFit to contents
         {
-        oTable.width = "";
+        oTable.removeAttribute("width");
         oTable.style.width = "";
         }
     if(inpAutoFit1[1].checked)//Fixed cell width
         {
         if(inpWidth.value!="")
             {
-            oTable.width = "";
+            oTable.removeAttribute("width");
             oTable.style.width = inpWidth.value + inpAutoFitMeasure1.value;
             }
         }
     if(inpAutoFit1[2].checked)//AutoFit to window
         {
-        oTable.width = "";
+        oTable.removeAttribute("width");
         oTable.style.width = "100%";
         }
 
@@ -474,7 +474,7 @@ function doApply()
         oTable.style.height = "100%";
         }
 
-    oTable.align = inpAlign.value;
+    if(inpAlign.value!="") oTable.align = inpAlign.value;
 
     //Berkaitan dgn "Not Available"
 
@@ -485,9 +485,11 @@ function doApply()
 
     //Background sec. umum harus lebih dulu, baru kmd background color.
     //oTable.style.background=divPreviewTable.style.background;
-    oTable.style.backgroundImage = divPreviewTable.style.backgroundImage;
-    oTable.style.backgroundRepeat = divPreviewTable.style.backgroundRepeat;
-    oTable.style.backgroundPosition = divPreviewTable.style.backgroundPosition;
+	if(divPreviewTable.style.backgroundImage!="") {
+		oTable.style.backgroundImage = divPreviewTable.style.backgroundImage;
+		oTable.style.backgroundRepeat = divPreviewTable.style.backgroundRepeat;
+		oTable.style.backgroundPosition = divPreviewTable.style.backgroundPosition;
+	}
 
     oTable.style.backgroundColor = inpBackgroundColor.style.backgroundColor;
 

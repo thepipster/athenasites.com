@@ -1,9 +1,10 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link href="style/editor.css" rel="stylesheet" type="text/css">
 <style>
-.box{cursor:default;border:#9B95A6 1 solid;width:60;background:white;}
+.box{cursor:default;border:#9b95a6 1px solid;width:80px;background-color:white;}
 </style>
 <script>
   var sLangDir=parent.oUtil.langDir;
@@ -17,33 +18,33 @@ function tabClick(n)
   switch(n)
     {
     case 1:
-      tab1.style.border="#e5e5e5 1 solid";
+      tab1.style.border="#e5e5e5 1px solid";
       tab1.style.borderBottom="none";
       tab1.style.background="#ffffff";
       tab1.style.cursor="";
 
-      tab2.style.border="#e5e5e5 1 solid";
+      tab2.style.border="#e5e5e5 1px solid";
       tab2.style.borderLeft="none";
       tab2.style.background="#e5e5e5";
-      tab2.style.cursor="hand";
+      tab2.style.cursor="pointer";
 
-      divNumbered.style.display="block"
-      divBulleted.style.display="none"
+      divNumbered.style.visibility="visible";
+      divBulleted.style.visibility="hidden";
 
       break;
     case 2:
-      tab1.style.border="#e5e5e5 1 solid";
+      tab1.style.border="#e5e5e5 1px solid";
       tab1.style.borderRight="none";
       tab1.style.background="#e5e5e5";
-      tab1.style.cursor="hand";
+      tab1.style.cursor="pointer";
 
-      tab2.style.border="#e5e5e5 1 solid";
+      tab2.style.border="#e5e5e5 1px solid";
       tab2.style.borderBottom="none";
       tab2.style.background="#ffffff";
       tab2.style.cursor="";
 
-      divNumbered.style.display="none"
-      divBulleted.style.display="block"
+      divNumbered.style.visibility="hidden";
+      divBulleted.style.visibility="visible";
 
       break;
     }
@@ -318,24 +319,24 @@ function doApply()
   }
 function doClick1(oEl)
   {
-  box1.style.border='white 2 solid';
+  box1.style.border='white 2px solid';
   box1.selThis="";
-  box2.style.border='white 2 solid';
+  box2.style.border='white 2px solid';
   box2.selThis="";
-  box3.style.border='white 2 solid';
+  box3.style.border='white 2px solid';
   box3.selThis="";
-  box4.style.border='white 2 solid';
+  box4.style.border='white 2px solid';
   box4.selThis="";
-  box5.style.border='white 2 solid';
+  box5.style.border='white 2px solid';
   box5.selThis="";
-  box6.style.border='white 2 solid';
+  box6.style.border='white 2px solid';
   box6.selThis="";
-  box7.style.border='white 2 solid';
+  box7.style.border='white 2px solid';
   box7.selThis="";
-  box8.style.border='white 2 solid';
+  box8.style.border='white 2px solid';
   box8.selThis="";
 
-  oEl.style.border='#708090 2 solid';
+  oEl.style.border='#708090 2px solid';
   oEl.selThis="selThis";
 
   inpImgURL.value="";
@@ -344,52 +345,52 @@ function doMouseOut(oEl)
   {
   if(oEl.selThis=="selThis")
     {
-    oEl.style.border='#708090 2 solid';
+    oEl.style.border='#708090 2px solid';
     }
   else
     {
-    oEl.style.border='white 2 solid';
+    oEl.style.border='white 2px solid';
     }
   }
 function doMouseOver(oEl)
   {
   if(oEl.style.border!='#708090 2px solid')
-  oEl.style.border='#e0e0e0 2 solid';
+  oEl.style.border='#e0e0e0 2px solid';
   }
 </script>
 </head>
 <body style="overflow:hidden;">
 
-<table width=100% height=100% align=center cellpadding=0 cellspacing=0>
+<table width="100%" height="250px" align=center cellpadding=0 cellspacing=0>
 <tr>
-<td valign=top style="padding-top:12;padding-left:10;padding-right:10;padding-bottom:0;height:100%">
+<td valign=top style="padding-top:12px;padding-left:10px;padding-right:10px;padding-bottom:0px;">
 
   <table cellpadding=0 cellspacing=0 style="border-collapse:collapse;width:100%;">
   <tr>
-  <td nowrap id=tab1 style="cursor:hand;padding:8;" onclick="tabClick(1)"><b><span id=txtLang name=txtLang>Numbered</span></b></td>
-  <td nowrap id=tab2 style="cursor:hand;padding:8;" onclick="tabClick(2)"><b><span id=txtLang name=txtLang>Bulleted</span></b></td>
-  <td style="border-bottom:#e5e5e5 1 solid;" width=100%></td>
+  <td nowrap id=tab1 style="cursor:pointer;padding:8px;" onclick="tabClick(1)"><b><span id=txtLang name=txtLang>Numbered</span></b></td>
+  <td nowrap id=tab2 style="cursor:pointer;padding:8px;" onclick="tabClick(2)"><b><span id=txtLang name=txtLang>Bulleted</span></b></td>
+  <td style="border-bottom:#e5e5e5 1px solid;" width="100%"></td>
   </tr>
   </table>
 
 
-  <table cellpadding=0 cellspacing=0 style="border:#e5e5e5 1 solid;border-top:none;border-collapse:collapse;width:100%;height:195;background:#ffffff;">
+  <table cellpadding=0 cellspacing=0 style="border:#e5e5e5 1px solid;border-top:none;border-collapse:collapse;width:100%;height:195px;background:#ffffff;">
   <tr>
-  <td style="padding:7;" valign=top height=100%>
+  <td style="padding:7px;" valign="top" height="100%" style="position:relative;">
 
   <!-- NUMBERED -->
-  <div id=divNumbered style="display:block;">
+  <div id=divNumbered style="visibility:visible;position:absolute;">
 
-  <table>
+  <table style="border-collapse:separate">
   <tr>
-  <td class="box" style="padding:1">
-    <table cellpadding="0" cellspacing="0">
+  <td class="box" style="padding:1px">
+    <table cellpadding="0" cellspacing="0" width="100%">
     <tr>
-    <td id="box1" style="color:#555555;border:white 2 solid;padding:3;padding-right:0"
+    <td id="box1" style="color:#555555;border:white 2px solid;padding:3px;padding-right:0px"
       onclick="doClick1(this)"
       onmouseover="doMouseOver(this)"
       onmouseout="doMouseOut(this)">
-    <ol style="margin-left:27;margin-right:6;margin-top:2;margin-bottom:2" type="1">
+    <ol style="margin-top:2px;margin-bottom:2px" type="1">
     <li>-----</li>
     <li>-----</li>
     <li>-----</li>
@@ -402,11 +403,11 @@ function doMouseOver(oEl)
   <td class="box">
     <table cellpadding="0" cellspacing="0">
     <tr>
-    <td id="box2" style="color:#555555;border:white 2 solid;padding:3;padding-right:0"
+    <td id="box2" style="color:#555555;border:white 2px solid;padding:3px;padding-right:0px"
       onclick="doClick1(this)"
       onmouseover="doMouseOver(this)"
       onmouseout="doMouseOut(this)">
-    <ol style="margin-left:27;margin-right:6;margin-top:2;margin-bottom:2" type="A">
+    <ol style="margin-top:2px;margin-bottom:2px" type="A">
     <li>-----</li>
     <li>-----</li>
     <li>-----</li>
@@ -419,11 +420,11 @@ function doMouseOver(oEl)
   <td class="box">
     <table cellpadding="0" cellspacing="0">
     <tr>
-    <td id="box3" style="color:#555555;border:white 2 solid;padding:3;padding-right:0"
+    <td id="box3" style="color:#555555;border:white 2px solid;padding:3px;padding-right:0px"
       onclick="doClick1(this)"
       onmouseover="doMouseOver(this)"
       onmouseout="doMouseOut(this)">
-    <ol style="margin-left:27;margin-right:6;margin-top:2;margin-bottom:2" type="a">
+    <ol style="margin-left:6px;margin-right:6px;margin-top:2px;margin-bottom:2px" type="a">
     <li>-----</li>
     <li>-----</li>
     <li>-----</li>
@@ -437,11 +438,11 @@ function doMouseOver(oEl)
   <td class="box">
     <table cellpadding="0" cellspacing="0">
     <tr>
-    <td id="box4" style="color:#555555;border:white 2 solid;padding:3;padding-right:0"
+    <td id="box4" style="color:#555555;border:white 2px solid;padding:3px;padding-right:0px"
       onclick="doClick1(this)"
       onmouseover="doMouseOver(this)"
       onmouseout="doMouseOut(this)">
-    <ol style="margin-left:27;margin-right:6;margin-top:2;margin-bottom:2" type="I">
+    <ol style="margin-left:6px;margin-right:6px;margin-top:2px;margin-bottom:2px" type="I">
     <li>-----</li>
     <li>-----</li>
     <li>-----</li>
@@ -454,11 +455,11 @@ function doMouseOver(oEl)
   <td class="box">
     <table cellpadding="0" cellspacing="0">
     <tr>
-    <td id="box5" style="color:#555555;border:white 2 solid;padding:3;padding-right:0"
+    <td id="box5" style="color:#555555;border:white 2px solid;padding:3px;padding-right:0px"
       onclick="doClick1(this)"
       onmouseover="doMouseOver(this)"
       onmouseout="doMouseOut(this)">
-    <ol style="margin-left:27;margin-right:6;margin-top:2;margin-bottom:2" type="i">
+    <ol style="margin-left:6px;margin-right:6px;margin-top:2px;margin-bottom:2px" type="i">
     <li>-----</li>
     <li>-----</li>
     <li>-----</li>
@@ -471,13 +472,13 @@ function doMouseOver(oEl)
   <td>&nbsp;</td>
   </tr>
   <tr>
-  <td nowrap colspan="5" style="padding-top:5">
-    <span id="txtLang" name="txtLang" style="width:90">Starting Number</span>: <input class="inpTxt" type="text" name="inpStarting" value="1" size="3">
+  <td nowrap colspan="5" style="padding-top:5px">
+    <span id="txtLang" name="txtLang" style="width:90px">Starting Number</span>: <input class="inpTxt" type="text" name="inpStarting" value="1" size="3">
   </td>
   </tr>
   <tr>
-  <td nowrap colspan="5" style="padding-top:5">
-    <span id="txtLang" name="txtLang" style="width:90">Left Margin</span>:
+  <td nowrap colspan="5" style="padding-top:5px">
+    <span id="txtLang" name="txtLang" style="width:90px">Left Margin</span>:
     <select name="inpLeftMargin1" class="inpSel">
       <option value=""></option>
       <option value="1em" selected>1em</option>
@@ -495,18 +496,18 @@ function doMouseOver(oEl)
   </div>
 
   <!-- BULLETED -->
-  <div id="divBulleted" style="display:none;">
+  <div id="divBulleted" style="visibility:hidden;position:absolute;">
 
   <table>
   <tr>
-  <td class="box" style="padding:1">
+  <td class="box" style="padding:1px">
     <table cellpadding="0" cellspacing="0">
     <tr>
-    <td id="box6" style="color:#555555;border:white 2 solid;padding:3;padding-right:0"
+    <td id="box6" style="color:#555555;border:white 2px solid;padding:3px;padding-right:0px"
       onclick="doClick1(this)"
       onmouseover="doMouseOver(this)"
       onmouseout="doMouseOut(this)">
-    <ul style="margin-left:21;margin-right:12;margin-top:2;margin-bottom:2" type="disc">
+    <ul style="margin-left:6px;margin-right:6px;margin-top:2px;margin-bottom:2px" type="disc">
     <li>-----</li>
     <li>-----</li>
     <li>-----</li>
@@ -519,11 +520,11 @@ function doMouseOver(oEl)
   <td class="box">
     <table cellpadding="0" cellspacing="0">
     <tr>
-    <td id="box7" style="color:#555555;border:white 2 solid;padding:3;padding-right:0"
+    <td id="box7" style="color:#555555;border:white 2px solid;padding:3px;padding-right:0px"
       onclick="doClick1(this)"
       onmouseover="doMouseOver(this)"
       onmouseout="doMouseOut(this)">
-    <ul style="margin-left:21;margin-right:12;margin-top:2;margin-bottom:2" type="circle">
+    <ul style="margin-left:6px;margin-right:6px;margin-top:2px;margin-bottom:2px" type="circle">
     <li>-----</li>
     <li>-----</li>
     <li>-----</li>
@@ -536,11 +537,11 @@ function doMouseOver(oEl)
   <td class="box">
     <table cellpadding="0" cellspacing="0">
     <tr>
-    <td id="box8" style="color:#555555;border:white 2 solid;padding:3;padding-right:0"
+    <td id="box8" style="color:#555555;border:white 2px solid;padding:3px;padding-right:0px"
       onclick="doClick1(this)"
       onmouseover="doMouseOver(this)"
       onmouseout="doMouseOut(this)">
-    <ul style="margin-left:21;margin-right:12;margin-top:2;margin-bottom:2" type="square">
+    <ul style="margin-left:6px;margin-right:6px;margin-top:2px;margin-bottom:2px" type="square">
     <li>-----</li>
     <li>-----</li>
     <li>-----</li>
@@ -557,24 +558,24 @@ function doMouseOver(oEl)
   </tr>
   -->
   <tr>
-  <td colspan="5" style="padding-top:5;height:57">&nbsp;
+  <td colspan="5" style="padding-top:5px;height:57px">&nbsp;
   </td>
   </tr>
   <tr>
-  <td colspan="5" style="padding-top:5">
+  <td colspan="5" style="padding-top:5px">
     <table cellpadding="0" cellspacing="0" style="width:100%" id="Table1">
     <tr>
-    <td nowrap><span id="txtLang" name="txtLang" style="width:90">Using Image - url</span>:</td>
-    <td style="width:100%;padding-left:3"><input type="text" id="inpImgURL" name=inpImgURL style="width:90px" class="inpTxt"></td>
-    <td><input type="button" value="" onclick="openAsset()" id="btnAsset" name="btnAsset" style="display:none;background:url('openAsset.gif');width:23px;height:18px;border:#a5acb2 1px solid;margin-left:1px;"></td>
+    <td nowrap><span id="txtLang" name="txtLang" style="width:90px">Using Image - url</span>:</td>
+    <td style="width:100%;padding-left:3px"><input type="text" id="inpImgURL" name=inpImgURL style="width:150px" class="inpTxt"></td>
+    <td><input type="button" value="" onclick="openAsset()" id="btnAsset" name="btnAsset" style="display:none;background:url('openAsset.gif') no-repeat center center;width:23px;height:18px;border:#a5acb2 1px solid;margin-left:1px;"></td>
     </tr>
     </table>
   </td>
   </tr>
 
   <tr>
-  <td nowrap colspan="5" style="padding-top:5">
-    <span id="txtLang" name="txtLang" style="width:90">Left Margin</span>:
+  <td nowrap colspan="5" style="padding-top:5px">
+    <span id="txtLang" name="txtLang" style="width:90px">Left Margin</span>:
     <select name="inpLeftMargin2" class="inpSel">
       <option value=""></option>
       <option value="1em" selected>1em</option>
@@ -602,13 +603,13 @@ function doMouseOver(oEl)
   <table cellpadding=0 cellspacing=0>
   <tr>
   <td>
-    <input type="button" name=btnCancel id=btnCancel value="cancel" onclick="self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+    <input type="button" name=btnCancel id=btnCancel value="cancel" onclick="self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   <td>
     <input type="button" name=btnApply id=btnApply value="apply" onclick="doApply()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   <td>
-    <input type="button" name=btnOk id=btnOk value=" ok " onclick="doApply();self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+    <input type="button" name=btnOk id=btnOk value=" ok " onclick="doApply();self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   </tr>
   </table>

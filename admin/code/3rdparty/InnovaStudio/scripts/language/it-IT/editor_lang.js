@@ -48,6 +48,7 @@ function getTxt(s)
     case "Special Characters":return "Carattere Speciale";
     case "Image":return "Immagine";
     case "Flash":return "Flash";
+    case "YoutubeVideo":return "Insert Youtube Video";
     case "Media":return "Video & Audio";
     case "Content Block":return "Blocco Contenuto"; 
     case "Internal Link":return "Link Interno";
@@ -57,6 +58,7 @@ function getTxt(s)
     case "Edit Table":return "Modifica Tabella";
     case "Edit Cell":return "Modifica Cella";
     case "Table":return "Tabella";
+    case "AutoTable":return "Table Auto Format";
     case "Border & Shading":return "Bordi & Gradazioni";
     case "Show/Hide Guidelines":return "Mostra/Nascondi griglia";
     case "Absolute":return "Assoluto";

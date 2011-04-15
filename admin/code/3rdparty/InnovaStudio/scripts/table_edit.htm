@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link href="style/editor.css" rel="stylesheet" type="text/css">
@@ -28,20 +29,20 @@ function tabClick(n)
   switch(n)
     {
     case 1:
-      tab1.style.border="#e5e5e5 1 solid";
+      tab1.style.border="#e5e5e5 1px solid";
       tab1.style.borderBottom="none";
       tab1.style.background="#ffffff";
       tab1.style.cursor="";
 
-      tab2.style.border="#e5e5e5 1 solid";
+      tab2.style.border="#e5e5e5 1px solid";
       tab2.style.borderLeft="none";
       tab2.style.background="#e5e5e5";
-      tab2.style.cursor="hand";
+      tab2.style.cursor="pointer";
 
-      tab3.style.border="#e5e5e5 1 solid";
+      tab3.style.border="#e5e5e5 1px solid";
       tab3.style.borderLeft="none";
       tab3.style.background="#e5e5e5";
-      tab3.style.cursor="hand";
+      tab3.style.cursor="pointer";
 
       divAutoFit.style.display="block"
       divProperties.style.display="none"
@@ -49,20 +50,20 @@ function tabClick(n)
 
       break;
     case 2:
-      tab1.style.border="#e5e5e5 1 solid";
+      tab1.style.border="#e5e5e5 1px solid";
       tab1.style.borderRight="none";
       tab1.style.background="#e5e5e5";
-      tab1.style.cursor="hand";
+      tab1.style.cursor="pointer";
 
-      tab2.style.border="#e5e5e5 1 solid";
+      tab2.style.border="#e5e5e5 1px solid";
       tab2.style.borderBottom="none";
       tab2.style.background="#ffffff";
       tab2.style.cursor="";
 
-      tab3.style.border="#e5e5e5 1 solid";
+      tab3.style.border="#e5e5e5 1px solid";
       tab3.style.borderLeft="none";
       tab3.style.background="#e5e5e5";
-      tab3.style.cursor="hand";
+      tab3.style.cursor="pointer";
 
       divAutoFit.style.display="none"
       divProperties.style.display="block"
@@ -70,16 +71,16 @@ function tabClick(n)
 
       break;
     case 3:
-      tab1.style.border="#e5e5e5 1 solid";
+      tab1.style.border="#e5e5e5 1px solid";
       tab1.style.borderRight="none";
       tab1.style.background="#e5e5e5";
-      tab1.style.cursor="hand";
+      tab1.style.cursor="pointer";
 
-      tab2.style.border="#e5e5e5 1 solid";
+      tab2.style.border="#e5e5e5 1px solid";
       tab2.style.background="#e5e5e5";
-      tab2.style.cursor="hand";
+      tab2.style.cursor="pointer";
 
-      tab3.style.border="#e5e5e5 1 solid";
+      tab3.style.border="#e5e5e5 1px solid";
       tab3.style.borderBottom="none";
       tab3.style.background="#ffffff";
       tab3.style.cursor="";
@@ -141,7 +142,9 @@ function realTime()
   inpAlign.value = oTable.align;
 
   if(oTable.caption) inpCaption.value=oTable.caption.innerText;
-  inpSummary.value=oTable.getAttribute("summary");
+  if(oTable.getAttribute("summary")) {
+  	inpSummary.value=oTable.getAttribute("summary");
+  }
 
   //Margin
   //Berkaitan dgn "Not Available"
@@ -372,12 +375,12 @@ function doApply()
     return;
     }
 
-  if(inpAutoFit1(0).checked)//AutoFit to contents
+  if(inpAutoFit1[0].checked)//AutoFit to contents
     {
     oTable.width = "";
     oTable.style.width = "";
     }
-  if(inpAutoFit1(1).checked)//Fixed cell width
+  if(inpAutoFit1[1].checked)//Fixed cell width
     {
     if(inpWidth.value!="")
       {
@@ -385,18 +388,18 @@ function doApply()
       oTable.style.width = inpWidth.value + inpAutoFitMeasure1.value;
       }
     }
-  if(inpAutoFit1(2).checked)//AutoFit to window
+  if(inpAutoFit1[2].checked)//AutoFit to window
     {
     oTable.width = "";
     oTable.style.width = "100%";
     }
 
-  if(inpAutoFit2(0).checked)//AutoFit to contents
+  if(inpAutoFit2[0].checked)//AutoFit to contents
     {
     oTable.height = "";
     oTable.style.height = "";
     }
-  if(inpAutoFit2(1).checked)//Fixed cell height
+  if(inpAutoFit2[1].checked)//Fixed cell height
     {
     if(inpHeight.value!="")
       {
@@ -404,7 +407,7 @@ function doApply()
       oTable.style.height = inpHeight.value + inpAutoFitMeasure2.value;
       }
     }
-  if(inpAutoFit2(2).checked)//AutoFit to window
+  if(inpAutoFit2[2].checked)//AutoFit to window
     {
     oTable.height = "";
     oTable.style.height = "100%";
@@ -510,42 +513,40 @@ function doApply()
 
 <table width=100% height=100% align=center cellpadding=0 cellspacing=0>
 <tr>
-<td valign=top style="padding-top:15;padding-left:13;padding-right:13;padding-bottom:0;height:100%">
+<td valign=top style="padding-top:15px;padding-left:13px;padding-right:13px;padding-bottom:0px;height:100%">
 
   <table cellpadding=0 cellspacing=0 style="border-collapse:collapse;width:100%;">
   <tr>
-  <td id=tab1 style="cursor:hand;padding:8; border:#e5e5e5 1 solid;border-bottom:none;background:#ffffff;cursor:" onclick="tabClick(1)" nowrap><b><span id=txtLang name=txtLang>AutoFit</span></b></td>
-  <td id=tab2 style="cursor:hand;padding:8; border:#e5e5e5 1 solid;border-left:none;background:#e5e5e5;cursor:hand" onclick="tabClick(2)" nowrap><b><span id=txtLang name=txtLang>Properties</span></b></td>
-  <td id=tab3 style="cursor:hand;padding:8; border:#e5e5e5 1 solid;border-left:none;background:#e5e5e5;cursor:hand" onclick="tabClick(3)" nowrap><b><span id=txtLang name=txtLang>Style</span></b></td>
-  <td style="border-bottom:#e5e5e5 1 solid;" width=100%></td>
+  <td id=tab1 style="cursor:pointer;padding:8px; border:#e5e5e5 1px solid;border-bottom:none;background:#ffffff;cursor:" onclick="tabClick(1)" nowrap><b><span id=txtLang name=txtLang>AutoFit</span></b></td>
+  <td id=tab2 style="cursor:pointer;padding:8px; border:#e5e5e5 1px solid;border-left:none;background:#e5e5e5;cursor:pointer" onclick="tabClick(2)" nowrap><b><span id=txtLang name=txtLang>Properties</span></b></td>
+  <td id=tab3 style="cursor:pointer;padding:8px; border:#e5e5e5 1px solid;border-left:none;background:#e5e5e5;cursor:pointer" onclick="tabClick(3)" nowrap><b><span id=txtLang name=txtLang>Style</span></b></td>
+  <td style="border-bottom:#e5e5e5 1px solid;" width=100%></td>
   </tr>
   </table>
 
 
-  <table cellpadding=0 cellspacing=0 style="border:#e5e5e5 1 solid;border-top:none;border-collapse:collapse;width:100%;height:208px;background:#ffffff;">
+  <table cellpadding=0 cellspacing=0 style="border:#e5e5e5 1px solid;border-top:none;border-collapse:collapse;width:100%;height:298px;background:#ffffff;">
   <tr>
-  <td style="padding:10;" valign=top nowrap>
+  <td style="padding:10px;" valign=top nowrap>
 
   <!-- AUTOFIT -->
   <div id=divAutoFit style="display:block;">
-    <div style="margin-bottom:7;margin-top:3;">
-      <span id=txtLang name=txtLang>Width</span>:</div>
-    <input type="radio" class=inpRdo name="inpAutoFit1">
-      <span id=txtLang name=txtLang>AutoFit to contents</span><br>
-    <input type="radio" class=inpRdo name="inpAutoFit1">
-      <span id=txtLang name=txtLang>Fixed table width</span>:
+    <div style="margin-bottom:7px;margin-top:3px;">
+
+    <span id=txtLang name=txtLang>Width</span>:</div>
+    <input type="radio" class=inpRdo name="inpAutoFit1"><span id=txtLang name=txtLang>AutoFit to contents</span><br>
+
+    <input type="radio" class=inpRdo name="inpAutoFit1"><span id=txtLang name=txtLang>Fixed table width</span>:
     <input type="text" name="inpWidth" size=3 onblur="inpAutoFit1[1].checked=true" class="inpTxt">
     <select ID="inpAutoFitMeasure1" name="inpAutoFitMeasure1" class="inpSel">
       <option value="px" id="optLang" name="optLang">pixels</option>
       <option value="%" id="optLang" name="optLang">percent</option>
     </select><br>
-    <span style="height:18"></span>
-    <input type="radio" class=inpRdo name="inpAutoFit1">
-      <span id=txtLang name=txtLang>AutoFit to window</span>
+    <input type="radio" class=inpRdo name="inpAutoFit1"><span id=txtLang name=txtLang>AutoFit to window</span>
 
     <br><br>
 
-    <div style="margin-bottom:7;margin-top:3;">
+    <div style="margin-bottom:7px;margin-top:3px;">
       <span id=txtLang name=txtLang>Height</span>:</div>
     <input type="radio" class=inpRdo name="inpAutoFit2">
       <span id=txtLang name=txtLang>AutoFit to contents</span><br>
@@ -556,7 +557,6 @@ function doApply()
       <option value="px" id="optLang" name="optLang">pixels</option>
       <option value="%" id="optLang" name="optLang">percent</option>
     </select><br>
-    <span style="height:18"></span>
     <input type="radio" class=inpRdo name="inpAutoFit2">
       <span id=txtLang name=txtLang>AutoFit to window</span>
   </div>
@@ -614,12 +614,12 @@ function doApply()
       </table>
     </td>
     <tr>
-    <td style="padding-top:5;padding-bottom:5">
+    <td style="padding-top:5px;padding-bottom:5px">
       <span id=txtLang name=txtLang>Background</span>:
     </td>
     <td style="padding-top:5;padding-bottom:5">
-      <span style="background:#ffffff"><span id="inpBackgroundColor" style="border:gray 1 solid;width:20;margin-right:3;"></span></span>
-      <input type=button name=btnPick value=Pick onclick="oColor1.show(this);event.cancelBubble=true;" />
+      <span style="background:#ffffff"><span id="inpBackgroundColor" style="border:gray 1px solid;width:16px;height:16px;margin-right:3px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span>
+      <input type=button name="btnPick" id="btnPick" value=Pick onclick="oColor1.show(this);event.cancelBubble=true;" />
       <script>
       var oColor1 = new ColorPicker("oColor1");
       oColor1.onPickColor = new Function("inpBackgroundColor.style.backgroundColor=oColor1.color;");
@@ -631,7 +631,7 @@ function doApply()
       oColor1.RENDER();
       </script>
       <table id=divPreviewTable name=divPreviewTable style="display:none"><tr><td></td></tr></table>
-      <input type="button" name=btnImage id=btnImage value="Image" onclick="modalDialogShow('image_background.htm?divPreviewTable', 380, 196);" />
+      <input type="button" name="btnImage" id="btnImage" value="Image" onclick="modalDialogShow('image_background.htm?divPreviewTable', 380, 196);" />
     </td>
     <td>&nbsp;</td>
     </tr>
@@ -697,9 +697,9 @@ function doApply()
 
   <!-- CSS -->
   <div id="divStyle" style="display:none;">
-    <div style="margin-bottom:9;margin-top:3;">
+    <div style="margin-bottom:9px;margin-top:3px;">
     <span id=txtLang name=txtLang>CSS Text</span>: <br>
-    <textarea name="inpCSSText" style="width:100%;height:158;font-family:verdana;font-size:10px" class="inpTxt"></textarea>
+    <textarea name="inpCSSText" style="width:100%;height:158px;font-family:verdana;font-size:10px" class="inpTxt"></textarea>
     </div>
   </div>
 
@@ -715,13 +715,13 @@ function doApply()
   <table cellpadding=0 cellspacing=0>
   <tr>
   <td>
-    <input type="button" name=btnCancel id=btnCancel value="cancel" onclick="self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+    <input type="button" name=btnCancel id=btnCancel value="cancel" onclick="self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   <td>
     <input type="button" name=btnApply id=btnApply value="apply" onclick="doApply()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   <td>
-    <input type="button" name=btnOk id=btnOk value=" ok " onclick="doApply();self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+    <input type="button" name=btnOk id=btnOk value=" ok " onclick="doApply();self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   </tr>
   </table>

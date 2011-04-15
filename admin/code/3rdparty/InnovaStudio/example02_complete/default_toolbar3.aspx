@@ -44,8 +44,8 @@
             Dim grpFont As ISGroup = New ISGroup("grpFont", "", New String() {"FontName", "FontSize", "Strikethrough", "Superscript", "BRK", "Bold", "Italic", "Underline", "ForeColor", "BackColor"})
             Dim grpPara As ISGroup = New ISGroup("grpPara", "", New String() {"Paragraph", "Indent", "Outdent", "Styles", "StyleAndFormatting", "BRK", "JustifyLeft", "JustifyCenter", "JustifyRight", "JustifyFull", "Numbering", "Bullets"})
             Dim grpInsert As ISGroup = New ISGroup("Insert", "", New String() {"Hyperlink", "Bookmark", "BRK", "Image"})
-            Dim grpTables As ISGroup = New ISGroup("grpTables", "", New String() {"Table", "BRK", "Guidelines"})
-            Dim grpMedia As ISGroup = New ISGroup("grpMedia", "", New String() {"Media", "Flash", "CustomName1", "CustomName2", "CustomName3", "BRK", "CustomTag", "Characters", "Line"}) '"Absolute"
+            Dim grpTables As ISGroup = New ISGroup("grpTables", "", New String() {"Table", "BRK", "Guidelines", "AutoTable"})
+            Dim grpMedia As ISGroup = New ISGroup("grpMedia", "", New String() {"Media", "Flash", "YoutubeVideo", "CustomName1", "CustomName2", "CustomName3", "BRK", "CustomTag", "Characters", "Line"}) '"Absolute"
             Dim grpResource As ISGroup = New ISGroup("grpResource", "", New String() {"InternalLink", "BRK", "CustomObject"})
 
             Dim tabHome = New ISTab("tabHome", "Home")
@@ -63,7 +63,7 @@
             '***************************************************
             oEdit1.onSave="document.forms.Form1.elements.btnSubmit.click();"
             
-            oEdit1.Css="style/test.css" 'Specify external css file here
+            oEdit1.Css="style/test.css" 'Specify external css file here. If Table Auto Format is enabled, the table autoformat css rules must be defined in the css file.
             
             'oEdit1.EditingStyles.add(new EditingStyle("BODY",false,"","font-family:Verdana,Arial,Helvetica;font-size:x-small;"))
             'oEdit1.EditingStyles.add(new EditingStyle(".ScreenText",true,"Screen Text","font-family:Tahoma;"))

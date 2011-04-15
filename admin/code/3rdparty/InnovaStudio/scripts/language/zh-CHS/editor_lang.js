@@ -48,6 +48,7 @@ function getTxt(s)
     case "Special Characters":return "\u7279\u6b8a\u5b57\u7b26 ";
     case "Image":return "\u4e0a\u4f20\u56fe\u50cf ";
     case "Flash":return "\u4e0a\u4f20\ Flash";
+    case "YoutubeVideo":return "Insert Youtube Video";
     case "Media":return "\u4e0a\u4f20\u89c6\u9891\u6587\u4ef6 ";
     case "Content Block":return "Content Block";
     case "Internal Link":return "\u5185\u90e8\u8fde\u7ed3 ";
@@ -58,6 +59,7 @@ function getTxt(s)
     case "Edit Table":return "\u8868\u683c\u5c5e\u6027 ";
     case "Edit Cell":return "\u5355\u5143\u683c\u5c5e\u6027 ";
     case "Table":return "\u8868\u683c ";
+    case "AutoTable":return "Table Auto Format";
     case "Border & Shading":return "\u8fb9\u6846\u548c\u9634\u5f71 ";
     case "Show/Hide Guidelines":return "\u663e\u793a /\u9690\u85cf\u7f51\u683c\u7ebf ";
     case "Absolute":return "\u7edd\u5bf9\u503c ";

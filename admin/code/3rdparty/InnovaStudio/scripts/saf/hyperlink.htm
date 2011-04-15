@@ -94,6 +94,7 @@ function realTime()
     var inpTargetCustom = document.getElementById("inpTargetCustom");
     var inpTarget = document.getElementById("inpTarget");
     var inpTitle = document.getElementById("inpTitle");
+    var inpRel = document.getElementById("inpRel");
 
     var btnInsert = document.getElementById("btnInsert");
     var btnApply = document.getElementById("btnApply");
@@ -116,6 +117,7 @@ function realTime()
         inpTarget.value="";
         inpTargetCustom.value="";
         inpTitle.value="";
+        inpRel.value="";
 
         inpType.value="";
         inpURL.value="";
@@ -155,6 +157,9 @@ function realTime()
 
         inpTitle.value="";
         if(oEl.getAttribute("TITLE")!=null) inpTitle.value=oEl.getAttribute("TITLE");//inpTitle //1.5.1
+
+        inpRel.value="";
+        if(oEl.getAttribute("REL")!=null) inpRel.value=oEl.getAttribute("REL");
 
     if(sURL==null)sURL="";
 
@@ -260,6 +265,7 @@ function realTime()
         inpTarget.value="";
         inpTargetCustom.value="";
         inpTitle.value="";
+        inpRel.value="";
 
         inpType.value="";
         inpURL.value="";
@@ -289,6 +295,7 @@ function applyHyperlink()
     var inpTargetCustom = document.getElementById("inpTargetCustom");
     var inpTarget = document.getElementById("inpTarget");
     var inpTitle = document.getElementById("inpTitle");
+    var inpRel= document.getElementById("inpRel");
 
     var sURL;
     if(rdoLinkTo[0].checked)
@@ -344,6 +351,12 @@ function applyHyperlink()
         var oEl = parent.getSelectedElement(oSel);
         if(oEl)
             {
+            if(oEl.tagName=="IMG") {
+            	if(oEl.parentNode.tagName=="A") {
+            		oEl = oEl.parentNode;
+            	}
+            }
+
             if(inpTarget.value=="" && inpTargetCustom.value=="") oEl.removeAttribute("target",0);//target
             else
                 {
@@ -355,6 +368,10 @@ function applyHyperlink()
 
             if(inpTitle.value=="") oEl.removeAttribute("title",0);//1.5.1
             else oEl.title=inpTitle.value;
+
+            if(inpRel.value=="") oEl.removeAttribute("rel",0);
+            else oEl.rel=inpRel.value;
+
             }
 
 
@@ -446,6 +463,10 @@ function changeLinkTo()
     <tr>
         <td nowrap>&nbsp;<span id="txtLang" name="txtLang">Title</span>:</td>
         <td><INPUT type="text" ID="inpTitle" NAME="inpTitle" style="width:160px" class="inpTxt"></td>
+    </tr>
+    <tr>
+        <td nowrap>&nbsp;<span id="txtLang" name="txtLang">Rel</span>:</td>
+        <td><INPUT type="text" ID="inpRel" NAME="inpRel" style="width:160px" class="inpTxt"></td>
     </tr>
     </table>
 </td>

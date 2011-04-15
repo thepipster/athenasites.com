@@ -5,6 +5,7 @@ function loadTxt()
     txtLang[1].innerHTML = "Kirjanmerkki";
     txtLang[2].innerHTML = "Kohde";
     txtLang[3].innerHTML = "Otsikko";
+    txtLang[4].innerHTML = "Rel";
 
     var optLang = document.getElementsByName("optLang");
     optLang[0].text = "Kohdesivu"

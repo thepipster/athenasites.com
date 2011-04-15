@@ -65,7 +65,7 @@ var Pages = {
                     "JustifyCenter", "JustifyRight","JustifyFull", "Numbering", "Bullets"
                 ]
             ],
-            ["grpObjects", "Objects", ["Image", "InsertInternalImage", "Flash", "Media", "BRK", "Hyperlink", "Characters", "Line",  "ApolloPageBreak"]]
+            ["grpObjects", "Objects", ["Image", "InsertInternalImage", "Flash", "Media", "BRK", "Hyperlink", "Characters", "Line"]]
         ];
 
 		// apolloContentEditor
@@ -90,17 +90,32 @@ var Pages = {
 
     },
 	
-	m_contentChangedTO : '',
+    // ////////////////////////////////////////////////////////////////////////
+
+	setContent : function(content){
+        oUtil.obj.loadHTML(content);
+        PagesFrame.m_prevContent = oUtil.obj.getHTMLBody();
+	},
+	
 	m_prevContent : '',
+	m_contentChanged : false,	
+	
+    // ////////////////////////////////////////////////////////////////////////
+
+	hasContentChanged : function() { return m_contentChanged; },
+	
+    // ////////////////////////////////////////////////////////////////////////
 	
 	/**
 	* Called whenever is key is pressed in the content editor. We want to wait until the user has stopped
 	* typing before we submit changes
 	*/
 	setEditorChangeListener : function(){
-								
+
+		//var changed = oEdit1.isContentChanged();
+										
 		// Get content
-		var content = oUtil.obj.getXHTMLBody();
+		var content = oUtil.obj.getHTMLBody();
 
 		if (Pages.m_prevContent == '') {
 			Pages.m_prevContent = content;
@@ -108,10 +123,12 @@ var Pages = {
 		
 		// If its changed, save it
 		if (content != Pages.m_prevContent){
+			Pages.m_contentChanged = true;
 	    	PagesFrame.onChange(); 								
 		}		
 				
-    	Pages.m_prevContent = content;    	
+    	Pages.m_prevContent = content;
+    	    	
 	},	
 
     // ////////////////////////////////////////////////////////////////////////

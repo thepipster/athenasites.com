@@ -5,6 +5,7 @@ function loadTxt()
     txtLang[1].innerHTML = "Vinculo interno";
     txtLang[2].innerHTML = "Destino";
     txtLang[3].innerHTML = "Titulo";
+    txtLang[4].innerHTML = "Rel";
 
     var optLang = document.getElementsByName("optLang");
     optLang[0].text = "Self"

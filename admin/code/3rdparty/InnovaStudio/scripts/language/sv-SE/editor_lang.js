@@ -48,6 +48,7 @@ function getTxt(s)
     case "Special Characters":return "Specialtecken";
     case "Image":return "Bild";
     case "Flash":return "Flash";
+    case "YoutubeVideo":return "Insert Youtube Video";
     case "Media":return "Media";
     case "Content Block":return unescape("Inneh%E5ll"); 
     case "Internal Link":return unescape("Intern l%E4nk");
@@ -58,6 +59,7 @@ function getTxt(s)
     case "Edit Table":return "Tabellegenskaper";
     case "Edit Cell":return "Cellegenskaper";
     case "Table":return "Tabell";
+    case "AutoTable":return "Table Auto Format";
     case "Border & Shading":return "Kantlinjer och fyllning";
     case "Show/Hide Guidelines":return unescape("Visa/d%F6lj st%F6dlinjer");
     case "Absolute":return "Absolut";

@@ -5,6 +5,7 @@ function loadTxt()
     txtLang[1].innerHTML = "Bookmark";
     txtLang[2].innerHTML = "Target";
     txtLang[3].innerHTML = "Title";
+    txtLang[4].innerHTML = "Rel";
 
     var optLang = document.getElementsByName("optLang");
     optLang[0].text = "Self"

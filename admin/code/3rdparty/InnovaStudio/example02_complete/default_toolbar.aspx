@@ -39,8 +39,8 @@
             
             oEdit1.ButtonFeatures = New String() { _
              "Save", "FullScreen", "Preview", "Print", "Search", "SpellCheck", _
-             "Table", "Guidelines", "Absolute", _
-             "Flash", "Media", "InternalLink", "CustomObject", _
+             "Table","AutoTable", "Guidelines", "Absolute", _
+             "Flash", "Media", "YoutubeVideo", "InternalLink", "CustomObject", _
              "Form", "Characters", "ClearAll", "XHTMLFullSource", "XHTMLSource", "BRK", _
              "Cut", "Copy", "Paste", "PasteWord", "PasteText", _
              "Undo", "Redo", "Hyperlink", "Bookmark", "Image", _
@@ -59,7 +59,7 @@
             '***************************************************
             oEdit1.onSave="document.forms.Form1.elements.btnSubmit.click();"
             
-            oEdit1.Css="style/test.css" 'Specify external css file here
+            oEdit1.Css="style/test.css" 'Specify external css file here. If Table Auto Format is enabled, the table autoformat css rules must be defined in the css file.
             
             'oEdit1.EditingStyles.add(new EditingStyle("BODY",false,"","font-family:Verdana,Arial,Helvetica;font-size:x-small;"))
             'oEdit1.EditingStyles.add(new EditingStyle(".ScreenText",true,"Screen Text","font-family:Tahoma;"))

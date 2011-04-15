@@ -1,0 +1,89 @@
+InnovaStudio WYSIWYG Editor 5.1
+Copyright © 2010, INNOVA STUDIO (www.InnovaStudio.com). All rights reserved.
+____________________________________________________________________
+
+*** CHANGE NOTES  v5.0 - v5.1 ***
+1. Fix fullscreen and some formatting issue in Firefox and Safari/Chrome
+2. Fix minor issue in assetmanager (asp version)
+
+*** CHANGE NOTES  v4.2.1 - v5.0 ***
+1. New draggable resize handler.
+2. New initialization method.
+3. New icons.
+4. New sample included: Extending the editor using custom button and jQuery.
+
+5. Compressed script.
+
+*** CHANGE NOTES  v4.2 - v4.2.1 ***
+1. Fix style selector bug. Problem on show/hide parameter in arrStyle.
+2. Fix search/replace in source view
+3. Fix background image problem in table in Safari/Chrome.
+4. Fix <link> tag issue in HTML full source editing.
+
+*** CHANGE NOTES  v4.1 - v4.2 *** 
+1. Fix full html editing problem in FF and Safari/Chrome.
+2. Brand new icons.
+3. New group toolbar.
+4. useTab property is deprecated, replace with toolbarMode property
+    - 0 for standard toolbar
+    - 1 for tab toolbar (default)
+    - 2 for group toolbar
+
+*** CHANGE NOTES  v4.0 - v4.1 *** 
+1. Fix lightbox bug when use in page with non standard mode (IE, without doctype).
+2. Fix problem when inserting image and link or other objects inside table.
+3. Fix problem with meta tags when paste from word.
+4. Fix asset manager layout issue when there is long file name.
+5. Fix error and focus issue in Firefox 2.x.
+
+*** CHANGE NOTES  v3.6 - v4.0 *** 
+1. Replace all dialogs using lightbox type dialog.
+2. Fix insert link bug in Safari.
+3. Fix layout problem in asset manager (.NET version).
+4. Table grid lines is now supported in FF and Safari.
+5. Object is now visible in FF.
+6. New property Editor.pasteTextOnCtrlV, paste text content when using CTRL+V.
+7. Fix some minor bugs.
+
+*** CHANGE NOTES  v3.5 - v3.6 *** 
+1. Fix <br class="innova"> problem in FF.
+2. Fix table cell background problem in FF. Background cleared after apply twice or apply then ok.
+3. Fix problem with table dialog in FF
+4. Fix problem with spaces in Safari.
+5. Fix toolbar problem in IE8.
+6. Replace all modal dialog in IE with normal window.
+
+
+*** CHANGE NOTES  v3.1 - v3.5 *** 
+1. Support for Safari/Chrome
+2. Fix <body> attribute problem when using XHTML source mode (full xhtml mode).
+3. Fix problem with Paste Word and Paste Text in Firefox 3.0
+4. Fix font-color in color_picker.js (moz)
+5. Fix problem with background table in edit table cell (moz)
+6. Refined dll for .NET.
+7. Fix problem in source_xhtml.htm and source_xhtml_full.htm when running .htm as PHP.
+8. Added new property useTab, by default the value is true which make the editor use tab toolbar.
+
+*** CHANGE NOTES  v3.0 - v3.1 *** 
+
+1. Fix full screen problem in IE (when using DOCTYPE).
+2. Fix tooltips prolem in Firefox/Gecko browsers.
+3. Fix problem with buttons disappeared in fullscreen mode when clicking on tab.
+4. Fix problem with tag selector in Firefox/Gecko browsers.
+5. Fix paste text button in FF to open Paste Text window.
+6. Fix problem with css text dialog (style_cssText.htm) that doesn't remove class attribute when class inputbox is emptied.
+7. Add caption and summry field to Insert Table dialog (advanced insert).
+8. Fix delete row and cell in table size dialog. Table is not removed when all cells/rows deleted.
+
+9. Fix language translation.
+    - n x n Table and Advanced link.
+    - Use color name in color picker.
+
+10. Fix problem with code generated from Firefox browser doesn't work in IE (media, wma) in Media dialog (moz/media.htm). 
+11. Fix cursor problem di Firefox.
+12. Fix bug in IE, selected value in Select element always removed by editor.
+13. Fix print button in Firefox.
+14. Fix file sorting in asset manager (php)
+15. Add increase/decrease editor at runtime.
+16. Add .NET version asset manager.
+17. Reorganize language folder/files based on local/culture code.

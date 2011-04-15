@@ -1,0 +1,46 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Insert Music</title>
+    <script>
+        function insertMP3() {
+            var obj = (opener ? opener : openerWin).oUtil.obj;
+            obj.insertHTML('<a class=\'media\' href=\'' + document.getElementById('txtMP3').value + '\'>' + document.getElementById('txtTitle').value + '</a>');
+        }
+        function openAsset() {
+            if (parent.oUtil.obj.cmdAssetManager != "")
+                eval(parent.oUtil.obj.cmdAssetManager);
+            if (parent.oUtil.obj.cmdImageManager != "")
+                eval(parent.oUtil.obj.cmdImageManager);
+        }
+        function setAssetValue(v) {
+            document.getElementById("txtMP3").value = v;
+        }
+        function modalDialogShow(url, width, height) {
+            parent.modalDialogShow(url, width, height, window);
+        }
+    </script>
+    <link href="../scripts/style/editor.css" rel="stylesheet" type="text/css">
+
+</head>
+<body style="overflow:hidden;">
+
+<table>
+<tr>
+    <td style="white-space:nowrap">MP3 File: </td>
+    <td style="width:100%"><input id="txtMP3" type="text" style="width:250px" /></td>
+    <td><input type="button" value="" onclick="openAsset()" id="btnAsset" name="btnAsset" style="background:url('../scripts/openAsset.gif');width:21px;height:16px;border:#a5acb2 1px solid;margin-left:1px;"></td>
+</tr>
+<tr>
+    <td>Title: </td>
+    <td><input id="txtTitle" type="text" style="width:250px" /></td>
+    <td></td>
+</tr>
+</table>
+<div class="dialogFooter" style="padding-top:10px;text-align:right">
+    <input type="button" value=" Insert " onclick="insertMP3();self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'"/>
+</div>
+</body>
+</html>
+

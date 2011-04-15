@@ -87,10 +87,10 @@ function realTime()
         oSel.removeAllRanges();
         oSel.addRange(range);
 
-        inpImgURL.value=oElement.getAttribute("SRC");
+        inpImgURL.value=oElement.getAttribute("src");
 
-        inpImgAlt.value = oElement.getAttribute("TITLE");
-        inpImgAlt.value = oElement.getAttribute("ALT");
+        inpImgAlt.value = oElement.getAttribute("title");
+        inpImgAlt.value = oElement.getAttribute("alt");
 
         inpImgAlign.value = oElement.getAttribute("align");
 
@@ -99,8 +99,8 @@ function realTime()
         idImg.style.borderLeft=oElement.style.borderLeft;
         idImg.style.borderRight=oElement.style.borderRight;
 
-        inpImgWidth.value = oElement.getAttribute("WIDTH");
-        inpImgHeight.value = oElement.getAttribute("HEIGHT");
+        inpImgWidth.value = oElement.width;
+        inpImgHeight.value = oElement.height;
 
         if(oElement.style.marginTop.substr(oElement.style.marginTop.length-2,2)=="px")
             inpImgTop.value=oElement.style.marginTop.substr(0,oElement.style.marginTop.length-2);
@@ -241,7 +241,7 @@ function doInsert()
 
         if(bNoBorder) {
             //oElement.border="0px";
-            oElement.style.border = "none";
+            oElement.style.border = null;
         }
         else
             {
@@ -251,8 +251,8 @@ function doInsert()
             oElement.style.borderRight=sImgBorderRight;
             }
 
-        if(sImgWidth!="")oElement.setAttribute("WIDTH", sImgWidth);
-        if(sImgHeight!="")oElement.setAttribute("HEIGHT", sImgHeight);
+        if(sImgWidth!="")oElement.setAttribute("width", sImgWidth);
+        if(sImgHeight!="")oElement.setAttribute("height", sImgHeight);
 
         if(sImgTop!="")oElement.style.marginTop=sImgTop;
         if(sImgBottom!="")oElement.style.marginBottom=sImgBottom;
@@ -310,7 +310,7 @@ function doUpdate()
             (idImg.style.borderLeftStyle=="none"||idImg.style.borderLeft=="")&&
             (idImg.style.borderRightStyle=="none"||idImg.style.borderRight=="")) {
             //oElement.border=0;
-            oElement.style.border = "none";
+            oElement.style.border = null;
         }
 
         //clean

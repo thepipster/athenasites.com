@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link href="style/editor.css" rel="stylesheet" type="text/css">
@@ -139,7 +140,7 @@ function recur(oEl,sTab)
   var sHTML="";
   for(var i=0;i<oEl.childNodes.length;i++)
     {
-    var oNode=oEl.childNodes(i);
+    var oNode=oEl.childNodes[i];
     if(oNode.nodeType==1)//tag
       {
       var sTagName = oNode.nodeName;
@@ -571,7 +572,7 @@ function HtmlTagUtil(inpHtml)
 </head>
 <body style="overflow:hidden;margin:0;">
 
-<table width="100%" height="100%" align="center" cellpadding="0" cellspacing="0">
+<table width="100%" height="180px" align="center" cellpadding="0" cellspacing="0">
 <tr>
 <td nowrap style="padding:5px;">&nbsp;<span id=txtLang name=txtLang>Paste Word content here</span>:
 </td>
@@ -587,10 +588,10 @@ function HtmlTagUtil(inpHtml)
   <table cellpadding=0 cellspacing=0>
   <tr>
   <td>
-    <input type="button" name=btnCancel id=btnCancel value="cancel" onclick="self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+    <input type="button" name=btnCancel id=btnCancel value="cancel" onclick="self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   <td>
-    <input type="button" name=btnOk id=btnOk value=" ok " onclick="doInsert();self.close()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
+    <input type="button" name=btnOk id=btnOk value=" ok " onclick="doInsert();self.closeWin()" class="inpBtn" onmouseover="this.className='inpBtnOver';" onmouseout="this.className='inpBtnOut'">
   </td>
   </tr>
   </table>

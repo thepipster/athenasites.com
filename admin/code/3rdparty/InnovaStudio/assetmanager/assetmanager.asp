@@ -127,28 +127,18 @@ function writeFileSelections()
 
       nIndex=nIndex+1
 
-      'server.MapPath(sBaseFolder)
-      'oFSO.GetFolder(server.MapPath(sBaseFolder))
-      ' => sama. yg satu c:\.. yg lain C:\..
-      'response.Write oFile.path & "  -  " & oFSO.GetFolder(server.MapPath(sBaseFolder)) & "<br>"
-      if InStr(1,oFile.path,oFSO.GetFolder(server.MapPath(arrBaseFolder(0)))) <> 0 then
+      if InStr(1,oFile.path,oFSO.GetFolder(server.MapPath(arrBaseFolder(0))) & "\") <> 0 then
         sBaseFolder_PhysicalPath = oFolder_base0.path 'folder terakhir tdk diikuti dgn / shg sFile_VirtualPath_UnderBaseFolder diawali dgn /
         sBaseFolder = arrBaseFolder(0)
-      elseif arrBaseFolder(1)<>"" then'NEW 2.4
-        if InStr(1,oFile.path,oFSO.GetFolder(server.MapPath(arrBaseFolder(1)))) <> 0 then
+      elseif InStr(1,oFile.path,oFSO.GetFolder(server.MapPath(arrBaseFolder(1))) & "\") <> 0 then
           sBaseFolder_PhysicalPath = oFolder_base1.path 'folder terakhir tdk diikuti dgn / shg sFile_VirtualPath_UnderBaseFolder diawali dgn /
           sBaseFolder = arrBaseFolder(1)
-        end if
-      elseif arrBaseFolder(2)<>"" then'NEW 2.4
-        if InStr(1,oFile.path,oFSO.GetFolder(server.MapPath(arrBaseFolder(2)))) <> 0 then
+      elseif InStr(1,oFile.path,oFSO.GetFolder(server.MapPath(arrBaseFolder(2))) & "\") <> 0 then
           sBaseFolder_PhysicalPath = oFolder_base2.path 'folder terakhir tdk diikuti dgn / shg sFile_VirtualPath_UnderBaseFolder diawali dgn /
           sBaseFolder = arrBaseFolder(2)
-        end if
-      elseif arrBaseFolder(3)<>"" then'NEW 2.4
-        if InStr(1,oFile.path,oFSO.GetFolder(server.MapPath(arrBaseFolder(3)))) <> 0 then
+      elseif InStr(1,oFile.path,oFSO.GetFolder(server.MapPath(arrBaseFolder(3))) & "\") <> 0 then
           sBaseFolder_PhysicalPath = oFolder_base3.path 'folder terakhir tdk diikuti dgn / shg sFile_VirtualPath_UnderBaseFolder diawali dgn /
           sBaseFolder = arrBaseFolder(3)
-        end if
       end if
 
       sFile_PhysicalPath = oFile.path
@@ -220,7 +210,7 @@ function writeFileSelections()
 
       Response.Write "<tr style='background:" & sColorResult & "'>" & VbCrLf & _
         "<td><img src='images/"&sIcon&"'></td>" & VbCrLf & _
-        "<td valign=top width='100%' ><div style='width:210px;overflow:hidden;white-space:nowrap'><u id=""idFile"&nIndex&""" style='cursor:pointer;' onclick=""selectFile(" & nIndex & ")"">" & oFile.name & "</u></div></td>" & VbCrLf & _
+        "<td valign=top width='100%' align='left'><div style='width:210px;overflow:hidden;white-space:nowrap'><u id=""idFile"&nIndex&""" style='cursor:pointer;' onclick=""selectFile(" & nIndex & ")"">" & oFile.name & "</u></div></td>" & VbCrLf & _
         "<td>&nbsp;&nbsp;<img style='cursor:pointer;' onclick=""downloadFile(" & nIndex & ")"" src='download.gif'></td>" & VbCrLf & _
         "<input type=hidden name=inpFile" & nIndex & " id=inpFile" & nIndex & " value=""" & sFile_VirtualPath & """>" & VbCrLf & _
         "<td valign=top align=right nowrap>" & FormatNumber(oFile.size/1000,1) & " kb&nbsp;</td>" & VbCrLf & _
@@ -455,7 +445,7 @@ function doOk()
   {
     (opener?opener:openerWin).setAssetValue(document.getElementById("inpSource").value);
   bOk=true;
-  self.close();
+  if(self.closeWin)self.closeWin(); else self.close();
   }
 function doUnload()
   {
@@ -472,8 +462,8 @@ function doUnload()
 <input type="hidden" name="inpAssetBaseFolder1" id="inpAssetBaseFolder1" value="<%if arrBaseFolder(1)<>"" then response.Write(oFolder_base1.path)%>">
 <input type="hidden" name="inpAssetBaseFolder2" id="inpAssetBaseFolder2" value="<%if arrBaseFolder(2)<>"" then response.Write(oFolder_base2.path)%>">
 <input type="hidden" name="inpAssetBaseFolder3" id="inpAssetBaseFolder3" value="<%if arrBaseFolder(3)<>"" then response.Write(oFolder_base3.path)%>">
-
-<table width="100%" height="100%" align=center style="" cellpadding=0 cellspacing=0 border=0 >
+<% response.write "<!--Version 5.2-->" %>
+<table width="100%" height="430px" align=center style="" cellpadding=0 cellspacing=0 border=0 >
 <tr>
 <td valign=top style="height:100%;background:url('bg.gif') no-repeat right bottom;padding-top:5px;padding-left:5px;padding-right:5px;padding-bottom:0px;">
     <!--ffilter-->
@@ -524,7 +514,7 @@ function doUnload()
         <tr>
         <td>
           <div id="idPreview" style="text-align:center;overflow:auto;width:297px;height:245px;border:#d7d7d7 5px solid;border-bottom:#d7d7d7 3px solid;background:#ffffff;margin-right:2;"></div>
-          <div align=center><input type="text" id="inpSource" name="inpSource" style="border:#cfcfcf 1px solid;width:295" class="inpTxt"></div>
+          <div align=center><input type="text" id="inpSource" name="inpSource" style="border:#cfcfcf 1px solid;width:295px" class="inpTxt"></div>
         </td>
         <td valign=top width="100%">
           <%writeFileSelections()%>

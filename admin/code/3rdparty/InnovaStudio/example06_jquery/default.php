@@ -6,7 +6,7 @@
         body{font:11px verdana,arial,sans-serif;}
         a{color:#0000cc;font-size:xx-small;}
     </style>
-    
+
     <script language=JavaScript src='../scripts/innovaeditor.js'></script>
 
     <!-- Include JQUERY -->
@@ -43,7 +43,7 @@
 
 
     <h3>IMPLEMENTATION</h3>
-    <p>   
+    <p>
     <b>STEP 1</b>: Initialize the Custom Button to open mp3.htm:<br />
     <pre>oEdit1.arrCustomButtons = [["CustomName1","modelessDialogShow('../common/mp3.htm',340,125)","Insert Music","btnMusic.gif"]]</pre>
     <br />mp3.htm is a Custom Dialog that we use to insert a hyperlink with class="media".
@@ -74,16 +74,17 @@
     </p>
 
     <h3>DEMO</h3>
-    
+
   <textarea id="txtContent" name="txtContent" rows=4 cols=30>
   <?php
-  function encodeHTML($sHTML)
+function encodeHTML($sHTML)
     {
-    $sHTML=ereg_replace("&","&amp;",$sHTML);
-    $sHTML=ereg_replace("<","&lt;",$sHTML);
-    $sHTML=ereg_replace(">","&gt;",$sHTML);
+    $sHTML=preg_replace('/&/i','&amp;',$sHTML);
+    $sHTML=preg_replace('/</i','&lt;',$sHTML);
+    $sHTML=preg_replace('/>/i','&gt;',$sHTML);
     return $sHTML;
     }
+
 
   if(isset($_POST["txtContent"]))
     {
@@ -150,13 +151,13 @@
   </script>
 
   <input type="submit" value="Submit" id="btnSubmit">
-  
+
     <div style="margin-top:30px;margin-bottom:30px;">
     <?php
     echo isset($_POST["txtContent"]) ? $_POST["txtContent"] : "";
     ?>
     </div>
-    
+
 </form>
 
 </body>
