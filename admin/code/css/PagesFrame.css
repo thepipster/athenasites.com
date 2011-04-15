@@ -9,7 +9,8 @@
 	padding-right: 25px;
 	margin-right: 10px;
 	width: 380px;
-	display: inline-block;
+	overflow: hidden;
+	height: 25px;
 }
 
 #PagesFrame fieldset {

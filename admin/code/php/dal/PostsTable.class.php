@@ -311,7 +311,7 @@ class PostsTable {
     // /////////////////////////////////////////////////////////////////////////////////
 
     public static function getPostFromSlug($site_id, $path, $slug) {
-        $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts WHERE slug = %s AND path = %s", $site_id, $slug, $path);
+        $sql = DatabaseManager::prepare("SELECT * FROM athena_%d_Posts WHERE slug = %s AND path = %s AND status != 'Revision'", $site_id, $slug, $path);
         return DatabaseManager::getSingleResult($sql);
     }
 

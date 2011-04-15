@@ -222,13 +222,13 @@ function getPostComplete($site_id, $post_id){
     $post = PostsTable::getPost($site_id, $post_id);
 
     if (isset($post)) {
-    	$postObj = new Post($post);
-        $post['last_edit'] = date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
-        $post['created'] = date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
-        $post['tags'] = PostsTable::getPostTags($site_id, $post['id']);
+    	$postObj 			= new Post($post);
+        $post['last_edit'] 	= date("m/d/Y H:i", strtotime($post['last_edit'])); // Convert to JS compatible date
+        $post['created'] 	= date("m/d/Y H:i", strtotime($post['created'])); // Convert to JS compatible date
+        $post['tags'] 		= PostsTable::getPostTags($site_id, $post['id']);
         $post['categories'] = PostsTable::getPostCategories($site_id, $post['id']);
-        $post['content'] = ImportHelper::convertContent($post['content'], $post['source']);
-        $post['url'] = $postObj->getLink();
+        $post['content'] 	= ImportHelper::convertContent($post['content'], $post['source']);
+        $post['url'] 		= $postObj->getLink();
         $post['noComments'] = CommentsTable::getNoCommentsForPost($site_id, $post_id);
     }
     
@@ -435,6 +435,8 @@ function getApprovedComments($post_id, $site_id) {
 
 function getPostDetails($site_id, $post_id) {
 
+	Logger::debug("getPostDetails($site_id, $post_id)");
+	
     $post = getPostComplete($site_id, $post_id);
 
 	$post['content'] = utf8_encode($post['content']);

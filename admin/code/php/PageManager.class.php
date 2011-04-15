@@ -141,6 +141,8 @@ class PageManager {
         	return;
         }
         
+        //Logger::debug(">>>>> Site id = " . $site['id']);
+        
         self::$site_id = $site['id'];
         // Get the list of pages
         self::$page_list = PagesTable::getPages(self::$site_id);

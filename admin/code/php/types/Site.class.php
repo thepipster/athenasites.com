@@ -58,12 +58,21 @@ class Site {
 	* Derive the site id from the domain
 	*/
 	public static function getSiteID(){
-		if (self::$currentSiteID == ''){
+	
+		if (self::$currentSiteID == '' || self::$currentSiteID == 0){
+
 			$domain = str_replace('www.', '', $_SERVER['HTTP_HOST']);
-		    $site = SitesTable::getSiteFromDomain($domain);
+			
+			// Get the site id, this could be the non-live site (xxxx.apollosites.com) so get id first
+		    $site_id = SitesTable::getSiteIDFromDomain($domain);		    
+		    
+		    // Now get the live domain name
+		    $site = SitesTable::getSite($site_id);
+			
 			self::$currentSiteID = $site['id'];
 			self::$currentDomain = $site['domain'];
 		}
+		
 		return self::$currentSiteID;
 	}	
 	
