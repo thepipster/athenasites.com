@@ -90,8 +90,21 @@ var Posts = {
 
     },
 	
-	m_contentChangedTO : '',
+    // ////////////////////////////////////////////////////////////////////////
+
+	setContent : function(content){
+        oUtil.obj.loadHTML(content);
+        PostsFrame.m_prevContent = oUtil.obj.getHTMLBody();
+	},
+	
 	m_prevContent : '',
+	m_contentChanged : false,	
+	
+    // ////////////////////////////////////////////////////////////////////////
+
+	hasContentChanged : function() { return m_contentChanged; },
+	
+    // ////////////////////////////////////////////////////////////////////////
 	
 	/**
 	* Called whenever is key is pressed in the content editor. We want to wait until the user has stopped
@@ -99,12 +112,22 @@ var Posts = {
 	*/
 	setEditorChangeListener : function(){
 			
-		var changed = oEdit1.isContentChanged();
-		
-		if (changed){
-			alert('Posts.setEditorChangeListener - post changed!');
-	    	PostsFrame.onChange(); 								
+		//var changed = oEdit1.isContentChanged();				
+			
+		// Get content
+		var content = oUtil.obj.getHTMLBody();
+
+		if (Posts.m_prevContent == '') {
+			Posts.m_prevContent = content;
 		}
+		
+		// If its changed, save it
+		if (content != Posts.m_prevContent){
+			Posts.m_contentChanged = true;
+	    	PostsFrame.onChange(); 								
+		}		
+				
+    	Posts.m_prevContent = content;			
 			
 	},	
 

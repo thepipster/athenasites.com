@@ -87,15 +87,23 @@ class PostsTable {
 
 	public static function createRevision($site_id, $post_id){
 
-		// How many revisions do we have for this post?
-		$no_revs = DatabaseManager::getVar(DatabaseManager::prepare("SELECT count(id) FROM athena_%d_Posts WHERE source_id = %d AND status = 'Revision'", $site_id, $post_id));
-
-		//$last_date = DatabaseManager::getVar(DatabaseManager::prepare("SELECT last_edit FROM athena_%d_Posts WHERE source_id = %d AND status = 'Revision' ORDER BY last_edit DESC LIMIT 1", $site_id, $post_id));
+		//Logger::debug("createRevision($site_id, $post_id)");
 		
-		if ($no_revs >= 20){
-			// Delete the oldest revisions
-			DatabaseManager::submitQuery(DatabaseManager::prepare("DELETE FROM athena_%d_Posts WHERE source_id = %d AND status = 'Revision' AND id = 
-			(SELECT id FROM athena_%d_Posts WHERE source_id = %d AND status = 'Revision' ORDER BY created LIMIT 1) ", $site_id, $post_id));
+		// Only keep 20 revisions around, delete any more....
+		
+		$id_list = DatabaseManager::getColumn(DatabaseManager::prepare("SELECT id FROM athena_%d_Posts WHERE source_id = %d AND status = 'Revision' ORDER BY last_edit LIMIT 20,9999", $site_id, $post_id));
+		
+		if (isset($id_list)){
+		
+			$id_csv_list = "";
+			foreach($id_list as $id){
+				if ($id_csv_list != "") $id_csv_list .= ", ";
+				$id_csv_list .= $id;
+			}
+			
+			$query = DatabaseManager::prepare("DELETE FROM athena_%d_Posts WHERE id IN ($id_csv_list)", $site_id);
+			DatabaseManager::submitQuery($query);
+			
 		}
 		
         // Get data in correct locale (SQL's NOW() doesn't do that)

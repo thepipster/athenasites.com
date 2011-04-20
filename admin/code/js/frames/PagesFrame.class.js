@@ -411,6 +411,7 @@ var PagesFrame = {
         var new_page_order 		= $('#pageOrder').val();
         var new_description 	= $('#pageDesc').val();        
                 
+        /*        
         if (originalPage.content != new_content) alert('new content');
 		if (originalPage.title != new_title) alert('new title');
 		if (originalPage.browser_title != new_browser_title) alert('new browser title');
@@ -419,6 +420,7 @@ var PagesFrame = {
 		if (originalPage.template != new_template) alert('new template');  
 		if (originalPage.page_order != new_page_order) alert('new order');
 		if (originalPage.description != new_description) alert('new description');		
+        */
         
 		// Check for changes, and only save if we detect a change
 		if ((originalPage.content 		!= new_content) || 
@@ -441,7 +443,6 @@ var PagesFrame = {
 
 		    // Force an immediate save
 		    DataStore.updatePage(originalPage);
-		    alert('saving');
 		    DataStore.save();
 		}
 		                        

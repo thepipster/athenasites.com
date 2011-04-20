@@ -263,7 +263,6 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
         $page['created'] = date("m/d/Y H:i", strtotime($page['created'])); // Convert to JS compatible date
 		$page['content'] = utf8_encode($page['content']);
 		$page['title'] = utf8_encode($page['title']);
-		$page['excerpt'] = utf8_encode($page['excerpt']);
         $page['url'] = $pageObj->getLink();
     }
 

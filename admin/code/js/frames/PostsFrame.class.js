@@ -69,10 +69,8 @@ var PostsFrame = {
 				$('#postTitleWrapper').html(txt);
 			}
         
-	        oUtil.obj.loadHTML(postObj.content);
-	        
-	        //PostsFrame.oEdit.loadHTML(postObj.content);
-		
+        	Posts.setContent(postObj.content);
+	        		
 	        $('#postTitle').val(postObj.title);
 	        $('#postSlug').html(postObj.slug);
 	        $('#postLastEdit').html(postObj.last_edit);
