@@ -39,9 +39,9 @@ if (isset($parts['query'])) {
 }
 $ext = substr(strrchr($page, '.'), 1);
 
-if ($DEBUG) Logger::debug(">>>> Request page: $page Ext: $ext Full request: " . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-if ($DEBUG) Logger::debug(">>>> Domain: $domain Page: $page Path: $path ");
-if ($DEBUG) Logger::debug(">>>> Tag: $tag Category: $category Month: $month Year: $year");
+if ($DEBUG) Logger::debug("Request page: $page Ext: $ext Full request: " . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+if ($DEBUG) Logger::debug("Domain: $domain Page: $page Path: $path ");
+if ($DEBUG) Logger::debug("Tag: $tag Category: $category Month: $month Year: $year");
 
 PageManager::init();
 
@@ -56,10 +56,17 @@ if (strpos($_SERVER['REQUEST_URI'], "/".PageManager::$blog_base_url."/") !== fal
 	$ext = "html";
 }
 
+if ($DEBUG) Logger::debug("Blog Base URL = " . PageManager::$blog_base_url);
+
 // The blog is a special case, as convention is to use just 'blog' rather than a real page like 'blog.html'
 if ($page == PageManager::$blog_base_url || ($page."/") == PageManager::$blog_base_url){
 	$ext = "html";
 }
+if ($page.".html" == PageManager::$blog_base_url || ($page.".html/") == PageManager::$blog_base_url){
+	$ext = "html";
+	$page .= ".html";
+}
+
 
 if ($page == '' || (($ext == 'html') || ($ext == 'htm') || ($ext == 'php'))) {
 
