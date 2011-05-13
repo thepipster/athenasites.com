@@ -1505,9 +1505,12 @@ var cgpBlog = {
             cgpCommon.init('blog', 'all');
         }
             
+		// Make sure images fit within content, and don't overflow
+		cgpBlog.onResize();
+		$(window).resize(function() {
+			cgpBlog.onResize();
+		});
 
-
-    
 
         cgpBlog.m_commandURL = 'http://' + location.host + '/admin/code/php/remoteapi/BlogAPI.php';
     
@@ -1540,6 +1543,24 @@ var cgpBlog = {
 		            	        
     },
 
+	onResize : function(){
+		
+		var maxWidth = $('#container').width() - $('#menuContainer').width() - 100;
+		
+		$('#blogPage').width(maxWidth);
+		
+		$('#blogPage img').css('max-width', maxWidth);
+		
+		$('#blogPage img').each(function(index) {
+			if ($(this).width() > maxWidth){
+				$(this).width(maxWidth);
+			}
+	  	});
+		
+		// IE fix (ugh)
+		//$('#blogPage img').css("width", "expression(this.width > "+maxWidth+" ? "+maxWidth+": true)");
+	},
+	
 	// ////////////////////////////////////////////////////////////////
 
 	checkEmail : function(email) {

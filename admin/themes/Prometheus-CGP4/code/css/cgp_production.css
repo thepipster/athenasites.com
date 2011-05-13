@@ -323,6 +323,12 @@ This is the blog theme for the integrated blog on Charlotte Geary Photography v3
 	margin-left: 50px;
 }
 
+
+#blogPage img {
+	background-color: red;
+	max-width: 50%;
+}
+
 #blogPage .post {
 	/*margin-left: 15px;*/
 }
