@@ -97,8 +97,16 @@ class Page {
     //	
     // ////////////////////////////////////////////////////////////////////
 
-	public static function encodeSlug($title){
-		return StringUtils::encodeSlug($title, '.html');
+	public static function encodeSlug($title, $isBlog=false){
+		if ($isBlog){
+			Logger::debug("Encoding blog slug!");
+			$slug = StringUtils::encodeSlug($title, '');
+		}
+		else {
+			$slug = StringUtils::encodeSlug($title, '.html');
+		}
+		Logger::debug("Slug = $slug");
+		return $slug;
 	}	
 		
 }

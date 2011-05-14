@@ -198,19 +198,20 @@ function updatePage($site_id, $page_id, $title, $parent_page_id, $content, $stat
     $user_id = SecurityUtils::getCurrentUserID();
     $path = ""; // Update path *after* we update the page, as the parent page may have changed
 		    	
-    $safe_content = StringUtils::makeHtmlSafe($content);
-    $safe_title = StringUtils::makeHtmlSafe($title);
+    $safe_content 		= StringUtils::makeHtmlSafe($content);
+    $safe_title 		= StringUtils::makeHtmlSafe($title);
     $safe_browser_title = StringUtils::makeHtmlSafe($browser_title);
-    $safe_description = StringUtils::makeHtmlSafe($description);
+    $safe_description 	= StringUtils::makeHtmlSafe($description);
 
     //$is_home = PagesTable::getIsHome($site_id, $page_id);
     $is_home = $origPage['is_homepage'];
+    $is_blog = $origPage['is_blogpage'];
 
 	if ($is_home == 1){
 		$slug = "index.html";
 	}
 	else {
-		$slug = Page::encodeSlug($safe_title);
+		$slug = Page::encodeSlug($safe_title, $is_blog);
 	}
 
 
@@ -292,7 +293,7 @@ function addPage($site_id, $title, $parent_page_id, $content, $status, $tamplate
     $safe_content = StringUtils::makeHtmlSafe($content);
     $safe_title = StringUtils::makeHtmlSafe($title);
 
-    $page_id = PagesTable::create($user_id, $site_id, $parent_page_id, $safe_content, $status, $safe_title, $tamplate_name, Page::encodeSlug($safe_title), $path, $order, $ishome, $isblog);
+    $page_id = PagesTable::create($user_id, $site_id, $parent_page_id, $safe_content, $status, $safe_title, $tamplate_name, Page::encodeSlug($safe_title, $isblog), $path, $order, $ishome, $isblog);
 
     $page = PagesTable::getPage($site_id, $page_id);
     if (isset($page_data)) {

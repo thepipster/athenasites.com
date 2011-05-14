@@ -62,10 +62,10 @@ if ($DEBUG) Logger::debug("Blog Base URL = " . PageManager::$blog_base_url);
 if ($page == PageManager::$blog_base_url || ($page."/") == PageManager::$blog_base_url){
 	$ext = "html";
 }
-if ($page.".html" == PageManager::$blog_base_url || ($page.".html/") == PageManager::$blog_base_url){
-	$ext = "html";
-	$page .= ".html";
-}
+//if ($page.".html" == PageManager::$blog_base_url || ($page.".html/") == PageManager::$blog_base_url){
+//	$ext = "html";
+//	$page .= ".html";
+//}
 
 
 if ($page == '' || (($ext == 'html') || ($ext == 'htm') || ($ext == 'php'))) {
