@@ -29,7 +29,7 @@ class FeedGenerator {
 		$user = UserTable::getUserFromSiteID($site_id);
 			
 		// Get the most recent 20 posts
-		$posts = PostsTable::getRecentPosts($site_id, 20);
+		$posts = PostsTable::getRecentPublishedPosts($site_id, 20);
 		
 		foreach($posts as $post){
 		
@@ -167,7 +167,7 @@ class FeedGenerator {
 		$TestFeed->setChannelElement('author', array('name'=>$user['name']));
 			
 		// Get the most recent 20 posts
-		$posts = PostsTable::getRecentPosts($site_id, 20);
+		$posts = PostsTable::getRecentPublishedPosts($site_id, 20);
 		
 		foreach($posts as $post){
 		
