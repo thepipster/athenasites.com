@@ -278,7 +278,7 @@ class PageManager {
 				// with the assumption that its a blog post with a bad link
 	            if (!isset($page)){
 	            	$decoded_slug = Post::decodeTag($page_name);
-	            	Logger::error(">>>>>> Broken link: Could not find blog page for site " . self::$site_id . ". Path = $post_path Slug = " . self::$page_slug . "! Title = " . $decoded_slug);
+	            	Logger::warn(">>>>>> Broken link: Could not find blog page for site " . self::$site_id . ". Path = $post_path Slug = " . self::$page_slug . "! Title = " . $decoded_slug);
 	            	$post = PostsTable::getPostFromTitle(self::$site_id, $decoded_slug);
 	            	
 	            	if (isset($post)){
