@@ -274,6 +274,7 @@ class PageManager {
                 self::$blog_mode = self::$BLOGMODE_ALL;
                 $page = PagesTable::getPageFromSlug(self::$site_id, self::$page_slug);
 
+/*
 				// If we've found no page, and no blog post try looking up from post title
 				// with the assumption that its a blog post with a bad link
 	            if (!isset($page)){
@@ -295,7 +296,7 @@ class PageManager {
 	            else {
 	                Logger::debug(">>> PAGE/BLOG!");
 	            }
-                
+  */              
             }
             
         }
