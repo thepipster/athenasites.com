@@ -268,13 +268,36 @@ class PageManager {
                 self::$current_post = $post;
                 Logger::debug(">>> BLOG SINGLE POST MODE!");
                 $page = $blogPage;
-            } 
+            }
             else {
                 // Get the current page id
                 self::$blog_mode = self::$BLOGMODE_ALL;
                 $page = PagesTable::getPageFromSlug(self::$site_id, self::$page_slug);
-                Logger::debug(">>> PAGE/BLOG!");
+
+				// If we've found no page, and no blog post try looking up from post title
+				// with the assumption that its a blog post with a bad link
+	            if (!isset($page)){
+	            	$decoded_slug = Post::decodeTag($page_name);
+	            	Logger::error(">>>>>> Broken link: Could not find blog page for site " . self::$site_id . ". Path = $post_path Slug = " . self::$page_slug . "! Title = " . $decoded_slug);
+	            	$post = PostsTable::getPostFromTitle(self::$site_id, $decoded_slug);
+	            	
+	            	if (isset($post)){
+	            		// Broken path? Fix it here...
+	            		//$fixed_path = Post::generatePath($post['created']);
+	            		//Logger::debug("<<<<<  >>>>> Post " . $post['id'] . " has bad path Fixing path from $post_path to $fixed_path");
+	            		//PostsTable::updatePath($post['id'], self::$site_id, $post_path);
+		                self::$blog_mode = self::$BLOGMODE_SINGLEPOST;
+		                self::$current_post = $post;
+		                Logger::debug(">>> BLOG SINGLE POST MODE!");
+		                $page = $blogPage;
+	            	}
+	            }
+	            else {
+	                Logger::debug(">>> PAGE/BLOG!");
+	            }
+                
             }
+            
         }
 
         // If we couldn't find the page, load the home page
