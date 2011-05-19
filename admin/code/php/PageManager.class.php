@@ -500,10 +500,10 @@ class PageManager {
 		
 	    if (PageManager::$blog_mode == PageManager::$BLOGMODE_SINGLEPOST){	
 	    	$post_id = self::$current_post['id'];    	
-			$global_tracker_id = "$site_id-$page_id-$post_id";
+			$global_tracker_id = "Post $site_id-$post_id";
 	    }
 		else {
-			$global_tracker_id = "$site_id-$page_id-0";
+			$global_tracker_id = "Page $site_id-$page_id";
 		}		
 		
 		echo "
