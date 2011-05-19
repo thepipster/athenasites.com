@@ -15,7 +15,7 @@ foreach($post_list as $post){
 
     $content = stripslashes($post['excerpt']);
                 
-    Logger::debug("Processing post " . $post['id'] . " source = " . $post['source']);
+    //Logger::debug("Processing post " . $post['id'] . " source = " . $post['source']);
            
     // <a href='/blog/2010/12/14/selecting-photos-for-your-wedding-album' class="apolloPageBreak">More information and example pictures</a>       
 //    $result = preg_match("/<a href='(.*?)' class='apolloPageBreak'>(.*?)<\/a>/i", $content, $match);
@@ -28,7 +28,7 @@ foreach($post_list as $post){
         $s_pos = strpos($content, $original_tag);
         $e_pos = strpos($content, "</a>", $s_pos) + 4;
         
-        Logger::debug("Position = $s_pos to $e_pos Tag = $original_tag");
+        //Logger::debug("Position = $s_pos to $e_pos Tag = $original_tag");
     	
     	if ($s_pos > 0 && $e_pos > 0){
     	
@@ -39,7 +39,7 @@ foreach($post_list as $post){
 	    	
 	    	$new_content = substr($content, 0, $s_pos) . $new_link . substr($content, $e_pos);
 	    	
-	    	//PostsTable::updateExcerpt($site_id, $post['id'], $new_content);
+	    	PostsTable::updateExcerpt($site_id, $post['id'], $new_content);
     	}
 
     } 
