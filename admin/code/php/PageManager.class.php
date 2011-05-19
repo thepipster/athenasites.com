@@ -447,6 +447,7 @@ class PageManager {
         $page_title = self::$page_title;
         $site_id = self::$site_id;
         $page_id = self::$page_id;
+        
         //$page_path = self::$page_path;
         //$slug = self::$slug;
 
@@ -497,6 +498,14 @@ class PageManager {
 		// ApolloSites tracker: UA-21458669-1
 		// Ad Astra Systems tracker for apollo: UA-20462178-1
 		
+	    if (PageManager::$blog_mode == PageManager::$BLOGMODE_SINGLEPOST){	
+	    	$post_id = self::$current_post['id'];    	
+			$global_tracker_id = "$site_id-$page_id-$post_id";
+	    }
+		else {
+			$global_tracker_id = "$site_id-$page_id-0";
+		}		
+		
 		echo "
 		<script type='text/javascript'>
 		
@@ -504,7 +513,7 @@ class PageManager {
 		  
 		  _gaq.push(['_setAccount', 'UA-21458669-1']);
 		  _gaq.push(['_setDomainName', 'none']);
-		  _gaq.push(['_trackPageview', '$page_title']);
+		  _gaq.push(['_trackPageview', '$global_tracker_id']);
 		  _gaq.push(['_setAllowHash', false]);
 				
 		  (function() {
