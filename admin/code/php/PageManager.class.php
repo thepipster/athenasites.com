@@ -503,6 +503,7 @@ class PageManager {
 			$global_tracker_id = "Post $site_id-$post_id";
 	    }
 		else {
+			if (!isset($page_id)) $page_id = 'E404';
 			$global_tracker_id = "Page $site_id-$page_id";
 		}		
 		
