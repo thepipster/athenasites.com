@@ -1,5 +1,10 @@
 RewriteEngine On
-#RewriteBase /
+RewriteBase /
+
+#force trailing slashes on real directories
+#RewriteCond %{REQUEST_FILENAME} -D
+#RewriteCond %{REQUEST_URI} !(.*)/$
+#RewriteRule ^(.*)$ $1/
 
 #RewriteCond %{HTTP_HOST} ^www\.(.*) [NC]
 #RewriteRule (.*) //%1/$1 [L,R=301]
@@ -36,15 +41,22 @@ RewriteRule ^weddingideas/([^/\.]+)/?.html$ /admin/themes/Prometheus-CGP4/getima
 
 # Redirect charlottegeary.com/slideshows/name/index.html /admin/themes/Prometheus-CGP4/slideshows/name/index.html
 #RewriteCond %{HTTP_HOST} ^charlottegeary.com
-#RewriteRule ^slideshows/([^/\.]+)/([^/\.]+)/?.html$ /admin/themes/Prometheus-CGP4/slideshows/$1/index.html [L]
+#RewriteRule ^slideshows/([^/\.]+)/([^/\.]+)/?.html$ admin/themes/Prometheus-CGP4/slideshows/$1/index.html [L]
 
-# Redirect charlottegeary.com/slideshows/name/ /admin/themes/Prometheus-CGP4/slideshows/name/index.html
+RewriteCond %{HTTP_HOST} ^www.charlottegeary.com
+RewriteCond %{REQUEST_URI} !(.*)/$
+RewriteRule ^slideshows/(.*)$ http://charlottegeary.com/slideshows/$1/ [L]
+
 RewriteCond %{HTTP_HOST} ^charlottegeary.com
-RewriteRule ^slideshows/([^/\.]+)/?$ /admin/themes/Prometheus-CGP4/slideshows/$1 [L]
+RewriteCond %{REQUEST_URI} !(.*)/$
+RewriteRule ^slideshows/(.*)$ http://charlottegeary.com/slideshows/$1/ [L]
 
-# Redirect charlottegeary.com/slideshows/name /admin/themes/Prometheus-CGP4/slideshows/name/index.html
-#RewriteCond %{HTTP_HOST} ^charlottegeary.com
-#RewriteRule ^slideshows/([^/\.]+)?$ /admin/themes/Prometheus-CGP4/slideshows/$1 [L]
+RewriteCond %{HTTP_HOST} ^www.charlottegeary.com
+RewriteRule ^slideshows/(.*)$ http://charlottegeary.com/slideshows/$1 [L]
+
+RewriteCond %{HTTP_HOST} ^charlottegeary.com
+RewriteRule ^slideshows/(.*)$ admin/themes/Prometheus-CGP4/slideshows/$1 [L]
+
 
 
 # http://example.com/feed/ - defaults to rss
