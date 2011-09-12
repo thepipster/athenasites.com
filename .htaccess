@@ -34,6 +34,18 @@ RewriteRule ^wedding-ideas/([^/\.]+)/?.html$ /admin/themes/Prometheus-CGP4/getim
 RewriteCond %{HTTP_HOST} ^www.charlottegeary.com
 RewriteRule ^weddingideas/([^/\.]+)/?.html$ /admin/themes/Prometheus-CGP4/getimages.php?tag=$1 [L]
 
+# Redirect charlottegeary.com/slideshows/name/index.html /admin/themes/Prometheus-CGP4/slideshows/name/index.html
+#RewriteCond %{HTTP_HOST} ^charlottegeary.com
+#RewriteRule ^slideshows/([^/\.]+)/([^/\.]+)/?.html$ /admin/themes/Prometheus-CGP4/slideshows/$1/index.html [L]
+
+# Redirect charlottegeary.com/slideshows/name/ /admin/themes/Prometheus-CGP4/slideshows/name/index.html
+RewriteCond %{HTTP_HOST} ^charlottegeary.com
+RewriteRule ^slideshows/([^/\.]+)/?$ /admin/themes/Prometheus-CGP4/slideshows/$1 [L]
+
+# Redirect charlottegeary.com/slideshows/name /admin/themes/Prometheus-CGP4/slideshows/name/index.html
+#RewriteCond %{HTTP_HOST} ^charlottegeary.com
+#RewriteRule ^slideshows/([^/\.]+)?$ /admin/themes/Prometheus-CGP4/slideshows/$1 [L]
+
 
 # http://example.com/feed/ - defaults to rss
 # http://example.com/feed/rss/
