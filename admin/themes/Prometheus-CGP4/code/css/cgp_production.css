@@ -160,7 +160,6 @@ a {
     background-image: url("../imgs/tree_whitebg2.jpg");
     background-position: bottom left;
     background-repeat: no-repeat;
-    background-color: red;
 }
 
 #treeMenuLogo {
@@ -325,7 +324,6 @@ This is the blog theme for the integrated blog on Charlotte Geary Photography v3
 
 
 #blogPage img {
-	background-color: red;
 	max-width: 50%;
 }
 

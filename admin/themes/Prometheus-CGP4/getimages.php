@@ -164,7 +164,7 @@ echo "
 if ($isMobile) {
 	// Add a banner add for mobile
 	echo "
-	<div id='cgpWeddingIdeasMobileAds' style='float:right; margin-right:20px;'>
+	<div id='cgpWeddingIdeasMobileAds' style=''>
 		<script type='text/javascript'><!--
 			// XHTML should not attempt to parse these strings, declare them CDATA.
 			/* <![CDATA[ */
