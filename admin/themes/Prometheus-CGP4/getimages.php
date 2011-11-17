@@ -146,6 +146,7 @@ require_once('header.php');
 // Echo images....
 
 echo "
+
 <div id='venuePage' class='pageContents'>
 
 	<div class='venuePageContents'>
@@ -156,9 +157,21 @@ echo "
 	
 	<p>".$title_text['caption']."</p>
 
+	<div id='cgpWeddingIdeasAds' style='float:right; margin-right:20px;'>
+		<script type='text/javascript'><!--
+		google_ad_client = 'ca-pub-1988280901434851';
+		/* CGP Wedding Ideas Skyscraper */
+		google_ad_slot = '6828077444';
+		google_ad_width = 120;
+		google_ad_height = 600;
+		//-->
+		</script>
+		<script type='text/javascript'
+		src='http://pagead2.googlesyndication.com/pagead/show_ads.js'>
+		</script>
+	</div>
+
 	<p align='left'>";
-
-
 
 
 foreach($media_id_list as $media_id){
