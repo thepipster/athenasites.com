@@ -153,8 +153,6 @@ $iPad = stripos($_SERVER['HTTP_USER_AGENT'],"iPad");
 $Android = stripos($_SERVER['HTTP_USER_AGENT'],"Android");
 $isMobile = ($iPod || $iPhone || $iPad || $Android);
 
-$isMobile = true;
-
 echo "
 
 <div id='venuePage' class='pageContents'>
