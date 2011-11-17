@@ -162,6 +162,8 @@ echo "
 ";
 
 if ($isMobile) {
+
+
 	// Add a banner add for mobile
 	echo "
 	<p>
@@ -178,61 +180,82 @@ if ($isMobile) {
 		//--></script>
 		<script type='text/javascript' src='http://pagead2.googlesyndication.com/pagead/show_afmc_ads.js'></script>
 	</p>
-	";
-}
-
-echo "	
+	
 	<h1>WEDDING PLANNING IDEAS</h1>
 	
 	<h2>".$title_text['title']."</h2>
 	
 	<p>".$title_text['caption']."</p>
 
-";	
+	";
+	
+	echoImages($site_id, $media_id, $media_id_list);
 
-if (!$isMobile){
+}
+else {
 
 	echo "
-	<div id='cgpWeddingIdeasAds' style='float:right; margin-right:20px;'>
-		<script type='text/javascript'><!--
-			/* CGP Wedding Ideas */
-			google_ad_client = 'ca-pub-1988280901434851';
-			google_ad_slot = '5490349513';
-			google_ad_width = 160;
-			google_ad_height = 600;
-		//-->
-		</script>
-		<script type='text/javascript' src='http://pagead2.googlesyndication.com/pagead/show_ads.js'></script>
-	</div>
+	<h1>WEDDING PLANNING IDEAS</h1>
+	
+	<h2>".$title_text['title']."</h2>
+	
+	<p>".$title_text['caption']."</p>
+
+	<table width='100%' border='0' style='padding:0; margin:0; width:100%' >
+		<tr valign='top' width='100%'>
+			<td>";
+			
+	echoImages($site_id, $media_id, $media_id_list);
+	
+	echo "  </td>
+			<td width='180px'>
+				<div style=''>
+					<script type='text/javascript'><!--
+						/* CGP Wedding Ideas */
+						google_ad_client = 'ca-pub-1988280901434851';
+						google_ad_slot = '5490349513';
+						google_ad_width = 160;
+						google_ad_height = 600;
+					//-->
+					</script>
+					<script type='text/javascript' src='http://pagead2.googlesyndication.com/pagead/show_ads.js'></script>
+				</div>			
+
+				<div style='margin-top:30px'>
+					<script type='text/javascript'><!--
+						/* CGP Wedding Ideas */
+						google_ad_client = 'ca-pub-1988280901434851';
+						google_ad_slot = '5490349513';
+						google_ad_width = 160;
+						google_ad_height = 600;
+					//-->
+					</script>
+					<script type='text/javascript' src='http://pagead2.googlesyndication.com/pagead/show_ads.js'></script>
+				</div>		
+				
+				<div style='margin-top:30px'>
+					<script type='text/javascript'><!--
+						/* CGP Wedding Ideas */
+						google_ad_client = 'ca-pub-1988280901434851';
+						google_ad_slot = '5490349513';
+						google_ad_width = 160;
+						google_ad_height = 600;
+					//-->
+					</script>
+					<script type='text/javascript' src='http://pagead2.googlesyndication.com/pagead/show_ads.js'></script>
+				</div>						
+			</td>
+		</tr>		
+	</table>
 	";
 
+
 }
 
-echo "		
-	<p align='left'>";
 
 
-foreach($media_id_list as $media_id){
-
-	$image = MediaTable::getMedia($site_id, $media_id);
-	
-	$image_url = "http://files.apollosites.com/$site_id/" . $image['filepath'] . $image['filename'];
-	$thumb_url = "http://files.apollosites.com/$site_id/" . $image['filepath'] . $image['thumb_filename'];
-	$title =  $image['title'];
-	$description = $image['description'];										
-	$alt_text = $image['tags'];
-		
-	echo "<img src='$image_url' title='$title' alt='$alt_text'/><br/>";  
-	if ($title != ''){
-		echo "<span class='title'>$title</span><br/>";
-	} 
-	echo "<span class='caption'>$description</span>"; 
-	echo "<br/><br/>";	
-}
-
-echo "
-	</p>
-</div>";
+echo "</div>"; // venuePageContents
+echo "</div>"; // venuePage
 
 ?>
 <script type="text/javascript">
@@ -247,6 +270,31 @@ echo "
 require_once('footer.php');
 
 
+function echoImages($site_id, $media_id, $media_id_list){
+
+	echo "<p align='left'>";
+	
+	foreach($media_id_list as $media_id){
+	
+		$image = MediaTable::getMedia($site_id, $media_id);
+		
+		$image_url = "http://files.apollosites.com/$site_id/" . $image['filepath'] . $image['filename'];
+		$thumb_url = "http://files.apollosites.com/$site_id/" . $image['filepath'] . $image['thumb_filename'];
+		$title =  $image['title'];
+		$description = $image['description'];										
+		$alt_text = $image['tags'];
+			
+		echo "<img src='$image_url' title='$title' alt='$alt_text' style='max-width:100%'/><br/>";  
+		if ($title != ''){
+			echo "<span class='title'>$title</span><br/>";
+		} 
+		echo "<span class='caption'>$description</span>"; 
+		echo "<br/><br/>";	
+	}
+	
+	echo "</p>";	
+	
+}
 
 function getTitleText($text_list, $tag_list){
 
