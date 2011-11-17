@@ -153,6 +153,8 @@ $iPad = stripos($_SERVER['HTTP_USER_AGENT'],"iPad");
 $Android = stripos($_SERVER['HTTP_USER_AGENT'],"Android");
 $isMobile = ($iPod || $iPhone || $iPad || $Android);
 
+$isMobile = true;
+
 echo "
 
 <div id='venuePage' class='pageContents'>
@@ -164,7 +166,7 @@ echo "
 if ($isMobile) {
 	// Add a banner add for mobile
 	echo "
-	<div id='cgpWeddingIdeasMobileAds' style=''>
+	<p>
 		<script type='text/javascript'><!--
 			// XHTML should not attempt to parse these strings, declare them CDATA.
 			/* <![CDATA[ */
@@ -177,7 +179,7 @@ if ($isMobile) {
 		/* ]]> */
 		//--></script>
 		<script type='text/javascript' src='http://pagead2.googlesyndication.com/pagead/show_afmc_ads.js'></script>
-	</div>
+	</p>
 	";
 }
 
