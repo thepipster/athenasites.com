@@ -28,8 +28,8 @@ if (!isset($last_date)) {
 
 Logger::debug("Last Date: $last_date, which was $no_days days ago");
 
-$query = "INSERT INTO stats_PageViewsOld (SELECT * FROM stats_PageViews WHERE view_date < '$last_date')";
-DatabaseManager::submitQuery($query);
+//$query = "INSERT INTO stats_PageViewsOld (SELECT * FROM stats_PageViews WHERE view_date < '$last_date')";
+//DatabaseManager::submitQuery($query);
 
 $query = "DELETE FROM stats_PageViews WHERE view_date < '$last_date'";
 DatabaseManager::submitQuery($query);
