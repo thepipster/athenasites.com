@@ -185,8 +185,8 @@ for ($i = 1; $i < $no_days; $i++) {
     serverLoadRollup($date_from, $date_end, $day_date);
 }
 
-$query = "INSERT INTO stats_PageViewsOld (SELECT * FROM stats_PageViews WHERE view_date < '$last_date')";
-DatabaseManager::submitQuery($query);
+//$query = "INSERT INTO stats_PageViewsOld (SELECT * FROM stats_PageViews WHERE view_date < '$last_date')";
+//DatabaseManager::submitQuery($query);
 
 
 Logger::debug("Done!");
